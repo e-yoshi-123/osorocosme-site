@@ -1,20 +1,26 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import VideoCard from "../components/VideoCard.astro";
-import { getVisibleVideos, sortByPublishedDesc, withBase } from "../lib/data";
+import { getVisibleVideos, sortByPublishedDesc, getVideoScore, withBase } from "../lib/data";
 
-const visible = sortByPublishedDesc(getVisibleVideos());
-const featured = visible.slice(0, 3);
-const gallery = visible;
+const visible = getVisibleVideos();
+const gallery = sortByPublishedDesc(visible);
 const PAGE_SIZE = 60;
+
+// ヒーロー枠は「人気動画プール」上位20件からランダムに3件を表示する（ランダム選択はクライアント側で実施）
+const HERO_POOL_SIZE = 20;
+const heroPool = [...visible].sort((a, b) => getVideoScore(b) - getVideoScore(a)).slice(0, HERO_POOL_SIZE);
 ---
 
 <Layout title="ホーム">
   {
-    featured.length > 0 && (
-      <section class="mb-10 grid md:grid-cols-3 gap-4">
-        {featured.map((v) => (
-          <a href={withBase(`/video/${v.key}`)} class="relative block rounded-lg overflow-hidden shadow-md group">
+    heroPool.length > 0 && (
+      <section id="hero-pool" class="mb-10 grid md:grid-cols-3 gap-4">
+        {heroPool.map((v) => (
+          <a
+            href={withBase(`/video/${v.key}`)}
+            class="hero-candidate relative block rounded-lg overflow-hidden shadow-md group hidden"
+          >
             <img src={v.thumbnail} alt={v.title} class="w-full aspect-video object-cover group-hover:scale-105 transition" />
             <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3">
               <p class="text-white text-sm font-semibold line-clamp-2">{v.title}</p>
@@ -25,45 +31,89 @@ const PAGE_SIZE = 60;
     )
   }
 
-  <h2 class="text-lg font-bold mb-4">新着動画</h2>
+  <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+    <h2 class="text-lg font-bold">動画一覧</h2>
+    <div class="flex gap-2 text-sm">
+      <button id="sort-newest" data-sort="newest" class="sort-btn px-3 py-1 rounded border border-pink-300 text-pink-600">
+        新着順
+      </button>
+      <button id="sort-popular" data-sort="popular" class="sort-btn px-3 py-1 rounded border border-neutral-300 text-neutral-500">
+        人気順
+      </button>
+    </div>
+  </div>
+
   <div id="video-gallery" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
     {
       gallery.map((v, i) => (
-        <div class:list={["gallery-item", { hidden: i >= PAGE_SIZE }]} data-index={i}>
+        <div
+          class:list={["gallery-item", { hidden: i >= PAGE_SIZE }]}
+          data-published={v.published_at}
+          data-score={getVideoScore(v)}
+        >
           <VideoCard video={v} />
         </div>
       ))
     }
   </div>
 
-  {
-    gallery.length > PAGE_SIZE && (
-      <div class="text-center mt-8">
-        <button
-          id="load-more-btn"
-          class="bg-pink-600 text-white px-6 py-2 rounded hover:bg-pink-700"
-          data-page-size={PAGE_SIZE}
-        >
-          もっと見る
-        </button>
-      </div>
-    )
-  }
+  <div class="text-center mt-8">
+    <button id="load-more-btn" class="bg-pink-600 text-white px-6 py-2 rounded hover:bg-pink-700" data-page-size={PAGE_SIZE}>
+      もっと見る
+    </button>
+  </div>
 </Layout>
 
-<script>
-  const btn = document.getElementById("load-more-btn") as HTMLButtonElement | null;
-  if (btn) {
-    const pageSize = parseInt(btn.dataset.pageSize || "60", 10);
-    let shown = pageSize;
-    btn.addEventListener("click", () => {
-      const items = document.querySelectorAll<HTMLElement>("#video-gallery .gallery-item.hidden");
-      items.forEach((item, i) => {
-        if (i < pageSize) item.classList.remove("hidden");
-      });
-      shown += pageSize;
-      if (document.querySelectorAll("#video-gallery .gallery-item.hidden").length === 0) {
-        btn.remove();
+<script define:vars={{ PAGE_SIZE }}>
+  // --- ヒーロー: 人気動画プールからランダムに3件だけ表示 ---
+  const candidates = Array.from(document.querySelectorAll(".hero-candidate"));
+  for (let i = candidates.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
+  }
+  candidates.slice(0, 3).forEach((el) => el.classList.remove("hidden"));
+
+  // --- ギャラリー: 新着順/人気順の切り替え + もっと見る ---
+  const gallery = document.getElementById("video-gallery");
+  const loadMoreBtn = document.getElementById("load-more-btn");
+  let currentSort = "newest";
+
+  function applySort(sort) {
+    currentSort = sort;
+    const items = Array.from(gallery.querySelectorAll(".gallery-item"));
+    items.sort((a, b) => {
+      if (sort === "popular") {
+        return parseFloat(b.dataset.score) - parseFloat(a.dataset.score);
+      }
+      return new Date(b.dataset.published).getTime() - new Date(a.dataset.published).getTime();
+    });
+    items.forEach((item, i) => {
+      gallery.appendChild(item);
+      item.classList.toggle("hidden", i >= PAGE_SIZE);
+    });
+    if (loadMoreBtn) loadMoreBtn.classList.toggle("hidden", items.length <= PAGE_SIZE);
+
+    document.querySelectorAll(".sort-btn").forEach((btn) => {
+      const active = btn.dataset.sort === sort;
+      btn.classList.toggle("border-pink-300", active);
+      btn.classList.toggle("text-pink-600", active);
+      btn.classList.toggle("border-neutral-300", !active);
+      btn.classList.toggle("text-neutral-500", !active);
+    });
+  }
+
+  document.querySelectorAll(".sort-btn").forEach((btn) => {
+    btn.addEventListener("click", () => applySort(btn.dataset.sort));
+  });
+
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener("click", () => {
+      const hidden = gallery.querySelectorAll(".gallery-item.hidden");
+      Array.from(hidden)
+        .slice(0, PAGE_SIZE)
+        .forEach((item) => item.classList.remove("hidden"));
+      if (gallery.querySelectorAll(".gallery-item.hidden").length === 0) {
+        loadMoreBtn.classList.add("hidden");
       }
     });
   }

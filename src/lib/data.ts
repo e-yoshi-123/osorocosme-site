@@ -265,3 +265,22 @@ export function formatCount(n: string | number | undefined): string {
   if (Number.isNaN(num)) return "-";
   return num.toLocaleString("ja-JP");
 }
+
+/** インフルエンサーのスコア(getInfluencerRanking)と同じ考え方で、動画単体の「人気」を
+ * 再生回数・この動画で紹介されているコスメ数・投稿からの新しさから合成する。
+ * 実データでは動画の投稿日が古いもので約3,200日、新しいものでも約200日前後と
+ * 全体的に古めに偏っているため、経過730日(約2年)ごとに1点減点する緩やかな減衰にして、
+ * 「多少古くても圧倒的に人気」な動画まで埋もれさせないようにしつつ、
+ * 同程度の人気なら新しい方を優先する設計にしている。 */
+export function getVideoScore(v: Video): number {
+  const cosmeticsCount = (v.cosmetics || []).filter((c) => c.brand && c.name).length;
+  const popularityScore = Math.log10(toNumber(v.view_count) + 1) + Math.log10(cosmeticsCount + 1) * 1.5;
+
+  let recencyScore = 0;
+  if (v.published_at) {
+    const daysSincePublished = (Date.now() - new Date(v.published_at).getTime()) / 86_400_000;
+    recencyScore = -Math.max(daysSincePublished, 0) / 730;
+  }
+
+  return popularityScore + recencyScore;
+}
