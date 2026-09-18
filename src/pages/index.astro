@@ -1,10 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import VideoCard from "../components/VideoCard.astro";
-import { getVisibleVideos, sortByPublishedDesc, getVideoScore, withBase } from "../lib/data";
+import { getVisibleVideos, getVideoScore, withBase } from "../lib/data";
 
 const visible = getVisibleVideos();
-const gallery = sortByPublishedDesc(visible);
+const gallery = [...visible].sort((a, b) => getVideoScore(b) - getVideoScore(a));
 const PAGE_SIZE = 60;
 
 // ヒーロー枠は「人気動画プール」上位20件からランダムに3件を表示する（ランダム選択はクライアント側で実施）
@@ -34,10 +34,10 @@ const heroPool = [...visible].sort((a, b) => getVideoScore(b) - getVideoScore(a)
   <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
     <h2 class="text-lg font-bold">動画一覧</h2>
     <div class="flex gap-2 text-sm">
-      <button id="sort-newest" data-sort="newest" class="sort-btn px-3 py-1 rounded border border-pink-300 text-pink-600">
+      <button id="sort-newest" data-sort="newest" class="sort-btn px-3 py-1 rounded border border-neutral-300 text-neutral-500">
         新着順
       </button>
-      <button id="sort-popular" data-sort="popular" class="sort-btn px-3 py-1 rounded border border-neutral-300 text-neutral-500">
+      <button id="sort-popular" data-sort="popular" class="sort-btn px-3 py-1 rounded border border-pink-300 text-pink-600">
         人気順
       </button>
     </div>
@@ -76,7 +76,7 @@ const heroPool = [...visible].sort((a, b) => getVideoScore(b) - getVideoScore(a)
   // --- ギャラリー: 新着順/人気順の切り替え + もっと見る ---
   const gallery = document.getElementById("video-gallery");
   const loadMoreBtn = document.getElementById("load-more-btn");
-  let currentSort = "newest";
+  let currentSort = "popular";
 
   function applySort(sort) {
     currentSort = sort;
