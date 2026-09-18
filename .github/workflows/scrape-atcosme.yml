@@ -2,7 +2,7 @@ name: Scrape @cosme Catalog
 
 on:
   schedule:
-    - cron: "0 17 * * *" # 毎日 UTC 17:00 = JST 2:00 (他の日次ジョブより前)
+    - cron: "0 17 * * 0" # 毎週日曜 UTC 17:00 = JST月曜2:00
   workflow_dispatch:
     inputs:
       time_budget:
