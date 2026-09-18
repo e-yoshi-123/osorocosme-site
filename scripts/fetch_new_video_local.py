@@ -25,7 +25,7 @@ DATA_DIR = os.path.join(BASE_DIR, "..", "src", "data")
 VIDEOS_JSON = os.path.join(DATA_DIR, "videos.json")
 PENDING_DIR = os.path.join(BASE_DIR, "pending")
 
-YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY", "AIzaSyDaTuGeJrgAARSZ3m8fNug6sSfqH5wBzdI")
+YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY")
 COOKIES_FILE = os.environ.get(
     "YOUTUBE_COOKIES_FILE", os.path.join(BASE_DIR, "..", "..", "youtube_cookies.txt")
 )
@@ -140,6 +140,13 @@ def fetch_transcript(video_id: str) -> Optional[str]:
 
 
 def main():
+    if not YOUTUBE_API_KEY:
+        print("環境変数 YOUTUBE_API_KEY が設定されていません。", file=sys.stderr)
+        sys.exit(1)
+    if not os.path.exists(COOKIES_FILE):
+        print(f"cookieファイルが見つかりません: {COOKIES_FILE}", file=sys.stderr)
+        sys.exit(1)
+
     with open(VIDEOS_JSON, encoding="utf-8") as f:
         videos = json.load(f)
     existing_ids = {v.get("video_id") for v in videos.values()}
