@@ -1,0 +1,70 @@
+---
+import Layout from "../layouts/Layout.astro";
+import VideoCard from "../components/VideoCard.astro";
+import { getVisibleVideos, sortByPublishedDesc, withBase } from "../lib/data";
+
+const visible = sortByPublishedDesc(getVisibleVideos());
+const featured = visible.slice(0, 3);
+const gallery = visible;
+const PAGE_SIZE = 60;
+---
+
+<Layout title="ホーム">
+  {
+    featured.length > 0 && (
+      <section class="mb-10 grid md:grid-cols-3 gap-4">
+        {featured.map((v) => (
+          <a href={withBase(`/video/${v.key}`)} class="relative block rounded-lg overflow-hidden shadow-md group">
+            <img src={v.thumbnail} alt={v.title} class="w-full aspect-video object-cover group-hover:scale-105 transition" />
+            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+              <p class="text-white text-sm font-semibold line-clamp-2">{v.title}</p>
+            </div>
+          </a>
+        ))}
+      </section>
+    )
+  }
+
+  <h2 class="text-lg font-bold mb-4">新着動画</h2>
+  <div id="video-gallery" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    {
+      gallery.map((v, i) => (
+        <div class:list={["gallery-item", { hidden: i >= PAGE_SIZE }]} data-index={i}>
+          <VideoCard video={v} />
+        </div>
+      ))
+    }
+  </div>
+
+  {
+    gallery.length > PAGE_SIZE && (
+      <div class="text-center mt-8">
+        <button
+          id="load-more-btn"
+          class="bg-pink-600 text-white px-6 py-2 rounded hover:bg-pink-700"
+          data-page-size={PAGE_SIZE}
+        >
+          もっと見る
+        </button>
+      </div>
+    )
+  }
+</Layout>
+
+<script>
+  const btn = document.getElementById("load-more-btn") as HTMLButtonElement | null;
+  if (btn) {
+    const pageSize = parseInt(btn.dataset.pageSize || "60", 10);
+    let shown = pageSize;
+    btn.addEventListener("click", () => {
+      const items = document.querySelectorAll<HTMLElement>("#video-gallery .gallery-item.hidden");
+      items.forEach((item, i) => {
+        if (i < pageSize) item.classList.remove("hidden");
+      });
+      shown += pageSize;
+      if (document.querySelectorAll("#video-gallery .gallery-item.hidden").length === 0) {
+        btn.remove();
+      }
+    });
+  }
+</script>

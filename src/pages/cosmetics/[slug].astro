@@ -1,0 +1,99 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import VideoCard from "../../components/VideoCard.astro";
+import CosmeticCard from "../../components/CosmeticCard.astro";
+import {
+  getUsedCosmeticKeys,
+  getCosmeticListEntry,
+  getVideosUsingCosmetic,
+  getRelatedCosmetics,
+  cosmeticSlug,
+  sortByPublishedDesc,
+  formatCount,
+  withBase,
+} from "../../lib/data";
+
+export function getStaticPaths() {
+  return getUsedCosmeticKeys().map(({ brand_id, name_id }) => ({
+    params: { slug: cosmeticSlug(brand_id, name_id) },
+    props: { brand_id, name_id },
+  }));
+}
+
+const { brand_id, name_id } = Astro.props;
+
+// cosmetics_list.json を正データとする（現行WordPressは動画反復順で最後に処理した値が勝つ
+// 不安定な実装だったため、単一の正規ソースに統一）
+const entry = getCosmeticListEntry(brand_id, name_id);
+const videosUsing = sortByPublishedDesc(getVideosUsingCosmetic(brand_id, name_id));
+
+const relatedTags = new Set<string>();
+for (const v of videosUsing) {
+  for (const c of v.cosmetics || []) {
+    if (c.brand_id === brand_id && c.name_id === name_id) {
+      for (const t of c.related_tags || []) relatedTags.add(t);
+    }
+  }
+}
+const related = getRelatedCosmetics(brand_id, name_id, Array.from(relatedTags)).slice(0, 8);
+---
+
+<Layout title={entry ? `${entry.brand} ${entry.name}` : "商品詳細"}>
+  {
+    !entry ? (
+      <p class="text-neutral-400">商品情報が見つかりませんでした。</p>
+    ) : (
+      <>
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-8 flex flex-col md:flex-row gap-6">
+          {entry.rakuten_image_link && (
+            <div class="shrink-0 [&_img]:rounded" set:html={entry.rakuten_image_link} />
+          )}
+          <div>
+            <a href={withBase(`/brand/${entry.brand_id}`)} class="text-sm text-pink-600 hover:underline">
+              {entry.brand}
+            </a>
+            <h1 class="text-xl font-bold mt-1 mb-2">{entry.name}</h1>
+            {entry.category && <p class="text-sm text-neutral-500 mb-1">カテゴリ: {entry.category}</p>}
+            {entry.now_price !== undefined && (
+              <p class="text-sm text-neutral-500 mb-3">参考価格: ¥{formatCount(entry.now_price)}</p>
+            )}
+            {entry.rakuten_text_link && (
+              <a
+                href={entry.rakuten_text_link}
+                target="_blank"
+                rel="nofollow sponsored noopener"
+                class="inline-block bg-red-600 text-white text-sm px-4 py-2 rounded hover:bg-red-700"
+              >
+                楽天市場で見る
+              </a>
+            )}
+          </div>
+        </div>
+
+        <h2 class="font-bold mb-3">この商品が紹介されている動画（{videosUsing.length}件）</h2>
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-10">
+          {videosUsing.map((v) => (
+            <VideoCard video={v} />
+          ))}
+        </div>
+
+        {related.length > 0 && (
+          <>
+            <h2 class="font-bold mb-3">関連商品</h2>
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {related.map((c) => (
+                <CosmeticCard
+                  brand_id={c.brand_id}
+                  brand={c.brand}
+                  name_id={c.name_id}
+                  name={c.name}
+                  rakutenImageHtml={c.rakuten_image_link}
+                />
+              ))}
+            </div>
+          </>
+        )}
+      </>
+    )
+  }
+</Layout>

@@ -1,0 +1,26 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getAllBrands, groupByKana, withBase } from "../lib/data";
+
+const brands = getAllBrands().sort((a, b) => a.name.localeCompare(b.name, "ja"));
+const grouped = groupByKana(brands);
+---
+
+<Layout title="ブランド一覧">
+  <h1 class="text-xl font-bold mb-6">ブランド一覧（{brands.length}件）</h1>
+
+  {
+    Array.from(grouped.entries()).map(([kana, items]) => (
+      <section class="mb-8">
+        <h2 class="text-pink-600 font-bold border-b border-pink-200 mb-3 pb-1">{kana}</h2>
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+          {items.map((b) => (
+            <a href={withBase(`/brand/${b.brand_id}`)} class="text-sm hover:text-pink-600 truncate">
+              {b.name}
+            </a>
+          ))}
+        </div>
+      </section>
+    ))
+  }
+</Layout>

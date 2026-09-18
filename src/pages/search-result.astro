@@ -1,0 +1,66 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="検索結果">
+  <h1 class="text-xl font-bold mb-2">検索結果: <span id="search-query" class="text-pink-600"></span></h1>
+  <p id="search-count" class="text-sm text-neutral-500 mb-6"></p>
+  <div id="search-results" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+  <p id="search-empty" class="text-neutral-400 hidden">該当する動画が見つかりませんでした。</p>
+</Layout>
+
+<script>
+  interface SearchItem {
+    key: string;
+    title: string;
+    channel_title: string;
+    description: string;
+    thumbnail: string;
+    published_at: string;
+    cosmetics: { brand: string; name: string }[];
+  }
+
+  const base = import.meta.env.BASE_URL.endsWith("/")
+    ? import.meta.env.BASE_URL.slice(0, -1)
+    : import.meta.env.BASE_URL;
+
+  const params = new URLSearchParams(location.search);
+  const q = (params.get("q") || "").trim();
+  document.getElementById("search-query")!.textContent = q;
+
+  if (q) {
+    fetch(`${base}/search-index.json`)
+      .then((r) => r.json())
+      .then((items: SearchItem[]) => {
+        const needle = q.toLowerCase();
+        const matched = items.filter((v) => {
+          if (v.title.toLowerCase().includes(needle)) return true;
+          if (v.channel_title.toLowerCase().includes(needle)) return true;
+          if (v.description.toLowerCase().includes(needle)) return true;
+          return v.cosmetics.some(
+            (c) => c.brand.toLowerCase().includes(needle) || c.name.toLowerCase().includes(needle)
+          );
+        });
+
+        document.getElementById("search-count")!.textContent = `${matched.length}件見つかりました`;
+        const grid = document.getElementById("search-results")!;
+        if (matched.length === 0) {
+          document.getElementById("search-empty")!.classList.remove("hidden");
+        }
+        for (const v of matched) {
+          const a = document.createElement("a");
+          a.href = `${base}/video/${v.key}`;
+          a.className = "block bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden";
+          a.innerHTML = `
+            <img src="${v.thumbnail}" alt="" class="w-full aspect-video object-cover" loading="lazy" />
+            <div class="p-3">
+              <h3 class="font-semibold text-sm line-clamp-2 mb-1">${v.title}</h3>
+              <p class="text-xs text-neutral-500 truncate">${v.channel_title}</p>
+            </div>`;
+          grid.appendChild(a);
+        }
+      });
+  } else {
+    document.getElementById("search-count")!.textContent = "検索キーワードを入力してください";
+  }
+</script>

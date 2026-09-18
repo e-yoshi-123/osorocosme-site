@@ -1,0 +1,91 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import VideoCard from "../../components/VideoCard.astro";
+import CosmeticCard from "../../components/CosmeticCard.astro";
+import {
+  getAllInfluencers,
+  getInfluencerByChannelId,
+  getVideosByChannel,
+  sortByPublishedDesc,
+  type Cosmetic,
+} from "../../lib/data";
+
+export function getStaticPaths() {
+  return getAllInfluencers().map((i) => ({ params: { channel_id: i.channel_id } }));
+}
+
+const { channel_id } = Astro.params;
+const influencer = getInfluencerByChannelId(channel_id!);
+const videos = sortByPublishedDesc(getVideosByChannel(channel_id!));
+
+// 使用コスメ遍歴（重複除去なし、動画投稿日降順。現行実装の仕様を踏襲）
+type HistoryItem = Cosmetic & { publishedAt: string; videoKey: string };
+const history: HistoryItem[] = [];
+for (const v of videos) {
+  for (const c of v.cosmetics || []) {
+    if (c.brand && c.name) {
+      history.push({ ...c, publishedAt: v.published_at, videoKey: v.key });
+    }
+  }
+}
+
+const tagSet = new Set<string>();
+for (const h of history) for (const t of h.related_tags || []) tagSet.add(t);
+const tags = Array.from(tagSet).sort((a, b) => a.localeCompare(b, "ja"));
+---
+
+<Layout title={influencer?.channel_title ?? "インフルエンサー詳細"}>
+  {
+    !influencer ? (
+      <p class="text-neutral-400">インフルエンサーが見つかりませんでした。</p>
+    ) : (
+      <>
+        <div class="flex items-center gap-4 mb-8">
+          {influencer.channel_icon && <img src={influencer.channel_icon} alt="" class="w-16 h-16 rounded-full" />}
+          <h1 class="text-xl font-bold">{influencer.channel_title}</h1>
+        </div>
+
+        {history.length > 0 && (
+          <section class="mb-12">
+            <h2 class="font-bold mb-3">使用コスメ遍歴</h2>
+            {tags.length > 0 && (
+              <select id="history-tag-select" class="border rounded px-3 py-2 mb-4 text-sm">
+                <option value="__all__">すべて</option>
+                {tags.map((t) => (
+                  <option value={t}>{t}</option>
+                ))}
+              </select>
+            )}
+            <div id="history-grid" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {history.map((h) => (
+                <div class="history-item" data-tags={(h.related_tags || []).join(",")}>
+                  <CosmeticCard brand_id={h.brand_id} brand={h.brand} name_id={h.name_id} name={h.name} rakutenImageHtml={h.rakuten_image_link} />
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <section>
+          <h2 class="font-bold mb-3">動画一覧（{videos.length}件）</h2>
+          <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {videos.map((v) => (
+              <VideoCard video={v} />
+            ))}
+          </div>
+        </section>
+      </>
+    )
+  }
+</Layout>
+
+<script>
+  const select = document.getElementById("history-tag-select") as HTMLSelectElement | null;
+  select?.addEventListener("change", () => {
+    const tag = select.value;
+    document.querySelectorAll<HTMLElement>(".history-item").forEach((el) => {
+      const tags = (el.dataset.tags || "").split(",");
+      el.style.display = tag === "__all__" || tags.includes(tag) ? "" : "none";
+    });
+  });
+</script>

@@ -1,0 +1,62 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import CosmeticCard from "../../components/CosmeticCard.astro";
+import { getAllVideoEntries, getVideoByKey, formatCount, withBase } from "../../lib/data";
+
+export function getStaticPaths() {
+  return getAllVideoEntries().map((v) => ({ params: { video_key: v.key } }));
+}
+
+const { video_key } = Astro.params;
+const video = getVideoByKey(video_key!);
+const validCosmetics = (video?.cosmetics || []).filter((c) => c.brand && c.name);
+---
+
+<Layout title={video?.title ?? "動画詳細"}>
+  {
+    !video ? (
+      <p class="text-neutral-400">動画が見つかりませんでした。</p>
+    ) : (
+      <>
+        <div class="aspect-video mb-4 max-w-3xl">
+          <iframe
+            class="w-full h-full rounded-lg"
+            src={`https://www.youtube.com/embed/${video.video_id}`}
+            title={video.title}
+            allowfullscreen
+          />
+        </div>
+
+        <h1 class="text-xl font-bold mb-2">{video.title}</h1>
+
+        <a href={withBase(`/influencer/${video.channel_id}`)} class="flex items-center gap-2 mb-4 w-fit hover:text-pink-600">
+          {video.channel_icon && <img src={video.channel_icon} alt="" class="w-8 h-8 rounded-full" />}
+          <span class="text-sm">{video.channel_title}</span>
+        </a>
+
+        <div class="flex gap-4 text-sm text-neutral-500 mb-6">
+          <span>{new Date(video.published_at).toLocaleDateString("ja-JP")}</span>
+          <span>再生 {formatCount(video.view_count)}</span>
+        </div>
+
+        {video.summary && (
+          <div class="bg-white rounded-lg shadow-sm p-4 mb-8 text-sm leading-relaxed whitespace-pre-wrap">
+            <p class="text-xs text-neutral-400 mb-2">※AIによる自動生成の紹介文です</p>
+            {video.summary}
+          </div>
+        )}
+
+        {validCosmetics.length > 0 && (
+          <>
+            <h2 class="font-bold mb-3">紹介されたコスメ</h2>
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {validCosmetics.map((c) => (
+                <CosmeticCard brand_id={c.brand_id} brand={c.brand} name_id={c.name_id} name={c.name} rakutenImageHtml={c.rakuten_image_link} />
+              ))}
+            </div>
+          </>
+        )}
+      </>
+    )
+  }
+</Layout>

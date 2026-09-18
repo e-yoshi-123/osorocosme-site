@@ -1,0 +1,36 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import CosmeticCard from "../../components/CosmeticCard.astro";
+import { getAllBrands, getBrandName, getCosmeticsForBrand } from "../../lib/data";
+
+export function getStaticPaths() {
+  return getAllBrands().map((b) => ({ params: { brand_id: b.brand_id } }));
+}
+
+const { brand_id } = Astro.params;
+const brandName = getBrandName(brand_id!) ?? "不明なブランド";
+const cosmetics = getCosmeticsForBrand(brand_id!);
+---
+
+<Layout title={brandName}>
+  <h1 class="text-xl font-bold mb-2">{brandName}</h1>
+  <p class="text-sm text-neutral-500 mb-6">動画で紹介された商品 {cosmetics.length}件</p>
+
+  {
+    cosmetics.length === 0 ? (
+      <p class="text-neutral-400">このブランドの商品紹介動画はまだありません。</p>
+    ) : (
+      <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {cosmetics.map((c) => (
+          <CosmeticCard
+            brand_id={c.brand_id}
+            brand={c.brand}
+            name_id={c.name_id}
+            name={c.name}
+            rakutenImageHtml={c.rakuten_image_link}
+          />
+        ))}
+      </div>
+    )
+  }
+</Layout>

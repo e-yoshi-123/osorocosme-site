@@ -1,0 +1,47 @@
+---
+import { cosmeticSlug, withBase } from "../lib/data";
+
+interface Props {
+  brand_id: string;
+  brand: string;
+  name_id: string;
+  name: string;
+  rakutenImageHtml?: string;
+}
+
+const { brand_id, brand, name_id, name, rakutenImageHtml } = Astro.props;
+---
+
+<div class="bg-white rounded-lg shadow-sm p-3 flex flex-col gap-2">
+  <div class="cosmetic-image-box aspect-square w-full bg-neutral-50 rounded flex items-center justify-center overflow-hidden">
+    {
+      rakutenImageHtml ? (
+        <Fragment set:html={rakutenImageHtml} />
+      ) : (
+        <span class="text-neutral-300 text-xs">No Image</span>
+      )
+    }
+  </div>
+  <a href={withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`)} class="text-sm hover:text-pink-600">
+    <div class="text-neutral-500 text-xs">{brand}</div>
+    <div class="font-medium line-clamp-2">{name}</div>
+  </a>
+</div>
+
+<style>
+  .cosmetic-image-box :global(a) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+  .cosmetic-image-box :global(img) {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 0.25rem;
+  }
+</style>

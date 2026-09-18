@@ -1,0 +1,97 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CosmeticCard from "../components/CosmeticCard.astro";
+import { getVisibleVideos, type Cosmetic } from "../lib/data";
+
+// related_tags と rakuten_image_link が両方非空のコスメを rakuten_image_link で重複排除（先勝ち）
+const seenLinks = new Set<string>();
+const uniqueCosmetics: Cosmetic[] = [];
+for (const v of getVisibleVideos()) {
+  for (const c of v.cosmetics || []) {
+    if (!c.rakuten_image_link || !c.related_tags || c.related_tags.length === 0) continue;
+    if (seenLinks.has(c.rakuten_image_link)) continue;
+    seenLinks.add(c.rakuten_image_link);
+    uniqueCosmetics.push(c);
+  }
+}
+
+// タグごとの出現回数を集計（現行のハードコード＆不整合なタグ一覧はやめ、実データから動的に生成）
+const tagCounts = new Map<string, number>();
+for (const c of uniqueCosmetics) {
+  for (const t of c.related_tags || []) {
+    tagCounts.set(t, (tagCounts.get(t) || 0) + 1);
+  }
+}
+const tags = Array.from(tagCounts.keys()).sort((a, b) => (tagCounts.get(b)! - tagCounts.get(a)!));
+
+const rankingByTag = new Map<string, Cosmetic[]>();
+for (const tag of tags) {
+  const items = uniqueCosmetics
+    .filter((c) => (c.related_tags || []).includes(tag))
+    .slice(0, 5);
+  rankingByTag.set(tag, items);
+}
+---
+
+<Layout title="ランキング">
+  <h1 class="text-xl font-bold mb-6">コスメランキング</h1>
+
+  <div class="flex gap-8">
+    <aside class="hidden md:block w-48 shrink-0">
+      <ul class="space-y-1 text-sm sticky top-20">
+        {
+          tags.map((tag, i) => (
+            <li>
+              <button class="tag-select w-full text-left px-2 py-1 rounded hover:bg-pink-50" data-tag={tag} data-active={i === 0}>
+                {tag} <span class="text-neutral-400">({tagCounts.get(tag)})</span>
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+    </aside>
+
+    <div class="flex-1">
+      <select id="tag-select-mobile" class="md:hidden w-full border rounded px-3 py-2 mb-6">
+        {tags.map((tag) => <option value={tag}>{tag}（{tagCounts.get(tag)}件）</option>)}
+      </select>
+
+      {
+        tags.map((tag, i) => (
+          <section class="ranking-block" data-tag={tag} style={i === 0 ? "" : "display:none"}>
+            <h2 class="font-bold mb-3">{tag} 人気ランキング TOP5</h2>
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 mb-10">
+              {rankingByTag.get(tag)!.map((c) => (
+                <CosmeticCard
+                  brand_id={c.brand_id}
+                  brand={c.brand}
+                  name_id={c.name_id}
+                  name={c.name}
+                  rakutenImageHtml={c.rakuten_image_link}
+                />
+              ))}
+            </div>
+          </section>
+        ))
+      }
+    </div>
+  </div>
+</Layout>
+
+<script>
+  function showTag(tag: string) {
+    document.querySelectorAll<HTMLElement>(".ranking-block").forEach((el) => {
+      el.style.display = el.dataset.tag === tag ? "" : "none";
+    });
+    document.querySelectorAll<HTMLElement>(".tag-select").forEach((el) => {
+      el.classList.toggle("bg-pink-100", el.dataset.tag === tag);
+    });
+  }
+
+  document.querySelectorAll<HTMLButtonElement>(".tag-select").forEach((btn) => {
+    btn.addEventListener("click", () => showTag(btn.dataset.tag!));
+  });
+
+  const mobileSelect = document.getElementById("tag-select-mobile") as HTMLSelectElement | null;
+  mobileSelect?.addEventListener("change", () => showTag(mobileSelect.value));
+</script>

@@ -1,0 +1,36 @@
+---
+import { formatCount, withBase, type VideoEntry } from "../lib/data";
+
+interface Props {
+  video: VideoEntry;
+}
+
+const { video } = Astro.props;
+const validCosmetics = (video.cosmetics || []).filter((c) => c.brand && c.name && c.rakuten_image_link);
+---
+
+<a href={withBase(`/video/${video.key}`)} class="block bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden">
+  <img src={video.thumbnail} alt={video.title} class="w-full aspect-video object-cover" loading="lazy" />
+  <div class="p-3">
+    <h3 class="font-semibold text-sm line-clamp-2 mb-2">{video.title}</h3>
+    <div class="flex items-center gap-2 text-xs text-neutral-500 mb-2">
+      {video.channel_icon && <img src={video.channel_icon} alt="" class="w-5 h-5 rounded-full" />}
+      <span class="truncate">{video.channel_title}</span>
+    </div>
+    <div class="flex justify-between text-xs text-neutral-400">
+      <span>{new Date(video.published_at).toLocaleDateString("ja-JP")}</span>
+      <span>再生 {formatCount(video.view_count)}</span>
+    </div>
+    {
+      validCosmetics.length > 0 && (
+        <div class="mt-2 flex gap-1 flex-wrap">
+          {validCosmetics.slice(0, 2).map((c) => (
+            <span class="text-[10px] bg-pink-50 text-pink-700 rounded px-1.5 py-0.5">
+              {c.brand} {c.name}
+            </span>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</a>
