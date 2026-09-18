@@ -62,50 +62,11 @@ def get_brand_name(cosme_brand_id: int):
         return None
 
 
-def _get_review_count(review_ul) -> int:
-    if review_ul:
-        m = re.search(r"クチコミ(\d+)件", review_ul.text)
-        if m:
-            return int(m.group(1))
-    return 0
-
-
-def _get_rating(review_ul):
-    """5点満点の評価点(例: 5.4)。無ければNone。"""
-    if not review_ul:
-        return None
-    tag = review_ul.select_one("li.top strong")
-    if tag:
-        try:
-            return float(tag.text.strip())
-        except ValueError:
-            return None
-    return None
-
-
-def _get_ranking_pt(review_ul):
-    """@cosmeランキングポイント(例: "132.1pt")。無ければNone。"""
-    if not review_ul:
-        return None
-    tag = review_ul.select_one("li.rankingPt span")
-    return tag.text.strip() if tag else None
-
-
-def _get_release_date(product_text_div):
-    """発売日を取得する。無ければNone。価格は楽天APIから別途取得するためここでは扱わない。"""
-    if not product_text_div:
-        return None
-    for li in product_text_div.select("ul.brand-renewal-price-info li"):
-        text = li.get_text(strip=True)
-        if text.startswith("発売日"):
-            return text.split("：", 1)[-1].strip()
-    return None
-
-
 def get_products_for_brand(cosme_brand_id: int, known_names: "set[str] | None" = None) -> list[dict]:
-    """[{name, category, review_count, rating, ranking_pt, release_date,
-    image_url}, ...] を返す(カテゴリ除外フィルタ適用済み)。
+    """[{name, category}, ...] を返す(カテゴリ除外フィルタ適用済み)。
     ※商品ページURLはアフィリエイト提携をしていないため保持しない(2026-09-18時点)。
+    口コミ件数・評価点・ランキングポイント・発売日・商品画像も一覧ページ内に存在するが、
+    元々の取得項目(brand/name/category)以外は追加しない方針に戻したため取得しない。
     すべて商品一覧ページ内の情報のみで完結させ、商品ごとの追加リクエストは発生させない。
 
     known_names: このブランドについて既にカタログ側で把握済みの商品名の集合。
@@ -149,30 +110,7 @@ def get_products_for_brand(cosme_brand_id: int, known_names: "set[str] | None" =
             if known_names is not None and name not in known_names:
                 page_has_new = True
 
-            review_ul = block.select_one("ul.review")
-            product_text = block.select_one("div.productText")
-            release_date = _get_release_date(product_text)
-
-            image_url = None
-            picture = block.find_previous_sibling("div", class_="productPicture") or (
-                block.parent.select_one("div.productPicture") if block.parent else None
-            )
-            if picture:
-                img_tag = picture.select_one("img")
-                if img_tag and img_tag.get("src"):
-                    image_url = img_tag["src"]
-
-            products.append(
-                {
-                    "name": name,
-                    "category": category,
-                    "review_count": _get_review_count(review_ul),
-                    "rating": _get_rating(review_ul),
-                    "ranking_pt": _get_ranking_pt(review_ul),
-                    "release_date": release_date,
-                    "image_url": image_url,
-                }
-            )
+            products.append({"name": name, "category": category})
 
         if stop or not page_has_new:
             break

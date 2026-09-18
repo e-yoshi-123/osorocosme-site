@@ -54,7 +54,6 @@ const related = getRelatedCosmetics(brand_id, name_id, Array.from(relatedTags)).
             </a>
             <h1 class="text-xl font-bold mt-1 mb-2">{entry.name}</h1>
             {entry.category && <p class="text-sm text-neutral-500 mb-1">カテゴリ: {entry.category}</p>}
-            {entry.release_date && <p class="text-sm text-neutral-500 mb-1">発売日: {entry.release_date}</p>}
             {entry.now_price !== undefined && (
               <p class="text-sm text-neutral-500 mb-3">参考価格: ¥{formatCount(entry.now_price)}</p>
             )}

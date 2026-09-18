@@ -53,12 +53,6 @@ export interface CosmeticListEntry {
   now_price?: number;
   count?: number;
   rakuten_link_none?: boolean;
-  // @cosmeスクレイピング由来（scripts/scrape_atcosme.py）
-  release_date?: string;
-  review_count?: number;
-  rating?: number;
-  ranking_pt?: string;
-  cosme_image_url?: string;
 }
 
 export interface Influencer {

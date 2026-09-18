@@ -93,7 +93,7 @@ def main():
         return brand_known_names.get(bid) if bid else None
 
     start_time = time.time()
-    new_brands = new_products = updated_products = processed_this_run = 0
+    new_brands = new_products = matched_existing = processed_this_run = 0
 
     while progress["pending_urls"]:
         if time.time() - start_time > args.time_budget:
@@ -120,17 +120,9 @@ def main():
 
         for p in products:
             pair = (brand_id, p["name"])
-            extra_fields = {
-                "review_count": p["review_count"],
-                "rating": p["rating"],
-                "ranking_pt": p["ranking_pt"],
-                "release_date": p["release_date"],
-                "cosme_image_url": p["image_url"],
-            }
             if pair in pair_to_key:
-                # 既存商品: rakuten系・count(動画言及数)・IDには触れず、@cosme由来の情報だけ更新
-                cosmetics_list[pair_to_key[pair]].update(extra_fields)
-                updated_products += 1
+                # 既存商品: 何も上書きしない(brand_id/name_id/rakuten系/countはこのスクリプトの管轄外)
+                matched_existing += 1
                 continue
 
             next_name_num = brand_max_name_num.get(brand_id, 0) + 1
@@ -147,7 +139,6 @@ def main():
                 "rakuten_image_link": "",
                 "rakuten_text_link": "",
                 "count": 0,
-                **extra_fields,
             }
             pair_to_key[pair] = key
             brand_known_names.setdefault(brand_id, set()).add(p["name"])
@@ -158,7 +149,7 @@ def main():
             save_catalogs(brands, cosmetics_list)
             print(
                 f"[進捗保存] {processed_this_run}件処理 / 残り{len(progress['pending_urls'])}件 "
-                f"/ 新規ブランド{new_brands} / 新規商品{new_products} / 更新{updated_products}"
+                f"/ 新規ブランド{new_brands} / 新規商品{new_products} / 既存一致{matched_existing}"
             )
 
     save_progress(progress)
@@ -166,7 +157,7 @@ def main():
 
     print(
         f"\n=== 完了 === 今回処理: {processed_this_run}件 / 新規ブランド: {new_brands} "
-        f"/ 新規商品: {new_products} / 既存更新: {updated_products} / 残り: {len(progress['pending_urls'])}件"
+        f"/ 新規商品: {new_products} / 既存一致: {matched_existing} / 残り: {len(progress['pending_urls'])}件"
     )
 
 
