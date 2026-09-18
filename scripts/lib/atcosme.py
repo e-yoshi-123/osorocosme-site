@@ -1,6 +1,9 @@
 """@cosme(cosme.net)からブランド・商品一覧を取得するスクレイパー。
 旧 edit/attocosme-scraping.py のロジックを踏襲しつつ、以下を変更している:
-  - 上位500ブランドへの絞り込みは廃止（全ブランド対象、コストはLLM側の設計で吸収する）
+  - 上位500ブランド(レビュー数ベース)への絞り込みは廃止し、代わりにカテゴリ別ランキング
+    (cosme.net/ranking/category/items 配下の各カテゴリ上位)に登場するブランドに絞り込む
+    （@cosmeには全ブランドを人気順に並べた一覧ページが存在しないため。詳細は
+    fetch_item_category_ids / fetch_popular_brand_ids 参照）
   - 完全洗い替えではなく、既存カタログへの「差分追加」専用（既存のbrand_id/name_idは一切変更しない）
 """
 
@@ -10,6 +13,8 @@ import requests
 from bs4 import BeautifulSoup
 
 SITEMAP_URL = "https://www.cosme.net/sitemap-brand-products.xml"
+RANKING_CATEGORY_INDEX_URL = "https://www.cosme.net/ranking/category/items"
+RANKING_PAGE_URL = "https://www.cosme.net/categories/item/{category_id}/ranking/"
 REQUEST_DELAY = 1.0  # サイトへの配慮
 
 # 旧 edit/brand_reviewcount_filter.py・csv_edit.py と同一の除外カテゴリ
@@ -44,6 +49,32 @@ def fetch_sitemap_urls() -> list[str]:
 def extract_cosme_brand_id(url: str):
     m = re.search(r"/brand/brand_id/(\d+)/products", url)
     return int(m.group(1)) if m else None
+
+
+def fetch_item_category_ids() -> list[int]:
+    """アイテムカテゴリ別ランキングのカテゴリID一覧を取得する。"""
+    res = requests.get(RANKING_CATEGORY_INDEX_URL, timeout=30)
+    res.raise_for_status()
+    ids = {int(m) for m in re.findall(r"/categories/item/(\d+)/ranking/", res.text)}
+    return sorted(ids)
+
+
+def fetch_popular_brand_ids(category_ids: list[int]) -> set[int]:
+    """各アイテムカテゴリのランキング1ページ目(上位10件)に登場するブランドの
+    cosme_brand_id 集合を返す。@cosme全体を人気順に並べた一覧が存在しないため、
+    カテゴリ別ランキングの上位商品から逆引きする方式で「人気ブランド」を近似する。"""
+    brand_ids: set[int] = set()
+    for category_id in category_ids:
+        url = RANKING_PAGE_URL.format(category_id=category_id)
+        try:
+            res = requests.get(url, timeout=15)
+        except requests.RequestException:
+            continue
+        if res.status_code != 200:
+            continue
+        brand_ids.update(int(m) for m in re.findall(r"/brands/(\d+)/", res.text))
+        time.sleep(REQUEST_DELAY)
+    return brand_ids
 
 
 def get_brand_name(cosme_brand_id: int):

@@ -1,9 +1,12 @@
-"""@cosmeから全ブランド・全商品を取得し、既存カタログに差分追加する。
+"""@cosmeのカテゴリ別ランキング上位に登場する人気ブランドの商品を取得し、
+既存カタログに差分追加する。
 
-- 旧 edit/ 一式と異なり、上位500ブランドへの絞り込みは行わない(全47,610ブランド対象)
+- 旧 edit/ 一式の「レビュー数上位500ブランド」という絞り込みに代えて、
+  カテゴリ別ランキング(アイテムカテゴリ)の上位商品から逆引きした「人気ブランド」に
+  絞り込む(47,610件の全ブランド走査はしない。詳細は lib/atcosme.py 参照)
 - 既存の brand_id/name_id は一切変更しない(videos.jsonからの参照を壊さないため)
-- 47,610ブランドのフル取得には数十時間かかるため、--time-budget 秒内で打ち切り、
-  続きは scripts/atcosme_progress.json に記録して次回実行時に再開する
+- --time-budget 秒内で打ち切り、続きは scripts/atcosme_progress.json に記録して
+  次回実行時に再開する(人気ブランドに絞ったことで通常は1〜数回で完走する見込み)
 - サイトへの配慮として1リクエストごとに待機時間を挟む(lib/atcosme.py の REQUEST_DELAY)
 """
 
@@ -15,7 +18,13 @@ import sys
 import time
 
 sys.path.insert(0, os.path.dirname(__file__))
-from lib.atcosme import fetch_sitemap_urls, scrape_one_brand
+from lib.atcosme import (
+    extract_cosme_brand_id,
+    fetch_item_category_ids,
+    fetch_popular_brand_ids,
+    fetch_sitemap_urls,
+    scrape_one_brand,
+)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "..", "src", "data")
@@ -30,9 +39,17 @@ def load_progress():
     if os.path.exists(PROGRESS_JSON):
         with open(PROGRESS_JSON, encoding="utf-8") as f:
             return json.load(f)
-    print("初回実行: @cosmeのサイトマップを取得します（全ブランドURL一覧）")
-    urls = fetch_sitemap_urls()
-    print(f"サイトマップ取得完了: {len(urls)}件のブランドURL")
+
+    print("初回実行: カテゴリ別ランキングから人気ブランドを収集します")
+    category_ids = fetch_item_category_ids()
+    print(f"アイテムカテゴリ数: {len(category_ids)}")
+    popular_brand_ids = fetch_popular_brand_ids(category_ids)
+    print(f"人気ブランド候補: {len(popular_brand_ids)}件")
+
+    print("@cosmeのサイトマップを取得します（全ブランドURL一覧）")
+    all_urls = fetch_sitemap_urls()
+    urls = [u for u in all_urls if extract_cosme_brand_id(u) in popular_brand_ids]
+    print(f"サイトマップ{len(all_urls)}件中、人気ブランドに該当する{len(urls)}件のみを対象にします")
     return {"pending_urls": urls, "total_urls": len(urls), "done_count": 0}
 
 
