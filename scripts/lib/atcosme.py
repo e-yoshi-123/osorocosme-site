@@ -102,11 +102,16 @@ def _get_release_date(product_text_div):
     return None
 
 
-def get_products_for_brand(cosme_brand_id: int) -> list[dict]:
+def get_products_for_brand(cosme_brand_id: int, known_names: "set[str] | None" = None) -> list[dict]:
     """[{name, category, review_count, rating, ranking_pt, release_date,
     image_url}, ...] を返す(カテゴリ除外フィルタ適用済み)。
     ※商品ページURLはアフィリエイト提携をしていないため保持しない(2026-09-18時点)。
-    すべて商品一覧ページ内の情報のみで完結させ、商品ごとの追加リクエストは発生させない。"""
+    すべて商品一覧ページ内の情報のみで完結させ、商品ごとの追加リクエストは発生させない。
+
+    known_names: このブランドについて既にカタログ側で把握済みの商品名の集合。
+    渡された場合、あるページの商品が1件も新規で無かった時点でそれ以降のページ取得を
+    打ち切る(再クロール時の節約用。新規追加分は掲載順の都合上、先頭寄りのページに
+    出る前提のヒューリスティックであり、完全性より速度を優先する)。"""
     products = []
     page = 1
     while True:
@@ -124,6 +129,7 @@ def get_products_for_brand(cosme_brand_id: int) -> list[dict]:
             break
 
         stop = False
+        page_has_new = known_names is None
         for block in blocks:
             if "(生産終了)" in block.text:
                 stop = True
@@ -139,6 +145,9 @@ def get_products_for_brand(cosme_brand_id: int) -> list[dict]:
             category = category_tag.text.strip() if category_tag else ""
             if category in SKIP_CATEGORIES:
                 continue
+
+            if known_names is not None and name not in known_names:
+                page_has_new = True
 
             review_ul = block.select_one("ul.review")
             product_text = block.select_one("div.productText")
@@ -165,7 +174,7 @@ def get_products_for_brand(cosme_brand_id: int) -> list[dict]:
                 }
             )
 
-        if stop:
+        if stop or not page_has_new:
             break
         page += 1
         time.sleep(REQUEST_DELAY)
@@ -173,8 +182,11 @@ def get_products_for_brand(cosme_brand_id: int) -> list[dict]:
     return products
 
 
-def scrape_one_brand(sitemap_url: str):
-    """1ブランド分を取得する。(brand_name, products) を返す。取得できなければ (None, [])。"""
+def scrape_one_brand(sitemap_url: str, known_names_for_brand=None):
+    """1ブランド分を取得する。(brand_name, products) を返す。取得できなければ (None, [])。
+
+    known_names_for_brand: brand_name(str) -> 既知の商品名の集合、を返すコールバック(省略可)。
+    渡した場合、get_products_for_brand の早期打ち切りに使われる。"""
     cosme_brand_id = extract_cosme_brand_id(sitemap_url)
     if cosme_brand_id is None:
         return None, []
@@ -182,5 +194,6 @@ def scrape_one_brand(sitemap_url: str):
     time.sleep(REQUEST_DELAY)
     if not brand_name:
         return None, []
-    products = get_products_for_brand(cosme_brand_id)
+    known_names = known_names_for_brand(brand_name) if known_names_for_brand else None
+    products = get_products_for_brand(cosme_brand_id, known_names=known_names)
     return brand_name, products

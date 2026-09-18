@@ -60,7 +60,7 @@ def get_next_brand_num(brands: dict) -> int:
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--time-budget", type=int, default=3300, help="このスクリプトが処理に使ってよい秒数の目安(デフォルト55分)"
+        "--time-budget", type=int, default=20100, help="このスクリプトが処理に使ってよい秒数の目安(デフォルト335分)"
     )
     args = parser.parse_args()
 
@@ -73,9 +73,11 @@ def main():
     name_to_brand_id = {v: k for k, v in brands.items()}
     next_brand_num = get_next_brand_num(brands)
 
-    # brand_id -> 現在の最大name_id番号、(brand_id, name) -> key のインデックスを事前構築
+    # brand_id -> 現在の最大name_id番号、(brand_id, name) -> key、
+    # brand_id -> 既知の商品名集合、のインデックスを事前構築
     brand_max_name_num = {}
     pair_to_key = {}
+    brand_known_names = {}
     for key, entry in cosmetics_list.items():
         bid = entry.get("brand_id")
         nid = entry.get("name_id", "")
@@ -84,6 +86,11 @@ def main():
             brand_max_name_num[bid] = max(brand_max_name_num.get(bid, 0), int(m.group(1)))
         if bid and entry.get("name"):
             pair_to_key[(bid, entry["name"])] = key
+            brand_known_names.setdefault(bid, set()).add(entry["name"])
+
+    def known_names_for_brand(brand_name):
+        bid = name_to_brand_id.get(brand_name)
+        return brand_known_names.get(bid) if bid else None
 
     start_time = time.time()
     new_brands = new_products = updated_products = processed_this_run = 0
@@ -97,7 +104,7 @@ def main():
         progress["done_count"] += 1
         processed_this_run += 1
 
-        brand_name, products = scrape_one_brand(url)
+        brand_name, products = scrape_one_brand(url, known_names_for_brand=known_names_for_brand)
         if not brand_name:
             continue
 
@@ -143,6 +150,7 @@ def main():
                 **extra_fields,
             }
             pair_to_key[pair] = key
+            brand_known_names.setdefault(brand_id, set()).add(p["name"])
             new_products += 1
 
         if processed_this_run % SAVE_EVERY_N_BRANDS == 0:
