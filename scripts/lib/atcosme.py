@@ -59,21 +59,27 @@ def fetch_item_category_ids() -> list[int]:
     return sorted(ids)
 
 
+RANKING_PAGES_PER_CATEGORY = 3  # 1ページ10件 x 3ページ = 上位30件
+
+
 def fetch_popular_brand_ids(category_ids: list[int]) -> set[int]:
-    """各アイテムカテゴリのランキング1ページ目(上位10件)に登場するブランドの
-    cosme_brand_id 集合を返す。@cosme全体を人気順に並べた一覧が存在しないため、
-    カテゴリ別ランキングの上位商品から逆引きする方式で「人気ブランド」を近似する。"""
+    """各アイテムカテゴリのランキング上位30件（10件x3ページ、?page=2,3で確認済み）に
+    登場するブランドの cosme_brand_id 集合を返す。@cosme全体を人気順に並べた一覧が
+    存在しないため、カテゴリ別ランキングの上位商品から逆引きする方式で
+    「人気ブランド」を近似する。"""
     brand_ids: set[int] = set()
     for category_id in category_ids:
-        url = RANKING_PAGE_URL.format(category_id=category_id)
-        try:
-            res = requests.get(url, timeout=15)
-        except requests.RequestException:
-            continue
-        if res.status_code != 200:
-            continue
-        brand_ids.update(int(m) for m in re.findall(r"/brands/(\d+)/", res.text))
-        time.sleep(REQUEST_DELAY)
+        base_url = RANKING_PAGE_URL.format(category_id=category_id)
+        for page in range(1, RANKING_PAGES_PER_CATEGORY + 1):
+            url = base_url if page == 1 else f"{base_url}?page={page}"
+            try:
+                res = requests.get(url, timeout=15)
+            except requests.RequestException:
+                continue
+            if res.status_code != 200:
+                continue
+            brand_ids.update(int(m) for m in re.findall(r"/brands/(\d+)/", res.text))
+            time.sleep(REQUEST_DELAY)
     return brand_ids
 
 

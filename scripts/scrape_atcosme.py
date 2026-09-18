@@ -2,11 +2,15 @@
 既存カタログに差分追加する。
 
 - 旧 edit/ 一式の「レビュー数上位500ブランド」という絞り込みに代えて、
-  カテゴリ別ランキング(アイテムカテゴリ)の上位商品から逆引きした「人気ブランド」に
-  絞り込む(47,610件の全ブランド走査はしない。詳細は lib/atcosme.py 参照)
+  カテゴリ別ランキング(アイテムカテゴリ、上位30件)の上位商品から逆引きした
+  「人気ブランド」に絞り込む(47,610件の全ブランド走査はしない。詳細は lib/atcosme.py 参照)
+- ランキングは毎回の実行時に再取得し、前回は圏外だったが新たに人気入りしたブランドが
+  あればpending_urlsに追加する(一度処理済みのブランドは再追加しない。
+  「今回捕捉できなかったブランドは諦めるが、次回ランキングに入れば以後は対象にする」
+  という運用方針に対応)
 - 既存の brand_id/name_id は一切変更しない(videos.jsonからの参照を壊さないため)
-- --time-budget 秒内で打ち切り、続きは scripts/atcosme_progress.json に記録して
-  次回実行時に再開する(人気ブランドに絞ったことで通常は1〜数回で完走する見込み)
+- --time-budget 秒内(ランキング再取得の時間も含む)で打ち切り、続きは
+  scripts/atcosme_progress.json に記録して次回実行時に再開する
 - サイトへの配慮として1リクエストごとに待機時間を挟む(lib/atcosme.py の REQUEST_DELAY)
 """
 
@@ -35,22 +39,46 @@ PROGRESS_JSON = os.path.join(BASE_DIR, "atcosme_progress.json")
 SAVE_EVERY_N_BRANDS = 25
 
 
-def load_progress():
-    if os.path.exists(PROGRESS_JSON):
-        with open(PROGRESS_JSON, encoding="utf-8") as f:
-            return json.load(f)
-
-    print("初回実行: カテゴリ別ランキングから人気ブランドを収集します")
+def refresh_pending_from_rankings(progress):
+    """カテゴリ別ランキングを毎回再取得し、まだ拾えていない人気ブランドが新たに
+    見つかればpending_urlsに追加する。「今回ランキング圏外のブランドは新商品
+    チェックを諦めるが、次回以降ランキングに入ってくれば対象にする」という
+    運用方針に対応するため、初回だけでなく毎回このチェックを行う。
+    一度処理済み(seen_brand_ids)のブランドは、引き続き人気でも再追加しない
+    (差分追加の対象としては1ブランド1回で十分なため)。"""
+    print("人気ブランドをカテゴリ別ランキングから収集します(取りこぼしは毎回拾い直す)")
     category_ids = fetch_item_category_ids()
     print(f"アイテムカテゴリ数: {len(category_ids)}")
     popular_brand_ids = fetch_popular_brand_ids(category_ids)
     print(f"人気ブランド候補: {len(popular_brand_ids)}件")
 
-    print("@cosmeのサイトマップを取得します（全ブランドURL一覧）")
+    seen = set(progress.get("seen_brand_ids", []))
+    pending_ids = {extract_cosme_brand_id(u) for u in progress["pending_urls"]}
+    new_ids = popular_brand_ids - seen - pending_ids
+    if not new_ids:
+        print("新たに追加すべき人気ブランドはありません")
+        return
+
+    print(f"新規に人気入りしたブランド{len(new_ids)}件をサイトマップから引き当てます")
     all_urls = fetch_sitemap_urls()
-    urls = [u for u in all_urls if extract_cosme_brand_id(u) in popular_brand_ids]
-    print(f"サイトマップ{len(all_urls)}件中、人気ブランドに該当する{len(urls)}件のみを対象にします")
-    return {"pending_urls": urls, "total_urls": len(urls), "done_count": 0}
+    added = 0
+    for u in all_urls:
+        if extract_cosme_brand_id(u) in new_ids:
+            progress["pending_urls"].append(u)
+            added += 1
+    progress["total_urls"] = progress.get("total_urls", 0) + added
+    print(f"追加: {added}件")
+
+
+def load_progress():
+    if os.path.exists(PROGRESS_JSON):
+        with open(PROGRESS_JSON, encoding="utf-8") as f:
+            progress = json.load(f)
+    else:
+        progress = {"pending_urls": [], "seen_brand_ids": [], "total_urls": 0, "done_count": 0}
+
+    refresh_pending_from_rankings(progress)
+    return progress
 
 
 def save_progress(progress):
@@ -81,6 +109,7 @@ def main():
     )
     args = parser.parse_args()
 
+    start_time = time.time()  # ランキング再取得(load_progress内)の時間も予算に含める
     progress = load_progress()
     with open(BRANDS_JSON, encoding="utf-8") as f:
         brands = json.load(f)
@@ -109,7 +138,6 @@ def main():
         bid = name_to_brand_id.get(brand_name)
         return brand_known_names.get(bid) if bid else None
 
-    start_time = time.time()
     new_brands = new_products = matched_existing = processed_this_run = 0
 
     while progress["pending_urls"]:
@@ -120,6 +148,10 @@ def main():
         url = progress["pending_urls"].pop(0)
         progress["done_count"] += 1
         processed_this_run += 1
+
+        cosme_brand_id = extract_cosme_brand_id(url)
+        if cosme_brand_id is not None:
+            progress.setdefault("seen_brand_ids", []).append(cosme_brand_id)
 
         brand_name, products = scrape_one_brand(url, known_names_for_brand=known_names_for_brand)
         if not brand_name:
