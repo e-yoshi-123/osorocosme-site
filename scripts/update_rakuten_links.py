@@ -72,7 +72,7 @@ def main():
         brand, name = entry.get("brand", ""), entry.get("name", "")
         product_name = f"{brand} {name}"
         try:
-            image_html, link, price = get_rakuten_item_info(product_name)
+            image_html, link, price = get_rakuten_item_info(brand, name)
         except RakutenAPIUnavailable as e:
             print(f"[楽天API利用不可] {e} — 今回はここで打ち切ります（未確定分は次回リトライ）")
             api_down = True
@@ -105,7 +105,7 @@ def main():
             product_name = f"{brand} {name}"
             print(f"[リンク切れ検出] {product_name} ({link})")
             try:
-                image_html, new_link, price = get_rakuten_item_info(product_name)
+                image_html, new_link, price = get_rakuten_item_info(brand, name)
             except RakutenAPIUnavailable as e:
                 print(f"[楽天API利用不可] {e} — 今回はここで打ち切ります（未確定分は次回リトライ）")
                 api_down = True
