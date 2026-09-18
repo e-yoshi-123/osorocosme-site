@@ -132751,5 +132751,66 @@
     "check_status": false,
     "delete_flg": false,
     "processed": false
+  },
+  "YQuitIhM3OI": {
+    "video_id": "YQuitIhM3OI",
+    "title": "絶対に盛りたい日の最近の毎日メイク紹介します#shorts #beauty #makeup",
+    "description": "",
+    "thumbnail": "https://i.ytimg.com/vi/YQuitIhM3OI/mqdefault.jpg",
+    "url": "https://www.youtube.com/watch?v=YQuitIhM3OI",
+    "published_at": "2026-07-29T10:12:04Z",
+    "channel_title": "梨木",
+    "channel_id": "UCqaKZNBzAIwNfym2dsqiQ6Q",
+    "channel_icon": "https://yt3.ggpht.com/BD3fj6mjO1wr2MJzh1_-yMIX_LF80Vlj_vtNVMFMJ8Ez2YzrA-nS6RQJ8c2oVuuIcYa9hU1iSQ=s88-c-k-c0x00ffffff-no-rj",
+    "subscriber_count": 299000,
+    "view_count": "438050",
+    "check_status": true,
+    "delete_flg": false,
+    "processed": true,
+    "skin_profile": {
+      "イエベ春": false,
+      "イエベ秋": true,
+      "ブルベ夏": false,
+      "ブルベ冬": false,
+      "乾燥肌": false,
+      "脂性肌": false,
+      "混合肌": false,
+      "敏感肌": false,
+      "普通肌": false
+    },
+    "cosmetics": [
+      {
+        "brand_id": "brand-00001",
+        "brand": "セザンヌ",
+        "name_id": "name-00032",
+        "name": "クッションファンデーション",
+        "related_tags": [
+          "リキッドファンデーション"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
+        "amazon_link": "",
+        "mentions": [
+          "薄膜",
+          "艶が綺麗",
+          "悪いところなし"
+        ]
+      },
+      {
+        "brand_id": "brand-00001",
+        "brand": "セザンヌ",
+        "name_id": "name-00056",
+        "name": "UVクリアフェイスパウダー",
+        "related_tags": [
+          "プレストパウダー"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
+        "amazon_link": "",
+        "mentions": []
+      }
+    ]
   }
 }
