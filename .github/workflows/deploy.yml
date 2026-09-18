@@ -10,6 +10,7 @@ on:
     workflows:
       - "Update Video Metadata"
       - "Process Pending Videos (Claude)"
+      - "Scrape @cosme Catalog"
     types: [completed]
   workflow_dispatch:
 

@@ -1,0 +1,39 @@
+name: Scrape @cosme Catalog
+
+on:
+  schedule:
+    - cron: "0 17 * * *" # 毎日 UTC 17:00 = JST 2:00 (他の日次ジョブより前)
+  workflow_dispatch:
+    inputs:
+      time_budget:
+        description: "1回で処理に使う秒数の目安"
+        required: false
+        default: "3300"
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Scrape @cosme (resumable)
+        run: python scripts/scrape_atcosme.py --time-budget "${{ github.event.inputs.time_budget || '3300' }}"
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add scripts/atcosme_progress.json src/data/brands-list.json src/data/cosmetics_list.json
+          git diff --cached --quiet && echo "No changes" || git commit -m "chore: scrape @cosme catalog batch"
+          git push

@@ -45,8 +45,12 @@ const related = getRelatedCosmetics(brand_id, name_id, Array.from(relatedTags)).
     ) : (
       <>
         <div class="bg-white rounded-lg shadow-sm p-6 mb-8 flex flex-col md:flex-row gap-6">
-          {entry.rakuten_image_link && (
+          {entry.rakuten_image_link ? (
             <div class="shrink-0 [&_img]:rounded" set:html={entry.rakuten_image_link} />
+          ) : (
+            entry.cosme_image_url && (
+              <img src={entry.cosme_image_url} alt={entry.name} class="shrink-0 w-40 h-40 object-contain rounded" />
+            )
           )}
           <div>
             <a href={withBase(`/brand/${entry.brand_id}`)} class="text-sm text-pink-600 hover:underline">
@@ -54,6 +58,17 @@ const related = getRelatedCosmetics(brand_id, name_id, Array.from(relatedTags)).
             </a>
             <h1 class="text-xl font-bold mt-1 mb-2">{entry.name}</h1>
             {entry.category && <p class="text-sm text-neutral-500 mb-1">カテゴリ: {entry.category}</p>}
+
+            {(entry.rating !== undefined || entry.review_count !== undefined) && (
+              <p class="text-sm text-neutral-600 mb-1">
+                {entry.rating !== undefined && <span>★ {entry.rating.toFixed(1)}</span>}
+                {entry.review_count !== undefined && (
+                  <span class="text-neutral-400"> （クチコミ{formatCount(entry.review_count)}件）</span>
+                )}
+              </p>
+            )}
+            {entry.price_info && <p class="text-sm text-neutral-500 mb-1">容量・価格: {entry.price_info}</p>}
+            {entry.release_date && <p class="text-sm text-neutral-500 mb-1">発売日: {entry.release_date}</p>}
             {entry.now_price !== undefined && (
               <p class="text-sm text-neutral-500 mb-3">参考価格: ¥{formatCount(entry.now_price)}</p>
             )}
