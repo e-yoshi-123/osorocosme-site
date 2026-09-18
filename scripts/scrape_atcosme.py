@@ -117,7 +117,6 @@ def main():
                 "review_count": p["review_count"],
                 "rating": p["rating"],
                 "ranking_pt": p["ranking_pt"],
-                "price_info": p["price_info"],
                 "release_date": p["release_date"],
                 "cosme_image_url": p["image_url"],
             }

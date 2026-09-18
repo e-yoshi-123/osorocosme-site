@@ -91,22 +91,19 @@ def _get_ranking_pt(review_ul):
     return tag.text.strip() if tag else None
 
 
-def _get_price_info_and_release_date(product_text_div):
-    """容量・税込価格の説明文と発売日を取得する。どちらも無ければ(None, None)。"""
-    price_info, release_date = None, None
+def _get_release_date(product_text_div):
+    """発売日を取得する。無ければNone。価格は楽天APIから別途取得するためここでは扱わない。"""
     if not product_text_div:
-        return price_info, release_date
+        return None
     for li in product_text_div.select("ul.brand-renewal-price-info li"):
         text = li.get_text(strip=True)
-        if text.startswith("容量") or "価格" in text.split("：")[0]:
-            price_info = text.split("：", 1)[-1].strip()
-        elif text.startswith("発売日"):
-            release_date = text.split("：", 1)[-1].strip()
-    return price_info, release_date
+        if text.startswith("発売日"):
+            return text.split("：", 1)[-1].strip()
+    return None
 
 
 def get_products_for_brand(cosme_brand_id: int) -> list[dict]:
-    """[{name, category, review_count, rating, ranking_pt, price_info, release_date,
+    """[{name, category, review_count, rating, ranking_pt, release_date,
     image_url}, ...] を返す(カテゴリ除外フィルタ適用済み)。
     ※商品ページURLはアフィリエイト提携をしていないため保持しない(2026-09-18時点)。
     すべて商品一覧ページ内の情報のみで完結させ、商品ごとの追加リクエストは発生させない。"""
@@ -145,7 +142,7 @@ def get_products_for_brand(cosme_brand_id: int) -> list[dict]:
 
             review_ul = block.select_one("ul.review")
             product_text = block.select_one("div.productText")
-            price_info, release_date = _get_price_info_and_release_date(product_text)
+            release_date = _get_release_date(product_text)
 
             image_url = None
             picture = block.find_previous_sibling("div", class_="productPicture") or (
@@ -163,7 +160,6 @@ def get_products_for_brand(cosme_brand_id: int) -> list[dict]:
                     "review_count": _get_review_count(review_ul),
                     "rating": _get_rating(review_ul),
                     "ranking_pt": _get_ranking_pt(review_ul),
-                    "price_info": price_info,
                     "release_date": release_date,
                     "image_url": image_url,
                 }
