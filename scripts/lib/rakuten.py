@@ -4,8 +4,11 @@ import os
 import requests
 
 RAKUTEN_APP_ID = os.environ.get("RAKUTEN_APP_ID")
+RAKUTEN_ACCESS_KEY = os.environ.get("RAKUTEN_ACCESS_KEY")
 RAKUTEN_AFFILIATE_ID = os.environ.get("RAKUTEN_AFFILIATE_ID")
-SEARCH_URL = "https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706"
+# 2026-05-13に旧エンドポイント(app.rakuten.co.jp/services/api)が完全廃止されたため、
+# 新エンドポイント(openapi.rakuten.co.jp/ichibams/api)+accessKey認証に移行済み。
+SEARCH_URL = "https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260401"
 
 
 def simplify_product_name(product_name: str) -> str:
@@ -33,6 +36,7 @@ def get_rakuten_item_info(product_name: str):
         "format": "json",
         "keyword": query,
         "applicationId": RAKUTEN_APP_ID,
+        "accessKey": RAKUTEN_ACCESS_KEY,
         "affiliateId": RAKUTEN_AFFILIATE_ID,
     }
     try:
