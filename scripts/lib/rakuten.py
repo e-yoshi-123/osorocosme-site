@@ -44,7 +44,9 @@ def get_rakuten_item_info(product_name: str):
     except requests.RequestException as e:
         raise RakutenAPIUnavailable(str(e))
 
-    if response.status_code >= 500:
+    if response.status_code >= 500 or response.status_code in (401, 403, 429):
+        # 403 CLIENT_IP_NOT_ALLOWED 等、APIそのものへの到達・認可の問題は
+        # 「商品が見つからない」とは全く別物なので、rakuten_link_noneは立てずに打ち切る。
         raise RakutenAPIUnavailable(f"HTTP {response.status_code}: {response.text[:200]}")
     if response.status_code != 200:
         print(f"  楽天APIエラー: HTTP {response.status_code} / {response.text[:200]}")
