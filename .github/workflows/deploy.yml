@@ -10,6 +10,7 @@ on:
     workflows:
       - "Update Video Metadata"
       - "Process Pending Videos (Claude)"
+      - "Update Rakuten Links"
     types: [completed]
   workflow_dispatch:
 
