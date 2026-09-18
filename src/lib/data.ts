@@ -54,11 +54,13 @@ export interface CosmeticListEntry {
   count?: number;
   rakuten_link_none?: boolean;
   // @cosmeスクレイピング由来（scripts/scrape_atcosme.py）
+  price_info?: string;
+  release_date?: string;
+  // 以下は@cosme自身が集計・算出した数値/画像で著作権の帰属が明確なため、
+  // サイト上には表示せず内部保持（突合・将来の別用途検討用）にとどめる。
   review_count?: number;
   rating?: number;
   ranking_pt?: string;
-  price_info?: string;
-  release_date?: string;
   cosme_image_url?: string;
 }
 
