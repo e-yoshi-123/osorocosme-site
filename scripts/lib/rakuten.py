@@ -156,7 +156,7 @@ def is_link_alive(url: str) -> bool:
     404・接続エラー・明らかなエラーページへの到達は検知できる。
     """
     try:
-        resp = requests.get(url, timeout=10, allow_redirects=True)
+        resp = requests.get(url, timeout=25, allow_redirects=True)
         if resp.status_code >= 400:
             return False
         # 楽天の「ページが見つかりません」的な文言を軽くチェック
