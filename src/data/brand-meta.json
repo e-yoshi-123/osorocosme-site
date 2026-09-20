@@ -20,7 +20,8 @@
   "group": "コーセー"
  },
  "brand-00128": {
-  "country": "KR"
+  "country": "KR",
+  "group": "CLIO"
  },
  "brand-00037": {
   "country": "JP",
@@ -66,7 +67,8 @@
   "country": "JP"
  },
  "brand-00426": {
-  "country": "KR"
+  "country": "KR",
+  "group": "CLIO"
  },
  "brand-00040": {
   "country": "FR",
@@ -245,7 +247,8 @@
   "group": "アモーレパシフィック"
  },
  "brand-00457": {
-  "country": "JP"
+  "country": "JP",
+  "group": "マッシュビューティーラボ"
  },
  "brand-00196": {
   "country": "JP"
@@ -435,9 +438,6 @@
   "country": "JP",
   "group": "キリン"
  },
- "brand-00470": {
-  "country": "KR"
- },
  "brand-00163": {
   "country": "JP",
   "group": "ロート製薬"
@@ -518,7 +518,8 @@
   "group": "BCL"
  },
  "brand-00133": {
-  "country": "JP"
+  "country": "JP",
+  "group": "コーセー"
  },
  "brand-00092": {
   "country": "KR"
@@ -645,7 +646,8 @@
   "group": "常盤薬品工業（サナ）"
  },
  "brand-00428": {
-  "country": "GB"
+  "country": "GB",
+  "group": "コティ"
  },
  "brand-00454": {
   "country": "KR",
@@ -766,7 +768,8 @@
   "country": "JP"
  },
  "brand-00379": {
-  "country": "JP"
+  "country": "JP",
+  "group": "ヤーマン"
  },
  "brand-00343": {
   "country": "JP",
@@ -820,10 +823,6 @@
  },
  "brand-00285": {
   "country": "JP"
- },
- "brand-00514": {
-  "country": "JP",
-  "group": "花王"
  },
  "brand-00159": {
   "country": "JP"
@@ -1033,5 +1032,57 @@
  },
  "brand-00313": {
   "country": "JP"
+ },
+ "brand-00499": {
+  "country": "KR",
+  "group": "CLIO"
+ },
+ "brand-01080": {
+  "country": "JP",
+  "group": "マッシュビューティーラボ"
+ },
+ "brand-00114": {
+  "country": "JP",
+  "group": "花王"
+ },
+ "brand-00697": {
+  "country": "JP",
+  "group": "花王"
+ },
+ "brand-00360": {
+  "country": "JP",
+  "group": "花王"
+ },
+ "brand-00137": {
+  "country": "JP",
+  "group": "資生堂"
+ },
+ "brand-00336": {
+  "country": "JP",
+  "group": "資生堂"
+ },
+ "brand-00521": {
+  "country": "US",
+  "group": "エスティ ローダー"
+ },
+ "brand-00583": {
+  "country": "GB",
+  "group": "エスティ ローダー"
+ },
+ "brand-00376": {
+  "country": "KR",
+  "group": "エスティ ローダー"
+ },
+ "brand-00264": {
+  "country": "KR",
+  "group": "アモーレパシフィック"
+ },
+ "brand-00861": {
+  "country": "KR",
+  "group": "ロレアル"
+ },
+ "brand-00764": {
+  "country": "FR",
+  "group": "ロレアル"
  }
 }

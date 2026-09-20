@@ -2,6 +2,7 @@ import videosData from "../data/videos.json";
 import brandsData from "../data/brands-list.json";
 import cosmeticsListData from "../data/cosmetics_list.json";
 import brandMetaData from "../data/brand-meta.json";
+import brandReadings from "../data/brand-readings.json";
 
 export interface Cosmetic {
   brand_id: string;
@@ -268,11 +269,20 @@ export function getInfluencerRanking(): InfluencerRanking[] {
   return result.sort((a, b) => b.score - a.score);
 }
 
-export function groupByKana(items: { name: string }[]): Map<string, typeof items> {
+/** ブランドの読み仮名（英字・漢字の名前のブランド用。カナ始まりの名前には無い）。 */
+export function getBrandReading(brand_id: string): string | undefined {
+  return (brandReadings as Record<string, string>)[brand_id];
+}
+
+const toKatakana = (s: string) => s.replace(/[ぁ-ん]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0x60));
+
+/** 読み（無ければ名前）の先頭文字で五十音の見出しに分ける。英字・漢字名も読みで統一する。 */
+export function groupByKana(items: { name: string; brand_id?: string }[]): Map<string, typeof items> {
   const groups = new Map<string, typeof items>();
   for (const item of items) {
-    const head = item.name.charAt(0);
-    const key = /[ぁ-んァ-ヶ]/.test(head) ? head : "他";
+    const reading = item.brand_id ? getBrandReading(item.brand_id) : undefined;
+    const head = toKatakana((reading ?? item.name).charAt(0));
+    const key = /[ァ-ヶ]/.test(head) ? head : "他";
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key)!.push(item);
   }

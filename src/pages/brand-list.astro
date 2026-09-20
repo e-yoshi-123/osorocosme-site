@@ -4,13 +4,16 @@ import {
   getBrandsWithVideos,
   getBrandGroups,
   getBrandMeta,
+  getBrandReading,
   getCountryRegion,
   groupByKana,
   COUNTRY_NAMES,
   withBase,
 } from "../lib/data";
 
-const brands = getBrandsWithVideos().sort((a, b) => a.name.localeCompare(b.name, "ja"));
+const brands = getBrandsWithVideos().sort((a, b) =>
+  (getBrandReading(a.brand_id) ?? a.name).localeCompare(getBrandReading(b.brand_id) ?? b.name, "ja"),
+);
 const grouped = groupByKana(brands);
 
 const REGIONS = [
@@ -228,7 +231,8 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
       for (let iter = 0; iter < 4; iter++) {
         order = [...items.map((it) => ({ b: it.b, i: it.i, v: it.b.v }))];
         if (merged.length > 0) order.push({ more: true, v: merged.reduce((n, m) => n + m.b.v, 0) });
-        order.sort((a, b) => b.v - a.v);
+        // 「ほか」は合計が個々のブランドより大きくても常に最後に置く（並びは個別ブランドの多い順）
+        order.sort((a, b) => (a.more ? 1 : 0) - (b.more ? 1 : 0) || b.v - a.v);
         rects = squarify(order.map((o) => o.v), area);
         if (iter === 3) break;
         const nonfit = order.map((o, k) => ({ o, r: rects[k] })).filter(({ o, r }) => !o.more && !fits(o.b!.name, r));
