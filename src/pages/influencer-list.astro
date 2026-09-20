@@ -5,7 +5,10 @@ import { getInfluencerRanking, formatCount, withBase } from "../lib/data";
 const influencers = getInfluencerRanking();
 ---
 
-<Layout title="インフルエンサー一覧">
+<Layout
+  title="インフルエンサー一覧"
+  description="コスメを紹介しているYouTuberの一覧。登録者数・掲載動画数・紹介コスメ数から算出した人気順で、各人の使用コスメ遍歴を確認できます。"
+>
   <h1 class="text-xl font-bold mb-6">インフルエンサー一覧（{influencers.length}件）</h1>
 
   <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

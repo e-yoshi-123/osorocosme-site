@@ -1,33 +1,20 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import CosmeticCard from "../components/CosmeticCard.astro";
-import { getCosmeticRankings, RANKING_CATEGORY_GROUPS } from "../lib/data";
+import { getCosmeticRankingsByTag, groupTagsByCategory } from "../lib/data";
 
 const TOP_N = 5;
-const rankings = getCosmeticRankings();
-
-// タグごとにスコア降順で並べる（同点は紹介動画数→名前で安定化）
-const rankingByTag = new Map<string, typeof rankings>();
-for (const r of rankings) {
-  for (const t of r.tags) {
-    if (!rankingByTag.has(t)) rankingByTag.set(t, []);
-    rankingByTag.get(t)!.push(r);
-  }
-}
-for (const list of rankingByTag.values()) {
-  list.sort((a, b) => b.score - a.score || b.videoCount - a.videoCount || a.name.localeCompare(b.name, "ja"));
-}
+const rankingByTag = getCosmeticRankingsByTag();
 
 // 大分類 → 肌に載せる順のカテゴリ。定義に無いタグは「その他」へ。
-const known = new Set(RANKING_CATEGORY_GROUPS.flatMap((g) => g.tags));
-const unknownTags = Array.from(rankingByTag.keys()).filter((t) => !known.has(t));
-const groups = [...RANKING_CATEGORY_GROUPS, { group: "その他", tags: unknownTags }]
-  .map((g) => ({ group: g.group, tags: g.tags.filter((t) => rankingByTag.has(t)) }))
-  .filter((g) => g.tags.length > 0);
+const groups = groupTagsByCategory(rankingByTag.keys());
 const allTags = groups.flatMap((g) => g.tags);
 ---
 
-<Layout title="ランキング">
+<Layout
+  title="コスメ人気ランキング（カテゴリ別）"
+  description="YouTubeのコスメ紹介動画での紹介数・再生数・紹介したインフルエンサー数から算出した、カテゴリ別の人気コスメランキング。化粧下地、ファンデーション、アイシャドウ、リップなど。"
+>
   <h1 class="text-xl font-bold mb-2">コスメランキング</h1>
   <p class="text-xs text-neutral-500 mb-6">
     紹介動画の合計再生回数・紹介動画数・紹介したインフルエンサー数から算出した人気スコア順です。
@@ -110,7 +97,12 @@ const allTags = groups.flatMap((g) => g.tags);
     btn.addEventListener("click", () => showTag(btn.dataset.tag!));
   });
 
-  showTag(document.querySelector<HTMLElement>(".ranking-block")!.dataset.tag!);
+  // トップページのカテゴリリンク（#カテゴリ名）から直接開けるようにする
+  const hashTag = decodeURIComponent(location.hash.slice(1));
+  const initial = Array.from(document.querySelectorAll<HTMLElement>(".ranking-block")).find((el) => el.dataset.tag === hashTag);
+  showTag((initial ?? document.querySelector<HTMLElement>(".ranking-block")!).dataset.tag!);
+  const sel = document.getElementById("tag-select-mobile") as HTMLSelectElement | null;
+  if (sel && initial) sel.value = hashTag;
 
   const mobileSelect = document.getElementById("tag-select-mobile") as HTMLSelectElement | null;
   mobileSelect?.addEventListener("change", () => showTag(mobileSelect.value));

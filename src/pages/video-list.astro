@@ -1,0 +1,93 @@
+---
+import Layout from "../layouts/Layout.astro";
+import VideoCard from "../components/VideoCard.astro";
+import { getVisibleVideos, getVideoScore } from "../lib/data";
+
+const gallery = [...getVisibleVideos()].sort((a, b) => getVideoScore(b) - getVideoScore(a));
+const PAGE_SIZE = 60;
+---
+
+<Layout
+  title="コスメ紹介動画一覧"
+  description={`YouTubeのコスメ紹介動画${gallery.length}本の一覧。新着順・人気順で探せます。`}
+>
+  <h1 class="text-xl font-bold mb-4">動画一覧（{gallery.length}本）</h1>
+  <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+    <p class="text-sm text-neutral-500">コスメを紹介している動画</p>
+    <div class="flex gap-2 text-sm">
+      <button id="sort-newest" data-sort="newest" class="sort-btn px-3 py-1 rounded border border-neutral-300 text-neutral-500">
+        新着順
+      </button>
+      <button id="sort-popular" data-sort="popular" class="sort-btn px-3 py-1 rounded border border-pink-300 text-pink-600">
+        人気順
+      </button>
+    </div>
+  </div>
+
+  <div id="video-gallery" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    {
+      gallery.map((v, i) => (
+        <div
+          class:list={["gallery-item", { hidden: i >= PAGE_SIZE }]}
+          data-published={v.published_at}
+          data-score={getVideoScore(v)}
+        >
+          <VideoCard video={v} />
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="text-center mt-8">
+    <button id="load-more-btn" class="bg-pink-600 text-white px-6 py-2 rounded hover:bg-pink-700" data-page-size={PAGE_SIZE}>
+      もっと見る
+    </button>
+  </div>
+</Layout>
+
+<script define:vars={{ PAGE_SIZE }}>
+  // --- ギャラリー: 新着順/人気順の切り替え + もっと見る ---
+  const gallery = document.getElementById("video-gallery");
+  const loadMoreBtn = document.getElementById("load-more-btn");
+  let currentSort = "popular";
+
+  function applySort(sort) {
+    currentSort = sort;
+    const items = Array.from(gallery.querySelectorAll(".gallery-item"));
+    items.sort((a, b) => {
+      if (sort === "popular") {
+        return parseFloat(b.dataset.score) - parseFloat(a.dataset.score);
+      }
+      return new Date(b.dataset.published).getTime() - new Date(a.dataset.published).getTime();
+    });
+    items.forEach((item, i) => {
+      gallery.appendChild(item);
+      item.classList.toggle("hidden", i >= PAGE_SIZE);
+    });
+    if (loadMoreBtn) loadMoreBtn.classList.toggle("hidden", items.length <= PAGE_SIZE);
+
+    document.querySelectorAll(".sort-btn").forEach((btn) => {
+      const active = btn.dataset.sort === sort;
+      btn.classList.toggle("border-pink-300", active);
+      btn.classList.toggle("text-pink-600", active);
+      btn.classList.toggle("border-neutral-300", !active);
+      btn.classList.toggle("text-neutral-500", !active);
+    });
+  }
+
+  document.querySelectorAll(".sort-btn").forEach((btn) => {
+    btn.addEventListener("click", () => applySort(btn.dataset.sort));
+  });
+
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener("click", () => {
+      const hidden = gallery.querySelectorAll(".gallery-item.hidden");
+      Array.from(hidden)
+        .slice(0, PAGE_SIZE)
+        .forEach((item) => item.classList.remove("hidden"));
+      if (gallery.querySelectorAll(".gallery-item.hidden").length === 0) {
+        loadMoreBtn.classList.add("hidden");
+      }
+    });
+  }
+</script>

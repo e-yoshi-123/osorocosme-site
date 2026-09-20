@@ -1,7 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import CosmeticCard from "../../components/CosmeticCard.astro";
-import { getAllVideoEntries, getVideoByKey, formatCount, withBase } from "../../lib/data";
+import { getAllVideoEntries, getVideoByKey, formatCount, withBase, formatJaDate, breadcrumbLd } from "../../lib/data";
 
 export function getStaticPaths() {
   return getAllVideoEntries().map((v) => ({ params: { video_key: v.key } }));
@@ -10,9 +10,28 @@ export function getStaticPaths() {
 const { video_key } = Astro.params;
 const video = getVideoByKey(video_key!);
 const validCosmetics = (video?.cosmetics || []).filter((c) => c.brand && c.name);
+const cosmeticNames = validCosmetics.slice(0, 5).map((c) => `${c.brand} ${c.name}`).join("、");
+const description = video
+  ? `${video.channel_title}が${formatJaDate(video.published_at)}に投稿した動画。紹介コスメ${validCosmetics.length}品` + (cosmeticNames ? `（${cosmeticNames}${validCosmetics.length > 5 ? "ほか" : ""}）` : "") + "。"
+  : undefined;
+const jsonLd = video
+  ? [
+      {
+        "@context": "https://schema.org",
+        "@type": "VideoObject",
+        name: video.title,
+        description: description,
+        thumbnailUrl: video.thumbnail,
+        uploadDate: video.published_at,
+        embedUrl: `https://www.youtube.com/embed/${video.video_id}`,
+        contentUrl: video.url,
+      },
+      breadcrumbLd([{ name: "ホーム", path: "/" }, { name: "動画一覧", path: "/video-list" }, { name: video.title, path: `/video/${video.key}` }], Astro.site!),
+    ]
+  : [];
 ---
 
-<Layout title={video?.title ?? "動画詳細"}>
+<Layout title={video?.title ?? "動画詳細"} description={description} image={video?.thumbnail} ogType="video.other" jsonLd={jsonLd}>
   {
     !video ? (
       <p class="text-neutral-400">動画が見つかりませんでした。</p>

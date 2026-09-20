@@ -1,7 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import CosmeticCard from "../../components/CosmeticCard.astro";
-import { getBrandsWithVideos, getBrandName, getCosmeticsForBrand } from "../../lib/data";
+import { getBrandsWithVideos, getBrandName, getCosmeticsForBrand, breadcrumbLd } from "../../lib/data";
 
 export function getStaticPaths() {
   return getBrandsWithVideos().map((b) => ({ params: { brand_id: b.brand_id } }));
@@ -10,11 +10,16 @@ export function getStaticPaths() {
 const { brand_id } = Astro.params;
 const brandName = getBrandName(brand_id!) ?? "不明なブランド";
 const cosmetics = getCosmeticsForBrand(brand_id!);
+const stats = getBrandsWithVideos().find((b) => b.brand_id === brand_id);
+const description = `${brandName}は、YouTubeのコスメ紹介動画${stats?.videoCount ?? 0}本で${cosmetics.length}品が紹介されています。紹介された商品とその紹介動画を一覧できます。`;
+const jsonLd = [
+  breadcrumbLd([{ name: "ホーム", path: "/" }, { name: "ブランド一覧", path: "/brand-list" }, { name: brandName, path: `/brand/${brand_id}` }], Astro.site!),
+];
 ---
 
-<Layout title={brandName}>
+<Layout title={brandName} description={description} jsonLd={jsonLd}>
   <h1 class="text-xl font-bold mb-2">{brandName}</h1>
-  <p class="text-sm text-neutral-500 mb-6">動画で紹介された商品 {cosmetics.length}件</p>
+  <p class="text-sm text-neutral-500 mb-6">{description}</p>
 
   {
     cosmetics.length === 0 ? (

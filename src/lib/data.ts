@@ -337,7 +337,9 @@ export interface CosmeticRanking {
  * 対数スケールに揃えて合算する。紹介動画数(2倍)・紹介したチャンネル数(1.5倍)を厚めに、
  * 紹介動画の合計再生回数を1倍で加える。チャンネル数を入れることで、同一インフルエンサーが
  * 何本も紹介しただけの商品より、複数の人に支持されている商品が上位に来る。 */
+let _rankingsCache: CosmeticRanking[] | null = null;
 export function getCosmeticRankings(): CosmeticRanking[] {
+  if (_rankingsCache) return _rankingsCache;
   const map = new Map<string, CosmeticRanking & { videos: Set<string>; channels: Set<string>; tagSet: Set<string> }>();
   for (const v of getVisibleVideos()) {
     for (const c of v.cosmetics || []) {
@@ -362,7 +364,7 @@ export function getCosmeticRankings(): CosmeticRanking[] {
       }
     }
   }
-  return Array.from(map.values()).map(({ videos, channels, tagSet, ...e }) => ({
+  _rankingsCache = Array.from(map.values()).map(({ videos, channels, tagSet, ...e }) => ({
     ...e,
     tags: Array.from(tagSet),
     videoCount: videos.size,
@@ -372,6 +374,7 @@ export function getCosmeticRankings(): CosmeticRanking[] {
       Math.log10(videos.size + 1) * 2 +
       Math.log10(channels.size + 1) * 1.5,
   }));
+  return _rankingsCache;
 }
 
 /** ランキングのカテゴリ表示順。大分類（メイク→スキンケア）の中を、肌に載せる一般的な順に並べる。
@@ -431,4 +434,103 @@ export function groupTagsByCategory(tags: Iterable<string>): { group: string; ta
   return [...RANKING_CATEGORY_GROUPS, { group: "その他", tags: unknown }]
     .map((g) => ({ group: g.group, tags: g.tags.filter((t) => present.has(t)) }))
     .filter((g) => g.tags.length > 0);
+}
+
+/** タグごとのスコア降順ランキング（同点は紹介動画数→名前）。 */
+let _byTagCache: Map<string, CosmeticRanking[]> | null = null;
+export function getCosmeticRankingsByTag(): Map<string, CosmeticRanking[]> {
+  if (_byTagCache) return _byTagCache;
+  const byTag = new Map<string, CosmeticRanking[]>();
+  for (const r of getCosmeticRankings()) {
+    for (const t of r.tags) {
+      if (!byTag.has(t)) byTag.set(t, []);
+      byTag.get(t)!.push(r);
+    }
+  }
+  for (const list of byTag.values()) {
+    list.sort((a, b) => b.score - a.score || b.videoCount - a.videoCount || a.name.localeCompare(b.name, "ja"));
+  }
+  _byTagCache = byTag;
+  return byTag;
+}
+
+/** 直近の動画（投稿日降順の上位 recentVideos 本）で紹介されたコスメを、その中での紹介回数順に返す。
+ * 「いま動画で話題になっているコスメ」を示す。同数なら通算の人気スコア順。 */
+export function getTrendingCosmetics(limit: number, recentVideos = 40): CosmeticRanking[] {
+  const ranked = new Map(getCosmeticRankings().map((r) => [`${r.brand_id}_${r.name_id}`, r]));
+  const counts = new Map<string, number>();
+  for (const v of sortByPublishedDesc(getVisibleVideos()).slice(0, recentVideos)) {
+    const seen = new Set<string>();
+    for (const c of v.cosmetics || []) {
+      const key = `${c.brand_id}_${c.name_id}`;
+      if (ranked.has(key) && !seen.has(key)) {
+        seen.add(key);
+        counts.set(key, (counts.get(key) || 0) + 1);
+      }
+    }
+  }
+  return Array.from(counts.entries())
+    .sort((a, b) => b[1] - a[1] || ranked.get(b[0])!.score - ranked.get(a[0])!.score)
+    .slice(0, limit)
+    .map(([k]) => ranked.get(k)!);
+}
+
+export interface CosmeticFacts {
+  videoCount: number;
+  channelCount: number;
+  mainTag?: string;
+  rank?: number;
+  rankTotal?: number;
+  introductions: { channel_id: string; channel_title: string; videoKey: string; videoTitle: string; published_at: string }[];
+}
+
+/** コスメ詳細用の事実データ。紹介した人・日付（新しい順）、主カテゴリ内での順位など。 */
+export function getCosmeticFacts(brand_id: string, name_id: string): CosmeticFacts {
+  const videos = sortByPublishedDesc(getVideosUsingCosmetic(brand_id, name_id));
+  const introductions = videos.map((v) => ({
+    channel_id: v.channel_id,
+    channel_title: v.channel_title,
+    videoKey: v.key,
+    videoTitle: v.title,
+    published_at: v.published_at,
+  }));
+  const r = getCosmeticRankings().find((x) => x.brand_id === brand_id && x.name_id === name_id);
+  const facts: CosmeticFacts = {
+    videoCount: videos.length,
+    channelCount: new Set(videos.map((v) => v.channel_id)).size,
+    introductions,
+  };
+  if (r && r.tags.length > 0) {
+    const byTag = getCosmeticRankingsByTag();
+    // 紹介コスメ数が最も多い（=代表的な）カテゴリで順位を出す
+    const mainTag = [...r.tags].sort((a, b) => byTag.get(b)!.length - byTag.get(a)!.length)[0];
+    const list = byTag.get(mainTag)!;
+    facts.mainTag = mainTag;
+    facts.rank = list.findIndex((x) => x.brand_id === brand_id && x.name_id === name_id) + 1;
+    facts.rankTotal = list.length;
+  }
+  return facts;
+}
+
+export function formatJaDate(iso: string): string {
+  const d = new Date(iso);
+  return `${d.getUTCFullYear()}年${d.getUTCMonth() + 1}月${d.getUTCDate()}日`;
+}
+
+/** Rakuten の画像リンクHTMLから最初の img src を取り出す（構造化データ用）。 */
+export function extractImageSrc(html?: string): string | undefined {
+  return html?.match(/<img[^>]+src=["']([^"']+)["']/i)?.[1];
+}
+
+export function breadcrumbLd(items: { name: string; path: string }[], site: URL) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((it, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: it.name,
+      item: new URL(withBase(it.path), site).href,
+    })),
+  };
 }

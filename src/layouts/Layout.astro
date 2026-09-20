@@ -4,15 +4,25 @@ import { withBase } from "../lib/data";
 
 interface Props {
   title: string;
+  description?: string;
+  image?: string;
+  ogType?: "website" | "article" | "video.other";
+  noindex?: boolean;
+  jsonLd?: object[];
 }
 
-const { title } = Astro.props;
+const SITE_NAME = "OsoroCosme";
+const DEFAULT_DESCRIPTION =
+  "YouTubeのコスメ紹介動画から、誰がいつどのコスメを使っているかを集めたデータベース。カテゴリ別ランキング、ブランド、インフルエンサー別の使用コスメ遍歴を確認できます。";
+const { title, description = DEFAULT_DESCRIPTION, image, ogType = "website", noindex = false, jsonLd = [] } = Astro.props;
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
 
 const navLinks = [
   { href: "/", label: "ホーム" },
   { href: "/ranking", label: "ランキング" },
   { href: "/brand-list", label: "ブランド一覧" },
   { href: "/influencer-list", label: "インフルエンサー一覧" },
+  { href: "/video-list", label: "動画一覧" },
 ];
 ---
 
@@ -21,7 +31,19 @@ const navLinks = [
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <title>{title} | OsoroCosme</title>
+    <title>{title} | {SITE_NAME}</title>
+    <meta name="description" content={description} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={`${title} | ${SITE_NAME}`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="ja_JP" />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {image && <meta property="og:image" content={image} />}
+    <meta name="twitter:card" content={image ? "summary_large_image" : "summary"} />
+    {jsonLd.map((ld) => <script type="application/ld+json" set:html={JSON.stringify(ld)} />)}
   </head>
   <body class="min-h-screen bg-neutral-50 text-neutral-900 flex flex-col">
     <header class="bg-white border-b border-neutral-200 sticky top-0 z-30">

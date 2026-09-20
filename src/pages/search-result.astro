@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="検索結果">
+<Layout title="検索結果" noindex>
   <h1 class="text-xl font-bold mb-2">検索結果: <span id="search-query" class="text-pink-600"></span></h1>
   <p id="search-count" class="text-sm text-neutral-500 mb-6"></p>
   <div id="search-results" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>

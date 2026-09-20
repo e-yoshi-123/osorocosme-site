@@ -6,7 +6,10 @@ const brands = getBrandsWithVideos().sort((a, b) => a.name.localeCompare(b.name,
 const grouped = groupByKana(brands);
 ---
 
-<Layout title="ブランド一覧">
+<Layout
+  title="ブランド一覧"
+  description="YouTubeのコスメ紹介動画で紹介されたブランドの一覧。紹介動画数の多い人気ブランドや、五十音順で探せます。"
+>
   <h1 class="text-xl font-bold mb-6">ブランド一覧（{brands.length}件）</h1>
 
   {

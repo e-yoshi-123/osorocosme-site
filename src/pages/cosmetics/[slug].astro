@@ -11,6 +11,10 @@ import {
   sortByPublishedDesc,
   formatCount,
   withBase,
+  getCosmeticFacts,
+  formatJaDate,
+  extractImageSrc,
+  breadcrumbLd,
 } from "../../lib/data";
 
 export function getStaticPaths() {
@@ -35,10 +39,44 @@ for (const v of videosUsing) {
     }
   }
 }
+const facts = getCosmeticFacts(brand_id, name_id);
 const related = getRelatedCosmetics(brand_id, name_id, Array.from(relatedTags)).slice(0, 8);
+
+const factSentence = entry
+  ? `${entry.brand}「${entry.name}」は、YouTubeのコスメ紹介動画${facts.videoCount}本・インフルエンサー${facts.channelCount}人に紹介されています` +
+    (facts.rank ? `。「${facts.mainTag}」カテゴリの人気ランキングでは${facts.rankTotal}品中${facts.rank}位です。` : "。")
+  : "";
+const firstIntro = facts.introductions[facts.introductions.length - 1];
+const lastIntro = facts.introductions[0];
+const description = entry
+  ? factSentence + (firstIntro ? `最初の紹介は${formatJaDate(firstIntro.published_at)}、直近は${formatJaDate(lastIntro.published_at)}です。` : "")
+  : undefined;
+const imageSrc = extractImageSrc(entry?.rakuten_image_link);
+const productLd = entry && {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: entry.name,
+  brand: { "@type": "Brand", name: entry.brand },
+  ...(entry.category ? { category: entry.category } : {}),
+  ...(imageSrc ? { image: imageSrc } : {}),
+  description,
+};
+const jsonLd = entry
+  ? [
+      productLd!,
+      breadcrumbLd(
+        [
+          { name: "ホーム", path: "/" },
+          { name: entry.brand, path: `/brand/${entry.brand_id}` },
+          { name: entry.name, path: `/cosmetics/${cosmeticSlug(brand_id, name_id)}` },
+        ],
+        Astro.site!
+      ),
+    ]
+  : [];
 ---
 
-<Layout title={entry ? `${entry.brand} ${entry.name}` : "商品詳細"}>
+<Layout title={entry ? `${entry.brand} ${entry.name}` : "商品詳細"} description={description} image={imageSrc} jsonLd={jsonLd}>
   {
     !entry ? (
       <p class="text-neutral-400">商品情報が見つかりませんでした。</p>
@@ -69,6 +107,19 @@ const related = getRelatedCosmetics(brand_id, name_id, Array.from(relatedTags)).
             )}
           </div>
         </div>
+
+        <p class="text-sm text-neutral-700 mb-8 bg-pink-50 rounded-lg p-4">{factSentence}</p>
+
+        <h2 class="font-bold mb-3">いつ・誰が紹介したか</h2>
+        <ul class="mb-10 text-sm divide-y bg-white rounded-lg shadow-sm">
+          {facts.introductions.map((i) => (
+            <li class="px-4 py-2 flex flex-wrap gap-x-4">
+              <span class="text-neutral-500 w-32 shrink-0">{formatJaDate(i.published_at)}</span>
+              <a href={withBase(`/influencer/${i.channel_id}`)} class="font-medium hover:text-pink-600">{i.channel_title}</a>
+              <a href={withBase(`/video/${i.videoKey}`)} class="text-neutral-500 hover:text-pink-600 line-clamp-1">{i.videoTitle}</a>
+            </li>
+          ))}
+        </ul>
 
         <h2 class="font-bold mb-3">この商品が紹介されている動画（{videosUsing.length}件）</h2>
         <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-10">

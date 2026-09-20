@@ -9,6 +9,7 @@ import {
   sortByPublishedDesc,
   groupTagsByCategory,
   withBase,
+  breadcrumbLd,
   type Cosmetic,
 } from "../../lib/data";
 
@@ -51,9 +52,27 @@ for (const g of groups) {
   for (const b of timeline) for (const c of b.items) if ((c.related_tags || []).some((t) => set.has(t))) n++;
   groupCounts.set(g.group, n);
 }
+const description = influencer
+  ? `${influencer.channel_title}のコスメ紹介動画${videos.length}本から、使用コスメ${totalItems}品をカテゴリ別・投稿日順にまとめています。いつどのコスメを紹介していたか、使用コスメの変遷を確認できます。`
+  : undefined;
+const jsonLd = influencer
+  ? [
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        name: influencer.channel_title,
+        ...(influencer.channel_icon ? { image: influencer.channel_icon } : {}),
+        url: `https://www.youtube.com/channel/${influencer.channel_id}`,
+      },
+      breadcrumbLd(
+        [{ name: "ホーム", path: "/" }, { name: "インフルエンサー一覧", path: "/influencer-list" }, { name: influencer.channel_title, path: `/influencer/${influencer.channel_id}` }],
+        Astro.site!
+      ),
+    ]
+  : [];
 ---
 
-<Layout title={influencer?.channel_title ?? "インフルエンサー詳細"}>
+<Layout title={influencer?.channel_title ?? "インフルエンサー詳細"} description={description} image={influencer?.channel_icon} jsonLd={jsonLd}>
   {
     !influencer ? (
       <p class="text-neutral-400">インフルエンサーが見つかりませんでした。</p>
@@ -61,7 +80,10 @@ for (const g of groups) {
       <>
         <div class="flex items-center gap-4 mb-8">
           {influencer.channel_icon && <img src={influencer.channel_icon} alt="" class="w-16 h-16 rounded-full" />}
-          <h1 class="text-xl font-bold">{influencer.channel_title}</h1>
+          <div>
+            <h1 class="text-xl font-bold">{influencer.channel_title}</h1>
+            <p class="text-sm text-neutral-500 mt-1">{description}</p>
+          </div>
         </div>
 
         {timeline.length > 0 && (

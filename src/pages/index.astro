@@ -1,50 +1,107 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import VideoCard from "../components/VideoCard.astro";
+import CosmeticCard from "../components/CosmeticCard.astro";
 import {
   getVisibleVideos,
-  getVideoScore,
   getPopularBrands,
   getInfluencerRanking,
+  getCosmeticRankingsByTag,
+  getTrendingCosmetics,
+  groupTagsByCategory,
+  sortByPublishedDesc,
   formatCount,
   withBase,
 } from "../lib/data";
 
 const visible = getVisibleVideos();
-const gallery = [...visible].sort((a, b) => getVideoScore(b) - getVideoScore(a));
-const PAGE_SIZE = 60;
-
-// ヒーロー枠は「人気動画プール」上位20件からランダムに3件を表示する（ランダム選択はクライアント側で実施）
-const HERO_POOL_SIZE = 20;
-const heroPool = [...visible].sort((a, b) => getVideoScore(b) - getVideoScore(a)).slice(0, HERO_POOL_SIZE);
-
+const latestVideos = sortByPublishedDesc(visible).slice(0, 12);
 const popularBrands = getPopularBrands(12);
 const popularInfluencers = getInfluencerRanking().slice(0, 12);
+const trending = getTrendingCosmetics(8);
+
+const byTag = getCosmeticRankingsByTag();
+const categoryGroups = groupTagsByCategory(byTag.keys());
+const influencerCount = getInfluencerRanking().length;
+const cosmeticCount = new Set(Array.from(byTag.values()).flat().map((r) => `${r.brand_id}_${r.name_id}`)).size;
+
+const siteLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "OsoroCosme",
+  description: "YouTubeのコスメ紹介動画から、誰がいつどのコスメを使っているかを集めたデータベース",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: { "@type": "EntryPoint", urlTemplate: new URL(withBase("/search-result"), Astro.site).href + "?q={search_term_string}" },
+    "query-input": "required name=search_term_string",
+  },
+};
 ---
 
-<Layout title="ホーム">
-  {
-    heroPool.length > 0 && (
-      <section id="hero-pool" class="mb-10 grid md:grid-cols-3 gap-4">
-        {heroPool.map((v) => (
-          <a
-            href={withBase(`/video/${v.key}`)}
-            class="hero-candidate relative block rounded-lg overflow-hidden shadow-md group hidden"
-          >
-            <img src={v.thumbnail} alt={v.title} class="w-full aspect-video object-cover group-hover:scale-105 transition" />
-            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3">
-              <p class="text-white text-sm font-semibold line-clamp-2">{v.title}</p>
+<Layout
+  title="コスメ紹介動画から探すコスメデータベース"
+  description={`YouTubeのコスメ紹介動画${visible.length}本から、インフルエンサー${influencerCount}人が使ったコスメ${cosmeticCount}品を集めました。カテゴリ別ランキングや、インフルエンサーごとの使用コスメ遍歴で探せます。`}
+  jsonLd={[siteLd]}
+>
+  <section class="text-center mb-12 pt-4">
+    <h1 class="text-2xl md:text-3xl font-bold mb-3">みんなが使っているコスメを、動画から探す</h1>
+    <p class="text-sm text-neutral-500 mb-6">
+      YouTubeのコスメ紹介動画 {visible.length}本 ／ インフルエンサー {influencerCount}人 ／ コスメ {cosmeticCount}品を集めたデータベース
+    </p>
+    <form action={withBase("/search-result")} method="get" class="max-w-xl mx-auto flex gap-2">
+      <input
+        type="text"
+        name="q"
+        placeholder="コスメ名・ブランド・インフルエンサーで検索"
+        class="flex-1 border border-neutral-300 rounded-full px-5 py-3 focus:outline-none focus:ring-2 focus:ring-pink-300"
+      />
+      <button type="submit" class="bg-pink-600 text-white px-6 rounded-full hover:bg-pink-700">検索</button>
+    </form>
+  </section>
+
+  <section class="mb-12">
+    <div class="flex items-end justify-between mb-3">
+      <h2 class="text-lg font-bold">カテゴリから探す</h2>
+      <a href={withBase("/ranking")} class="text-sm text-pink-600 hover:underline">ランキング一覧へ →</a>
+    </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {
+        categoryGroups.map((g) => {
+          const top = [...g.tags].sort((a, b) => byTag.get(b)!.length - byTag.get(a)!.length).slice(0, 8);
+          return (
+            <div class="bg-white rounded-xl shadow-sm p-4">
+              <h3 class="font-bold text-sm mb-2 text-pink-700">{g.group}</h3>
+              <div class="flex flex-wrap gap-1.5">
+                {top.map((t) => (
+                  <a href={withBase(`/ranking#${encodeURIComponent(t)}`)} class="text-xs px-2.5 py-1 rounded-full bg-pink-50 text-pink-700 hover:bg-pink-100">
+                    {t}
+                  </a>
+                ))}
+              </div>
             </div>
-          </a>
-        ))}
+          );
+        })
+      }
+    </div>
+  </section>
+
+  {
+    trending.length > 0 && (
+      <section class="mb-12">
+        <h2 class="text-lg font-bold mb-1">最近の動画で紹介が多いコスメ</h2>
+        <p class="text-xs text-neutral-500 mb-3">直近に投稿された動画で、紹介された回数が多い順です。</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          {trending.map((c) => (
+            <CosmeticCard brand_id={c.brand_id} brand={c.brand} name_id={c.name_id} name={c.name} rakutenImageHtml={c.rakuten_image_link} />
+          ))}
+        </div>
       </section>
     )
   }
 
-
-  <section class="mb-10">
+  <section class="mb-12">
     <div class="flex items-end justify-between mb-3">
-      <h2 class="text-lg font-bold">🔥 人気ブランド</h2>
+      <h2 class="text-lg font-bold">人気ブランド</h2>
       <a href={withBase("/brand-list")} class="text-sm text-pink-600 hover:underline">ブランド一覧へ →</a>
     </div>
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
@@ -66,9 +123,9 @@ const popularInfluencers = getInfluencerRanking().slice(0, 12);
     </div>
   </section>
 
-  <section class="mb-10">
+  <section class="mb-12">
     <div class="flex items-end justify-between mb-3">
-      <h2 class="text-lg font-bold">⭐ 人気インフルエンサー</h2>
+      <h2 class="text-lg font-bold">人気インフルエンサー</h2>
       <a href={withBase("/influencer-list")} class="text-sm text-pink-600 hover:underline">インフルエンサー一覧へ →</a>
     </div>
     <div class="flex gap-4 overflow-x-auto pb-3 -mx-4 px-4 snap-x">
@@ -92,90 +149,13 @@ const popularInfluencers = getInfluencerRanking().slice(0, 12);
     </div>
   </section>
 
-  <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-    <h2 class="text-lg font-bold">🎬 動画一覧</h2>
-    <div class="flex gap-2 text-sm">
-      <button id="sort-newest" data-sort="newest" class="sort-btn px-3 py-1 rounded border border-neutral-300 text-neutral-500">
-        新着順
-      </button>
-      <button id="sort-popular" data-sort="popular" class="sort-btn px-3 py-1 rounded border border-pink-300 text-pink-600">
-        人気順
-      </button>
+  <section>
+    <div class="flex items-end justify-between mb-3">
+      <h2 class="text-lg font-bold">新着動画</h2>
+      <a href={withBase("/video-list")} class="text-sm text-pink-600 hover:underline">動画一覧へ →</a>
     </div>
-  </div>
-
-  <div id="video-gallery" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-    {
-      gallery.map((v, i) => (
-        <div
-          class:list={["gallery-item", { hidden: i >= PAGE_SIZE }]}
-          data-published={v.published_at}
-          data-score={getVideoScore(v)}
-        >
-          <VideoCard video={v} />
-        </div>
-      ))
-    }
-  </div>
-
-  <div class="text-center mt-8">
-    <button id="load-more-btn" class="bg-pink-600 text-white px-6 py-2 rounded hover:bg-pink-700" data-page-size={PAGE_SIZE}>
-      もっと見る
-    </button>
-  </div>
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {latestVideos.map((v) => <VideoCard video={v} />)}
+    </div>
+  </section>
 </Layout>
-
-<script define:vars={{ PAGE_SIZE }}>
-  // --- ヒーロー: 人気動画プールからランダムに3件だけ表示 ---
-  const candidates = Array.from(document.querySelectorAll(".hero-candidate"));
-  for (let i = candidates.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
-  }
-  candidates.slice(0, 3).forEach((el) => el.classList.remove("hidden"));
-
-  // --- ギャラリー: 新着順/人気順の切り替え + もっと見る ---
-  const gallery = document.getElementById("video-gallery");
-  const loadMoreBtn = document.getElementById("load-more-btn");
-  let currentSort = "popular";
-
-  function applySort(sort) {
-    currentSort = sort;
-    const items = Array.from(gallery.querySelectorAll(".gallery-item"));
-    items.sort((a, b) => {
-      if (sort === "popular") {
-        return parseFloat(b.dataset.score) - parseFloat(a.dataset.score);
-      }
-      return new Date(b.dataset.published).getTime() - new Date(a.dataset.published).getTime();
-    });
-    items.forEach((item, i) => {
-      gallery.appendChild(item);
-      item.classList.toggle("hidden", i >= PAGE_SIZE);
-    });
-    if (loadMoreBtn) loadMoreBtn.classList.toggle("hidden", items.length <= PAGE_SIZE);
-
-    document.querySelectorAll(".sort-btn").forEach((btn) => {
-      const active = btn.dataset.sort === sort;
-      btn.classList.toggle("border-pink-300", active);
-      btn.classList.toggle("text-pink-600", active);
-      btn.classList.toggle("border-neutral-300", !active);
-      btn.classList.toggle("text-neutral-500", !active);
-    });
-  }
-
-  document.querySelectorAll(".sort-btn").forEach((btn) => {
-    btn.addEventListener("click", () => applySort(btn.dataset.sort));
-  });
-
-  if (loadMoreBtn) {
-    loadMoreBtn.addEventListener("click", () => {
-      const hidden = gallery.querySelectorAll(".gallery-item.hidden");
-      Array.from(hidden)
-        .slice(0, PAGE_SIZE)
-        .forEach((item) => item.classList.remove("hidden"));
-      if (gallery.querySelectorAll(".gallery-item.hidden").length === 0) {
-        loadMoreBtn.classList.add("hidden");
-      }
-    });
-  }
-</script>
