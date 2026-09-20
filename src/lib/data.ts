@@ -319,3 +319,106 @@ export function getVideoScore(v: Video): number {
 
   return popularityScore + recencyScore;
 }
+
+export interface CosmeticRanking {
+  brand_id: string;
+  brand: string;
+  name_id: string;
+  name: string;
+  rakuten_image_link?: string;
+  videoCount: number;
+  channelCount: number;
+  totalViews: number;
+  score: number;
+  tags: string[];
+}
+
+/** コスメ単位の人気スコア。インフルエンサー(getInfluencerRanking)と同じく、桁の違う指標を
+ * 対数スケールに揃えて合算する。紹介動画数(2倍)・紹介したチャンネル数(1.5倍)を厚めに、
+ * 紹介動画の合計再生回数を1倍で加える。チャンネル数を入れることで、同一インフルエンサーが
+ * 何本も紹介しただけの商品より、複数の人に支持されている商品が上位に来る。 */
+export function getCosmeticRankings(): CosmeticRanking[] {
+  const map = new Map<string, CosmeticRanking & { videos: Set<string>; channels: Set<string>; tagSet: Set<string> }>();
+  for (const v of getVisibleVideos()) {
+    for (const c of v.cosmetics || []) {
+      if (!c.brand_id || !c.name_id || !c.related_tags || c.related_tags.length === 0) continue;
+      const key = `${c.brand_id}_${c.name_id}`;
+      let e = map.get(key);
+      if (!e) {
+        e = {
+          brand_id: c.brand_id, brand: c.brand, name_id: c.name_id, name: c.name,
+          rakuten_image_link: c.rakuten_image_link,
+          videoCount: 0, channelCount: 0, totalViews: 0, score: 0, tags: [],
+          videos: new Set(), channels: new Set(), tagSet: new Set(),
+        };
+        map.set(key, e);
+      }
+      if (!e.rakuten_image_link && c.rakuten_image_link) e.rakuten_image_link = c.rakuten_image_link;
+      c.related_tags.forEach((t) => e!.tagSet.add(t));
+      if (!e.videos.has(v.key)) {
+        e.videos.add(v.key);
+        e.channels.add(v.channel_id);
+        e.totalViews += toNumber(v.view_count);
+      }
+    }
+  }
+  return Array.from(map.values()).map(({ videos, channels, tagSet, ...e }) => ({
+    ...e,
+    tags: Array.from(tagSet),
+    videoCount: videos.size,
+    channelCount: channels.size,
+    score:
+      Math.log10(e.totalViews + 1) +
+      Math.log10(videos.size + 1) * 2 +
+      Math.log10(channels.size + 1) * 1.5,
+  }));
+}
+
+/** ランキングのカテゴリ表示順。大分類（スキンケア→メイク）の中を、肌に載せる一般的な順に並べる。
+ * ここに無いタグは末尾の「その他」にまとめる。 */
+export const RANKING_CATEGORY_GROUPS: { group: string; tags: string[] }[] = [
+  {
+    group: "スキンケア",
+    tags: [
+      "オイルクレンジング", "クレンジングジェル", "クレンジングクリーム", "ミルククレンジング",
+      "リキッドクレンジング", "その他クレンジング", "ゴマージュ・ピーリング",
+      "ブースター・導入液", "化粧水", "ミスト状化粧水", "美容液", "シートマスク・パック",
+      "乳液", "フェイスクリーム", "乳液・クリーム", "オールインワン化粧品",
+      "アイケア・アイクリーム", "フェイスオイル・バーム", "日焼け止め・UVケア(顔用)",
+      "ハンドクリーム・ケア", "ハンドソープ・ジェル", "スキンケア美容家電",
+    ],
+  },
+  {
+    group: "ベースメイク",
+    tags: [
+      "化粧下地", "リキッドファンデーション", "クリーム・ジェルファンデーション",
+      "パウダーファンデーション", "ファンデーション", "その他ファンデーション",
+      "コンシーラー", "プレストパウダー", "ルースパウダー",
+    ],
+  },
+  {
+    group: "アイブロウ",
+    tags: ["アイブロウペンシル", "パウダーアイブロウ", "眉マスカラ", "その他アイブロウ", "アイブロウ"],
+  },
+  {
+    group: "アイメイク",
+    tags: [
+      "パウダーアイシャドウ", "ジェル・クリームアイシャドウ", "アイシャドウ",
+      "リキッドアイライナー", "ジェルアイライナー", "ペンシルアイライナー", "その他アイライナー",
+      "マスカラ下地・トップコート", "マスカラ", "つけまつげ", "まつげ美容液",
+      "二重まぶた用グッズ", "カラコン",
+    ],
+  },
+  {
+    group: "チーク・リップ",
+    tags: [
+      "パウダーチーク", "ジェル・クリームチーク",
+      "リップライナー", "口紅", "リップスティック", "リップグロス", "リップケア・リップクリーム",
+      "ポイントメイクリムーバー",
+    ],
+  },
+  {
+    group: "メイク小物・その他",
+    tags: ["メイクアップキット・パレット", "メイクブラシ", "パフ・スポンジ", "ビューラー", "コットン"],
+  },
+];

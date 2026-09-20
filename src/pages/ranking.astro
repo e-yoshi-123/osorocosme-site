@@ -1,74 +1,92 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import CosmeticCard from "../components/CosmeticCard.astro";
-import { getVisibleVideos, type Cosmetic } from "../lib/data";
+import { getCosmeticRankings, RANKING_CATEGORY_GROUPS } from "../lib/data";
 
-// related_tags と rakuten_image_link が両方非空のコスメを rakuten_image_link で重複排除（先勝ち）
-const seenLinks = new Set<string>();
-const uniqueCosmetics: Cosmetic[] = [];
-for (const v of getVisibleVideos()) {
-  for (const c of v.cosmetics || []) {
-    if (!c.rakuten_image_link || !c.related_tags || c.related_tags.length === 0) continue;
-    if (seenLinks.has(c.rakuten_image_link)) continue;
-    seenLinks.add(c.rakuten_image_link);
-    uniqueCosmetics.push(c);
+const TOP_N = 5;
+const rankings = getCosmeticRankings();
+
+// タグごとにスコア降順で並べる（同点は紹介動画数→名前で安定化）
+const rankingByTag = new Map<string, typeof rankings>();
+for (const r of rankings) {
+  for (const t of r.tags) {
+    if (!rankingByTag.has(t)) rankingByTag.set(t, []);
+    rankingByTag.get(t)!.push(r);
   }
 }
-
-// タグごとの出現回数を集計（現行のハードコード＆不整合なタグ一覧はやめ、実データから動的に生成）
-const tagCounts = new Map<string, number>();
-for (const c of uniqueCosmetics) {
-  for (const t of c.related_tags || []) {
-    tagCounts.set(t, (tagCounts.get(t) || 0) + 1);
-  }
+for (const list of rankingByTag.values()) {
+  list.sort((a, b) => b.score - a.score || b.videoCount - a.videoCount || a.name.localeCompare(b.name, "ja"));
 }
-const tags = Array.from(tagCounts.keys()).sort((a, b) => (tagCounts.get(b)! - tagCounts.get(a)!));
 
-const rankingByTag = new Map<string, Cosmetic[]>();
-for (const tag of tags) {
-  const items = uniqueCosmetics
-    .filter((c) => (c.related_tags || []).includes(tag))
-    .slice(0, 5);
-  rankingByTag.set(tag, items);
-}
+// 大分類 → 肌に載せる順のカテゴリ。定義に無いタグは「その他」へ。
+const known = new Set(RANKING_CATEGORY_GROUPS.flatMap((g) => g.tags));
+const unknownTags = Array.from(rankingByTag.keys()).filter((t) => !known.has(t));
+const groups = [...RANKING_CATEGORY_GROUPS, { group: "その他", tags: unknownTags }]
+  .map((g) => ({ group: g.group, tags: g.tags.filter((t) => rankingByTag.has(t)) }))
+  .filter((g) => g.tags.length > 0);
+const allTags = groups.flatMap((g) => g.tags);
 ---
 
 <Layout title="ランキング">
-  <h1 class="text-xl font-bold mb-6">コスメランキング</h1>
+  <h1 class="text-xl font-bold mb-2">コスメランキング</h1>
+  <p class="text-xs text-neutral-500 mb-6">
+    紹介動画の合計再生回数・紹介動画数・紹介したインフルエンサー数から算出した人気スコア順です。
+  </p>
 
   <div class="flex gap-8">
-    <aside class="hidden md:block w-48 shrink-0">
-      <ul class="space-y-1 text-sm sticky top-20">
+    <aside class="hidden md:block w-56 shrink-0">
+      <div class="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto space-y-4 text-sm">
         {
-          tags.map((tag, i) => (
-            <li>
-              <button class="tag-select w-full text-left px-2 py-1 rounded hover:bg-pink-50" data-tag={tag} data-active={i === 0}>
-                {tag} <span class="text-neutral-400">({tagCounts.get(tag)})</span>
-              </button>
-            </li>
+          groups.map((g) => (
+            <div>
+              <div class="text-xs font-bold text-neutral-500 border-b mb-1 pb-1">{g.group}</div>
+              <ul class="space-y-0.5">
+                {g.tags.map((tag) => (
+                  <li>
+                    <button class="tag-select w-full text-left px-2 py-1 rounded hover:bg-pink-50" data-tag={tag}>
+                      {tag} <span class="text-neutral-400">({rankingByTag.get(tag)!.length})</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))
         }
-      </ul>
+      </div>
     </aside>
 
-    <div class="flex-1">
+    <div class="flex-1 min-w-0">
       <select id="tag-select-mobile" class="md:hidden w-full border rounded px-3 py-2 mb-6">
-        {tags.map((tag) => <option value={tag}>{tag}（{tagCounts.get(tag)}件）</option>)}
+        {
+          groups.map((g) => (
+            <optgroup label={g.group}>
+              {g.tags.map((tag) => <option value={tag}>{tag}（{rankingByTag.get(tag)!.length}件）</option>)}
+            </optgroup>
+          ))
+        }
       </select>
 
       {
-        tags.map((tag, i) => (
+        allTags.map((tag, i) => (
           <section class="ranking-block" data-tag={tag} style={i === 0 ? "" : "display:none"}>
-            <h2 class="font-bold mb-3">{tag} 人気ランキング TOP5</h2>
+            <h2 class="font-bold mb-3">{tag} 人気ランキング TOP{TOP_N}</h2>
             <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 mb-10">
-              {rankingByTag.get(tag)!.map((c) => (
-                <CosmeticCard
-                  brand_id={c.brand_id}
-                  brand={c.brand}
-                  name_id={c.name_id}
-                  name={c.name}
-                  rakutenImageHtml={c.rakuten_image_link}
-                />
+              {rankingByTag.get(tag)!.slice(0, TOP_N).map((c, idx) => (
+                <div class="relative">
+                  <span class="absolute top-1 left-1 z-10 bg-pink-600 text-white text-xs font-bold rounded px-2 py-0.5">
+                    {idx + 1}位
+                  </span>
+                  <CosmeticCard
+                    brand_id={c.brand_id}
+                    brand={c.brand}
+                    name_id={c.name_id}
+                    name={c.name}
+                    rakutenImageHtml={c.rakuten_image_link}
+                  />
+                  <p class="text-xs text-neutral-500 mt-1 px-1">
+                    紹介動画 {c.videoCount}本 ／ {c.channelCount}チャンネル
+                  </p>
+                </div>
               ))}
             </div>
           </section>
@@ -91,6 +109,8 @@ for (const tag of tags) {
   document.querySelectorAll<HTMLButtonElement>(".tag-select").forEach((btn) => {
     btn.addEventListener("click", () => showTag(btn.dataset.tag!));
   });
+
+  showTag(document.querySelector<HTMLElement>(".ranking-block")!.dataset.tag!);
 
   const mobileSelect = document.getElementById("tag-select-mobile") as HTMLSelectElement | null;
   mobileSelect?.addEventListener("change", () => showTag(mobileSelect.value));
