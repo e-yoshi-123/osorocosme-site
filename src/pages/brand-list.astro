@@ -1,29 +1,315 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { getBrandsWithVideos, groupByKana, withBase } from "../lib/data";
+import {
+  getBrandsWithVideos,
+  getBrandGroups,
+  getBrandMeta,
+  getCountryRegion,
+  groupByKana,
+  COUNTRY_NAMES,
+  withBase,
+} from "../lib/data";
 
 const brands = getBrandsWithVideos().sort((a, b) => a.name.localeCompare(b.name, "ja"));
 const grouped = groupByKana(brands);
+
+const REGIONS = [
+  { key: "ALL", label: "すべて" },
+  { key: "JP", label: "日本" },
+  { key: "KR", label: "韓国" },
+  { key: "OTHER", label: "その他" },
+];
+const regionCounts = new Map<string, number>([["ALL", brands.length]]);
+for (const b of brands) {
+  const r = getCountryRegion(b.brand_id);
+  regionCounts.set(r, (regionCounts.get(r) || 0) + 1);
+}
+
+// 系列マップ：ブランドが2つ以上ある系列を、紹介動画数の合計が多い順に。
+const groups = getBrandGroups().filter((g) => g.brands.length >= 2);
+const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
 ---
 
 <Layout
   title="ブランド一覧"
-  description="YouTubeのコスメ紹介動画で紹介されたブランドの一覧。紹介動画数の多い人気ブランドや、五十音順で探せます。"
+  description="YouTubeのコスメ紹介動画で紹介されたブランドの一覧。国（日本・韓国・その他）や親会社の系列ごとに探せ、系列ごとの紹介動画数も比べられます。"
 >
   <h1 class="text-xl font-bold mb-6">ブランド一覧（{brands.length}件）</h1>
 
+  <section class="mb-12">
+    <h2 class="font-bold mb-1">系列マップ</h2>
+    <p class="text-xs text-neutral-500 mb-4">
+      同じ親会社・系列のブランドを、紹介動画数に応じた面積の長方形で示しています。系列の中は「メイク系／両方／スキンケア系」に分け、
+      名前が収まるブロックには名前を表示し、小さいものは「ほかNブランド」にまとめました（押すと一覧が開きます）。ブロックを押すとブランドのページへ移動します。
+      区画の大きさは目安で、系列どうしや区分どうしの面積は正確な比例ではありません。
+    </p>
+    <div class="space-y-4">
+      {
+        groups.map((g) => (
+          <div class="flex gap-3 gmap" data-json={JSON.stringify({
+            height: Math.round(90 + 200 * Math.sqrt(g.videoCount / maxVideos)),
+            brands: g.brands.map((b) => ({ name: b.name, v: b.videoCount, kind: b.kind, href: withBase(`/brand/${b.brand_id}`) })),
+          })}>
+            <div class="w-28 sm:w-40 shrink-0 text-right pt-1">
+              <div class="text-sm font-medium truncate">{g.group}</div>
+              <div class="text-[11px] text-neutral-400">{g.brands.length}ブランド ／ {g.videoCount}本</div>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="gmap-canvas relative hidden"></div>
+              {/* JS無効時の一覧（JS有効時は非表示） */}
+              <div class="gmap-legend flex flex-wrap gap-x-3 gap-y-0.5 text-[11px] text-neutral-600">
+                {g.brands.map((b) => (
+                  <a href={withBase(`/brand/${b.brand_id}`)} class="hover:text-pink-600">
+                    {b.name}<span class="text-neutral-400">{b.videoCount}</span>
+                  </a>
+                ))}
+              </div>
+              <div class="gmap-rest hidden mt-2 text-xs text-neutral-700 bg-white rounded p-3 shadow-sm space-y-1"></div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <div class="flex flex-wrap items-center gap-2 mb-6 text-sm">
+    <span class="text-neutral-500 mr-1">国:</span>
+    {
+      REGIONS.map((r) => (
+        <button class="region-chip px-3 py-1 rounded-full border" data-region={r.key}>
+          {r.label} <span class="text-neutral-400">({regionCounts.get(r.key) || 0})</span>
+        </button>
+      ))
+    }
+    {regionCounts.get("UNKNOWN") ? <span class="text-xs text-neutral-400 ml-1">※国不明 {regionCounts.get("UNKNOWN")}件は「すべて」のみに表示</span> : null}
+  </div>
+
   {
     Array.from(grouped.entries()).map(([kana, items]) => (
-      <section class="mb-8">
+      <section class="kana-section mb-8">
         <h2 class="text-pink-600 font-bold border-b border-pink-200 mb-3 pb-1">{kana}</h2>
-        <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-          {items.map((b) => (
-            <a href={withBase(`/brand/${b.brand_id}`)} class="text-sm hover:text-pink-600 truncate">
-              {b.name}
-            </a>
-          ))}
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-2">
+          {items.map((b) => {
+            const meta = getBrandMeta(b.brand_id);
+            return (
+              <a href={withBase(`/brand/${b.brand_id}`)} class="brand-item text-sm hover:text-pink-600 min-w-0" data-region={getCountryRegion(b.brand_id)}>
+                <span class="block truncate">{b.name}</span>
+                {(meta.country || meta.group) && (
+                  <span class="block text-[11px] text-neutral-400 truncate">
+                    {[meta.country ? COUNTRY_NAMES[meta.country] ?? meta.country : null, meta.group].filter(Boolean).join("・")}
+                  </span>
+                )}
+              </a>
+            );
+          })}
         </div>
       </section>
     ))
   }
 </Layout>
+
+<script>
+  const chips = document.querySelectorAll<HTMLButtonElement>(".region-chip");
+  function show(region: string) {
+    chips.forEach((c) => c.classList.toggle("bg-pink-100", c.dataset.region === region));
+    document.querySelectorAll<HTMLElement>(".brand-item").forEach((el) => {
+      el.style.display = region === "ALL" || el.dataset.region === region ? "" : "none";
+    });
+    document.querySelectorAll<HTMLElement>(".kana-section").forEach((sec) => {
+      const any = Array.from(sec.querySelectorAll<HTMLElement>(".brand-item")).some((el) => el.style.display !== "none");
+      sec.style.display = any ? "" : "none";
+    });
+  }
+  chips.forEach((c) => c.addEventListener("click", () => show(c.dataset.region!)));
+  show("ALL");
+</script>
+
+<script>
+  // 系列マップ（ツリーマップ）：系列ごとに「メイク系／両方／スキンケア系」の区画へ分け、
+  // 各区画をsquarified法でブランドの長方形に分割する。名前が収まらない小さな長方形は
+  // 区画ごとに1つの「ほかNブランド」にまとめ、押すと一覧を開閉する。
+  type Brand = { name: string; v: number; kind: "MAKE" | "BOTH" | "SKIN"; href: string };
+  type R = { x: number; y: number; w: number; h: number };
+  const SECTIONS = [
+    { kind: "MAKE", label: "メイク系", hue: 340 },
+    { kind: "BOTH", label: "両方", hue: 280 },
+    { kind: "SKIN", label: "スキンケア系", hue: 180 },
+  ] as const;
+  const HEADER = 16;
+  const MIN_SECTION_W = 96;
+  const PAD = 10;
+
+  const ctx = document.createElement("canvas").getContext("2d")!;
+  ctx.font = `11px ${getComputedStyle(document.body).fontFamily}`;
+  const textW = (t: string) => ctx.measureText(t).width;
+
+  function squarify(values: number[], rect: R): R[] {
+    const total = values.reduce((a, b) => a + b, 0);
+    const scale = (rect.w * rect.h) / total;
+    const areas = values.map((v) => v * scale);
+    const out: R[] = [];
+    let r = { ...rect };
+    const worst = (row: number[], side: number) => {
+      const s = row.reduce((a, b) => a + b, 0);
+      return Math.max((side * side * Math.max(...row)) / (s * s), (s * s) / (side * side * Math.min(...row)));
+    };
+    let i = 0;
+    while (i < areas.length) {
+      const side = Math.min(r.w, r.h);
+      const row = [areas[i]];
+      let j = i + 1;
+      while (j < areas.length && worst([...row, areas[j]], side) <= worst(row, side)) row.push(areas[j++]);
+      const s = row.reduce((a, b) => a + b, 0);
+      if (r.w >= r.h) {
+        const cw = s / r.h;
+        let yy = r.y;
+        for (const a of row) { out.push({ x: r.x, y: yy, w: cw, h: a / cw }); yy += a / cw; }
+        r = { x: r.x + cw, y: r.y, w: r.w - cw, h: r.h };
+      } else {
+        const rh = s / r.w;
+        let xx = r.x;
+        for (const a of row) { out.push({ x: xx, y: r.y, w: a / rh, h: rh }); xx += a / rh; }
+        r = { x: r.x, y: r.y + rh, w: r.w, h: r.h - rh };
+      }
+      i = j;
+    }
+    return out;
+  }
+
+  const fits = (name: string, r: R) => textW(name) + PAD <= r.w && r.h >= 18;
+
+  function css(el: HTMLElement, r: R) {
+    el.style.left = `${r.x}px`;
+    el.style.top = `${r.y}px`;
+    el.style.width = `${Math.max(r.w - 1, 0)}px`;
+    el.style.height = `${Math.max(r.h - 1, 0)}px`;
+  }
+
+  function layout(gmap: HTMLElement) {
+    const data = JSON.parse(gmap.dataset.json!) as { height: number; brands: Brand[] };
+    const canvas = gmap.querySelector<HTMLElement>(".gmap-canvas")!;
+    const rest = gmap.querySelector<HTMLElement>(".gmap-rest")!;
+    canvas.classList.remove("hidden");
+    canvas.textContent = "";
+    rest.textContent = "";
+    const W = canvas.clientWidth;
+    const H = data.height;
+    canvas.style.height = `${H}px`;
+
+    const secs = SECTIONS.map((sec) => {
+      const brands = data.brands.filter((b) => b.kind === sec.kind).sort((a, b) => b.v - a.v);
+      return { ...sec, brands, total: brands.reduce((n, b) => n + b.v, 0) };
+    }).filter((sec) => sec.brands.length > 0);
+
+    // 区画の幅：最低幅を確保し、残りを紹介動画数の比で配分する
+    const grand = secs.reduce((n, s) => n + s.total, 0);
+    const free = Math.max(W - MIN_SECTION_W * secs.length, 0);
+    let x = 0;
+    let moreOpen = rest.dataset.open === "1";
+    let anyMore = false;
+
+    for (const sec of secs) {
+      const w = MIN_SECTION_W + free * (sec.total / grand);
+      const area: R = { x, y: HEADER, w, h: H - HEADER };
+      x += w;
+
+      const head = document.createElement("div");
+      head.className = "absolute text-[11px] font-bold whitespace-nowrap overflow-hidden";
+      head.style.color = `hsl(${sec.hue} 45% 32%)`;
+      css(head, { x: area.x, y: 0, w, h: HEADER });
+      head.textContent = `${sec.label}・${sec.total}本`;
+      canvas.append(head);
+
+      // 名前が収まらない長方形を、2つ以上あれば1つの「ほか」にまとめる（最大3回やり直す）
+      let items = sec.brands.map((b, i) => ({ b, i }));
+      let merged: { b: Brand; i: number }[] = [];
+      let rects: R[] = [];
+      let order: { b?: Brand; i?: number; more?: boolean; v: number }[] = [];
+      for (let iter = 0; iter < 4; iter++) {
+        order = [...items.map((it) => ({ b: it.b, i: it.i, v: it.b.v }))];
+        if (merged.length > 0) order.push({ more: true, v: merged.reduce((n, m) => n + m.b.v, 0) });
+        order.sort((a, b) => b.v - a.v);
+        rects = squarify(order.map((o) => o.v), area);
+        if (iter === 3) break;
+        const nonfit = order.map((o, k) => ({ o, r: rects[k] })).filter(({ o, r }) => !o.more && !fits(o.b!.name, r));
+        if (nonfit.length + (merged.length > 0 ? 1 : 0) < 2 && merged.length === 0) break;
+        if (nonfit.length === 0) break;
+        const ids = new Set(nonfit.map(({ o }) => o.i));
+        merged = [...merged, ...items.filter((it) => ids.has(it.i))];
+        items = items.filter((it) => !ids.has(it.i));
+        if (items.length === 0) { order = [{ more: true, v: merged.reduce((n, m) => n + m.b.v, 0) }]; rects = [area]; break; }
+      }
+
+      order.forEach((o, k) => {
+        const r = rects[k];
+        if (o.more) {
+          anyMore = true;
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "absolute overflow-hidden whitespace-nowrap text-[11px] px-1.5 text-left text-neutral-600 hover:brightness-95";
+          btn.style.background = "hsl(0 0% 88%)";
+          css(btn, r);
+          const n = merged.length;
+          const label = [`ほか${n}ブランド ▾`, `+${n}`].find((t) => fits(t, r)) ?? "";
+          btn.textContent = label;
+          btn.title = `ほか${n}ブランド（クリックで一覧）`;
+          btn.addEventListener("click", () => {
+            const open = rest.classList.contains("hidden");
+            rest.classList.toggle("hidden", !open);
+            rest.dataset.open = open ? "1" : "0";
+          });
+          canvas.append(btn);
+        } else {
+          const a = document.createElement("a");
+          a.href = o.b!.href;
+          a.title = `${o.b!.name}（紹介動画${o.b!.v}本）`;
+          a.className = "absolute overflow-hidden whitespace-nowrap text-[11px] px-1.5 flex items-center hover:brightness-95";
+          a.style.background = `hsl(${sec.hue} 70% ${90 - (o.i! % 3) * 6}%)`;
+          a.style.color = `hsl(${sec.hue} 50% 25%)`;
+          css(a, r);
+          const span = document.createElement("span");
+          span.className = "truncate";
+          span.textContent = o.b!.name;
+          a.append(span);
+          canvas.append(a);
+        }
+      });
+
+      if (merged.length > 0) {
+        const row = document.createElement("div");
+        const title = document.createElement("span");
+        title.className = "font-bold mr-2";
+        title.style.color = `hsl(${sec.hue} 45% 32%)`;
+        title.textContent = `${sec.label}:`;
+        row.append(title);
+        merged.forEach((m, k) => {
+          const a = document.createElement("a");
+          a.href = m.b.href;
+          a.className = "hover:text-pink-600 mr-3 inline-block";
+          a.innerHTML = "";
+          a.textContent = m.b.name;
+          const n = document.createElement("span");
+          n.className = "text-neutral-400 ml-0.5";
+          n.textContent = String(m.b.v);
+          a.append(n);
+          row.append(a);
+        });
+        rest.append(row);
+      }
+    }
+    if (!anyMore) rest.classList.add("hidden");
+    else rest.classList.toggle("hidden", !moreOpen);
+  }
+
+  function layoutAll() {
+    document.querySelectorAll<HTMLElement>(".gmap").forEach(layout);
+  }
+
+  document.querySelectorAll<HTMLElement>(".gmap").forEach((g) => g.querySelector(".gmap-legend")?.classList.add("hidden"));
+  layoutAll();
+  let t: number | undefined;
+  window.addEventListener("resize", () => {
+    clearTimeout(t);
+    t = window.setTimeout(layoutAll, 100);
+  });
+</script>

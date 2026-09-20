@@ -1,6 +1,7 @@
 import videosData from "../data/videos.json";
 import brandsData from "../data/brands-list.json";
 import cosmeticsListData from "../data/cosmetics_list.json";
+import brandMetaData from "../data/brand-meta.json";
 
 export interface Cosmetic {
   brand_id: string;
@@ -533,4 +534,108 @@ export function breadcrumbLd(items: { name: string; path: string }[], site: URL)
       item: new URL(withBase(it.path), site).href,
     })),
   };
+}
+
+// ---- ブランドの国・系列（brand-meta.json。確認済みのものだけ収録し、不明は空欄） ----
+
+export interface BrandMeta {
+  country?: string; // ISO 3166-1 alpha-2
+  group?: string; // 親会社・系列
+}
+const brandMeta = brandMetaData as unknown as Record<string, BrandMeta>;
+
+export const COUNTRY_NAMES: Record<string, string> = {
+  JP: "日本", KR: "韓国", FR: "フランス", US: "アメリカ", GB: "イギリス", IT: "イタリア",
+  CA: "カナダ", DE: "ドイツ", AU: "オーストラリア", NZ: "ニュージーランド", CH: "スイス",
+  IL: "イスラエル", ZA: "南アフリカ",
+};
+
+export function getBrandMeta(brand_id: string): BrandMeta {
+  return brandMeta[brand_id] || {};
+}
+
+/** 画面の絞り込み用の区分。日本・韓国・その他（国不明はその他ではなく「不明」）。 */
+export function getCountryRegion(brand_id: string): "JP" | "KR" | "OTHER" | "UNKNOWN" {
+  const c = brandMeta[brand_id]?.country;
+  if (!c) return "UNKNOWN";
+  return c === "JP" || c === "KR" ? c : "OTHER";
+}
+
+export type BrandKind = "MAKE" | "SKIN" | "BOTH";
+
+// タグからの自動判定が実態と合わないブランドの手動補正
+const BRAND_KIND_OVERRIDES: Record<string, BrandKind> = {
+  "brand-00510": "SKIN", // ユースキン（ハンドクリーム等。動画データ上のタグが不正確）
+  "brand-00044": "SKIN", // ヴァセリン（ボディ・リップ等のケア用品）
+};
+
+/** ブランドがメイク系かスキンケア系かを、紹介コスメのカテゴリの比率から判定する。
+ * スキンケア系タグが2割以下ならメイク系、8割以上ならスキンケア系、その間は両方。 */
+export function getBrandKind(brand_id: string): BrandKind {
+  if (BRAND_KIND_OVERRIDES[brand_id]) return BRAND_KIND_OVERRIDES[brand_id];
+  const skin = new Set(RANKING_CATEGORY_GROUPS.find((g) => g.group === "スキンケア")!.tags);
+  let mk = 0, sk = 0;
+  for (const r of getCosmeticRankings()) {
+    if (r.brand_id !== brand_id) continue;
+    for (const t of r.tags) (skin.has(t) ? sk++ : mk++);
+  }
+  if (mk + sk === 0) return "BOTH";
+  const ratio = sk / (mk + sk);
+  return ratio <= 0.2 ? "MAKE" : ratio >= 0.8 ? "SKIN" : "BOTH";
+}
+
+export interface BrandGroupStats {
+  group: string;
+  brands: (BrandWithStats & { kind: BrandKind })[]; // 紹介動画数の多い順
+  videoCount: number; // 系列内ブランドの紹介動画数の合計（同じ動画に複数ブランドが出ると重複して数える）
+}
+
+/** 系列ごとに、掲載ブランドと紹介動画数の合計をまとめる（系列が分かっているブランドのみ）。 */
+export function getBrandGroups(): BrandGroupStats[] {
+  const map = new Map<string, (BrandWithStats & { kind: BrandKind })[]>();
+  for (const b of getBrandsWithVideos()) {
+    const g = brandMeta[b.brand_id]?.group;
+    if (!g) continue;
+    if (!map.has(g)) map.set(g, []);
+    map.get(g)!.push({ ...b, kind: getBrandKind(b.brand_id) });
+  }
+  return Array.from(map.entries())
+    .map(([group, brands]) => {
+      brands.sort((a, b) => b.videoCount - a.videoCount);
+      return { group, brands, videoCount: brands.reduce((s, b) => s + b.videoCount, 0) };
+    })
+    .sort((a, b) => b.videoCount - a.videoCount);
+}
+
+export interface BrandCategorySection {
+  group: string;
+  tag: string;
+  items: Cosmetic[];
+}
+
+/** ブランドの紹介コスメを、ランキングと同じ大分類・カテゴリ順に分ける。
+ * 複数タグを持つコスメは、表示順で最も早いカテゴリに1回だけ入れる（重複表示を避ける）。
+ * タグが無いコスメは末尾の「その他」へ。 */
+export function getBrandCosmeticsByCategory(brand_id: string): BrandCategorySection[] {
+  const tagsByKey = new Map(getCosmeticRankings().map((r) => [`${r.brand_id}_${r.name_id}`, r.tags]));
+  const cosmetics = getCosmeticsForBrand(brand_id);
+
+  const allTags = new Set<string>();
+  const tagsOf = (c: Cosmetic) => tagsByKey.get(`${c.brand_id}_${c.name_id}`) ?? c.related_tags ?? [];
+  for (const c of cosmetics) tagsOf(c).forEach((t) => allTags.add(t));
+  const ordered = groupTagsByCategory(allTags).flatMap((g) => g.tags.map((tag) => ({ group: g.group, tag })));
+  const rank = new Map(ordered.map((o, i) => [o.tag, i]));
+
+  const buckets = new Map<string, Cosmetic[]>();
+  for (const c of cosmetics) {
+    const tags = tagsOf(c).filter((t) => rank.has(t));
+    const main = tags.length > 0 ? tags.sort((a, b) => rank.get(a)! - rank.get(b)!)[0] : "その他";
+    if (!buckets.has(main)) buckets.set(main, []);
+    buckets.get(main)!.push(c);
+  }
+  const sections: BrandCategorySection[] = ordered
+    .filter((o) => buckets.has(o.tag))
+    .map((o) => ({ ...o, items: buckets.get(o.tag)! }));
+  if (buckets.has("その他")) sections.push({ group: "その他", tag: "その他", items: buckets.get("その他")! });
+  return sections;
 }
