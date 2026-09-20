@@ -422,3 +422,13 @@ export const RANKING_CATEGORY_GROUPS: { group: string; tags: string[] }[] = [
     ],
   },
 ];
+
+/** タグ一覧を RANKING_CATEGORY_GROUPS の大分類・表示順に並べ直す。定義に無いタグは「その他」へ。 */
+export function groupTagsByCategory(tags: Iterable<string>): { group: string; tags: string[] }[] {
+  const present = new Set(tags);
+  const known = new Set(RANKING_CATEGORY_GROUPS.flatMap((g) => g.tags));
+  const unknown = Array.from(present).filter((t) => !known.has(t)).sort((a, b) => a.localeCompare(b, "ja"));
+  return [...RANKING_CATEGORY_GROUPS, { group: "その他", tags: unknown }]
+    .map((g) => ({ group: g.group, tags: g.tags.filter((t) => present.has(t)) }))
+    .filter((g) => g.tags.length > 0);
+}
