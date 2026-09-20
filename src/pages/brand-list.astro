@@ -46,11 +46,11 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
     <div class="space-y-4">
       {
         groups.map((g) => (
-          <div class="flex gap-3 gmap" data-json={JSON.stringify({
+          <div class="flex flex-col sm:flex-row gap-1 sm:gap-3 gmap" data-json={JSON.stringify({
             height: Math.round(90 + 200 * Math.sqrt(g.videoCount / maxVideos)),
             brands: g.brands.map((b) => ({ name: b.name, v: b.videoCount, kind: b.kind, href: withBase(`/brand/${b.brand_id}`) })),
           })}>
-            <div class="w-28 sm:w-40 shrink-0 text-right pt-1">
+            <div class="sm:w-40 shrink-0 sm:text-right sm:pt-1 flex items-baseline gap-2 sm:block">
               <div class="text-sm font-medium truncate">{g.group}</div>
               <div class="text-[11px] text-neutral-400">{g.brands.length}ブランド ／ {g.videoCount}本</div>
             </div>
@@ -76,7 +76,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
     <span class="text-neutral-500 mr-1">国:</span>
     {
       REGIONS.map((r) => (
-        <button class="region-chip px-3 py-1 rounded-full border" data-region={r.key}>
+        <button class="region-chip px-3 py-1.5 sm:py-1 rounded-full border" data-region={r.key}>
           {r.label} <span class="text-neutral-400">({regionCounts.get(r.key) || 0})</span>
         </button>
       ))

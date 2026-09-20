@@ -53,20 +53,20 @@ const jsonLd = [
       <>
         {sections.length > 1 && (
           <div class="md:sticky md:top-14 z-20 bg-neutral-50/95 backdrop-blur py-2 mb-6 border-b text-sm">
-            <div class="flex flex-wrap gap-1.5">
-              <button class="group-tab px-3 py-1 rounded-full border bg-white" data-group="__all__">
+            <div class="flex flex-nowrap sm:flex-wrap gap-1.5 overflow-x-auto sm:overflow-visible -mx-4 px-4 sm:mx-0 sm:px-0 pb-1">
+              <button class="group-tab shrink-0 whitespace-nowrap px-3 py-1.5 sm:py-1 rounded-full border bg-white" data-group="__all__">
                 すべて <span class="text-neutral-400">({cosmetics.length})</span>
               </button>
               {brandGroups.map((g) => (
-                <button class="group-tab px-3 py-1 rounded-full border bg-white" data-group={g.group}>
+                <button class="group-tab shrink-0 whitespace-nowrap px-3 py-1.5 sm:py-1 rounded-full border bg-white" data-group={g.group}>
                   {g.group} <span class="text-neutral-400">({g.count})</span>
                 </button>
               ))}
             </div>
             {brandGroups.map((g) => (
-              <div class="chip-row flex-wrap gap-1.5 mt-2 pt-2 border-t border-dashed max-h-28 overflow-y-auto" data-group={g.group} style="display:none">
+              <div class="chip-row flex-nowrap sm:flex-wrap gap-1.5 mt-2 pt-2 border-t border-dashed sm:max-h-28 overflow-x-auto sm:overflow-x-visible sm:overflow-y-auto -mx-4 px-4 sm:mx-0 sm:px-0 pb-1" data-group={g.group} style="display:none">
                 {sections.filter((sec) => sec.group === g.group).map((sec) => (
-                  <button class="cat-chip px-2.5 py-0.5 rounded-full border text-xs bg-white" data-tag={sec.tag}>
+                  <button class="cat-chip shrink-0 whitespace-nowrap px-3 py-1 sm:px-2.5 sm:py-0.5 rounded-full border text-xs bg-white" data-tag={sec.tag}>
                     {sec.tag} <span class="text-neutral-400">({sec.items.length})</span>
                   </button>
                 ))}
@@ -79,7 +79,7 @@ const jsonLd = [
             <h2 class="font-bold mb-3 border-b border-pink-200 pb-1">
               {sec.tag} <span class="text-sm font-normal text-neutral-400">{sec.group !== sec.tag && sec.group !== "その他" ? `${sec.group}・` : ""}{sec.items.length}品</span>
             </h2>
-            <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
               {sec.items.map((c) => (
                 <CosmeticCard
                   brand_id={c.brand_id}

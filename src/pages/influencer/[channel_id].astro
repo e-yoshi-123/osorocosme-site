@@ -96,20 +96,20 @@ const jsonLd = influencer
             </div>
 
             <div class="md:sticky md:top-14 z-20 bg-white/95 backdrop-blur py-2 mb-6 border-b text-sm">
-              <div class="flex flex-wrap gap-1.5">
-                <button class="group-tab px-3 py-1 rounded-full border" data-group="__all__">
+              <div class="flex flex-nowrap sm:flex-wrap gap-1.5 overflow-x-auto sm:overflow-visible -mx-4 px-4 sm:mx-0 sm:px-0 pb-1">
+                <button class="group-tab shrink-0 whitespace-nowrap px-3 py-1.5 sm:py-1 rounded-full border" data-group="__all__">
                   すべて <span class="text-neutral-400">({totalItems})</span>
                 </button>
                 {groups.map((g) => (
-                  <button class="group-tab px-3 py-1 rounded-full border" data-group={g.group} data-tags={g.tags.join("|")}>
+                  <button class="group-tab shrink-0 whitespace-nowrap px-3 py-1.5 sm:py-1 rounded-full border" data-group={g.group} data-tags={g.tags.join("|")}>
                     {g.group} <span class="text-neutral-400">({groupCounts.get(g.group)})</span>
                   </button>
                 ))}
               </div>
               {groups.map((g) => (
-                <div class="chip-row flex-wrap gap-1.5 mt-2 pt-2 border-t border-dashed max-h-28 overflow-y-auto" data-group={g.group} style="display:none">
+                <div class="chip-row flex-nowrap sm:flex-wrap gap-1.5 mt-2 pt-2 border-t border-dashed sm:max-h-28 overflow-x-auto sm:overflow-x-visible sm:overflow-y-auto -mx-4 px-4 sm:mx-0 sm:px-0 pb-1" data-group={g.group} style="display:none">
                   {g.tags.map((t) => (
-                    <button class="cat-chip px-2.5 py-0.5 rounded-full border text-xs" data-tag={t}>
+                    <button class="cat-chip shrink-0 whitespace-nowrap px-3 py-1 sm:px-2.5 sm:py-0.5 rounded-full border text-xs" data-tag={t}>
                       {t} <span class="text-neutral-400">({tagCounts.get(t)})</span>
                     </button>
                   ))}
@@ -126,7 +126,7 @@ const jsonLd = influencer
                       {video.title}
                     </a>
                   </div>
-                  <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                     {items.map((c) => (
                       <div class="history-item" data-tags={(c.related_tags || []).join(",")}>
                         <CosmeticCard brand_id={c.brand_id} brand={c.brand} name_id={c.name_id} name={c.name} rakutenImageHtml={c.rakuten_image_link} />

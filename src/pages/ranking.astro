@@ -57,7 +57,7 @@ const allTags = groups.flatMap((g) => g.tags);
         allTags.map((tag, i) => (
           <section class="ranking-block" data-tag={tag} style={i === 0 ? "" : "display:none"}>
             <h2 class="font-bold mb-3">{tag} 人気ランキング TOP{TOP_N}</h2>
-            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 mb-10">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-10">
               {rankingByTag.get(tag)!.slice(0, TOP_N).map((c, idx) => (
                 <div class="relative">
                   <span class="absolute top-1 left-1 z-10 bg-pink-600 text-white text-xs font-bold rounded px-2 py-0.5">

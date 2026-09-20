@@ -131,7 +131,7 @@ const jsonLd = entry
         {related.length > 0 && (
           <>
             <h2 class="font-bold mb-3">関連商品</h2>
-            <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
               {related.map((c) => (
                 <CosmeticCard
                   brand_id={c.brand_id}

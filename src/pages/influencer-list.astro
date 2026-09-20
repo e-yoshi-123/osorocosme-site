@@ -14,7 +14,7 @@ const influencers = getInfluencerRanking();
   <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
     {
       influencers.map((inf) => (
-        <a href={withBase(`/influencer/${inf.channel_id}`)} class="bg-white rounded-lg shadow-sm p-4 flex items-center gap-3 hover:shadow-md">
+        <a href={withBase(`/influencer/${inf.channel_id}`)} class="min-w-0 bg-white rounded-lg shadow-sm p-4 flex items-center gap-3 hover:shadow-md">
           {inf.channel_icon && <img src={inf.channel_icon} alt="" class="w-12 h-12 rounded-full shrink-0" />}
           <div class="min-w-0">
             <p class="font-medium truncate">{inf.channel_title}</p>
