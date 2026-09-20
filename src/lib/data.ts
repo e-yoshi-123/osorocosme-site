@@ -99,6 +99,41 @@ export function getAllBrands(): { brand_id: string; name: string }[] {
   return Object.entries(brands).map(([brand_id, name]) => ({ brand_id, name }));
 }
 
+export interface BrandWithStats {
+  brand_id: string;
+  name: string;
+  videoCount: number;
+  cosmeticCount: number;
+}
+
+/** 掲載中の動画で1つ以上コスメが紹介されているブランドだけを、動画数・コスメ数付きで返す。 */
+export function getBrandsWithVideos(): BrandWithStats[] {
+  const videoSets = new Map<string, Set<string>>();
+  const cosmeticSets = new Map<string, Set<string>>();
+  for (const v of getVisibleVideos()) {
+    for (const c of v.cosmetics || []) {
+      if (!c.brand_id || !c.name_id || !brands[c.brand_id]) continue;
+      if (!videoSets.has(c.brand_id)) videoSets.set(c.brand_id, new Set());
+      if (!cosmeticSets.has(c.brand_id)) cosmeticSets.set(c.brand_id, new Set());
+      videoSets.get(c.brand_id)!.add(v.key);
+      cosmeticSets.get(c.brand_id)!.add(c.name_id);
+    }
+  }
+  return Array.from(videoSets.entries()).map(([brand_id, vs]) => ({
+    brand_id,
+    name: brands[brand_id],
+    videoCount: vs.size,
+    cosmeticCount: cosmeticSets.get(brand_id)!.size,
+  }));
+}
+
+/** 紹介動画数を第一、紹介コスメ数を第二キーとした人気ブランド順。 */
+export function getPopularBrands(limit: number): BrandWithStats[] {
+  return getBrandsWithVideos()
+    .sort((a, b) => b.videoCount - a.videoCount || b.cosmeticCount - a.cosmeticCount)
+    .slice(0, limit);
+}
+
 export function cosmeticSlug(brand_id: string, name_id: string): string {
   return `${brand_id}-${name_id}`;
 }

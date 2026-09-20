@@ -1,8 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { getAllBrands, groupByKana, withBase } from "../lib/data";
+import { getBrandsWithVideos, groupByKana, withBase } from "../lib/data";
 
-const brands = getAllBrands().sort((a, b) => a.name.localeCompare(b.name, "ja"));
+const brands = getBrandsWithVideos().sort((a, b) => a.name.localeCompare(b.name, "ja"));
 const grouped = groupByKana(brands);
 ---
 

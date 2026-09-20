@@ -1,10 +1,10 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import CosmeticCard from "../../components/CosmeticCard.astro";
-import { getAllBrands, getBrandName, getCosmeticsForBrand } from "../../lib/data";
+import { getBrandsWithVideos, getBrandName, getCosmeticsForBrand } from "../../lib/data";
 
 export function getStaticPaths() {
-  return getAllBrands().map((b) => ({ params: { brand_id: b.brand_id } }));
+  return getBrandsWithVideos().map((b) => ({ params: { brand_id: b.brand_id } }));
 }
 
 const { brand_id } = Astro.params;

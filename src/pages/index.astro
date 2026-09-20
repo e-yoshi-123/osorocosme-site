@@ -1,7 +1,14 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import VideoCard from "../components/VideoCard.astro";
-import { getVisibleVideos, getVideoScore, withBase } from "../lib/data";
+import {
+  getVisibleVideos,
+  getVideoScore,
+  getPopularBrands,
+  getInfluencerRanking,
+  formatCount,
+  withBase,
+} from "../lib/data";
 
 const visible = getVisibleVideos();
 const gallery = [...visible].sort((a, b) => getVideoScore(b) - getVideoScore(a));
@@ -10,6 +17,9 @@ const PAGE_SIZE = 60;
 // ヒーロー枠は「人気動画プール」上位20件からランダムに3件を表示する（ランダム選択はクライアント側で実施）
 const HERO_POOL_SIZE = 20;
 const heroPool = [...visible].sort((a, b) => getVideoScore(b) - getVideoScore(a)).slice(0, HERO_POOL_SIZE);
+
+const popularBrands = getPopularBrands(12);
+const popularInfluencers = getInfluencerRanking().slice(0, 12);
 ---
 
 <Layout title="ホーム">
@@ -31,8 +41,59 @@ const heroPool = [...visible].sort((a, b) => getVideoScore(b) - getVideoScore(a)
     )
   }
 
+
+  <section class="mb-10">
+    <div class="flex items-end justify-between mb-3">
+      <h2 class="text-lg font-bold">🔥 人気ブランド</h2>
+      <a href={withBase("/brand-list")} class="text-sm text-pink-600 hover:underline">ブランド一覧へ →</a>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+      {
+        popularBrands.map((b, i) => (
+          <a
+            href={withBase(`/brand/${b.brand_id}`)}
+            class="relative rounded-xl p-4 bg-gradient-to-br from-pink-50 to-rose-100 border border-pink-100 hover:shadow-md hover:-translate-y-0.5 transition group"
+          >
+            <span class="absolute top-2 right-3 text-xs font-bold text-pink-400">#{i + 1}</span>
+            <span class="flex items-center justify-center w-10 h-10 rounded-full bg-white text-pink-600 font-bold shadow-sm mb-3">
+              {b.name.charAt(0).toUpperCase()}
+            </span>
+            <p class="font-semibold text-sm truncate group-hover:text-pink-600">{b.name}</p>
+            <p class="text-xs text-neutral-500 mt-0.5">紹介動画 {b.videoCount}本</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="mb-10">
+    <div class="flex items-end justify-between mb-3">
+      <h2 class="text-lg font-bold">⭐ 人気インフルエンサー</h2>
+      <a href={withBase("/influencer-list")} class="text-sm text-pink-600 hover:underline">インフルエンサー一覧へ →</a>
+    </div>
+    <div class="flex gap-4 overflow-x-auto pb-3 -mx-4 px-4 snap-x">
+      {
+        popularInfluencers.map((inf) => (
+          <a
+            href={withBase(`/influencer/${inf.channel_id}`)}
+            class="snap-start shrink-0 w-36 bg-white rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition p-4 text-center"
+          >
+            {inf.channel_icon ? (
+              <img src={inf.channel_icon} alt="" class="w-20 h-20 rounded-full mx-auto mb-2 ring-4 ring-pink-200" loading="lazy" />
+            ) : (
+              <div class="w-20 h-20 rounded-full mx-auto mb-2 ring-4 ring-pink-200 bg-pink-50" />
+            )}
+            <p class="font-semibold text-sm truncate">{inf.channel_title}</p>
+            <p class="text-[11px] text-neutral-400">登録者 {formatCount(inf.subscriber_count)}人</p>
+            <p class="text-[11px] text-pink-600 mt-1">動画 {inf.videoCount}本</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
   <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
-    <h2 class="text-lg font-bold">動画一覧</h2>
+    <h2 class="text-lg font-bold">🎬 動画一覧</h2>
     <div class="flex gap-2 text-sm">
       <button id="sort-newest" data-sort="newest" class="sort-btn px-3 py-1 rounded border border-neutral-300 text-neutral-500">
         新着順
