@@ -82,8 +82,15 @@ const navLinks = [
     </main>
 
     <footer class="bg-white border-t border-neutral-200 mt-12">
-      <div class="max-w-6xl mx-auto px-4 py-6 text-sm text-neutral-500">
-        &copy; {new Date().getFullYear()} OsoroCosme
+      <div class="max-w-6xl mx-auto px-4 py-6 text-sm text-neutral-500 space-y-3">
+        <nav class="flex flex-wrap gap-x-5 gap-y-1" aria-label="サイト情報">
+          <a href={withBase("/about")} class="hover:text-pink-600">OsoroCosmeについて</a>
+          <a href={withBase("/contact")} class="hover:text-pink-600">お問い合わせ</a>
+          <a href={withBase("/privacy")} class="hover:text-pink-600">プライバシーポリシー</a>
+          <a href={withBase("/disclaimer")} class="hover:text-pink-600">免責事項・広告表記</a>
+        </nav>
+        <p class="text-xs text-neutral-400">当サイトは楽天アフィリエイトなどの広告を利用しており、商品リンクから収益を得ることがあります。</p>
+        <p>&copy; {new Date().getFullYear()} OsoroCosme</p>
       </div>
     </footer>
   </body>

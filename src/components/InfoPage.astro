@@ -1,0 +1,13 @@
+---
+import Layout from "../layouts/Layout.astro";
+interface Props { title: string; description: string; }
+const { title, description } = Astro.props;
+---
+<Layout title={title} description={description}>
+  <article class="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm p-5 sm:p-8">
+    <h1 class="text-xl font-bold mb-6">{title}</h1>
+    <div class="text-sm leading-7 text-neutral-700 space-y-4 [&_h2]:text-base [&_h2]:font-bold [&_h2]:text-neutral-900 [&_h2]:mt-8 [&_h2]:pl-3 [&_h2]:border-l-4 [&_h2]:border-pink-500 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1 [&_a]:text-pink-600 [&_a]:underline">
+      <slot />
+    </div>
+  </article>
+</Layout>

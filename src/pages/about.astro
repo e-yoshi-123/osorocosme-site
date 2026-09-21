@@ -1,0 +1,28 @@
+---
+import InfoPage from "../components/InfoPage.astro";
+import { withBase } from "../lib/data";
+import { OPERATOR_NAME } from "../lib/site-info";
+---
+<InfoPage title="OsoroCosmeについて" description="OsoroCosmeの運営者情報と、データの作り方・注意点についての説明です。">
+  <p>OsoroCosmeは、YouTubeのコスメ紹介動画から「誰がいつどのコスメを紹介したか」を集めて、ランキングやインフルエンサー別の使用コスメで探せるようにしたデータベースです。</p>
+
+  <h2>運営者</h2>
+  <ul>
+    <li>運営者：{OPERATOR_NAME}（個人運営）</li>
+    <li>お問い合わせ：<a href={withBase("/contact")}>お問い合わせページ</a>のフォームからお願いします。</li>
+  </ul>
+
+  <h2>データの作り方</h2>
+  <ul>
+    <li>YouTubeで公開されているコスメ紹介動画の情報（タイトル・概要欄・字幕など）から、紹介されている製品をAI（大規模言語モデル）などで抽出し、製品データベースと照合しています。</li>
+    <li>ランキングの人気スコアは、紹介動画数・動画の再生回数・紹介したインフルエンサー数から算出しています。</li>
+    <li>商品画像やリンクは楽天市場のものを利用しています。</li>
+  </ul>
+
+  <h2>ご利用にあたっての注意</h2>
+  <ul>
+    <li>自動処理のため、製品の取り違え、抜け、誤りを含む場合があります。購入前には、必ず公式サイトや販売ページで最新の情報をご確認ください。</li>
+    <li>ランキングは当サイト独自の集計であり、製品の品質や効果を保証するものではありません。</li>
+    <li>詳しくは<a href={withBase("/disclaimer")}>免責事項・広告表記</a>をご覧ください。</li>
+  </ul>
+</InfoPage>

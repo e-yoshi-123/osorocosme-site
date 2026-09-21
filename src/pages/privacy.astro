@@ -1,0 +1,38 @@
+---
+import InfoPage from "../components/InfoPage.astro";
+import { withBase } from "../lib/data";
+import { OPERATOR_NAME, POLICY_UPDATED } from "../lib/site-info";
+---
+<InfoPage title="プライバシーポリシー" description="OsoroCosmeにおける個人情報・アクセス解析・Cookie・広告配信の取り扱いについて。">
+  <p>{OPERATOR_NAME}（以下「運営者」）は、OsoroCosme（以下「当サイト」）における、ご利用者の情報の取り扱いを、次のとおり定めます。</p>
+
+  <h2>1. 取得する情報</h2>
+  <ul>
+    <li>当サイトにはアカウント登録機能がなく、氏名・住所などの個人情報を、当サイトから直接お尋ねすることはありません。</li>
+    <li>お問い合わせフォーム（Googleフォーム）にご入力いただいた内容（メールアドレスなどを含む）は、お問い合わせへの対応のためだけに使います。</li>
+    <li>当サイトの検索欄に入力した語句は、ブラウザ内で処理され、運営者のサーバーには保存されません。</li>
+  </ul>
+
+  <h2>2. アクセス解析ツール</h2>
+  <p>当サイトは、利用状況を把握してサイトを改善するため、Googleアナリティクスなどのアクセス解析ツールを利用します。これらのツールは、Cookieを使って、アクセス情報（閲覧ページ、参照元、端末・ブラウザの情報など）を匿名で収集します。この情報から個人が特定されることはありません。Cookieはブラウザの設定で無効にでき、無効にしても当サイトをご利用いただけます。詳しくは<a href="https://marketingplatform.google.com/about/analytics/terms/jp/" target="_blank" rel="noopener noreferrer">Googleアナリティクス利用規約</a>および<a href="https://policies.google.com/technologies/partner-sites?hl=ja" target="_blank" rel="noopener noreferrer">Googleのサービスを使用するサイトやアプリから収集した情報のGoogleによる使用</a>をご覧ください。</p>
+
+  <h2>3. 広告の配信</h2>
+  <p>当サイトは、第三者配信の広告サービス（Google AdSenseなど）を利用する場合があります。広告配信事業者は、Cookieを使って、ご利用者が当サイトや他のサイトに過去にアクセスした際の情報に基づいて、適切な広告を表示します。Googleによる広告Cookieの使用は、<a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer">広告設定</a>で無効にできます。</p>
+
+  <h2>4. アフィリエイトプログラム</h2>
+  <p>当サイトは、楽天アフィリエイトなどのアフィリエイトプログラムに参加しています。商品リンクをクリックすると、提携先のサイトでCookieが使われ、購入の成果が記録されることがあります。詳しくは、<a href={withBase("/disclaimer")}>免責事項・広告表記</a>および各提携先のプライバシーポリシーをご覧ください。</p>
+
+  <h2>5. 動画の埋め込み</h2>
+  <p>当サイトには、YouTubeの動画を埋め込んだ（またはリンクした）ページがあります。埋め込み動画を再生すると、YouTube（Google）にアクセス情報が送られ、Cookieが使われる場合があります。取り扱いはGoogleのプライバシーポリシーに従います。</p>
+
+  <h2>6. 第三者への提供</h2>
+  <p>運営者は、法令に基づく場合を除き、取得した個人情報を、ご本人の同意なく第三者に提供しません。</p>
+
+  <h2>7. 変更</h2>
+  <p>この方針は、法令の変更やサイトの変更にあわせて、予告なく見直すことがあります。変更後の内容は、このページに掲載した時点で有効になります。</p>
+
+  <h2>8. お問い合わせ</h2>
+  <p>この方針についてのお問い合わせは、<a href={withBase("/contact")}>お問い合わせページ</a>からお願いします。</p>
+
+  <p class="text-neutral-400 text-xs">制定・最終更新：{POLICY_UPDATED}</p>
+</InfoPage>

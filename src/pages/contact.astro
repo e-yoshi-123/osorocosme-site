@@ -1,0 +1,22 @@
+---
+import InfoPage from "../components/InfoPage.astro";
+import { withBase } from "../lib/data";
+import { CONTACT_FORM_URL } from "../lib/site-info";
+---
+<InfoPage title="お問い合わせ" description="OsoroCosmeへのお問い合わせ、掲載内容の誤り・削除のご依頼はこちらから。">
+  <p>当サイトへのご意見・ご質問、掲載内容の誤りのご指摘、動画や画像などの削除のご依頼は、下のフォームからお送りください。</p>
+  {CONTACT_FORM_URL ? (
+    <p>
+      <a href={CONTACT_FORM_URL} target="_blank" rel="noopener noreferrer" class="!no-underline inline-block bg-pink-600 text-white px-6 py-3 rounded-full hover:bg-pink-700">お問い合わせフォームを開く（Googleフォーム）</a>
+    </p>
+  ) : (
+    <p class="bg-neutral-50 rounded p-4">お問い合わせフォームは準備中です。</p>
+  )}
+  <h2>ご連絡の際のお願い</h2>
+  <ul>
+    <li>誤りのご指摘・削除のご依頼は、該当ページのURLを添えていただくと、すばやく対応できます。</li>
+    <li>削除のご依頼は、権利者ご本人であることが分かる内容でお願いします。</li>
+    <li>返信までにお時間をいただくことや、内容によっては返信できないことがあります。</li>
+  </ul>
+  <p>個人情報の取り扱いは<a href={withBase("/privacy")}>プライバシーポリシー</a>をご覧ください。</p>
+</InfoPage>
