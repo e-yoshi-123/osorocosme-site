@@ -1,0 +1,98 @@
+---
+import { cosmeticSlug, formatCount, formatJaDate, getInfluencerHighlights, withBase, type InfluencerRanking } from "../lib/data";
+
+interface Props {
+  influencer: InfluencerRanking;
+  rank: number;
+  /** large: 動画3本＋コスメ6点（上位向け） / medium: 最新動画1本＋コスメ4点 */
+  size: "large" | "medium";
+}
+
+const { influencer: inf, rank, size } = Astro.props;
+const large = size === "large";
+const h = getInfluencerHighlights(inf.channel_id, large ? 3 : 1, large ? 6 : 4);
+const href = withBase(`/influencer/${inf.channel_id}`);
+---
+
+<div class="min-w-0 bg-white rounded-lg shadow-sm p-4 flex flex-col gap-4">
+  <!-- 見出し：順位・アイコン・名前・実績 -->
+  <div class="flex items-start gap-3">
+    <span class:list={["shrink-0 rounded-full text-white font-bold flex items-center justify-center", large ? "w-8 h-8 text-sm" : "w-6 h-6 text-xs", rank <= 3 ? "bg-pink-600" : "bg-neutral-400"]}>{rank}</span>
+    {inf.channel_icon && <img src={inf.channel_icon} alt="" class:list={["rounded-full shrink-0", large ? "w-14 h-14" : "w-11 h-11"]} loading="lazy" />}
+    <div class="min-w-0 flex-1">
+      <a href={href} class:list={["block font-bold truncate hover:text-pink-600", large ? "text-lg" : "text-base"]}>{inf.channel_title}</a>
+      <p class="text-xs text-neutral-500 flex flex-wrap gap-x-2">
+        <span class="whitespace-nowrap">登録者 {formatCount(inf.subscriber_count)}人</span>
+        <span class="whitespace-nowrap">動画 {inf.videoCount}本</span>
+        <span class="whitespace-nowrap">コスメ {inf.cosmeticCount}品</span>
+      </p>
+      {
+        h.topTags.length > 0 && (
+          <div class="mt-1.5 flex gap-1 flex-wrap">
+            {h.topTags.map((t) => (
+              <span class="text-[10px] bg-pink-50 text-pink-700 rounded px-1.5 py-0.5">{t}</span>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </div>
+
+  <!-- 最新の動画 -->
+  {
+    h.latestVideos.length > 0 && (
+      <div>
+        <p class="text-xs font-medium text-neutral-500 mb-1.5">最新の動画</p>
+        {large ? (
+          <div class="grid grid-cols-3 gap-2">
+            {h.latestVideos.map((v) => (
+              <a href={withBase(`/video/${v.key}`)} class="min-w-0 block group">
+                <img src={v.thumbnail} alt="" class="w-full aspect-video object-cover rounded" loading="lazy" />
+                <p class="mt-1 text-[11px] leading-snug line-clamp-2 group-hover:text-pink-600">{v.title}</p>
+                <p class="text-[10px] text-neutral-400">{formatJaDate(v.published_at)}</p>
+              </a>
+            ))}
+          </div>
+        ) : (
+          h.latestVideos.map((v) => (
+            <a href={withBase(`/video/${v.key}`)} class="flex items-center gap-2 group">
+              <img src={v.thumbnail} alt="" class="w-20 aspect-video object-cover rounded shrink-0" loading="lazy" />
+              <span class="min-w-0">
+                <span class="block text-xs leading-snug line-clamp-2 group-hover:text-pink-600">{v.title}</span>
+                <span class="block text-[10px] text-neutral-400">{formatJaDate(v.published_at)}</span>
+              </span>
+            </a>
+          ))
+        )}
+      </div>
+    )
+  }
+
+  <!-- よく紹介するコスメ -->
+  {
+    h.topCosmetics.length > 0 && (
+      <div>
+        <p class="text-xs font-medium text-neutral-500 mb-1.5">よく紹介するコスメ</p>
+        <div class:list={["grid gap-2", large ? "grid-cols-3" : "grid-cols-4"]}>
+          {h.topCosmetics.map((c) => (
+            <a href={withBase(`/cosmetics/${cosmeticSlug(c.brand_id, c.name_id)}`)} class="min-w-0 block group" title={`${c.brand} ${c.name}`}>
+              <div class="aspect-square bg-neutral-50 rounded flex items-center justify-center overflow-hidden">
+                <img
+                  src={c.imageSrc}
+                  alt=""
+                  class="max-w-full max-h-full object-contain"
+                  loading="lazy"
+                  onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'text-neutral-300 text-[10px]',textContent:'No Image'}))"
+                />
+              </div>
+              <p class="mt-1 text-[10px] leading-snug line-clamp-2 group-hover:text-pink-600">{c.name}</p>
+              {c.videoCount > 1 && <p class="text-[10px] text-neutral-400">{c.videoCount}本で紹介</p>}
+            </a>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  <a href={href} class="mt-auto text-xs text-pink-600 hover:underline self-end">{inf.channel_title}の使用コスメをすべて見る →</a>
+</div>

@@ -269,6 +269,60 @@ export function getInfluencerRanking(): InfluencerRanking[] {
   return result.sort((a, b) => b.score - a.score);
 }
 
+export interface InfluencerTopCosmetic {
+  brand_id: string;
+  brand: string;
+  name_id: string;
+  name: string;
+  imageSrc: string;
+  /** そのインフルエンサーが、この商品を紹介した動画の本数 */
+  videoCount: number;
+}
+
+export interface InfluencerHighlights {
+  /** 最新の動画（投稿日降順） */
+  latestVideos: VideoEntry[];
+  /** よく紹介するコスメ（紹介した動画数の多い順。画像のあるものだけ） */
+  topCosmetics: InfluencerTopCosmetic[];
+  /** よく紹介するカテゴリ（紹介コスメのタグの多い順） */
+  topTags: string[];
+}
+
+/** インフルエンサー一覧の上位カード用に、最新動画・よく紹介するコスメ・得意カテゴリを集計する。 */
+export function getInfluencerHighlights(channel_id: string, videoLimit = 3, cosmeticLimit = 6, tagLimit = 3): InfluencerHighlights {
+  const videos = sortByPublishedDesc(getVideosByChannel(channel_id));
+  const byCosmetic = new Map<string, InfluencerTopCosmetic>();
+  const tagCounts = new Map<string, number>();
+  for (const v of videos) {
+    const seen = new Set<string>();
+    for (const c of v.cosmetics || []) {
+      if (!c.brand_id || !c.name_id || !c.brand || !c.name) continue;
+      for (const t of c.related_tags || []) tagCounts.set(t, (tagCounts.get(t) || 0) + 1);
+      const key = `${c.brand_id}_${c.name_id}`;
+      if (seen.has(key)) continue; // 同じ動画内の重複は1本と数える
+      seen.add(key);
+      const entry = getCosmeticListEntry(c.brand_id, c.name_id);
+      const imageSrc = extractImageSrc(entry?.rakuten_image_link || c.rakuten_image_link);
+      const cur = byCosmetic.get(key);
+      if (cur) {
+        cur.videoCount += 1;
+        if (!cur.imageSrc && imageSrc) cur.imageSrc = imageSrc;
+      } else {
+        byCosmetic.set(key, { brand_id: c.brand_id, brand: c.brand, name_id: c.name_id, name: c.name, imageSrc: imageSrc || "", videoCount: 1 });
+      }
+    }
+  }
+  const topCosmetics = Array.from(byCosmetic.values())
+    .filter((c) => c.imageSrc)
+    .sort((a, b) => b.videoCount - a.videoCount)
+    .slice(0, cosmeticLimit);
+  const topTags = Array.from(tagCounts.entries())
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, tagLimit)
+    .map(([t]) => t);
+  return { latestVideos: videos.slice(0, videoLimit), topCosmetics, topTags };
+}
+
 /** ブランドの読み仮名（英字・漢字の名前のブランド用。カナ始まりの名前には無い）。 */
 export function getBrandReading(brand_id: string): string | undefined {
   return (brandReadings as Record<string, string>)[brand_id];

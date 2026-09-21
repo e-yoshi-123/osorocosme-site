@@ -1,28 +1,53 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import InfluencerFeatureCard from "../components/InfluencerFeatureCard.astro";
 import { getInfluencerRanking, formatCount, withBase } from "../lib/data";
 
 const influencers = getInfluencerRanking();
+// 上位ほど情報を厚く見せる：TOP3は大きなカード、4〜12位は中サイズ、それ以降はコンパクトな一覧
+const LARGE = 3;
+const MEDIUM_UNTIL = 12;
+const large = influencers.slice(0, LARGE);
+const medium = influencers.slice(LARGE, MEDIUM_UNTIL);
+const rest = influencers.slice(MEDIUM_UNTIL);
 ---
 
 <Layout
   title="インフルエンサー一覧"
   description="コスメを紹介しているYouTuberの一覧。登録者数・掲載動画数・紹介コスメ数から算出した人気順で、各人の使用コスメ遍歴を確認できます。"
 >
-  <h1 class="text-xl font-bold mb-6">インフルエンサー一覧（{influencers.length}件）</h1>
+  <h1 class="text-xl font-bold mb-2">インフルエンサー一覧（{influencers.length}件）</h1>
+  <p class="text-sm text-neutral-500 mb-6">登録者数・掲載動画数・紹介コスメ数から算出した人気順です。上位の方は、最新の動画とよく紹介するコスメも見られます。</p>
 
-  <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-    {
-      influencers.map((inf) => (
-        <a href={withBase(`/influencer/${inf.channel_id}`)} class="min-w-0 bg-white rounded-lg shadow-sm p-4 flex items-center gap-3 hover:shadow-md">
-          {inf.channel_icon && <img src={inf.channel_icon} alt="" class="w-12 h-12 rounded-full shrink-0" />}
-          <div class="min-w-0">
-            <p class="font-medium truncate">{inf.channel_title}</p>
-            <p class="text-xs text-neutral-400">登録者 {formatCount(inf.subscriber_count)}人</p>
-            <p class="text-xs text-neutral-400">動画 {inf.videoCount}件 / コスメ {inf.cosmeticCount}件</p>
-          </div>
-        </a>
-      ))
-    }
-  </div>
+  <section class="mb-10">
+    <h2 class="text-base font-bold mb-3">注目のインフルエンサー TOP{LARGE}</h2>
+    <div class="grid gap-4 lg:grid-cols-3">
+      {large.map((inf, i) => <InfluencerFeatureCard influencer={inf} rank={i + 1} size="large" />)}
+    </div>
+  </section>
+
+  <section class="mb-10">
+    <h2 class="text-base font-bold mb-3">人気のインフルエンサー {LARGE + 1}〜{LARGE + medium.length}位</h2>
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {medium.map((inf, i) => <InfluencerFeatureCard influencer={inf} rank={LARGE + i + 1} size="medium" />)}
+    </div>
+  </section>
+
+  <section>
+    <h2 class="text-base font-bold mb-3">そのほかのインフルエンサー（{rest.length}件）</h2>
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {
+        rest.map((inf) => (
+          <a href={withBase(`/influencer/${inf.channel_id}`)} class="min-w-0 bg-white rounded-lg shadow-sm p-4 flex items-center gap-3 hover:shadow-md">
+            {inf.channel_icon && <img src={inf.channel_icon} alt="" class="w-12 h-12 rounded-full shrink-0" loading="lazy" />}
+            <div class="min-w-0">
+              <p class="font-medium truncate">{inf.channel_title}</p>
+              <p class="text-xs text-neutral-400">登録者 {formatCount(inf.subscriber_count)}人</p>
+              <p class="text-xs text-neutral-400">動画 {inf.videoCount}件 / コスメ {inf.cosmeticCount}件</p>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </section>
 </Layout>
