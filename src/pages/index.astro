@@ -69,9 +69,16 @@ const siteLd = {
       <button type="submit" class="bg-pink-600 text-white px-5 sm:px-6 rounded-full hover:bg-pink-700 shrink-0 shadow-sm">検索</button>
     </form>
     <div class="max-w-md mx-auto grid grid-cols-3 gap-2 sm:gap-3">
-      <div class="bg-white/80 rounded-xl py-3 shadow-sm"><p class="text-xl sm:text-2xl font-bold text-pink-600">{formatCount(cosmeticCount)}</p><p class="text-[11px] text-neutral-500">コスメ</p></div>
-      <div class="bg-white/80 rounded-xl py-3 shadow-sm"><p class="text-xl sm:text-2xl font-bold text-pink-600">{formatCount(visible.length)}</p><p class="text-[11px] text-neutral-500">紹介動画</p></div>
-      <div class="bg-white/80 rounded-xl py-3 shadow-sm"><p class="text-xl sm:text-2xl font-bold text-pink-600">{formatCount(influencerCount)}</p><p class="text-[11px] text-neutral-500">インフルエンサー</p></div>
+      {[
+        { n: cosmeticCount, label: "コスメ", href: "/ranking" },
+        { n: visible.length, label: "紹介動画", href: "/video-list" },
+        { n: influencerCount, label: "インフルエンサー", href: "/influencer-list" },
+      ].map((x) => (
+        <a href={withBase(x.href)} class="group bg-white/80 rounded-xl py-3 shadow-sm hover:bg-white hover:shadow-md transition">
+          <p class="text-xl sm:text-2xl font-bold text-pink-600">{formatCount(x.n)}</p>
+          <p class="text-[11px] text-neutral-500">{x.label}<span class="ml-0.5 text-pink-400 group-hover:translate-x-0.5 inline-block transition" aria-hidden="true">›</span></p>
+        </a>
+      ))}
     </div>
   </section>
 
@@ -180,14 +187,26 @@ const siteLd = {
     </div>
   </section>
 
-  <!-- 使い方とデータの出典：信頼感の補強 -->
-  <section class="mb-4 rounded-2xl bg-pink-50 p-6">
-    <h2 class="font-bold mb-4 text-center">OsoroCosmeの使い方</h2>
-    <div class="grid sm:grid-cols-3 gap-4 text-center text-sm">
-      <div><p class="text-2xl mb-1">🔎</p><p class="font-semibold">探す</p><p class="text-xs text-neutral-500">カテゴリや検索で、気になるコスメを見つけます。</p></div>
-      <div><p class="text-2xl mb-1">📊</p><p class="font-semibold">比べる</p><p class="text-xs text-neutral-500">紹介動画数・インフルエンサー数から出した人気順を確認します。</p></div>
-      <div><p class="text-2xl mb-1">▶️</p><p class="font-semibold">動画で確かめる</p><p class="text-xs text-neutral-500">誰がいつ紹介したかを、元の動画で見られます。</p></div>
-    </div>
-    <p class="mt-5 text-center text-[11px] text-neutral-400">データはYouTubeのコスメ紹介動画から作成しています。{updatedAt && `最新の動画：${formatJaDate(updatedAt)}`}</p>
+  <!-- 使い方とデータの出典：3ステップを番号付きカードで見せ、各ステップから実際のページへ進める -->
+  <section class="mb-4 rounded-2xl bg-gradient-to-b from-pink-50 to-white border border-pink-100 p-5 sm:p-8">
+    <p class="text-center text-[11px] font-bold tracking-wider text-pink-500 mb-1">HOW TO USE</p>
+    <h2 class="font-bold text-lg mb-6 text-center">OsoroCosmeの使い方</h2>
+    <ol class="grid sm:grid-cols-3 gap-4 sm:gap-6">
+      {[
+        { n: 1, icon: "🔎", title: "探す", text: "カテゴリや検索で、気になるコスメを見つけます。", href: "/ranking", cta: "ランキングを見る" },
+        { n: 2, icon: "📊", title: "比べる", text: "紹介動画数・インフルエンサー数から出した人気順を確認します。", href: "/brand-list", cta: "ブランド一覧へ" },
+        { n: 3, icon: "▶️", title: "動画で確かめる", text: "誰がいつ紹介したかを、元の動画で見られます。", href: "/video-list", cta: "動画一覧へ" },
+      ].map((st, i) => (
+        <li class="relative bg-white rounded-xl shadow-sm p-5 pt-8 text-center">
+          <span class="absolute -top-3 left-1/2 -translate-x-1/2 w-7 h-7 rounded-full bg-pink-600 text-white text-sm font-bold flex items-center justify-center shadow">{st.n}</span>
+          <p class="text-3xl mb-2">{st.icon}</p>
+          <p class="font-semibold mb-1">{st.title}</p>
+          <p class="text-xs text-neutral-500 mb-3 min-h-[3em]">{st.text}</p>
+          <a href={withBase(st.href)} class="inline-block text-xs text-pink-600 border border-pink-200 rounded-full px-3 py-1 hover:bg-pink-50">{st.cta} →</a>
+          {i < 2 && <span class="hidden sm:block absolute top-1/2 -right-5 -translate-y-1/2 text-pink-300 text-xl" aria-hidden="true">›</span>}
+        </li>
+      ))}
+    </ol>
+    <p class="mt-6 text-center text-[11px] text-neutral-400">データはYouTubeのコスメ紹介動画から作成しています。{updatedAt && `最新の動画：${formatJaDate(updatedAt)}`}</p>
   </section>
 </Layout>
