@@ -2,12 +2,15 @@
 import Layout from "../layouts/Layout.astro";
 import VideoCard from "../components/VideoCard.astro";
 import CosmeticCard from "../components/CosmeticCard.astro";
+import CosmeticTile from "../components/CosmeticTile.astro";
 import {
   getVisibleVideos,
   getPopularBrands,
   getInfluencerRanking,
   getCosmeticRankingsByTag,
   getTrendingCosmetics,
+  getCategoryTop,
+  formatJaDate,
   groupTagsByCategory,
   sortByPublishedDesc,
   formatCount,
@@ -16,13 +19,20 @@ import {
 } from "../lib/data";
 
 const visible = getVisibleVideos();
-const latestVideos = sortByPublishedDesc(visible).slice(0, 12);
-const popularBrands = getPopularBrands(12);
-const popularInfluencers = getInfluencerRanking().slice(0, 12);
+const latestVideos = sortByPublishedDesc(visible).slice(0, 8);
+const updatedAt = sortByPublishedDesc(visible)[0]?.published_at;
+const popularBrands = getPopularBrands(6);
+const popularInfluencers = getInfluencerRanking().slice(0, 10);
 const trending = getTrendingCosmetics(8);
 
 const byTag = getCosmeticRankingsByTag();
 const categoryGroups = groupTagsByCategory(byTag.keys());
+// 商品数の多いカテゴリ上位3つの1〜3位を、トップで先に見せる
+const featuredTags = Array.from(byTag.entries())
+  .sort((a, b) => b[1].length - a[1].length)
+  .slice(0, 3)
+  .map(([t]) => t);
+const featured = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 3) }));
 const influencerCount = getInfluencerRanking().length;
 const cosmeticCount = new Set(Array.from(byTag.values()).flat().map((r) => `${r.brand_id}_${r.name_id}`)).size;
 
@@ -44,55 +54,59 @@ const siteLd = {
   description={`YouTubeのコスメ紹介動画${visible.length}本から、インフルエンサー${influencerCount}人が使ったコスメ${cosmeticCount}品を集めました。カテゴリ別ランキングや、インフルエンサーごとの使用コスメ遍歴で探せます。`}
   jsonLd={[siteLd]}
 >
-  <section class="text-center mb-10 md:mb-12 pt-2 md:pt-4">
-    <h1 class="text-xl sm:text-2xl md:text-3xl font-bold mb-3 text-balance">みんなが使っているコスメを、<br class="sm:hidden" />動画から探す</h1>
-    <p class="text-sm text-neutral-500 mb-6">
-      YouTubeのコスメ紹介動画 {visible.length}本 ／ インフルエンサー {influencerCount}人 ／ コスメ {cosmeticCount}品を集めたデータベース
-    </p>
-    <form action={withBase("/search-result")} method="get" class="max-w-xl mx-auto flex gap-2">
+  <!-- ヒーロー：淡いピンクの面に、キャッチ・検索・実績の3つの数字だけを置く -->
+  <section class="-mx-4 px-4 pt-8 pb-10 md:pt-12 md:pb-14 mb-12 bg-gradient-to-b from-pink-100/80 via-pink-50 to-transparent text-center">
+    <p class="text-xs font-bold tracking-wider text-pink-500 mb-2">YOUTUBE COSME DATABASE</p>
+    <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 text-balance">みんなが使っているコスメを、<br class="sm:hidden" />動画から探す</h1>
+    <p class="text-sm text-neutral-500 mb-6">誰がいつどのコスメを紹介したかを、YouTube動画から集めました。</p>
+    <form action={withBase("/search-result")} method="get" class="max-w-xl mx-auto flex gap-2 mb-6">
       <input
         type="text"
         name="q"
         placeholder="コスメ名・ブランドで検索"
-        class="flex-1 min-w-0 border border-neutral-300 rounded-full px-4 sm:px-5 py-3 focus:outline-none focus:ring-2 focus:ring-pink-300"
+        class="flex-1 min-w-0 bg-white border border-neutral-200 shadow-sm rounded-full px-4 sm:px-5 py-3 focus:outline-none focus:ring-2 focus:ring-pink-300"
       />
-      <button type="submit" class="bg-pink-600 text-white px-5 sm:px-6 rounded-full hover:bg-pink-700 shrink-0">検索</button>
+      <button type="submit" class="bg-pink-600 text-white px-5 sm:px-6 rounded-full hover:bg-pink-700 shrink-0 shadow-sm">検索</button>
     </form>
+    <div class="max-w-md mx-auto grid grid-cols-3 gap-2 sm:gap-3">
+      <div class="bg-white/80 rounded-xl py-3 shadow-sm"><p class="text-xl sm:text-2xl font-bold text-pink-600">{formatCount(cosmeticCount)}</p><p class="text-[11px] text-neutral-500">コスメ</p></div>
+      <div class="bg-white/80 rounded-xl py-3 shadow-sm"><p class="text-xl sm:text-2xl font-bold text-pink-600">{formatCount(visible.length)}</p><p class="text-[11px] text-neutral-500">紹介動画</p></div>
+      <div class="bg-white/80 rounded-xl py-3 shadow-sm"><p class="text-xl sm:text-2xl font-bold text-pink-600">{formatCount(influencerCount)}</p><p class="text-[11px] text-neutral-500">インフルエンサー</p></div>
+    </div>
   </section>
 
-  <section class="mb-12">
-    <div class="flex items-end justify-between mb-3">
-      <h2 class="text-lg font-bold">カテゴリから探す</h2>
-      <a href={withBase("/ranking/")} class="text-sm text-pink-600 hover:underline">ランキング一覧へ →</a>
+  <!-- 主役：人気ランキングの1〜3位（画像つき）を先に見せる -->
+  <section class="mb-14">
+    <div class="flex items-end justify-between mb-4">
+      <h2 class="text-lg font-bold">人気ランキング</h2>
+      <a href={withBase("/ranking/")} class="text-sm text-pink-600 hover:underline">すべてのカテゴリ →</a>
     </div>
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="grid lg:grid-cols-3 gap-5">
       {
-        categoryGroups.map((g) => {
-          const top = [...g.tags].sort((a, b) => byTag.get(b)!.length - byTag.get(a)!.length).slice(0, 8);
-          return (
-            <div class="bg-white rounded-xl shadow-sm p-4">
-              <h3 class="font-bold text-sm mb-2 text-pink-700">{g.group}</h3>
-              <div class="flex flex-wrap gap-1.5">
-                {top.map((t, ti) => (
-                  <a href={categoryUrl(t)} class:list={["text-xs px-2.5 py-1.5 sm:py-1 rounded-full bg-pink-50 text-pink-700 hover:bg-pink-100", { "hidden sm:inline-block": ti >= 6 }]}>
-                    {t}
-                  </a>
-                ))}
-              </div>
+        featured.map((f) => (
+          <div class="bg-white rounded-2xl shadow-sm p-4">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="font-bold text-pink-700">{f.tag}</h3>
+              <a href={categoryUrl(f.tag)} class="text-xs text-pink-600 hover:underline">TOP50 →</a>
             </div>
-          );
-        })
+            <div class="grid grid-cols-3 gap-2">
+              {f.top.map(({ rank, tile }) => (
+                <CosmeticTile tile={tile} rank={rank} caption={`${tile.videoCount}本で紹介`} />
+              ))}
+            </div>
+          </div>
+        ))
       }
     </div>
   </section>
 
   {
     trending.length > 0 && (
-      <section class="mb-12">
+      <section class="mb-14">
         <h2 class="text-lg font-bold mb-1">最近の動画で紹介が多いコスメ</h2>
-        <p class="text-xs text-neutral-500 mb-3">直近に投稿された動画で、紹介された回数が多い順です。</p>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {trending.map((c) => (
+        <p class="text-xs text-neutral-500 mb-4">直近に投稿された動画で、紹介された回数が多い順です。</p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {trending.slice(0, 4).map((c) => (
             <CosmeticCard brand_id={c.brand_id} brand={c.brand} name_id={c.name_id} name={c.name} rakutenImageHtml={c.rakuten_image_link} />
           ))}
         </div>
@@ -100,63 +114,80 @@ const siteLd = {
     )
   }
 
-  <section class="mb-12">
-    <div class="flex items-end justify-between mb-3">
-      <h2 class="text-lg font-bold">人気ブランド</h2>
-      <a href={withBase("/brand-list")} class="text-sm text-pink-600 hover:underline">ブランド一覧へ →</a>
+  <section class="mb-14">
+    <div class="flex items-end justify-between mb-4">
+      <h2 class="text-lg font-bold">カテゴリから探す</h2>
+      <a href={withBase("/ranking/")} class="text-sm text-pink-600 hover:underline">ランキング一覧へ →</a>
     </div>
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+    <div class="flex flex-wrap gap-2">
       {
-        popularBrands.map((b, i) => (
-          <a
-            href={withBase(`/brand/${b.brand_id}`)}
-            class="relative rounded-xl p-4 bg-gradient-to-br from-pink-50 to-rose-100 border border-pink-100 hover:shadow-md hover:-translate-y-0.5 transition group"
-          >
-            <span class="absolute top-2 right-3 text-xs font-bold text-pink-400">#{i + 1}</span>
-            <span class="flex items-center justify-center w-10 h-10 rounded-full bg-white text-pink-600 font-bold shadow-sm mb-3">
-              {b.name.charAt(0).toUpperCase()}
-            </span>
-            <p class="font-semibold text-sm truncate group-hover:text-pink-600">{b.name}</p>
-            <p class="text-xs text-neutral-500 mt-0.5">紹介動画 {b.videoCount}本</p>
+        categoryGroups.map((g) => (
+          <a href={withBase("/ranking/")} class="text-sm px-4 py-2 rounded-full bg-white border border-pink-100 text-pink-700 hover:bg-pink-50 shadow-sm">
+            {g.group} <span class="text-neutral-400 text-xs">{g.tags.length}</span>
           </a>
         ))
       }
     </div>
   </section>
 
-  <section class="mb-12">
-    <div class="flex items-end justify-between mb-3">
-      <h2 class="text-lg font-bold">人気インフルエンサー</h2>
-      <a href={withBase("/influencer-list")} class="text-sm text-pink-600 hover:underline">インフルエンサー一覧へ →</a>
-    </div>
-    <div class="flex gap-4 overflow-x-auto pb-3 -mx-4 px-4 snap-x">
-      {
-        popularInfluencers.map((inf) => (
-          <a
-            href={withBase(`/influencer/${inf.channel_id}`)}
-            class="snap-start shrink-0 w-36 bg-white rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition p-4 text-center"
-          >
-            {inf.channel_icon ? (
-              <img src={inf.channel_icon} alt="" class="w-20 h-20 rounded-full mx-auto mb-2 ring-4 ring-pink-200" loading="lazy" />
-            ) : (
-              <div class="w-20 h-20 rounded-full mx-auto mb-2 ring-4 ring-pink-200 bg-pink-50" />
-            )}
-            <p class="font-semibold text-sm truncate">{inf.channel_title}</p>
-            <p class="text-[11px] text-neutral-400">登録者 {formatCount(inf.subscriber_count)}人</p>
-            <p class="text-[11px] text-pink-600 mt-1">動画 {inf.videoCount}本</p>
-          </a>
-        ))
-      }
+  <section class="mb-14 -mx-4 px-4 py-8 bg-white">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-end justify-between mb-4">
+        <h2 class="text-lg font-bold">人気インフルエンサー</h2>
+        <a href={withBase("/influencer-list")} class="text-sm text-pink-600 hover:underline">一覧へ →</a>
+      </div>
+      <div class="flex gap-4 overflow-x-auto pb-3 -mx-4 px-4 snap-x">
+        {
+          popularInfluencers.map((inf) => (
+            <a
+              href={withBase(`/influencer/${inf.channel_id}`)}
+              class="snap-start shrink-0 w-32 rounded-xl hover:bg-pink-50 transition p-3 text-center"
+            >
+              {inf.channel_icon ? (
+                <img src={inf.channel_icon} alt="" class="w-16 h-16 rounded-full mx-auto mb-2 ring-2 ring-pink-200" loading="lazy" />
+              ) : (
+                <div class="w-16 h-16 rounded-full mx-auto mb-2 ring-2 ring-pink-200 bg-pink-50" />
+              )}
+              <p class="font-semibold text-xs truncate">{inf.channel_title}</p>
+              <p class="text-[11px] text-neutral-400">動画 {inf.videoCount}本</p>
+            </a>
+          ))
+        }
+      </div>
+      <div class="flex items-end justify-between mt-8 mb-3">
+        <h2 class="text-lg font-bold">人気ブランド</h2>
+        <a href={withBase("/brand-list")} class="text-sm text-pink-600 hover:underline">一覧へ →</a>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        {
+          popularBrands.map((b) => (
+            <a href={withBase(`/brand/${b.brand_id}`)} class="text-sm px-4 py-2 rounded-full bg-pink-50 text-pink-700 hover:bg-pink-100">
+              {b.name} <span class="text-neutral-400 text-xs">{b.videoCount}本</span>
+            </a>
+          ))
+        }
+      </div>
     </div>
   </section>
 
-  <section>
-    <div class="flex items-end justify-between mb-3">
+  <section class="mb-14">
+    <div class="flex items-end justify-between mb-4">
       <h2 class="text-lg font-bold">新着動画</h2>
       <a href={withBase("/video-list")} class="text-sm text-pink-600 hover:underline">動画一覧へ →</a>
     </div>
-    <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
       {latestVideos.map((v) => <VideoCard video={v} />)}
     </div>
+  </section>
+
+  <!-- 使い方とデータの出典：信頼感の補強 -->
+  <section class="mb-4 rounded-2xl bg-pink-50 p-6">
+    <h2 class="font-bold mb-4 text-center">OsoroCosmeの使い方</h2>
+    <div class="grid sm:grid-cols-3 gap-4 text-center text-sm">
+      <div><p class="text-2xl mb-1">🔎</p><p class="font-semibold">探す</p><p class="text-xs text-neutral-500">カテゴリや検索で、気になるコスメを見つけます。</p></div>
+      <div><p class="text-2xl mb-1">📊</p><p class="font-semibold">比べる</p><p class="text-xs text-neutral-500">紹介動画数・インフルエンサー数から出した人気順を確認します。</p></div>
+      <div><p class="text-2xl mb-1">▶️</p><p class="font-semibold">動画で確かめる</p><p class="text-xs text-neutral-500">誰がいつ紹介したかを、元の動画で見られます。</p></div>
+    </div>
+    <p class="mt-5 text-center text-[11px] text-neutral-400">データはYouTubeのコスメ紹介動画から作成しています。{updatedAt && `最新の動画：${formatJaDate(updatedAt)}`}</p>
   </section>
 </Layout>

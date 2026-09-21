@@ -1,7 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import CosmeticCard from "../../components/CosmeticCard.astro";
-import { getBrandsWithVideos, getBrandName, getCosmeticsForBrand, breadcrumbLd, getBrandMeta, getBrandGroups, getBrandCosmeticsByCategory, COUNTRY_NAMES, withBase } from "../../lib/data";
+import { getBrandsWithVideos, getBrandName, getCosmeticsForBrand, breadcrumbLd, getBrandMeta, getBrandGroups, getBrandCosmeticsByCategory, COUNTRY_NAMES, withBase, cosmeticSlug } from "../../lib/data";
 
 export function getStaticPaths() {
   return getBrandsWithVideos().map((b) => ({ params: { brand_id: b.brand_id } }));
@@ -25,6 +25,25 @@ const sisters = meta.group
 const profile = [countryName ? `${countryName}のブランド` : null, meta.group ? `${meta.group}系列` : null].filter(Boolean).join("・");
 const description = `${brandName}${profile ? `（${profile}）` : ""}は、YouTubeのコスメ紹介動画${stats?.videoCount ?? 0}本で${cosmetics.length}品が紹介されています。紹介された商品とその紹介動画を一覧できます。`;
 const jsonLd = [
+  ...(cosmetics.length > 0
+    ? [
+        {
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: `${brandName}の紹介されたコスメ`,
+          numberOfItems: cosmetics.length,
+          itemListElement: sections
+            .flatMap((s) => s.items)
+            .slice(0, 10)
+            .map((it: any, i: number) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              name: `${brandName} ${it.name}`,
+              url: new URL(withBase(`/cosmetics/${cosmeticSlug(brand_id!, it.name_id)}`), Astro.site!).href,
+            })),
+        },
+      ]
+    : []),
   breadcrumbLd([{ name: "ホーム", path: "/" }, { name: "ブランド一覧", path: "/brand-list" }, { name: brandName, path: `/brand/${brand_id}` }], Astro.site!),
 ];
 ---

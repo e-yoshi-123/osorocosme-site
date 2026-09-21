@@ -15,6 +15,7 @@ const SITE_NAME = "OsoroCosme";
 const DEFAULT_DESCRIPTION =
   "YouTubeのコスメ紹介動画から、誰がいつどのコスメを使っているかを集めたデータベース。カテゴリ別ランキング、ブランド、インフルエンサー別の使用コスメ遍歴を確認できます。";
 const { title, description = DEFAULT_DESCRIPTION, image, ogType = "website", noindex = false, jsonLd = [] } = Astro.props;
+const ogImage = image ?? (Astro.site ? new URL("/og-default.png", Astro.site).href : undefined);
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
 
 const navLinks = [
@@ -41,8 +42,9 @@ const navLinks = [
     <meta property="og:description" content={description} />
     <meta property="og:locale" content="ja_JP" />
     {canonical && <meta property="og:url" content={canonical} />}
-    {image && <meta property="og:image" content={image} />}
-    <meta name="twitter:card" content={image ? "summary_large_image" : "summary"} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content={ogImage ? "summary_large_image" : "summary"} />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
     {jsonLd.map((ld) => <script type="application/ld+json" set:html={JSON.stringify(ld)} />)}
   </head>
   <body class="min-h-screen bg-neutral-50 text-neutral-900 flex flex-col">
