@@ -55,18 +55,26 @@ const description = entry
   ? factSentence + (firstIntro ? `最初の紹介は${formatJaDate(firstIntro.published_at)}、直近は${formatJaDate(lastIntro.published_at)}です。` : "")
   : undefined;
 const imageSrc = extractImageSrc(entry?.rakuten_image_link);
-const productLd = entry && {
-  "@context": "https://schema.org",
-  "@type": "Product",
-  name: entry.name,
-  brand: { "@type": "Brand", name: entry.brand },
-  ...(entry.category ? { category: entry.category } : {}),
-  ...(imageSrc ? { image: imageSrc } : {}),
-  description,
-};
+// Googleの「商品スニペット」は、Productに offers / review / aggregateRating のいずれかが無いと重大な問題として扱われる（Search Consoleの指摘）。
+// このサイトには、根拠のある口コミ・評価は無い（@cosmeの評価点は規約上出さない、YouTubeの紹介は口コミではない）ので、偽って付けない。
+// 価格をページに出している商品（＝buyable かつ参考価格あり。ページの表示と一致させる）にだけ offers を付け、それ以外は Product を出さない。
+const hasOffer = buyable && typeof entry?.now_price === "number" && entry.now_price > 0 && !!entry.rakuten_text_link;
+const productLd =
+  entry && hasOffer
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        name: entry.name,
+        brand: { "@type": "Brand", name: entry.brand },
+        ...(entry.category ? { category: entry.category } : {}),
+        ...(imageSrc ? { image: imageSrc } : {}),
+        description,
+        offers: { "@type": "Offer", price: entry.now_price, priceCurrency: "JPY" },
+      }
+    : null;
 const jsonLd = entry
   ? [
-      productLd!,
+      ...(productLd ? [productLd] : []),
       breadcrumbLd(
         [
           { name: "ホーム", path: "/" },
