@@ -6,28 +6,14 @@ const pages = getRankingPages();
 const nav = getRankingNav();
 const allTags = Array.from(pages.keys());
 
-// 大分類ごとに、実際の並び順を保ったまま「単独カテゴリの並び」と「まとめ（種類を束ねた枠）」のブロックにする。
-// （単独カテゴリをまとめの後ろにまとめて置くと、まとめの中身のように見えてしまうため）
-type Item = (typeof nav)[number]["items"][number];
-type Block = { kind: "singles"; items: Extract<Item, { kind: "single" }>[] } | { kind: "parent"; item: Extract<Item, { kind: "parent" }> };
-function toBlocks(items: Item[]): Block[] {
-  const blocks: Block[] = [];
-  for (const it of items) {
-    if (it.kind === "parent") blocks.push({ kind: "parent", item: it });
-    else {
-      const last = blocks[blocks.length - 1];
-      if (last && last.kind === "singles") last.items.push(it);
-      else blocks.push({ kind: "singles", items: [it] });
-    }
-  }
-  return blocks;
-}
-
 // 各カテゴリの1〜3位の画像（カテゴリの雰囲気が分かるように）
+// 商品が3品未満でも枠の大きさが変わらないよう、常に3枠分を返す（足りない分は空）
 function topImages(tag: string): string[] {
-  return (pages.get(tag)?.list || [])
+  const imgs = (pages.get(tag)?.list || [])
     .slice(0, 3)
     .map((r) => extractImageSrc(getCosmeticListEntry(r.brand_id, r.name_id)?.rakuten_image_link || r.rakuten_image_link) || "");
+  while (imgs.length < 3) imgs.push("");
+  return imgs;
 }
 ---
 
@@ -37,66 +23,79 @@ function topImages(tag: string): string[] {
 >
   <h1 class="text-xl font-bold mb-2">コスメランキング</h1>
   <p class="text-xs text-neutral-500 mb-6">
-    見たいカテゴリを選んでください。ファンデーションやアイライナーなどは、細かい種類をまとめた「全般」のランキングと、種類別のランキングの両方を見られます。紹介動画の合計再生回数・紹介動画数・紹介したインフルエンサー数から算出した人気スコア順で、各カテゴリの上位50位まで見られます。
+    見たいカテゴリを選んでください。ファンデーションやアイライナーなどは、クリックすると「全般（まとめ）」と種類別のどれを見るか選べます。紹介動画の合計再生回数・紹介動画数・紹介したインフルエンサー数から算出した人気スコア順で、各カテゴリの上位50位まで見られます。
   </p>
 
   {
     nav.map((g) => (
       <section class="mb-10">
         <h2 class="text-lg font-bold mb-4 pl-3 border-l-4 border-pink-500">{g.group}</h2>
-        <div class="space-y-4">
-          {toBlocks(g.items).map((blk) =>
-            blk.kind === "singles" ? (
-              <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                {blk.items.map((it) => (
-                  <a href={categoryUrl(it.name)} class="min-w-0 block bg-white rounded-lg shadow-sm hover:shadow-md transition p-3">
-                    <div class="flex gap-1 mb-2">
-                      {topImages(it.name).map((src) => (
-                        <div class="flex-1 aspect-square bg-neutral-50 rounded overflow-hidden flex items-center justify-center">
-                          {src ? <img src={src} alt="" class="max-w-full max-h-full object-contain" loading="lazy" onerror="this.style.visibility='hidden'" /> : null}
-                        </div>
-                      ))}
-                    </div>
-                    <p class="font-medium text-sm truncate">{it.name}</p>
-                    <p class="text-xs text-neutral-400">{it.count}品</p>
-                  </a>
+        {/* 「まとめ」も単独カテゴリも、同じ幅・同じ見た目の行として同列に並べる。
+            単独カテゴリは行をクリックでランキングへ。まとめは行をクリックで開き、「全般」か種類別かを選ぶ（<details>なのでJSなしでも動き、リンクはHTMLに残る） */}
+        <ul class="space-y-3">
+          {g.items.map((it) => {
+            const imgs = (
+              <div class="flex gap-1 w-36 sm:w-52 shrink-0">
+                {topImages(it.name).map((src) => (
+                  <div class="flex-1 aspect-square bg-neutral-50 rounded overflow-hidden flex items-center justify-center">
+                    {src ? <img src={src} alt="" class="max-w-full max-h-full object-contain" loading="lazy" onerror="this.style.visibility='hidden'" /> : null}
+                  </div>
                 ))}
               </div>
-            ) : (
-              <div class="rounded-xl border-2 border-pink-200 bg-pink-50/50 p-3">
-                <a href={categoryUrl(blk.item.name)} class="min-w-0 flex items-center gap-3 bg-white rounded-lg shadow-sm hover:shadow-md transition p-3 mb-3">
-                  <div class="flex gap-1 w-36 sm:w-44 shrink-0">
-                    {topImages(blk.item.name).map((src) => (
-                      <div class="flex-1 aspect-square bg-neutral-50 rounded overflow-hidden flex items-center justify-center">
-                        {src ? <img src={src} alt="" class="max-w-full max-h-full object-contain" loading="lazy" onerror="this.style.visibility='hidden'" /> : null}
+            );
+            return (
+              <li class="bg-white rounded-xl shadow-sm overflow-hidden">
+                {it.kind === "single" ? (
+                  <a href={categoryUrl(it.name)} class="min-w-0 flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-pink-50/60 transition">
+                    {imgs}
+                    <div class="min-w-0 flex-1">
+                      <p class="font-bold sm:text-lg">{it.name}</p>
+                      <p class="text-xs text-neutral-500 mt-0.5">{it.count}品</p>
+                    </div>
+                    <span class="text-neutral-300 text-xl shrink-0" aria-hidden="true">›</span>
+                  </a>
+                ) : (
+                  <details class="group">
+                    <summary class="min-w-0 flex items-center gap-3 sm:gap-4 p-3 sm:p-4 cursor-pointer list-none [&::-webkit-details-marker]:hidden hover:bg-pink-50/60 transition">
+                      {imgs}
+                      <div class="min-w-0 flex-1">
+                        <p class="font-bold sm:text-lg">
+                          {it.name}
+                          <span class="ml-1 text-[11px] font-normal text-white bg-pink-600 rounded px-1.5 py-0.5 align-middle">まとめ</span>
+                        </p>
+                        <p class="text-xs text-neutral-500 mt-0.5">{it.count}品 ／ {it.children.length}種類から選べます</p>
                       </div>
-                    ))}
-                  </div>
-                  <div class="min-w-0">
-                    <p class="font-bold">{blk.item.name} <span class="ml-1 text-[11px] font-normal text-white bg-pink-600 rounded px-1.5 py-0.5 align-middle">まとめて見る</span></p>
-                    <p class="text-xs text-neutral-500 mt-0.5">{blk.item.count}品 ／ 下の種類をまとめたランキング</p>
-                  </div>
-                </a>
-                <p class="text-[11px] text-neutral-500 mb-2 px-1">種類別のランキング</p>
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
-                  {blk.item.children.map((c) => (
-                    <a href={categoryUrl(c.name)} class="min-w-0 block bg-white rounded-lg shadow-sm hover:shadow-md transition p-2.5">
-                      <div class="flex gap-1 mb-1.5">
-                        {topImages(c.name).map((src) => (
-                          <div class="flex-1 aspect-square bg-neutral-50 rounded overflow-hidden flex items-center justify-center">
-                            {src ? <img src={src} alt="" class="max-w-full max-h-full object-contain" loading="lazy" onerror="this.style.visibility='hidden'" /> : null}
-                          </div>
+                      <span class="text-xs text-pink-600 shrink-0 hidden sm:inline">種類を選ぶ</span>
+                      <span class="text-neutral-400 text-xl shrink-0 transition-transform group-open:rotate-90" aria-hidden="true">›</span>
+                    </summary>
+                    <div class="border-t border-neutral-100 bg-neutral-50 px-3 sm:px-4 py-3">
+                      <p class="text-[11px] text-neutral-500 mb-2">見たいランキングを選んでください</p>
+                      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+                        <a href={categoryUrl(it.name)} class="min-w-0 flex flex-col justify-center rounded-lg bg-pink-600 text-white hover:bg-pink-700 transition p-3">
+                          <p class="font-bold text-sm">{it.name}</p>
+                          <p class="text-[11px] opacity-90">{it.count}品 ／ すべてまとめて</p>
+                        </a>
+                        {it.children.map((c) => (
+                          <a href={categoryUrl(c.name)} class="min-w-0 block bg-white rounded-lg border border-neutral-200 hover:shadow-md transition p-2">
+                            <div class="flex gap-1 mb-1.5">
+                              {topImages(c.name).map((src) => (
+                                <div class="flex-1 aspect-square bg-neutral-50 rounded overflow-hidden flex items-center justify-center">
+                                  {src ? <img src={src} alt="" class="max-w-full max-h-full object-contain" loading="lazy" onerror="this.style.visibility='hidden'" /> : null}
+                                </div>
+                              ))}
+                            </div>
+                            <p class="font-medium text-xs truncate">{c.name}</p>
+                            <p class="text-[11px] text-neutral-400">{c.count}品</p>
+                          </a>
                         ))}
                       </div>
-                      <p class="font-medium text-sm truncate">{c.name}</p>
-                      <p class="text-xs text-neutral-400">{c.count}品</p>
-                    </a>
-                  ))}
-                </div>
-              </div>
-            )
-          )}
-        </div>
+                    </div>
+                  </details>
+                )}
+              </li>
+            );
+          })}
+        </ul>
       </section>
     ))
   }
