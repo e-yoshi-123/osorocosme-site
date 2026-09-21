@@ -12,6 +12,7 @@ import {
   sortByPublishedDesc,
   formatCount,
   withBase,
+  categoryUrl,
 } from "../lib/data";
 
 const visible = getVisibleVideos();
@@ -62,7 +63,7 @@ const siteLd = {
   <section class="mb-12">
     <div class="flex items-end justify-between mb-3">
       <h2 class="text-lg font-bold">カテゴリから探す</h2>
-      <a href={withBase("/ranking")} class="text-sm text-pink-600 hover:underline">ランキング一覧へ →</a>
+      <a href={withBase("/ranking/")} class="text-sm text-pink-600 hover:underline">ランキング一覧へ →</a>
     </div>
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
       {
@@ -73,7 +74,7 @@ const siteLd = {
               <h3 class="font-bold text-sm mb-2 text-pink-700">{g.group}</h3>
               <div class="flex flex-wrap gap-1.5">
                 {top.map((t, ti) => (
-                  <a href={withBase(`/ranking#${encodeURIComponent(t)}`)} class:list={["text-xs px-2.5 py-1.5 sm:py-1 rounded-full bg-pink-50 text-pink-700 hover:bg-pink-100", { "hidden sm:inline-block": ti >= 6 }]}>
+                  <a href={categoryUrl(t)} class:list={["text-xs px-2.5 py-1.5 sm:py-1 rounded-full bg-pink-50 text-pink-700 hover:bg-pink-100", { "hidden sm:inline-block": ti >= 6 }]}>
                     {t}
                   </a>
                 ))}

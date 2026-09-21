@@ -4,6 +4,7 @@ import {
   getBrandsWithVideos,
   getUsedCosmeticKeys,
   getInfluencerRanking,
+  getRankingPages,
   cosmeticSlug,
   withBase,
 } from "../lib/data";
@@ -13,7 +14,8 @@ export const prerender = true;
 export const GET: APIRoute = ({ site }) => {
   const paths = [
     "/",
-    "/ranking",
+    "/ranking/",
+    ...Array.from(getRankingPages().keys()).map((t) => `/ranking/${encodeURIComponent(t)}/`),
     "/brand-list",
     "/influencer-list",
     "/video-list",

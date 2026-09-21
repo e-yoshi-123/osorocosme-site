@@ -9,6 +9,7 @@ import {
   getCoMentionedCosmetics,
   getCategoryTop,
   getBrandTopCosmetics,
+  categoryUrl,
   cosmeticSlug,
   sortByPublishedDesc,
   formatCount,
@@ -34,6 +35,8 @@ const entry = getCosmeticListEntry(brand_id, name_id);
 const videosUsing = sortByPublishedDesc(getVideosUsingCosmetic(brand_id, name_id));
 
 const facts = getCosmeticFacts(brand_id, name_id);
+// 画像の無い商品（＝楽天側に出品が無い・画像が消えている）は、購入できないリンクの可能性が高いので、価格・購入ボタンを出さない
+const buyable = !!extractImageSrc(entry?.rakuten_image_link);
 // ページ下部の「次に見たくなる」3要素：一緒に紹介されているコスメ／同じカテゴリの人気ランキング／同じブランドの人気商品
 const coMentioned = getCoMentionedCosmetics(brand_id, name_id, 6);
 const categoryTop = facts.mainTag ? getCategoryTop(facts.mainTag, 6) : [];
@@ -84,7 +87,7 @@ const jsonLd = entry
       <>
         <div class="bg-white rounded-lg shadow-sm p-6 mb-8 flex flex-col md:flex-row gap-6">
           {entry.rakuten_image_link && (
-            <div class="shrink-0 [&_img]:rounded" set:html={entry.rakuten_image_link} />
+            <div data-item-image class="shrink-0 [&_img]:rounded" set:html={entry.rakuten_image_link} />
           )}
           <div>
             <a href={withBase(`/brand/${entry.brand_id}`)} class="text-sm text-pink-600 hover:underline">
@@ -92,11 +95,12 @@ const jsonLd = entry
             </a>
             <h1 class="text-xl font-bold mt-1 mb-2">{entry.name}</h1>
             {entry.category && <p class="text-sm text-neutral-500 mb-1">カテゴリ: {entry.category}</p>}
-            {entry.now_price !== undefined && (
-              <p class="text-sm text-neutral-500 mb-3">参考価格: ¥{formatCount(entry.now_price)}</p>
+            {buyable && entry.now_price !== undefined && (
+              <p data-buy class="text-sm text-neutral-500 mb-3">参考価格: ¥{formatCount(entry.now_price)}</p>
             )}
-            {entry.rakuten_text_link && (
+            {buyable && entry.rakuten_text_link && (
               <a
+                data-buy
                 href={entry.rakuten_text_link}
                 target="_blank"
                 rel="nofollow sponsored noopener"
@@ -120,7 +124,7 @@ const jsonLd = entry
             <p class="mt-1 text-pink-600 font-bold leading-none"><span class="text-2xl sm:text-4xl">{facts.channelCount}</span><span class="text-xs sm:text-sm ml-0.5">人</span></p>
           </div>
           {facts.rank && (
-            <a href={withBase(`/ranking#${encodeURIComponent(facts.mainTag!)}`)} class="bg-white rounded-lg shadow-sm p-3 sm:p-4 text-center min-w-0 hover:shadow-md block">
+            <a href={categoryUrl(facts.mainTag!)} class="bg-white rounded-lg shadow-sm p-3 sm:p-4 text-center min-w-0 hover:shadow-md block">
               <p class="text-[11px] sm:text-xs text-neutral-500 whitespace-nowrap">人気ランキング</p>
               <p class="mt-1 text-pink-600 font-bold leading-none"><span class="text-2xl sm:text-4xl">{facts.rank}</span><span class="text-xs sm:text-sm ml-0.5">位</span></p>
               <p class="mt-1.5 text-[10px] sm:text-xs text-neutral-500 truncate">{facts.mainTag} {facts.rankTotal}品中</p>
@@ -168,7 +172,7 @@ const jsonLd = entry
               ))}
             </div>
             <p class="mt-3 text-right text-sm">
-              <a href={withBase(`/ranking#${encodeURIComponent(facts.mainTag)}`)} class="text-pink-600 hover:underline">「{facts.mainTag}」のランキングをすべて見る（{facts.rankTotal}品） →</a>
+              <a href={categoryUrl(facts.mainTag)} class="text-pink-600 hover:underline">「{facts.mainTag}」のランキングをすべて見る（{facts.rankTotal}品） →</a>
             </p>
           </section>
         )}
@@ -189,3 +193,16 @@ const jsonLd = entry
     )
   }
 </Layout>
+
+<script is:inline>
+  // 画像のURLはあっても実際に読み込めない場合（楽天側で画像が消えている）は、購入できないリンクの可能性が高いので、価格・購入ボタンを取り除く
+  (function () {
+    var img = document.querySelector("[data-item-image] img");
+    if (!img) return;
+    function drop() {
+      document.querySelectorAll("[data-buy]").forEach(function (e) { e.remove(); });
+    }
+    if (img.complete && img.naturalWidth === 0) drop();
+    else img.addEventListener("error", drop);
+  })();
+</script>

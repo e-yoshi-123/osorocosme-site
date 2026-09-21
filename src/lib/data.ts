@@ -3,6 +3,7 @@ import brandsData from "../data/brands-list.json";
 import cosmeticsListData from "../data/cosmetics_list.json";
 import brandMetaData from "../data/brand-meta.json";
 import brandReadings from "../data/brand-readings.json";
+import categoryOverridesData from "../data/category-overrides.json";
 
 export interface Cosmetic {
   brand_id: string;
@@ -67,6 +68,23 @@ export interface Influencer {
 const videos = videosData as unknown as Record<string, Video>;
 const brands = brandsData as unknown as Record<string, string>;
 const cosmeticsList = cosmeticsListData as unknown as Record<string, CosmeticListEntry>;
+
+/** 商品のカテゴリの補正（src/data/category-overrides.json）。
+ * 商品マスタ（@cosme由来）のカテゴリが実際の種類とずれている商品（例: クッションファンデが化粧下地、アイ用の下地が化粧下地）を、
+ * ランキング・カテゴリ表示の全体に一貫して反映するため、読み込み時に動画側のタグと商品マスタのカテゴリを書き換える。
+ * マスタ側は週次のスクレイピングで上書きされうるため、サイト側で補正する。キー: "brand_id_name_id"。 */
+{
+  const overrides = categoryOverridesData as unknown as Record<string, { category: string }>;
+  for (const v of Object.values(videos)) {
+    for (const c of v.cosmetics || []) {
+      const o = overrides[`${c.brand_id}_${c.name_id}`];
+      if (o && c.related_tags && c.related_tags.length > 0) c.related_tags = [o.category];
+    }
+  }
+  for (const [key, o] of Object.entries(overrides)) {
+    if (cosmeticsList[key]) cosmeticsList[key].category = o.category;
+  }
+}
 
 /** 現行WordPress実装は check_status の判定がページごとに不統一（緩い/厳密が混在するバグ）。
  * ここでは常に厳密判定（boolean true のみ有効）に統一する。 */
@@ -478,6 +496,7 @@ export const RANKING_CATEGORY_GROUPS: { group: string; tags: string[] }[] = [
     tags: [
       "化粧下地", "リキッドファンデーション", "クリーム・ジェルファンデーション",
       "パウダーファンデーション", "ファンデーション", "その他ファンデーション",
+      "クッションファンデ", "CCクリーム",
       "コンシーラー", "プレストパウダー", "ルースパウダー",
     ],
   },
@@ -488,7 +507,7 @@ export const RANKING_CATEGORY_GROUPS: { group: string; tags: string[] }[] = [
   {
     group: "アイメイク",
     tags: [
-      "パウダーアイシャドウ", "ジェル・クリームアイシャドウ", "アイシャドウ",
+      "パウダーアイシャドウ", "ジェル・クリームアイシャドウ", "アイシャドウ", "アイシャドウベース",
       "リキッドアイライナー", "ジェルアイライナー", "ペンシルアイライナー", "その他アイライナー",
       "マスカラ下地・トップコート", "マスカラ", "つけまつげ", "まつげ美容液",
       "二重まぶた用グッズ", "カラコン",
@@ -514,6 +533,7 @@ export const RANKING_CATEGORY_GROUPS: { group: string; tags: string[] }[] = [
       "ブースター・導入液", "化粧水", "ミスト状化粧水", "美容液", "シートマスク・パック",
       "乳液", "フェイスクリーム", "乳液・クリーム", "オールインワン化粧品",
       "アイケア・アイクリーム", "フェイスオイル・バーム", "日焼け止め・UVケア(顔用)",
+      "洗顔ジェル", "泡洗顔", "トナーパッド",
       "ハンドクリーム・ケア", "ハンドソープ・ジェル", "スキンケア美容家電",
     ],
   },
@@ -527,6 +547,99 @@ export function groupTagsByCategory(tags: Iterable<string>): { group: string; ta
   return [...RANKING_CATEGORY_GROUPS, { group: "その他", tags: unknown }]
     .map((g) => ({ group: g.group, tags: g.tags.filter((t) => present.has(t)) }))
     .filter((g) => g.tags.length > 0);
+}
+
+/** 同じ種類の細かいカテゴリを束ねる「まとめ」ランキング（例: リキッド・クリーム・パウダー等をまとめた「ファンデーション全般」）。
+ * 名前は既存のカテゴリ名と重ならないようにする。細かいカテゴリのランキングも、そのまま別に見られる。
+ * 商品ごとのスコアはカテゴリによらず同じなので、まとめの順位は「細かいカテゴリの商品を重複なく集めて、同じ基準で並べたもの」。 */
+export interface RankingParent {
+  name: string;
+  group: string;
+  tags: string[];
+}
+export const RANKING_PARENTS: RankingParent[] = [
+  { name: "ファンデーション全般", group: "ベースメイク", tags: ["リキッドファンデーション", "クリーム・ジェルファンデーション", "パウダーファンデーション", "ファンデーション", "その他ファンデーション", "クッションファンデ"] },
+  { name: "フェイスパウダー全般", group: "ベースメイク", tags: ["プレストパウダー", "ルースパウダー"] },
+  { name: "アイブロウ全般", group: "アイブロウ", tags: ["アイブロウペンシル", "パウダーアイブロウ", "眉マスカラ", "その他アイブロウ", "アイブロウ"] },
+  { name: "アイシャドウ全般", group: "アイメイク", tags: ["パウダーアイシャドウ", "ジェル・クリームアイシャドウ", "アイシャドウ", "アイシャドウベース"] },
+  { name: "アイライナー全般", group: "アイメイク", tags: ["リキッドアイライナー", "ジェルアイライナー", "ペンシルアイライナー", "その他アイライナー"] },
+  { name: "マスカラ全般", group: "アイメイク", tags: ["マスカラ", "マスカラ下地・トップコート"] },
+  { name: "チーク全般", group: "チーク・リップ", tags: ["パウダーチーク", "ジェル・クリームチーク"] },
+  { name: "リップ全般", group: "チーク・リップ", tags: ["口紅", "リップスティック", "リップグロス", "リップライナー", "リップケア・リップクリーム"] },
+  { name: "クレンジング全般", group: "スキンケア", tags: ["オイルクレンジング", "クレンジングジェル", "クレンジングクリーム", "ミルククレンジング", "リキッドクレンジング", "その他クレンジング"] },
+  { name: "化粧水全般", group: "スキンケア", tags: ["化粧水", "ミスト状化粧水"] },
+  { name: "乳液・クリーム全般", group: "スキンケア", tags: ["乳液", "フェイスクリーム", "乳液・クリーム"] },
+];
+
+/** ランキングのページ1つ分（細かいカテゴリ、または「まとめ」）。 */
+export interface RankingPageEntry {
+  /** URLとページ名に使う名前 */
+  key: string;
+  kind: "category" | "parent";
+  /** 「まとめ」の場合、束ねている（実際にランキングのある）細かいカテゴリ */
+  children: string[];
+  list: CosmeticRanking[];
+}
+
+const rankingCmp = (a: CosmeticRanking, b: CosmeticRanking) =>
+  b.score - a.score || b.videoCount - a.videoCount || a.name.localeCompare(b.name, "ja");
+
+let _rankingPages: Map<string, RankingPageEntry> | null = null;
+/** ランキングのページ（細かいカテゴリ＋「まとめ」）を、キー別に返す。「まとめ」は細かいカテゴリが2つ以上あるものだけ。 */
+export function getRankingPages(): Map<string, RankingPageEntry> {
+  if (_rankingPages) return _rankingPages;
+  const byTag = getCosmeticRankingsByTag();
+  const pages = new Map<string, RankingPageEntry>();
+  for (const [tag, list] of byTag) pages.set(tag, { key: tag, kind: "category", children: [], list });
+  for (const p of RANKING_PARENTS) {
+    const present = p.tags.filter((t) => byTag.has(t));
+    if (present.length < 2) continue;
+    const merged = new Map<string, CosmeticRanking>();
+    for (const t of present) for (const r of byTag.get(t)!) merged.set(`${r.brand_id}_${r.name_id}`, r);
+    pages.set(p.name, { key: p.name, kind: "parent", children: present, list: Array.from(merged.values()).sort(rankingCmp) });
+  }
+  _rankingPages = pages;
+  return pages;
+}
+
+/** 細かいカテゴリが属する「まとめ」（無ければundefined）。 */
+export function getParentOfTag(tag: string): RankingPageEntry | undefined {
+  for (const page of getRankingPages().values()) if (page.kind === "parent" && page.children.includes(tag)) return page;
+  return undefined;
+}
+
+export type RankingNavItem =
+  | { kind: "parent"; name: string; count: number; children: { name: string; count: number }[] }
+  | { kind: "single"; name: string; count: number };
+
+/** サイドバー・一覧用に、大分類ごとに「まとめ＋細かいカテゴリ」または単独のカテゴリを、表示順に並べる。 */
+export function getRankingNav(): { group: string; items: RankingNavItem[] }[] {
+  const pages = getRankingPages();
+  const doneParents = new Set<string>();
+  return groupTagsByCategory(getCosmeticRankingsByTag().keys()).map((g) => {
+    const items: RankingNavItem[] = [];
+    const done = new Set<string>();
+    for (const tag of g.tags) {
+      if (done.has(tag)) continue;
+      const parent = getParentOfTag(tag);
+      if (parent && !doneParents.has(parent.key)) {
+        doneParents.add(parent.key);
+        done.add(parent.key);
+        const kids = parent.children.filter((c) => g.tags.includes(c));
+        kids.forEach((c) => done.add(c));
+        items.push({ kind: "parent", name: parent.key, count: parent.list.length, children: kids.map((c) => ({ name: c, count: pages.get(c)!.list.length })) });
+      } else if (!parent) {
+        done.add(tag);
+        items.push({ kind: "single", name: tag, count: pages.get(tag)!.list.length });
+      }
+    }
+    return { group: g.group, items };
+  });
+}
+
+/** カテゴリ別ランキングのページURL（カテゴリ名は使えない文字を含まないため、日本語のまま使う）。 */
+export function categoryUrl(tag: string): string {
+  return withBase(`/ranking/${encodeURIComponent(tag)}/`);
 }
 
 /** タグごとのスコア降順ランキング（同点は紹介動画数→名前）。 */

@@ -1,0 +1,313 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import RankingRow from "../../components/RankingRow.astro";
+import {
+  getRankingPages,
+  getRankingNav,
+  getParentOfTag,
+  getCosmeticListEntry,
+  extractImageSrc,
+  cosmeticSlug,
+  categoryUrl,
+  withBase,
+  breadcrumbLd,
+} from "../../lib/data";
+
+export function getStaticPaths() {
+  return Array.from(getRankingPages().keys()).map((tag) => ({ params: { tag }, props: { tag } }));
+}
+
+const { tag } = Astro.props;
+const pages = getRankingPages();
+const page = pages.get(tag)!;
+const list = page.list;
+const isParent = page.kind === "parent";
+const parent = isParent ? undefined : getParentOfTag(tag); // 細かいカテゴリなら、それを束ねる「まとめ」
+const nav = getRankingNav();
+
+const INITIAL = 20; // 最初に見せる件数
+const MAX = 50; // 「もっと見る」で見せる上限
+const STEP = 30;
+
+// 各商品の表示用データ。価格・楽天リンク・画像は cosmetics_list.json を正とする。
+const rows = list.map((r, i) => {
+  const entry = getCosmeticListEntry(r.brand_id, r.name_id);
+  return {
+    r,
+    base: i + 1,
+    imageSrc: extractImageSrc(entry?.rakuten_image_link || r.rakuten_image_link) || "",
+    price: entry?.now_price,
+    link: entry?.rakuten_text_link || undefined,
+    // 「まとめ」では、その商品がどの細かいカテゴリかを添える
+    subLabel: isParent ? r.tags.filter((t) => page.children.includes(t)).slice(0, 2).join("・") : undefined,
+  };
+});
+const total = list.length;
+const shownMax = Math.min(MAX, total);
+
+const top3 = list.slice(0, 3).map((r) => `${r.brand}「${r.name}」`);
+const description =
+  `${tag}の人気コスメランキング。YouTubeのコスメ紹介動画での紹介数・再生数・紹介したインフルエンサー数から算出した、${total}品中の上位${shownMax}位。` +
+  (isParent ? `${page.children.slice(0, 4).join("・")}などをまとめたランキングです。` : "") +
+  (top3.length ? `1位は${top3[0]}` : "") +
+  (top3.length >= 3 ? `、2位・3位は${top3[1]}、${top3[2]}` : "") +
+  "です。";
+const topImage = rows.find((x) => x.imageSrc)?.imageSrc;
+const crumbs = [
+  { name: "ホーム", path: "/" },
+  { name: "ランキング", path: "/ranking/" },
+  ...(parent ? [{ name: parent.key, path: `/ranking/${encodeURIComponent(parent.key)}/` }] : []),
+  { name: tag, path: `/ranking/${encodeURIComponent(tag)}/` },
+];
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `${tag}の人気コスメランキング`,
+    numberOfItems: shownMax,
+    itemListElement: rows.slice(0, 10).map((x) => ({
+      "@type": "ListItem",
+      position: x.base,
+      name: `${x.r.brand} ${x.r.name}`,
+      url: new URL(withBase(`/cosmetics/${cosmeticSlug(x.r.brand_id, x.r.name_id)}`), Astro.site!).href,
+    })),
+  },
+  breadcrumbLd(crumbs, Astro.site!),
+];
+---
+
+<Layout title={`${tag}の人気コスメランキング TOP${shownMax}`} description={description} image={topImage} jsonLd={jsonLd}>
+  <nav class="text-xs text-neutral-500 mb-4" aria-label="パンくず">
+    <a href={withBase("/")} class="hover:text-pink-600">ホーム</a> ›
+    <a href={withBase("/ranking/")} class="hover:text-pink-600">ランキング</a> ›
+    {parent && <><a href={categoryUrl(parent.key)} class="hover:text-pink-600">{parent.key}</a> › </>}
+    <span>{tag}</span>
+  </nav>
+
+  <div class="flex gap-6 lg:gap-8 items-start">
+    <!-- 左: カテゴリの一覧。枠と見出しで「カテゴリを選ぶ場所」だと分かるようにする（PCのみ）。各カテゴリは独立したURL -->
+    <aside class="hidden md:block w-60 shrink-0 sticky top-20 self-start">
+      <div class="bg-white rounded-lg shadow-sm max-h-[calc(100vh-6rem)] overflow-y-auto">
+        <h2 class="sticky top-0 bg-white z-10 px-4 py-3 text-sm font-bold border-b border-neutral-200">カテゴリから探す</h2>
+        <div class="p-3 space-y-4 text-sm">
+          {
+            nav.map((g) => (
+              <div>
+                <div class="text-[11px] font-bold text-neutral-400 tracking-wide mb-1 px-2">{g.group}</div>
+                <ul class="space-y-0.5">
+                  {g.items.map((it) =>
+                    it.kind === "parent" ? (
+                      <li>
+                        <a href={categoryUrl(it.name)} class:list={["block px-2 py-1 rounded hover:bg-pink-50 font-medium", { "bg-pink-100": it.name === tag }]} aria-current={it.name === tag ? "page" : undefined}>
+                          {it.name} <span class="text-neutral-400 font-normal">({it.count})</span>
+                        </a>
+                        <ul class="ml-3 border-l border-neutral-200">
+                          {it.children.map((c) => (
+                            <li>
+                              <a href={categoryUrl(c.name)} class:list={["block pl-2 pr-1 py-0.5 rounded text-[13px] text-neutral-600 hover:bg-pink-50", { "bg-pink-100 font-medium text-neutral-900": c.name === tag }]} aria-current={c.name === tag ? "page" : undefined}>
+                                {c.name} <span class="text-neutral-400">({c.count})</span>
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </li>
+                    ) : (
+                      <li>
+                        <a href={categoryUrl(it.name)} class:list={["block px-2 py-1 rounded hover:bg-pink-50", { "bg-pink-100 font-medium": it.name === tag }]} aria-current={it.name === tag ? "page" : undefined}>
+                          {it.name} <span class="text-neutral-400">({it.count})</span>
+                        </a>
+                      </li>
+                    )
+                  )}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </aside>
+
+    <div class="flex-1 min-w-0">
+      <!-- スマホ: カテゴリの切り替え（選ぶとそのカテゴリのページへ移動） -->
+      <select id="tag-nav-mobile" class="md:hidden w-full border border-neutral-300 rounded-lg px-3 py-2.5 mb-4 bg-white" aria-label="カテゴリを選ぶ">
+        {
+          nav.map((g) => (
+            <optgroup label={g.group}>
+              {g.items.flatMap((it) =>
+                it.kind === "parent"
+                  ? [
+                      <option value={categoryUrl(it.name)} selected={it.name === tag}>{it.name}（{it.count}品）</option>,
+                      ...it.children.map((c) => (
+                        <option value={categoryUrl(c.name)} selected={c.name === tag}>{"　└ "}{c.name}（{c.count}品）</option>
+                      )),
+                    ]
+                  : [<option value={categoryUrl(it.name)} selected={it.name === tag}>{it.name}（{it.count}品）</option>]
+              )}
+            </optgroup>
+          ))
+        }
+      </select>
+
+      <!-- ① ページの見出し：何のランキングか、何品中いくつ見せているか、まとめ／種類別の行き来、スコアの見方 -->
+      <header class="bg-white rounded-lg shadow-sm mb-6 overflow-hidden">
+        <div class="p-4 md:p-5">
+          <p class="text-xs font-bold text-pink-600 mb-1">{isParent ? "まとめランキング" : "カテゴリ別ランキング"}</p>
+          <h1 class="text-xl md:text-2xl font-bold">{tag} 人気ランキング</h1>
+          <p class="text-xs text-neutral-500 mt-2">
+            {total}品中、上位{shownMax}位までを紹介しています。YouTubeのコスメ紹介動画での人気スコア順です。
+            {isParent && "細かいカテゴリの商品をまとめて、同じ基準で並べています。"}
+          </p>
+        </div>
+        {
+          isParent && (
+            <div class="border-t border-neutral-100 bg-neutral-50 px-4 md:px-5 py-3">
+              <p class="text-xs text-neutral-500 mb-2">種類別に見る（細かいカテゴリのランキング）</p>
+              <div class="flex flex-wrap gap-2">
+                {page.children.map((c) => (
+                  <a href={categoryUrl(c)} class="text-xs px-3 py-1.5 rounded-full bg-white border border-pink-200 text-pink-700 hover:bg-pink-50">
+                    {c} <span class="text-pink-400">{pages.get(c)!.list.length}品</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )
+        }
+        {
+          parent && (
+            <a href={categoryUrl(parent.key)} class="flex items-center justify-between gap-3 border-t border-pink-100 bg-pink-50 px-4 md:px-5 py-3 text-sm text-pink-700 hover:bg-pink-100">
+              <span>「{parent.key}」（{parent.children.join("・")}）をまとめて見る</span>
+              <span class="shrink-0">{parent.list.length}品 →</span>
+            </a>
+          )
+        }
+        <details class="border-t border-neutral-100 text-xs text-neutral-600">
+          <summary class="px-4 md:px-5 py-2.5 cursor-pointer select-none text-pink-600 hover:bg-pink-50">スコアの見方</summary>
+          <div class="px-4 md:px-5 pb-4 pt-1 space-y-1.5 leading-relaxed">
+            <p>紹介した動画の<b>合計再生回数</b>、<b>紹介動画の本数</b>、<b>紹介したインフルエンサー（チャンネル）の数</b>から算出した人気スコアの順です。</p>
+            <p>再生数が多く、複数の動画・複数のインフルエンサーに紹介されている商品ほど上位になります。同じ人が何本も紹介しているだけの商品より、多くの人に紹介されている商品が上位になりやすいよう、チャンネル数を重めにしています。</p>
+            <p class="text-neutral-500">紹介動画が1〜2本の商品は、動画が1本増えるだけで順位が大きく変わります。順位の差が小さい範囲は、目安としてご覧ください。</p>
+            <p class="text-neutral-400">（計算式：log₁₀(合計再生数＋1) ＋ log₁₀(紹介動画数＋1)×2 ＋ log₁₀(紹介チャンネル数＋1)×1.5）</p>
+          </div>
+        </details>
+      </header>
+
+      <!-- ② ランキング：並び替えと、一覧（1つの表にまとめ、列の見出しを付ける） -->
+      <section aria-label="ランキング">
+        <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 mb-2">
+          <h2 class="font-bold">ランキング <span id="range-label" class="text-xs font-normal text-neutral-500"></span></h2>
+          <div class="flex flex-wrap items-center gap-2 text-xs" role="group" aria-label="並び替え">
+            <span class="text-neutral-500">並び替え</span>
+            <button type="button" class="sort-btn px-3 py-1.5 rounded-full border border-neutral-300 bg-white" data-sort="score">人気スコア順</button>
+            <button type="button" class="sort-btn px-3 py-1.5 rounded-full border border-neutral-300 bg-white" data-sort="videos">紹介動画数順</button>
+            <button type="button" class="sort-btn px-3 py-1.5 rounded-full border border-neutral-300 bg-white" data-sort="channels">紹介チャンネル数順</button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+          <div class="hidden md:grid grid-cols-[2.5rem_5.5rem_minmax(0,1fr)_10rem_10rem] gap-x-4 px-4 py-2 bg-neutral-50 border-b border-neutral-200 text-[11px] font-bold text-neutral-500">
+            <span class="text-center">順位</span>
+            <span class="col-span-2">商品</span>
+            <span>紹介実績</span>
+            <span class="text-right">参考価格・購入</span>
+          </div>
+          <ol id="ranking-list" class="divide-y divide-neutral-100" data-initial={INITIAL} data-max={MAX} data-step={STEP}>
+            {
+              rows.map((x) => (
+                <RankingRow
+                  rank={x.base}
+                  base={x.base}
+                  brand_id={x.r.brand_id}
+                  brand={x.r.brand}
+                  name_id={x.r.name_id}
+                  name={x.r.name}
+                  imageSrc={x.imageSrc}
+                  videoCount={x.r.videoCount}
+                  channelCount={x.r.channelCount}
+                  price={x.price}
+                  link={x.link}
+                  extra={x.base > MAX}
+                  subLabel={x.subLabel}
+                />
+              ))
+            }
+          </ol>
+        </div>
+
+        <div class="mt-4 text-center">
+          <button id="more-btn" type="button" class="hidden px-6 py-2 rounded-full border border-pink-300 text-pink-600 bg-white hover:bg-pink-50 text-sm"></button>
+          <p id="limit-note" class="hidden mt-2 text-xs text-neutral-400">
+            {MAX}位までを表示しています。{MAX + 1}位以降は、紹介動画が少なく順位の差が小さいため掲載していません。
+          </p>
+        </div>
+      </section>
+
+      <p class="mt-8 text-sm">
+        <a href={withBase("/ranking/")} class="text-pink-600 hover:underline">ほかのカテゴリのランキングを見る →</a>
+      </p>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const list = document.getElementById("ranking-list") as HTMLElement;
+  const rows = Array.from(list.querySelectorAll<HTMLLIElement>("li.ranking-row"));
+  const MAX = Number(list.dataset.max);
+  const STEP = Number(list.dataset.step);
+  const INITIAL = Number(list.dataset.initial);
+  const limit = Math.min(MAX, rows.length);
+  const moreBtn = document.getElementById("more-btn") as HTMLButtonElement;
+  const note = document.getElementById("limit-note") as HTMLElement;
+
+  let sortKey: "score" | "videos" | "channels" = "score";
+  let shown = Math.min(INITIAL, limit);
+
+  const n = (li: HTMLLIElement, k: string) => Number(li.dataset[k]);
+  const cmp = {
+    score: (a: HTMLLIElement, b: HTMLLIElement) => n(a, "base") - n(b, "base"),
+    videos: (a: HTMLLIElement, b: HTMLLIElement) => n(b, "videos") - n(a, "videos") || n(b, "channels") - n(a, "channels") || n(a, "base") - n(b, "base"),
+    channels: (a: HTMLLIElement, b: HTMLLIElement) => n(b, "channels") - n(a, "channels") || n(b, "videos") - n(a, "videos") || n(a, "base") - n(b, "base"),
+  };
+
+  function render() {
+    [...rows].sort(cmp[sortKey]).forEach((li, i) => {
+      list.appendChild(li);
+      li.hidden = i >= shown;
+      const top = i < 3;
+      li.querySelector(".rank-badge")!.textContent = String(i + 1);
+      li.querySelector(".rank-badge")!.classList.toggle("bg-pink-600", top);
+      li.querySelector(".rank-badge")!.classList.toggle("bg-neutral-400", !top);
+      li.classList.toggle("bg-pink-50", top);
+      li.classList.toggle("bg-white", !top);
+    });
+    document.querySelectorAll<HTMLButtonElement>(".sort-btn").forEach((b) => {
+      const on = b.dataset.sort === sortKey;
+      b.classList.toggle("bg-pink-600", on);
+      b.classList.toggle("text-white", on);
+      b.classList.toggle("border-pink-600", on);
+      b.classList.toggle("bg-white", !on);
+    });
+    const rangeLabel = document.getElementById("range-label");
+    if (rangeLabel) rangeLabel.textContent = `1〜${shown}位を表示中`;
+    const remaining = limit - shown;
+    moreBtn.classList.toggle("hidden", remaining <= 0);
+    moreBtn.textContent = `もっと見る（あと${remaining}件）`;
+    note.classList.toggle("hidden", !(remaining <= 0 && rows.length > MAX));
+  }
+
+  document.querySelectorAll<HTMLButtonElement>(".sort-btn").forEach((b) =>
+    b.addEventListener("click", () => {
+      sortKey = b.dataset.sort as typeof sortKey;
+      shown = Math.min(INITIAL, limit);
+      render();
+    })
+  );
+  moreBtn.addEventListener("click", () => {
+    shown = Math.min(shown + STEP, limit);
+    render();
+  });
+  document.getElementById("tag-nav-mobile")?.addEventListener("change", (e) => {
+    location.href = (e.target as HTMLSelectElement).value;
+  });
+
+  render();
+</script>

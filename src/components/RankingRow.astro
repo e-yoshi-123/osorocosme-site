@@ -1,0 +1,81 @@
+---
+import { cosmeticSlug, formatCount, withBase } from "../lib/data";
+
+interface Props {
+  /** 現在の表示順での順位（並び替えのたびにスクリプトが書き換える） */
+  rank: number;
+  /** 標準（人気スコア順）での順位。並び替えの基準。 */
+  base: number;
+  brand_id: string;
+  brand: string;
+  name_id: string;
+  name: string;
+  imageSrc: string;
+  videoCount: number;
+  channelCount: number;
+  price?: number;
+  link?: string;
+  /** 標準順位が表示上限を超える行（スクリプトなしでは非表示） */
+  extra?: boolean;
+  /** 「まとめ」ランキングで、その商品がどの細かいカテゴリか（例: リキッドファンデーション） */
+  subLabel?: string;
+}
+
+const { rank, base, brand_id, brand, name_id, name, imageSrc, videoCount, channelCount, price, link, extra = false, subLabel } = Astro.props;
+const top = rank <= 3;
+// 画像の無い商品（＝楽天側に出品が無い・画像が消えている）は、購入できないリンクの可能性が高いので、価格・購入ボタンを出さない。
+// 画像のURLはあっても、実際に読み込めない場合は、下の onerror で価格・購入ボタンを取り除く。
+const buyable = !!imageSrc;
+const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
+---
+
+<!--
+  ランキングの1行（一覧全体は親で1つの表にまとめる）。PC: 順位／画像／商品名／実績／価格と購入ボタンの5列（親に列の見出しがある）。スマホ: 1段目に順位・画像・商品名、2段目に実績、3段目に価格と購入ボタン。
+  data-* と rank-badge は、カテゴリページの並び替え・「もっと見る」のスクリプトが使う。
+-->
+<li
+  class:list={["ranking-row px-3 py-3 md:px-4 grid grid-cols-[auto_4.5rem_minmax(0,1fr)] md:grid-cols-[2.5rem_5.5rem_minmax(0,1fr)_10rem_10rem] gap-x-3 md:gap-x-4 gap-y-2 items-center", top ? "bg-pink-50" : "bg-white"]}
+  data-base={base}
+  data-videos={videoCount}
+  data-channels={channelCount}
+  hidden={extra}
+>
+  <span
+    class:list={["rank-badge shrink-0 min-w-8 h-8 px-1 rounded-full text-white text-sm font-bold flex items-center justify-center", top ? "bg-pink-600" : "bg-neutral-400"]}
+  >{rank}</span>
+  <a href={href} class="block aspect-square bg-white rounded flex items-center justify-center overflow-hidden" tabindex="-1" aria-hidden="true">
+    {
+      imageSrc ? (
+        <img
+          src={imageSrc}
+          alt=""
+          class="max-w-full max-h-full object-contain"
+          loading="lazy"
+          onerror="var li=this.closest('li');this.replaceWith(Object.assign(document.createElement('span'),{className:'text-neutral-300 text-[10px]',textContent:'No Image'}));if(li)li.querySelectorAll('[data-buy]').forEach(function(e){e.remove()})"
+        />
+      ) : (
+        <span class="text-neutral-300 text-[10px]">No Image</span>
+      )
+    }
+  </a>
+  <a href={href} class="min-w-0 group">
+    <span class="block text-xs text-neutral-500 truncate">{brand}</span>
+    <span class="block font-medium leading-snug line-clamp-2 group-hover:text-pink-600">{name}</span>
+    {subLabel && <span class="inline-block mt-1 text-[10px] bg-neutral-100 text-neutral-600 rounded px-1.5 py-0.5">{subLabel}</span>}
+  </a>
+  <p class="col-span-3 md:col-span-1 text-xs text-neutral-500">
+    <span class="whitespace-nowrap">紹介動画 <b class="text-neutral-800 text-sm">{videoCount}</b>本</span>
+    <span class="mx-1">/</span>
+    <span class="whitespace-nowrap"><b class="text-neutral-800 text-sm">{channelCount}</b>チャンネル</span>
+  </p>
+  <div class="col-span-3 md:col-span-1 flex items-center justify-between md:justify-end gap-3 min-h-8">
+    {buyable && price !== undefined && <span data-buy class="text-sm text-neutral-700 whitespace-nowrap">¥{formatCount(price)}</span>}
+    {
+      buyable && link && (
+        <a data-buy href={link} target="_blank" rel="nofollow sponsored noopener" class="inline-block bg-red-600 text-white text-xs px-3 py-1.5 rounded hover:bg-red-700 whitespace-nowrap">
+          楽天市場で見る
+        </a>
+      )
+    }
+  </div>
+</li>
