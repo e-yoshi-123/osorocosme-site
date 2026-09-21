@@ -1,0 +1,47 @@
+---
+import { cosmeticSlug, withBase, type CosmeticTileData } from "../lib/data";
+
+interface Props {
+  tile: CosmeticTileData;
+  /** ランキング上位の順位バッジ（1〜3位は色付き） */
+  rank?: number;
+  /** 補足の1行（例: 「3本の動画で一緒に紹介」） */
+  caption?: string;
+  /** 現在表示中の商品なら枠を強調する */
+  current?: boolean;
+  showBrand?: boolean;
+}
+
+const { tile, rank, caption, current = false, showBrand = true } = Astro.props;
+---
+
+<a
+  href={withBase(`/cosmetics/${cosmeticSlug(tile.brand_id, tile.name_id)}`)}
+  class:list={["min-w-0 block group bg-white rounded-lg shadow-sm hover:shadow-md transition p-2.5", { "ring-2 ring-pink-300": current }]}
+>
+  <div class="relative aspect-square bg-neutral-50 rounded flex items-center justify-center overflow-hidden">
+    {
+      tile.imageSrc ? (
+        <img
+          src={tile.imageSrc}
+          alt=""
+          class="max-w-full max-h-full object-contain"
+          loading="lazy"
+          onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'text-neutral-300 text-[10px]',textContent:'No Image'}))"
+        />
+      ) : (
+        <span class="text-neutral-300 text-[10px]">No Image</span>
+      )
+    }
+    {
+      rank !== undefined && (
+        <span class:list={["absolute top-1 left-1 min-w-6 h-6 px-1.5 rounded-full text-[11px] font-bold flex items-center justify-center text-white", rank <= 3 ? "bg-pink-600" : "bg-neutral-500"]}>
+          {rank}
+        </span>
+      )
+    }
+  </div>
+  {showBrand && <p class="mt-1.5 text-[10px] text-neutral-500 truncate">{tile.brand}</p>}
+  <p class:list={["text-xs font-medium leading-snug line-clamp-2 group-hover:text-pink-600", { "mt-1.5": !showBrand }]}>{tile.name}</p>
+  {caption && <p class="mt-1 text-[10px] text-neutral-400">{caption}</p>}
+</a>

@@ -574,7 +574,7 @@ export interface CosmeticFacts {
   mainTag?: string;
   rank?: number;
   rankTotal?: number;
-  introductions: { channel_id: string; channel_title: string; channel_icon?: string; videoKey: string; videoTitle: string; published_at: string }[];
+  introductions: { channel_id: string; channel_title: string; channel_icon?: string; thumbnail?: string; videoKey: string; videoTitle: string; published_at: string }[];
 }
 
 /** コスメ詳細用の事実データ。紹介した人・日付（新しい順）、主カテゴリ内での順位など。 */
@@ -584,6 +584,7 @@ export function getCosmeticFacts(brand_id: string, name_id: string): CosmeticFac
     channel_id: v.channel_id,
     channel_title: v.channel_title,
     channel_icon: v.channel_icon,
+    thumbnail: v.thumbnail,
     videoKey: v.key,
     videoTitle: v.title,
     published_at: v.published_at,
@@ -604,6 +605,88 @@ export function getCosmeticFacts(brand_id: string, name_id: string): CosmeticFac
     facts.rankTotal = list.length;
   }
   return facts;
+}
+
+// ---- コスメ詳細ページ下部の「次に見たくなる」要素 ----
+
+export interface CosmeticTileData {
+  brand_id: string;
+  brand: string;
+  name_id: string;
+  name: string;
+  imageSrc: string;
+  /** 掲載動画のうち、この商品が紹介された動画の本数 */
+  videoCount: number;
+  /** 共起（一緒に紹介）の場合: 対象の商品と同じ動画に出た本数 */
+  together?: number;
+}
+
+function cosmeticImageSrc(brand_id: string, name_id: string, fallbackHtml?: string): string {
+  return extractImageSrc(getCosmeticListEntry(brand_id, name_id)?.rakuten_image_link || fallbackHtml) || "";
+}
+
+/** 画像のある商品を先に、無いものを後ろに（元の順序は保つ）。タイルに「No Image」が並びすぎないように。 */
+function imagesFirst<T extends { imageSrc: string }>(items: T[]): T[] {
+  return [...items.filter((i) => i.imageSrc), ...items.filter((i) => !i.imageSrc)];
+}
+
+/** この商品を紹介した動画で、あわせて紹介されているコスメ（同じ動画に出た本数の多い順）。 */
+export function getCoMentionedCosmetics(brand_id: string, name_id: string, limit = 6): CosmeticTileData[] {
+  const self = `${brand_id}_${name_id}`;
+  const together = new Map<string, { c: Cosmetic; n: number }>();
+  for (const v of getVisibleVideos()) {
+    const list = (v.cosmetics || []).filter((c) => c.brand_id && c.name_id && c.brand && c.name);
+    if (!list.some((c) => `${c.brand_id}_${c.name_id}` === self)) continue;
+    const seen = new Set<string>();
+    for (const c of list) {
+      const key = `${c.brand_id}_${c.name_id}`;
+      if (key === self || seen.has(key)) continue; // 動画内の重複は1本と数える
+      seen.add(key);
+      const cur = together.get(key);
+      if (cur) cur.n += 1;
+      else together.set(key, { c, n: 1 });
+    }
+  }
+  const total = new Map(getCosmeticRankings().map((r) => [`${r.brand_id}_${r.name_id}`, r.videoCount]));
+  const items = Array.from(together.entries())
+    .sort((a, b) => b[1].n - a[1].n || (total.get(b[0]) || 0) - (total.get(a[0]) || 0))
+    .map(([key, { c, n }]) => ({
+      brand_id: c.brand_id, brand: c.brand, name_id: c.name_id, name: c.name,
+      imageSrc: cosmeticImageSrc(c.brand_id, c.name_id, c.rakuten_image_link),
+      videoCount: total.get(key) || n, together: n,
+    }));
+  return imagesFirst(items).slice(0, limit);
+}
+
+/** カテゴリ（タグ）の人気ランキング上位。順位はランキングページと同じ並び。 */
+export function getCategoryTop(tag: string, limit = 6): { rank: number; tile: CosmeticTileData }[] {
+  const list = getCosmeticRankingsByTag().get(tag) || [];
+  return list.slice(0, limit).map((r, i) => ({
+    rank: i + 1,
+    tile: {
+      brand_id: r.brand_id, brand: r.brand, name_id: r.name_id, name: r.name,
+      imageSrc: cosmeticImageSrc(r.brand_id, r.name_id, r.rakuten_image_link), videoCount: r.videoCount,
+    },
+  }));
+}
+
+/** 同じブランドの他の商品（紹介動画数などの人気順）。 */
+export function getBrandTopCosmetics(brand_id: string, excludeNameId: string, limit = 6): CosmeticTileData[] {
+  const items = getCosmeticRankings()
+    .filter((r) => r.brand_id === brand_id && r.name_id !== excludeNameId)
+    .sort((a, b) => b.score - a.score)
+    .map((r) => ({
+      brand_id: r.brand_id, brand: r.brand, name_id: r.name_id, name: r.name,
+      imageSrc: cosmeticImageSrc(r.brand_id, r.name_id, r.rakuten_image_link), videoCount: r.videoCount,
+    }));
+  return imagesFirst(items).slice(0, limit);
+}
+
+/** 表の列を揃えるための固定幅の日付（例: 2025/09/07）。月・日をゼロ埋めする。 */
+export function formatDateFixed(iso: string): string {
+  const d = new Date(iso);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getUTCFullYear()}/${pad(d.getUTCMonth() + 1)}/${pad(d.getUTCDate())}`;
 }
 
 export function formatJaDate(iso: string): string {

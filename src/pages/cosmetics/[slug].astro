@@ -1,13 +1,14 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import VideoCard from "../../components/VideoCard.astro";
-import CosmeticCard from "../../components/CosmeticCard.astro";
+import CosmeticTile from "../../components/CosmeticTile.astro";
 import IntroRow from "../../components/IntroRow.astro";
 import {
   getUsedCosmeticKeys,
   getCosmeticListEntry,
   getVideosUsingCosmetic,
-  getRelatedCosmetics,
+  getCoMentionedCosmetics,
+  getCategoryTop,
+  getBrandTopCosmetics,
   cosmeticSlug,
   sortByPublishedDesc,
   formatCount,
@@ -32,16 +33,11 @@ const { brand_id, name_id } = Astro.props;
 const entry = getCosmeticListEntry(brand_id, name_id);
 const videosUsing = sortByPublishedDesc(getVideosUsingCosmetic(brand_id, name_id));
 
-const relatedTags = new Set<string>();
-for (const v of videosUsing) {
-  for (const c of v.cosmetics || []) {
-    if (c.brand_id === brand_id && c.name_id === name_id) {
-      for (const t of c.related_tags || []) relatedTags.add(t);
-    }
-  }
-}
 const facts = getCosmeticFacts(brand_id, name_id);
-const related = getRelatedCosmetics(brand_id, name_id, Array.from(relatedTags)).slice(0, 8);
+// ページ下部の「次に見たくなる」3要素：一緒に紹介されているコスメ／同じカテゴリの人気ランキング／同じブランドの人気商品
+const coMentioned = getCoMentionedCosmetics(brand_id, name_id, 6);
+const categoryTop = facts.mainTag ? getCategoryTop(facts.mainTag, 6) : [];
+const brandTop = getBrandTopCosmetics(brand_id, name_id, 6);
 
 const INTRO_SHOWN = 10;
 const introFirst = facts.introductions.slice(0, INTRO_SHOWN);
@@ -136,7 +132,7 @@ const jsonLd = entry
         <!-- 日付・チャンネル・動画タイトルを固定の列にして、長い名前やタイトルは1行で省略する（折り返しで見づらくならないように）。
              スマホは「日付＋チャンネル」の1行と、その下にタイトル（最大2行）。件数が多い商品は、先頭10件だけ表示して残りを折りたたむ -->
         <div class="mb-10 bg-white rounded-lg shadow-sm text-sm">
-          <div class="hidden md:grid grid-cols-[8rem_14rem_minmax(0,1fr)] gap-x-4 px-4 py-2 text-xs text-neutral-400 border-b border-neutral-200">
+          <div class="hidden md:grid grid-cols-[6rem_14rem_minmax(0,1fr)] gap-x-4 px-4 py-2 text-xs text-neutral-400 border-b border-neutral-200">
             <span>紹介日</span><span>チャンネル</span><span>動画</span>
           </div>
           <ul class="divide-y divide-neutral-100">
@@ -152,28 +148,42 @@ const jsonLd = entry
           )}
         </div>
 
-        <h2 class="font-bold mb-3">この商品が紹介されている動画（{videosUsing.length}件）</h2>
-        <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-10">
-          {videosUsing.map((v) => (
-            <VideoCard video={v} />
-          ))}
-        </div>
+        {coMentioned.length > 0 && (
+          <section class="mb-10">
+            <h2 class="font-bold mb-1">一緒に紹介されているコスメ</h2>
+            <p class="text-xs text-neutral-500 mb-3">{entry.name}を紹介した動画で、あわせて紹介されているコスメです。</p>
+            <div class="grid grid-cols-3 sm:grid-cols-6 gap-3">
+              {coMentioned.map((t) => <CosmeticTile tile={t} caption={`${t.together}本の動画で一緒に紹介`} />)}
+            </div>
+          </section>
+        )}
 
-        {related.length > 0 && (
-          <>
-            <h2 class="font-bold mb-3">関連商品</h2>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-              {related.map((c) => (
-                <CosmeticCard
-                  brand_id={c.brand_id}
-                  brand={c.brand}
-                  name_id={c.name_id}
-                  name={c.name}
-                  rakutenImageHtml={c.rakuten_image_link}
-                />
+        {facts.mainTag && categoryTop.length > 0 && (
+          <section class="mb-10">
+            <h2 class="font-bold mb-1">「{facts.mainTag}」の人気ランキング</h2>
+            <p class="text-xs text-neutral-500 mb-3">{facts.rankTotal}品中、この商品は{facts.rank}位です。</p>
+            <div class="grid grid-cols-3 sm:grid-cols-6 gap-3">
+              {categoryTop.map(({ rank, tile }) => (
+                <CosmeticTile tile={tile} rank={rank} caption={`${tile.videoCount}本の動画で紹介`} current={tile.brand_id === brand_id && tile.name_id === name_id} />
               ))}
             </div>
-          </>
+            <p class="mt-3 text-right text-sm">
+              <a href={withBase(`/ranking#${encodeURIComponent(facts.mainTag)}`)} class="text-pink-600 hover:underline">「{facts.mainTag}」のランキングをすべて見る（{facts.rankTotal}品） →</a>
+            </p>
+          </section>
+        )}
+
+        {brandTop.length > 0 && (
+          <section class="mb-10">
+            <h2 class="font-bold mb-1">{entry.brand}の人気商品</h2>
+            <p class="text-xs text-neutral-500 mb-3">{entry.brand}の商品のうち、紹介されている動画が多いものです。</p>
+            <div class="grid grid-cols-3 sm:grid-cols-6 gap-3">
+              {brandTop.map((t) => <CosmeticTile tile={t} showBrand={false} caption={`${t.videoCount}本の動画で紹介`} />)}
+            </div>
+            <p class="mt-3 text-right text-sm">
+              <a href={withBase(`/brand/${entry.brand_id}`)} class="text-pink-600 hover:underline">{entry.brand}の商品をすべて見る →</a>
+            </p>
+          </section>
         )}
       </>
     )
