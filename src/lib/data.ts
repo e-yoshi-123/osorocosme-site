@@ -574,7 +574,7 @@ export interface CosmeticFacts {
   mainTag?: string;
   rank?: number;
   rankTotal?: number;
-  introductions: { channel_id: string; channel_title: string; videoKey: string; videoTitle: string; published_at: string }[];
+  introductions: { channel_id: string; channel_title: string; channel_icon?: string; videoKey: string; videoTitle: string; published_at: string }[];
 }
 
 /** コスメ詳細用の事実データ。紹介した人・日付（新しい順）、主カテゴリ内での順位など。 */
@@ -583,6 +583,7 @@ export function getCosmeticFacts(brand_id: string, name_id: string): CosmeticFac
   const introductions = videos.map((v) => ({
     channel_id: v.channel_id,
     channel_title: v.channel_title,
+    channel_icon: v.channel_icon,
     videoKey: v.key,
     videoTitle: v.title,
     published_at: v.published_at,
