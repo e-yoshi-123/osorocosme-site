@@ -21,14 +21,14 @@ const rest = influencers.slice(MEDIUM_UNTIL);
 
   <section class="mb-10">
     <h2 class="text-base font-bold mb-3">注目のインフルエンサー TOP{LARGE}</h2>
-    <div class="grid gap-4 lg:grid-cols-3">
+    <div class="grid gap-x-4 gap-y-0 lg:grid-cols-3">
       {large.map((inf, i) => <InfluencerFeatureCard influencer={inf} rank={i + 1} size="large" />)}
     </div>
   </section>
 
   <section class="mb-10">
     <h2 class="text-base font-bold mb-3">人気のインフルエンサー {LARGE + 1}〜{LARGE + medium.length}位</h2>
-    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div class="grid gap-x-4 gap-y-0 md:grid-cols-2 lg:grid-cols-3">
       {medium.map((inf, i) => <InfluencerFeatureCard influencer={inf} rank={LARGE + i + 1} size="medium" />)}
     </div>
   </section>
