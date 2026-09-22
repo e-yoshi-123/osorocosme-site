@@ -60,6 +60,7 @@ const sameCosmetics = Array.from(overlap.values())
   .slice(0, RELATED)
   .map((x) => x.v);
 
+const viewCountNum = video?.view_count !== undefined ? Number(video.view_count) : NaN;
 const jsonLd = video
   ? [
       {
@@ -71,6 +72,16 @@ const jsonLd = video
         uploadDate: video.published_at,
         embedUrl: `https://www.youtube.com/embed/${video.video_id}`,
         contentUrl: video.url,
+        ...(video.duration ? { duration: video.duration } : {}),
+        ...(Number.isFinite(viewCountNum)
+          ? {
+              interactionStatistic: {
+                "@type": "InteractionCounter",
+                interactionType: { "@type": "WatchAction" },
+                userInteractionCount: viewCountNum,
+              },
+            }
+          : {}),
       },
       breadcrumbLd([{ name: "ホーム", path: "/" }, { name: "動画一覧", path: "/video-list" }, { name: video.title, path: `/video/${video.key}` }], Astro.site!),
     ]

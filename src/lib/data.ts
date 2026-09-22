@@ -31,6 +31,7 @@ export interface Video {
   channel_icon?: string;
   subscriber_count?: string | number;
   view_count?: string | number;
+  duration?: string;
   check_status?: boolean | string;
   delete_flg?: boolean;
   processed?: boolean;
