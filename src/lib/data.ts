@@ -549,6 +549,18 @@ export function groupTagsByCategory(tags: Iterable<string>): { group: string; ta
     .filter((g) => g.tags.length > 0);
 }
 
+const CATEGORY_TAG_TO_GROUP: Record<string, string> = Object.fromEntries(
+  RANKING_CATEGORY_GROUPS.flatMap((g) => g.tags.map((t) => [t, g.group]))
+);
+
+/** 商品ページの構造化データ（Product.category）用に、単一のカテゴリ名（例:「アイブロウペンシル」）を
+ * 「コスメ・美容 > 大分類 > カテゴリ名」の階層テキストに変換する（Search Consoleの「category の値が無効」指摘への対応）。
+ * 大分類は RANKING_CATEGORY_GROUPS と同じ区分を使う（未定義のカテゴリは「その他」）。 */
+export function productCategoryPath(category: string): string {
+  const group = CATEGORY_TAG_TO_GROUP[category] || "その他";
+  return `コスメ・美容 > ${group} > ${category}`;
+}
+
 /** 同じ種類の細かいカテゴリを束ねる「まとめ」ランキング（例: リキッド・クリーム・パウダー等をまとめた「ファンデーション全般」）。
  * 名前は既存のカテゴリ名と重ならないようにする。細かいカテゴリのランキングも、そのまま別に見られる。
  * 商品ごとのスコアはカテゴリによらず同じなので、まとめの順位は「細かいカテゴリの商品を重複なく集めて、同じ基準で並べたもの」。 */

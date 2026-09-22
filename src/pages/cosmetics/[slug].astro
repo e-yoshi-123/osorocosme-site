@@ -18,6 +18,7 @@ import {
   formatJaDate,
   extractImageSrc,
   breadcrumbLd,
+  productCategoryPath,
 } from "../../lib/data";
 
 export function getStaticPaths() {
@@ -57,6 +58,8 @@ const description = entry
 const imageSrc = extractImageSrc(entry?.rakuten_image_link);
 // Googleの「商品スニペット」は、Productに offers / review / aggregateRating のいずれかが無いと重大な問題として扱われる（Search Consoleの指摘）。
 // このサイトには、根拠のある口コミ・評価は無い（@cosmeの評価点は規約上出さない、YouTubeの紹介は口コミではない）ので、偽って付けない。
+// 同様に、offers.availability（在庫）・hasMerchantReturnPolicy（返品）・shippingDetails（配送）も、
+// 実際の販売者は楽天市場の各ショップでありこのサイトは把握していないため、不正確な値を出さず付けない（いずれもGoogle側も任意項目）。
 // 価格をページに出している商品（＝buyable かつ参考価格あり。ページの表示と一致させる）にだけ offers を付け、それ以外は Product を出さない。
 const hasOffer = buyable && typeof entry?.now_price === "number" && entry.now_price > 0 && !!entry.rakuten_text_link;
 const productLd =
@@ -66,7 +69,9 @@ const productLd =
         "@type": "Product",
         name: entry.name,
         brand: { "@type": "Brand", name: entry.brand },
-        ...(entry.category ? { category: entry.category } : {}),
+        // category はカテゴリ名単体だと「値が無効」と判定された（Search Consoleの指摘）ため、
+        // 大分類を含む階層テキストにする（productCategoryPath）。
+        ...(entry.category ? { category: productCategoryPath(entry.category) } : {}),
         ...(imageSrc ? { image: imageSrc } : {}),
         description,
         offers: { "@type": "Offer", price: entry.now_price, priceCurrency: "JPY" },
