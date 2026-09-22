@@ -1,0 +1,29 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { withBase } from "../lib/data";
+---
+
+<Layout title="ページが見つかりません" noindex>
+  <div class="text-center py-12">
+    <p class="text-sm text-neutral-400 mb-2">404</p>
+    <h1 class="text-xl font-bold mb-3">お探しのページが見つかりませんでした</h1>
+    <p class="text-sm text-neutral-500 mb-8">
+      URLが間違っているか、ページが削除された可能性があります。
+    </p>
+    <div class="flex flex-wrap justify-center gap-3 text-sm">
+      <a href={withBase("/")} class="!no-underline !text-white inline-block bg-pink-600 px-6 py-3 rounded-full hover:bg-pink-700">
+        トップページへ戻る
+      </a>
+      <a href={withBase("/ranking/")} class="inline-block bg-white text-pink-600 px-6 py-3 rounded-full border border-pink-200 hover:bg-pink-50">
+        ランキングを見る
+      </a>
+    </div>
+    <p class="mt-8 text-sm">
+      <a href={withBase("/brand-list")} class="text-pink-600 hover:underline">ブランド一覧</a>
+      <span class="text-neutral-300 mx-2">/</span>
+      <a href={withBase("/influencer-list")} class="text-pink-600 hover:underline">インフルエンサー一覧</a>
+      <span class="text-neutral-300 mx-2">/</span>
+      <a href={withBase("/video-list")} class="text-pink-600 hover:underline">動画一覧</a>
+    </p>
+  </div>
+</Layout>
