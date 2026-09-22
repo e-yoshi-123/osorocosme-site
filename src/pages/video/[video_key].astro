@@ -106,12 +106,8 @@ const jsonLd = video
 
         <p class="text-sm text-neutral-600 leading-relaxed mb-6">{overview}</p>
 
-        {video.summary && (
-          <div class="bg-white rounded-lg shadow-sm p-4 mb-8 text-sm leading-relaxed whitespace-pre-wrap">
-            <p class="text-xs text-neutral-400 mb-2">※AIによる自動生成の紹介文です</p>
-            {video.summary}
-          </div>
-        )}
+        {/* 旧AI要約(video.summary)は、生成元・品質が不確かなため非表示にしている。
+            データ自体は保持しており、Claudeでの作り直し後に復活させる想定 */}
 
         {validCosmetics.length > 0 && (
           <>
