@@ -119214,60 +119214,132 @@
     "check_status": true,
     "cosmetics": [
       {
-        "amazon_link": "",
-        "brand": "Torriden (トリデン)",
-        "brand_id": "brand-00130",
-        "name": "ソリッドイン セラミド リップエッセンス",
-        "name_id": "name-00005",
-        "now_price": 880,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000181242%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10156286%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img202/item_1000181242_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"Torriden (トリデン) ソリッドイン セラミド リップエッセンス\" title=\"Torriden (トリデン) ソリッドイン セラミド リップエッセンス\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000181242%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10156286%2F&rafcid=wsc_i_is_1011877497265360338",
+        "brand_id": "brand-00231",
+        "brand": "espoir",
+        "name_id": "name-00002",
+        "name": "プロテーラー ビーベルベット カバークッション",
         "related_tags": [
-          "リップケア・リップクリーム"
+          "リキッドファンデーション"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcharimeti%2Fespoir_cushion%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcharimeti%2Fi%2F10001511%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/charimeti/cabinet/05876460/11139689/006.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"espoir プロテーラー ビーベルベット カバークッション\" title=\"espoir プロテーラー ビーベルベット カバークッション\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcharimeti%2Fespoir_cushion%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcharimeti%2Fi%2F10001511%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [],
+        "now_price": 3370
       },
       {
+        "brand_id": "brand-01064",
+        "brand": "Perfect Diary",
+        "name_id": "name-00013",
+        "name": "トランスルーシェントブルーリング ル一スパウダ一(N)",
+        "related_tags": [
+          "ルースパウダー"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
         "amazon_link": "",
-        "brand": "キャンメイク",
-        "brand_id": "brand-00002",
-        "name": "クリーミータッチライナー",
+        "mentions": [
+          "おでこ・眉・目全体・まつ毛にも使用"
+        ]
+      },
+      {
+        "brand_id": "brand-00050",
+        "brand": "rom&nd",
+        "name_id": "name-00008",
+        "name": "ベターザンパレット",
+        "related_tags": [
+          "パウダーアイシャドウ"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00t9iqh.ftdz488b.g00t9iqh.ftdz53fa/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fc-garden%2Fromuandoparetto00%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fc-garden%2Fi%2F10000375%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/c-garden/cabinet/12020436/12030476/12030479/imgrc0099998503.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"rom&nd ベターザンパレット\" title=\"rom&nd ベターザンパレット\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00t9iqh.ftdz488b.g00t9iqh.ftdz53fa/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fc-garden%2Fromuandoparetto00%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fc-garden%2Fi%2F10000375%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "ピンクオレンジ系をアイホール全体に使用"
+        ],
+        "now_price": 1790
+      },
+      {
+        "brand_id": "brand-01048",
+        "brand": "2aN",
         "name_id": "name-00001",
-        "now_price": 715,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405929%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319500%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24/cabinet/929/405929.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"キャンメイク クリーミータッチライナー\" title=\"キャンメイク クリーミータッチライナー\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405929%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319500%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "name": "デュアルチーク",
+        "related_tags": [
+          "パウダーチーク"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2F2an-official%2F2an0008%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2F2an-official%2Fi%2F10000012%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/2an-official/cabinet/10483548/imgrc0117344760.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"2aN デュアルチーク\" title=\"2aN デュアルチーク\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2F2an-official%2F2an0008%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2F2an-official%2Fi%2F10000012%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [],
+        "now_price": 1870
+      },
+      {
+        "brand_id": "brand-01048",
+        "brand": "2aN",
+        "name_id": "name-00004",
+        "name": "ピュアグラッシュハイライター",
+        "related_tags": [
+          "プレストパウダー"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
+        "amazon_link": "",
+        "mentions": [
+          "鼻・目頭・顎・頬に使用"
+        ]
+      },
+      {
+        "brand_id": "brand-00002",
+        "brand": "キャンメイク",
+        "name_id": "name-00001",
+        "name": "クリーミータッチライナー",
         "related_tags": [
           "ジェルアイライナー"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405929%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319500%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24/cabinet/929/405929.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"キャンメイク クリーミータッチライナー\" title=\"キャンメイク クリーミータッチライナー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405929%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319500%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "アイライナーとして目尻から粘膜も埋める"
+        ],
+        "now_price": 715
       },
       {
-        "amazon_link": "",
-        "brand": "セザンヌ",
         "brand_id": "brand-00001",
-        "name": "ノーズ＆アイブロウパウダー",
+        "brand": "セザンヌ",
         "name_id": "name-00011",
-        "now_price": 820,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00q9suh.ftdz4c30.g00q9suh.ftdz55fd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Faxas-co%2Fchokh-4939553040736%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Faxas-co%2Fi%2F10079819%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/axas-co/cabinet/chokh01/4939553040736.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"セザンヌ ノーズ＆アイブロウパウダー\" title=\"セザンヌ ノーズ＆アイブロウパウダー\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00q9suh.ftdz4c30.g00q9suh.ftdz55fd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Faxas-co%2Fchokh-4939553040736%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Faxas-co%2Fi%2F10079819%2F&rafcid=wsc_i_is_1011877497265360338",
+        "name": "ノーズ＆アイブロウパウダー",
         "related_tags": [
           "パウダーアイブロウ"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00q9suh.ftdz4c30.g00q9suh.ftdz55fd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Faxas-co%2Fchokh-4939553040736%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Faxas-co%2Fi%2F10079819%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/axas-co/cabinet/chokh01/4939553040736.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"セザンヌ ノーズ＆アイブロウパウダー\" title=\"セザンヌ ノーズ＆アイブロウパウダー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00q9suh.ftdz4c30.g00q9suh.ftdz55fd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Faxas-co%2Fchokh-4939553040736%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Faxas-co%2Fi%2F10079819%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [],
+        "now_price": 820
       },
       {
-        "amazon_link": "",
-        "brand": "エチュード",
         "brand_id": "brand-00146",
-        "name": "カールフィックスマスカラ ボリュームブラック",
+        "brand": "エチュード",
         "name_id": "name-00011",
-        "now_price": 990,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000214767%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10170987%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img227/item_1000214767_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"エチュード カールフィックスマスカラ ボリュームブラック\" title=\"エチュード カールフィックスマスカラ ボリュームブラック\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000214767%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10170987%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "name": "カールフィックスマスカラ ボリュームブラック",
         "related_tags": [
           "マスカラ"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000214767%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10170987%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img227/item_1000214767_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"エチュード カールフィックスマスカラ ボリュームブラック\" title=\"エチュード カールフィックスマスカラ ボリュームブラック\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000214767%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10170987%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "根元からしっかり上げる"
+        ],
+        "now_price": 990
       }
     ],
     "delete_flg": false,
@@ -119276,15 +119348,15 @@
     "processed": true,
     "published_at": "2025-03-23T11:00:04Z",
     "skin_profile": {
-      "イエベ春": true,
+      "イエベ春": false,
       "イエベ秋": false,
-      "ブルベ冬": false,
       "ブルベ夏": false,
-      "乾燥肌": true,
-      "敏感肌": false,
-      "普通肌": false,
+      "ブルベ冬": false,
+      "乾燥肌": false,
+      "脂性肌": false,
       "混合肌": false,
-      "脂性肌": false
+      "敏感肌": false,
+      "普通肌": false
     },
     "subscriber_count": "387000",
     "summary": "ゆっぴチャンネルさんは、春の毎日メイクを通じて、その肌タイプやスキンケアに関する情報を垣間見ることができます。彼女のトランスクリプトからは、肌に対する配慮や、使用している製品の選択が伺えます。\n\nまず、ゆっぴチャンネルさんは、「乾燥」について言及しており、特に鼻の上で乾燥が気になると述べています。このことから、彼女の肌は乾燥しやすいタイプである可能性が高いと考えられます。乾燥肌の方は、保湿が重要であり、彼女もその点を意識したスキンケアを行っているようです。具体的には、保湿リップを使用していることや、化粧下地に「ティルティルマスクフィットトンアップエッセンス」を用いて、肌のトーンを整えつつ保湿効果を得ようとしていることが見受けられます。\n\nまた、ゆっぴチャンネルさんは、ファンデーションやコンシーラーを使用する際に、肌の状態を考慮しているようです。エスポアのファンデーションを愛用していることや、コンシーラーの使用方法についても触れており、肌トラブルをカバーしつつ、自然な仕上がりを求めている様子が伺えます。特に、明るく見えるようにコンシーラーを目の下に塗ることで、立体感を演出しようとしている点は、肌のトーンを均一にする工夫として評価できます。\n\nさらに、彼女は「季節のゆらぎ」という言葉を使い、春の花粉症などの影響も考慮しているようです。この点からも、敏感肌である可能性が考えられ、季節の変わり目には特に肌トラブルが起こりやすいことを意識していることが分かります。敏感肌の方は、スキンケアやメイクアップにおいて低刺激であることを重視する必要がありますが、ゆっぴチャンネルさんはその点を意識しながら製品選びをされているようです。\n\n総じて、ゆっぴチャンネルさんは、自身の肌タイプに合ったスキンケアやメイク方法を模索し、実践していることがトランスクリプトから読み取れます。乾燥や敏感さへの配慮をしっかりと行い、春の季節に合わせたメイクを楽しんでいる姿勢は、同じような肌タイプを持つ方々にとって非常に参考になることでしょう。",
@@ -135184,6 +135256,122 @@
     "check_status": true,
     "cosmetics": [
       {
+        "brand_id": "brand-00994",
+        "brand": "JUNGSAEMMOOL",
+        "name_id": "name-00001",
+        "name": "エッセンシャルスキンヌーダークッション",
+        "related_tags": [
+          "リキッドファンデーション"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
+        "amazon_link": "",
+        "mentions": [
+          "夏向けでお直しにも強い"
+        ]
+      },
+      {
+        "brand_id": "brand-01064",
+        "brand": "Perfect Diary",
+        "name_id": "name-00013",
+        "name": "トランスルーシェントブルーリング ル一スパウダ一(N)",
+        "related_tags": [
+          "ルースパウダー"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
+        "amazon_link": "",
+        "mentions": [
+          "おでこ・眉・鼻の上に使用"
+        ]
+      },
+      {
+        "brand_id": "brand-00050",
+        "brand": "rom&nd",
+        "name_id": "name-00001",
+        "name": "ハンオールブロウカラ",
+        "related_tags": [
+          "眉マスカラ"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkoma%2Fromand_browcara%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fkoma%2Fi%2F10001116%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/koma/cabinet/brand/06701809/browsoymilk/soymilk_th_00.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"rom&nd ハンオールブロウカラ\" title=\"rom&nd ハンオールブロウカラ\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkoma%2Fromand_browcara%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fkoma%2Fi%2F10001116%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "眉マスカラとして薄く塗る"
+        ],
+        "now_price": 825
+      },
+      {
+        "brand_id": "brand-01064",
+        "brand": "Perfect Diary",
+        "name_id": "name-00001",
+        "name": "エクスプローラ 12色動物アイシャドウパレット",
+        "related_tags": [
+          "パウダーアイシャドウ"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
+        "amazon_link": "",
+        "mentions": [
+          "目のキラキラ用に使用"
+        ]
+      },
+      {
+        "brand_id": "brand-00002",
+        "brand": "キャンメイク",
+        "name_id": "name-00001",
+        "name": "クリーミータッチライナー",
+        "related_tags": [
+          "ジェルアイライナー"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405929%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319500%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24/cabinet/929/405929.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"キャンメイク クリーミータッチライナー\" title=\"キャンメイク クリーミータッチライナー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405929%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319500%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "アイライナーとして使用"
+        ],
+        "now_price": 715
+      },
+      {
+        "brand_id": "brand-00011",
+        "brand": "ケイト",
+        "name_id": "name-00003",
+        "name": "ポッピングシルエットシャドウ",
+        "related_tags": [
+          "パウダーアイシャドウ"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00rxdnh.ftdz414a.g00rxdnh.ftdz5630/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsian%2F526224kt%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fsian%2Fi%2F10011929%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/sian/cabinet/06771221/kate/526224.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ケイト ポッピングシルエットシャドウ\" title=\"ケイト ポッピングシルエットシャドウ\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00rxdnh.ftdz414a.g00rxdnh.ftdz5630/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsian%2F526224kt%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fsian%2Fi%2F10011929%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "涙袋に使用"
+        ],
+        "now_price": 1540
+      },
+      {
+        "brand_id": "brand-00146",
+        "brand": "エチュード",
+        "name_id": "name-00011",
+        "name": "カールフィックスマスカラ ボリュームブラック",
+        "related_tags": [
+          "マスカラ"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000214767%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10170987%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img227/item_1000214767_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"エチュード カールフィックスマスカラ ボリュームブラック\" title=\"エチュード カールフィックスマスカラ ボリュームブラック\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000214767%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10170987%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "少しだけ長さを出す"
+        ],
+        "now_price": 990
+      },
+      {
         "amazon_link": "",
         "brand": "デジャヴュ",
         "brand_id": "brand-00024",
@@ -135193,34 +135381,6 @@
         "rakuten_text_link": "",
         "related_tags": [
           "アイブロウペンシル"
-        ],
-        "skin_concern": ""
-      },
-      {
-        "amazon_link": "",
-        "brand": "キャンメイク",
-        "brand_id": "brand-00002",
-        "name": "クリーミータッチライナー",
-        "name_id": "name-00001",
-        "now_price": 715,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405929%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319500%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24/cabinet/929/405929.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"キャンメイク クリーミータッチライナー\" title=\"キャンメイク クリーミータッチライナー\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405929%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319500%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-        "related_tags": [
-          "ジェルアイライナー"
-        ],
-        "skin_concern": ""
-      },
-      {
-        "amazon_link": "",
-        "brand": "エチュード",
-        "brand_id": "brand-00146",
-        "name": "カールフィックスマスカラ ボリュームブラック",
-        "name_id": "name-00011",
-        "now_price": 990,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000214767%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10170987%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img227/item_1000214767_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"エチュード カールフィックスマスカラ ボリュームブラック\" title=\"エチュード カールフィックスマスカラ ボリュームブラック\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000214767%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10170987%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-        "related_tags": [
-          "マスカラ"
         ],
         "skin_concern": ""
       }
@@ -135235,7 +135395,18 @@
     "transcript_url": "https://storage.googleapis.com/cosme-stars-fb.appspot.com/transcripts/-OV3I_l7n_bh1a6sdmYX.txt",
     "url": "https://www.youtube.com/watch?v=EM6maQaBV3A",
     "video_id": "EM6maQaBV3A",
-    "view_count": "230518"
+    "view_count": "230518",
+    "skin_profile": {
+      "イエベ春": false,
+      "イエベ秋": false,
+      "ブルベ夏": false,
+      "ブルベ冬": false,
+      "乾燥肌": false,
+      "脂性肌": false,
+      "混合肌": false,
+      "敏感肌": false,
+      "普通肌": false
+    }
   },
   "-OV8SAPY-_UhA0b5wkNk": {
     "channel_icon": "https://yt3.ggpht.com/C0K72pX5ESzqKPKl24f1cpDQDyelrC-cgePEAnRymne1i8R9sJSUzbnKCIF_-ilmoopdIJF1Qg=s88-c-k-c0x00ffffff-no-rj",
