@@ -39,7 +39,7 @@ const rest = influencers.slice(MEDIUM_UNTIL);
       {
         rest.map((inf) => (
           <a href={withBase(`/influencer/${inf.channel_id}`)} class="min-w-0 bg-white rounded-lg shadow-sm p-4 flex items-center gap-3 hover:shadow-md">
-            {inf.channel_icon && <img src={inf.channel_icon} alt="" class="w-12 h-12 rounded-full shrink-0" loading="lazy" />}
+            {inf.channel_icon && <img src={inf.channel_icon} alt="" width="48" height="48" class="w-12 h-12 rounded-full shrink-0" loading="lazy" />}
             <div class="min-w-0">
               <p class="font-medium truncate">{inf.channel_title}</p>
               <p class="text-xs text-neutral-400">登録者 {formatCount(inf.subscriber_count)}人</p>

@@ -36,6 +36,10 @@ const navLinks = [
     <meta name="description" content={description} />
     {canonical && <link rel="canonical" href={canonical} />}
     {noindex && <meta name="robots" content="noindex, follow" />}
+    <!-- チャンネルアイコン・動画サムネイル・商品画像の主な配信元に事前接続してLCPを短縮する -->
+    <link rel="preconnect" href="https://yt3.ggpht.com" crossorigin />
+    <link rel="preconnect" href="https://i.ytimg.com" crossorigin />
+    <link rel="preconnect" href="https://thumbnail.image.rakuten.co.jp" crossorigin />
     <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={`${title} | ${SITE_NAME}`} />

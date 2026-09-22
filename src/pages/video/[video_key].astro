@@ -95,7 +95,7 @@ const jsonLd = video
         <h1 class="text-xl font-bold mb-2">{video.title}</h1>
 
         <a href={withBase(`/influencer/${video.channel_id}`)} class="flex items-center gap-2 mb-4 w-fit hover:text-pink-600">
-          {video.channel_icon && <img src={video.channel_icon} alt="" class="w-8 h-8 rounded-full" />}
+          {video.channel_icon && <img src={video.channel_icon} alt="" width="32" height="32" class="w-8 h-8 rounded-full" />}
           <span class="text-sm">{video.channel_title}</span>
         </a>
 

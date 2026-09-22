@@ -14,7 +14,7 @@ const validCosmetics = (video.cosmetics || []).filter((c) => c.brand && c.name &
   <div class="p-3">
     <h3 class="font-semibold text-sm line-clamp-2 mb-2">{video.title}</h3>
     <div class="flex items-center gap-2 text-xs text-neutral-500 mb-2">
-      {video.channel_icon && <img src={video.channel_icon} alt="" class="w-5 h-5 rounded-full" />}
+      {video.channel_icon && <img src={video.channel_icon} alt="" width="20" height="20" class="w-5 h-5 rounded-full" />}
       <span class="truncate">{video.channel_title}</span>
     </div>
     <div class="flex justify-between text-xs text-neutral-400">
