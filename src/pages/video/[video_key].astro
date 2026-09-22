@@ -1,7 +1,21 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import CosmeticCard from "../../components/CosmeticCard.astro";
-import { getAllVideoEntries, getVideoByKey, formatCount, withBase, formatJaDate, breadcrumbLd } from "../../lib/data";
+import VideoCard from "../../components/VideoCard.astro";
+import {
+  getAllVideoEntries,
+  getVideoByKey,
+  getVideosByChannel,
+  getVideosUsingCosmetic,
+  getCosmeticFacts,
+  isVisible,
+  sortByPublishedDesc,
+  categoryUrl,
+  formatCount,
+  withBase,
+  formatJaDate,
+  breadcrumbLd,
+} from "../../lib/data";
 
 export function getStaticPaths() {
   return getAllVideoEntries().map((v) => ({ params: { video_key: v.key } }));
@@ -14,6 +28,38 @@ const cosmeticNames = validCosmetics.slice(0, 5).map((c) => `${c.brand} ${c.name
 const description = video
   ? `${video.channel_title}が${formatJaDate(video.published_at)}に投稿した動画。紹介コスメ${validCosmetics.length}品` + (cosmeticNames ? `（${cosmeticNames}${validCosmetics.length > 5 ? "ほか" : ""}）` : "") + "。"
   : undefined;
+// 非掲載（check_status未確認・削除済み）の動画はsitemapに載せておらず、内容も未確認なので検索に出さない
+const noindex = !!video && !isVisible(video);
+
+// 概要（AI要約が無い動画でも、ページに固有の文章が残るように、掲載データから作る）
+const cosmeticFacts = validCosmetics.map((c) => ({ c, f: getCosmeticFacts(c.brand_id, c.name_id) }));
+const ranked = cosmeticFacts.filter((x) => x.f.rank).sort((a, b) => a.f.rank! - b.f.rank!)[0];
+const overview = video
+  ? `${video.channel_title}が${formatJaDate(video.published_at)}に投稿したコスメ紹介動画です。` +
+    (validCosmetics.length > 0 ? `この動画では${validCosmetics.length}品のコスメが紹介されています。` : "") +
+    (ranked ? `そのうち「${ranked.c.brand} ${ranked.c.name}」は、「${ranked.f.mainTag}」カテゴリの人気ランキングで${ranked.f.rankTotal}品中${ranked.f.rank}位です。` : "")
+  : "";
+
+// 関連動画：同じチャンネルの他の動画／紹介コスメが重なる他の動画（掲載中のものだけ、新しい順）
+const RELATED = 4;
+const sameChannel = video
+  ? sortByPublishedDesc(getVideosByChannel(video.channel_id)).filter((v) => v.key !== video.key).slice(0, RELATED)
+  : [];
+const sameChannelKeys = new Set(sameChannel.map((v) => v.key));
+const overlap = new Map<string, { v: ReturnType<typeof getVideoByKey> & {}; n: number }>();
+for (const c of validCosmetics) {
+  for (const v of getVideosUsingCosmetic(c.brand_id, c.name_id)) {
+    if (v.key === video!.key || sameChannelKeys.has(v.key)) continue;
+    const cur = overlap.get(v.key);
+    if (cur) cur.n += 1;
+    else overlap.set(v.key, { v, n: 1 });
+  }
+}
+const sameCosmetics = Array.from(overlap.values())
+  .sort((a, b) => b.n - a.n || new Date(b.v.published_at).getTime() - new Date(a.v.published_at).getTime())
+  .slice(0, RELATED)
+  .map((x) => x.v);
+
 const jsonLd = video
   ? [
       {
@@ -31,7 +77,7 @@ const jsonLd = video
   : [];
 ---
 
-<Layout title={video?.title ?? "動画詳細"} description={description} image={video?.thumbnail} ogType="video.other" jsonLd={jsonLd}>
+<Layout title={video?.title ?? "動画詳細"} description={description} image={video?.thumbnail} ogType="video.other" jsonLd={jsonLd} noindex={noindex}>
   {
     !video ? (
       <p class="text-neutral-400">動画が見つかりませんでした。</p>
@@ -58,6 +104,8 @@ const jsonLd = video
           <span>再生 {formatCount(video.view_count)}</span>
         </div>
 
+        <p class="text-sm text-neutral-600 leading-relaxed mb-6">{overview}</p>
+
         {video.summary && (
           <div class="bg-white rounded-lg shadow-sm p-4 mb-8 text-sm leading-relaxed whitespace-pre-wrap">
             <p class="text-xs text-neutral-400 mb-2">※AIによる自動生成の紹介文です</p>
@@ -74,6 +122,28 @@ const jsonLd = video
               ))}
             </div>
           </>
+        )}
+
+        {sameChannel.length > 0 && (
+          <section class="mt-10">
+            <h2 class="font-bold mb-3">{video.channel_title}の他の動画</h2>
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {sameChannel.map((v) => <VideoCard video={v} />)}
+            </div>
+            <p class="mt-3 text-right text-sm">
+              <a href={withBase(`/influencer/${video.channel_id}`)} class="text-pink-600 hover:underline">{video.channel_title}の使用コスメ一覧を見る →</a>
+            </p>
+          </section>
+        )}
+
+        {sameCosmetics.length > 0 && (
+          <section class="mt-10">
+            <h2 class="font-bold mb-1">同じコスメを紹介している他の動画</h2>
+            <p class="text-xs text-neutral-500 mb-3">この動画で紹介されているコスメが登場する、他のインフルエンサーの動画です。</p>
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {sameCosmetics.map((v) => <VideoCard video={v} />)}
+            </div>
+          </section>
         )}
       </>
     )

@@ -72,7 +72,7 @@ const jsonLd = influencer
   : [];
 ---
 
-<Layout title={influencer?.channel_title ?? "インフルエンサー詳細"} description={description} image={influencer?.channel_icon} jsonLd={jsonLd}>
+<Layout title={influencer ? `${influencer.channel_title}の使用コスメ一覧・愛用コスメ遍歴` : "インフルエンサー詳細"} description={description} image={influencer?.channel_icon} jsonLd={jsonLd}>
   {
     !influencer ? (
       <p class="text-neutral-400">インフルエンサーが見つかりませんでした。</p>
