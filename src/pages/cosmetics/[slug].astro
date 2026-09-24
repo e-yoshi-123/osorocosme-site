@@ -109,7 +109,7 @@ const jsonLd = entry
             <h1 class="text-xl font-bold mt-1 mb-2">{entry.name}</h1>
             {entry.category && <p class="text-sm text-neutral-500 mb-1">カテゴリ: {entry.category}</p>}
             {buyable && entry.now_price !== undefined && (
-              <p data-buy class="text-sm text-neutral-500 mb-3">参考価格: ¥{formatCount(entry.now_price)}</p>
+              <p data-buy class="text-sm text-neutral-500 mb-3">参考価格: ¥{formatCount(entry.now_price)}{entry.price_updated && `（${formatJaDate(entry.price_updated)}時点）`}</p>
             )}
             {buyable && entry.rakuten_text_link && (
               <a

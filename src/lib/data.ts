@@ -55,6 +55,8 @@ export interface CosmeticListEntry {
   rakuten_image_link?: string;
   rakuten_text_link?: string;
   now_price?: number;
+  /** now_price を楽天で確認した日（YYYY-MM-DD）。無い商品は日付を表示しない */
+  price_updated?: string;
   count?: number;
   rakuten_link_none?: boolean;
 }
