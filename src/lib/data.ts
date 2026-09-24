@@ -556,6 +556,89 @@ const CATEGORY_TAG_TO_GROUP: Record<string, string> = Object.fromEntries(
   RANKING_CATEGORY_GROUPS.flatMap((g) => g.tags.map((t) => [t, g.group]))
 );
 
+/** 特集ページ（/feature/<slug>/）。動画の**タイトルに明記された語**で動画を絞り、その動画で紹介されたコスメを集計する。
+ * 肌質・パーソナルカラーのラベル（skin_profile）は、6〜9割がタイトル・概要欄・字幕に根拠の無いAIの推測だったため、軸に使わない。 */
+export interface FeatureDef {
+  slug: string;
+  name: string;
+  /** タイトルにこのうちどれかを含む動画を対象にする */
+  keywords: string[];
+  lead: string;
+}
+export const FEATURES: FeatureDef[] = [
+  {
+    slug: "daily-makeup",
+    name: "毎日メイク",
+    keywords: ["毎日メイク", "デイリーメイク"],
+    lead: "インフルエンサーが日々のメイクで使っているコスメを、「毎日メイク」動画から集めました。特別な日ではなく普段使いで選ばれているコスメが分かります。",
+  },
+  {
+    slug: "petit-price",
+    name: "プチプラ・ドラコス",
+    keywords: ["プチプラ", "ドラコス", "ドラッグストア", "100均", "ダイソー"],
+    lead: "プチプラ・ドラッグストア・100均をテーマにした動画で紹介されたコスメを集めました。手に取りやすい価格帯で、複数の人が紹介しているものだけを載せています。",
+  },
+];
+/** 掲載する条件: 紹介したチャンネル数がこれ以上（1人が何本も紹介しただけの商品を除く） */
+export const FEATURE_MIN_CHANNELS = 3;
+export const FEATURE_PER_GROUP = 5;
+
+export interface FeatureItem {
+  brand_id: string;
+  brand: string;
+  name_id: string;
+  name: string;
+  videoCount: number;
+  channelCount: number;
+  tag: string;
+}
+const _featureCache = new Map<string, ReturnType<typeof buildFeature>>();
+function buildFeature(def: FeatureDef) {
+  const videos = getVisibleVideos().filter((v) => def.keywords.some((k) => (v.title || "").includes(k)));
+  const map = new Map<string, FeatureItem & { vs: Set<string>; cs: Set<string>; views: number }>();
+  for (const v of videos) {
+    for (const c of v.cosmetics || []) {
+      if (!c.brand_id || !c.name_id || !c.related_tags?.length) continue;
+      const tag = c.related_tags.find((t) => CATEGORY_TAG_TO_GROUP[t]);
+      if (!tag) continue; // 大分類に属さないカテゴリ（その他）は載せない
+      const key = `${c.brand_id}_${c.name_id}`;
+      let e = map.get(key);
+      if (!e) {
+        e = { brand_id: c.brand_id, brand: c.brand, name_id: c.name_id, name: c.name, tag, videoCount: 0, channelCount: 0, vs: new Set(), cs: new Set(), views: 0 };
+        map.set(key, e);
+      }
+      if (!e.vs.has(v.key)) {
+        e.vs.add(v.key);
+        e.cs.add(v.channel_id);
+        e.views += toNumber(v.view_count);
+      }
+    }
+  }
+  const items = Array.from(map.values())
+    .map((e) => ({ ...e, videoCount: e.vs.size, channelCount: e.cs.size }))
+    .filter((e) => e.channelCount >= FEATURE_MIN_CHANNELS)
+    .sort((a, b) => b.channelCount - a.channelCount || b.videoCount - a.videoCount || b.views - a.views || a.name.localeCompare(b.name, "ja"));
+  const groups = RANKING_CATEGORY_GROUPS.map((g) => ({
+    group: g.group,
+    items: items.filter((e) => CATEGORY_TAG_TO_GROUP[e.tag] === g.group).slice(0, FEATURE_PER_GROUP),
+  })).filter((g) => g.items.length > 0);
+  const sample = [...videos].sort((a, b) => toNumber(b.view_count) - toNumber(a.view_count)).slice(0, 6);
+  return {
+    def,
+    videoCount: videos.length,
+    channelCount: new Set(videos.map((v) => v.channel_id)).size,
+    groups,
+    sample,
+    newest: sortByPublishedDesc(videos)[0]?.published_at,
+  };
+}
+export function getFeature(slug: string) {
+  const def = FEATURES.find((f) => f.slug === slug);
+  if (!def) return undefined;
+  if (!_featureCache.has(slug)) _featureCache.set(slug, buildFeature(def));
+  return _featureCache.get(slug)!;
+}
+
 /** 商品ページの構造化データ（Product.category）用に、単一のカテゴリ名（例:「アイブロウペンシル」）を
  * 「コスメ・美容 > 大分類 > カテゴリ名」の階層テキストに変換する（Search Consoleの「category の値が無効」指摘への対応）。
  * 大分類は RANKING_CATEGORY_GROUPS と同じ区分を使う（未定義のカテゴリは「その他」）。 */

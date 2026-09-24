@@ -1,0 +1,27 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { FEATURES, getFeature, withBase } from "../../lib/data";
+
+const list = FEATURES.map((d) => getFeature(d.slug)!);
+---
+
+<Layout
+  title="特集（動画から集計したコスメ）"
+  description="YouTubeのコスメ紹介動画を、毎日メイク・プチプラなどのテーマ別に集計した特集。複数のインフルエンサーが紹介しているコスメだけをカテゴリ別にまとめています。"
+>
+  <h1 class="text-xl font-bold mb-2">特集</h1>
+  <p class="text-xs text-neutral-500 mb-6">動画のタイトルに明記されたテーマで動画を絞り、その動画で紹介されたコスメを集計しています。複数のインフルエンサーが紹介したものだけを載せています。</p>
+  <ul class="space-y-3">
+    {
+      list.map((f) => (
+        <li>
+          <a href={withBase(`/feature/${f.def.slug}/`)} class="block bg-white rounded-lg shadow-sm hover:shadow-md p-4">
+            <span class="block font-bold text-pink-600">{f.def.name}動画で人気のコスメ</span>
+            <span class="block text-xs text-neutral-500 mt-1">{f.videoCount}本の動画・{f.channelCount}チャンネルから集計</span>
+            <span class="block text-sm text-neutral-700 mt-2">{f.def.lead}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Layout>
