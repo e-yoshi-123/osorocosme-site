@@ -16,6 +16,10 @@ import {
   formatCount,
   withBase,
   categoryUrl,
+  FEATURES,
+  getFeature,
+  getCosmeticListEntry,
+  extractImageSrc,
 } from "../lib/data";
 
 const visible = getVisibleVideos();
@@ -47,6 +51,18 @@ const siteLd = {
     "query-input": "required name=search_term_string",
   },
 };
+// 特集カード用: 各特集の上位コスメの画像（各カテゴリの1位を最大3つ）と、集計元の動画数
+const featureCards = FEATURES.map((d) => {
+  const f = getFeature(d.slug)!;
+  const imgs = f.groups
+    .map((g) => g.items[0])
+    .filter(Boolean)
+    .map((it) => extractImageSrc(getCosmeticListEntry(it.brand_id, it.name_id)?.rakuten_image_link) || "")
+    .filter(Boolean)
+    .slice(0, 3);
+  return { def: d, videoCount: f.videoCount, channelCount: f.channelCount, imgs };
+});
+
 ---
 
 <Layout
@@ -102,6 +118,31 @@ const siteLd = {
               ))}
             </div>
           </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 特集：動画のタイトルに明記されたテーマで集計したコスメ -->
+  <section class="mb-14">
+    <div class="flex items-end justify-between mb-4">
+      <h2 class="text-lg font-bold">特集</h2>
+      <a href={withBase("/feature/")} class="text-sm text-pink-600 hover:underline">すべての特集 →</a>
+    </div>
+    <div class="grid sm:grid-cols-2 gap-5">
+      {
+        featureCards.map((c) => (
+          <a href={withBase(`/feature/${c.def.slug}/`)} class="block bg-white rounded-2xl shadow-sm hover:shadow-md p-4">
+            <div class="flex gap-2 mb-3">
+              {c.imgs.map((src) => (
+                <div class="w-1/3 aspect-square bg-neutral-50 rounded overflow-hidden flex items-center justify-center">
+                  <img src={src} alt="" class="max-w-full max-h-full object-contain" loading="lazy" />
+                </div>
+              ))}
+            </div>
+            <span class="block font-bold text-pink-700">{c.def.name}動画で人気のコスメ</span>
+            <span class="block text-xs text-neutral-500 mt-1">{c.videoCount}本の動画・{c.channelCount}チャンネルから集計</span>
+          </a>
         ))
       }
     </div>
