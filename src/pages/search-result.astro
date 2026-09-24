@@ -49,7 +49,7 @@ import Layout from "../layouts/Layout.astro";
         }
         for (const v of matched) {
           const a = document.createElement("a");
-          a.href = `${base}/video/${v.key}`;
+          a.href = `${base}/video/${v.key}/`;
           a.className = "block bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden";
           a.innerHTML = `
             <img src="${v.thumbnail}" alt="" class="w-full aspect-video object-cover" loading="lazy" />

@@ -399,7 +399,18 @@ export function withBase(path: string): string {
   const base = import.meta.env.BASE_URL || "/";
   const cleanBase = base.endsWith("/") ? base.slice(0, -1) : base;
   const cleanPath = path.startsWith("/") ? path : `/${path}`;
-  return `${cleanBase}${cleanPath}`;
+  return `${cleanBase}${withTrailingSlash(cleanPath)}`;
+}
+
+/** ページのURLは末尾スラッシュ付きが正（canonicalもそう）。スラッシュ無しで書くと、ホスティングが301で転送するため、
+ * 内部リンクやsitemapが全部リダイレクト経由になり、Search Consoleに「ページにリダイレクトがあります」と出て、クロールも無駄になる。
+ * ファイル（.xml / .png / .json / .txt など、拡張子付き）と、?クエリ・#ハッシュ付きの部分はそのまま。 */
+export function withTrailingSlash(path: string): string {
+  const m = path.match(/^([^?#]*)([?#].*)?$/);
+  const p = m?.[1] ?? path;
+  const rest = m?.[2] ?? "";
+  if (p.endsWith("/") || /\.[A-Za-z0-9]{1,5}$/.test(p.split("/").pop() || "")) return path;
+  return `${p}/${rest}`;
 }
 
 export function toNumber(n: string | number | undefined): number {
