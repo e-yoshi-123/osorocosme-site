@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import { withBase } from "../lib/data";
+import { GA_MEASUREMENT_ID } from "../lib/site-info";
 
 interface Props {
   title: string;
@@ -50,6 +51,18 @@ const navLinks = [
     <meta name="twitter:card" content={ogImage ? "summary_large_image" : "summary"} />
     {ogImage && <meta name="twitter:image" content={ogImage} />}
     {jsonLd.map((ld) => <script type="application/ld+json" set:html={JSON.stringify(ld)} />)}
+    {/* Googleアナリティクス4。開発中の閲覧を数えないよう、本番ビルドのときだけ出す。外部リンク（楽天など）のクリックは拡張計測機能で自動記録される */}
+    {import.meta.env.PROD && GA_MEASUREMENT_ID && (
+      <>
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}></script>
+        <script is:inline define:vars={{ id: GA_MEASUREMENT_ID }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { dataLayer.push(arguments); }
+          gtag("js", new Date());
+          gtag("config", id);
+        </script>
+      </>
+    )}
   </head>
   <body class="min-h-screen bg-neutral-50 text-neutral-900 flex flex-col">
     <header class="bg-white border-b border-neutral-200 md:sticky md:top-0 z-30">
