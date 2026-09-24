@@ -1,13 +1,19 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import CosmeticCard from "../../components/CosmeticCard.astro";
-import { getBrandsWithVideos, getBrandName, getCosmeticsForBrand, breadcrumbLd, getBrandMeta, getBrandGroups, getBrandCosmeticsByCategory, getBrandTopCosmetics, COUNTRY_NAMES, withBase, cosmeticSlug } from "../../lib/data";
+import { getBrandsWithVideos, getAliasRedirects, getBrandName, getCosmeticsForBrand, breadcrumbLd, getBrandMeta, getBrandGroups, getBrandCosmeticsByCategory, getBrandTopCosmetics, COUNTRY_NAMES, withBase, cosmeticSlug } from "../../lib/data";
 
 export function getStaticPaths() {
-  return getBrandsWithVideos().map((b) => ({ params: { brand_id: b.brand_id } }));
+  return [
+    ...getBrandsWithVideos().map((b) => ({ params: { brand_id: b.brand_id }, props: { redirectTo: "" } })),
+    // 二重登録ブランドの統合前のURLは、統合先のブランドページへ転送する
+    ...getAliasRedirects().brands.map((r) => ({ params: { brand_id: r.from }, props: { redirectTo: r.to } })),
+  ];
 }
 
 const { brand_id } = Astro.params;
+const { redirectTo } = Astro.props;
+if (redirectTo) return Astro.redirect(withBase(`/brand/${redirectTo}`), 301);
 const brandName = getBrandName(brand_id!) ?? "不明なブランド";
 const cosmetics = getCosmeticsForBrand(brand_id!);
 const sections = getBrandCosmeticsByCategory(brand_id!);

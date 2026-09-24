@@ -4,6 +4,7 @@ import cosmeticsListData from "../data/cosmetics_list.json";
 import brandMetaData from "../data/brand-meta.json";
 import brandReadings from "../data/brand-readings.json";
 import categoryOverridesData from "../data/category-overrides.json";
+import brandEquivalentsData from "../data/brand_equivalents.json";
 
 export interface Cosmetic {
   brand_id: string;
@@ -89,6 +90,73 @@ const cosmeticsList = cosmeticsListData as unknown as Record<string, CosmeticLis
   }
 }
 
+/** 二重登録ブランド（同じブランドが@cosme上で別ページになり、別のbrand_idで登録されているもの。brand_equivalents.json）の統合。
+ * - ブランドページ・一覧・集計は、グループ内で最も小さいbrand_id（＝先に登録された方）に1本化する（canonicalBrandId）。
+ * - 商品は、統合先ブランドに同じ名前の商品があれば、その商品に寄せる（動画側の参照を書き換え、紹介数を合算する）。
+ *   無いものは商品のIDをそのまま残し（URLを変えない）、表示上のブランド名だけ統合先に揃える。
+ * - 統合前のURL（ブランドページ・寄せた商品のページ）は、統合先へ転送するページを出す（getAliasRedirects）。 */
+const canonicalOf: Record<string, string> = {};
+for (const g of (brandEquivalentsData as unknown as { groups: string[][] }).groups) {
+  const c = [...g].sort()[0];
+  for (const id of g) canonicalOf[id] = c;
+}
+
+export function canonicalBrandId(brand_id: string): string {
+  return canonicalOf[brand_id] ?? brand_id;
+}
+
+const productAlias: Record<string, string> = {}; // "統合前brand_id_name_id" -> "統合先brand_id_name_id"
+{
+  const norm = (s: string) => s.normalize("NFKC").toLowerCase().replace(/[\s・･·.\-_&＆'’!！()（）]/g, "");
+  const canonByName = new Map<string, string>();
+  for (const [key, e] of Object.entries(cosmeticsList)) {
+    if (canonicalOf[e.brand_id] === e.brand_id) canonByName.set(`${e.brand_id}|${norm(e.name)}`, key);
+  }
+  for (const [key, e] of Object.entries(cosmeticsList)) {
+    const c = canonicalOf[e.brand_id];
+    if (!c || c === e.brand_id) continue;
+    const target = canonByName.get(`${c}|${norm(e.name)}`);
+    if (target && target !== key) {
+      productAlias[key] = target;
+      const t = cosmeticsList[target];
+      // 統合先に無い楽天リンク・画像・価格は、統合前の商品から補う
+      for (const f of ["rakuten_image_link", "rakuten_text_link", "amazon_link", "now_price", "price_updated"] as const) {
+        if (!t[f] && e[f]) (t as any)[f] = e[f];
+      }
+    } else {
+      e.brand = brands[c] ?? e.brand;
+    }
+  }
+  for (const v of Object.values(videos)) {
+    if (!v.cosmetics) continue;
+    const seen = new Set<string>();
+    v.cosmetics = v.cosmetics.filter((c) => {
+      const alias = productAlias[`${c.brand_id}_${c.name_id}`];
+      if (alias) {
+        const t = cosmeticsList[alias];
+        c.brand_id = t.brand_id; c.name_id = t.name_id; c.brand = t.brand; c.name = t.name;
+      } else if (canonicalOf[c.brand_id] && canonicalOf[c.brand_id] !== c.brand_id) {
+        c.brand = brands[canonicalOf[c.brand_id]] ?? c.brand;
+      }
+      const k = `${c.brand_id}_${c.name_id}`;
+      if (seen.has(k)) return false; // 同じ動画で統合前・統合後の両方に載っていたものは1つにする
+      seen.add(k);
+      return true;
+    });
+  }
+}
+
+/** 統合前のURLから統合先への転送先。ブランドページと、統合先の商品に寄せた商品のページ。 */
+export function getAliasRedirects(): { brands: { from: string; to: string }[]; products: { from: string; to: string }[] } {
+  return {
+    brands: Object.entries(canonicalOf).filter(([id, c]) => id !== c).map(([from, to]) => ({ from, to })),
+    products: Object.entries(productAlias).map(([from, to]) => ({
+      from: from.replace("_", "-"),
+      to: to.replace("_", "-"),
+    })),
+  };
+}
+
 /** 現行WordPress実装は check_status の判定がページごとに不統一（緩い/厳密が混在するバグ）。
  * ここでは常に厳密判定（boolean true のみ有効）に統一する。 */
 export function isVisible(v: Video): boolean {
@@ -135,11 +203,12 @@ export function getBrandsWithVideos(): BrandWithStats[] {
   const cosmeticSets = new Map<string, Set<string>>();
   for (const v of getVisibleVideos()) {
     for (const c of v.cosmetics || []) {
-      if (!c.brand_id || !c.name_id || !brands[c.brand_id]) continue;
-      if (!videoSets.has(c.brand_id)) videoSets.set(c.brand_id, new Set());
-      if (!cosmeticSets.has(c.brand_id)) cosmeticSets.set(c.brand_id, new Set());
-      videoSets.get(c.brand_id)!.add(v.key);
-      cosmeticSets.get(c.brand_id)!.add(c.name_id);
+      if (!c.brand_id || !c.name_id || !brands[canonicalBrandId(c.brand_id)]) continue;
+      const bid = canonicalBrandId(c.brand_id);
+      if (!videoSets.has(bid)) videoSets.set(bid, new Set());
+      if (!cosmeticSets.has(bid)) cosmeticSets.set(bid, new Set());
+      videoSets.get(bid)!.add(v.key);
+      cosmeticSets.get(bid)!.add(`${c.brand_id}_${c.name_id}`);
     }
   }
   return Array.from(videoSets.entries()).map(([brand_id, vs]) => ({
@@ -198,7 +267,7 @@ export function getCosmeticsForBrand(brand_id: string): Cosmetic[] {
   const map = new Map<string, Cosmetic>();
   for (const v of getVisibleVideos()) {
     for (const c of v.cosmetics || []) {
-      if (c.brand_id === brand_id && c.name_id) {
+      if (c.brand_id && canonicalBrandId(c.brand_id) === brand_id && c.name_id) {
         const key = `${c.brand_id}_${c.name_id}`;
         if (!map.has(key)) map.set(key, c);
       }
@@ -895,7 +964,7 @@ export function getCategoryTop(tag: string, limit = 6): { rank: number; tile: Co
 /** 同じブランドの他の商品（紹介動画数などの人気順）。 */
 export function getBrandTopCosmetics(brand_id: string, excludeNameId: string, limit = 6): CosmeticTileData[] {
   const items = getCosmeticRankings()
-    .filter((r) => r.brand_id === brand_id && r.name_id !== excludeNameId)
+    .filter((r) => canonicalBrandId(r.brand_id) === canonicalBrandId(brand_id) && !(r.brand_id === brand_id && r.name_id === excludeNameId))
     .sort((a, b) => b.score - a.score)
     .map((r) => ({
       brand_id: r.brand_id, brand: r.brand, name_id: r.name_id, name: r.name,
@@ -974,7 +1043,7 @@ export function getBrandKind(brand_id: string): BrandKind {
   const skin = new Set(RANKING_CATEGORY_GROUPS.find((g) => g.group === "スキンケア")!.tags);
   let mk = 0, sk = 0;
   for (const r of getCosmeticRankings()) {
-    if (r.brand_id !== brand_id) continue;
+    if (canonicalBrandId(r.brand_id) !== canonicalBrandId(brand_id)) continue;
     for (const t of r.tags) (skin.has(t) ? sk++ : mk++);
   }
   if (mk + sk === 0) return "BOTH";

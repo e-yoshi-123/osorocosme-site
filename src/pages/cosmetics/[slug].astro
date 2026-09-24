@@ -4,6 +4,8 @@ import CosmeticTile from "../../components/CosmeticTile.astro";
 import IntroRow from "../../components/IntroRow.astro";
 import {
   getUsedCosmeticKeys,
+  getAliasRedirects,
+  canonicalBrandId,
   getCosmeticListEntry,
   getVideosUsingCosmetic,
   getCoMentionedCosmetics,
@@ -22,13 +24,21 @@ import {
 } from "../../lib/data";
 
 export function getStaticPaths() {
-  return getUsedCosmeticKeys().map(({ brand_id, name_id }) => ({
-    params: { slug: cosmeticSlug(brand_id, name_id) },
-    props: { brand_id, name_id },
-  }));
+  return [
+    ...getUsedCosmeticKeys().map(({ brand_id, name_id }) => ({
+      params: { slug: cosmeticSlug(brand_id, name_id) },
+      props: { brand_id, name_id, redirectTo: "" },
+    })),
+    // 二重登録ブランドの統合で、統合先の商品に寄せた商品の統合前のURLは、統合先の商品ページへ転送する
+    ...getAliasRedirects().products.map((r) => ({
+      params: { slug: r.from },
+      props: { brand_id: "", name_id: "", redirectTo: r.to },
+    })),
+  ];
 }
 
-const { brand_id, name_id } = Astro.props;
+const { brand_id, name_id, redirectTo } = Astro.props;
+if (redirectTo) return Astro.redirect(withBase(`/cosmetics/${redirectTo}`), 301);
 
 // cosmetics_list.json を正データとする（現行WordPressは動画反復順で最後に処理した値が勝つ
 // 不安定な実装だったため、単一の正規ソースに統一）
@@ -83,7 +93,7 @@ const jsonLd = entry
       breadcrumbLd(
         [
           { name: "ホーム", path: "/" },
-          { name: entry.brand, path: `/brand/${entry.brand_id}` },
+          { name: entry.brand, path: `/brand/${canonicalBrandId(entry.brand_id)}` },
           { name: entry.name, path: `/cosmetics/${cosmeticSlug(brand_id, name_id)}` },
         ],
         Astro.site!
@@ -103,7 +113,7 @@ const jsonLd = entry
             <div data-item-image class="shrink-0 [&_img]:rounded" set:html={entry.rakuten_image_link} />
           )}
           <div>
-            <a href={withBase(`/brand/${entry.brand_id}`)} class="text-sm text-pink-600 hover:underline">
+            <a href={withBase(`/brand/${canonicalBrandId(entry.brand_id)}`)} class="text-sm text-pink-600 hover:underline">
               {entry.brand}
             </a>
             <h1 class="text-xl font-bold mt-1 mb-2">{entry.name}</h1>
@@ -198,7 +208,7 @@ const jsonLd = entry
               {brandTop.map((t) => <CosmeticTile tile={t} showBrand={false} caption={`${t.videoCount}本の動画で紹介`} />)}
             </div>
             <p class="mt-3 text-right text-sm">
-              <a href={withBase(`/brand/${entry.brand_id}`)} class="text-pink-600 hover:underline">{entry.brand}の商品をすべて見る →</a>
+              <a href={withBase(`/brand/${canonicalBrandId(entry.brand_id)}`)} class="text-pink-600 hover:underline">{entry.brand}の商品をすべて見る →</a>
             </p>
           </section>
         )}

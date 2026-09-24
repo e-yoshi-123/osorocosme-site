@@ -3,6 +3,7 @@ import {
   getVisibleVideos,
   getBrandsWithVideos,
   getUsedCosmeticKeys,
+  canonicalBrandId,
   getInfluencerRanking,
   getRankingPages,
   FEATURES,
@@ -25,7 +26,8 @@ export const GET: APIRoute = ({ site }) => {
   for (const v of videos) {
     for (const c of v.cosmetics || []) {
       const d = day(v.published_at)!;
-      if (!brandNewest.has(c.brand_id) || brandNewest.get(c.brand_id)! < d) brandNewest.set(c.brand_id, d);
+      const bid = canonicalBrandId(c.brand_id);
+      if (!brandNewest.has(bid) || brandNewest.get(bid)! < d) brandNewest.set(bid, d);
     }
   }
   const items: { path: string; lastmod?: string }[] = [
