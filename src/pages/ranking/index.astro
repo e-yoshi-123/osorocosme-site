@@ -1,6 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { getRankingPages, getRankingNav, getCosmeticListEntry, extractImageSrc, categoryUrl, withBase } from "../../lib/data";
+import { getRankingPages, getRankingNav, getCosmeticListEntry, productImageSrc, categoryUrl, withBase } from "../../lib/data";
 
 const pages = getRankingPages();
 const nav = getRankingNav();
@@ -11,7 +11,7 @@ const allTags = Array.from(pages.keys());
 function topImages(tag: string): string[] {
   const imgs = (pages.get(tag)?.list || [])
     .slice(0, 3)
-    .map((r) => extractImageSrc(getCosmeticListEntry(r.brand_id, r.name_id)?.rakuten_image_link || r.rakuten_image_link) || "");
+    .map((r) => productImageSrc(getCosmeticListEntry(r.brand_id, r.name_id), r.rakuten_image_link));
   while (imgs.length < 3) imgs.push("");
   return imgs;
 }

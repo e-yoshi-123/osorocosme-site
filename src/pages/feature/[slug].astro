@@ -8,7 +8,7 @@ import {
   FEATURE_PER_GROUP,
   getFeature,
   getCosmeticListEntry,
-  extractImageSrc,
+  productOffer,
   cosmeticSlug,
   categoryUrl,
   formatJaDate,
@@ -30,12 +30,14 @@ const groups = f.groups.map((g) => ({
   group: g.group,
   rows: g.items.map((it, i) => {
     const entry = getCosmeticListEntry(it.brand_id, it.name_id);
+    const offer = productOffer(entry); // 楽天の画像が無ければYahoo!の画像・価格（115章）
     return {
       it,
       rank: i + 1,
-      imageSrc: extractImageSrc(entry?.rakuten_image_link) || "",
-      price: entry?.now_price,
-      link: entry?.rakuten_text_link || undefined,
+      imageSrc: offer.imageSrc,
+      price: offer.price,
+      link: offer.rakutenLink,
+      fromYahoo: offer.source === "yahoo",
       yahooLink: entry?.yahoo_text_link || undefined,
       subLabel: it.tag,
     };
@@ -112,6 +114,7 @@ const jsonLd = [
                 videoCount={r.it.videoCount}
                 channelCount={r.it.channelCount}
                 price={r.price}
+                fromYahoo={r.fromYahoo}
                 link={r.link}
                 yahooLink={r.yahooLink}
                 subLabel={r.subLabel}

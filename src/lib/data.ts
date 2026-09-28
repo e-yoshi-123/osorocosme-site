@@ -64,6 +64,8 @@ export interface CosmeticListEntry {
   yahoo_text_link?: string;
   yahoo_image_url?: string;
   yahoo_price?: number;
+  /** yahoo_price を確認した日（YYYY-MM-DD） */
+  yahoo_price_updated?: string;
 }
 
 export interface Influencer {
@@ -124,7 +126,7 @@ const productAlias: Record<string, string> = {}; // "統合前brand_id_name_id" 
       productAlias[key] = target;
       const t = cosmeticsList[target];
       // 統合先に無い楽天・Yahoo!のリンク・画像・価格は、統合前の商品から補う
-      for (const f of ["rakuten_image_link", "rakuten_text_link", "amazon_link", "now_price", "price_updated", "yahoo_text_link", "yahoo_image_url", "yahoo_price"] as const) {
+      for (const f of ["rakuten_image_link", "rakuten_text_link", "amazon_link", "now_price", "price_updated", "yahoo_text_link", "yahoo_image_url", "yahoo_price", "yahoo_price_updated"] as const) {
         if (!t[f] && e[f]) (t as any)[f] = e[f];
       }
     } else {
@@ -419,7 +421,7 @@ export function getInfluencerHighlights(channel_id: string, videoLimit = 3, cosm
       mentions++;
       for (const t of c.related_tags || []) tagCounts.set(t, (tagCounts.get(t) || 0) + 1);
       const entry = getCosmeticListEntry(c.brand_id, c.name_id);
-      const imageSrc = extractImageSrc(entry?.rakuten_image_link || c.rakuten_image_link);
+      const imageSrc = productImageSrc(entry, c.rakuten_image_link);
       const cur = byCosmetic.get(key);
       if (cur) {
         cur.videoCount += 1;
@@ -917,7 +919,7 @@ export interface CosmeticTileData {
 }
 
 function cosmeticImageSrc(brand_id: string, name_id: string, fallbackHtml?: string): string {
-  return extractImageSrc(getCosmeticListEntry(brand_id, name_id)?.rakuten_image_link || fallbackHtml) || "";
+  return productImageSrc(getCosmeticListEntry(brand_id, name_id), fallbackHtml);
 }
 
 /** 画像のある商品を先に、無いものを後ろに（元の順序は保つ）。タイルに「No Image」が並びすぎないように。 */
@@ -992,6 +994,26 @@ export function formatJaDate(iso: string): string {
 /** Rakuten の画像リンクHTMLから最初の img src を取り出す（構造化データ用）。 */
 export function extractImageSrc(html?: string): string | undefined {
   return html?.match(/<img[^>]+src=["']([^"']+)["']/i)?.[1];
+}
+
+/**
+ * 商品の画像と、それに合わせた価格・購入リンク。楽天の画像があれば楽天を使い、
+ * 楽天の画像が無く、Yahoo!ショッピングのリンクと画像があればYahoo!の画像・価格を使う（115章）。
+ * 画像の無い商品は購入できないリンクの可能性が高いので、価格は出さない（従来どおり）。
+ */
+export function productOffer(entry?: CosmeticListEntry, fallbackHtml?: string) {
+  const rakutenSrc = extractImageSrc(entry?.rakuten_image_link || fallbackHtml);
+  if (rakutenSrc) {
+    return { imageSrc: rakutenSrc, source: "rakuten" as const, price: entry?.now_price, priceUpdated: entry?.price_updated, rakutenLink: entry?.rakuten_text_link || undefined };
+  }
+  if (entry?.yahoo_text_link && entry.yahoo_image_url) {
+    return { imageSrc: entry.yahoo_image_url, source: "yahoo" as const, price: entry.yahoo_price, priceUpdated: entry.yahoo_price_updated, rakutenLink: undefined };
+  }
+  return { imageSrc: "", source: undefined, price: undefined, priceUpdated: undefined, rakutenLink: undefined };
+}
+
+export function productImageSrc(entry?: CosmeticListEntry, fallbackHtml?: string): string {
+  return productOffer(entry, fallbackHtml).imageSrc;
 }
 
 export function breadcrumbLd(items: { name: string; path: string }[], site: URL) {

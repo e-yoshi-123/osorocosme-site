@@ -1,5 +1,5 @@
 ---
-import { cosmeticSlug, withBase } from "../lib/data";
+import { cosmeticSlug, withBase, extractImageSrc, getCosmeticListEntry } from "../lib/data";
 
 interface Props {
   brand_id: string;
@@ -10,6 +10,9 @@ interface Props {
 }
 
 const { brand_id, brand, name_id, name, rakutenImageHtml } = Astro.props;
+// 楽天の画像が無い商品は、Yahoo!ショッピングの画像があればそれを出す（115章）
+const entry = extractImageSrc(rakutenImageHtml) ? undefined : getCosmeticListEntry(brand_id, name_id);
+const yahooImage = entry?.yahoo_text_link && entry.yahoo_image_url ? entry : undefined;
 ---
 
 <div class="bg-white rounded-lg shadow-sm p-3 flex flex-col gap-2">
@@ -17,6 +20,10 @@ const { brand_id, brand, name_id, name, rakutenImageHtml } = Astro.props;
     {
       rakutenImageHtml ? (
         <Fragment set:html={rakutenImageHtml} />
+      ) : yahooImage ? (
+        <a href={yahooImage.yahoo_text_link} target="_blank" rel="nofollow sponsored noopener">
+          <img src={yahooImage.yahoo_image_url} alt={`${brand} ${name}`} loading="lazy" />
+        </a>
       ) : (
         <span class="text-neutral-300 text-xs">No Image</span>
       )

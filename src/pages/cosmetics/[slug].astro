@@ -48,6 +48,10 @@ const videosUsing = sortByPublishedDesc(getVideosUsingCosmetic(brand_id, name_id
 const facts = getCosmeticFacts(brand_id, name_id);
 // 画像の無い商品（＝楽天側に出品が無い・画像が消えている）は、購入できないリンクの可能性が高いので、価格・購入ボタンを出さない
 const buyable = !!extractImageSrc(entry?.rakuten_image_link);
+// 楽天の画像が無い商品で、Yahoo!ショッピングのリンクと画像があれば、Yahoo!の画像・価格を出す（115章）
+const yahooFallback = !buyable && !!entry?.yahoo_text_link && !!entry?.yahoo_image_url;
+// 楽天の画像はあるが実際には読み込めなかったとき、下のスクリプトがYahoo!の画像に差し替えるための値
+const yahooSwap = buyable && entry?.yahoo_text_link && entry?.yahoo_image_url ? entry : undefined;
 // ページ下部の「次に見たくなる」3要素：一緒に紹介されているコスメ／同じカテゴリの人気ランキング／同じブランドの人気商品
 const coMentioned = getCoMentionedCosmetics(brand_id, name_id, 6);
 const categoryTop = facts.mainTag ? getCategoryTop(facts.mainTag, 6) : [];
@@ -65,13 +69,16 @@ const lastIntro = facts.introductions[0];
 const description = entry
   ? factSentence + (firstIntro ? `最初の紹介は${formatJaDate(firstIntro.published_at)}、直近は${formatJaDate(lastIntro.published_at)}です。` : "")
   : undefined;
-const imageSrc = extractImageSrc(entry?.rakuten_image_link);
+const imageSrc = extractImageSrc(entry?.rakuten_image_link) || (yahooFallback ? entry?.yahoo_image_url : undefined);
 // Googleの「商品スニペット」は、Productに offers / review / aggregateRating のいずれかが無いと重大な問題として扱われる（Search Consoleの指摘）。
 // このサイトには、根拠のある口コミ・評価は無い（@cosmeの評価点は規約上出さない、YouTubeの紹介は口コミではない）ので、偽って付けない。
 // 同様に、offers.availability（在庫）・hasMerchantReturnPolicy（返品）・shippingDetails（配送）も、
 // 実際の販売者は楽天市場の各ショップでありこのサイトは把握していないため、不正確な値を出さず付けない（いずれもGoogle側も任意項目）。
 // 価格をページに出している商品（＝buyable かつ参考価格あり。ページの表示と一致させる）にだけ offers を付け、それ以外は Product を出さない。
-const hasOffer = buyable && typeof entry?.now_price === "number" && entry.now_price > 0 && !!entry.rakuten_text_link;
+const offerPrice = buyable
+  ? (entry?.rakuten_text_link ? entry?.now_price : undefined)
+  : yahooFallback ? entry?.yahoo_price : undefined;
+const hasOffer = typeof offerPrice === "number" && offerPrice > 0;
 const productLd =
   entry && hasOffer
     ? {
@@ -84,7 +91,7 @@ const productLd =
         ...(entry.category ? { category: productCategoryPath(entry.category) } : {}),
         ...(imageSrc ? { image: imageSrc } : {}),
         description,
-        offers: { "@type": "Offer", price: entry.now_price, priceCurrency: "JPY" },
+        offers: { "@type": "Offer", price: offerPrice, priceCurrency: "JPY" },
       }
     : null;
 const jsonLd = entry
@@ -109,8 +116,20 @@ const jsonLd = entry
     ) : (
       <>
         <div class="bg-white rounded-lg shadow-sm p-6 mb-8 flex flex-col md:flex-row gap-6">
-          {entry.rakuten_image_link && (
-            <div data-item-image class="shrink-0 [&_img]:rounded" set:html={entry.rakuten_image_link} />
+          {entry.rakuten_image_link ? (
+            <div
+              data-item-image
+              data-yahoo-link={yahooSwap?.yahoo_text_link}
+              data-yahoo-image={yahooSwap?.yahoo_image_url}
+              class="shrink-0 [&_img]:rounded"
+              set:html={entry.rakuten_image_link}
+            />
+          ) : yahooFallback && (
+            <div class="shrink-0">
+              <a href={entry.yahoo_text_link} target="_blank" rel="nofollow sponsored noopener">
+                <img src={entry.yahoo_image_url} alt={`${entry.brand} ${entry.name}`} width="240" height="240" class="rounded object-contain" />
+              </a>
+            </div>
           )}
           <div>
             <a href={withBase(`/brand/${canonicalBrandId(entry.brand_id)}`)} class="text-sm text-pink-600 hover:underline">
@@ -120,6 +139,12 @@ const jsonLd = entry
             {entry.category && <p class="text-sm text-neutral-500 mb-1">カテゴリ: {entry.category}</p>}
             {buyable && entry.now_price !== undefined && (
               <p data-buy class="text-sm text-neutral-500 mb-3">参考価格: ¥{formatCount(entry.now_price)}{entry.price_updated && `（${formatJaDate(entry.price_updated)}時点）`}</p>
+            )}
+            {yahooFallback && entry.yahoo_price !== undefined && (
+              <p class="text-sm text-neutral-500 mb-3">参考価格（Yahoo!ショッピング）: ¥{formatCount(entry.yahoo_price)}{entry.yahoo_price_updated && `（${formatJaDate(entry.yahoo_price_updated)}時点）`}</p>
+            )}
+            {yahooSwap?.yahoo_price !== undefined && (
+              <p data-yahoo-price hidden class="text-sm text-neutral-500 mb-3">参考価格（Yahoo!ショッピング）: ¥{formatCount(yahooSwap.yahoo_price)}{yahooSwap.yahoo_price_updated && `（${formatJaDate(yahooSwap.yahoo_price_updated)}時点）`}</p>
             )}
             <!-- 楽天とYahoo!ショッピングのボタンを並べる。Yahoo!は楽天の画像（buyable）とは別に、リンクがあれば出す
                  （data-buy を付けないので、楽天の画像が読み込めずに楽天のボタンが消えても、Yahoo!のボタンは残る） -->
@@ -232,12 +257,24 @@ const jsonLd = entry
 </Layout>
 
 <script is:inline>
-  // 画像のURLはあっても実際に読み込めない場合（楽天側で画像が消えている）は、購入できないリンクの可能性が高いので、価格・購入ボタンを取り除く
+  // 画像のURLはあっても実際に読み込めない場合（楽天側で画像が消えている）は、購入できないリンクの可能性が高いので、価格・購入ボタンを取り除く。
+  // Yahoo!ショッピングの画像があれば、そちらの画像と価格に差し替える（115章）
   (function () {
-    var img = document.querySelector("[data-item-image] img");
+    var box = document.querySelector("[data-item-image]");
+    var img = box && box.querySelector("img");
     if (!img) return;
     function drop() {
       document.querySelectorAll("[data-buy]").forEach(function (e) { e.remove(); });
+      var link = box.getAttribute("data-yahoo-link");
+      var src = box.getAttribute("data-yahoo-image");
+      if (!link || !src) return;
+      var a = document.createElement("a");
+      a.href = link; a.target = "_blank"; a.rel = "nofollow sponsored noopener";
+      var y = document.createElement("img");
+      y.src = src; y.alt = img.alt; y.width = 240; y.height = 240; y.className = "rounded object-contain";
+      a.appendChild(y); box.replaceChildren(a);
+      var p = document.querySelector("[data-yahoo-price]");
+      if (p) p.hidden = false;
     }
     if (img.complete && img.naturalWidth === 0) drop();
     else img.addEventListener("error", drop);

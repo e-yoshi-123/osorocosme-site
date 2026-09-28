@@ -17,13 +17,15 @@ interface Props {
   link?: string;
   /** Yahoo!ショッピングのアフィリエイトリンク。楽天の画像の有無とは別に、あれば出す */
   yahooLink?: string;
+  /** 画像・価格がYahoo!ショッピングのものか（楽天の画像が無い商品。115章） */
+  fromYahoo?: boolean;
   /** 標準順位が表示上限を超える行（スクリプトなしでは非表示） */
   extra?: boolean;
   /** 「まとめ」ランキングで、その商品がどの細かいカテゴリか（例: リキッドファンデーション） */
   subLabel?: string;
 }
 
-const { rank, base, brand_id, brand, name_id, name, imageSrc, videoCount, channelCount, price, link, yahooLink, extra = false, subLabel } = Astro.props;
+const { rank, base, brand_id, brand, name_id, name, imageSrc, videoCount, channelCount, price, link, yahooLink, fromYahoo = false, extra = false, subLabel } = Astro.props;
 const top = rank <= 3;
 // 画像の無い商品（＝楽天側に出品が無い・画像が消えている）は、購入できないリンクの可能性が高いので、価格・購入ボタンを出さない。
 // 画像のURLはあっても、実際に読み込めない場合は、下の onerror で価格・購入ボタンを取り除く。
@@ -71,7 +73,7 @@ const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
     <span class="whitespace-nowrap"><b class="text-neutral-800 text-sm">{channelCount}</b>チャンネル</span>
   </p>
   <div class="col-span-3 md:col-span-1 flex items-center justify-between md:justify-end gap-3 min-h-8">
-    {buyable && price !== undefined && <span data-buy class="text-sm text-neutral-700 whitespace-nowrap">¥{formatCount(price)}</span>}
+    {buyable && price !== undefined && <span data-buy class="text-sm text-neutral-700 whitespace-nowrap" title={fromYahoo ? "Yahoo!ショッピングの参考価格" : "楽天市場の参考価格"}>¥{formatCount(price)}</span>}
     <!-- 楽天とYahoo!のボタンを短いラベルで横に並べる（列が狭いため。正式名は aria-label と title に入れる）。
          Yahoo!のボタンには data-buy を付けないので、楽天の画像が読み込めずに楽天のボタンが消えても残る -->
     <div class="flex items-center gap-1.5">

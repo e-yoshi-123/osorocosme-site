@@ -6,7 +6,7 @@ import {
   getRankingNav,
   getParentOfTag,
   getCosmeticListEntry,
-  extractImageSrc,
+  productOffer,
   cosmeticSlug,
   categoryUrl,
   withBase,
@@ -32,12 +32,14 @@ const STEP = 30;
 // 各商品の表示用データ。価格・楽天とYahoo!のリンク・画像は cosmetics_list.json を正とする。
 const rows = list.map((r, i) => {
   const entry = getCosmeticListEntry(r.brand_id, r.name_id);
+  const offer = productOffer(entry, r.rakuten_image_link); // 楽天の画像が無ければYahoo!の画像・価格（115章）
   return {
     r,
     base: i + 1,
-    imageSrc: extractImageSrc(entry?.rakuten_image_link || r.rakuten_image_link) || "",
-    price: entry?.now_price,
-    link: entry?.rakuten_text_link || undefined,
+    imageSrc: offer.imageSrc,
+    price: offer.price,
+    link: offer.rakutenLink,
+    fromYahoo: offer.source === "yahoo",
     yahooLink: entry?.yahoo_text_link || undefined,
     // 「まとめ」では、その商品がどの細かいカテゴリかを添える
     subLabel: isParent ? r.tags.filter((t) => page.children.includes(t)).slice(0, 2).join("・") : undefined,
@@ -226,6 +228,7 @@ const jsonLd = [
                   videoCount={x.r.videoCount}
                   channelCount={x.r.channelCount}
                   price={x.price}
+                  fromYahoo={x.fromYahoo}
                   link={x.link}
                   yahooLink={x.yahooLink}
                   extra={x.base > MAX}
