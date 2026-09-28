@@ -9,15 +9,24 @@ import {
   productOffer,
   cosmeticSlug,
   categoryUrl,
+  RANKING_TAG_ALIAS,
   withBase,
   breadcrumbLd,
 } from "../../lib/data";
 
 export function getStaticPaths() {
-  return Array.from(getRankingPages().keys()).map((tag) => ({ params: { tag }, props: { tag } }));
+  const pages = getRankingPages();
+  return [
+    ...Array.from(pages.keys()).map((tag) => ({ params: { tag }, props: { tag, redirectTo: "" } })),
+    // 主なカテゴリに寄せた細かいカテゴリの旧URLは、寄せた先のページへ転送する（120章）
+    ...Object.entries(RANKING_TAG_ALIAS)
+      .filter(([from, to]) => !pages.has(from) && pages.has(to))
+      .map(([from, to]) => ({ params: { tag: from }, props: { tag: from, redirectTo: to } })),
+  ];
 }
 
-const { tag } = Astro.props;
+const { tag, redirectTo } = Astro.props;
+if (redirectTo) return Astro.redirect(categoryUrl(redirectTo), 301);
 const pages = getRankingPages();
 const page = pages.get(tag)!;
 const list = page.list;

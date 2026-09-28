@@ -554,6 +554,27 @@ export interface CosmeticRanking {
  * 紹介動画の合計再生回数を1倍で加える。チャンネル数を入れることで、同一インフルエンサーが
  * 何本も紹介しただけの商品より、複数の人に支持されている商品が上位に来る。 */
 let _rankingsCache: CosmeticRanking[] | null = null;
+/** ランキングで、細かく分かれたカテゴリを主なカテゴリに寄せる（@cosmeが新しく作った細かいカテゴリ。120章）。
+ * 商品ページの「カテゴリ」表示は元のまま。ランキング・一覧・特集の分類だけに使う。 */
+export const RANKING_TAG_ALIAS: Record<string, string> = {
+  リキッドルージュ: "口紅",
+  リップスティック: "口紅",
+  リキッドコンシーラー: "コンシーラー",
+  スティックコンシーラー: "コンシーラー",
+  コンシーラーパレット: "コンシーラー",
+  BBクリーム: "BB・CCクリーム",
+  CCクリーム: "BB・CCクリーム",
+  リキッドチーク: "ジェル・クリームチーク",
+  スティックアイシャドウ: "ジェル・クリームアイシャドウ",
+  拭き取り化粧水: "化粧水",
+  リキッドアイブロウ: "その他アイブロウ",
+};
+export function rankingTag(tag: string): string {
+  return RANKING_TAG_ALIAS[tag] ?? tag;
+}
+/** この品数に満たないカテゴリは、ランキングのページを作らない（一覧・サイトマップにも出さない。120章） */
+export const MIN_RANKING_ITEMS = 6;
+
 export function getCosmeticRankings(): CosmeticRanking[] {
   if (_rankingsCache) return _rankingsCache;
   const map = new Map<string, CosmeticRanking & { videos: Set<string>; channels: Set<string>; tagSet: Set<string> }>();
@@ -572,7 +593,7 @@ export function getCosmeticRankings(): CosmeticRanking[] {
         map.set(key, e);
       }
       if (!e.rakuten_image_link && c.rakuten_image_link) e.rakuten_image_link = c.rakuten_image_link;
-      c.related_tags.forEach((t) => e!.tagSet.add(t));
+      c.related_tags.forEach((t) => e!.tagSet.add(rankingTag(t)));
       if (!e.videos.has(v.key)) {
         e.videos.add(v.key);
         e.channels.add(v.channel_id);
@@ -601,19 +622,19 @@ export const RANKING_CATEGORY_GROUPS: { group: string; tags: string[] }[] = [
     tags: [
       "化粧下地", "リキッドファンデーション", "クリーム・ジェルファンデーション",
       "パウダーファンデーション", "ファンデーション", "その他ファンデーション",
-      "クッションファンデ", "CCクリーム", "BBクリーム",
-      "コンシーラー", "リキッドコンシーラー", "スティックコンシーラー", "コンシーラーパレット",
+      "クッションファンデ", "BB・CCクリーム",
+      "コンシーラー",
       "プレストパウダー", "ルースパウダー", "ハイライト", "シェーディング",
     ],
   },
   {
     group: "アイブロウ",
-    tags: ["アイブロウペンシル", "パウダーアイブロウ", "眉マスカラ", "リキッドアイブロウ", "その他アイブロウ", "アイブロウ"],
+    tags: ["アイブロウペンシル", "パウダーアイブロウ", "眉マスカラ", "その他アイブロウ", "アイブロウ"],
   },
   {
     group: "アイメイク",
     tags: [
-      "パウダーアイシャドウ", "ジェル・クリームアイシャドウ", "スティックアイシャドウ", "アイシャドウ", "アイシャドウベース",
+      "パウダーアイシャドウ", "ジェル・クリームアイシャドウ", "アイシャドウ", "アイシャドウベース",
       "リキッドアイライナー", "ジェルアイライナー", "ペンシルアイライナー", "その他アイライナー",
       "マスカラ下地・トップコート", "マスカラ", "つけまつげ", "まつげ美容液",
       "二重まぶた用グッズ", "カラコン",
@@ -622,8 +643,8 @@ export const RANKING_CATEGORY_GROUPS: { group: string; tags: string[] }[] = [
   {
     group: "チーク・リップ",
     tags: [
-      "パウダーチーク", "ジェル・クリームチーク", "リキッドチーク",
-      "リップライナー", "口紅", "リキッドルージュ", "リップスティック", "リップグロス", "リップケア・リップクリーム",
+      "パウダーチーク", "ジェル・クリームチーク",
+      "リップライナー", "口紅", "リップグロス", "リップケア・リップクリーム",
       "ポイントメイクリムーバー",
     ],
   },
@@ -636,7 +657,7 @@ export const RANKING_CATEGORY_GROUPS: { group: string; tags: string[] }[] = [
     tags: [
       "オイルクレンジング", "クレンジングバーム", "クレンジングジェル", "クレンジングクリーム", "ミルククレンジング",
       "リキッドクレンジング", "その他クレンジング", "ゴマージュ・ピーリング",
-      "ブースター・導入液", "化粧水", "ミスト状化粧水", "拭き取り化粧水", "美容液", "シートマスク・パック",
+      "ブースター・導入液", "化粧水", "ミスト状化粧水", "美容液", "シートマスク・パック",
       "乳液", "フェイスクリーム", "乳液・クリーム", "オールインワン化粧品",
       "アイケア・アイクリーム", "フェイスオイル・バーム", "日焼け止め・UVケア(顔用)",
       "洗顔ジェル", "泡洗顔", "トナーパッド",
@@ -702,7 +723,7 @@ function buildFeature(def: FeatureDef) {
   for (const v of videos) {
     for (const c of v.cosmetics || []) {
       if (!c.brand_id || !c.name_id || !c.related_tags?.length) continue;
-      const tag = c.related_tags.find((t) => CATEGORY_TAG_TO_GROUP[t]);
+      const tag = c.related_tags.map(rankingTag).find((t) => CATEGORY_TAG_TO_GROUP[t]);
       if (!tag) continue; // 大分類に属さないカテゴリ（その他）は載せない
       const key = `${c.brand_id}_${c.name_id}`;
       let e = map.get(key);
@@ -759,16 +780,16 @@ export interface RankingParent {
   tags: string[];
 }
 export const RANKING_PARENTS: RankingParent[] = [
-  { name: "ファンデーション全般", group: "ベースメイク", tags: ["リキッドファンデーション", "クリーム・ジェルファンデーション", "パウダーファンデーション", "ファンデーション", "その他ファンデーション", "クッションファンデ", "CCクリーム", "BBクリーム"] },
+  { name: "ファンデーション全般", group: "ベースメイク", tags: ["リキッドファンデーション", "クリーム・ジェルファンデーション", "パウダーファンデーション", "ファンデーション", "その他ファンデーション", "クッションファンデ", "BB・CCクリーム"] },
   { name: "フェイスパウダー全般", group: "ベースメイク", tags: ["プレストパウダー", "ルースパウダー"] },
-  { name: "アイブロウ全般", group: "アイブロウ", tags: ["アイブロウペンシル", "パウダーアイブロウ", "眉マスカラ", "リキッドアイブロウ", "その他アイブロウ", "アイブロウ"] },
-  { name: "アイシャドウ全般", group: "アイメイク", tags: ["パウダーアイシャドウ", "ジェル・クリームアイシャドウ", "スティックアイシャドウ", "アイシャドウ", "アイシャドウベース"] },
+  { name: "アイブロウ全般", group: "アイブロウ", tags: ["アイブロウペンシル", "パウダーアイブロウ", "眉マスカラ", "その他アイブロウ", "アイブロウ"] },
+  { name: "アイシャドウ全般", group: "アイメイク", tags: ["パウダーアイシャドウ", "ジェル・クリームアイシャドウ", "アイシャドウ", "アイシャドウベース"] },
   { name: "アイライナー全般", group: "アイメイク", tags: ["リキッドアイライナー", "ジェルアイライナー", "ペンシルアイライナー", "その他アイライナー"] },
   { name: "マスカラ全般", group: "アイメイク", tags: ["マスカラ", "マスカラ下地・トップコート"] },
-  { name: "チーク全般", group: "チーク・リップ", tags: ["パウダーチーク", "ジェル・クリームチーク", "リキッドチーク"] },
-  { name: "リップ全般", group: "チーク・リップ", tags: ["口紅", "リキッドルージュ", "リップスティック", "リップグロス", "リップライナー", "リップケア・リップクリーム"] },
+  { name: "チーク全般", group: "チーク・リップ", tags: ["パウダーチーク", "ジェル・クリームチーク"] },
+  { name: "リップ全般", group: "チーク・リップ", tags: ["口紅", "リップグロス", "リップライナー", "リップケア・リップクリーム"] },
   { name: "クレンジング全般", group: "スキンケア", tags: ["オイルクレンジング", "クレンジングバーム", "クレンジングジェル", "クレンジングクリーム", "ミルククレンジング", "リキッドクレンジング", "その他クレンジング"] },
-  { name: "化粧水全般", group: "スキンケア", tags: ["化粧水", "ミスト状化粧水", "拭き取り化粧水"] },
+  { name: "化粧水全般", group: "スキンケア", tags: ["化粧水", "ミスト状化粧水"] },
   { name: "乳液・クリーム全般", group: "スキンケア", tags: ["乳液", "フェイスクリーム", "乳液・クリーム"] },
 ];
 
@@ -839,6 +860,10 @@ export function getRankingNav(): { group: string; items: RankingNavItem[] }[] {
 }
 
 /** カテゴリ別ランキングのページURL（カテゴリ名は使えない文字を含まないため、日本語のまま使う）。 */
+export function hasRankingPage(tag: string): boolean {
+  return getRankingPages().has(tag);
+}
+
 export function categoryUrl(tag: string): string {
   return withBase(`/ranking/${encodeURIComponent(tag)}/`);
 }
@@ -854,8 +879,9 @@ export function getCosmeticRankingsByTag(): Map<string, CosmeticRanking[]> {
       byTag.get(t)!.push(r);
     }
   }
-  for (const list of byTag.values()) {
-    list.sort((a, b) => b.score - a.score || b.videoCount - a.videoCount || a.name.localeCompare(b.name, "ja"));
+  for (const [tag, list] of byTag) {
+    if (list.length < MIN_RANKING_ITEMS) byTag.delete(tag); // 品数の少ないカテゴリはページを作らない
+    else list.sort((a, b) => b.score - a.score || b.videoCount - a.videoCount || a.name.localeCompare(b.name, "ja"));
   }
   _byTagCache = byTag;
   return byTag;
@@ -909,10 +935,11 @@ export function getCosmeticFacts(brand_id: string, name_id: string): CosmeticFac
     channelCount: new Set(videos.map((v) => v.channel_id)).size,
     introductions,
   };
-  if (r && r.tags.length > 0) {
-    const byTag = getCosmeticRankingsByTag();
-    // 紹介コスメ数が最も多い（=代表的な）カテゴリで順位を出す
-    const mainTag = [...r.tags].sort((a, b) => byTag.get(b)!.length - byTag.get(a)!.length)[0];
+  const byTag = getCosmeticRankingsByTag();
+  const pagedTags = r ? r.tags.filter((t) => byTag.has(t)) : [];
+  if (r && pagedTags.length > 0) {
+    // 紹介コスメ数が最も多い（=代表的な）カテゴリで順位を出す（ランキングのページがあるカテゴリだけ）
+    const mainTag = [...pagedTags].sort((a, b) => byTag.get(b)!.length - byTag.get(a)!.length)[0];
     const list = byTag.get(mainTag)!;
     facts.mainTag = mainTag;
     facts.rank = list.findIndex((x) => x.brand_id === brand_id && x.name_id === name_id) + 1;
