@@ -568,6 +568,7 @@ export const RANKING_TAG_ALIAS: Record<string, string> = {
   スティックアイシャドウ: "ジェル・クリームアイシャドウ",
   拭き取り化粧水: "化粧水",
   リキッドアイブロウ: "その他アイブロウ",
+  "スリーピングマスク・パック": "シートマスク・パック",
 };
 export function rankingTag(tag: string): string {
   return RANKING_TAG_ALIAS[tag] ?? tag;
