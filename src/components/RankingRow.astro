@@ -15,13 +15,15 @@ interface Props {
   channelCount: number;
   price?: number;
   link?: string;
+  /** Yahoo!ショッピングのアフィリエイトリンク。楽天の画像の有無とは別に、あれば出す */
+  yahooLink?: string;
   /** 標準順位が表示上限を超える行（スクリプトなしでは非表示） */
   extra?: boolean;
   /** 「まとめ」ランキングで、その商品がどの細かいカテゴリか（例: リキッドファンデーション） */
   subLabel?: string;
 }
 
-const { rank, base, brand_id, brand, name_id, name, imageSrc, videoCount, channelCount, price, link, extra = false, subLabel } = Astro.props;
+const { rank, base, brand_id, brand, name_id, name, imageSrc, videoCount, channelCount, price, link, yahooLink, extra = false, subLabel } = Astro.props;
 const top = rank <= 3;
 // 画像の無い商品（＝楽天側に出品が無い・画像が消えている）は、購入できないリンクの可能性が高いので、価格・購入ボタンを出さない。
 // 画像のURLはあっても、実際に読み込めない場合は、下の onerror で価格・購入ボタンを取り除く。
@@ -34,7 +36,7 @@ const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
   data-* と rank-badge は、カテゴリページの並び替え・「もっと見る」のスクリプトが使う。
 -->
 <li
-  class:list={["ranking-row px-3 py-3 md:px-4 grid grid-cols-[auto_4.5rem_minmax(0,1fr)] md:grid-cols-[2.5rem_5.5rem_minmax(0,1fr)_10rem_10rem] gap-x-3 md:gap-x-4 gap-y-2 items-center", top ? "bg-pink-50" : "bg-white"]}
+  class:list={["ranking-row px-3 py-3 md:px-4 grid grid-cols-[auto_4.5rem_minmax(0,1fr)] md:grid-cols-[2.5rem_5.5rem_minmax(0,1fr)_10rem_12rem] gap-x-3 md:gap-x-4 gap-y-2 items-center", top ? "bg-pink-50" : "bg-white"]}
   data-base={base}
   data-videos={videoCount}
   data-channels={channelCount}
@@ -70,12 +72,23 @@ const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
   </p>
   <div class="col-span-3 md:col-span-1 flex items-center justify-between md:justify-end gap-3 min-h-8">
     {buyable && price !== undefined && <span data-buy class="text-sm text-neutral-700 whitespace-nowrap">¥{formatCount(price)}</span>}
-    {
-      buyable && link && (
-        <a data-buy href={link} target="_blank" rel="nofollow sponsored noopener" class="inline-block bg-red-600 text-white text-xs px-3 py-1.5 rounded hover:bg-red-700 whitespace-nowrap">
-          楽天市場で見る
-        </a>
-      )
-    }
+    <!-- 楽天とYahoo!のボタンを短いラベルで横に並べる（列が狭いため。正式名は aria-label と title に入れる）。
+         Yahoo!のボタンには data-buy を付けないので、楽天の画像が読み込めずに楽天のボタンが消えても残る -->
+    <div class="flex items-center gap-1.5">
+      {
+        buyable && link && (
+          <a data-buy href={link} target="_blank" rel="nofollow sponsored noopener" aria-label="楽天市場で見る" title="楽天市場で見る" class="inline-block bg-red-600 text-white text-xs px-3 py-1.5 rounded hover:bg-red-700 whitespace-nowrap">
+            楽天
+          </a>
+        )
+      }
+      {
+        yahooLink && (
+          <a href={yahooLink} target="_blank" rel="nofollow sponsored noopener" aria-label="Yahoo!ショッピングで見る" title="Yahoo!ショッピングで見る" class="inline-block bg-white text-red-600 border border-red-600 text-xs px-2.5 py-[5px] rounded hover:bg-red-50 whitespace-nowrap">
+            Yahoo!
+          </a>
+        )
+      }
+    </div>
   </div>
 </li>

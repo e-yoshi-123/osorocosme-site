@@ -25,7 +25,7 @@ const f = getFeature(slug)!;
 const others = FEATURES.filter((x) => x.slug !== slug);
 const total = f.groups.reduce((n, g) => n + g.items.length, 0);
 
-// 表示用データ。価格・楽天リンク・画像は cosmetics_list.json を正とする（ランキングページと同じ）
+// 表示用データ。価格・楽天とYahoo!のリンク・画像は cosmetics_list.json を正とする（ランキングページと同じ）
 const groups = f.groups.map((g) => ({
   group: g.group,
   rows: g.items.map((it, i) => {
@@ -36,6 +36,7 @@ const groups = f.groups.map((g) => ({
       imageSrc: extractImageSrc(entry?.rakuten_image_link) || "",
       price: entry?.now_price,
       link: entry?.rakuten_text_link || undefined,
+      yahooLink: entry?.yahoo_text_link || undefined,
       subLabel: it.tag,
     };
   }),
@@ -112,6 +113,7 @@ const jsonLd = [
                 channelCount={r.it.channelCount}
                 price={r.price}
                 link={r.link}
+                yahooLink={r.yahooLink}
                 subLabel={r.subLabel}
               />
             ))}

@@ -29,7 +29,7 @@ const INITIAL = 20; // 最初に見せる件数
 const MAX = 50; // 「もっと見る」で見せる上限
 const STEP = 30;
 
-// 各商品の表示用データ。価格・楽天リンク・画像は cosmetics_list.json を正とする。
+// 各商品の表示用データ。価格・楽天とYahoo!のリンク・画像は cosmetics_list.json を正とする。
 const rows = list.map((r, i) => {
   const entry = getCosmeticListEntry(r.brand_id, r.name_id);
   return {
@@ -38,6 +38,7 @@ const rows = list.map((r, i) => {
     imageSrc: extractImageSrc(entry?.rakuten_image_link || r.rakuten_image_link) || "",
     price: entry?.now_price,
     link: entry?.rakuten_text_link || undefined,
+    yahooLink: entry?.yahoo_text_link || undefined,
     // 「まとめ」では、その商品がどの細かいカテゴリかを添える
     subLabel: isParent ? r.tags.filter((t) => page.children.includes(t)).slice(0, 2).join("・") : undefined,
   };
@@ -205,7 +206,7 @@ const jsonLd = [
 
         <p class="text-xs text-neutral-500 mb-2">価格は楽天市場で確認した時点の参考価格です。最新の価格・在庫は楽天市場でご確認ください。</p>
         <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-          <div class="hidden md:grid grid-cols-[2.5rem_5.5rem_minmax(0,1fr)_10rem_10rem] gap-x-4 px-4 py-2 bg-neutral-50 border-b border-neutral-200 text-[11px] font-bold text-neutral-500">
+          <div class="hidden md:grid grid-cols-[2.5rem_5.5rem_minmax(0,1fr)_10rem_12rem] gap-x-4 px-4 py-2 bg-neutral-50 border-b border-neutral-200 text-[11px] font-bold text-neutral-500">
             <span class="text-center">順位</span>
             <span class="col-span-2">商品</span>
             <span>紹介実績</span>
@@ -226,6 +227,7 @@ const jsonLd = [
                   channelCount={x.r.channelCount}
                   price={x.price}
                   link={x.link}
+                  yahooLink={x.yahooLink}
                   extra={x.base > MAX}
                   subLabel={x.subLabel}
                 />
