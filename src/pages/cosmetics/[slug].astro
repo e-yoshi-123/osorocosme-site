@@ -121,17 +121,31 @@ const jsonLd = entry
             {buyable && entry.now_price !== undefined && (
               <p data-buy class="text-sm text-neutral-500 mb-3">参考価格: ¥{formatCount(entry.now_price)}{entry.price_updated && `（${formatJaDate(entry.price_updated)}時点）`}</p>
             )}
-            {buyable && entry.rakuten_text_link && (
-              <a
-                data-buy
-                href={entry.rakuten_text_link}
-                target="_blank"
-                rel="nofollow sponsored noopener"
-                class="inline-block bg-red-600 text-white text-sm px-4 py-2 rounded hover:bg-red-700"
-              >
-                楽天市場で見る
-              </a>
-            )}
+            <!-- 楽天とYahoo!ショッピングのボタンを並べる。Yahoo!は楽天の画像（buyable）とは別に、リンクがあれば出す
+                 （data-buy を付けないので、楽天の画像が読み込めずに楽天のボタンが消えても、Yahoo!のボタンは残る） -->
+            <div class="flex flex-wrap gap-2">
+              {buyable && entry.rakuten_text_link && (
+                <a
+                  data-buy
+                  href={entry.rakuten_text_link}
+                  target="_blank"
+                  rel="nofollow sponsored noopener"
+                  class="inline-block bg-red-600 text-white text-sm px-4 py-2 rounded hover:bg-red-700"
+                >
+                  楽天市場で見る
+                </a>
+              )}
+              {entry.yahoo_text_link && (
+                <a
+                  href={entry.yahoo_text_link}
+                  target="_blank"
+                  rel="nofollow sponsored noopener"
+                  class="inline-block bg-white text-red-600 border border-red-600 text-sm px-4 py-2 rounded hover:bg-red-50"
+                >
+                  Yahoo!ショッピングで見る
+                </a>
+              )}
+            </div>
           </div>
         </div>
 

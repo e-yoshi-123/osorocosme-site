@@ -60,6 +60,10 @@ export interface CosmeticListEntry {
   price_updated?: string;
   count?: number;
   rakuten_link_none?: boolean;
+  /** Yahoo!ショッピングのアフィリエイトリンク（バリューコマース経由、backend/scripts/update_yahoo_links.py が取得） */
+  yahoo_text_link?: string;
+  yahoo_image_url?: string;
+  yahoo_price?: number;
 }
 
 export interface Influencer {
@@ -119,8 +123,8 @@ const productAlias: Record<string, string> = {}; // "統合前brand_id_name_id" 
     if (target && target !== key) {
       productAlias[key] = target;
       const t = cosmeticsList[target];
-      // 統合先に無い楽天リンク・画像・価格は、統合前の商品から補う
-      for (const f of ["rakuten_image_link", "rakuten_text_link", "amazon_link", "now_price", "price_updated"] as const) {
+      // 統合先に無い楽天・Yahoo!のリンク・画像・価格は、統合前の商品から補う
+      for (const f of ["rakuten_image_link", "rakuten_text_link", "amazon_link", "now_price", "price_updated", "yahoo_text_link", "yahoo_image_url", "yahoo_price"] as const) {
         if (!t[f] && e[f]) (t as any)[f] = e[f];
       }
     } else {
