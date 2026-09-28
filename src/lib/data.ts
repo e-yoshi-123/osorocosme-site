@@ -88,7 +88,8 @@ const cosmeticsList = cosmeticsListData as unknown as Record<string, CosmeticLis
   for (const v of Object.values(videos)) {
     for (const c of v.cosmetics || []) {
       const o = overrides[`${c.brand_id}_${c.name_id}`];
-      if (o && c.related_tags && c.related_tags.length > 0) c.related_tags = [o.category];
+      // カテゴリが空欄の商品（related_tags が空）にも付ける。付けないとランキングに入らない（119章）
+      if (o) c.related_tags = [o.category];
     }
   }
   for (const [key, o] of Object.entries(overrides)) {
@@ -602,7 +603,7 @@ export const RANKING_CATEGORY_GROUPS: { group: string; tags: string[] }[] = [
       "パウダーファンデーション", "ファンデーション", "その他ファンデーション",
       "クッションファンデ", "CCクリーム", "BBクリーム",
       "コンシーラー", "リキッドコンシーラー", "スティックコンシーラー", "コンシーラーパレット",
-      "プレストパウダー", "ルースパウダー",
+      "プレストパウダー", "ルースパウダー", "ハイライト", "シェーディング",
     ],
   },
   {
