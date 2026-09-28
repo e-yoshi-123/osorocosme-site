@@ -43,17 +43,20 @@
     "group": "花王"
   },
   "brand-00030": {
-    "country": "JP"
+    "country": "JP",
+    "group": "コーセー"
   },
   "brand-00016": {
     "country": "CA",
     "group": "エスティ ローダー"
   },
   "brand-00067": {
-    "country": "JP"
+    "country": "JP",
+    "group": "エキップ"
   },
   "brand-00072": {
-    "country": "JP"
+    "country": "JP",
+    "group": "エキップ"
   },
   "brand-00013": {
     "country": "JP",
@@ -64,7 +67,8 @@
     "group": "アモーレパシフィック"
   },
   "brand-00064": {
-    "country": "JP"
+    "country": "JP",
+    "group": "アルビオン"
   },
   "brand-00426": {
     "country": "KR",
@@ -172,7 +176,7 @@
   },
   "brand-00024": {
     "country": "JP",
-    "group": "石澤研究所"
+    "group": "イミュ"
   },
   "brand-00052": {
     "country": "KR"
@@ -191,7 +195,8 @@
     "country": "KR"
   },
   "brand-00237": {
-    "country": "JP"
+    "country": "JP",
+    "group": "BCL"
   },
   "brand-00032": {
     "country": "JP",
@@ -212,10 +217,12 @@
     "country": "JP"
   },
   "brand-00053": {
-    "country": "JP"
+    "country": "JP",
+    "group": "アルビオン"
   },
   "brand-00226": {
-    "country": "KR"
+    "country": "KR",
+    "group": "APR"
   },
   "brand-00141": {
     "country": "JP"
@@ -254,7 +261,8 @@
     "country": "JP"
   },
   "brand-00112": {
-    "country": "FR"
+    "country": "FR",
+    "group": "アルビオン"
   },
   "brand-00142": {
     "country": "KR"
@@ -275,10 +283,12 @@
     "group": "伊勢半"
   },
   "brand-00056": {
-    "country": "JP"
+    "country": "JP",
+    "group": "資生堂"
   },
   "brand-00041": {
-    "country": "JP"
+    "country": "JP",
+    "group": "イミュ"
   },
   "brand-00261": {
     "country": "JP"
@@ -296,7 +306,8 @@
     "group": "花王"
   },
   "brand-00007": {
-    "country": "JP"
+    "country": "JP",
+    "group": "ダイソー"
   },
   "brand-00236": {
     "country": "JP"
@@ -366,7 +377,8 @@
     "country": "KR"
   },
   "brand-00075": {
-    "country": "KR"
+    "country": "KR",
+    "group": "グーダイグローバル"
   },
   "brand-00162": {
     "country": "KR"
@@ -405,7 +417,8 @@
     "group": "資生堂"
   },
   "brand-00500": {
-    "country": "KR"
+    "country": "KR",
+    "group": "ロート製薬"
   },
   "brand-00329": {
     "country": "KR"
@@ -414,7 +427,8 @@
     "country": "KR"
   },
   "brand-00334": {
-    "country": "JP"
+    "country": "JP",
+    "group": "資生堂"
   },
   "brand-00019": {
     "country": "JP",
@@ -452,7 +466,8 @@
     "country": "JP"
   },
   "brand-00062": {
-    "country": "JP"
+    "country": "JP",
+    "group": "キリン"
   },
   "brand-00301": {
     "country": "JP"
@@ -466,7 +481,8 @@
     "group": "花王"
   },
   "brand-00289": {
-    "country": "JP"
+    "country": "JP",
+    "group": "ロート製薬"
   },
   "brand-00396": {
     "country": "KR"
@@ -476,7 +492,8 @@
     "group": "ロート製薬"
   },
   "brand-00212": {
-    "country": "JP"
+    "country": "JP",
+    "group": "イミュ"
   },
   "brand-00160": {
     "country": "KR",
@@ -552,7 +569,8 @@
     "country": "JP"
   },
   "brand-00199": {
-    "country": "KR"
+    "country": "KR",
+    "group": "LG生活健康"
   },
   "brand-00110": {
     "country": "JP"
@@ -587,7 +605,8 @@
     "group": "ロート製薬"
   },
   "brand-00154": {
-    "country": "KR"
+    "country": "KR",
+    "group": "グーダイグローバル"
   },
   "brand-00187": {
     "country": "US",
@@ -597,13 +616,15 @@
     "country": "JP"
   },
   "brand-00204": {
-    "country": "JP"
+    "country": "JP",
+    "group": "常盤薬品工業（サナ）"
   },
   "brand-00412": {
     "country": "JP"
   },
   "brand-00255": {
-    "country": "JP"
+    "country": "JP",
+    "group": "コージー本舗"
   },
   "brand-00079": {
     "country": "FR",
@@ -628,7 +649,8 @@
     "group": "パナソニック"
   },
   "brand-00403": {
-    "country": "JP"
+    "country": "JP",
+    "group": "プレミアアンチエイジング"
   },
   "brand-00240": {
     "country": "JP"
@@ -703,7 +725,8 @@
     "group": "ロレアル"
   },
   "brand-00108": {
-    "country": "JP"
+    "country": "JP",
+    "group": "イミュ"
   },
   "brand-00061": {
     "country": "JP",
@@ -714,7 +737,8 @@
     "group": "アンファー"
   },
   "brand-00394": {
-    "country": "KR"
+    "country": "KR",
+    "group": "CJオリーブヤング"
   },
   "brand-00367": {
     "country": "JP"
@@ -745,7 +769,8 @@
     "group": "コーセー"
   },
   "brand-00263": {
-    "country": "JP"
+    "country": "JP",
+    "group": "花王"
   },
   "brand-00491": {
     "country": "KR"
@@ -783,7 +808,8 @@
     "country": "NZ"
   },
   "brand-00501": {
-    "country": "KR"
+    "country": "KR",
+    "group": "CJオリーブヤング"
   },
   "brand-00506": {
     "country": "FR"
@@ -796,7 +822,8 @@
     "group": "LVMH"
   },
   "brand-00502": {
-    "country": "US"
+    "country": "US",
+    "group": "アルビオン"
   },
   "brand-00510": {
     "country": "JP",
@@ -819,7 +846,8 @@
     "country": "JP"
   },
   "brand-00507": {
-    "country": "GB"
+    "country": "GB",
+    "group": "マリークヮント"
   },
   "brand-00285": {
     "country": "JP"
@@ -864,13 +892,16 @@
     "country": "JP"
   },
   "brand-00223": {
-    "country": "JP"
+    "country": "JP",
+    "group": "マンダム"
   },
   "brand-00369": {
-    "country": "JP"
+    "country": "JP",
+    "group": "石澤研究所"
   },
   "brand-00121": {
-    "country": "JP"
+    "country": "JP",
+    "group": "コーセー"
   },
   "brand-00461": {
     "country": "JP",
@@ -974,7 +1005,8 @@
     "country": "JP"
   },
   "brand-00096": {
-    "country": "JP"
+    "country": "JP",
+    "group": "プレミアアンチエイジング"
   },
   "brand-00193": {
     "country": "JP",
@@ -1084,5 +1116,83 @@
   "brand-00764": {
     "country": "FR",
     "group": "ロレアル"
+  },
+  "brand-00139": {
+    "group": "コーセー"
+  },
+  "brand-00150": {
+    "group": "コーセー"
+  },
+  "brand-01063": {
+    "group": "コーセー"
+  },
+  "brand-00623": {
+    "group": "資生堂"
+  },
+  "brand-01045": {
+    "group": "資生堂"
+  },
+  "brand-01171": {
+    "group": "資生堂"
+  },
+  "brand-00530": {
+    "group": "花王"
+  },
+  "brand-01097": {
+    "group": "花王"
+  },
+  "brand-01163": {
+    "group": "アルビオン"
+  },
+  "brand-00095": {
+    "group": "ロレアル"
+  },
+  "brand-00827": {
+    "group": "ロレアル"
+  },
+  "brand-01152": {
+    "group": "ロレアル"
+  },
+  "brand-01155": {
+    "group": "LVMH"
+  },
+  "brand-00963": {
+    "group": "ポーラ・オルビス"
+  },
+  "brand-01154": {
+    "group": "アモーレパシフィック"
+  },
+  "brand-01393": {
+    "group": "アモーレパシフィック"
+  },
+  "brand-01027": {
+    "group": "LG生活健康"
+  },
+  "brand-00286": {
+    "group": "BCL"
+  },
+  "brand-00550": {
+    "group": "常盤薬品工業（サナ）"
+  },
+  "brand-00602": {
+    "group": "牛乳石鹸"
+  },
+  "brand-00529": {
+    "group": "ダイソー"
+  },
+  "brand-01096": {
+    "group": "マリークヮント"
+  },
+  "brand-01016": {
+    "group": "CJオリーブヤング"
+  },
+  "brand-01144": {
+    "group": "CJオリーブヤング"
+  },
+  "brand-01394": {
+    "group": "APR"
+  },
+  "brand-01156": {
+    "group": "グーダイグローバル"
   }
 }
