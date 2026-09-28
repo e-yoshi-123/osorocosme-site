@@ -100,11 +100,17 @@ const cosmeticsList = cosmeticsListData as unknown as Record<string, CosmeticLis
  * - ブランドページ・一覧・集計は、グループ内で最も小さいbrand_id（＝先に登録された方）に1本化する（canonicalBrandId）。
  * - 商品は、統合先ブランドに同じ名前の商品があれば、その商品に寄せる（動画側の参照を書き換え、紹介数を合算する）。
  *   無いものは商品のIDをそのまま残し（URLを変えない）、表示上のブランド名だけ統合先に揃える。
- * - 統合前のURL（ブランドページ・寄せた商品のページ）は、統合先へ転送するページを出す（getAliasRedirects）。 */
+ * - 統合前のURL（ブランドページ・寄せた商品のページ）は、統合先へ転送するページを出す（getAliasRedirects）。
+ * - site_separate に挙げた派生ブランド（ポーラとホワイトショット・B.Aなど）は、照合では同じグループだが、
+ *   サイトでは統合しない（統合すると、ホワイトショットの商品が「B.A」として出るなど、ブランド名を取り違える。116章）。 */
+const equivalents = brandEquivalentsData as unknown as { groups: string[][]; site_separate?: string[] };
+const siteSeparate = new Set(equivalents.site_separate ?? []);
 const canonicalOf: Record<string, string> = {};
-for (const g of (brandEquivalentsData as unknown as { groups: string[][] }).groups) {
-  const c = [...g].sort()[0];
-  for (const id of g) canonicalOf[id] = c;
+for (const g of equivalents.groups) {
+  const merged = g.filter((id) => !siteSeparate.has(id));
+  if (merged.length < 2) continue;
+  const c = [...merged].sort()[0];
+  for (const id of merged) canonicalOf[id] = c;
 }
 
 export function canonicalBrandId(brand_id: string): string {
@@ -155,7 +161,10 @@ const productAlias: Record<string, string> = {}; // "統合前brand_id_name_id" 
 /** 統合前のURLから統合先への転送先。ブランドページと、統合先の商品に寄せた商品のページ。 */
 export function getAliasRedirects(): { brands: { from: string; to: string }[]; products: { from: string; to: string }[] } {
   return {
-    brands: Object.entries(canonicalOf).filter(([id, c]) => id !== c).map(([from, to]) => ({ from, to })),
+    // 統合先にページが無い（動画で紹介された商品が無い）ブランドは、転送ページを作らない（転送先が404になるため。116章）
+    brands: Object.entries(canonicalOf)
+      .filter(([id, c]) => id !== c && brandsWithPages().has(c))
+      .map(([from, to]) => ({ from, to })),
     products: Object.entries(productAlias).map(([from, to]) => ({
       from: from.replace("_", "-"),
       to: to.replace("_", "-"),
@@ -204,6 +213,12 @@ export interface BrandWithStats {
 }
 
 /** 掲載中の動画で1つ以上コスメが紹介されているブランドだけを、動画数・コスメ数付きで返す。 */
+let brandsWithPagesCache: Set<string> | undefined;
+/** ブランドページが作られるbrand_id（getBrandsWithVideos と同じ基準） */
+function brandsWithPages(): Set<string> {
+  return (brandsWithPagesCache ??= new Set(getBrandsWithVideos().map((b) => b.brand_id)));
+}
+
 export function getBrandsWithVideos(): BrandWithStats[] {
   const videoSets = new Map<string, Set<string>>();
   const cosmeticSets = new Map<string, Set<string>>();
