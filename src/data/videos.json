@@ -240439,7 +240439,7 @@
     "delete_flg": false,
     "processed": true,
     "skin_profile": {
-      "イエベ春": false,
+      "イエベ春": true,
       "イエベ秋": false,
       "ブルベ夏": false,
       "ブルベ冬": false,
@@ -240447,7 +240447,7 @@
       "脂性肌": false,
       "混合肌": false,
       "敏感肌": false,
-      "普通肌": false
+      "普通肌": true
     },
     "cosmetics": [
       {
