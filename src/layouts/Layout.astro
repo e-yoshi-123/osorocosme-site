@@ -67,6 +67,30 @@ const navLinks = [
         </script>
       </>
     )}
+    <!-- 商品画像が読み込めない（店が画像を差し替えて古いURLが消えた等）ときの共通の処理（135章）。
+         Yahoo!ショッピングの画像があれば差し替え、無ければ「No Image」にする。
+         自前の onerror を持つ画像（ランキング行・タイル）と、商品ページの画像（data-item-image、専用のスクリプト）は対象外。
+         画像の error はバブルしないので、キャプチャで拾う。body より前に置き、読み込み中の失敗も取りこぼさない -->
+    <script is:inline>
+      window.addEventListener("error", function (ev) {
+        var img = ev.target;
+        if (!img || img.tagName !== "IMG" || img.hasAttribute("onerror") || img.closest("[data-item-image]")) return;
+        if (!/thumbnail\.image\.rakuten\.co\.jp|item-shopping\.c\.yimg\.jp/.test(img.src)) return;
+        var box = img.closest("[data-yahoo-image]");
+        if (box && !box.hasAttribute("data-swapped")) {
+          box.setAttribute("data-swapped", "");
+          var a = document.createElement("a");
+          a.href = box.getAttribute("data-yahoo-link"); a.target = "_blank"; a.rel = "nofollow sponsored noopener";
+          var y = document.createElement("img");
+          y.src = box.getAttribute("data-yahoo-image"); y.alt = img.alt; y.loading = "lazy";
+          a.appendChild(y); box.replaceChildren(a);
+          return;
+        }
+        var s = document.createElement("span");
+        s.className = "text-neutral-300 text-xs"; s.textContent = "No Image";
+        (img.parentElement && img.parentElement.tagName === "A" && img.parentElement.children.length === 1 ? img.parentElement : img).replaceWith(s);
+      }, true);
+    </script>
   </head>
   <body class="min-h-screen bg-neutral-50 text-neutral-900 flex flex-col">
     <header class="bg-white border-b border-neutral-200 md:sticky md:top-0 z-30">

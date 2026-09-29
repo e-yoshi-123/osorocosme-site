@@ -10,13 +10,19 @@ interface Props {
 }
 
 const { brand_id, brand, name_id, name, rakutenImageHtml } = Astro.props;
-// 楽天の画像が無い商品は、Yahoo!ショッピングの画像があればそれを出す（115章）
-const entry = extractImageSrc(rakutenImageHtml) ? undefined : getCosmeticListEntry(brand_id, name_id);
-const yahooImage = entry?.yahoo_text_link && entry.yahoo_image_url ? entry : undefined;
+// 楽天の画像が無い商品は、Yahoo!ショッピングの画像があればそれを出す（115章）。
+// 楽天の画像はあっても読み込めない場合に備え、Yahoo!の画像を data-* に持たせる（Layout の共通の処理が差し替える。135章）
+const entry = getCosmeticListEntry(brand_id, name_id);
+const yahooEntry = entry?.yahoo_text_link && entry.yahoo_image_url ? entry : undefined;
+const yahooImage = extractImageSrc(rakutenImageHtml) ? undefined : yahooEntry;
 ---
 
 <div class="bg-white rounded-lg shadow-sm p-3 flex flex-col gap-2">
-  <div class="cosmetic-image-box aspect-square w-full bg-neutral-50 rounded flex items-center justify-center overflow-hidden">
+  <div
+    class="cosmetic-image-box aspect-square w-full bg-neutral-50 rounded flex items-center justify-center overflow-hidden"
+    data-yahoo-image={rakutenImageHtml ? yahooEntry?.yahoo_image_url : undefined}
+    data-yahoo-link={rakutenImageHtml ? yahooEntry?.yahoo_text_link : undefined}
+  >
     {
       rakutenImageHtml ? (
         <Fragment set:html={rakutenImageHtml} />
