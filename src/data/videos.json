@@ -104262,7 +104262,7 @@
         "skin_concern": ""
       }
     ],
-    "delete_flg": false,
+    "delete_flg": true,
     "description": "間違えてる部分もあるかもしれないし、そんな使い方？？って\n思う方もいるかもしれませんが、温かいコメントお待ちしております❤️\n\n【YouTubeお問合せ窓口について】\n■oc.info@hq.cri....",
     "gas_edit": false,
     "processed": true,
@@ -104293,7 +104293,8 @@
     "url": "https://www.youtube.com/watch?v=l47gV7X2ZmI",
     "video_id": "l47gV7X2ZmI",
     "view_count": "60877",
-    "duration": "PT10M40S"
+    "duration": "PT10M40S",
+    "hidden_reason": "login_required"
   },
   "-OIsbAVQS4rsgMQDHbiy": {
     "channel_icon": "https://yt3.ggpht.com/LbGTZK0ZvNBGXV9lqpF7ZSoqZdwzek6jbqL2M2NJHfhGLojwIpCzjPWrO7KijDoqxtqzPM-idw=s88-c-k-c0x00ffffff-no-rj",
