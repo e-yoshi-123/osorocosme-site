@@ -71949,6 +71949,38 @@
           "オレンジ味のあるベージュで使いやすい"
         ],
         "now_price": 770
+      },
+      {
+        "brand_id": "brand-01454",
+        "brand": "JOOCYEE",
+        "name_id": "name-00019",
+        "name": "SILVER RIBBON ニュアンスブラッシャー",
+        "related_tags": [
+          "パウダーチーク"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
+        "amazon_link": "",
+        "mentions": [
+          "発色が控えめで可愛いチーク、綺麗な血色感"
+        ]
+      },
+      {
+        "brand_id": "brand-01454",
+        "brand": "JOOCYEE",
+        "name_id": "name-00036",
+        "name": "SILVER RIBBON ダイアモンドハイライト",
+        "related_tags": [
+          "ハイライト"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
+        "amazon_link": "",
+        "mentions": [
+          "メタリックなピンクの輝きのハイライター"
+        ]
       }
     ],
     "delete_flg": false,
@@ -199660,6 +199692,22 @@
           "清涼感のある付け心地でふっくらした唇に、蓋に鏡付き"
         ],
         "now_price": 4422
+      },
+      {
+        "brand_id": "brand-00059",
+        "brand": "ジルスチュアート",
+        "name_id": "name-00593",
+        "name": "ドロージープリンセス コレクション",
+        "related_tags": [
+          "メイクアップキット・パレット"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
+        "amazon_link": "",
+        "mentions": [
+          "夢見るプリンセスがテーマのクリスマスコフレ、枕のようなポーチ付き"
+        ]
       }
     ]
   },
@@ -200659,6 +200707,70 @@
           "アイシャドウとデューイーメルトリップカラーのセット、争奪戦になりそう"
         ],
         "now_price": 10900
+      },
+      {
+        "brand_id": "brand-00059",
+        "brand": "ジルスチュアート",
+        "name_id": "name-00589",
+        "name": "ネクターピーチ オードトワレ",
+        "related_tags": [
+          "香水・フレグランス(レディース・ウィメンズ)"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
+        "amazon_link": "",
+        "mentions": [
+          "限定のピーチの香り"
+        ]
+      },
+      {
+        "brand_id": "brand-00059",
+        "brand": "ジルスチュアート",
+        "name_id": "name-00590",
+        "name": "ネクターピーチ ハンドクリーム ディープモイスチュア",
+        "related_tags": [
+          "ハンドクリーム・ケア"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
+        "amazon_link": "",
+        "mentions": [
+          "美容カプセル入りのジャータイプ、ギフトにぴったり"
+        ]
+      },
+      {
+        "brand_id": "brand-00059",
+        "brand": "ジルスチュアート",
+        "name_id": "name-00591",
+        "name": "ネクターピーチ ボディミルク",
+        "related_tags": [
+          "ボディローション・ミルク"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
+        "amazon_link": "",
+        "mentions": [
+          "ピーチの香り"
+        ]
+      },
+      {
+        "brand_id": "brand-00059",
+        "brand": "ジルスチュアート",
+        "name_id": "name-00592",
+        "name": "ネクターピーチ ヘアミルク",
+        "related_tags": [
+          "アウトバストリートメント"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
+        "amazon_link": "",
+        "mentions": [
+          "限定品"
+        ]
       }
     ]
   },
