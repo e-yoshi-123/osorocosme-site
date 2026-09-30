@@ -111,9 +111,12 @@ const jsonLd = video
           <span class="text-sm">{video.channel_title}</span>
         </a>
 
-        <div class="flex gap-4 text-sm text-neutral-500 mb-3">
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-neutral-500 mb-3">
           <span>{new Date(video.published_at).toLocaleDateString("ja-JP")}</span>
           <span>再生 {formatCount(video.view_count)}</span>
+          {/* 投稿者のチャンネルへ送る導線（181章） */}
+          <a href={`https://www.youtube.com/watch?v=${video.video_id}`} target="_blank" rel="noopener" class="inline-flex items-center min-h-8 px-3 rounded-full border border-neutral-300 text-xs font-bold text-neutral-700 hover:bg-neutral-100">YouTubeで見る</a>
+          <a href={`https://www.youtube.com/channel/${video.channel_id}`} target="_blank" rel="noopener" class="inline-flex items-center min-h-8 px-3 rounded-full border border-neutral-300 text-xs font-bold text-neutral-700 hover:bg-neutral-100">チャンネルを見る</a>
         </div>
         <ShareButtons text={`${video.channel_title}「${video.title}」で紹介されたコスメ`} class="mb-6" />
 
