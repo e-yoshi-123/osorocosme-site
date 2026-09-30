@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import ShareButtons from "../../components/ShareButtons.astro";
 import CosmeticCard from "../../components/CosmeticCard.astro";
 import VideoCard from "../../components/VideoCard.astro";
 import {
@@ -110,10 +111,11 @@ const jsonLd = video
           <span class="text-sm">{video.channel_title}</span>
         </a>
 
-        <div class="flex gap-4 text-sm text-neutral-500 mb-6">
+        <div class="flex gap-4 text-sm text-neutral-500 mb-3">
           <span>{new Date(video.published_at).toLocaleDateString("ja-JP")}</span>
           <span>再生 {formatCount(video.view_count)}</span>
         </div>
+        <ShareButtons text={`${video.channel_title}「${video.title}」で紹介されたコスメ`} class="mb-6" />
 
         <p class="text-sm text-neutral-600 leading-relaxed mb-6">{overview}</p>
 

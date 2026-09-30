@@ -1,0 +1,70 @@
+---
+// SNSへのシェアボタン（176章）。外部のスクリプト（各社の公式ウィジェット）は読み込まず、共有用のURLへのリンクだけで作る（表示を重くしない）。
+// 「リンクをコピー」と「その他」（端末の共有メニュー。対応する端末だけ表示）は下のスクリプトで動かす。
+// シェアの操作はGA4の推奨イベント share（method＝共有先）で記録する。
+interface Props {
+  text: string;
+  label?: string;
+  class?: string;
+}
+const { text, label = "シェア", class: className } = Astro.props;
+const url = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.url.href;
+const t = encodeURIComponent(text);
+const u = encodeURIComponent(url);
+const links = [
+  { method: "x", name: "X", href: `https://x.com/intent/tweet?text=${t}&url=${u}`, cls: "bg-neutral-900 text-white hover:bg-neutral-700 border-neutral-900" },
+  { method: "line", name: "LINE", href: `https://social-plugins.line.me/lineit/share?url=${u}`, cls: "bg-[#06C755] text-white hover:bg-[#05b34c] border-[#06C755]" },
+  { method: "threads", name: "Threads", href: `https://www.threads.com/intent/post?text=${t}&url=${u}`, cls: "bg-white text-neutral-900 hover:bg-neutral-100 border-neutral-300" },
+];
+const btn = "inline-flex items-center justify-center min-h-8 px-3 rounded-full border text-xs font-bold whitespace-nowrap";
+---
+
+<div data-share data-url={url} data-text={text} class:list={["flex flex-wrap items-center gap-1.5", className]}>
+  <span class="text-xs text-neutral-500 mr-0.5">{label}</span>
+  {links.map((l) => (
+    <a href={l.href} target="_blank" rel="noopener" data-share-method={l.method} class:list={[btn, l.cls]}>{l.name}</a>
+  ))}
+  <button type="button" data-share-copy class:list={[btn, "bg-white text-neutral-700 hover:bg-neutral-100 border-neutral-300 font-normal"]}>リンクをコピー</button>
+  <button type="button" data-share-native hidden class:list={[btn, "bg-white text-neutral-700 hover:bg-neutral-100 border-neutral-300 font-normal"]}>その他</button>
+</div>
+
+<script is:inline>
+  (function () {
+    if (window.__shareInit) return;
+    window.__shareInit = true;
+    function track(method, url) {
+      if (typeof window.gtag === "function") window.gtag("event", "share", { method: method, item_id: url });
+    }
+    function init() {
+      document.querySelectorAll("[data-share]").forEach(function (box) {
+        var url = box.getAttribute("data-url");
+        var text = box.getAttribute("data-text");
+        box.querySelectorAll("[data-share-method]").forEach(function (a) {
+          a.addEventListener("click", function () { track(a.getAttribute("data-share-method"), url); });
+        });
+        var copy = box.querySelector("[data-share-copy]");
+        copy.addEventListener("click", function () {
+          var done = function () {
+            copy.textContent = "コピーしました";
+            setTimeout(function () { copy.textContent = "リンクをコピー"; }, 2000);
+            track("copy", url);
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(done, function () { window.prompt("このURLをコピーしてください", url); });
+          } else {
+            window.prompt("このURLをコピーしてください", url);
+          }
+        });
+        var native = box.querySelector("[data-share-native]");
+        if (navigator.share) {
+          native.hidden = false;
+          native.addEventListener("click", function () {
+            navigator.share({ title: text, url: url }).then(function () { track("native", url); }, function () {});
+          });
+        }
+      });
+    }
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+    else init();
+  })();
+</script>

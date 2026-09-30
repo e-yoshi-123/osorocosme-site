@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import ShareButtons from "../../components/ShareButtons.astro";
 import RankingRow from "../../components/RankingRow.astro";
 import InfluencerLinks from "../../components/InfluencerLinks.astro";
 import {
@@ -174,6 +175,7 @@ const jsonLd = [
             {total}品中、上位{shownMax}位までを紹介しています。YouTubeのコスメ紹介動画での人気スコア順です。
             {isParent && "細かいカテゴリの商品をまとめて、同じ基準で並べています。"}
           </p>
+          <ShareButtons text={`YouTuberが紹介している${tag}の人気ランキング`} class="mt-3" />
         </div>
         {
           isParent && (
@@ -280,6 +282,8 @@ const jsonLd = [
           </section>
         )
       }
+
+      <ShareButtons text={`YouTuberが紹介している${tag}の人気ランキング`} label="このランキングをシェア" class="mb-10" />
 
       <InfluencerLinks title={`${tag}をよく紹介しているインフルエンサー`} items={topInfluencers} unit={`${tag}`} />
 

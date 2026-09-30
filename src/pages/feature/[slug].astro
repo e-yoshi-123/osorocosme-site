@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import ShareButtons from "../../components/ShareButtons.astro";
 import RankingRow from "../../components/RankingRow.astro";
 import VideoCard from "../../components/VideoCard.astro";
 import {
@@ -86,6 +87,7 @@ const jsonLd = [
 
   <h1 class="text-xl font-bold mb-2">{f.def.name}動画で人気のコスメ</h1>
   <p class="text-sm text-neutral-700 mb-3">{f.def.lead}</p>
+  <ShareButtons text={`${f.def.name}動画で人気のコスメ`} class="mb-4" />
 
   <div class="bg-white rounded-lg shadow-sm p-4 mb-8 text-xs text-neutral-600 leading-relaxed">
     <p class="font-bold text-neutral-800 mb-1">この特集の集計方法</p>
@@ -147,6 +149,8 @@ const jsonLd = [
       {f.sample.map((v) => <VideoCard video={v} />)}
     </div>
   </section>
+
+  <ShareButtons text={`${f.def.name}動画で人気のコスメ`} label="この特集をシェア" class="mb-10" />
 
   <p class="text-sm">
     {

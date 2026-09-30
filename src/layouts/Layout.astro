@@ -16,7 +16,18 @@ const SITE_NAME = "OsoroCosme";
 const DEFAULT_DESCRIPTION =
   "YouTubeのコスメ紹介動画から、誰がいつどのコスメを使っているかを集めたデータベース。カテゴリ別ランキング、ブランド、インフルエンサー別の使用コスメ遍歴を確認できます。";
 const { title, description = DEFAULT_DESCRIPTION, image, ogType = "website", noindex = false, jsonLd = [] } = Astro.props;
-const ogImage = image ?? (Astro.site ? new URL("/og-default.png", Astro.site).href : undefined);
+const ogImage = image ? largerOgImage(image) : Astro.site ? new URL("/og-default.png", Astro.site).href : undefined;
+// SNSのカード（176章）：商品画像・チャンネルアイコンは正方形なので、横長の大きいカード（summary_large_image）だと上下が切れる。
+// 正方形の画像は summary（小さい正方形のカード）、動画のサムネイルと既定の画像（1200×630）は大きいカードにする
+const twitterCard = !image || ogType === "video.other" ? "summary_large_image" : "summary";
+
+// ページで表示している小さい画像のURLを、SNSのカード用に大きいサイズへ置き換える（いずれも同じ画像の別サイズで、存在を確認済み）
+function largerOgImage(src: string): string {
+  return src
+    .replace(/(thumbnail\.image\.rakuten\.co\.jp\/.*[?&]_ex=)\d+x\d+/, (_, head) => `${head}500x500`) // 楽天：240×240 → 500×500（楽天の上限）
+    .replace(/(i\.ytimg\.com\/vi\/[^/]+\/)mqdefault\.jpg/, "$1hqdefault.jpg") // YouTube：320×180 → 480×360
+    .replace(/(yt3\.ggpht\.com\/[^=]+=)s\d+-/, "$1s400-"); // チャンネルアイコン：88 → 400
+}
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
 
 const navLinks = [
@@ -52,7 +63,7 @@ const navLinks = [
     <meta property="og:locale" content="ja_JP" />
     {canonical && <meta property="og:url" content={canonical} />}
     {ogImage && <meta property="og:image" content={ogImage} />}
-    <meta name="twitter:card" content={ogImage ? "summary_large_image" : "summary"} />
+    <meta name="twitter:card" content={twitterCard} />
     {ogImage && <meta name="twitter:image" content={ogImage} />}
     {jsonLd.map((ld) => <script type="application/ld+json" set:html={JSON.stringify(ld)} />)}
     {/* Googleアナリティクス4。開発中の閲覧を数えないよう、本番ビルドのときだけ出す。外部リンク（楽天など）のクリックは拡張計測機能で自動記録される */}

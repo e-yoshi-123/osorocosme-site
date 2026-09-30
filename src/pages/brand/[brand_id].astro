@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import ShareButtons from "../../components/ShareButtons.astro";
 import CosmeticCard from "../../components/CosmeticCard.astro";
 import { getBrandsWithVideos, getAliasRedirects, getBrandName, getCosmeticsForBrand, breadcrumbLd, getBrandMeta, getBrandGroups, getBrandCosmeticsByCategory, getBrandTopCosmetics, COUNTRY_NAMES, withBase, cosmeticSlug } from "../../lib/data";
 
@@ -59,6 +60,7 @@ const jsonLd = [
 <Layout title={`${brandName}の人気コスメ・紹介動画`} description={description} image={ogImage} jsonLd={jsonLd}>
   <h1 class="text-xl font-bold mb-2">{brandName}</h1>
   <p class="text-sm text-neutral-500 mb-3">{description}</p>
+  <ShareButtons text={`${brandName}の人気コスメ・YouTubeの紹介動画`} class="mb-4" />
   {
     sisters.length > 0 && (
       <p class="text-sm mb-6">
