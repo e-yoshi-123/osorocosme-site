@@ -8,6 +8,7 @@ import {
   canonicalBrandId,
   getCosmeticListEntry,
   getVideosUsingCosmetic,
+  COSMETIC_INDEX_MIN_VIDEOS,
   getCoMentionedCosmetics,
   getCategoryTop,
   getBrandTopCosmetics,
@@ -44,6 +45,7 @@ if (redirectTo) return Astro.redirect(withBase(`/cosmetics/${redirectTo}`), 301)
 // 不安定な実装だったため、単一の正規ソースに統一）
 const entry = getCosmeticListEntry(brand_id, name_id);
 const videosUsing = sortByPublishedDesc(getVideosUsingCosmetic(brand_id, name_id));
+const noindex = videosUsing.length < COSMETIC_INDEX_MIN_VIDEOS;
 
 const facts = getCosmeticFacts(brand_id, name_id);
 // 画像の無い商品（＝楽天側に出品が無い・画像が消えている）は、購入できないリンクの可能性が高いので、価格・購入ボタンを出さない
@@ -109,7 +111,7 @@ const jsonLd = entry
   : [];
 ---
 
-<Layout title={entry ? `${entry.brand} ${entry.name}の紹介動画・使っている人` : "商品詳細"} description={description} image={imageSrc} jsonLd={jsonLd}>
+<Layout title={entry ? `${entry.brand} ${entry.name}の紹介動画・使っている人` : "商品詳細"} description={description} image={imageSrc} jsonLd={jsonLd} noindex={noindex}>
   {
     !entry ? (
       <p class="text-neutral-400">商品情報が見つかりませんでした。</p>

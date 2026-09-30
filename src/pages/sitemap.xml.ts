@@ -8,6 +8,7 @@ import {
   getRankingPages,
   FEATURES,
   getVideosUsingCosmetic,
+  COSMETIC_INDEX_MIN_VIDEOS,
   getVideosByChannel,
   sortByPublishedDesc,
   cosmeticSlug,
@@ -40,7 +41,11 @@ export const GET: APIRoute = ({ site }) => {
     { path: "/influencer-list", lastmod: siteNewest },
     { path: "/video-list", lastmod: siteNewest },
     ...getBrandsWithVideos().map((b) => ({ path: `/brand/${b.brand_id}`, lastmod: brandNewest.get(b.brand_id) })),
-    ...getUsedCosmeticKeys().map((k) => ({ path: `/cosmetics/${cosmeticSlug(k.brand_id, k.name_id)}`, lastmod: newest(getVideosUsingCosmetic(k.brand_id, k.name_id)) })),
+    ...getUsedCosmeticKeys().flatMap((k) => {
+      const using = getVideosUsingCosmetic(k.brand_id, k.name_id);
+      if (using.length < COSMETIC_INDEX_MIN_VIDEOS) return []; // noindex のページは載せない
+      return [{ path: `/cosmetics/${cosmeticSlug(k.brand_id, k.name_id)}`, lastmod: newest(using) }];
+    }),
     ...getInfluencerRanking().map((i) => ({ path: `/influencer/${i.channel_id}`, lastmod: newest(getVideosByChannel(i.channel_id)) })),
     ...videos.map((v) => ({ path: `/video/${v.key}`, lastmod: day(v.published_at) })),
   ];

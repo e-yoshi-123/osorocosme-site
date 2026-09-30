@@ -279,6 +279,10 @@ export function getUsedCosmeticKeys(): { brand_id: string; name_id: string }[] {
   return Array.from(map.values());
 }
 
+// 紹介動画がこの本数に満たない商品ページは noindex にし、サイトマップにも載せない。
+// 「検出 - インデックス未登録」が4千件余りあり、クロールを紹介の多いページ・人・ランキングに集めるため（履歴171章）
+export const COSMETIC_INDEX_MIN_VIDEOS = 2;
+
 export function getVideosUsingCosmetic(brand_id: string, name_id: string): VideoEntry[] {
   return getVisibleVideos().filter((v) =>
     (v.cosmetics || []).some((c) => c.brand_id === brand_id && c.name_id === name_id)
@@ -342,6 +346,57 @@ export function getInfluencerByChannelId(channel_id: string): Influencer | undef
 
 export function getVideosByChannel(channel_id: string): VideoEntry[] {
   return getVisibleVideos().filter((v) => v.channel_id === channel_id);
+}
+
+// チャンネルごとの紹介コスメ（brand_id_name_id）の集合。人どうし・カテゴリと人をつなぐ内部リンクに使う（履歴171章）
+let _channelCosmetics: Map<string, { inf: Influencer; keys: Set<string> }> | undefined;
+function getChannelCosmetics(): Map<string, { inf: Influencer; keys: Set<string> }> {
+  if (_channelCosmetics) return _channelCosmetics;
+  const map = new Map<string, { inf: Influencer; keys: Set<string> }>();
+  for (const v of getVisibleVideos()) {
+    if (!v.channel_id) continue;
+    let e = map.get(v.channel_id);
+    if (!e) {
+      e = { inf: { channel_id: v.channel_id, channel_title: v.channel_title, channel_icon: v.channel_icon }, keys: new Set() };
+      map.set(v.channel_id, e);
+    }
+    for (const c of v.cosmetics || []) if (c.brand_id && c.name_id) e.keys.add(`${c.brand_id}_${c.name_id}`);
+  }
+  _channelCosmetics = map;
+  return map;
+}
+
+export interface InfluencerMatch extends Influencer {
+  count: number; // 共通の（またはそのカテゴリの）紹介コスメ数
+}
+
+/** 紹介コスメが近いインフルエンサー。共通の紹介コスメ数が多い順（同数なら紹介コスメが少ない＝好みが近い人を先に）。 */
+export function getSimilarInfluencers(channel_id: string, limit = 6, minCommon = 3): InfluencerMatch[] {
+  const all = getChannelCosmetics();
+  const mine = all.get(channel_id)?.keys;
+  if (!mine || mine.size === 0) return [];
+  const result: (InfluencerMatch & { size: number })[] = [];
+  for (const [id, e] of all) {
+    if (id === channel_id) continue;
+    let n = 0;
+    for (const k of e.keys) if (mine.has(k)) n++;
+    if (n >= minCommon) result.push({ ...e.inf, count: n, size: e.keys.size });
+  }
+  return result
+    .sort((a, b) => b.count - a.count || a.size - b.size)
+    .slice(0, limit)
+    .map(({ size: _size, ...r }) => r);
+}
+
+/** 指定したコスメ群（ランキングのカテゴリ）を多く紹介しているインフルエンサー。 */
+export function getTopInfluencersForCosmetics(keys: Set<string>, limit = 8, minCount = 2): InfluencerMatch[] {
+  const result: InfluencerMatch[] = [];
+  for (const e of getChannelCosmetics().values()) {
+    let n = 0;
+    for (const k of e.keys) if (keys.has(k)) n++;
+    if (n >= minCount) result.push({ ...e.inf, count: n });
+  }
+  return result.sort((a, b) => b.count - a.count).slice(0, limit);
 }
 
 export interface InfluencerRanking extends Influencer {

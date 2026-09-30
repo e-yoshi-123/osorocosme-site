@@ -1,8 +1,10 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import RankingRow from "../../components/RankingRow.astro";
+import InfluencerLinks from "../../components/InfluencerLinks.astro";
 import {
   getRankingPages,
+  getTopInfluencersForCosmetics,
   getRankingNav,
   getParentOfTag,
   getCosmeticListEntry,
@@ -65,6 +67,9 @@ const description =
   (top3.length >= 3 ? `、2位・3位は${top3[1]}、${top3[2]}` : "") +
   "です。";
 const topImage = rows.find((x) => x.imageSrc)?.imageSrc;
+// このカテゴリをよく紹介している人・上位3品の要約（人のページへの内部リンクと、検索での説明文。履歴171章）
+const topInfluencers = getTopInfluencersForCosmetics(new Set(list.map((r) => `${r.brand_id}_${r.name_id}`)));
+const summary = list.slice(0, 3).map((r, i) => ({ rank: i + 1, r }));
 const crumbs = [
   { name: "ホーム", path: "/" },
   { name: "ランキング", path: "/ranking/" },
@@ -88,7 +93,7 @@ const jsonLd = [
 ];
 ---
 
-<Layout title={`${tag}の人気コスメランキング TOP${shownMax}`} description={description} image={topImage} jsonLd={jsonLd}>
+<Layout title={`${tag}のおすすめ人気ランキング TOP${shownMax}｜YouTuberの紹介数順`} description={description} image={topImage} jsonLd={jsonLd}>
   <nav class="text-xs text-neutral-500 mb-4" aria-label="パンくず">
     <a href={withBase("/")} class="hover:text-pink-600">ホーム</a> ›
     <a href={withBase("/ranking/")} class="hover:text-pink-600">ランキング</a> ›
@@ -164,7 +169,7 @@ const jsonLd = [
       <header class="bg-white rounded-lg shadow-sm mb-6 overflow-hidden">
         <div class="p-4 md:p-5">
           <p class="text-xs font-bold text-pink-600 mb-1">{isParent ? "まとめランキング" : "カテゴリ別ランキング"}</p>
-          <h1 class="text-xl md:text-2xl font-bold">{tag} 人気ランキング</h1>
+          <h1 class="text-xl md:text-2xl font-bold">{tag} おすすめ人気ランキング</h1>
           <p class="text-xs text-neutral-500 mt-2">
             {total}品中、上位{shownMax}位までを紹介しています。YouTubeのコスメ紹介動画での人気スコア順です。
             {isParent && "細かいカテゴリの商品をまとめて、同じ基準で並べています。"}
@@ -255,6 +260,28 @@ const jsonLd = [
           </p>
         </div>
       </section>
+
+      {
+        summary.length > 0 && (
+          <section class="mt-10 mb-12 bg-white rounded-lg shadow-sm p-4 md:p-5 text-sm leading-relaxed">
+            <h2 class="font-bold mb-2">YouTubeで人気の{tag}は？</h2>
+            <p class="text-neutral-700 mb-2">
+              コスメ紹介動画での人気スコアでは、{tag}（{total}品）の1位は{summary[0].r.brand}「{summary[0].r.name}」です。
+            </p>
+            <ol class="space-y-1 text-neutral-700">
+              {summary.map(({ rank, r }) => (
+                <li>
+                  {rank}位：
+                  <a href={withBase(`/cosmetics/${cosmeticSlug(r.brand_id, r.name_id)}`)} class="text-pink-600 hover:underline">{r.brand}「{r.name}」</a>
+                  <span class="text-neutral-500">（{r.channelCount}人が{r.videoCount}本の動画で紹介）</span>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )
+      }
+
+      <InfluencerLinks title={`${tag}をよく紹介しているインフルエンサー`} items={topInfluencers} unit={`${tag}`} />
 
       <p class="mt-8 text-sm">
         <a href={withBase("/ranking/")} class="text-pink-600 hover:underline">ほかのカテゴリのランキングを見る →</a>

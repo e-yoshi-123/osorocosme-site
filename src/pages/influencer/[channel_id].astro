@@ -2,10 +2,12 @@
 import Layout from "../../layouts/Layout.astro";
 import VideoCard from "../../components/VideoCard.astro";
 import CosmeticCard from "../../components/CosmeticCard.astro";
+import InfluencerLinks from "../../components/InfluencerLinks.astro";
 import {
   getAllInfluencers,
   getInfluencerByChannelId,
   getVideosByChannel,
+  getSimilarInfluencers,
   sortByPublishedDesc,
   groupTagsByCategory,
   withBase,
@@ -20,6 +22,7 @@ export function getStaticPaths() {
 const { channel_id } = Astro.params;
 const influencer = getInfluencerByChannelId(channel_id!);
 const videos = sortByPublishedDesc(getVideosByChannel(channel_id!));
+const similar = getSimilarInfluencers(channel_id!);
 
 // 使用コスメ遍歴を動画（投稿日）単位のタイムラインにする。動画は投稿日降順。
 const timeline = videos
@@ -140,7 +143,7 @@ const jsonLd = influencer
           </section>
         )}
 
-        <section>
+        <section class="mb-12">
           <h2 class="font-bold mb-3">動画一覧（{videos.length}件）</h2>
           <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {videos.map((v) => (
@@ -148,6 +151,8 @@ const jsonLd = influencer
             ))}
           </div>
         </section>
+
+        <InfluencerLinks title={`${influencer.channel_title}と同じコスメを使っている人`} items={similar} unit="共通のコスメ" />
       </>
     )
   }
