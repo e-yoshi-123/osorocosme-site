@@ -74655,18 +74655,56 @@
     "check_status": true,
     "cosmetics": [
       {
-        "amazon_link": "",
-        "brand": "エンビロン",
         "brand_id": "brand-00355",
-        "name": "C−ブーストクリーム",
+        "brand": "エンビロン",
         "name_id": "name-00018",
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcreidea-coms%2F10002546%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcreidea-coms%2Fi%2F10002576%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/creidea-coms/cabinet/cosme/09681884/4562202601660.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"エンビロン C−ブーストクリーム\" title=\"エンビロン C−ブーストクリーム\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcreidea-coms%2F10002546%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcreidea-coms%2Fi%2F10002576%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "name": "C−ブーストクリーム",
         "related_tags": [
           "美容液"
         ],
         "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcreidea-coms%2F10002546%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcreidea-coms%2Fi%2F10002576%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/creidea-coms/cabinet/cosme/09681884/4562202601660.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"エンビロン C−ブーストクリーム\" title=\"エンビロン C−ブーストクリーム\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcreidea-coms%2F10002546%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcreidea-coms%2Fi%2F10002576%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "美容機器の前につける美容液。買うときに一緒に使うよう勧められた"
+        ],
         "now_price": 6780
+      },
+      {
+        "brand_id": "brand-00355",
+        "brand": "エンビロン",
+        "name_id": "name-00003",
+        "name": "モイスチャークリーム4",
+        "related_tags": [
+          "フェイスクリーム"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00tx7oh.ftdz4001.g00tx7oh.ftdz5994/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fch2o-ysfactory%2F10000285%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fch2o-ysfactory%2Fi%2F10000285%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/ch2o-ysfactory/cabinet/compass1673267562.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"エンビロン モイスチャークリーム4\" title=\"エンビロン モイスチャークリーム4\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00tx7oh.ftdz4001.g00tx7oh.ftdz5994/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fch2o-ysfactory%2F10000285%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fch2o-ysfactory%2Fi%2F10000285%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "ビタミンAを1から4へ段階的に肌を慣らし、今はレベル4。使えば使うほど肌が強くなる",
+          "2年ほどこのシリーズ1本で使っている"
+        ],
+        "now_price": 10610
+      },
+      {
+        "brand_id": "brand-00460",
+        "brand": "soaddicted",
+        "name_id": "name-00001",
+        "name": "ラッシュアディクト アイラッシュコンディショニングセラム",
+        "related_tags": [
+          "まつげ美容液"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsoaddicted%2Flashaddict-05%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fsoaddicted%2Fi%2F10000005%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/soaddicted/cabinet/lash/lash-theme202510.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"soaddicted ラッシュアディクト アイラッシュコンディショニングセラム\" title=\"soaddicted ラッシュアディクト アイラッシュコンディショニングセラム\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsoaddicted%2Flashaddict-05%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fsoaddicted%2Fi%2F10000005%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "本当に伸びる。下まつ毛がめっちゃ伸び、最初は少し痒かったが大丈夫になった"
+        ],
+        "now_price": 11000
       }
     ],
     "delete_flg": false,
@@ -74677,13 +74715,13 @@
     "skin_profile": {
       "イエベ春": false,
       "イエベ秋": false,
-      "ブルベ冬": false,
       "ブルベ夏": false,
+      "ブルベ冬": false,
       "乾燥肌": false,
-      "敏感肌": false,
-      "普通肌": false,
+      "脂性肌": false,
       "混合肌": false,
-      "脂性肌": false
+      "敏感肌": false,
+      "普通肌": false
     },
     "subscriber_count": "1710000",
     "summary": "ヘラヘラ三銃士さんは、非常に洗練されたスキンケアを実践していることがトランスクリプトから伺えます。彼女の肌は美しく、肌質を改善するために多くの時間と労力を注いでいる様子が伝わってきます。彼女は、自身の肌の状態に合わせた製品を選び、しっかりとした基礎を築くことに重きを置いているようです。\n\nまず、ヘラヘラ三銃士さんの肌タイプについてですが、彼女はニキビ肌や乾燥肌といったトラブルを抱えていた時期があったようです。しかし、エンビロンのクレンジングや洗顔などの基礎的なケアを重視し、ペーハーを正常化するためのミストウォーターも積極的に使用しています。このような導入液は、肌の浸透性を高めるだけでなく、状態を整える役割も果たすとのことです。\n\nさらに、彼女はビタミンAを豊富に含むエンビロンの化粧水を使用しており、肌を慣らしながらレベルを上げていくことで、肌の強化を図っているようです。ビタミンAは皮膚の健康にとって重要な成分であり、シミやニキビを予防する効果も期待できるため、彼女がこの成分を選んでいるのは非常に理にかなっています。\n\nまた、ヘラヘラ三銃士さんは、スキンケアの一環として定期的にクリニックに通い、ダーマペンやピコトーニングなどの施術を受けることも取り入れています。これにより、肌の再生を促進し、美しさをキープしているのです。また、食事や生活習慣にも気を遣い、特にグルテンや動物性食品の摂取に関しては注意を払っているようです。\n\nヘラヘラ三銃士さんのスキンケアは、彼女自身の肌状態を理解し、効果的な製品や施術を選択することで成り立っています。彼女のように、自分の肌に合ったケアを行うことは、肌の健康を維持するために非常に重要です。",
@@ -78758,32 +78796,21 @@
     "check_status": true,
     "cosmetics": [
       {
-        "amazon_link": "",
-        "brand": "キャンメイク",
         "brand_id": "brand-00002",
-        "name": "メタルックマスカラ",
-        "name_id": "name-00008",
-        "now_price": 990,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00r136h.ftdz47bb.g00r136h.ftdz5d79/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F4901008316598%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11300989%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24/cabinet/598/4901008316598.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"キャンメイク メタルックマスカラ\" title=\"キャンメイク メタルックマスカラ\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00r136h.ftdz47bb.g00r136h.ftdz5d79/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F4901008316598%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11300989%2F&rafcid=wsc_i_is_1011877497265360338",
-        "related_tags": [
-          "マスカラ"
-        ],
-        "skin_concern": ""
-      },
-      {
-        "amazon_link": "",
         "brand": "キャンメイク",
-        "brand_id": "brand-00002",
-        "name": "メルティールミナスルージュ",
-        "name_id": "name-00087",
-        "now_price": 1279,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmorro%2F20250217194525_94%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fmorro%2Fi%2F10042874%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/morro/cabinet/r_2025021718/20250217194525_94_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"キャンメイク メルティールミナスルージュ\" title=\"キャンメイク メルティールミナスルージュ\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmorro%2F20250217194525_94%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fmorro%2Fi%2F10042874%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "name_id": "name-00006",
+        "name": "シェーディングパウダー",
         "related_tags": [
-          "口紅"
+          "プレストパウダー"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F4901008313535%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F10982288%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24/cabinet/535/4901008313535.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"キャンメイク シェーディングパウダー\" title=\"キャンメイク シェーディングパウダー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F4901008313535%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F10982288%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "ノーズシャドウとエラ・顎の影に使う。濃いのでここを潰すのに良い"
+        ],
+        "now_price": 748
       }
     ],
     "delete_flg": false,
@@ -78794,13 +78821,13 @@
     "skin_profile": {
       "イエベ春": false,
       "イエベ秋": false,
-      "ブルベ冬": false,
       "ブルベ夏": false,
+      "ブルベ冬": false,
       "乾燥肌": false,
+      "脂性肌": false,
+      "混合肌": true,
       "敏感肌": false,
-      "普通肌": false,
-      "混合肌": false,
-      "脂性肌": true
+      "普通肌": false
     },
     "subscriber_count": "386000",
     "summary": "ろこ Rocoさんの肌タイプについて、トランスクリプトを基に詳しく解説いたします。\n\nまず、ろこさんは自身の肌質を「油肌」と「乾燥肌」の2つに分けて説明しています。特に、顔の一部が油っぽくなりやすいことを示唆しており、そのためにプライマーを使用することを推奨しています。プライマーを塗ることで化粧のりが良くなるとのことで、特に油肌の方にはこのステップが重要であると感じているようです。\n\nまた、ろこさんは化粧下地として「コントロールカラー」を使用し、これによって肌の赤みや透明感を調整しています。ピンクの下地を選ぶことで血色感をアップさせることができるため、肌のトーンに合わせて自分に合った色を選ぶことが大切であるという考えも示しています。\n\nさらに、ろこさんは「肌荒れがあまりない」とも述べており、比較的健康的な肌状態を保っていることが伺えます。そのため、下地とパウダーのみでメイクを仕上げることも可能としています。この点から、ろこさんの肌はある程度の肌トラブルが少なく、メイクが映えやすい状態にあることがわかります。\n\nろこさんは、メイクの仕上がりにおいても肌の質感やトーンに気を配っており、メイクに対する意識が高いことが伺えます。彼女は、自分の肌を理解し、最適なスキンケアやメイク方法を選ぶことで、より美しさを引き出す努力をしていると考えられます。\n\nこのように、ろこ Rocoさんは自身の肌質を把握し、適切なスキンケアやメイクを行うことで、肌の状態を良好に保っていることが理解できました。彼女の取り組みは、肌タイプに合ったケアの重要性を再認識させてくれます。",
@@ -96799,102 +96826,194 @@
     "check_status": true,
     "cosmetics": [
       {
-        "amazon_link": "",
-        "brand": "ランコム",
-        "brand_id": "brand-00049",
-        "name": "ジェニフィック アルティメ セラム",
+        "brand_id": "brand-00061",
+        "brand": "シュウ ウエムラ",
         "name_id": "name-00001",
-        "now_price": 12430,
+        "name": "アルティム8∞ スブリム ビューティ クレンジング オイルn",
+        "related_tags": [
+          "オイルクレンジング"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fshuuemura%2Fshu10049-2%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fshuuemura%2Fi%2F10000006%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/shuuemura/cabinet/12824584/12825927/13904765/imgrc0143205368.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"シュウ ウエムラ アルティム8∞ スブリム ビューティ クレンジング オイルn\" title=\"シュウ ウエムラ アルティム8∞ スブリム ビューティ クレンジング オイルn\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fshuuemura%2Fshu10049-2%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fshuuemura%2Fi%2F10000006%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "色々使ってきて結局これに戻る。素早く落とせるのに全く乾燥せず、ダブル洗顔不要",
+          "小鼻の角栓も取れやすい"
+        ],
+        "now_price": 6270
+      },
+      {
+        "brand_id": "brand-00037",
+        "brand": "ヒロインメイク",
+        "name_id": "name-00001",
+        "name": "スピーディーマスカラリムーバー",
+        "related_tags": [
+          "ポイントメイクリムーバー"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F573168%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11234829%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24/cabinet/168/573168.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ヒロインメイク スピーディーマスカラリムーバー\" title=\"ヒロインメイク スピーディーマスカラリムーバー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F573168%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11234829%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "目に入っても全く染みず、クレンジングの前に塗ると素早く落とせる"
+        ],
+        "now_price": 1848
+      },
+      {
+        "brand_id": "brand-00049",
+        "brand": "ランコム",
+        "name_id": "name-00001",
+        "name": "ジェニフィック アルティメ セラム",
+        "related_tags": [
+          "ブースター・導入液"
+        ],
+        "skin_concern": "",
         "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00trnuh.ftdz4b77.g00trnuh.ftdz54a7/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Flancome%2Fjp-lan-000329%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Flancome%2Fi%2F10000136%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/lancome/cabinet/12611101/pdp/12802210/700x700_v2.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ランコム ジェニフィック アルティメ セラム\" title=\"ランコム ジェニフィック アルティメ セラム\"></a>",
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00trnuh.ftdz4b77.g00trnuh.ftdz54a7/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Flancome%2Fjp-lan-000329%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Flancome%2Fi%2F10000136%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "リピ2回目の導入美容液。寝不足や調子が悪い時でもこれを塗れば肌の調子が良くなる",
+          "高いけど価値はある"
+        ],
+        "now_price": 12430
+      },
+      {
+        "brand_id": "brand-00008",
+        "brand": "SK-II",
+        "name_id": "name-00001",
+        "name": "フェイシャル トリートメント エッセンス",
+        "related_tags": [
+          "化粧水"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00u29lh.ftdz4baf.g00u29lh.ftdz5657/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff252107-yasu%2Fsk003%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Ff252107-yasu%2Fi%2F10000099%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/f252107-yasu/cabinet/frp_goods/frp001/5316582.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"SK-II フェイシャル トリートメント エッセンス\" title=\"SK-II フェイシャル トリートメント エッセンス\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00u29lh.ftdz4baf.g00u29lh.ftdz5657/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ff252107-yasu%2Fsk003%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Ff252107-yasu%2Fi%2F10000099%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "久々に使ったらやっぱり良く、肌の調子が全然違う",
+          "とろみがほぼなく水のようで、発酵の香りがする"
+        ],
+        "now_price": 105000
+      },
+      {
+        "brand_id": "brand-00048",
+        "brand": "VT(ブイティー)",
+        "name_id": "name-00002",
+        "name": "リードルショット100",
         "related_tags": [
           "ブースター・導入液"
         ],
-        "skin_concern": ""
-      },
-      {
-        "amazon_link": "",
-        "brand": "VT(ブイティー)",
-        "brand_id": "brand-00048",
-        "name": "リードルショット100",
-        "name_id": "name-00002",
-        "now_price": 3520,
+        "skin_concern": "",
         "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000176080%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10152482%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img2032/item_1000176080_2.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"VT(ブイティー) リードルショット100\" title=\"VT(ブイティー) リードルショット100\"></a>",
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000176080%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10152482%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-        "related_tags": [
-          "ブースター・導入液"
+        "amazon_link": "",
+        "mentions": [
+          "中に小さい針が入っていて、美容液が浸透しやすくなる。100はそんなに痛くない"
         ],
-        "skin_concern": ""
+        "now_price": 3520
       },
       {
-        "amazon_link": "",
-        "brand": "VT(ブイティー)",
         "brand_id": "brand-00048",
-        "name": "CICA エクソソーム モイスチャー マスク",
+        "brand": "VT(ブイティー)",
         "name_id": "name-00040",
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Froseroseshop%2Fvt_2410016%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Froseroseshop%2Fi%2F10003603%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/roseroseshop/cabinet/09833634/imgrc0112208896.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"VT(ブイティー) CICA エクソソーム モイスチャー マスク\" title=\"VT(ブイティー) CICA エクソソーム モイスチャー マスク\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Froseroseshop%2Fvt_2410016%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Froseroseshop%2Fi%2F10003603%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "name": "CICA エクソソーム モイスチャー マスク",
         "related_tags": [
           "シートマスク・パック"
         ],
         "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Froseroseshop%2Fvt_2410016%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Froseroseshop%2Fi%2F10003603%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/roseroseshop/cabinet/09833634/imgrc0112208896.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"VT(ブイティー) CICA エクソソーム モイスチャー マスク\" title=\"VT(ブイティー) CICA エクソソーム モイスチャー マスク\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Froseroseshop%2Fvt_2410016%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Froseroseshop%2Fi%2F10003603%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "シートが薄く、乾燥肌さんにおすすめ。10分でめちゃくちゃ滑らかになる"
+        ],
         "now_price": 2420
       },
       {
-        "amazon_link": "",
-        "brand": "VT(ブイティー)",
-        "brand_id": "brand-00048",
-        "name": "レチA リードルショット100",
-        "name_id": "name-00118",
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fderaega%2F0638-014951%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fderaega%2Fi%2F10005050%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/deraega/cabinet/amayahoo/07951592/0638-014951.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"VT(ブイティー) レチA リードルショット100\" title=\"VT(ブイティー) レチA リードルショット100\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fderaega%2F0638-014951%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fderaega%2Fi%2F10005050%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-        "related_tags": [
-          "ブースター・導入液"
-        ],
-        "skin_concern": "",
-        "now_price": 1780
-      },
-      {
-        "amazon_link": "",
-        "brand": "クラランス",
         "brand_id": "brand-00132",
-        "name": "ダブル セーラム ADC",
+        "brand": "クラランス",
         "name_id": "name-00003",
-        "now_price": 12210,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fclarins%2Fdoubleserum%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fclarins%2Fi%2F10000000%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/clarins/cabinet/img/80103081_s.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"クラランス ダブル セーラム ADC\" title=\"クラランス ダブル セーラム ADC\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fclarins%2Fdoubleserum%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fclarins%2Fi%2F10000000%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "name": "ダブル セーラム ADC",
         "related_tags": [
           "美容液"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fclarins%2Fdoubleserum%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fclarins%2Fi%2F10000000%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/clarins/cabinet/img/80103081_s.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"クラランス ダブル セーラム ADC\" title=\"クラランス ダブル セーラム ADC\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fclarins%2Fdoubleserum%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fclarins%2Fi%2F10000000%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "日々の生活習慣による老化に働きかけるエイジングケア美容液"
+        ],
+        "now_price": 12210
       },
       {
+        "brand_id": "brand-00343",
+        "brand": "リンクルショット",
+        "name_id": "name-00001",
+        "name": "リンクルショット メディカル セラム",
+        "related_tags": [
+          "美容液"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ffancylifecosme%2F30850%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Ffancylifecosme%2Fi%2F10000266%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/fancylifecosme/cabinet/12759776/310731-rank.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"リンクルショット リンクルショット メディカル セラム\" title=\"リンクルショット リンクルショット メディカル セラム\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ffancylifecosme%2F30850%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Ffancylifecosme%2Fi%2F10000266%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
         "amazon_link": "",
-        "brand": "SOFINA iP",
+        "mentions": [
+          "毎年リピートしている。笑った時や乾燥した時の小じわが全然目立たなくなる"
+        ],
+        "now_price": 10290
+      },
+      {
         "brand_id": "brand-00129",
-        "name": "ゴールデンタイムリペア　深夜浸透クリーム",
+        "brand": "SOFINA iP",
         "name_id": "name-00004",
-        "now_price": 2819,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00rz29h.ftdz4233.g00rz29h.ftdz52c0/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkumokumo-square%2F10054452%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fkumokumo-square%2Fi%2F10072745%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/kumokumo-square/cabinet/ikou26/10054452.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"SOFINA iP ゴールデンタイムリペア 深夜浸透クリーム\" title=\"SOFINA iP ゴールデンタイムリペア 深夜浸透クリーム\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00rz29h.ftdz4233.g00rz29h.ftdz52c0/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkumokumo-square%2F10054452%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fkumokumo-square%2Fi%2F10072745%2F&rafcid=wsc_i_is_1011877497265360338",
+        "name": "ゴールデンタイムリペア　深夜浸透クリーム",
         "related_tags": [
           "フェイスクリーム"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00rz29h.ftdz4233.g00rz29h.ftdz52c0/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkumokumo-square%2F10054452%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fkumokumo-square%2Fi%2F10072745%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/kumokumo-square/cabinet/ikou26/10054452.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"SOFINA iP ゴールデンタイムリペア 深夜浸透クリーム\" title=\"SOFINA iP ゴールデンタイムリペア 深夜浸透クリーム\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00rz29h.ftdz4233.g00rz29h.ftdz52c0/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkumokumo-square%2F10054452%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fkumokumo-square%2Fi%2F10072745%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "朝まで絶対に乾燥させないクリームで、もちもちになる",
+          "何をしても乾燥する方に使ってほしい"
+        ],
+        "now_price": 2819
       },
       {
-        "amazon_link": "",
-        "brand": "RMK",
         "brand_id": "brand-00067",
-        "name": "RMK リップバーム＜LC＞",
+        "brand": "RMK",
         "name_id": "name-00011",
-        "now_price": 2585,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00uh0ph.ftdz4b9a.g00uh0ph.ftdz5869/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Famitysun%2F10002648%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Famitysun%2Fi%2F10003512%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/amitysun/cabinet/biiino/item/main-image-4/20240726183755_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"RMK リップバーム＜LC＞\" title=\"RMK リップバーム＜LC＞\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00uh0ph.ftdz4b9a.g00uh0ph.ftdz5869/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Famitysun%2F10002648%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Famitysun%2Fi%2F10003512%2F&rafcid=wsc_i_is_1011877497265360338",
+        "name": "RMK リップバーム＜LC＞",
         "related_tags": [
           "リップケア・リップクリーム"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00uh0ph.ftdz4b9a.g00uh0ph.ftdz5869/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Famitysun%2F10002648%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Famitysun%2Fi%2F10003512%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/amitysun/cabinet/biiino/item/main-image-4/20240726183755_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"RMK リップバーム＜LC＞\" title=\"RMK リップバーム＜LC＞\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00uh0ph.ftdz4b9a.g00uh0ph.ftdz5869/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Famitysun%2F10002648%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Famitysun%2Fi%2F10003512%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "朝までずっと乾燥せず、洗顔後もしっとりが続き内側からふっくらする"
+        ],
+        "now_price": 2585
+      },
+      {
+        "brand_id": "brand-00460",
+        "brand": "soaddicted",
+        "name_id": "name-00002",
+        "name": "ラッシュアディクト アイラッシュ コンディショニング セラム アドバンス",
+        "related_tags": [
+          "まつげ美容液"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
+        "amazon_link": "",
+        "mentions": [
+          "絶対にまつ毛が伸びる。色素沈着もかゆみもなく、コシも長さも出る"
+        ]
       }
     ],
     "delete_flg": false,
@@ -96905,13 +97024,13 @@
     "skin_profile": {
       "イエベ春": false,
       "イエベ秋": false,
-      "ブルベ冬": false,
       "ブルベ夏": false,
+      "ブルベ冬": false,
       "乾燥肌": true,
-      "敏感肌": false,
-      "普通肌": false,
+      "脂性肌": false,
       "混合肌": false,
-      "脂性肌": false
+      "敏感肌": false,
+      "普通肌": false
     },
     "subscriber_count": "328000",
     "summary": "八田エミリ美容さんは、近年のスキンケア見直しによって、肌の状態が非常に良好であることを実感されています。特に、肌の乾燥がなくなり、毛穴の目立たない滑らかな肌を手に入れたとのことです。彼女は、スキンケアを通じて肌の健康を保つことに成功しており、この冬も乾燥しない自信を持っているようです。\n\n彼女の肌タイプは、乾燥肌と考えられますが、しっかりとした保湿ケアを行うことで、肌の潤いを保ちながら、年齢によるエイジングサインへの対策も意識しているようです。特に、乾燥肌の方におすすめのアイテムやケア方法を取り入れ、肌のバリア機能を強化しつつ、保湿を重視したアプローチを実践しています。\n\nまた、八田エミリ美容さんは、スキンケアの際に使用する製品について非常にこだわりを持っており、クレンジングから導入美容液、エイジングケア、フェイスパック、さらにはリップケアやまつ毛のケアまで、多岐にわたるアイテムを取り入れています。特に、肌の回復力を高める導入美容液や、保湿効果の高いフェイスパックを利用することで、肌の状態を整えることに成功しているようです。\n\n彼女のスキンケアの特徴として、温度管理や使用するアイテムの選定が挙げられます。クレンジングを行う際は、肌に優しい温度を保ち、乾燥を防ぐよう心がけています。また、使用する製品は、自身の肌に合ったものを選び、効果を実感できるアイテムをリピートすることで、安定した肌状態を維持しています。\n\nこのように、八田エミリ美容さんは、自身の肌をしっかりと理解し、適切なスキンケアを行うことで、見違えるほど美しい肌を保っています。彼女のスキンケアの取り組みは、多くの人々にとって、参考になることでしょう。",
@@ -97425,102 +97544,276 @@
     "check_status": true,
     "cosmetics": [
       {
-        "amazon_link": "",
-        "brand": "アリィー(ALLIE)",
         "brand_id": "brand-00122",
-        "name": "アリィー クロノビューティ カラーチューニングUV",
+        "brand": "アリィー(ALLIE)",
         "name_id": "name-00002",
-        "now_price": 2167,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000148864%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10136359%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img231/item_1000148864_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"アリィー(ALLIE) アリィー クロノビューティ カラーチューニングUV\" title=\"アリィー(ALLIE) アリィー クロノビューティ カラーチューニングUV\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000148864%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10136359%2F&rafcid=wsc_i_is_1011877497265360338",
+        "name": "アリィー クロノビューティ カラーチューニングUV",
         "related_tags": [
           "日焼け止め・UVケア(顔用)"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000148864%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10136359%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img231/item_1000148864_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"アリィー(ALLIE) アリィー クロノビューティ カラーチューニングUV\" title=\"アリィー(ALLIE) アリィー クロノビューティ カラーチューニングUV\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000148864%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10136359%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "ずっと使っているお気に入りの日焼け止め兼トーンアップ下地",
+          "少量で良く、つけすぎるとよれるので最小限にする"
+        ],
+        "now_price": 2167
       },
       {
-        "amazon_link": "",
-        "brand": "クラランス",
         "brand_id": "brand-00132",
-        "name": "フィックス メイクアップ N",
+        "brand": "クラランス",
         "name_id": "name-00002",
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fclarins%2Ffixmakeupn%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fclarins%2Fi%2F10000013%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/clarins/cabinet/img/80106220_s.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"クラランス フィックス メイクアップ N\" title=\"クラランス フィックス メイクアップ N\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fclarins%2Ffixmakeupn%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fclarins%2Fi%2F10000013%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "name": "フィックス メイクアップ N",
         "related_tags": [
           "ミスト状化粧水"
         ],
         "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fclarins%2Ffixmakeupn%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fclarins%2Fi%2F10000013%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/clarins/cabinet/img/80106220_s.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"クラランス フィックス メイクアップ N\" title=\"クラランス フィックス メイクアップ N\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fclarins%2Ffixmakeupn%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fclarins%2Fi%2F10000013%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載"
+        ],
         "now_price": 5060
       },
       {
-        "amazon_link": "",
-        "brand": "ケイト",
         "brand_id": "brand-00011",
-        "name": "デザイニングアイブロウ3D",
+        "brand": "ケイト",
         "name_id": "name-00002",
-        "now_price": 1210,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00r136h.ftdz47bb.g00r136h.ftdz5d79/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405930%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319317%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24/cabinet/930/405930.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ケイト デザイニングアイブロウ3D\" title=\"ケイト デザイニングアイブロウ3D\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00r136h.ftdz47bb.g00r136h.ftdz5d79/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405930%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319317%2F&rafcid=wsc_i_is_1011877497265360338",
+        "name": "デザイニングアイブロウ3D",
         "related_tags": [
           "パウダーアイブロウ"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00r136h.ftdz47bb.g00r136h.ftdz5d79/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405930%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319317%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24/cabinet/930/405930.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ケイト デザイニングアイブロウ3D\" title=\"ケイト デザイニングアイブロウ3D\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00r136h.ftdz47bb.g00r136h.ftdz5d79/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405930%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319317%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "3色の真ん中の色を眉毛に使う"
+        ],
+        "now_price": 1210
       },
       {
+        "brand_id": "brand-00043",
+        "brand": "ロージーローザ",
+        "name_id": "name-00010",
+        "name": "ダブルエンドアイブロウブラシ スマッジタイプ",
+        "related_tags": [
+          "メイクブラシ"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
         "amazon_link": "",
-        "brand": "ケイト",
+        "mentions": [
+          "眉を描く筆として使う"
+        ]
+      },
+      {
         "brand_id": "brand-00011",
-        "name": "3DアイブロウカラーN",
+        "brand": "ケイト",
         "name_id": "name-00004",
-        "now_price": 1180,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00u0z8h.ftdz4851.g00u0z8h.ftdz5010/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fj-seikatsu%2Fn3994-4973167829417%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fj-seikatsu%2Fi%2F10004018%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/j-seikatsu/cabinet/biiino/item/main-image-7/20240803223834_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ケイト 3DアイブロウカラーN\" title=\"ケイト 3DアイブロウカラーN\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00u0z8h.ftdz4851.g00u0z8h.ftdz5010/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fj-seikatsu%2Fn3994-4973167829417%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fj-seikatsu%2Fi%2F10004018%2F&rafcid=wsc_i_is_1011877497265360338",
+        "name": "3DアイブロウカラーN",
         "related_tags": [
           "眉マスカラ"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00u0z8h.ftdz4851.g00u0z8h.ftdz5010/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fj-seikatsu%2Fn3994-4973167829417%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fj-seikatsu%2Fi%2F10004018%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/j-seikatsu/cabinet/biiino/item/main-image-7/20240803223834_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ケイト 3DアイブロウカラーN\" title=\"ケイト 3DアイブロウカラーN\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00u0z8h.ftdz4851.g00u0z8h.ftdz5010/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fj-seikatsu%2Fn3994-4973167829417%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fj-seikatsu%2Fi%2F10004018%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "超お気に入りの眉マスカラで、ほぼずっとこれ"
+        ],
+        "now_price": 1180
       },
       {
+        "brand_id": "brand-00018",
+        "brand": "KANEBO",
+        "name_id": "name-00069",
+        "name": "カネボウ スムースフェザリー パウダー",
+        "related_tags": [
+          "ルースパウダー"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
         "amazon_link": "",
-        "brand": "SUQQU(スック)",
+        "mentions": [
+          "アイメイクの前に目の上下に乗せると崩れない"
+        ]
+      },
+      {
+        "brand_id": "brand-01048",
+        "brand": "2aN",
+        "name_id": "name-00002",
+        "name": "ベターミーアイパレット",
+        "related_tags": [
+          "パウダーアイシャドウ"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmerrygadget%2F21010101%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fmerrygadget%2Fi%2F10002005%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/merrygadget/cabinet/11459873/11459877/imgrc0106231806.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"2aN ベターミーアイパレット\" title=\"2aN ベターミーアイパレット\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmerrygadget%2F21010101%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fmerrygadget%2Fi%2F10002005%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載"
+        ],
+        "now_price": 2200
+      },
+      {
+        "brand_id": "brand-00496",
+        "brand": "BBIA",
+        "name_id": "name-00008",
+        "name": "ラストパウダーペンシル",
+        "related_tags": [
+          "ペンシルアイライナー"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fn-yakuhin%2F8809213809439-1kea%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fn-yakuhin%2Fi%2F10029807%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/n-yakuhin/cabinet/12513034/8809213809439.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"BBIA ラストパウダーペンシル\" title=\"BBIA ラストパウダーペンシル\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fn-yakuhin%2F8809213809439-1kea%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fn-yakuhin%2Fi%2F10029807%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載"
+        ],
+        "now_price": 1510
+      },
+      {
         "brand_id": "brand-00072",
-        "name": "アイラッシュ カーラー",
+        "brand": "SUQQU(スック)",
         "name_id": "name-00009",
-        "now_price": 2640,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00pukuh.ftdz4016.g00pukuh.ftdz5175/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fpureco%2Fprc-s-8337224629%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fpureco%2Fi%2F10050292%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/pureco/cabinet/prc-s-833000/prc-s-8337224629.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"SUQQU(スック) アイラッシュ カーラー\" title=\"SUQQU(スック) アイラッシュ カーラー\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00pukuh.ftdz4016.g00pukuh.ftdz5175/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fpureco%2Fprc-s-8337224629%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fpureco%2Fi%2F10050292%2F&rafcid=wsc_i_is_1011877497265360338",
+        "name": "アイラッシュ カーラー",
         "related_tags": [
           "ビューラー"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00pukuh.ftdz4016.g00pukuh.ftdz5175/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fpureco%2Fprc-s-8337224629%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fpureco%2Fi%2F10050292%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/pureco/cabinet/prc-s-833000/prc-s-8337224629.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"SUQQU(スック) アイラッシュ カーラー\" title=\"SUQQU(スック) アイラッシュ カーラー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00pukuh.ftdz4016.g00pukuh.ftdz5175/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fpureco%2Fprc-s-8337224629%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fpureco%2Fi%2F10050292%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載"
+        ],
+        "now_price": 2640
       },
       {
+        "brand_id": "brand-00092",
+        "brand": "Wonjungyo",
+        "name_id": "name-00001",
+        "name": "ウォンジョンヨ ヌードアイラッシュ",
+        "related_tags": [
+          "マスカラ"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00tnweh.ftdz4aca.g00tnweh.ftdz5503/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frainmakers-beautyfarm%2Fwon-wne%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frainmakers-beautyfarm%2Fi%2F10000076%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rainmakers-beautyfarm/cabinet/item_page/wonjungyo/wne/imgrc0090263827.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"Wonjungyo ウォンジョンヨ ヌードアイラッシュ\" title=\"Wonjungyo ウォンジョンヨ ヌードアイラッシュ\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00tnweh.ftdz4aca.g00tnweh.ftdz5503/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frainmakers-beautyfarm%2Fwon-wne%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frainmakers-beautyfarm%2Fi%2F10000076%2F&rafcid=wsc_i_is_1011877497265360338",
         "amazon_link": "",
-        "brand": "メイベリン ニューヨーク",
+        "mentions": [
+          "人生のマスカラ。束感にしたいので大好き",
+          "ブラウンで透明感が出る"
+        ],
+        "now_price": 1430
+      },
+      {
+        "brand_id": "brand-00146",
+        "brand": "エチュード",
+        "name_id": "name-00003",
+        "name": "コントゥアパウダー",
+        "related_tags": [
+          "パウダーチーク"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00rhu6h.ftdz457c.g00rhu6h.ftdz58b0/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fetudehouse%2F101004074%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fetudehouse%2Fi%2F10001341%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/etudehouse/cabinet/thum/3face/2powder/ra_46124_thum_02n.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"エチュード コントゥアパウダー\" title=\"エチュード コントゥアパウダー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00rhu6h.ftdz457c.g00rhu6h.ftdz58b0/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fetudehouse%2F101004074%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fetudehouse%2Fi%2F10001341%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載"
+        ],
+        "now_price": 2090
+      },
+      {
+        "brand_id": "brand-00125",
+        "brand": "THREE",
+        "name_id": "name-00225",
+        "name": "シマリング グロー デュオ R",
+        "related_tags": [
+          "ジェル・クリームチーク"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmediva%2F4562248602157%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmediva%2Fi%2F10002495%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmediva/cabinet/threeshim_top.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"THREE シマリング グロー デュオ R\" title=\"THREE シマリング グロー デュオ R\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmediva%2F4562248602157%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmediva%2Fi%2F10002495%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "パウダーを使いたくないので艶タイプのシェーディングとして鼻に使う"
+        ],
+        "now_price": 3700
+      },
+      {
+        "brand_id": "brand-01202",
+        "brand": "upink",
+        "name_id": "name-00005",
+        "name": "ドリーミーグロウチーク",
+        "related_tags": [
+          "ジェル・クリームチーク"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frainmakers-beautyfarm%2Fupinkdgc%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frainmakers-beautyfarm%2Fi%2F10000086%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rainmakers-beautyfarm/cabinet/item_page/upink/creamyglowcheek/dgc-k_4.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"upink ドリーミーグロウチーク\" title=\"upink ドリーミーグロウチーク\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frainmakers-beautyfarm%2Fupinkdgc%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frainmakers-beautyfarm%2Fi%2F10000086%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載"
+        ],
+        "now_price": 1320
+      },
+      {
         "brand_id": "brand-00009",
-        "name": "メイベリン ウルトラカラー アイライナー",
+        "brand": "メイベリン ニューヨーク",
         "name_id": "name-00013",
-        "now_price": 1630,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00tupxh.ftdz4aa5.g00tupxh.ftdz56ad/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsanreishop%2F6902395859383%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fsanreishop%2Fi%2F10006196%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/sanreishop/cabinet/07795391/07798026/6902395859383-01.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"メイベリン ニューヨーク ウルトラカラー アイライナー\" title=\"メイベリン ニューヨーク ウルトラカラー アイライナー\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00tupxh.ftdz4aa5.g00tupxh.ftdz56ad/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsanreishop%2F6902395859383%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fsanreishop%2Fi%2F10006196%2F&rafcid=wsc_i_is_1011877497265360338",
+        "name": "メイベリン ウルトラカラー アイライナー",
         "related_tags": [
           "リキッドアイライナー"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00tupxh.ftdz4aa5.g00tupxh.ftdz56ad/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsanreishop%2F6902395859383%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fsanreishop%2Fi%2F10006196%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/sanreishop/cabinet/07795391/07798026/6902395859383-01.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"メイベリン ニューヨーク ウルトラカラー アイライナー\" title=\"メイベリン ニューヨーク ウルトラカラー アイライナー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00tupxh.ftdz4aa5.g00tupxh.ftdz56ad/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsanreishop%2F6902395859383%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fsanreishop%2Fi%2F10006196%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "落ちない。二重幅を狭めたくないのでまつ毛の下の粘膜だけに塗り、目尻は長く引く"
+        ],
+        "now_price": 1630
       },
       {
+        "brand_id": "brand-00235",
+        "brand": "Laka",
+        "name_id": "name-00002",
+        "name": "フルーティーグラムティント",
+        "related_tags": [
+          "口紅"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00u4xph.ftdz4999.g00u4xph.ftdz5bf4/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fnextera2021%2Flakafruity%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fnextera2021%2Fi%2F10000195%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/nextera2021/cabinet/11737744/imgrc0128253869.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"Laka フルーティーグラムティント\" title=\"Laka フルーティーグラムティント\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00u4xph.ftdz4999.g00u4xph.ftdz5bf4/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fnextera2021%2Flakafruity%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fnextera2021%2Fi%2F10000195%2F&rafcid=wsc_i_is_1011877497265360338",
         "amazon_link": "",
-        "brand": "LANEIGE(ラネージュ)",
+        "mentions": [
+          "概要欄の使用アイテムに記載"
+        ],
+        "now_price": 1980
+      },
+      {
         "brand_id": "brand-00153",
-        "name": "リップスリーピングマスク",
+        "brand": "LANEIGE(ラネージュ)",
         "name_id": "name-00001",
-        "now_price": 2365,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00r7crh.ftdz4cc9.g00r7crh.ftdz5a64/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fhands-net%2F8809803532570%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fhands-net%2Fi%2F12159554%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/hands-net/cabinet/70/01/8809803532570-1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"LANEIGE(ラネージュ) リップスリーピングマスク\" title=\"LANEIGE(ラネージュ) リップスリーピングマスク\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00r7crh.ftdz4cc9.g00r7crh.ftdz5a64/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fhands-net%2F8809803532570%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fhands-net%2Fi%2F12159554%2F&rafcid=wsc_i_is_1011877497265360338",
+        "name": "リップスリーピングマスク",
         "related_tags": [
           "リップケア・リップクリーム"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00r7crh.ftdz4cc9.g00r7crh.ftdz5a64/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fhands-net%2F8809803532570%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fhands-net%2Fi%2F12159554%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/hands-net/cabinet/70/01/8809803532570-1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"LANEIGE(ラネージュ) リップスリーピングマスク\" title=\"LANEIGE(ラネージュ) リップスリーピングマスク\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00r7crh.ftdz4cc9.g00r7crh.ftdz5a64/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fhands-net%2F8809803532570%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fhands-net%2Fi%2F12159554%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "潤いが半端ないので日中にも使っている。唇がぷるぷるだと言ってもらえる"
+        ],
+        "now_price": 2365
       }
     ],
     "delete_flg": false,
@@ -97529,15 +97822,15 @@
     "processed": true,
     "published_at": "2024-11-25T11:00:35Z",
     "skin_profile": {
-      "イエベ春": true,
+      "イエベ春": false,
       "イエベ秋": false,
-      "ブルベ冬": false,
       "ブルベ夏": false,
+      "ブルベ冬": false,
       "乾燥肌": false,
-      "敏感肌": false,
-      "普通肌": false,
+      "脂性肌": false,
       "混合肌": false,
-      "脂性肌": false
+      "敏感肌": false,
+      "普通肌": false
     },
     "subscriber_count": "480000",
     "summary": "イコラブ ノイミー ニアジョイ チャンネルさんは、スキンケアとメイクにおいて非常にこだわりを持っていることが伺えます。彼女の肌タイプについては、艶感を大切にし、崩れにくい肌作りを目指している点が特徴的です。\n\nまず、イコラブ ノイミー ニアジョイ チャンネルさんは、スキンケアの後にティッシュオフを行うことで、肌の余分な油分を取り除くことを重要視しています。この工程は、メイクをする前に肌を整え、ベースの仕上がりをより良くするためのものです。また、彼女は日焼け止めを下地として使用することで、肌のトーンアップを図りつつ、紫外線対策も怠りません。\n\n彼女が使用するファンデーションは、艶感を持ちながらもカバー力を求めるものを選んでおり、肌に厚塗り感を与えないよう、少量を使うことを心掛けています。これにより、自然な仕上がりを維持しつつ、肌の美しさを引き立てる工夫をしています。\n\nさらに、メイクの過程では、常に艶肌を意識していることが強調されています。特に、パウダーを使用する際は、艶感を失わないように注意を払い、必要な部分にだけ薄く塗ることで、自然な仕上がりを保っています。このように、イコラブ ノイミー ニアジョイ チャンネルさんは、艶肌を求めるあまり、メイクの順番や使用アイテムにも独自の工夫を凝らしています。\n\n彼女の肌タイプは、乾燥肌やオイリー肌といった特定のタイプに分類されるものではなく、むしろ「艶感」を重視した中間的な性質を持っているようです。彼女のメイクやスキンケアのアプローチは、肌の健康と美しさを追求する姿勢が反映されており、多くの人々に共感を呼ぶものとなっています。",
@@ -98949,18 +99242,21 @@
     "check_status": true,
     "cosmetics": [
       {
-        "amazon_link": "",
-        "brand": "peripera",
-        "brand_id": "brand-00426",
-        "name": "インク グラスティング リップ グロス",
-        "name_id": "name-00003",
-        "now_price": 1320,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fplazastyle%2Fp03lgs1445%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fplazastyle%2Fi%2F10032523%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/plazastyle/cabinet/p03lgs1/p03lgs1445_l.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"peripera インク グラスティング リップ グロス\" title=\"peripera インク グラスティング リップ グロス\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fplazastyle%2Fp03lgs1445%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fplazastyle%2Fi%2F10032523%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "brand_id": "brand-00300",
+        "brand": "ヘビーローテーション",
+        "name_id": "name-00001",
+        "name": "カラーリングアイブロウEX",
         "related_tags": [
-          "リップグロス"
+          "眉マスカラ"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000194499%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10161726%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img212/item_1000194499_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ヘビーローテーション カラーリングアイブロウEX\" title=\"ヘビーローテーション カラーリングアイブロウEX\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000194499%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10161726%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "眉に使用"
+        ],
+        "now_price": 924
       }
     ],
     "delete_flg": false,
@@ -98971,13 +99267,13 @@
     "skin_profile": {
       "イエベ春": false,
       "イエベ秋": false,
-      "ブルベ冬": false,
       "ブルベ夏": false,
+      "ブルベ冬": false,
       "乾燥肌": false,
-      "敏感肌": false,
-      "普通肌": false,
+      "脂性肌": false,
       "混合肌": false,
-      "脂性肌": false
+      "敏感肌": false,
+      "普通肌": false
     },
     "subscriber_count": "386000",
     "summary": "ロコさんの肌タイプは、トランスクリプトからの情報を基にすると、主に乾燥肌や敏感肌の特徴が見受けられます。彼女はメイクをする際に、肌の状態に注意を払っている様子があり、具体的にはスキンケアを丁寧に行うようになったと語っています。また、ロコさんは肌を白く保ちたいと考えているようで、さまざまなスキンケア商品を試していることが伺えます。\n\n彼女はメイクをする際に、肌が赤くなりやすいことも触れています。これは敏感肌の特徴であり、刺激を受けやすい肌質である可能性があります。彼女の肌は、きれいで透明感があり、特にメイク後の肌の仕上がりにも気を使っている様子が見受けられます。さらに、ロコさんは自身の肌の変化についても意識しており、スキンケアのアプローチを見直すことに取り組んでいるようです。\n\nまた、彼女は最近、スキンケアのステップを増やしたことを明かしており、以前よりも丁寧にスキンケアを行うようになったとのことです。これは、彼女が肌トラブルを避け、自信を持ってメイクを楽しむための努力の一環であると考えられます。肌の状態に対する意識が高く、スキンケアに対する情熱が感じられるロコさんの姿勢は、多くの人にとっても参考になることでしょう。\n\nロコさんはまた、自己の肌質やメイクの技術についても試行錯誤している様子があり、他者とのメイク交換を通じて新たな視点を得ているようです。彼女の肌タイプやスキンケアに対する考え方は、彼女自身の美しさを引き出すための重要な要素となっているでしょう。",
@@ -99978,99 +100274,158 @@
     "check_status": true,
     "cosmetics": [
       {
-        "amazon_link": "",
-        "brand": "ドクターソワ",
-        "brand_id": "brand-00373",
-        "name": "SAIBOW ローション",
-        "name_id": "name-00011",
-        "now_price": 5940,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00to6xh.ftdz4c2d.g00to6xh.ftdz5cca/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcocobambi%2Fdrsoie-1005%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcocobambi%2Fi%2F10000174%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cocobambi/cabinet/08093168/imgrc0106076085.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ドクターソワ SAIBOW ローション\" title=\"ドクターソワ SAIBOW ローション\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00to6xh.ftdz4c2d.g00to6xh.ftdz5cca/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcocobambi%2Fdrsoie-1005%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcocobambi%2Fi%2F10000174%2F&rafcid=wsc_i_is_1011877497265360338",
+        "brand_id": "brand-00237",
+        "brand": "乾燥さん",
+        "name_id": "name-00001",
+        "name": "保湿力スキンケア下地",
         "related_tags": [
-          "化粧水"
+          "オールインワン化粧品"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00u993h.ftdz403e.g00u993h.ftdz5299/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fbcl-official%2F1013190572-01396%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fbcl-official%2Fi%2F10000723%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/bcl-official/cabinet/09529934/kansosan/imgrc0104073027.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"乾燥さん 保湿力スキンケア下地\" title=\"乾燥さん 保湿力スキンケア下地\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00u993h.ftdz403e.g00u993h.ftdz5299/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fbcl-official%2F1013190572-01396%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fbcl-official%2Fi%2F10000723%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "ノーマルタイプ。乾燥肌なので使っている下地"
+        ],
+        "now_price": 1430
       },
       {
-        "amazon_link": "",
-        "brand": "アリィー(ALLIE)",
         "brand_id": "brand-00122",
-        "name": "クロノビューティ　ラスティングプライマーＵＶ",
-        "name_id": "name-00004",
-        "now_price": 2167,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000184417%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10156936%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img231/item_1000184417_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"アリィー(ALLIE) クロノビューティ　ラスティングプライマーＵＶ\" title=\"アリィー(ALLIE) クロノビューティ　ラスティングプライマーＵＶ\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000184417%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10156936%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "brand": "アリィー(ALLIE)",
+        "name_id": "name-00002",
+        "name": "アリィー クロノビューティ カラーチューニングUV",
         "related_tags": [
           "日焼け止め・UVケア(顔用)"
         ],
-        "skin_concern": ""
-      },
-      {
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000148864%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10136359%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img231/item_1000148864_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"アリィー(ALLIE) アリィー クロノビューティ カラーチューニングUV\" title=\"アリィー(ALLIE) アリィー クロノビューティ カラーチューニングUV\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000148864%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10136359%2F&rafcid=wsc_i_is_1011877497265360338",
         "amazon_link": "",
-        "brand": "キャンメイク",
-        "brand_id": "brand-00002",
-        "name": "フェイスブラシ",
-        "name_id": "name-00140",
-        "now_price": 528,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ftsuruha%2F10163507%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Ftsuruha%2Fi%2F10098447%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/tsuruha/cabinet/shouhin75/10163507.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"キャンメイク フェイスブラシ\" title=\"キャンメイク フェイスブラシ\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ftsuruha%2F10163507%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Ftsuruha%2Fi%2F10098447%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-        "related_tags": [
-          "メイクブラシ"
+        "mentions": [
+          "最近肌が白くなったのはアリィーの紫の下地のおかげ",
+          "これで変わったと言っても過言ではなく、肌がトーンアップする"
         ],
-        "skin_concern": ""
+        "now_price": 2167
       },
       {
-        "amazon_link": "",
-        "brand": "ディオール",
-        "brand_id": "brand-00014",
-        "name": "ディオール　ルミナイザー",
-        "name_id": "name-00380",
-        "now_price": 7480,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00pu2mh.ftdz4b13.g00pu2mh.ftdz5296/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmelink%2Fc80970334%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmelink%2Fi%2F10073358%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmelink/cabinet/shade/0061748018_cp.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ディオール ルミナイザー\" title=\"ディオール ルミナイザー\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00pu2mh.ftdz4b13.g00pu2mh.ftdz5296/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmelink%2Fc80970334%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmelink%2Fi%2F10073358%2F&rafcid=wsc_i_is_1011877497265360338",
+        "brand_id": "brand-00446",
+        "brand": "LUNA",
+        "name_id": "name-00020",
+        "name": "コンシールブレンダーパレット",
         "related_tags": [
-          "化粧下地"
+          "コンシーラー"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00u4afh.ftdz43cf.g00u4afh.ftdz51c5/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fakbeauty%2Fluna_concealplt_5%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fakbeauty%2Fi%2F10000319%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/akbeauty/cabinet/08631507/12698919/imgrc0113152761.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"LUNA コンシールブレンダーパレット\" title=\"LUNA コンシールブレンダーパレット\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00u4afh.ftdz43cf.g00u4afh.ftdz51c5/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fakbeauty%2Fluna_concealplt_5%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fakbeauty%2Fi%2F10000319%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "黄色がニキビやシミをよく隠してくれる"
+        ],
+        "now_price": 2535
       },
       {
-        "amazon_link": "",
-        "brand": "milktouch",
-        "brand_id": "brand-00366",
-        "name": "オールデイロングアンドカール マスカラ",
+        "brand_id": "brand-00092",
+        "brand": "Wonjungyo",
         "name_id": "name-00002",
-        "rakuten_image_link": "",
-        "rakuten_text_link": "",
+        "name": "ウォンジョンヨ メタルシャワーペンシル",
+        "related_tags": [
+          "ジェル・クリームアイシャドウ"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frainmakers-beautyfarm%2Fwon-wmsp%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frainmakers-beautyfarm%2Fi%2F10000085%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rainmakers-beautyfarm/cabinet/item_page/wonjungyo/wmsp/imgrc0098263229.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"Wonjungyo ウォンジョンヨ メタルシャワーペンシル\" title=\"Wonjungyo ウォンジョンヨ メタルシャワーペンシル\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frainmakers-beautyfarm%2Fwon-wmsp%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frainmakers-beautyfarm%2Fi%2F10000085%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "涙袋の黒目の下からぼかすと、ナチュラルに涙袋ができる"
+        ],
+        "now_price": 1650
+      },
+      {
+        "brand_id": "brand-00014",
+        "brand": "ディオール",
+        "name_id": "name-00011",
+        "name": "ディオールスキン フォーエヴァー クチュール ルミナイザー",
+        "related_tags": [
+          "プレストパウダー"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00u4tbh.ftdz4b3a.g00u4tbh.ftdz5b56/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frareu%2F20210923199%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frareu%2Fi%2F10003933%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rareu/cabinet/11003753/imgrc0162568367.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ディオール ディオールスキン フォーエヴァー クチュール ルミナイザー\" title=\"ディオール ディオールスキン フォーエヴァー クチュール ルミナイザー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00u4tbh.ftdz4b3a.g00u4tbh.ftdz5b56/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frareu%2F20210923199%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frareu%2Fi%2F10003933%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "いつもハイライトに使っている。ピンクの部分を鼻筋に乗せると可愛い"
+        ],
+        "now_price": 9031
+      },
+      {
+        "brand_id": "brand-00198",
+        "brand": "fwee(フィー)",
+        "name_id": "name-00002",
+        "name": "フィー リップアンドチーク ブラーリープリンポット",
+        "related_tags": [
+          "口紅"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000189281%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10159555%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img209/item_1000189281_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"fwee(フィー) フィー リップアンドチーク ブラーリープリンポット\" title=\"fwee(フィー) フィー リップアンドチーク ブラーリープリンポット\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000189281%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10159555%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "ガチ可愛いクリームチーク",
+          "リップは口に合わずめくれるので、チークだけに使う"
+        ],
+        "now_price": 1980
+      },
+      {
+        "brand_id": "brand-00127",
+        "brand": "ジバンシイ",
+        "name_id": "name-00015",
+        "name": "プリズム・リーブル・ブラッシュ",
+        "related_tags": [
+          "パウダーチーク"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00pu2mh.ftdz4b13.g00pu2mh.ftdz5296/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmelink%2F0082456006%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmelink%2Fi%2F10078762%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmelink/cabinet/cheek2/0082456006-1_cp.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ジバンシイ プリズム・リーブル・ブラッシュ\" title=\"ジバンシイ プリズム・リーブル・ブラッシュ\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00pu2mh.ftdz4b13.g00pu2mh.ftdz5296/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmelink%2F0082456006%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmelink%2Fi%2F10078762%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "チークとして使用"
+        ],
+        "now_price": 5480
+      },
+      {
+        "brand_id": "brand-00366",
+        "brand": "milktouch",
+        "name_id": "name-00002",
+        "name": "オールデイロングアンドカール マスカラ",
         "related_tags": [
           "マスカラ"
         ],
-        "skin_concern": ""
-      },
-      {
-        "amazon_link": "",
-        "brand": "rom&nd",
-        "brand_id": "brand-00050",
-        "name": "リップマター",
-        "name_id": "name-00049",
+        "skin_concern": "",
         "rakuten_image_link": "",
         "rakuten_text_link": "",
-        "related_tags": [
-          "リップグロス"
-        ],
-        "skin_concern": ""
+        "amazon_link": "",
+        "mentions": [
+          "下まつ毛に縦にして慎重に塗る。めっちゃ伸びる"
+        ]
       },
       {
-        "amazon_link": "",
-        "brand": "ETUDE HOUSE (韓国)",
-        "brand_id": "brand-00281",
-        "name": "Proof　10　Liquid　Liner",
-        "name_id": "name-00115",
-        "rakuten_image_link": "",
-        "rakuten_text_link": "",
+        "brand_id": "brand-00102",
+        "brand": "Chacott COSMETICS(チャコット・コスメティクス)",
+        "name_id": "name-00013",
+        "name": "フィニッシングUVパウダー クール",
         "related_tags": [
-          "リキッドアイライナー"
+          "日焼け止め・UVケア(顔用)"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000208079%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10167431%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img222/item_1000208079_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"Chacott COSMETICS(チャコット・コスメティクス) フィニッシングUVパウダー クール\" title=\"Chacott COSMETICS(チャコット・コスメティクス) フィニッシングUVパウダー クール\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000208079%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10167431%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "透明感が好きで使っている"
+        ],
+        "now_price": 1980
       }
     ],
     "delete_flg": false,
@@ -100081,13 +100436,13 @@
     "skin_profile": {
       "イエベ春": false,
       "イエベ秋": false,
+      "ブルベ夏": false,
       "ブルベ冬": false,
-      "ブルベ夏": true,
       "乾燥肌": true,
-      "敏感肌": false,
-      "普通肌": false,
+      "脂性肌": false,
       "混合肌": false,
-      "脂性肌": false
+      "敏感肌": false,
+      "普通肌": false
     },
     "subscriber_count": "679000",
     "summary": "友子さんのトランスクリプトから、彼女の肌タイプやスキンケアに関する情報をまとめさせていただきます。\n\n友子さんは、自身の肌タイプを「乾燥肌」と明言しており、スキンケアには特に乾燥対策を重視しています。最近では、肌が白くなったと感じているようで、スキンケアの効果が実感できている様子が伺えます。特に、化粧水や下地選びにおいて、彼女は「ダルバの化粧水」や「アリーの紫の下地」を使用していることが言及されています。友子さんは、これらのアイテムを使うことで肌の調子が整い、周りからも褒められるようになったと感じているようです。\n\nまた、友子さんはメイクをする際に「艶肌」を意識していることも特徴的です。乾燥肌であるため、保湿を重視しながらも、肌のツヤ感を引き出すためのアイテム選びにも工夫を凝らしています。彼女は、肌の透明感を求めており、特に紫系の化粧品が効果的だと感じているようです。\n\n友子さんの肌は現在、ニキビが気になる状態であることも触れられています。彼女は、ニキビやシミを隠すためにコンシーラーを使用することが多く、特に色味にこだわって選んでいることが伺えます。肌荒れやトラブルの際には、友人から薬をもらったりと、周囲のサポートも大切にしているようです。\n\n友子さんは、肌の状態に合わせたスキンケアを行いながら、自分に合った化粧品を見つけることに熱心です。彼女のスキンケアやメイクの選び方は、多くの方にとって参考になるでしょう。乾燥肌の方や、透明感を求める方にとって、友子さんのアプローチは一つのヒントとなるかもしれません。",
@@ -100118,114 +100473,210 @@
     "check_status": true,
     "cosmetics": [
       {
-        "amazon_link": "",
-        "brand": "SKINFOOD(スキンフード)",
         "brand_id": "brand-00312",
-        "name": "キャロットカロテン カーミングウォーターパッド",
+        "brand": "SKINFOOD(スキンフード)",
         "name_id": "name-00001",
-        "now_price": 3080,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000126425%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10172636%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img230/item_1000126425_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"SKINFOOD(スキンフード) キャロットカロテン カーミングウォーターパッド\" title=\"SKINFOOD(スキンフード) キャロットカロテン カーミングウォーターパッド\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000126425%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10172636%2F&rafcid=wsc_i_is_1011877497265360338",
+        "name": "キャロットカロテン カーミングウォーターパッド",
         "related_tags": [
           "化粧水"
         ],
-        "skin_concern": ""
-      },
-      {
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000126425%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10172636%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img230/item_1000126425_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"SKINFOOD(スキンフード) キャロットカロテン カーミングウォーターパッド\" title=\"SKINFOOD(スキンフード) キャロットカロテン カーミングウォーターパッド\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000126425%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10172636%2F&rafcid=wsc_i_is_1011877497265360338",
         "amazon_link": "",
-        "brand": "BANILA CO",
-        "brand_id": "brand-00266",
-        "name": "イットラジアント CCカバークッションファンデ",
-        "name_id": "name-00107",
-        "rakuten_image_link": "",
-        "rakuten_text_link": "",
-        "related_tags": [
-          "化粧下地"
+        "mentions": [
+          "好きすぎて家に3箱ある。1枚で良く、みずみずしくて化粧水をコットンで入れ込む感覚",
+          "しっかり拭き取った後、割いてパックにすると肌が冷え冷えになり調子が良い"
         ],
-        "skin_concern": ""
+        "now_price": 3080
       },
       {
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00002",
+        "name": "エッセンス スキングロウ ファンデーション",
+        "related_tags": [
+          "リキッドファンデーション"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fhallofbeauty%2F4514254147221%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fhallofbeauty%2Fi%2F10000058%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/hallofbeauty/cabinet/compass1787907042.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"SHISEIDO エッセンス スキングロウ ファンデーション\" title=\"SHISEIDO エッセンス スキングロウ ファンデーション\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fhallofbeauty%2F4514254147221%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fhallofbeauty%2Fi%2F10000058%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
         "amazon_link": "",
-        "brand": "キャンメイク",
+        "mentions": [
+          "ファンデを塗るときにほんの少しだけ使うと、フィルターがかかったような肌感になる"
+        ],
+        "now_price": 6580
+      },
+      {
         "brand_id": "brand-00002",
-        "name": "マシュマロフィニッシュパウダー",
-        "name_id": "name-00005",
-        "now_price": 1034,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00r136h.ftdz47bb.g00r136h.ftdz5d79/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F4901008314693%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11110170%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24/cabinet/693/4901008314693.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"キャンメイク マシュマロフィニッシュパウダー\" title=\"キャンメイク マシュマロフィニッシュパウダー\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00r136h.ftdz47bb.g00r136h.ftdz5d79/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F4901008314693%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11110170%2F&rafcid=wsc_i_is_1011877497265360338",
+        "brand": "キャンメイク",
+        "name_id": "name-00012",
+        "name": "マシュマロフィニッシュパウダー 〜Abloom〜",
         "related_tags": [
           "プレストパウダー"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000147223%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10135622%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img2018/item_1000147223_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"キャンメイク マシュマロフィニッシュパウダー 〜Abloom〜\" title=\"キャンメイク マシュマロフィニッシュパウダー 〜Abloom〜\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000147223%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10135622%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "毛穴が消え、艶は少し消えるが潤いは残るので乾燥しにくい"
+        ],
+        "now_price": 1034
       },
       {
-        "amazon_link": "",
-        "brand": "CLIO",
         "brand_id": "brand-00128",
-        "name": "プロアイパレットエアー",
+        "brand": "CLIO",
         "name_id": "name-00002",
-        "now_price": 2990,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00tasbh.ftdz43f0.g00tasbh.ftdz53bd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcliojapan%2F10000211%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcliojapan%2Fi%2F10000211%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cliojapan/cabinet/06617315/06617316/imgrc0121465598.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"CLIO プロアイパレットエアー\" title=\"CLIO プロアイパレットエアー\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00tasbh.ftdz43f0.g00tasbh.ftdz53bd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcliojapan%2F10000211%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcliojapan%2Fi%2F10000211%2F&rafcid=wsc_i_is_1011877497265360338",
+        "name": "プロアイパレットエアー",
         "related_tags": [
           "パウダーアイシャドウ"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00tasbh.ftdz43f0.g00tasbh.ftdz53bd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcliojapan%2F10000211%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcliojapan%2Fi%2F10000211%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cliojapan/cabinet/06617315/06617316/imgrc0121465598.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"CLIO プロアイパレットエアー\" title=\"CLIO プロアイパレットエアー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00tasbh.ftdz43f0.g00tasbh.ftdz53bd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcliojapan%2F10000211%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcliojapan%2Fi%2F10000211%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "薄ピンクで涙袋の影を作る。新しく挑戦したい時に使う"
+        ],
+        "now_price": 2990
       },
       {
-        "amazon_link": "",
-        "brand": "peripera",
         "brand_id": "brand-00426",
-        "name": "インク ブイ シェーディング",
+        "brand": "peripera",
         "name_id": "name-00013",
-        "rakuten_image_link": "",
-        "rakuten_text_link": "",
+        "name": "インク ブイ シェーディング",
         "related_tags": [
           "プレストパウダー"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
+        "amazon_link": "",
+        "mentions": [
+          "なんだかんだこれが一番良かった。鼻をV字に痩せて見せられる"
+        ]
       },
       {
+        "brand_id": "brand-00146",
+        "brand": "エチュード",
+        "name_id": "name-00176",
+        "name": "TS ラブリークッキーブラッシャー",
+        "related_tags": [
+          "パウダーチーク"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
         "amazon_link": "",
-        "brand": "ヒロインメイク",
+        "mentions": [
+          "昔のコスメだが今マジで気に入っている",
+          "目の下キワまで広めに入れると中顔面が短く見える"
+        ]
+      },
+      {
+        "brand_id": "brand-00001",
+        "brand": "セザンヌ",
+        "name_id": "name-00004",
+        "name": "パールグロウハイライト",
+        "related_tags": [
+          "パウダーチーク"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F4939553041122%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F10790395%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24/cabinet/122/4939553041122.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"セザンヌ パールグロウハイライト\" title=\"セザンヌ パールグロウハイライト\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F4939553041122%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F10790395%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "ハイライトはまたこれに戻った。鼻に入れるとシュッとする"
+        ],
+        "now_price": 660
+      },
+      {
+        "brand_id": "brand-00317",
+        "brand": "too cool for school",
+        "name_id": "name-00178",
+        "name": "アートクラススマージングアンダーライナー",
+        "related_tags": [
+          "ペンシルアイライナー"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fskindesign%2Fschool_underliner%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fskindesign%2Fi%2F10002375%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/skindesign/cabinet/cosme/toocoolforschool/school_underliner/school_underliner_s.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"too cool for school アートクラススマージングアンダーライナー\" title=\"too cool for school アートクラススマージングアンダーライナー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fskindesign%2Fschool_underliner%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fskindesign%2Fi%2F10002375%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "涙袋の影を描くのに使っている"
+        ],
+        "now_price": 1680
+      },
+      {
         "brand_id": "brand-00037",
-        "name": "プライムリキッドアイライナー リッチキープ",
+        "brand": "ヒロインメイク",
         "name_id": "name-00002",
-        "now_price": 1085,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Farianakosume%2Fheroine-001%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Farianakosume%2Fi%2F10006877%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/arianakosume/cabinet/marason-ariana/heroine-001-ra-rk.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ヒロインメイク プライムリキッドアイライナー リッチキープ\" title=\"ヒロインメイク プライムリキッドアイライナー リッチキープ\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Farianakosume%2Fheroine-001%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Farianakosume%2Fi%2F10006877%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "name": "プライムリキッドアイライナー リッチキープ",
         "related_tags": [
           "リキッドアイライナー"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Farianakosume%2Fheroine-001%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Farianakosume%2Fi%2F10006877%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/arianakosume/cabinet/marason-ariana/heroine-001-ra-rk.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ヒロインメイク プライムリキッドアイライナー リッチキープ\" title=\"ヒロインメイク プライムリキッドアイライナー リッチキープ\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Farianakosume%2Fheroine-001%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Farianakosume%2Fi%2F10006877%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "横に2cmほど長く引く"
+        ],
+        "now_price": 1085
       },
       {
-        "amazon_link": "",
-        "brand": "コージー",
         "brand_id": "brand-00411",
-        "name": "カービングアイラッシュカーラー",
+        "brand": "コージー",
         "name_id": "name-00002",
-        "now_price": 1350,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00r7ldh.ftdz44ed.g00r7ldh.ftdz5e36/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fbiccamera%2F4972915004953%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fbiccamera%2Fi%2F10633306%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/biccamera/cabinet/product/1311/00000001622608_a01.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"コージー カービングアイラッシュカーラー\" title=\"コージー カービングアイラッシュカーラー\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00r7ldh.ftdz44ed.g00r7ldh.ftdz5e36/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fbiccamera%2F4972915004953%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fbiccamera%2Fi%2F10633306%2F&rafcid=wsc_i_is_1011877497265360338",
+        "name": "カービングアイラッシュカーラー",
         "related_tags": [
           "ビューラー"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00r7ldh.ftdz44ed.g00r7ldh.ftdz5e36/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fbiccamera%2F4972915004953%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fbiccamera%2Fi%2F10633306%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/biccamera/cabinet/product/1311/00000001622608_a01.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"コージー カービングアイラッシュカーラー\" title=\"コージー カービングアイラッシュカーラー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00r7ldh.ftdz44ed.g00r7ldh.ftdz5e36/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fbiccamera%2F4972915004953%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fbiccamera%2Fi%2F10633306%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "これじゃないとダメ。これが上がる"
+        ],
+        "now_price": 1350
       },
       {
-        "amazon_link": "",
-        "brand": "メイベリン ニューヨーク",
-        "brand_id": "brand-00009",
-        "name": "メイベリン SPステイ ヴィニルインク",
+        "brand_id": "brand-00006",
+        "brand": "マジョリカ マジョルカ",
         "name_id": "name-00006",
-        "now_price": 1991,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fper-bestone%2F1052326000%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fper-bestone%2Fi%2F10026388%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/per-bestone/cabinet/10523/1052326000.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"メイベリン ニューヨーク メイベリン SPステイ ヴィニルインク\" title=\"メイベリン ニューヨーク メイベリン SPステイ ヴィニルインク\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fper-bestone%2F1052326000%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fper-bestone%2Fi%2F10026388%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "name": "ラッシュエキスパンダー　ドーリーカール",
+        "related_tags": [
+          "マスカラ"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00r136h.ftdz47bb.g00r136h.ftdz5d79/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F4909978188429%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11254141%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24/cabinet/429/4909978188429.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"マジョリカ マジョルカ ラッシュエキスパンダー ドーリーカール\" title=\"マジョリカ マジョルカ ラッシュエキスパンダー ドーリーカール\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00r136h.ftdz47bb.g00r136h.ftdz5d79/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F4909978188429%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11254141%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "すごく上がってカールキープ力もあるのに、お湯と洗顔料で落ちる",
+          "大量につけてピンセットで束まつ毛を作る"
+        ],
+        "now_price": 1650
+      },
+      {
+        "brand_id": "brand-00009",
+        "brand": "メイベリン ニューヨーク",
+        "name_id": "name-00006",
+        "name": "メイベリン SPステイ ヴィニルインク",
         "related_tags": [
           "口紅"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fper-bestone%2F1052326000%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fper-bestone%2Fi%2F10026388%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/per-bestone/cabinet/10523/1052326000.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"メイベリン ニューヨーク メイベリン SPステイ ヴィニルインク\" title=\"メイベリン ニューヨーク メイベリン SPステイ ヴィニルインク\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fper-bestone%2F1052326000%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fper-bestone%2Fi%2F10026388%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "ずっと一番使っているリップ",
+          "1日お直し不要で、食べても落ちない"
+        ],
+        "now_price": 1991
       }
     ],
     "delete_flg": false,
@@ -100236,13 +100687,13 @@
     "skin_profile": {
       "イエベ春": false,
       "イエベ秋": false,
-      "ブルベ冬": false,
       "ブルベ夏": false,
-      "乾燥肌": true,
-      "敏感肌": false,
-      "普通肌": false,
+      "ブルベ冬": false,
+      "乾燥肌": false,
+      "脂性肌": false,
       "混合肌": false,
-      "脂性肌": false
+      "敏感肌": false,
+      "普通肌": false
     },
     "subscriber_count": "1480000",
     "summary": "ななこさんは、特におでこや鼻周りに毛穴の詰まりが生じやすい肌をお持ちのようです。彼女はそのため、ピーリングを取り入れたスキンケアを行い、おでこや鼻の横をしっかりとケアすることを重視しています。使用している製品は、CNPのPブースターパッドやスキンフードのキャロットカロテンカーミングウォーターパッドで、これらは優しく肌を整え、毛穴のつまりを軽減するのに役立っているようです。\n\nさらに、ななこさんは特に乾燥が気になる冬の時期にも使えるアイテムを選んでおり、肌に優しいケアを心掛けています。彼女は、肌が敏感な日や、あまり強いケアをしたくない日には、コットン面を使って優しく拭き取るなど、肌の状態に合わせて使い分けています。\n\nまた、彼女はスキンケアにおいても非常に丁寧で、クリームにはアビブのジェリーを使用しており、肌の乾燥を防ぎつつ、メイクのベースを整えるためにしっかりと塗り込むことを心掛けています。このクリームは、乾燥しやすい部分に特に気を配りながら、薄く均一に塗ることが大切だと感じているようです。\n\nななこさんの肌タイプは、毛穴の詰まりが気になるオイリー肌寄りの混合肌であり、乾燥にも敏感な一面を持っています。そのため、スキンケアではピーリングや保湿を重視し、季節に応じたケアを行うことが彼女の美肌維持の秘訣であると言えるでしょう。彼女のスキンケアへのこだわりは、肌の状態をしっかりと見極め、適切なアイテムを選ぶことで、毎日美しい肌を保つための大切な要素となっています。",
@@ -168209,32 +168660,171 @@
     "check_status": true,
     "cosmetics": [
       {
-        "amazon_link": "",
-        "brand": "セザンヌ",
-        "brand_id": "brand-00001",
-        "name": "ナチュラルマットシェーディング",
-        "name_id": "name-00017",
-        "now_price": 693,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00r4d8h.ftdz4726.g00r4d8h.ftdz56be/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2F0101marui%2Fcb003641090101%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2F0101marui%2Fi%2F11939357%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/0101marui/cabinet/cb003/641/094939553042211_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"セザンヌ ナチュラルマットシェーディング\" title=\"セザンヌ ナチュラルマットシェーディング\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00r4d8h.ftdz4726.g00r4d8h.ftdz56be/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2F0101marui%2Fcb003641090101%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2F0101marui%2Fi%2F11939357%2F&rafcid=wsc_i_is_1011877497265360338",
+        "brand_id": "brand-01143",
+        "brand": "CandyDoll(キャンディドール)",
+        "name_id": "name-00001",
+        "name": "トーンアップUVベース",
         "related_tags": [
-          "プレストパウダー"
+          "日焼け止め・UVケア(顔用)"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
+        "amazon_link": "",
+        "mentions": [
+          "下地で白みを仕込み、濡れたスポンジで叩く"
+        ]
       },
       {
-        "amazon_link": "",
-        "brand": "キャンメイク",
-        "brand_id": "brand-00002",
-        "name": "クリーミータッチライナー",
+        "brand_id": "brand-00422",
+        "brand": "ルドゥーブル",
         "name_id": "name-00001",
-        "now_price": 715,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405929%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319500%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24/cabinet/929/405929.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"キャンメイク クリーミータッチライナー\" title=\"キャンメイク クリーミータッチライナー\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405929%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319500%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "name": "ルドゥーブル",
+        "related_tags": [
+          "二重まぶた用グッズ"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fachieve1113%2Fledouble_2set%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fachieve1113%2Fi%2F10000074%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/achieve1113/cabinet/10740438/imgrc0108507190.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ルドゥーブル ルドゥーブル\" title=\"ルドゥーブル ルドゥーブル\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fachieve1113%2Fledouble_2set%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fachieve1113%2Fi%2F10000074%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "二重の余計な線を消すためにまぶたの際に塗る"
+        ],
+        "now_price": 2970
+      },
+      {
+        "brand_id": "brand-01027",
+        "brand": "VDL（ヴィ・ディー・エル）",
+        "name_id": "name-00002",
+        "name": "ＶＤＬ　チークステイン　ブラッシャー",
+        "related_tags": [
+          "パウダーチーク"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Flg-beauty-japan%2Ff001202031p%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Flg-beauty-japan%2Fi%2F10000112%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/lg-beauty-japan/cabinet/vdl/001202031z/cheek_smn_t14.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"VDL（ヴィ・ディー・エル） ＶＤＬ　チークステイン　ブラッシャー\" title=\"VDL（ヴィ・ディー・エル） ＶＤＬ　チークステイン　ブラッシャー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Flg-beauty-japan%2Ff001202031p%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Flg-beauty-japan%2Fi%2F10000112%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "パッケージがデパコスみたいでかっこよく、中身の色と同じで分かりやすい",
+          "チークをアイシャドウ代わりに使っている"
+        ],
+        "now_price": 2264
+      },
+      {
+        "brand_id": "brand-00002",
+        "brand": "キャンメイク",
+        "name_id": "name-00001",
+        "name": "クリーミータッチライナー",
         "related_tags": [
           "ジェルアイライナー"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405929%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319500%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24/cabinet/929/405929.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"キャンメイク クリーミータッチライナー\" title=\"キャンメイク クリーミータッチライナー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405929%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319500%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "下まぶたにまっすぐ線を引く"
+        ],
+        "now_price": 715
+      },
+      {
+        "brand_id": "brand-00001",
+        "brand": "セザンヌ",
+        "name_id": "name-00003",
+        "name": "描くふたえアイライナー",
+        "related_tags": [
+          "その他アイブロウ"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000158726%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10142635%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img234/item_1000158726_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"セザンヌ 描くふたえアイライナー\" title=\"セザンヌ 描くふたえアイライナー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000158726%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10142635%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "二重のラインを描くのに使う"
+        ],
+        "now_price": 660
+      },
+      {
+        "brand_id": "brand-00001",
+        "brand": "セザンヌ",
+        "name_id": "name-00017",
+        "name": "ナチュラルマットシェーディング",
+        "related_tags": [
+          "プレストパウダー"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00r4d8h.ftdz4726.g00r4d8h.ftdz56be/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2F0101marui%2Fcb003641090101%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2F0101marui%2Fi%2F11939357%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/0101marui/cabinet/cb003/641/094939553042211_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"セザンヌ ナチュラルマットシェーディング\" title=\"セザンヌ ナチュラルマットシェーディング\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00r4d8h.ftdz4726.g00r4d8h.ftdz56be/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2F0101marui%2Fcb003641090101%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2F0101marui%2Fi%2F11939357%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "使いすぎて底が見えるほど超いい"
+        ],
+        "now_price": 693
+      },
+      {
+        "brand_id": "brand-01147",
+        "brand": "Glint",
+        "name_id": "name-00016",
+        "name": "ハイライター",
+        "related_tags": [],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkoma%2Fglint_highlighter%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fkoma%2Fi%2F10001443%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/koma/cabinet/07642832/10554913/10554918/1-1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"Glint ハイライター\" title=\"Glint ハイライター\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkoma%2Fglint_highlighter%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fkoma%2Fi%2F10001443%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "パケ買いされるほど良いハイライト"
+        ],
+        "now_price": 1190
+      },
+      {
+        "brand_id": "brand-00350",
+        "brand": "dasique",
+        "name_id": "name-00052",
+        "name": "ジューシーデュイティント",
+        "related_tags": [
+          "口紅"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
+        "amazon_link": "",
+        "mentions": [
+          "色が大好きで、チュルチュルが続くので離れられない"
+        ]
+      },
+      {
+        "brand_id": "brand-01143",
+        "brand": "CandyDoll(キャンディドール)",
+        "name_id": "name-00006",
+        "name": "ブライトピュアクリームＡ",
+        "related_tags": [
+          "日焼け止め・UVケア(顔用)"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsinasahismile%2Fb0dvgnztqr%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fsinasahismile%2Fi%2F10084968%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/sinasahismile/cabinet/rakuv213_6007/b0dvgnztqr00.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"CandyDoll(キャンディドール) ブライトピュアクリームＡ\" title=\"CandyDoll(キャンディドール) ブライトピュアクリームＡ\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsinasahismile%2Fb0dvgnztqr%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fsinasahismile%2Fi%2F10084968%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "首や手に塗って顔との色の差を揃える"
+        ],
+        "now_price": 5476
+      },
+      {
+        "brand_id": "brand-00102",
+        "brand": "Chacott COSMETICS(チャコット・コスメティクス)",
+        "name_id": "name-00001",
+        "name": "フィニッシングパウダー マット",
+        "related_tags": [
+          "ルースパウダー"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000135670%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10125755%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img2014/item_1000135670_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"Chacott COSMETICS(チャコット・コスメティクス) フィニッシングパウダー マット\" title=\"Chacott COSMETICS(チャコット・コスメティクス) フィニッシングパウダー マット\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000135670%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10125755%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "使いすぎて底が見えている。鼻など高く見せたいところに塗る"
+        ],
+        "now_price": 1320
       }
     ],
     "delete_flg": false,
@@ -168248,7 +168838,18 @@
     "url": "https://www.youtube.com/watch?v=SP2FdWl4hFs",
     "video_id": "SP2FdWl4hFs",
     "view_count": "707982",
-    "duration": "PT37M59S"
+    "duration": "PT37M59S",
+    "skin_profile": {
+      "イエベ春": false,
+      "イエベ秋": false,
+      "ブルベ夏": false,
+      "ブルベ冬": false,
+      "乾燥肌": false,
+      "脂性肌": false,
+      "混合肌": false,
+      "敏感肌": false,
+      "普通肌": false
+    }
   },
   "-O_NBXm8szeVAep1wOF9": {
     "channel_icon": "https://yt3.ggpht.com/XMhTNtkGg5QLDmmbLgVA7pk1N9T5qkgWoQvIoydBLdamWcVEJ6fCQ63yffpM0R74p_8l8aW8=s88-c-k-c0x00ffffff-no-rj",
@@ -173771,46 +174372,121 @@
     "check_status": true,
     "cosmetics": [
       {
+        "brand_id": "brand-00756",
+        "brand": "スウィート",
+        "name_id": "name-00003",
+        "name": "プリモア",
+        "related_tags": [],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fbiccamera%2F2000423387021%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fbiccamera%2Fi%2F14640585%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/biccamera/cabinet/product/9727/00000012639062_a01.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"スウィート プリモア\" title=\"スウィート プリモア\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fbiccamera%2F2000423387021%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fbiccamera%2Fi%2F14640585%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
         "amazon_link": "",
-        "brand": "ニュクス",
-        "brand_id": "brand-00345",
-        "name": "クレームフレッシュ ハイドレーション クリーム",
-        "name_id": "name-00048",
-        "now_price": 4730,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000161084%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10169881%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img226/item_1000161084_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ニュクス クレームフレッシュ ハイドレーション クリーム\" title=\"ニュクス クレームフレッシュ ハイドレーション クリーム\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000161084%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10169881%2F&rafcid=wsc_i_is_1011877497265360338",
-        "related_tags": [
-          "クレンジングクリーム"
+        "mentions": [
+          "なじみのあるカラコンで、いつもの自分を作る"
         ],
-        "skin_concern": ""
+        "now_price": 1650
       },
       {
-        "amazon_link": "",
-        "brand": "fwee(フィー)",
         "brand_id": "brand-00198",
-        "name": "フィー フェザーライクデュアルアイシャドウブラシ",
-        "name_id": "name-00024",
-        "now_price": 1456,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fshopaz%2Fb0f433lg6r%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fshopaz%2Fi%2F10135933%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/shopaz/cabinet/rakub200_0439/b0f433lg6r00.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"fwee(フィー) フィー フェザーライクデュアルアイシャドウブラシ\" title=\"fwee(フィー) フィー フェザーライクデュアルアイシャドウブラシ\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fshopaz%2Fb0f433lg6r%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fshopaz%2Fi%2F10135933%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "brand": "fwee(フィー)",
+        "name_id": "name-00036",
+        "name": "フィー スパグロウUVトーンアップベース",
         "related_tags": [
-          "メイクブラシ"
+          "化粧下地"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmori%2Ffwee0100003%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmori%2Fi%2F10000128%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmori/cabinet/12329132/12693960/imgrc0133400459.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"fwee(フィー) フィー スパグロウUVトーンアップベース\" title=\"fwee(フィー) フィー スパグロウUVトーンアップベース\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmori%2Ffwee0100003%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmori%2Fi%2F10000128%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "乾燥肌用。超保湿されてトーンアップもし、UV効果もあるので最近よく使う"
+        ],
+        "now_price": 2190
       },
       {
-        "amazon_link": "",
-        "brand": "BANILA CO",
-        "brand_id": "brand-00266",
-        "name": "カバーリシャス パワーフィット ファンデーション",
-        "name_id": "name-00013",
-        "now_price": 3350,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00unzqh.ftdz4238.g00unzqh.ftdz58bd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Finhak%2Fbanila-co-23ver-covericious%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Finhak%2Fi%2F10000274%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/inhak/cabinet/11853721/11915654/imgrc0114480786.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"BANILA CO カバーリシャス パワーフィット ファンデーション\" title=\"BANILA CO カバーリシャス パワーフィット ファンデーション\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00unzqh.ftdz4238.g00unzqh.ftdz58bd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Finhak%2Fbanila-co-23ver-covericious%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Finhak%2Fi%2F10000274%2F&rafcid=wsc_i_is_1011877497265360338",
+        "brand_id": "brand-00142",
+        "brand": "the SAEM",
+        "name_id": "name-00181",
+        "name": "チップ コンシーラー",
         "related_tags": [
-          "リキッドファンデーション"
+          "コンシーラー"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fskindesign%2Ftip-concealer%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fskindesign%2Fi%2F10000016%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/skindesign/cabinet/cosme/thesaem/tipconceler/conconcon-main-1_.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"the SAEM チップ コンシーラー\" title=\"the SAEM チップ コンシーラー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fskindesign%2Ftip-concealer%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fskindesign%2Fi%2F10000016%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "ほくろを消すのに使う。本当に顔が変わる"
+        ],
+        "now_price": 820
+      },
+      {
+        "brand_id": "brand-01184",
+        "brand": "アイホリック",
+        "name_id": "name-00001",
+        "name": "コンシーラーペンシル",
+        "related_tags": [
+          "リキッドアイライナー"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fn-yakuhin%2F4515061012962-1kea%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fn-yakuhin%2Fi%2F10013949%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/n-yakuhin/cabinet/syouhin8/4515061012962.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"アイホリック コンシーラーペンシル\" title=\"アイホリック コンシーラーペンシル\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fn-yakuhin%2F4515061012962-1kea%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fn-yakuhin%2Fi%2F10013949%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "欠かせないアイテム。際の線と涙袋の線の間を明るくして修正する"
+        ],
+        "now_price": 1471
+      },
+      {
+        "brand_id": "brand-00050",
+        "brand": "rom&nd",
+        "name_id": "name-00001",
+        "name": "ハンオールブロウカラ",
+        "related_tags": [
+          "眉マスカラ"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkoma%2Fromand_browcara%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fkoma%2Fi%2F10001116%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/koma/cabinet/brand/06701809/browsoymilk/soymilk_th_00.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"rom&nd ハンオールブロウカラ\" title=\"rom&nd ハンオールブロウカラ\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkoma%2Fromand_browcara%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fkoma%2Fi%2F10001116%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "最近ずっと使っている眉マスカラ。暗いところに塗り毛並みを揃える"
+        ],
+        "now_price": 825
+      },
+      {
+        "brand_id": "brand-00350",
+        "brand": "dasique",
+        "name_id": "name-00009",
+        "name": "ムードブラーリップペンシル",
+        "related_tags": [
+          "リップライナー"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00uf6wh.ftdz4cdd.g00uf6wh.ftdz572d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fdasique%2F1000000025%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fdasique%2Fi%2F10000022%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/dasique/cabinet/dasique_/09657397/11594060/imgrc0109896690.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"dasique ムードブラーリップペンシル\" title=\"dasique ムードブラーリップペンシル\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00uf6wh.ftdz4cdd.g00uf6wh.ftdz572d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fdasique%2F1000000025%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fdasique%2Fi%2F10000022%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "口角から中心に広げて唇を大きく描く"
+        ],
+        "now_price": 1300
+      },
+      {
+        "brand_id": "brand-00002",
+        "brand": "キャンメイク",
+        "name_id": "name-00001",
+        "name": "クリーミータッチライナー",
+        "related_tags": [
+          "ジェルアイライナー"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405929%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319500%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24/cabinet/929/405929.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"キャンメイク クリーミータッチライナー\" title=\"キャンメイク クリーミータッチライナー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405929%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319500%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "目尻を長めに引き、際も塗りつぶして目を横に広く見せる"
+        ],
+        "now_price": 715
       },
       {
         "amazon_link": "",
@@ -173822,75 +174498,6 @@
         "rakuten_text_link": "",
         "related_tags": [
           "パウダーチーク"
-        ],
-        "skin_concern": ""
-      },
-      {
-        "amazon_link": "",
-        "brand": "MISSHA（ミシャ）",
-        "brand_id": "brand-00090",
-        "name": "アイシャドー",
-        "name_id": "name-00269",
-        "now_price": 968,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00tefih.ftdz457f.g00tefih.ftdz5b63/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fupsuke%2Fkan-mish88095%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fupsuke%2Fi%2F10021233%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/upsuke/cabinet/makeup/eyepalette/8809530034460_01.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"MISSHA（ミシャ／韓国） アイシャドー\" title=\"MISSHA（ミシャ／韓国） アイシャドー\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00tefih.ftdz457f.g00tefih.ftdz5b63/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fupsuke%2Fkan-mish88095%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fupsuke%2Fi%2F10021233%2F&rafcid=wsc_i_is_1011877497265360338",
-        "related_tags": [
-          "パウダーアイシャドウ"
-        ],
-        "skin_concern": ""
-      },
-      {
-        "amazon_link": "",
-        "brand": "コープ",
-        "brand_id": "brand-00316",
-        "name": "コンシーラー",
-        "name_id": "name-00319",
-        "now_price": 4576,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00rkklh.ftdz40f2.g00rkklh.ftdz57c7/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcinemasecrets%2F10000803%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcinemasecrets%2Fi%2F10000803%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_gold/cinemasecrets/img/pwt/pwt013_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"コープ コンシーラー\" title=\"コープ コンシーラー\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00rkklh.ftdz40f2.g00rkklh.ftdz57c7/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcinemasecrets%2F10000803%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcinemasecrets%2Fi%2F10000803%2F&rafcid=wsc_i_is_1011877497265360338",
-        "related_tags": [
-          "コンシーラー"
-        ],
-        "skin_concern": ""
-      },
-      {
-        "amazon_link": "",
-        "brand": "dasique",
-        "brand_id": "brand-00350",
-        "name": "Mood Blur Lip Pencil",
-        "name_id": "name-00038",
-        "now_price": 1001,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkamibako%2Fdasique-moodblurlippencil%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fkamibako%2Fi%2F10007550%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/kamibako/cabinet/11377800/13188173/imgrc0125171376.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"dasique Mood Blur Lip Pencil\" title=\"dasique Mood Blur Lip Pencil\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkamibako%2Fdasique-moodblurlippencil%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fkamibako%2Fi%2F10007550%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-        "related_tags": [
-          "口紅"
-        ],
-        "skin_concern": ""
-      },
-      {
-        "amazon_link": "",
-        "brand": "キャンメイク",
-        "brand_id": "brand-00002",
-        "name": "クリーミータッチライナー",
-        "name_id": "name-00001",
-        "now_price": 715,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405929%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319500%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24/cabinet/929/405929.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"キャンメイク クリーミータッチライナー\" title=\"キャンメイク クリーミータッチライナー\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405929%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319500%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-        "related_tags": [
-          "ジェルアイライナー"
-        ],
-        "skin_concern": ""
-      },
-      {
-        "amazon_link": "",
-        "brand": "ピュレア",
-        "brand_id": "brand-00270",
-        "name": "プルプルリップ",
-        "name_id": "name-00012",
-        "rakuten_image_link": "",
-        "rakuten_text_link": "",
-        "related_tags": [
-          "リップケア・リップクリーム"
         ],
         "skin_concern": ""
       }
@@ -173906,7 +174513,18 @@
     "url": "https://www.youtube.com/watch?v=gwt0XEOuaKA",
     "video_id": "gwt0XEOuaKA",
     "view_count": "675059",
-    "duration": "PT25M24S"
+    "duration": "PT25M24S",
+    "skin_profile": {
+      "イエベ春": false,
+      "イエベ秋": false,
+      "ブルベ夏": false,
+      "ブルベ冬": false,
+      "乾燥肌": true,
+      "脂性肌": false,
+      "混合肌": false,
+      "敏感肌": false,
+      "普通肌": false
+    }
   },
   "-Oe1stL-VzkxSf2dA2MV": {
     "channel_icon": "https://yt3.ggpht.com/X2sGXonKip7igRpJOPp0evpvOqjGkOarDGQZgOYniKr0enMCuBcTA95JmaBtmotI_K9U03-KTQ=s88-c-k-c0x00ffffff-no-rj",
