@@ -4,7 +4,7 @@ import ShareButtons from "../../components/ShareButtons.astro";
 import RankingRow from "../../components/RankingRow.astro";
 import VideoCard from "../../components/VideoCard.astro";
 import {
-  FEATURES,
+  getPublishedFeatures,
   FEATURE_MIN_CHANNELS,
   FEATURE_PER_GROUP,
   getFeature,
@@ -19,12 +19,12 @@ import {
 } from "../../lib/data";
 
 export function getStaticPaths() {
-  return FEATURES.map((f) => ({ params: { slug: f.slug }, props: { slug: f.slug } }));
+  return getPublishedFeatures().map((f) => ({ params: { slug: f.slug }, props: { slug: f.slug } }));
 }
 
 const { slug } = Astro.props;
 const f = getFeature(slug)!;
-const others = FEATURES.filter((x) => x.slug !== slug);
+const others = getPublishedFeatures().filter((x) => x.slug !== slug);
 const total = f.groups.reduce((n, g) => n + g.items.length, 0);
 
 // 表示用データ。価格・楽天とYahoo!のリンク・画像は cosmetics_list.json を正とする（ランキングページと同じ）
@@ -92,7 +92,7 @@ const jsonLd = [
   <div class="bg-white rounded-lg shadow-sm p-4 mb-8 text-xs text-neutral-600 leading-relaxed">
     <p class="font-bold text-neutral-800 mb-1">この特集の集計方法</p>
     <ul class="list-disc pl-5 space-y-0.5">
-      <li>対象：タイトルに「{f.def.keywords.join("」「")}」のいずれかを含む動画 <b>{f.videoCount}本</b>（<b>{f.channelCount}チャンネル</b>）</li>
+      <li>対象：{f.def.recentDays && <>直近{Math.round(f.def.recentDays / 30)}か月に投稿され、</>}タイトルに「{f.def.keywords.join("」「")}」のいずれかを含む動画 <b>{f.videoCount}本</b>（<b>{f.channelCount}チャンネル</b>）</li>
       <li>掲載条件：<b>{FEATURE_MIN_CHANNELS}チャンネル以上</b>が紹介したコスメのみ（1人が何本も紹介しただけのものは除外）</li>
       <li>並び順：紹介したチャンネル数 → 紹介動画数 → 合計再生回数。各カテゴリ上位{FEATURE_PER_GROUP}品まで</li>
       {f.newest && <li>最新の対象動画：{formatJaDate(f.newest)}投稿</li>}

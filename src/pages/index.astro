@@ -9,6 +9,7 @@ import {
   getInfluencerRanking,
   getCosmeticRankingsByTag,
   getTrendingCosmetics,
+  RECENT_DAYS,
   getCategoryTop,
   formatJaDate,
   groupTagsByCategory,
@@ -16,7 +17,7 @@ import {
   formatCount,
   withBase,
   categoryUrl,
-  FEATURES,
+  getPublishedFeatures,
   getFeature,
   getCosmeticListEntry,
   productImageSrc,
@@ -52,7 +53,7 @@ const siteLd = {
   },
 };
 // 特集カード用: 各特集の上位コスメの画像（各カテゴリの1位を最大3つ）と、集計元の動画数
-const featureCards = FEATURES.map((d) => {
+const featureCards = getPublishedFeatures().map((d) => {
   const f = getFeature(d.slug)!;
   const imgs = f.groups
     .map((g) => g.items[0])
@@ -151,8 +152,8 @@ const featureCards = FEATURES.map((d) => {
   {
     trending.length > 0 && (
       <section class="mb-14">
-        <h2 class="text-lg font-bold mb-1">最近の動画で紹介が多いコスメ</h2>
-        <p class="text-xs text-neutral-500 mb-4">直近に投稿された動画で、紹介された回数が多い順です。</p>
+        <h2 class="text-lg font-bold mb-1">最近話題のコスメ</h2>
+        <p class="text-xs text-neutral-500 mb-4">直近{RECENT_DAYS}日に投稿された動画で、紹介したインフルエンサーが多い順です。</p>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {trending.slice(0, 4).map((c) => (
             <CosmeticCard brand_id={c.brand_id} brand={c.brand} name_id={c.name_id} name={c.name} rakutenImageHtml={c.rakuten_image_link} />

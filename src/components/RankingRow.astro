@@ -23,9 +23,13 @@ interface Props {
   extra?: boolean;
   /** 「まとめ」ランキングで、その商品がどの細かいカテゴリか（例: リキッドファンデーション） */
   subLabel?: string;
+  /** 直近RECENT_DAYS日に投稿された動画での紹介数（「最近話題」の並び替え用） */
+  recentVideos?: number;
+  recentChannels?: number;
+  recentDays?: number;
 }
 
-const { rank, base, brand_id, brand, name_id, name, imageSrc, videoCount, channelCount, price, link, yahooLink, fromYahoo = false, extra = false, subLabel } = Astro.props;
+const { rank, base, brand_id, brand, name_id, name, imageSrc, videoCount, channelCount, price, link, yahooLink, fromYahoo = false, extra = false, subLabel, recentVideos = 0, recentChannels = 0, recentDays = 90 } = Astro.props;
 const top = rank <= 3;
 // 画像の無い商品（＝楽天側に出品が無い・画像が消えている）は、購入できないリンクの可能性が高いので、価格・購入ボタンを出さない。
 // 画像のURLはあっても、実際に読み込めない場合は、下の onerror で価格・購入ボタンを取り除く。
@@ -42,6 +46,8 @@ const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
   data-base={base}
   data-videos={videoCount}
   data-channels={channelCount}
+  data-recent-videos={recentVideos}
+  data-recent-channels={recentChannels}
   hidden={extra}
 >
   <span
@@ -71,6 +77,8 @@ const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
     <span class="whitespace-nowrap">紹介動画 <b class="text-neutral-800 text-sm">{videoCount}</b>本</span>
     <span class="mx-1">/</span>
     <span class="whitespace-nowrap"><b class="text-neutral-800 text-sm">{channelCount}</b>チャンネル</span>
+    <!-- 「最近話題」の並び替えのときだけスクリプトが表示する -->
+    <span class="recent-info hidden block mt-0.5 text-pink-600 whitespace-nowrap">直近{recentDays}日：{recentVideos}本 / {recentChannels}チャンネル</span>
   </p>
   <div class="col-span-3 md:col-span-1 flex items-center justify-between md:justify-end gap-3 min-h-8">
     {buyable && price !== undefined && <span data-buy class="text-sm text-neutral-700 whitespace-nowrap" title={fromYahoo ? "Yahoo!ショッピングの参考価格" : "楽天市場の参考価格"}>¥{formatCount(price)}</span>}

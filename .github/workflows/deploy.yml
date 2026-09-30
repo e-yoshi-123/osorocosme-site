@@ -3,6 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  schedule:
+    # 毎日 UTC 22:00 = JST 7:00。データの更新が無い日も組み直す（特集の予約公開と、「最近話題」の直近90日の起点を日付に合わせるため。178章）
+    - cron: "0 22 * * *"
   workflow_dispatch:
 
 permissions:

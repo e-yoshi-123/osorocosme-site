@@ -773,6 +773,15 @@ export interface FeatureDef {
   /** タイトルにこのうちどれかを含む動画を対象にする */
   keywords: string[];
   lead: string;
+  /** 載せる大分類を絞る（例: スキンケアの特集にメイクの商品を載せない）。省略時はすべて */
+  groups?: string[];
+  /** 公開日（JST、YYYY-MM-DD）。この日より前のビルドでは、ページ・一覧・サイトマップ・ホームのどこにも出さない。
+   * 特集を一度に増やすと低品質な量産ページと見られるおそれがあるため、間隔を空けて1本ずつ出す（178章） */
+  publishFrom?: string;
+  /** 直近この日数に投稿された動画だけを集計する（新作・ベスコスなど、古い動画が混ざると意味が変わる軸。178章） */
+  recentDays?: number;
+  /** 大分類ごとに載せる品数（省略時 FEATURE_PER_GROUP）。大分類を1つに絞った特集で増やす */
+  perGroup?: number;
 }
 export const FEATURES: FeatureDef[] = [
   {
@@ -787,10 +796,68 @@ export const FEATURES: FeatureDef[] = [
     keywords: ["プチプラ", "ドラコス", "ドラッグストア", "100均", "ダイソー"],
     lead: "プチプラ・ドラッグストア・100均をテーマにした動画で紹介されたコスメを集めました。手に取りやすい価格帯で、複数の人が紹介しているものだけを載せています。",
   },
+  // 178章で追加（ユーザー判断）。どれも3チャンネル以上が紹介した商品が20品以上ある軸
+  {
+    slug: "new-release",
+    publishFrom: "2026-10-21",
+    recentDays: 365,
+    name: "新作コスメ",
+    keywords: ["新作"],
+    lead: "「新作」をテーマにした動画で紹介されたコスメを集めました。発売に合わせて複数のインフルエンサーが試したものだけを載せています。",
+  },
+  {
+    slug: "best-cosme",
+    publishFrom: "2026-12-02",
+    recentDays: 365,
+    name: "ベスコス",
+    keywords: ["ベスコス", "ベストコスメ"],
+    lead: "インフルエンサーが自分のベストコスメを選ぶ「ベスコス」動画から集めました。1年使ってみて選ばれたコスメが分かります。",
+  },
+  {
+    slug: "skincare",
+    publishFrom: "2026-10-07",
+    name: "スキンケア",
+    keywords: ["スキンケア"],
+    lead: "スキンケアをテーマにした動画で紹介されたアイテムを集めました。化粧水・美容液・クリームなど、複数の人が使っているものだけを載せています。",
+    groups: ["スキンケア"],
+    perGroup: 15,
+  },
+  {
+    slug: "korean-cosme",
+    publishFrom: "2026-11-04",
+    name: "韓国コスメ",
+    keywords: ["韓国", "Qoo10", "オリヤン", "オリーブヤング"],
+    lead: "韓国コスメ・Qoo10・オリーブヤングをテーマにした動画で紹介されたコスメを集めました。",
+  },
+  {
+    slug: "favorites",
+    publishFrom: "2026-11-18",
+    name: "愛用品・リピート",
+    keywords: ["愛用", "リピ"],
+    lead: "「愛用品」「リピート買い」をテーマにした動画で紹介されたコスメを集めました。使い続けられているものが分かります。",
+  },
 ];
 /** 掲載する条件: 紹介したチャンネル数がこれ以上（1人が何本も紹介しただけの商品を除く） */
 export const FEATURE_MIN_CHANNELS = 3;
 export const FEATURE_PER_GROUP = 5;
+/** 載せる商品がこれ未満の特集は、公開日を過ぎても出さない（中身の薄いページを作らない） */
+export const FEATURE_MIN_ITEMS = 15;
+
+/** ビルド時点（JST）の日付 YYYY-MM-DD */
+function todayJst(): string {
+  // 予約した特集の確認用：FEATURE_PREVIEW_DATE=YYYY-MM-DD npm run build でその日の見え方を組める
+  if (process.env.FEATURE_PREVIEW_DATE) return process.env.FEATURE_PREVIEW_DATE;
+  return new Date(Date.now() + 9 * 3_600_000).toISOString().slice(0, 10);
+}
+/** 公開してよい特集（公開日を過ぎ、商品が FEATURE_MIN_ITEMS 品以上）。ページ・一覧・サイトマップ・ホームはすべてこれを使う */
+export function getPublishedFeatures(): FeatureDef[] {
+  const today = todayJst();
+  return FEATURES.filter((d) => {
+    if (d.publishFrom && d.publishFrom > today) return false;
+    const f = getFeature(d.slug)!;
+    return f.groups.reduce((n, g) => n + g.items.length, 0) >= FEATURE_MIN_ITEMS;
+  });
+}
 
 export interface FeatureItem {
   brand_id: string;
@@ -803,7 +870,10 @@ export interface FeatureItem {
 }
 const _featureCache = new Map<string, ReturnType<typeof buildFeature>>();
 function buildFeature(def: FeatureDef) {
-  const videos = getVisibleVideos().filter((v) => def.keywords.some((k) => (v.title || "").includes(k)));
+  const since = def.recentDays ? Date.now() - def.recentDays * 86_400_000 : 0;
+  const videos = getVisibleVideos().filter(
+    (v) => def.keywords.some((k) => (v.title || "").includes(k)) && (!since || (!!v.published_at && new Date(v.published_at).getTime() >= since))
+  );
   const map = new Map<string, FeatureItem & { vs: Set<string>; cs: Set<string>; views: number }>();
   for (const v of videos) {
     for (const c of v.cosmetics || []) {
@@ -827,9 +897,9 @@ function buildFeature(def: FeatureDef) {
     .map((e) => ({ ...e, videoCount: e.vs.size, channelCount: e.cs.size }))
     .filter((e) => e.channelCount >= FEATURE_MIN_CHANNELS)
     .sort((a, b) => b.channelCount - a.channelCount || b.videoCount - a.videoCount || b.views - a.views || a.name.localeCompare(b.name, "ja"));
-  const groups = RANKING_CATEGORY_GROUPS.map((g) => ({
+  const groups = RANKING_CATEGORY_GROUPS.filter((g) => !def.groups || def.groups.includes(g.group)).map((g) => ({
     group: g.group,
-    items: items.filter((e) => CATEGORY_TAG_TO_GROUP[e.tag] === g.group).slice(0, FEATURE_PER_GROUP),
+    items: items.filter((e) => CATEGORY_TAG_TO_GROUP[e.tag] === g.group).slice(0, def.perGroup ?? FEATURE_PER_GROUP),
   })).filter((g) => g.items.length > 0);
   const sample = [...videos].sort((a, b) => toNumber(b.view_count) - toNumber(a.view_count)).slice(0, 6);
   return {
@@ -974,23 +1044,38 @@ export function getCosmeticRankingsByTag(): Map<string, CosmeticRanking[]> {
 
 /** 直近の動画（投稿日降順の上位 recentVideos 本）で紹介されたコスメを、その中での紹介回数順に返す。
  * 「いま動画で話題になっているコスメ」を示す。同数なら通算の人気スコア順。 */
-export function getTrendingCosmetics(limit: number, recentVideos = 40): CosmeticRanking[] {
-  const ranked = new Map(getCosmeticRankings().map((r) => [`${r.brand_id}_${r.name_id}`, r]));
-  const counts = new Map<string, number>();
-  for (const v of sortByPublishedDesc(getVisibleVideos()).slice(0, recentVideos)) {
-    const seen = new Set<string>();
+/** 「最近話題」の集計期間（日）。投稿日がビルド時点からこの日数以内の動画だけを数える */
+export const RECENT_DAYS = 90;
+let _recentCache: Map<string, { videos: number; channels: number }> | null = null;
+/** 商品ごとの、直近RECENT_DAYS日に投稿された動画での紹介数（動画数・チャンネル数）。キーは brand_id_name_id */
+export function getRecentCounts(): Map<string, { videos: number; channels: number }> {
+  if (_recentCache) return _recentCache;
+  const since = Date.now() - RECENT_DAYS * 86_400_000;
+  const acc = new Map<string, { vs: Set<string>; cs: Set<string> }>();
+  for (const v of getVisibleVideos()) {
+    if (!v.published_at || new Date(v.published_at).getTime() < since) continue;
     for (const c of v.cosmetics || []) {
+      if (!c.brand_id || !c.name_id) continue;
       const key = `${c.brand_id}_${c.name_id}`;
-      if (ranked.has(key) && !seen.has(key)) {
-        seen.add(key);
-        counts.set(key, (counts.get(key) || 0) + 1);
-      }
+      let e = acc.get(key);
+      if (!e) acc.set(key, (e = { vs: new Set(), cs: new Set() }));
+      e.vs.add(v.key);
+      e.cs.add(v.channel_id);
     }
   }
-  return Array.from(counts.entries())
-    .sort((a, b) => b[1] - a[1] || ranked.get(b[0])!.score - ranked.get(a[0])!.score)
+  _recentCache = new Map(Array.from(acc, ([k, e]) => [k, { videos: e.vs.size, channels: e.cs.size }]));
+  return _recentCache;
+}
+
+/** 最近話題のコスメ：直近RECENT_DAYS日の動画で、紹介したチャンネル数→動画数→人気スコアの順 */
+export function getTrendingCosmetics(limit: number): CosmeticRanking[] {
+  const recent = getRecentCounts();
+  return getCosmeticRankings()
+    .filter((r) => recent.has(`${r.brand_id}_${r.name_id}`))
+    .map((r) => ({ r, c: recent.get(`${r.brand_id}_${r.name_id}`)! }))
+    .sort((a, b) => b.c.channels - a.c.channels || b.c.videos - a.c.videos || b.r.score - a.r.score)
     .slice(0, limit)
-    .map(([k]) => ranked.get(k)!);
+    .map((x) => x.r);
 }
 
 export interface CosmeticFacts {

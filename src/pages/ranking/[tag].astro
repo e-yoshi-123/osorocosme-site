@@ -15,6 +15,8 @@ import {
   RANKING_TAG_ALIAS,
   withBase,
   breadcrumbLd,
+  getRecentCounts,
+  RECENT_DAYS,
 } from "../../lib/data";
 
 export function getStaticPaths() {
@@ -42,12 +44,16 @@ const MAX = 50; // 「もっと見る」で見せる上限
 const STEP = 30;
 
 // 各商品の表示用データ。価格・楽天とYahoo!のリンク・画像は cosmetics_list.json を正とする。
+const recent = getRecentCounts();
 const rows = list.map((r, i) => {
+  const rc = recent.get(`${r.brand_id}_${r.name_id}`);
   const entry = getCosmeticListEntry(r.brand_id, r.name_id);
   const offer = productOffer(entry, r.rakuten_image_link); // 楽天の画像が無ければYahoo!の画像・価格（115章）
   return {
     r,
     base: i + 1,
+    recentVideos: rc?.videos ?? 0,
+    recentChannels: rc?.channels ?? 0,
     imageSrc: offer.imageSrc,
     price: offer.price,
     link: offer.rakutenLink,
@@ -58,6 +64,8 @@ const rows = list.map((r, i) => {
   };
 });
 const total = list.length;
+// 直近の紹介が少ないカテゴリでは「最近話題」を出さない（2品以上が紹介されているときだけ）
+const hasRecent = rows.filter((x) => x.recentVideos > 0).length >= 2;
 const shownMax = Math.min(MAX, total);
 
 const top3 = list.slice(0, 3).map((r) => `${r.brand}「${r.name}」`);
@@ -219,6 +227,7 @@ const jsonLd = [
             <button type="button" class="sort-btn px-3 py-1.5 rounded-full border border-neutral-300 bg-white" data-sort="score">人気スコア順</button>
             <button type="button" class="sort-btn px-3 py-1.5 rounded-full border border-neutral-300 bg-white" data-sort="videos">紹介動画数順</button>
             <button type="button" class="sort-btn px-3 py-1.5 rounded-full border border-neutral-300 bg-white" data-sort="channels">紹介チャンネル数順</button>
+            {hasRecent && <button type="button" class="sort-btn px-3 py-1.5 rounded-full border border-neutral-300 bg-white" data-sort="recent">最近話題（直近{RECENT_DAYS}日）</button>}
           </div>
         </div>
 
@@ -249,6 +258,9 @@ const jsonLd = [
                   yahooLink={x.yahooLink}
                   extra={x.base > MAX}
                   subLabel={x.subLabel}
+                  recentVideos={x.recentVideos}
+                  recentChannels={x.recentChannels}
+                  recentDays={RECENT_DAYS}
                 />
               ))
             }
@@ -257,6 +269,7 @@ const jsonLd = [
 
         <div class="mt-4 text-center">
           <button id="more-btn" type="button" class="hidden px-6 py-2 rounded-full border border-pink-300 text-pink-600 bg-white hover:bg-pink-50 text-sm"></button>
+          <p id="recent-note" class="hidden mt-2 text-xs text-neutral-400">直近{RECENT_DAYS}日に投稿された動画で紹介された商品だけを、紹介したチャンネル数→動画数の順に並べています。</p>
           <p id="limit-note" class="hidden mt-2 text-xs text-neutral-400">
             {MAX}位までを表示しています。{MAX + 1}位以降は、紹介動画が少なく順位の差が小さいため掲載していません。
           </p>
@@ -300,24 +313,34 @@ const jsonLd = [
   const MAX = Number(list.dataset.max);
   const STEP = Number(list.dataset.step);
   const INITIAL = Number(list.dataset.initial);
-  const limit = Math.min(MAX, rows.length);
+  const recentNote = document.getElementById("recent-note") as HTMLElement;
   const moreBtn = document.getElementById("more-btn") as HTMLButtonElement;
   const note = document.getElementById("limit-note") as HTMLElement;
 
-  let sortKey: "score" | "videos" | "channels" = "score";
-  let shown = Math.min(INITIAL, limit);
+  let sortKey: "score" | "videos" | "channels" | "recent" = "score";
+  // 「最近話題」では、直近に紹介された商品だけを対象にする
+  const targets = () => (sortKey === "recent" ? rows.filter((li) => n(li, "recentVideos") > 0) : rows);
+  const limitOf = () => Math.min(MAX, targets().length);
+  let limit = 0;
+  let shown = 0;
 
   const n = (li: HTMLLIElement, k: string) => Number(li.dataset[k]);
   const cmp = {
     score: (a: HTMLLIElement, b: HTMLLIElement) => n(a, "base") - n(b, "base"),
     videos: (a: HTMLLIElement, b: HTMLLIElement) => n(b, "videos") - n(a, "videos") || n(b, "channels") - n(a, "channels") || n(a, "base") - n(b, "base"),
     channels: (a: HTMLLIElement, b: HTMLLIElement) => n(b, "channels") - n(a, "channels") || n(b, "videos") - n(a, "videos") || n(a, "base") - n(b, "base"),
+    recent: (a: HTMLLIElement, b: HTMLLIElement) =>
+      n(b, "recentChannels") - n(a, "recentChannels") || n(b, "recentVideos") - n(a, "recentVideos") || n(a, "base") - n(b, "base"),
   };
 
   function render() {
-    [...rows].sort(cmp[sortKey]).forEach((li, i) => {
+    const t = new Set(targets());
+    const ordered = [...t].sort(cmp[sortKey]);
+    rows.filter((li) => !t.has(li)).forEach((li) => (li.hidden = true));
+    ordered.forEach((li, i) => {
       list.appendChild(li);
       li.hidden = i >= shown;
+      li.querySelector(".recent-info")?.classList.toggle("hidden", sortKey !== "recent");
       const top = i < 3;
       li.querySelector(".rank-badge")!.textContent = String(i + 1);
       li.querySelector(".rank-badge")!.classList.toggle("bg-pink-600", top);
@@ -337,12 +360,14 @@ const jsonLd = [
     const remaining = limit - shown;
     moreBtn.classList.toggle("hidden", remaining <= 0);
     moreBtn.textContent = `もっと見る（あと${remaining}件）`;
-    note.classList.toggle("hidden", !(remaining <= 0 && rows.length > MAX));
+    note.classList.toggle("hidden", !(remaining <= 0 && targets().length > MAX));
+    recentNote.classList.toggle("hidden", sortKey !== "recent");
   }
 
   document.querySelectorAll<HTMLButtonElement>(".sort-btn").forEach((b) =>
     b.addEventListener("click", () => {
       sortKey = b.dataset.sort as typeof sortKey;
+      limit = limitOf();
       shown = Math.min(INITIAL, limit);
       render();
     })
@@ -355,5 +380,7 @@ const jsonLd = [
     location.href = (e.target as HTMLSelectElement).value;
   });
 
+  limit = limitOf();
+  shown = Math.min(INITIAL, limit);
   render();
 </script>

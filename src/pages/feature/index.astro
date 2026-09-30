@@ -1,8 +1,8 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { FEATURES, getFeature, withBase } from "../../lib/data";
+import { getPublishedFeatures, getFeature, withBase } from "../../lib/data";
 
-const list = FEATURES.map((d) => getFeature(d.slug)!);
+const list = getPublishedFeatures().map((d) => getFeature(d.slug)!);
 ---
 
 <Layout
