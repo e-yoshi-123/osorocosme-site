@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import PageHead from "../../components/PageHead.astro";
 import { getRankingPages, getRankingNav, getCosmeticListEntry, productImageSrc, categoryUrl, withBase } from "../../lib/data";
 
 const pages = getRankingPages();
@@ -21,71 +22,69 @@ function topImages(tag: string): string[] {
   title="コスメ人気ランキング（カテゴリ別）"
   description="YouTubeのコスメ紹介動画での紹介数・再生数・紹介したインフルエンサー数から算出した、カテゴリ別の人気コスメランキング。化粧下地、ファンデーション、アイシャドウ、リップなど、カテゴリを選んで上位50位まで見られます。"
 >
-  <h1 class="text-xl font-bold mb-2">コスメランキング</h1>
-  <p class="text-sm mb-3"><a href={withBase("/feature/")} class="text-pink-600 hover:underline">特集：毎日メイク・プチプラ動画で人気のコスメ →</a></p>
-  <p class="text-xs text-neutral-500 mb-6">
-    見たいカテゴリを選んでください。ファンデーションやアイライナーなどは、クリックすると「全般（まとめ）」と種類別のどれを見るか選べます。紹介動画の合計再生回数・紹介動画数・紹介したインフルエンサー数から算出した人気スコア順で、各カテゴリの上位50位まで見られます。
-  </p>
+  <PageHead en="Ranking" title="コスメランキング" lead="見たいカテゴリを選んでください。ファンデーションやアイライナーなどは、開くと「全般（まとめ）」と種類別のどれを見るか選べます。紹介動画の合計再生回数・紹介動画数・紹介したインフルエンサー数から出した人気順で、各カテゴリの上位50位まで見られます。">
+    <p class="mt-4 text-sm"><a href={withBase("/feature/")} class="link-u text-rose">特集：毎日メイク・プチプラ動画で人気のコスメ →</a></p>
+  </PageHead>
 
   {
-    nav.map((g) => (
-      <section class="mb-10">
-        <h2 class="text-lg font-bold mb-4 pl-3 border-l-4 border-pink-500">{g.group}</h2>
+    nav.map((g, gi) => (
+      <section class="mb-14">
+        <h2 class="font-serif text-[20px] md:text-[22px] font-semibold mb-4 flex items-baseline gap-3"><span class="num-display text-sm text-neutral-400">{String(gi + 1).padStart(2, "0")}</span>{g.group}</h2>
         {/* 「まとめ」も単独カテゴリも、同じ幅・同じ見た目の行として同列に並べる。
             単独カテゴリは行をクリックでランキングへ。まとめは行をクリックで開き、「全般」か種類別かを選ぶ（<details>なのでJSなしでも動き、リンクはHTMLに残る） */}
-        <ul class="space-y-3">
+        <ul class="border-t border-ink/15">
           {g.items.map((it) => {
             const imgs = (
-              <div class="flex gap-1 w-36 sm:w-52 shrink-0">
+              <div class="flex gap-1.5 w-32 sm:w-48 shrink-0">
                 {topImages(it.name).map((src) => (
-                  <div class="flex-1 aspect-square bg-neutral-50 rounded overflow-hidden flex items-center justify-center">
-                    {src ? <img src={src} alt="" class="max-w-full max-h-full object-contain" loading="lazy" onerror="this.style.visibility='hidden'" /> : null}
+                  <div class="product-well flex-1 aspect-square rounded-lg overflow-hidden flex items-center justify-center">
+                    {src ? <img src={src} alt="" class="w-[86%] h-[86%] object-contain" loading="lazy" onerror="this.style.visibility='hidden'" /> : null}
                   </div>
                 ))}
               </div>
             );
             return (
-              <li class="bg-white rounded-xl shadow-sm overflow-hidden">
+              <li class="border-b border-ink/10">
                 {it.kind === "single" ? (
-                  <a href={categoryUrl(it.name)} class="min-w-0 flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-pink-50/60 transition">
+                  <a href={categoryUrl(it.name)} class="group min-w-0 flex items-center gap-4 sm:gap-6 py-4 transition">
                     {imgs}
                     <div class="min-w-0 flex-1">
-                      <p class="font-bold sm:text-lg">{it.name}</p>
+                      <p class="font-semibold sm:text-lg group-hover:text-rose transition-colors">{it.name}</p>
                       <p class="text-xs text-neutral-500 mt-0.5">{it.count}品</p>
                     </div>
-                    <span class="text-neutral-300 text-xl shrink-0" aria-hidden="true">›</span>
+                    <span class="shrink-0 w-9 h-9 rounded-full border border-ink/15 flex items-center justify-center transition-all duration-500 group-hover:bg-ink group-hover:text-paper group-hover:border-ink" aria-hidden="true">→</span>
                   </a>
                 ) : (
                   <details class="group">
-                    <summary class="min-w-0 flex items-center gap-3 sm:gap-4 p-3 sm:p-4 cursor-pointer list-none [&::-webkit-details-marker]:hidden hover:bg-pink-50/60 transition">
+                    <summary class="min-w-0 flex items-center gap-4 sm:gap-6 py-4 cursor-pointer list-none [&::-webkit-details-marker]:hidden hover:[&_p.font-semibold]:text-rose">
                       {imgs}
                       <div class="min-w-0 flex-1">
-                        <p class="font-bold sm:text-lg">
+                        <p class="font-semibold sm:text-lg transition-colors">
                           {it.name}
-                          <span class="ml-1 text-xs font-normal text-white bg-pink-600 rounded px-1.5 py-0.5 align-middle">まとめ</span>
+                          <span class="ml-2 text-xs font-normal border border-rose text-rose rounded-full px-2 py-0.5 align-middle">まとめ</span>
                         </p>
                         <p class="text-xs text-neutral-500 mt-0.5">{it.count}品 ／ {it.children.length}種類から選べます</p>
                       </div>
-                      <span class="text-xs text-pink-600 shrink-0 hidden sm:inline">種類を選ぶ</span>
-                      <span class="text-neutral-400 text-xl shrink-0 transition-transform group-open:rotate-90" aria-hidden="true">›</span>
+                      <span class="text-xs text-neutral-500 shrink-0 hidden sm:inline">種類を選ぶ</span>
+                      <span class="shrink-0 w-9 h-9 rounded-full border border-ink/15 flex items-center justify-center transition-transform duration-500 group-open:rotate-90" aria-hidden="true">→</span>
                     </summary>
-                    <div class="border-t border-neutral-100 bg-neutral-50 px-3 sm:px-4 py-3">
-                      <p class="text-xs text-neutral-500 mb-2">見たいランキングを選んでください</p>
+                    <div class="pb-6">
+                      <p class="text-xs text-neutral-500 mb-3">見たいランキングを選んでください</p>
                       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
-                        <a href={categoryUrl(it.name)} class="min-w-0 flex flex-col justify-center rounded-lg bg-pink-600 text-white hover:bg-pink-700 transition p-3">
-                          <p class="font-bold text-sm">{it.name}</p>
+                        <a href={categoryUrl(it.name)} class="min-w-0 flex flex-col justify-center rounded-2xl bg-ink text-paper hover:bg-rose transition-colors duration-500 p-4">
+                          <p class="font-semibold text-sm">{it.name}</p>
                           <p class="text-xs opacity-90">{it.count}品 ／ すべてまとめて</p>
                         </a>
                         {it.children.map((c) => (
-                          <a href={categoryUrl(c.name)} class="min-w-0 block bg-white rounded-lg border border-neutral-200 hover:shadow-md transition p-2">
+                          <a href={categoryUrl(c.name)} class="group min-w-0 block rounded-2xl border border-ink/10 bg-white/60 hover:border-ink/40 transition-colors p-3">
                             <div class="flex gap-1 mb-1.5">
                               {topImages(c.name).map((src) => (
-                                <div class="flex-1 aspect-square bg-neutral-50 rounded overflow-hidden flex items-center justify-center">
-                                  {src ? <img src={src} alt="" class="max-w-full max-h-full object-contain" loading="lazy" onerror="this.style.visibility='hidden'" /> : null}
+                                <div class="product-well flex-1 aspect-square rounded-lg overflow-hidden flex items-center justify-center">
+                                  {src ? <img src={src} alt="" class="w-[86%] h-[86%] object-contain" loading="lazy" onerror="this.style.visibility='hidden'" /> : null}
                                 </div>
                               ))}
                             </div>
-                            <p class="font-medium text-xs truncate">{c.name}</p>
+                            <p class="font-medium text-sm truncate group-hover:text-rose transition-colors">{c.name}</p>
                             <p class="text-xs text-neutral-400">{c.count}品</p>
                           </a>
                         ))}
