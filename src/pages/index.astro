@@ -209,7 +209,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
 
   <!-- ===== 02 TRENDING ===== -->
   {trending.length > 0 && (
-    <section class="pt-20 md:pt-32">
+    <section class="band mt-20 md:mt-32 py-14 md:py-20">
       <SectionHead num="02" en="Trending now" title="最近話題のコスメ" lead={`直近${RECENT_DAYS}日に投稿された動画で、紹介したインフルエンサーが多い順です。`} />
       <div class="-mx-4 md:mx-0 px-4 md:px-0 flex md:grid md:grid-cols-4 gap-4 md:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {trending.slice(0, 8).map((c, i) => {
@@ -257,7 +257,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
   )}
 
   <!-- ===== 04 INFLUENCERS ===== -->
-  <section class="pt-20 md:pt-32">
+  <section class="band mt-20 md:mt-32 py-14 md:py-20">
     <SectionHead num="04" en="Influencers" title="人気のインフルエンサー" lead="登録者数と、このサイトに載っている動画・コスメの数から並べています。" href={withBase("/influencer-list")} />
     <ol class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-10">
       {popularInfluencers.map((inf, i) => (
@@ -298,7 +298,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
   </section>
 
   <!-- ===== 06 LATEST VIDEOS ===== -->
-  <section class="pt-20 md:pt-32">
+  <section class="band mt-20 md:mt-32 py-14 md:py-20">
     <SectionHead num="06" en="Latest videos" title="新着の紹介動画" href={withBase("/video-list")} />
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
       {latestVideos.map((v, i) => <div class="reveal min-w-0" style={`--d:${(i % 4) * 80}ms`}><VideoCard video={v} /></div>)}

@@ -34,6 +34,8 @@
   --color-paper: #faf6f2;
   --color-ink: #1d1517;
   --color-blush: #f4e4e1;
+  /* エリアの区切りに敷く面（紙より一段濃い）。.band で使う（190章） */
+  --color-sand: #f1e9e1;
   --color-rose: #e60076;
   --color-berry: #5a0f31;
 
@@ -78,6 +80,12 @@
 }
 
 @layer components {
+  /* エリアの区切り：紙より一段濃い面を、本文の幅のまま画面の端まで敷く（横スクロールは出ない）。190章 */
+  .band {
+    background: var(--color-sand);
+    box-shadow: 0 0 0 100vmax var(--color-sand);
+    clip-path: inset(0 -100vmax);
+  }
   /* 見出しの組（番号・欧文ラベル・日本語の題・罫線） */
   .eyebrow {
     font-family: var(--font-display);

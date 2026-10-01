@@ -101,8 +101,8 @@ const jsonLd = [
   </div>
 
   {
-    groups.map((g) => (
-      <section class="mb-10">
+    groups.map((g, i) => (
+      <section class:list={[i % 2 === 1 ? "band py-10 md:py-12 mb-10" : "mb-10"]}>
         <h2 class="font-serif text-[20px] md:text-[22px] font-semibold mb-4">{g.group}</h2>
         <div class="border-t-2 border-ink">
           <ol class="divide-y divide-ink/10 border-b border-ink/10">
