@@ -113,7 +113,7 @@ const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 bg-ink text-white px-3 py-2 text-sm">本文へ</a>
     <header class="sticky top-0 z-40 bg-paper/85 backdrop-blur-md border-b border-ink/10">
       <div class="max-w-[1320px] mx-auto px-4 md:px-8 h-14 md:h-[72px] flex items-center gap-6">
-        <a href={withBase("/")} class="text-ink text-[22px] md:text-[26px] shrink-0" aria-label="OsoroCosme ホーム"><Logo /></a>
+        <a href={withBase("/")} class="text-ink text-[20px] md:text-[22px] shrink-0" aria-label="OsoroCosme ホーム"><Logo /></a>
         <nav class="hidden lg:flex items-center gap-7 ml-6" aria-label="メイン">
           {navLinks.map((l) => (
             <a href={withBase(l.href)} class:list={["group relative text-sm tracking-[0.04em] py-2", isCurrent(l.href) ? "text-ink" : "text-neutral-600 hover:text-ink"]} aria-current={isCurrent(l.href) ? "page" : undefined}>

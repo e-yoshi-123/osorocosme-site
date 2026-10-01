@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import PageHead from "../components/PageHead.astro";
 import InfluencerFeatureCard from "../components/InfluencerFeatureCard.astro";
 import { getInfluencerRanking, formatCount, withBase } from "../lib/data";
 
@@ -16,38 +17,41 @@ const rest = influencers.slice(MEDIUM_UNTIL);
   title="インフルエンサー一覧"
   description="コスメを紹介しているYouTuberの一覧。登録者数・掲載動画数・紹介コスメ数から算出した人気順で、各人の使用コスメ遍歴を確認できます。"
 >
-  <h1 class="text-xl font-bold mb-2">インフルエンサー一覧（{influencers.length}件）</h1>
-  <p class="text-sm text-neutral-500 mb-6">登録者数・掲載動画数・紹介コスメ数から算出した人気順です。上位の方は、最新の動画とよく紹介するコスメも見られます。</p>
+  <PageHead en="Influencers" title="インフルエンサー一覧" lead="登録者数・掲載動画数・紹介コスメ数から算出した人気順です。上位の方は、最新の動画とよく紹介するコスメも見られます。" stats={[{ n: formatCount(influencers.length), label: "人" }]} />
 
-  <section class="mb-10">
-    <h2 class="text-base font-bold mb-3">注目のインフルエンサー TOP{LARGE}</h2>
-    <div class="grid gap-x-4 gap-y-0 lg:grid-cols-3">
+  <section class="mb-16">
+    <h2 class="font-serif text-[20px] md:text-[22px] font-semibold mb-6">注目のインフルエンサー <span class="num-display text-rose ml-1">TOP{LARGE}</span></h2>
+    <div class="grid gap-x-6 gap-y-0 lg:grid-cols-3">
       {large.map((inf, i) => <InfluencerFeatureCard influencer={inf} rank={i + 1} size="large" />)}
     </div>
   </section>
 
-  <section class="mb-10">
-    <h2 class="text-base font-bold mb-3">人気のインフルエンサー {LARGE + 1}〜{LARGE + medium.length}位</h2>
-    <div class="grid gap-x-4 gap-y-0 md:grid-cols-2 lg:grid-cols-3">
+  <section class="mb-16">
+    <h2 class="font-serif text-[20px] md:text-[22px] font-semibold mb-6">人気のインフルエンサー <span class="num-display text-neutral-500 ml-1">{LARGE + 1}–{LARGE + medium.length}</span></h2>
+    <div class="grid gap-x-6 gap-y-0 md:grid-cols-2 lg:grid-cols-3">
       {medium.map((inf, i) => <InfluencerFeatureCard influencer={inf} rank={LARGE + i + 1} size="medium" />)}
     </div>
   </section>
 
   <section>
-    <h2 class="text-base font-bold mb-3">そのほかのインフルエンサー（{rest.length}件）</h2>
-    <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <h2 class="font-serif text-[20px] md:text-[22px] font-semibold mb-6">そのほかのインフルエンサー <span class="num-display text-neutral-500 ml-1">{rest.length}</span></h2>
+    <!-- 名簿のように、細い罫線で区切った行で並べる -->
+    <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 border-t border-ink/15">
       {
-        rest.map((inf) => (
-          <a href={withBase(`/influencer/${inf.channel_id}`)} class="min-w-0 bg-white rounded-lg shadow-sm p-4 flex items-center gap-3 hover:shadow-md">
-            {inf.channel_icon && <img src={inf.channel_icon} alt="" width="48" height="48" class="w-12 h-12 rounded-full shrink-0" loading="lazy" />}
-            <div class="min-w-0">
-              <p class="font-medium truncate">{inf.channel_title}</p>
-              <p class="text-xs text-neutral-400">登録者 {formatCount(inf.subscriber_count)}人</p>
-              <p class="text-xs text-neutral-400">動画 {inf.videoCount}件 / コスメ {inf.cosmeticCount}件</p>
-            </div>
-          </a>
+        rest.map((inf, i) => (
+          <li class="min-w-0 border-b border-ink/10">
+            <a href={withBase(`/influencer/${inf.channel_id}`)} class="group flex items-center gap-3 py-3">
+              <span class="w-8 shrink-0 text-xs text-neutral-400 tabular-nums">{LARGE + medium.length + i + 1}</span>
+              {inf.channel_icon ? <img src={inf.channel_icon} alt="" width="40" height="40" class="w-10 h-10 rounded-full shrink-0 ring-1 ring-ink/5" loading="lazy" /> : <span class="w-10 h-10 rounded-full bg-blush shrink-0" />}
+              <span class="min-w-0 flex-1">
+                <span class="block text-sm font-medium truncate group-hover:text-rose transition-colors">{inf.channel_title}</span>
+                <span class="block text-xs text-neutral-500 truncate">登録者 {formatCount(inf.subscriber_count)}人・動画 {inf.videoCount}本・コスメ {inf.cosmeticCount}品</span>
+              </span>
+              <span class="text-rose opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" aria-hidden="true">→</span>
+            </a>
+          </li>
         ))
       }
-    </div>
+    </ul>
   </section>
 </Layout>

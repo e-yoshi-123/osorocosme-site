@@ -147,25 +147,25 @@ const jsonLd = entry
             {facts.rank && facts.rank <= 10 && (
               <a href={categoryUrl(facts.mainTag!)} class="absolute -top-4 right-2 md:-right-5 w-20 h-20 md:w-24 md:h-24 rounded-full bg-ink text-paper flex flex-col items-center justify-center rotate-[8deg] shadow-xl hover:bg-rose transition-colors">
                 <span class="label-caps text-[11px] text-paper/60">Ranking</span>
-                <span class="num-display text-[28px] md:text-[34px] leading-none">No.{facts.rank}</span>
+                <span class="num-display text-[22px] md:text-[26px] leading-none">No.{facts.rank}</span>
               </a>
             )}
           </div>
 
           <div class="md:col-span-6 lg:col-span-7 md:pt-4">
             <a href={withBase(`/brand/${canonicalBrandId(entry.brand_id)}`)} class="link-u label-caps text-rose">{entry.brand}</a>
-            <h1 class="mt-4 font-serif font-semibold text-[26px] md:text-[34px] leading-[1.3] tracking-[-0.02em] text-balance">{entry.name}</h1>
+            <h1 class="mt-4 font-serif font-semibold text-[22px] md:text-[26px] leading-[1.3] tracking-[-0.02em] text-balance">{entry.name}</h1>
             {entry.category && <p class="mt-4 inline-flex items-center gap-2 text-xs text-neutral-600 border border-ink/15 rounded-full px-3 py-1">{entry.category}</p>}
 
             <div class="mt-8 pt-6 border-t border-ink/10">
               {buyable && entry.now_price !== undefined && (
-                <p data-buy class="flex items-baseline gap-3"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[30px] leading-none">¥{formatCount(entry.now_price)}</span><span class="text-xs text-neutral-500">楽天市場の参考価格{entry.price_updated && `・${formatJaDate(entry.price_updated)}時点`}</span></p>
+                <p data-buy class="flex items-baseline gap-3"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[24px] leading-none">¥{formatCount(entry.now_price)}</span><span class="text-xs text-neutral-500">楽天市場の参考価格{entry.price_updated && `・${formatJaDate(entry.price_updated)}時点`}</span></p>
               )}
               {yahooFallback && entry.yahoo_price !== undefined && (
-                <p class="flex items-baseline gap-3"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[30px] leading-none">¥{formatCount(entry.yahoo_price)}</span><span class="text-xs text-neutral-500">Yahoo!ショッピングの参考価格{entry.yahoo_price_updated && `・${formatJaDate(entry.yahoo_price_updated)}時点`}</span></p>
+                <p class="flex items-baseline gap-3"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[24px] leading-none">¥{formatCount(entry.yahoo_price)}</span><span class="text-xs text-neutral-500">Yahoo!ショッピングの参考価格{entry.yahoo_price_updated && `・${formatJaDate(entry.yahoo_price_updated)}時点`}</span></p>
               )}
               {yahooSwap?.yahoo_price !== undefined && (
-                <p data-yahoo-price hidden class="flex items-baseline gap-3"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[30px] leading-none">¥{formatCount(yahooSwap.yahoo_price)}</span><span class="text-xs text-neutral-500">Yahoo!ショッピングの参考価格{yahooSwap.yahoo_price_updated && `・${formatJaDate(yahooSwap.yahoo_price_updated)}時点`}</span></p>
+                <p data-yahoo-price hidden class="flex items-baseline gap-3"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[24px] leading-none">¥{formatCount(yahooSwap.yahoo_price)}</span><span class="text-xs text-neutral-500">Yahoo!ショッピングの参考価格{yahooSwap.yahoo_price_updated && `・${formatJaDate(yahooSwap.yahoo_price_updated)}時点`}</span></p>
               )}
               <!-- 楽天とYahoo!ショッピングのボタン（data-buy の扱いは従来どおり） -->
               <div class="mt-6 flex flex-wrap gap-3">
@@ -188,16 +188,16 @@ const jsonLd = entry
             <dl class:list={["mt-8 grid border-y border-ink/15 divide-x divide-ink/15", facts.rank ? "grid-cols-3" : "grid-cols-2"]}>
               <div class="py-5 pr-3">
                 <dt class="text-xs text-neutral-500">紹介動画</dt>
-                <dd class="mt-1 num-display text-[34px] md:text-[38px] leading-none">{facts.videoCount}<span class="font-sans text-xs ml-1 text-neutral-500">本</span></dd>
+                <dd class="mt-1 num-display text-[26px] md:text-[30px] leading-none">{facts.videoCount}<span class="font-sans text-xs ml-1 text-neutral-500">本</span></dd>
               </div>
               <div class="py-5 px-3 md:px-5">
                 <dt class="text-xs text-neutral-500">紹介した人</dt>
-                <dd class="mt-1 num-display text-[34px] md:text-[38px] leading-none">{facts.channelCount}<span class="font-sans text-xs ml-1 text-neutral-500">人</span></dd>
+                <dd class="mt-1 num-display text-[26px] md:text-[30px] leading-none">{facts.channelCount}<span class="font-sans text-xs ml-1 text-neutral-500">人</span></dd>
               </div>
               {facts.rank && (
                 <a href={categoryUrl(facts.mainTag!)} class="group py-5 px-3 md:px-5 block">
                   <dt class="text-xs text-neutral-500 truncate">{facts.mainTag}</dt>
-                  <dd class="mt-1 num-display text-[34px] md:text-[38px] leading-none group-hover:text-rose transition-colors"><span class="text-rose">{facts.rank}</span><span class="font-sans text-xs ml-1 text-neutral-500">位 / {facts.rankTotal}品</span></dd>
+                  <dd class="mt-1 num-display text-[26px] md:text-[30px] leading-none group-hover:text-rose transition-colors"><span class="text-rose">{facts.rank}</span><span class="font-sans text-xs ml-1 text-neutral-500">位 / {facts.rankTotal}品</span></dd>
                 </a>
               )}
             </dl>

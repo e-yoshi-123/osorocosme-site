@@ -154,11 +154,11 @@
 
   /* ランキングの順位（1〜3位は大きくローズ） */
   .rank-badge {
-    font-size: 26px;
+    font-size: 22px;
     color: rgb(29 21 23 / 0.45);
   }
   .ranking-row.is-top .rank-badge {
-    font-size: 36px;
+    font-size: 30px;
     color: var(--color-rose);
   }
   /* 左のカテゴリ一覧の現在地 */
@@ -262,7 +262,7 @@
 main h1.text-xl.font-bold {
   font-family: var(--font-serif);
   font-weight: 600;
-  font-size: clamp(28px, 3vw, 40px);
+  font-size: clamp(24px, 2.4vw, 30px);
   line-height: 1.25;
   letter-spacing: -0.02em;
   margin-bottom: 1rem;
@@ -273,7 +273,7 @@ main h1.text-xl.font-bold::before {
 main h2.font-bold:not(.font-serif) {
   font-family: var(--font-serif);
   font-weight: 600;
-  font-size: clamp(20px, 1.8vw, 24px);
+  font-size: 20px;
   letter-spacing: -0.02em;
 }
 main .bg-white.shadow-sm {
