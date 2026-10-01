@@ -222,7 +222,7 @@ const jsonLd = entry
         </div>
 
         <!-- ===== 01 いつ・誰が紹介したか ===== -->
-        <section class="pt-20 md:pt-28">
+        <section class="band mt-20 md:mt-28 py-14 md:py-20">
           <SectionHead num="01" en="Who used it" title="いつ・誰が紹介したか" lead={`${facts.introductions.length}件の紹介を、新しい順に並べています。`} />
           <!-- 日付・チャンネル・動画タイトルを固定の列にする。件数が多い商品は、先頭10件だけ表示して残りを折りたたむ -->
           <div class="text-sm border-t border-ink/15">
@@ -252,7 +252,7 @@ const jsonLd = entry
         )}
 
         {facts.mainTag && categoryTop.length > 0 && (
-          <section class="pt-20 md:pt-28">
+          <section class="band mt-20 md:mt-28 py-14 md:py-20">
             <SectionHead num="03" en="Ranking" title={`「${facts.mainTag}」の人気ランキング`} lead={`${facts.rankTotal}品中、この商品は${facts.rank}位です。`} href={categoryUrl(facts.mainTag)} cta={`All ${facts.rankTotal}`} />
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-8">
               {categoryTop.map(({ rank, tile }) => (

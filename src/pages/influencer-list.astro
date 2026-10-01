@@ -26,7 +26,7 @@ const rest = influencers.slice(MEDIUM_UNTIL);
     </div>
   </section>
 
-  <section class="mb-16">
+  <section class="band py-10 md:py-12 mb-16">
     <h2 class="font-serif text-[20px] md:text-[22px] font-semibold mb-6">人気のインフルエンサー <span class="num-display text-neutral-500 ml-1">{LARGE + 1}–{LARGE + medium.length}</span></h2>
     <div class="grid gap-x-6 gap-y-0 md:grid-cols-2 lg:grid-cols-3">
       {medium.map((inf, i) => <InfluencerFeatureCard influencer={inf} rank={LARGE + i + 1} size="medium" />)}

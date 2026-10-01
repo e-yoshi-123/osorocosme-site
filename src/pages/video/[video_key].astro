@@ -136,7 +136,7 @@ const jsonLd = video
             データ自体は保持しており、Claudeでの作り直し後に復活させる想定 */}
 
         {validCosmetics.length > 0 && (
-          <section class="pt-16 md:pt-24">
+          <section class="band mt-16 md:mt-24 py-14 md:py-20">
             <SectionHead num="01" en="In this video" title="紹介されたコスメ" lead={`この動画で紹介された${validCosmetics.length}品です。`} />
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-8">
               {validCosmetics.map((c) => (
@@ -156,7 +156,7 @@ const jsonLd = video
         )}
 
         {sameCosmetics.length > 0 && (
-          <section class="pt-20 md:pt-28">
+          <section class="band mt-20 md:mt-28 py-14 md:py-20">
             <SectionHead num="03" en="Same cosmetics" title="同じコスメを紹介している他の動画" lead="この動画で紹介されているコスメが登場する、他のインフルエンサーの動画です。" />
             <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
               {sameCosmetics.map((v) => <div class="min-w-0"><VideoCard video={v} /></div>)}

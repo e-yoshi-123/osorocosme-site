@@ -28,7 +28,7 @@ function topImages(tag: string): string[] {
 
   {
     nav.map((g, gi) => (
-      <section class="mb-14">
+      <section class:list={[gi % 2 === 1 ? "band py-10 md:py-12 mb-14" : "mb-14"]}>
         <h2 class="font-serif text-[20px] md:text-[22px] font-semibold mb-4 flex items-baseline gap-3"><span class="num-display text-sm text-neutral-400">{String(gi + 1).padStart(2, "0")}</span>{g.group}</h2>
         {/* 「まとめ」も単独カテゴリも、同じ幅・同じ見た目の行として同列に並べる。
             単独カテゴリは行をクリックでランキングへ。まとめは行をクリックで開き、「全般」か種類別かを選ぶ（<details>なのでJSなしでも動き、リンクはHTMLに残る） */}

@@ -10,7 +10,7 @@ import Layout from "../layouts/Layout.astro";
   </header>
   <!-- 種類の切り替え（すべて／ブランド／インフルエンサー／コスメ／動画）。件数0の種類は出さない -->
   <nav id="search-tabs" class="hidden flex flex-wrap gap-2 mb-10 text-sm" aria-label="検索結果の種類"></nav>
-  <div id="search-results" class="space-y-16"></div>
+  <div id="search-results" class="space-y-14"></div>
   <p id="search-empty" class="text-neutral-400 hidden">該当するブランド・インフルエンサー・コスメ・動画が見つかりませんでした。別の言い方（英字・カタカナ・略さない名前など）でもお試しください。</p>
 </Layout>
 
@@ -160,10 +160,13 @@ import Layout from "../layouts/Layout.astro";
         .join("");
       listEl.innerHTML = "";
       const targets = tab === "all" ? kinds : [tab];
-      for (const k of targets) {
+      targets.forEach((k, n) => {
         const limit = tab === "all" ? PREVIEW[k] : PAGE;
-        listEl.appendChild(section(k, results[k], limit, tab === "all"));
-      }
+        const sec = section(k, results[k], limit, tab === "all");
+        // 種類の切れ目が分かるよう、1つおきに区切りの面を敷く（190章）
+        if (n % 2 === 1) sec.classList.add("band", "py-12");
+        listEl.appendChild(sec);
+      });
     }
 
     function section(k: Kind, items: string[], limit: number, preview: boolean): HTMLElement {

@@ -104,8 +104,8 @@ const jsonLd = [
             ))}
           </div>
         )}
-        {sections.map((sec) => (
-          <section class="cat-section mb-10" data-group={sec.group} data-tag={sec.tag}>
+        {sections.map((sec, i) => (
+          <section class:list={["cat-section mb-10", { "band py-8 md:py-10": i % 2 === 1 }]} data-group={sec.group} data-tag={sec.tag}>
             <h2 class="font-serif text-lg font-semibold mb-5 border-b border-ink/15 pb-2">
               {sec.tag} <span class="text-xs font-normal text-neutral-500 ml-1">{sec.group !== sec.tag && sec.group !== "その他" ? `${sec.group}・` : ""}{sec.items.length}品</span>
             </h2>
@@ -138,11 +138,15 @@ const jsonLd = [
     groupTabs.forEach((t) => t.classList.toggle("is-active", t.dataset.group === activeGroup));
     chipRows.forEach((r) => (r.style.display = r.dataset.group === activeGroup ? "flex" : "none"));
     chips.forEach((c) => c.classList.toggle("is-active", c.dataset.tag === activeTag));
+    let n = 0;
     document.querySelectorAll<HTMLElement>(".cat-section").forEach((sec) => {
       const show =
         activeGroup === "__all__" ||
         (sec.dataset.group === activeGroup && (activeTag === null || sec.dataset.tag === activeTag));
       sec.style.display = show ? "" : "none";
+      // 区切りの面は、表示中のカテゴリの1つおきに敷き直す（190章）
+      const band = show && n++ % 2 === 1;
+      for (const c of ["band", "py-8", "md:py-10"]) sec.classList.toggle(c, band);
     });
   }
 
