@@ -3,7 +3,7 @@
 interface Props { en: string; title: string; lead?: string; stats?: { n: string | number; label: string }[] }
 const { en, title, lead, stats = [] } = Astro.props;
 ---
-<header class="mb-10 md:mb-14 grid md:grid-cols-12 gap-6 md:gap-10 items-end pb-8 border-b border-ink/15">
+<header class="mb-10 md:mb-14 grid md:grid-cols-12 gap-6 md:gap-10 items-end">
   <div class="md:col-span-8">
     <p class="eyebrow">{en}</p>
     <h1 class="mt-2 font-serif font-semibold text-[26px] md:text-[30px] leading-[1.35] tracking-[-0.01em]">{title}</h1>
