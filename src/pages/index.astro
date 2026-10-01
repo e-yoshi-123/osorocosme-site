@@ -120,7 +120,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
           ].map((x, i) => (
             <a href={withBase(x.href)} class:list={["group pt-5 block", i === 0 ? "pr-3" : "px-3 sm:px-5"]}>
               <dd class="num-display text-[34px] sm:text-[48px] leading-none group-hover:text-rose transition-colors">{formatCount(x.n)}</dd>
-              <dt class="mt-2 text-xs text-neutral-500"><span class="hidden sm:inline font-display italic text-sm text-ink/70 mr-1.5">{x.label}</span>{x.short ? <><span class="min-[400px]:hidden">{x.short}</span><span class="hidden min-[400px]:inline">{x.ja}</span></> : x.ja}</dt>
+              <dt class="mt-2 text-xs text-neutral-500">{x.short ? <><span class="min-[400px]:hidden">{x.short}</span><span class="hidden min-[400px]:inline">{x.ja}</span></> : x.ja}</dt>
             </a>
           ))}
         </dl>
@@ -153,7 +153,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
         <ul class="flex items-center shrink-0" aria-hidden={k === 1 ? "true" : undefined}>
           {popularBrands.map((b) => (
             <li class="flex items-center">
-              <a href={withBase(`/brand/${b.brand_id}`)} tabindex={k === 1 ? -1 : undefined} class:list={["px-6 md:px-10 text-[28px] md:text-[40px] leading-none whitespace-nowrap hover:text-rose transition-colors", isLatin(b.name) ? "font-display italic" : "font-serif font-medium"]}>{b.name}</a>
+              <a href={withBase(`/brand/${b.brand_id}`)} tabindex={k === 1 ? -1 : undefined} class:list={["px-6 md:px-10 text-[28px] md:text-[40px] leading-none whitespace-nowrap hover:text-rose transition-colors", isLatin(b.name) ? "font-display font-semibold" : "font-serif font-medium"]}>{b.name}</a>
               <span class="text-rose text-sm" aria-hidden="true">✦</span>
             </li>
           ))}
@@ -175,7 +175,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
           {f.top[0] && (
             <a href={withBase(`/cosmetics/${cosmeticSlug(f.top[0].tile.brand_id, f.top[0].tile.name_id)}`)} class="group block">
               <div class="flex items-end gap-5">
-                <span class="num-display italic text-rose text-[88px] leading-[0.72] -ml-1 w-12 shrink-0">1</span>
+                <span class="num-display text-rose text-[88px] leading-[0.72] -ml-1 w-12 shrink-0">1</span>
                 <div class="product-well flex-1 aspect-[5/4] rounded-2xl overflow-hidden flex items-center justify-center">
                   {f.top[0].tile.imageSrc && <img src={f.top[0].tile.imageSrc} alt={`${f.top[0].tile.brand} ${f.top[0].tile.name}`} class="h-[84%] w-auto max-w-[84%] object-contain transition-transform duration-[1.2s] ease-out-expo group-hover:scale-105" loading="lazy" />}
                 </div>
@@ -189,7 +189,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
             {f.top.slice(1).map(({ rank, tile }) => (
               <li class="border-b border-ink/10">
                 <a href={withBase(`/cosmetics/${cosmeticSlug(tile.brand_id, tile.name_id)}`)} class="group flex items-center gap-4 py-3">
-                  <span class="num-display italic text-[28px] w-6 text-ink/45 group-hover:text-rose transition-colors">{rank}</span>
+                  <span class="num-display text-[28px] w-6 text-ink/45 group-hover:text-rose transition-colors">{rank}</span>
                   <span class="product-well w-14 h-14 rounded-xl overflow-hidden shrink-0">
                     {tile.imageSrc && <img src={tile.imageSrc} alt="" class="w-full h-full object-contain p-1.5" loading="lazy" />}
                   </span>
@@ -197,7 +197,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
                     <span class="block text-xs tracking-[0.12em] uppercase text-neutral-500 truncate">{tile.brand}</span>
                     <span class="block text-sm leading-snug line-clamp-1 group-hover:text-rose transition-colors">{tile.name}</span>
                   </span>
-                  <span class="text-xs text-neutral-500 shrink-0 num-display">{tile.videoCount}<span class="font-sans text-xs ml-0.5">本</span></span>
+                  <span class="text-xs text-neutral-500 shrink-0">{tile.videoCount}<span class="font-sans text-xs ml-0.5">本</span></span>
                 </a>
               </li>
             ))}
@@ -270,7 +270,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
               ) : (
                 <span class="block w-full h-full rounded-full bg-blush" />
               )}
-              <span class="absolute -left-1 -top-1 num-display italic text-2xl text-rose leading-none">{String(i + 1).padStart(2, "0")}</span>
+              <span class="absolute -left-1 -top-1 num-display text-2xl text-rose leading-none">{String(i + 1).padStart(2, "0")}</span>
             </span>
             <span class="mt-5 block font-serif text-[15px] leading-snug truncate group-hover:text-rose transition-colors">{inf.channel_title}</span>
             <span class="mt-1 block text-xs text-neutral-500">動画{inf.videoCount}本・コスメ{inf.cosmeticCount}品</span>
@@ -287,7 +287,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
       {categoryGroups.map((g, i) => (
         <li class="reveal border-b border-ink/15" style={`--d:${(i % 2) * 80}ms`}>
           <a href={withBase("/ranking/")} class="group relative flex items-baseline gap-5 py-5 md:py-6 overflow-hidden">
-            <span class="num-display italic text-neutral-400 text-lg w-7 shrink-0">{String(i + 1).padStart(2, "0")}</span>
+            <span class="num-display text-neutral-400 text-lg w-7 shrink-0">{String(i + 1).padStart(2, "0")}</span>
             <span class="font-serif text-[22px] md:text-[28px] font-semibold transition-transform duration-700 ease-out-expo group-hover:translate-x-2 group-hover:text-rose">{g.group}</span>
             <span class="ml-auto text-xs text-neutral-500 shrink-0"><span class="num-display text-base text-ink">{g.tags.length}</span> カテゴリ</span>
             <span class="shrink-0 -mr-6 opacity-0 transition-all duration-500 ease-out-expo group-hover:mr-0 group-hover:opacity-100 text-rose" aria-hidden="true">→</span>
@@ -317,7 +317,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
           { n: "III", title: "動画で確かめる", text: "誰がいつ紹介したかを、元の動画で見られます。", href: "/video-list", cta: "動画一覧へ" },
         ].map((st, i) => (
           <li class="reveal text-center md:text-left" style={`--d:${i * 120}ms`}>
-            <p class="num-display italic text-rose text-[56px] leading-none">{st.n}</p>
+            <p class="num-display text-rose text-[56px] leading-none">{st.n}</p>
             <p class="mt-4 font-serif text-xl font-semibold">{st.title}</p>
             <p class="mt-3 text-sm leading-[1.9] text-neutral-600">{st.text}</p>
             <a href={withBase(st.href)} class="link-u mt-4 inline-block text-xs tracking-[0.1em]">{st.cta} →</a>

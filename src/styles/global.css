@@ -4,7 +4,7 @@
   デザインの試作（design-proto）。美容誌のような編集デザインに寄せる。
   - 地は生成り（paper）、文字は墨（ink）、差し色はブランドのローズ（#E60076、ファビコンと同じ）
   - Tailwind の pink / neutral をこの配色に置き換えるので、既存のページの色味も一度にそろう
-  - 見出しは明朝（Shippori Mincho）、欧文・数字は Cormorant Garamond、本文は端末の標準のゴシック
+  - 見出しは明朝（Shippori Mincho B1。線の太い版）、欧文・数字は Cormorant Garamond の立体（斜体はロゴだけ）、本文は端末の標準のゴシック
     （Googleフォントの日本語は詰め組み palt が削られているため、本文には使わない）
 */
 @theme {
@@ -38,8 +38,8 @@
   --color-berry: #5a0f31;
 
   --font-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Yu Gothic", "Noto Sans JP", Meiryo, system-ui, sans-serif;
-  --font-serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
-  --font-display: "Cormorant Garamond", "Shippori Mincho", serif;
+  --font-serif: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --font-display: "Cormorant Garamond", "Shippori Mincho B1", serif;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -76,8 +76,8 @@
   /* 見出しの組（番号・欧文ラベル・日本語の題・罫線） */
   .eyebrow {
     font-family: var(--font-display);
-    font-style: italic;
-    font-size: 0.95rem;
+    font-weight: 700;
+    font-size: 1.05rem;
     letter-spacing: 0.04em;
     color: var(--color-rose);
   }
@@ -90,6 +90,7 @@
   }
   .num-display {
     font-family: var(--font-display);
+    font-weight: 600;
     font-feature-settings: "lnum" 1, "pnum" 1;
     letter-spacing: -0.01em;
   }
@@ -180,7 +181,7 @@
     align-items: center;
     gap: 6px;
     font-family: var(--font-display);
-    font-style: italic;
+    font-weight: 600;
     font-size: 13px;
     color: var(--color-neutral-400);
   }

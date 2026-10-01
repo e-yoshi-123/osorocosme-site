@@ -147,7 +147,7 @@ const jsonLd = entry
             {facts.rank && facts.rank <= 10 && (
               <a href={categoryUrl(facts.mainTag!)} class="absolute -top-4 right-2 md:-right-5 w-20 h-20 md:w-24 md:h-24 rounded-full bg-ink text-paper flex flex-col items-center justify-center rotate-[8deg] shadow-xl hover:bg-rose transition-colors">
                 <span class="label-caps text-[10px] text-paper/60">Ranking</span>
-                <span class="num-display italic text-[32px] md:text-[40px] leading-none">No.{facts.rank}</span>
+                <span class="num-display text-[32px] md:text-[40px] leading-none">No.{facts.rank}</span>
               </a>
             )}
           </div>
@@ -197,7 +197,7 @@ const jsonLd = entry
               {facts.rank && (
                 <a href={categoryUrl(facts.mainTag!)} class="group py-5 px-3 md:px-5 block">
                   <dt class="text-xs text-neutral-500 truncate">{facts.mainTag}</dt>
-                  <dd class="mt-1 num-display text-[40px] md:text-[48px] leading-none group-hover:text-rose transition-colors"><span class="italic text-rose">{facts.rank}</span><span class="font-sans text-xs ml-1 text-neutral-500">位 / {facts.rankTotal}品</span></dd>
+                  <dd class="mt-1 num-display text-[40px] md:text-[48px] leading-none group-hover:text-rose transition-colors"><span class="text-rose">{facts.rank}</span><span class="font-sans text-xs ml-1 text-neutral-500">位 / {facts.rankTotal}品</span></dd>
                 </a>
               )}
             </dl>

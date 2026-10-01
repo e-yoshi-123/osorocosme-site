@@ -50,7 +50,7 @@ const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
   data-recent-channels={recentChannels}
   hidden={extra}
 >
-  <span class="rank-badge num-display italic leading-none text-center">{rank}</span>
+  <span class="rank-badge num-display leading-none text-center">{rank}</span>
   <a href={href} class="product-well block aspect-square rounded-xl flex items-center justify-center overflow-hidden" tabindex="-1" aria-hidden="true">
     {
       imageSrc ? (
@@ -72,9 +72,9 @@ const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
     {subLabel && <span class="inline-block mt-1.5 text-xs border border-ink/15 text-neutral-600 rounded-full px-2 py-0.5">{subLabel}</span>}
   </a>
   <p class="col-start-2 col-span-2 md:col-start-auto md:col-span-1 text-xs text-neutral-500">
-    <span class="whitespace-nowrap">動画 <b class="num-display font-normal text-ink text-xl">{videoCount}</b>本</span>
+    <span class="whitespace-nowrap">動画 <b class="num-display text-ink text-xl">{videoCount}</b>本</span>
     <span class="mx-1.5 text-ink/20">|</span>
-    <span class="whitespace-nowrap"><b class="num-display font-normal text-ink text-xl">{channelCount}</b>人</span>
+    <span class="whitespace-nowrap"><b class="num-display text-ink text-xl">{channelCount}</b>人</span>
     <!-- 「最近話題」の並び替えのときだけスクリプトが表示する -->
     <span class="recent-info hidden block mt-0.5 text-rose whitespace-nowrap">直近{recentDays}日：{recentVideos}本 / {recentChannels}チャンネル</span>
   </p>

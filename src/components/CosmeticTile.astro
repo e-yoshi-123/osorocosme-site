@@ -35,7 +35,7 @@ const { tile, rank, caption, current = false, showBrand = true } = Astro.props;
     }
     {
       rank !== undefined && (
-        <span class:list={["absolute top-0 left-0 num-display italic leading-none bg-paper rounded-br-2xl pl-3 pr-3.5 pt-1.5 pb-2", rank <= 3 ? "text-rose text-[28px]" : "text-ink/60 text-[22px]"]}>
+        <span class:list={["absolute top-0 left-0 num-display leading-none bg-paper rounded-br-2xl pl-3 pr-3.5 pt-1.5 pb-2", rank <= 3 ? "text-rose text-[28px]" : "text-ink/60 text-[22px]"]}>
           {rank}
         </span>
       )
