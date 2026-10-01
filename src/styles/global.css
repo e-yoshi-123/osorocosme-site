@@ -4,7 +4,7 @@
   デザインの試作（design-proto）。美容誌のような編集デザインに寄せる。
   - 地は生成り（paper）、文字は墨（ink）、差し色はブランドのローズ（#E60076、ファビコンと同じ）
   - Tailwind の pink / neutral をこの配色に置き換えるので、既存のページの色味も一度にそろう
-  - 見出しは明朝（Shippori Mincho B1。線の太い版）、欧文・数字は Cormorant Garamond の立体（斜体はロゴだけ）、本文は端末の標準のゴシック
+  - 見出しは端末の標準ゴシックの太字、英字の小見出し・数字は Helvetica Neue（明朝・細い欧文は見づらいとのユーザー判断）。ロゴだけ Cormorant Garamond、本文は端末の標準のゴシック
     （Googleフォントの日本語は詰め組み palt が削られているため、本文には使わない）
 */
 @theme {
@@ -38,8 +38,9 @@
   --color-berry: #5a0f31;
 
   --font-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Yu Gothic", "Noto Sans JP", Meiryo, system-ui, sans-serif;
-  --font-serif: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", serif;
-  --font-display: "Cormorant Garamond", "Shippori Mincho B1", serif;
+  --font-serif: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Yu Gothic", "Noto Sans JP", Meiryo, system-ui, sans-serif;
+  --font-display: "Helvetica Neue", Arial, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  --font-logo: "Cormorant Garamond", serif;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -81,8 +82,8 @@
   .eyebrow {
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: 1.05rem;
-    letter-spacing: 0.04em;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
     color: var(--color-rose);
   }
   .label-caps {
@@ -120,7 +121,7 @@
     border-radius: 4px;
   }
   h2.font-serif, h3.font-serif, .font-serif.tighten {
-    letter-spacing: -0.03em;
+    letter-spacing: -0.01em;
   }
 
   /* アーチ型の額（特集・ヒーロー） */
