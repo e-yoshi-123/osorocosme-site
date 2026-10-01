@@ -16,7 +16,7 @@ const links = [
   { method: "line", name: "LINE", href: `https://social-plugins.line.me/lineit/share?url=${u}`, cls: "" },
   { method: "threads", name: "Threads", href: `https://www.threads.com/intent/post?text=${t}&url=${u}`, cls: "" },
 ];
-const btn = "inline-flex items-center justify-center min-h-8 px-3.5 rounded-full border border-ink/20 text-[11px] tracking-[0.06em] whitespace-nowrap text-ink transition-colors duration-300 hover:bg-ink hover:text-paper hover:border-ink";
+const btn = "inline-flex items-center justify-center min-h-8 px-3.5 rounded-full border border-ink/20 text-xs tracking-[0.06em] whitespace-nowrap text-ink transition-colors duration-300 hover:bg-ink hover:text-paper hover:border-ink";
 ---
 
 <div data-share data-url={url} data-text={text} class:list={["flex flex-wrap items-center gap-1.5", className]}>

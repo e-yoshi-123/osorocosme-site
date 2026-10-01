@@ -88,14 +88,14 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
 >
   <!-- ===== HERO：雑誌の表紙のように、大きな見出しと話題のコスメの額装 ===== -->
   <section class="relative -mt-8 md:-mt-12 pt-10 md:pt-16 pb-16 md:pb-24">
-    <div class="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+    <div class="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-12 gap-12 lg:gap-8 items-center">
       <div class="lg:col-span-7 relative z-10">
-        <p class="flex items-center gap-3 mb-8 md:mb-10">
+        <p class="flex flex-wrap items-center gap-x-3 gap-y-1 mb-8 md:mb-10">
           <span class="label-caps text-ink">Issue {issue}</span>
-          <span class="h-px w-10 bg-ink/30"></span>
+          <span class="hidden min-[400px]:block h-px w-10 bg-ink/30"></span>
           <span class="eyebrow">The YouTube Cosme Database</span>
         </p>
-        <h1 class="font-serif font-semibold text-[clamp(34px,9.6vw,58px)] lg:text-[clamp(56px,5.4vw,84px)] leading-[1.16] tracking-[-0.01em]">
+        <h1 class="min-w-0 font-serif font-semibold text-[clamp(32px,9.2vw,58px)] lg:text-[clamp(56px,5.4vw,84px)] leading-[1.16] tracking-[-0.01em]">
           <span class="hero-line block"><span style="--d:0ms">あの人の</span></span>
           <span class="hero-line block"><span style="--d:60ms"><em class="not-italic text-rose">愛用</em>コスメ、</span></span>
           <span class="hero-line block whitespace-nowrap"><span style="--d:120ms">動画から見つかる。</span></span>
@@ -116,11 +116,11 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
           {[
             { n: cosmeticCount, label: "Cosmetics", ja: "コスメ", href: "/ranking/" },
             { n: visible.length, label: "Videos", ja: "紹介動画", href: "/video-list" },
-            { n: influencerCount, label: "Influencers", ja: "インフルエンサー", href: "/influencer-list" },
+            { n: influencerCount, label: "Influencers", ja: "インフルエンサー", short: "人", href: "/influencer-list" },
           ].map((x, i) => (
             <a href={withBase(x.href)} class:list={["group pt-5 block", i === 0 ? "pr-3" : "px-3 sm:px-5"]}>
-              <dd class="num-display text-[34px] sm:text-[52px] leading-none group-hover:text-rose transition-colors">{formatCount(x.n)}</dd>
-              <dt class="mt-2 text-[11px] text-neutral-500"><span class="hidden sm:inline font-display italic text-[13px] text-ink/70 mr-1.5">{x.label}</span>{x.ja}</dt>
+              <dd class="num-display text-[34px] sm:text-[48px] leading-none group-hover:text-rose transition-colors">{formatCount(x.n)}</dd>
+              <dt class="mt-2 text-xs text-neutral-500"><span class="hidden sm:inline font-display italic text-sm text-ink/70 mr-1.5">{x.label}</span>{x.short ? <><span class="min-[400px]:hidden">{x.short}</span><span class="hidden min-[400px]:inline">{x.ja}</span></> : x.ja}</dt>
             </a>
           ))}
         </dl>
@@ -135,8 +135,8 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
               <span class="w-12 h-12 rounded-full overflow-hidden bg-white shrink-0 ring-1 ring-ink/5"><img src={heroItems[0].img} alt="" class="w-full h-full object-contain p-1.5" /></span>
               <span class="min-w-0 flex-1">
                 <span class="block label-caps text-rose">Now trending No.1</span>
-                <span class="block text-[13px] leading-snug truncate group-hover:text-rose transition-colors">{heroItems[0].r.brand} {heroItems[0].r.name}</span>
-                <span class="block text-[11px] text-neutral-500">直近{RECENT_DAYS}日で{heroItems[0].c?.channels ?? heroItems[0].r.channelCount}人が紹介</span>
+                <span class="block text-sm leading-snug truncate group-hover:text-rose transition-colors">{heroItems[0].r.brand} {heroItems[0].r.name}</span>
+                <span class="block text-xs text-neutral-500">直近{RECENT_DAYS}日で{heroItems[0].c?.channels ?? heroItems[0].r.channelCount}人が紹介</span>
               </span>
               <span class="shrink-0 text-rose transition-transform duration-500 group-hover:translate-x-1" aria-hidden="true">→</span>
             </a>
@@ -153,7 +153,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
         <ul class="flex items-center shrink-0" aria-hidden={k === 1 ? "true" : undefined}>
           {popularBrands.map((b) => (
             <li class="flex items-center">
-              <a href={withBase(`/brand/${b.brand_id}`)} tabindex={k === 1 ? -1 : undefined} class:list={["px-6 md:px-10 text-[28px] md:text-[44px] leading-none whitespace-nowrap hover:text-rose transition-colors", isLatin(b.name) ? "font-display italic" : "font-serif font-medium"]}>{b.name}</a>
+              <a href={withBase(`/brand/${b.brand_id}`)} tabindex={k === 1 ? -1 : undefined} class:list={["px-6 md:px-10 text-[28px] md:text-[40px] leading-none whitespace-nowrap hover:text-rose transition-colors", isLatin(b.name) ? "font-display italic" : "font-serif font-medium"]}>{b.name}</a>
               <span class="text-rose text-sm" aria-hidden="true">✦</span>
             </li>
           ))}
@@ -170,19 +170,19 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
         <article class="reveal min-w-0" style={`--d:${fi * 120}ms`}>
           <div class="flex items-baseline justify-between mb-5">
             <h3 class="font-serif text-xl md:text-2xl font-semibold">{f.tag}</h3>
-            <a href={categoryUrl(f.tag)} class="link-u text-[11px] tracking-[0.18em] uppercase text-neutral-600">Top 50</a>
+            <a href={categoryUrl(f.tag)} class="link-u text-xs tracking-[0.18em] uppercase text-neutral-600">Top 50</a>
           </div>
           {f.top[0] && (
             <a href={withBase(`/cosmetics/${cosmeticSlug(f.top[0].tile.brand_id, f.top[0].tile.name_id)}`)} class="group block">
               <div class="flex items-end gap-5">
-                <span class="num-display italic text-rose text-[104px] leading-[0.72] -ml-1 w-12 shrink-0">1</span>
+                <span class="num-display italic text-rose text-[88px] leading-[0.72] -ml-1 w-12 shrink-0">1</span>
                 <div class="product-well flex-1 aspect-[5/4] rounded-2xl overflow-hidden flex items-center justify-center">
                   {f.top[0].tile.imageSrc && <img src={f.top[0].tile.imageSrc} alt={`${f.top[0].tile.brand} ${f.top[0].tile.name}`} class="h-[84%] w-auto max-w-[84%] object-contain transition-transform duration-[1.2s] ease-out-expo group-hover:scale-105" loading="lazy" />}
                 </div>
               </div>
-              <p class="mt-4 text-[10px] tracking-[0.14em] uppercase text-neutral-500">{f.top[0].tile.brand}</p>
+              <p class="mt-4 text-xs tracking-[0.14em] uppercase text-neutral-500">{f.top[0].tile.brand}</p>
               <p class="mt-1 font-serif text-lg leading-snug group-hover:text-rose transition-colors tighten">{f.top[0].tile.name}</p>
-              <p class="mt-1 text-[11px] text-neutral-500">{f.top[0].tile.videoCount}本の動画で紹介</p>
+              <p class="mt-1 text-xs text-neutral-500">{f.top[0].tile.videoCount}本の動画で紹介</p>
             </a>
           )}
           <ol class="mt-6 border-t border-ink/10">
@@ -194,10 +194,10 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
                     {tile.imageSrc && <img src={tile.imageSrc} alt="" class="w-full h-full object-contain p-1.5" loading="lazy" />}
                   </span>
                   <span class="min-w-0 flex-1">
-                    <span class="block text-[10px] tracking-[0.12em] uppercase text-neutral-500 truncate">{tile.brand}</span>
-                    <span class="block text-[13px] leading-snug line-clamp-1 group-hover:text-rose transition-colors">{tile.name}</span>
+                    <span class="block text-xs tracking-[0.12em] uppercase text-neutral-500 truncate">{tile.brand}</span>
+                    <span class="block text-sm leading-snug line-clamp-1 group-hover:text-rose transition-colors">{tile.name}</span>
                   </span>
-                  <span class="text-[11px] text-neutral-500 shrink-0 num-display">{tile.videoCount}<span class="font-sans text-[10px] ml-0.5">本</span></span>
+                  <span class="text-xs text-neutral-500 shrink-0 num-display">{tile.videoCount}<span class="font-sans text-xs ml-0.5">本</span></span>
                 </a>
               </li>
             ))}
@@ -273,7 +273,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
               <span class="absolute -left-1 -top-1 num-display italic text-2xl text-rose leading-none">{String(i + 1).padStart(2, "0")}</span>
             </span>
             <span class="mt-5 block font-serif text-[15px] leading-snug truncate group-hover:text-rose transition-colors">{inf.channel_title}</span>
-            <span class="mt-1 block text-[11px] text-neutral-500">動画{inf.videoCount}本・コスメ{inf.cosmeticCount}品</span>
+            <span class="mt-1 block text-xs text-neutral-500">動画{inf.videoCount}本・コスメ{inf.cosmeticCount}品</span>
           </a>
         </li>
       ))}
@@ -317,14 +317,14 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
           { n: "III", title: "動画で確かめる", text: "誰がいつ紹介したかを、元の動画で見られます。", href: "/video-list", cta: "動画一覧へ" },
         ].map((st, i) => (
           <li class="reveal text-center md:text-left" style={`--d:${i * 120}ms`}>
-            <p class="num-display italic text-rose text-[64px] leading-none">{st.n}</p>
+            <p class="num-display italic text-rose text-[56px] leading-none">{st.n}</p>
             <p class="mt-4 font-serif text-xl font-semibold">{st.title}</p>
             <p class="mt-3 text-sm leading-[1.9] text-neutral-600">{st.text}</p>
-            <a href={withBase(st.href)} class="link-u mt-4 inline-block text-[12px] tracking-[0.1em]">{st.cta} →</a>
+            <a href={withBase(st.href)} class="link-u mt-4 inline-block text-xs tracking-[0.1em]">{st.cta} →</a>
           </li>
         ))}
       </ol>
-      <p class="mt-14 text-center text-[11px] text-neutral-500">データはYouTubeのコスメ紹介動画から作成しています。{updatedAt && `最新の動画：${formatJaDate(updatedAt)}`}</p>
+      <p class="mt-14 text-center text-xs text-neutral-500">データはYouTubeのコスメ紹介動画から作成しています。{updatedAt && `最新の動画：${formatJaDate(updatedAt)}`}</p>
     </div>
   </section>
 </Layout>

@@ -55,12 +55,12 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
           })}>
             <div class="sm:w-40 shrink-0 sm:text-right sm:pt-1 flex items-baseline gap-2 sm:block">
               <div class="text-sm font-medium truncate">{g.group}</div>
-              <div class="text-[11px] text-neutral-400">{g.brands.length}ブランド ／ {g.videoCount}本</div>
+              <div class="text-xs text-neutral-400">{g.brands.length}ブランド ／ {g.videoCount}本</div>
             </div>
             <div class="flex-1 min-w-0">
               <div class="gmap-canvas relative hidden"></div>
               {/* JS無効時の一覧（JS有効時は非表示） */}
-              <div class="gmap-legend flex flex-wrap gap-x-3 gap-y-0.5 text-[11px] text-neutral-600">
+              <div class="gmap-legend flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-neutral-600">
                 {g.brands.map((b) => (
                   <a href={withBase(`/brand/${b.brand_id}`)} class="hover:text-pink-600">
                     {b.name}<span class="text-neutral-400">{b.videoCount}</span>
@@ -98,7 +98,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
               <a href={withBase(`/brand/${b.brand_id}`)} class="brand-item text-sm hover:text-pink-600 min-w-0" data-region={getCountryRegion(b.brand_id)}>
                 <span class="block truncate">{b.name}</span>
                 {(meta.country || meta.group) && (
-                  <span class="block text-[11px] text-neutral-400 truncate">
+                  <span class="block text-xs text-neutral-400 truncate">
                     {[meta.country ? COUNTRY_NAMES[meta.country] ?? meta.country : null, meta.group].filter(Boolean).join("・")}
                   </span>
                 )}
@@ -217,7 +217,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
       x += w;
 
       const head = document.createElement("div");
-      head.className = "absolute text-[11px] font-bold whitespace-nowrap overflow-hidden";
+      head.className = "absolute text-xs font-bold whitespace-nowrap overflow-hidden";
       head.style.color = `hsl(${sec.hue} 45% 32%)`;
       css(head, { x: area.x, y: 0, w, h: HEADER });
       head.textContent = `${sec.label}・${sec.total}本`;
@@ -250,7 +250,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
           anyMore = true;
           const btn = document.createElement("button");
           btn.type = "button";
-          btn.className = "absolute overflow-hidden whitespace-nowrap text-[11px] px-1.5 text-left text-neutral-600 hover:brightness-95";
+          btn.className = "absolute overflow-hidden whitespace-nowrap text-xs px-1.5 text-left text-neutral-600 hover:brightness-95";
           btn.style.background = "hsl(0 0% 88%)";
           css(btn, r);
           const n = merged.length;
@@ -267,7 +267,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
           const a = document.createElement("a");
           a.href = o.b!.href;
           a.title = `${o.b!.name}（紹介動画${o.b!.v}本）`;
-          a.className = "absolute overflow-hidden whitespace-nowrap text-[11px] px-1.5 flex items-center hover:brightness-95";
+          a.className = "absolute overflow-hidden whitespace-nowrap text-xs px-1.5 flex items-center hover:brightness-95";
           a.style.background = `hsl(${sec.hue} 70% ${90 - (o.i! % 3) * 6}%)`;
           a.style.color = `hsl(${sec.hue} 50% 25%)`;
           css(a, r);

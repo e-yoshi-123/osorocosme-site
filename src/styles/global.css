@@ -83,9 +83,9 @@
   }
   .label-caps {
     font-family: var(--font-sans);
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
   }
   .num-display {
@@ -132,8 +132,8 @@
     border-radius: 999px;
     transition: background-color 0.4s, color 0.4s, border-color 0.4s;
   }
-  .tab { padding: 0.45rem 1rem; font-size: 13px; }
-  .chip { padding: 0.3rem 0.8rem; font-size: 12px; }
+  .tab { padding: 0.45rem 1rem; font-size: 14px; }
+  .chip { padding: 0.35rem 0.85rem; font-size: 13px; }
   .tab:hover, .chip:hover { border-color: var(--color-ink); }
   .tab.is-active, .chip.is-active {
     background: var(--color-ink);

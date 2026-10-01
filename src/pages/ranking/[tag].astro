@@ -103,7 +103,7 @@ const jsonLd = [
 ---
 
 <Layout title={`${tag}のおすすめ人気ランキング TOP${shownMax}｜YouTuberの紹介数順`} description={description} image={topImage} jsonLd={jsonLd}>
-  <nav class="text-[11px] text-neutral-500 mb-8 md:mb-12 flex flex-wrap items-center gap-2" aria-label="パンくず">
+  <nav class="text-xs text-neutral-500 mb-8 md:mb-12 flex flex-wrap items-center gap-2" aria-label="パンくず">
     <a href={withBase("/")} class="link-u">Home</a><span aria-hidden="true">/</span>
     <a href={withBase("/ranking/")} class="link-u">ランキング</a><span aria-hidden="true">/</span>
     {parent && <><a href={categoryUrl(parent.key)} class="link-u">{parent.key}</a><span aria-hidden="true">/</span></>}
@@ -115,7 +115,7 @@ const jsonLd = [
     <aside class="hidden md:block w-56 shrink-0 sticky top-24 self-start">
       <div class="max-h-[calc(100vh-7rem)] overflow-y-auto pr-2 [scrollbar-width:thin]">
         <h2 class="sticky top-0 bg-paper z-10 pb-3 border-b border-ink/15"><span class="eyebrow block">Categories</span><span class="font-serif text-lg font-semibold">カテゴリから探す</span></h2>
-        <div class="pt-5 space-y-6 text-[13px]">
+        <div class="pt-5 space-y-6 text-sm">
           {
             nav.map((g) => (
               <div>
@@ -130,7 +130,7 @@ const jsonLd = [
                         <ul class="ml-1 pl-3 border-l border-ink/10">
                           {it.children.map((c) => (
                             <li>
-                              <a href={categoryUrl(c.name)} class:list={["side-link block py-0.5 text-[12px] text-neutral-600", { "is-current": c.name === tag }]} aria-current={c.name === tag ? "page" : undefined}>
+                              <a href={categoryUrl(c.name)} class:list={["side-link block py-0.5 text-xs text-neutral-600", { "is-current": c.name === tag }]} aria-current={c.name === tag ? "page" : undefined}>
                                 {c.name} <span class="text-neutral-400">({c.count})</span>
                               </a>
                             </li>
@@ -178,8 +178,8 @@ const jsonLd = [
       <header class="mb-10">
         <div>
           <p class="eyebrow">{isParent ? "Ranking — Overview" : "Ranking — Category"}</p>
-          <h1 class="mt-3 font-serif font-semibold leading-[1.2] tracking-[-0.02em]"><span class="block text-[40px] md:text-[64px]">{tag}</span><span class="block mt-2 text-lg md:text-2xl text-neutral-600">おすすめ人気ランキング</span></h1>
-          <p class="text-[13px] leading-relaxed text-neutral-600 mt-5 max-w-2xl">
+          <h1 class="mt-3 font-serif font-semibold leading-[1.2] tracking-[-0.02em]"><span class="block text-[40px] md:text-[56px]">{tag}</span><span class="block mt-2 text-lg md:text-2xl text-neutral-600">おすすめ人気ランキング</span></h1>
+          <p class="text-sm leading-relaxed text-neutral-600 mt-5 max-w-2xl">
             {total}品中、上位{shownMax}位までを紹介しています。YouTubeのコスメ紹介動画での人気スコア順です。
             {isParent && "細かいカテゴリの商品をまとめて、同じ基準で並べています。"}
           </p>
@@ -208,7 +208,7 @@ const jsonLd = [
           )
         }
         <details class="border-b border-ink/15 text-xs text-neutral-600">
-          <summary class="py-4 cursor-pointer select-none hover:text-rose flex items-center gap-2"><span class="w-5 h-5 rounded-full border border-ink/25 inline-flex items-center justify-center text-[10px]">?</span>スコアの見方</summary>
+          <summary class="py-4 cursor-pointer select-none hover:text-rose flex items-center gap-2"><span class="w-5 h-5 rounded-full border border-ink/25 inline-flex items-center justify-center text-xs">?</span>スコアの見方</summary>
           <div class="pb-5 pt-1 space-y-1.5 leading-relaxed max-w-2xl">
             <p>紹介した動画の<b>合計再生回数</b>、<b>紹介動画の本数</b>、<b>紹介したインフルエンサー（チャンネル）の数</b>から算出した人気スコアの順です。</p>
             <p>再生数が多く、複数の動画・複数のインフルエンサーに紹介されている商品ほど上位になります。同じ人が何本も紹介しているだけの商品より、多くの人に紹介されている商品が上位になりやすいよう、チャンネル数を重めにしています。</p>
@@ -231,7 +231,7 @@ const jsonLd = [
           </div>
         </div>
 
-        <p class="text-[11px] text-neutral-500 mb-4">価格は楽天市場で確認した時点の参考価格です。最新の価格・在庫は楽天市場でご確認ください。</p>
+        <p class="text-xs text-neutral-500 mb-4">価格は楽天市場で確認した時点の参考価格です。最新の価格・在庫は楽天市場でご確認ください。</p>
         <div class="border-t-2 border-ink">
           <div class="hidden md:grid grid-cols-[3.5rem_6rem_minmax(0,1fr)_10rem_12rem] gap-x-5 py-3 border-b border-ink/15 label-caps text-neutral-500">
             <span class="text-center">順位</span>

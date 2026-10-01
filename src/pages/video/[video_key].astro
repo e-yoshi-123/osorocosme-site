@@ -116,8 +116,8 @@ const jsonLd = video
               <span><span class="block label-caps text-neutral-500">Influencer</span><span class="block text-sm link-u group-hover:text-rose">{video.channel_title}</span></span>
             </a>
             <dl class="mt-6 grid grid-cols-2 border-y border-ink/15 divide-x divide-ink/15">
-              <div class="py-4 pr-3"><dt class="text-[11px] text-neutral-500">投稿日</dt><dd class="num-display text-[22px] mt-1">{(() => { const d = new Date(video.published_at); return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`; })()}</dd></div>
-              <div class="py-4 pl-4"><dt class="text-[11px] text-neutral-500">再生回数</dt><dd class="num-display text-[22px] mt-1">{formatCount(video.view_count)}</dd></div>
+              <div class="py-4 pr-3"><dt class="text-xs text-neutral-500">投稿日</dt><dd class="num-display text-[22px] mt-1">{(() => { const d = new Date(video.published_at); return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`; })()}</dd></div>
+              <div class="py-4 pl-4"><dt class="text-xs text-neutral-500">再生回数</dt><dd class="num-display text-[22px] mt-1">{formatCount(video.view_count)}</dd></div>
             </dl>
             {/* 投稿者のチャンネルへ送る導線（181章） */}
             <div class="mt-6 flex flex-wrap gap-3">

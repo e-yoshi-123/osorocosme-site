@@ -99,12 +99,12 @@ const jsonLd = influencer
           </div>
           <div class="md:col-span-8 lg:col-span-8">
             <p class="eyebrow">Influencer profile</p>
-            <h1 class="mt-3 font-serif font-semibold text-[34px] md:text-[56px] leading-[1.2] tracking-[-0.02em] text-balance">{influencer.channel_title}</h1>
+            <h1 class="mt-3 font-serif font-semibold text-[34px] md:text-[48px] leading-[1.2] tracking-[-0.02em] text-balance">{influencer.channel_title}</h1>
             <p class="mt-5 text-sm leading-[1.9] text-neutral-600 max-w-2xl">{description}</p>
             <dl class="mt-8 grid grid-cols-3 max-w-xl border-y border-ink/15 divide-x divide-ink/15">
-              <div class="py-4 pr-3"><dt class="text-[11px] text-neutral-500">紹介動画</dt><dd class="num-display text-[34px] md:text-[44px] leading-none mt-1">{videos.length}<span class="font-sans text-xs text-neutral-500 ml-1">本</span></dd></div>
-              <div class="py-4 px-3 md:px-5"><dt class="text-[11px] text-neutral-500">使用コスメ</dt><dd class="num-display text-[34px] md:text-[44px] leading-none mt-1">{totalItems}<span class="font-sans text-xs text-neutral-500 ml-1">品</span></dd></div>
-              <div class="py-4 px-3 md:px-5"><dt class="text-[11px] text-neutral-500">登録者</dt><dd class="num-display text-[34px] md:text-[44px] leading-none mt-1">{influencer.subscriber_count ? formatCount(Number(influencer.subscriber_count) >= 10000 ? Math.round(Number(influencer.subscriber_count) / 10000) : Number(influencer.subscriber_count)) : "—"}<span class="font-sans text-xs text-neutral-500 ml-1">{Number(influencer.subscriber_count) >= 10000 ? "万人" : "人"}</span></dd></div>
+              <div class="py-4 pr-3"><dt class="text-xs text-neutral-500">紹介動画</dt><dd class="num-display text-[34px] md:text-[40px] leading-none mt-1">{videos.length}<span class="font-sans text-xs text-neutral-500 ml-1">本</span></dd></div>
+              <div class="py-4 px-3 md:px-5"><dt class="text-xs text-neutral-500">使用コスメ</dt><dd class="num-display text-[34px] md:text-[40px] leading-none mt-1">{totalItems}<span class="font-sans text-xs text-neutral-500 ml-1">品</span></dd></div>
+              <div class="py-4 px-3 md:px-5"><dt class="text-xs text-neutral-500">登録者</dt><dd class="num-display text-[34px] md:text-[40px] leading-none mt-1">{influencer.subscriber_count ? formatCount(Number(influencer.subscriber_count) >= 10000 ? Math.round(Number(influencer.subscriber_count) / 10000) : Number(influencer.subscriber_count)) : "—"}<span class="font-sans text-xs text-neutral-500 ml-1">{Number(influencer.subscriber_count) >= 10000 ? "万人" : "人"}</span></dd></div>
             </dl>
             <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
               {/* 投稿者のチャンネルへ送る導線（181章） */}
@@ -158,7 +158,7 @@ const jsonLd = influencer
                       <span class="sr-only">{formatDate(video.published_at)}</span>
                       <a href={withBase(`/video/${video.key}`)} class="group mt-4 flex md:block gap-3 items-start">
                         <span class="block w-28 md:w-full shrink-0 overflow-hidden rounded-xl"><img src={video.thumbnail} alt="" class="w-full aspect-video object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105" loading="lazy" /></span>
-                        <span class="block md:mt-3 text-[12px] leading-relaxed text-neutral-600 group-hover:text-rose transition-colors line-clamp-3">{video.title}</span>
+                        <span class="block md:mt-3 text-xs leading-relaxed text-neutral-600 group-hover:text-rose transition-colors line-clamp-3">{video.title}</span>
                       </a>
                     </div>
                   </div>

@@ -116,7 +116,7 @@ const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace
         <a href={withBase("/")} class="text-ink text-[22px] md:text-[26px] shrink-0" aria-label="OsoroCosme ホーム"><Logo /></a>
         <nav class="hidden lg:flex items-center gap-7 ml-6" aria-label="メイン">
           {navLinks.map((l) => (
-            <a href={withBase(l.href)} class:list={["group relative text-[13px] tracking-[0.04em] py-2", isCurrent(l.href) ? "text-ink" : "text-neutral-600 hover:text-ink"]} aria-current={isCurrent(l.href) ? "page" : undefined}>
+            <a href={withBase(l.href)} class:list={["group relative text-sm tracking-[0.04em] py-2", isCurrent(l.href) ? "text-ink" : "text-neutral-600 hover:text-ink"]} aria-current={isCurrent(l.href) ? "page" : undefined}>
               {l.label}
               <span class:list={["absolute left-0 -bottom-0.5 h-px bg-rose transition-all duration-500 ease-out-expo", isCurrent(l.href) ? "w-full" : "w-0 group-hover:w-full"]} />
             </a>
@@ -139,7 +139,7 @@ const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace
       <nav class="lg:hidden border-t border-ink/5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="メイン（スマホ）">
         <div class="flex gap-5 px-4 md:px-8 whitespace-nowrap">
           {navLinks.map((l) => (
-            <a href={withBase(l.href)} class:list={["relative text-[13px] py-2.5 shrink-0", isCurrent(l.href) ? "text-ink font-medium" : "text-neutral-600"]}>
+            <a href={withBase(l.href)} class:list={["relative text-sm py-2.5 shrink-0", isCurrent(l.href) ? "text-ink font-medium" : "text-neutral-600"]}>
               {l.label}
               {isCurrent(l.href) && <span class="absolute left-0 right-0 bottom-0 h-px bg-rose" />}
             </a>

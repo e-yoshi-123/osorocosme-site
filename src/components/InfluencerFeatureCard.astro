@@ -34,10 +34,10 @@ const href = withBase(`/influencer/${inf.channel_id}`);
       {
         h.topTags.length > 0 && (
           <div class="mt-1.5">
-            <p class="text-[10px] text-neutral-400 mb-0.5">紹介が多いカテゴリ</p>
+            <p class="text-xs text-neutral-400 mb-0.5">紹介が多いカテゴリ</p>
             <div class="flex gap-1 flex-wrap">
               {h.topTags.map((t) => (
-                <span class="text-[10px] bg-pink-50 text-pink-700 rounded px-1.5 py-0.5">{t}</span>
+                <span class="text-xs bg-pink-50 text-pink-700 rounded px-1.5 py-0.5">{t}</span>
               ))}
             </div>
           </div>
@@ -56,8 +56,8 @@ const href = withBase(`/influencer/${inf.channel_id}`);
             {h.latestVideos.map((v) => (
               <a href={withBase(`/video/${v.key}`)} class="min-w-0 block group">
                 <img src={v.thumbnail} alt="" class="w-full aspect-video object-cover rounded" loading="lazy" />
-                <p class="mt-1 text-[11px] leading-snug line-clamp-2 group-hover:text-pink-600">{v.title}</p>
-                <p class="text-[10px] text-neutral-400">{formatJaDate(v.published_at)}</p>
+                <p class="mt-1 text-xs leading-snug line-clamp-2 group-hover:text-pink-600">{v.title}</p>
+                <p class="text-xs text-neutral-400">{formatJaDate(v.published_at)}</p>
               </a>
             ))}
           </div>
@@ -67,7 +67,7 @@ const href = withBase(`/influencer/${inf.channel_id}`);
               <img src={v.thumbnail} alt="" class="w-20 aspect-video object-cover rounded shrink-0" loading="lazy" />
               <span class="min-w-0">
                 <span class="block text-xs leading-snug line-clamp-2 group-hover:text-pink-600">{v.title}</span>
-                <span class="block text-[10px] text-neutral-400">{formatJaDate(v.published_at)}</span>
+                <span class="block text-xs text-neutral-400">{formatJaDate(v.published_at)}</span>
               </span>
             </a>
           ))
@@ -95,8 +95,8 @@ const href = withBase(`/influencer/${inf.channel_id}`);
                   onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'noimg',textContent:'No image'}))"
                 />
               </div>
-              <p class="mt-1 text-[10px] leading-snug line-clamp-2 group-hover:text-pink-600">{c.name}</p>
-              {c.videoCount > 1 && <p class="text-[10px] text-neutral-400">{c.videoCount}本で紹介</p>}
+              <p class="mt-1 text-xs leading-snug line-clamp-2 group-hover:text-pink-600">{c.name}</p>
+              {c.videoCount > 1 && <p class="text-xs text-neutral-400">{c.videoCount}本で紹介</p>}
             </a>
           ))}
         </div>
