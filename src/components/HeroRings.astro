@@ -36,12 +36,12 @@ const itemAngles = [-74, -40, -6, 28, 62];
   </div>
 
   <!-- 左の輪：インフルエンサー -->
-  <div class="orbit absolute inset-0" style={`transform-origin:${A.x}% ${A.y}%;--spin:-1`}>
+  <div class="orbit absolute inset-0 pointer-events-none" style={`transform-origin:${A.x}% ${A.y}%;--spin:-1`}>
     {faces.slice(0, faceAngles.length).map((f, i) => {
       const p = place(A, faceAngles[i]);
       const big = i % 2 === 0;
       return (
-        <a href={f.href} class="orbit-item group absolute -translate-x-1/2 -translate-y-1/2" style={`left:${p.left}%;top:${p.top}%`} title={f.name}>
+        <a href={f.href} class="orbit-item group absolute pointer-events-auto -translate-x-1/2 -translate-y-1/2" style={`left:${p.left}%;top:${p.top}%`} title={f.name}>
           <span class="counter block">
             <img src={f.src} alt={f.name} class:list={["rounded-full object-cover ring-4 ring-paper shadow-[0_12px_30px_-12px_rgba(29,21,23,0.5)] transition-transform duration-700 ease-out-expo group-hover:scale-110", big ? "w-[clamp(44px,5.2vw,74px)] h-[clamp(44px,5.2vw,74px)]" : "w-[clamp(36px,4.2vw,58px)] h-[clamp(36px,4.2vw,58px)]"]} loading="eager" />
           </span>
@@ -51,12 +51,12 @@ const itemAngles = [-74, -40, -6, 28, 62];
   </div>
 
   <!-- 右の輪：話題のコスメ（円で切り抜くので、画像の四隅の宣伝文字は隠れる） -->
-  <div class="orbit absolute inset-0" style={`transform-origin:${B.x}% ${B.y}%;--spin:1`}>
+  <div class="orbit absolute inset-0 pointer-events-none" style={`transform-origin:${B.x}% ${B.y}%;--spin:1`}>
     {items.slice(0, itemAngles.length).map((it, i) => {
       const p = place(B, itemAngles[i]);
       const big = i % 2 === 1;
       return (
-        <a href={it.href} class="orbit-item group absolute -translate-x-1/2 -translate-y-1/2" style={`left:${p.left}%;top:${p.top}%`} title={it.name}>
+        <a href={it.href} class="orbit-item group absolute pointer-events-auto -translate-x-1/2 -translate-y-1/2" style={`left:${p.left}%;top:${p.top}%`} title={it.name}>
           <span class="counter block">
             <span class:list={["block rounded-full overflow-hidden bg-white ring-4 ring-paper shadow-[0_12px_30px_-12px_rgba(90,15,49,0.45)] transition-transform duration-700 ease-out-expo group-hover:scale-110", big ? "w-[clamp(48px,5.6vw,80px)] h-[clamp(48px,5.6vw,80px)]" : "w-[clamp(38px,4.4vw,62px)] h-[clamp(38px,4.4vw,62px)]"]}>
               <img src={it.src} alt={it.name} class="w-full h-full object-contain p-[12%]" loading="eager" />
