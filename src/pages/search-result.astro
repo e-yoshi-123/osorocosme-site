@@ -3,67 +3,255 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="検索結果" noindex>
-  <header class="mb-10 pb-8 border-b border-ink/15">
+  <header class="mb-8 pb-8 border-b border-ink/15">
     <p class="eyebrow">Search</p>
     <h1 class="mt-2 font-serif font-semibold text-[26px] md:text-[30px] leading-[1.35]">検索結果：<span id="search-query" class="text-rose"></span></h1>
     <p id="search-count" class="mt-3 text-sm text-neutral-500"></p>
   </header>
-  <div id="search-results" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10 [&>*]:min-w-0"></div>
-  <p id="search-empty" class="text-neutral-400 hidden">該当する動画が見つかりませんでした。</p>
+  <!-- 種類の切り替え（すべて／ブランド／インフルエンサー／コスメ／動画）。件数0の種類は出さない -->
+  <nav id="search-tabs" class="hidden flex flex-wrap gap-2 mb-10 text-sm" aria-label="検索結果の種類"></nav>
+  <div id="search-results" class="space-y-16"></div>
+  <p id="search-empty" class="text-neutral-400 hidden">該当するブランド・インフルエンサー・コスメ・動画が見つかりませんでした。別の言い方（英字・カタカナ・略さない名前など）でもお試しください。</p>
 </Layout>
 
 <script>
-  interface SearchItem {
-    key: string;
-    title: string;
-    channel_title: string;
-    description: string;
-    thumbnail: string;
-    published_at: string;
-    cosmetics: { brand: string; name: string }[];
-  }
+  type BrandRow = [string, string, string, number, number];
+  type InfRow = [string, string, string, number, number];
+  type CosRow = [string, string, number, string, string, string, number];
+  type VideoRow = [string, string, number, string, string, string, number[]];
+  interface Index { b: BrandRow[]; i: InfRow[]; c: CosRow[]; v: VideoRow[] }
+  type Kind = "brand" | "influencer" | "cosmetic" | "video";
 
   const base = import.meta.env.BASE_URL.endsWith("/")
     ? import.meta.env.BASE_URL.slice(0, -1)
     : import.meta.env.BASE_URL;
 
+  /** 表記ゆれを吸収する正規化：全角半角・大小文字・ひらがな/カタカナをそろえ、記号と空白を除く。
+   * 「クレド」で「クレ・ド・ポー ボーテ」、「ロムアンド」「romand」で「rom&nd」が引けるようにする。 */
+  const norm = (s: string) =>
+    s
+      .normalize("NFKC")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "") // é → e（Clé de Peau など）。濁点は下で戻す
+      .normalize("NFC")
+      .replace(/[ぁ-ゖ]/g, (ch) => String.fromCharCode(ch.charCodeAt(0) + 0x60))
+      .replace(/ヴァ/g, "バ").replace(/ヴィ/g, "ビ").replace(/ヴェ/g, "ベ").replace(/ヴォ/g, "ボ").replace(/ヴ/g, "ブ")
+      .replace(/[\s・･·.,\-‐－_&＆'’"!！?？()（）［］\[\]「」『』/／~〜:：+＋#＃*＊]/g, "");
+
+  const esc = (s: string) =>
+    s.replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch]!);
+  const fmt = (n: number) => (n >= 10000 ? `${(n / 10000).toFixed(n >= 100000 ? 0 : 1).replace(/\.0$/, "")}万` : n.toLocaleString("ja-JP"));
+  const largerRakutenImage = (src: string) => src.replace(/(thumbnail\.image\.rakuten\.co\.jp\/.*[?&]_ex=)\d+x\d+/, "$1400x400");
+
   const params = new URLSearchParams(location.search);
   const q = (params.get("q") || "").trim();
   document.getElementById("search-query")!.textContent = q;
+  // 空白区切りの語は、すべてを含むものだけを出す（「クレド ファンデ」など）
+  const terms = q.split(/[\s　]+/).map(norm).filter(Boolean);
 
-  if (q) {
+  const LABELS: Record<Kind, string> = { brand: "ブランド", influencer: "インフルエンサー", cosmetic: "コスメ", video: "動画" };
+  // 「すべて」で各種類を何件まで見せるか
+  const PREVIEW: Record<Kind, number> = { brand: 12, influencer: 6, cosmetic: 10, video: 8 };
+  // 種類ごとの表示で、一度に出す件数（「もっと見る」で追加）
+  const PAGE = 60;
+
+  /** 名前との一致の強さ（完全一致 3、前方一致 2、部分一致 1、なし 0）。並べ替えに使う */
+  function nameScore(names: string[]): number {
+    const joined = terms.join("");
+    let best = 0;
+    for (const n of names) {
+      if (!n) continue;
+      if (n === joined) return 3;
+      if (n.startsWith(joined)) best = Math.max(best, 2);
+      else if (terms.every((t) => n.includes(t))) best = Math.max(best, 1);
+    }
+    return best;
+  }
+  const hitsAll = (hay: string) => terms.every((t) => hay.includes(t));
+
+  if (terms.length > 0) {
     fetch(`${base}/search-index.json`)
       .then((r) => r.json())
-      .then((items: SearchItem[]) => {
-        const needle = q.toLowerCase();
-        const matched = items.filter((v) => {
-          if (v.title.toLowerCase().includes(needle)) return true;
-          if (v.channel_title.toLowerCase().includes(needle)) return true;
-          if (v.description.toLowerCase().includes(needle)) return true;
-          return v.cosmetics.some(
-            (c) => c.brand.toLowerCase().includes(needle) || c.name.toLowerCase().includes(needle)
-          );
-        });
-
-        document.getElementById("search-count")!.textContent = `${matched.length}件見つかりました`;
-        const grid = document.getElementById("search-results")!;
-        if (matched.length === 0) {
-          document.getElementById("search-empty")!.classList.remove("hidden");
-        }
-        for (const v of matched) {
-          const a = document.createElement("a");
-          a.href = `${base}/video/${v.key}/`;
-          a.className = "group block min-w-0";
-          a.innerHTML = `
-            <span class="block overflow-hidden rounded-2xl bg-neutral-200"><img src="${v.thumbnail}" alt="" class="w-full aspect-video object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" /></span>
-            <span class="block pt-3">
-              <span class="block text-xs text-neutral-500 truncate mb-1">${v.channel_title}</span>
-              <span class="block text-sm leading-relaxed line-clamp-2 group-hover:text-rose transition-colors">${v.title}</span>
-            </span>`;
-          grid.appendChild(a);
-        }
-      });
+      .then((idx: Index) => render(idx));
   } else {
     document.getElementById("search-count")!.textContent = "検索キーワードを入力してください";
+  }
+
+  function render(idx: Index) {
+    // ブランド：名前・読み・別名
+    const brandNames = idx.b.map((b) => [norm(b[1]), ...b[2].split(" ").map(norm)]);
+    const brandHay = brandNames.map((ns) => ns.join("|"));
+    const brands = idx.b
+      .map((b, n) => ({ b, n, s: nameScore(brandNames[n]) }))
+      .filter((x) => hitsAll(brandHay[x.n]))
+      .sort((x, y) => y.s - x.s || y.b[3] - x.b[3]);
+
+    // インフルエンサー：チャンネル名
+    const infNames = idx.i.map((i) => norm(i[1]));
+    const influencers = idx.i
+      .map((i, n) => ({ i, n, s: nameScore([infNames[n]]) }))
+      .filter((x) => hitsAll(infNames[x.n]))
+      .sort((x, y) => y.s - x.s || y.i[4] - x.i[4]);
+
+    // コスメ：ブランド名（別名を含む）＋商品名。紹介動画の多い順
+    const cosHay = idx.c.map((c) => `${norm(c[1])}|${c[2] >= 0 ? brandHay[c[2]] : ""}|${norm(c[3])}`);
+    // カテゴリはコスメの検索だけで使う（動画の検索に入れると「リップ」で無関係な動画まで増えるため）
+    const cosHayWithCategory = idx.c.map((c, n) => `${cosHay[n]}|${c[5].split(" ").map(norm).join("|")}`);
+    const cosmetics = idx.c
+      .map((c, n) => ({ c, n }))
+      .filter((x) => hitsAll(cosHayWithCategory[x.n]));
+
+    // 動画：題名・チャンネル名・概要欄・紹介コスメ。題名かチャンネル名に当たるものを先に、その中は新しい順
+    const videos = idx.v
+      .map((v) => {
+        const title = norm(v[1]);
+        const ch = v[2] >= 0 ? infNames[v[2]] : "";
+        const hay = `${title}|${ch}|${norm(v[3])}|${v[6].map((n) => cosHay[n]).join("|")}`;
+        return { v, hit: hitsAll(hay), s: hitsAll(`${title}|${ch}`) ? 1 : 0 };
+      })
+      .filter((x) => x.hit)
+      .sort((x, y) => y.s - x.s || y.v[5].localeCompare(x.v[5]));
+
+    const results: Record<Kind, string[]> = {
+      brand: brands.map(({ b }) => brandHtml(b)),
+      influencer: influencers.map(({ i }) => influencerHtml(i)),
+      cosmetic: cosmetics.map(({ c }) => cosmeticHtml(c)),
+      video: videos.map(({ v }) => videoHtml(v, v[2] >= 0 ? idx.i[v[2]][1] : "")),
+    };
+    // 名前で強く当たった種類を先に出す（ブランド名で検索したらブランドが先頭、など）
+    const order: Kind[] = ["brand", "influencer", "cosmetic", "video"];
+    const strong: Record<Kind, number> = {
+      brand: brands[0]?.s ?? 0,
+      influencer: influencers[0]?.s ?? 0,
+      cosmetic: 0,
+      video: 0,
+    };
+    order.sort((a, b) => strong[b] - strong[a]);
+
+    const total = order.reduce((s, k) => s + results[k].length, 0);
+    const countEl = document.getElementById("search-count")!;
+    if (total === 0) {
+      countEl.textContent = "";
+      document.getElementById("search-empty")!.classList.remove("hidden");
+      return;
+    }
+    countEl.textContent = order
+      .filter((k) => results[k].length > 0)
+      .map((k) => `${LABELS[k]} ${results[k].length.toLocaleString("ja-JP")}件`)
+      .join("・");
+
+    const tabsEl = document.getElementById("search-tabs")!;
+    const listEl = document.getElementById("search-results")!;
+    const kinds = order.filter((k) => results[k].length > 0);
+
+    function show(tab: "all" | Kind, push: boolean) {
+      if (push) {
+        const u = new URL(location.href);
+        if (tab === "all") u.searchParams.delete("type");
+        else u.searchParams.set("type", tab);
+        history.replaceState(null, "", u);
+      }
+      tabsEl.innerHTML = [["all", "すべて", total] as const, ...kinds.map((k) => [k, LABELS[k], results[k].length] as const)]
+        .map(
+          ([key, label, n]) =>
+            `<button type="button" data-tab="${key}" aria-pressed="${key === tab}" class="px-4 py-2 rounded-full border ${key === tab ? "bg-pink-100" : ""}">${label}<span class="ml-1.5 text-xs text-neutral-400">${n.toLocaleString("ja-JP")}</span></button>`
+        )
+        .join("");
+      listEl.innerHTML = "";
+      const targets = tab === "all" ? kinds : [tab];
+      for (const k of targets) {
+        const limit = tab === "all" ? PREVIEW[k] : PAGE;
+        listEl.appendChild(section(k, results[k], limit, tab === "all"));
+      }
+    }
+
+    function section(k: Kind, items: string[], limit: number, preview: boolean): HTMLElement {
+      const sec = document.createElement("section");
+      sec.innerHTML = `
+        <h2 class="font-serif text-[20px] md:text-[22px] font-semibold mb-6 flex items-baseline gap-3">${LABELS[k]}<span class="num-display text-sm text-neutral-400">${items.length.toLocaleString("ja-JP")}</span></h2>
+        <div class="${GRID[k]}"></div>`;
+      const grid = sec.querySelector("div")!;
+      let shown = 0;
+      const more = document.createElement("button");
+      more.type = "button";
+      more.className = "mt-8 label-caps text-rose hover:underline";
+      const add = () => {
+        grid.insertAdjacentHTML("beforeend", items.slice(shown, shown + limit).join(""));
+        shown = Math.min(items.length, shown + limit);
+        if (shown >= items.length) more.remove();
+        else more.textContent = preview ? `${LABELS[k]}をすべて見る（${items.length.toLocaleString("ja-JP")}件）→` : `もっと見る（残り${(items.length - shown).toLocaleString("ja-JP")}件）`;
+      };
+      more.addEventListener("click", () => {
+        if (preview) {
+          show(k, true);
+          window.scrollTo({ top: 0 });
+        } else add();
+      });
+      sec.appendChild(more);
+      add();
+      return sec;
+    }
+
+    tabsEl.classList.remove("hidden");
+    tabsEl.addEventListener("click", (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-tab]");
+      if (btn) show(btn.dataset.tab as "all" | Kind, true);
+    });
+    const initial = params.get("type") as Kind | null;
+    show(initial && kinds.includes(initial) ? initial : "all", false);
+  }
+
+  const GRID: Record<Kind, string> = {
+    brand: "grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 border-t border-ink/15",
+    influencer: "grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 border-t border-ink/15",
+    cosmetic: "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-5 gap-y-8 [&>*]:min-w-0",
+    video: "grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10 [&>*]:min-w-0",
+  };
+
+  function brandHtml([id, name, , videoCount, cosmeticCount]: BrandRow) {
+    return `<a href="${base}/brand/${id}/" class="group flex items-center gap-3 py-3.5 border-b border-ink/10 min-w-0">
+      <span class="min-w-0 flex-1">
+        <span class="block text-sm font-medium truncate group-hover:text-rose transition-colors">${esc(name)}</span>
+        <span class="block text-xs text-neutral-500 truncate">動画 ${videoCount}本・コスメ ${cosmeticCount}品</span>
+      </span>
+      <span class="text-rose opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" aria-hidden="true">→</span>
+    </a>`;
+  }
+
+  function influencerHtml([id, name, icon, subs, videoCount]: InfRow) {
+    const img = icon
+      ? `<img src="${esc(icon)}" alt="" width="40" height="40" class="w-10 h-10 rounded-full shrink-0 ring-1 ring-ink/5" loading="lazy" />`
+      : `<span class="w-10 h-10 rounded-full bg-blush shrink-0"></span>`;
+    return `<a href="${base}/influencer/${id}/" class="group flex items-center gap-3 py-3 border-b border-ink/10 min-w-0">
+      ${img}
+      <span class="min-w-0 flex-1">
+        <span class="block text-sm font-medium truncate group-hover:text-rose transition-colors">${esc(name)}</span>
+        <span class="block text-xs text-neutral-500 truncate">登録者 ${fmt(subs)}人・動画 ${videoCount}本</span>
+      </span>
+      <span class="text-rose opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" aria-hidden="true">→</span>
+    </a>`;
+  }
+
+  function cosmeticHtml([slug, brand, , name, img, , videoCount]: CosRow) {
+    const pic = img
+      ? `<img src="${esc(largerRakutenImage(img))}" alt="" class="w-full h-full object-contain p-[11%] transition-transform duration-[1.2s] ease-out-expo group-hover:scale-[1.06]" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'noimg',textContent:'No image'}))" />`
+      : `<span class="noimg">No image</span>`;
+    return `<a href="${base}/cosmetics/${slug}/" class="min-w-0 block group">
+      <div class="product-well relative aspect-square rounded-2xl flex items-center justify-center overflow-hidden">${pic}</div>
+      <p class="mt-3 text-xs tracking-[0.14em] uppercase text-neutral-500 truncate">${esc(brand)}</p>
+      <p class="mt-1 text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors">${esc(name)}</p>
+      <p class="mt-1.5 text-xs text-neutral-500">動画 ${videoCount}本で紹介</p>
+    </a>`;
+  }
+
+  function videoHtml([key, title, , , thumb]: VideoRow, channel: string) {
+    return `<a href="${base}/video/${key}/" class="group block min-w-0">
+      <span class="block overflow-hidden rounded-2xl bg-neutral-200"><img src="${esc(thumb)}" alt="" class="w-full aspect-video object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" /></span>
+      <span class="block pt-3">
+        <span class="block text-xs text-neutral-500 truncate mb-1">${esc(channel)}</span>
+        <span class="block text-sm leading-relaxed line-clamp-2 group-hover:text-rose transition-colors">${esc(title)}</span>
+      </span>
+    </a>`;
   }
 </script>
