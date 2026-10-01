@@ -42,6 +42,10 @@
   --font-display: "Cormorant Garamond", "Shippori Mincho B1", serif;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* 文字の大きさの幅を縮める（ユーザー指摘）：いちばん小さい文字を13pxに */
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.6;
 }
 
 @layer base {
@@ -83,9 +87,9 @@
   }
   .label-caps {
     font-family: var(--font-sans);
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
   }
   .num-display {
@@ -149,11 +153,11 @@
 
   /* ランキングの順位（1〜3位は大きくローズ） */
   .rank-badge {
-    font-size: 30px;
+    font-size: 26px;
     color: rgb(29 21 23 / 0.45);
   }
   .ranking-row.is-top .rank-badge {
-    font-size: 46px;
+    font-size: 36px;
     color: var(--color-rose);
   }
   /* 左のカテゴリ一覧の現在地 */
@@ -257,7 +261,7 @@
 main h1.text-xl.font-bold {
   font-family: var(--font-serif);
   font-weight: 600;
-  font-size: clamp(32px, 4.4vw, 56px);
+  font-size: clamp(28px, 3vw, 40px);
   line-height: 1.25;
   letter-spacing: -0.02em;
   margin-bottom: 1rem;
@@ -268,7 +272,7 @@ main h1.text-xl.font-bold::before {
 main h2.font-bold:not(.font-serif) {
   font-family: var(--font-serif);
   font-weight: 600;
-  font-size: clamp(20px, 2vw, 26px);
+  font-size: clamp(20px, 1.8vw, 24px);
   letter-spacing: -0.02em;
 }
 main .bg-white.shadow-sm {
