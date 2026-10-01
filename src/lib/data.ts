@@ -922,6 +922,21 @@ export function getFeature(slug: string) {
   if (!_featureCache.has(slug)) _featureCache.set(slug, buildFeature(def));
   return _featureCache.get(slug)!;
 }
+/** 特集の表紙に並べる画像（ホームの特集カード・特集一覧）。各カテゴリの1位を先に、足りなければ2位以下から（大分類が1つの特集でも並ぶように） */
+export function featureCoverImages(slug: string, n = 3): string[] {
+  const f = getFeature(slug);
+  if (!f) return [];
+  const depth = Math.max(0, ...f.groups.map((g) => g.items.length));
+  const ordered: FeatureItem[] = [];
+  for (let i = 0; i < depth; i++) for (const g of f.groups) if (g.items[i]) ordered.push(g.items[i]);
+  const out: string[] = [];
+  for (const it of ordered) {
+    const src = productImageSrc(getCosmeticListEntry(it.brand_id, it.name_id));
+    if (src && !out.includes(src)) out.push(src);
+    if (out.length >= n) break;
+  }
+  return out;
+}
 
 /** 商品ページの構造化データ（Product.category）用に、単一のカテゴリ名（例:「アイブロウペンシル」）を
  * 「コスメ・美容 > 大分類 > カテゴリ名」の階層テキストに変換する（Search Consoleの「category の値が無効」指摘への対応）。

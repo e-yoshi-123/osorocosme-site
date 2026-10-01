@@ -20,6 +20,7 @@ import {
   categoryUrl,
   getPublishedFeatures,
   getFeature,
+  featureCoverImages,
   getCosmeticListEntry,
   productImageSrc,
   getRecentCounts,
@@ -56,16 +57,10 @@ const siteLd = {
     "query-input": "required name=search_term_string",
   },
 };
-// 特集カード用: 各特集の上位コスメの画像（各カテゴリの1位を最大3つ）と、集計元の動画数
+// 特集カード用: 各特集の上位コスメの画像（最大3つ）と、集計元の動画数
 const featureCards = getPublishedFeatures().map((d) => {
   const f = getFeature(d.slug)!;
-  const imgs = f.groups
-    .map((g) => g.items[0])
-    .filter(Boolean)
-    .map((it) => productImageSrc(getCosmeticListEntry(it.brand_id, it.name_id)))
-    .filter(Boolean)
-    .slice(0, 3);
-  return { def: d, videoCount: f.videoCount, channelCount: f.channelCount, imgs };
+  return { def: d, videoCount: f.videoCount, channelCount: f.channelCount, imgs: featureCoverImages(d.slug) };
 });
 
 // ヒーローの表紙：最近話題のコスメ上位3品（画像のあるもの）
