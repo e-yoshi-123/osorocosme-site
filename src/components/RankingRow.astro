@@ -42,7 +42,7 @@ const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
   data-* と rank-badge は、カテゴリページの並び替え・「もっと見る」のスクリプトが使う。
 -->
 <li
-  class:list={["ranking-row px-3 py-3 md:px-4 grid grid-cols-[auto_4.5rem_minmax(0,1fr)] md:grid-cols-[2.5rem_5.5rem_minmax(0,1fr)_10rem_12rem] gap-x-3 md:gap-x-4 gap-y-2 items-center", top ? "bg-pink-50" : "bg-white"]}
+  class:list={["ranking-row group/row py-5 grid grid-cols-[2.75rem_4.75rem_minmax(0,1fr)] md:grid-cols-[3.5rem_6rem_minmax(0,1fr)_10rem_12rem] gap-x-3 md:gap-x-5 gap-y-3 items-center", { "is-top": top }]}
   data-base={base}
   data-videos={videoCount}
   data-channels={channelCount}
@@ -50,51 +50,49 @@ const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
   data-recent-channels={recentChannels}
   hidden={extra}
 >
-  <span
-    class:list={["rank-badge shrink-0 min-w-8 h-8 px-1 rounded-full text-white text-sm font-bold flex items-center justify-center", top ? "bg-pink-600" : "bg-neutral-400"]}
-  >{rank}</span>
-  <a href={href} class="block aspect-square bg-white rounded flex items-center justify-center overflow-hidden" tabindex="-1" aria-hidden="true">
+  <span class="rank-badge num-display italic leading-none text-center">{rank}</span>
+  <a href={href} class="product-well block aspect-square rounded-xl flex items-center justify-center overflow-hidden" tabindex="-1" aria-hidden="true">
     {
       imageSrc ? (
         <img
           src={imageSrc}
           alt={`${brand} ${name}`}
-          class="max-w-full max-h-full object-contain"
+          class="w-[86%] h-[86%] object-contain transition-transform duration-700 ease-out-expo group-hover/row:scale-105"
           loading="lazy"
-          onerror="var li=this.closest('li');this.replaceWith(Object.assign(document.createElement('span'),{className:'text-neutral-300 text-[10px]',textContent:'No Image'}));if(li)li.querySelectorAll('[data-buy]').forEach(function(e){e.remove()})"
+          onerror="var li=this.closest('li');this.replaceWith(Object.assign(document.createElement('span'),{className:'noimg',textContent:'No image'}));if(li)li.querySelectorAll('[data-buy]').forEach(function(e){e.remove()})"
         />
       ) : (
-        <span class="text-neutral-300 text-[10px]">No Image</span>
+        <span class="noimg">No image</span>
       )
     }
   </a>
   <a href={href} class="min-w-0 group">
-    <span class="block text-xs text-neutral-500 truncate">{brand}</span>
-    <span class="block font-medium leading-snug line-clamp-2 group-hover:text-pink-600">{name}</span>
-    {subLabel && <span class="inline-block mt-1 text-[10px] bg-neutral-100 text-neutral-600 rounded px-1.5 py-0.5">{subLabel}</span>}
+    <span class="block text-[10px] tracking-[0.14em] uppercase text-neutral-500 truncate">{brand}</span>
+    <span class="block mt-1 text-[15px] leading-snug line-clamp-2 group-hover:text-rose transition-colors">{name}</span>
+    {subLabel && <span class="inline-block mt-1.5 text-[10px] border border-ink/15 text-neutral-600 rounded-full px-2 py-0.5">{subLabel}</span>}
   </a>
-  <p class="col-span-3 md:col-span-1 text-xs text-neutral-500">
-    <span class="whitespace-nowrap">紹介動画 <b class="text-neutral-800 text-sm">{videoCount}</b>本</span>
-    <span class="mx-1">/</span>
-    <span class="whitespace-nowrap"><b class="text-neutral-800 text-sm">{channelCount}</b>チャンネル</span>
+  <p class="col-start-2 col-span-2 md:col-start-auto md:col-span-1 text-[11px] text-neutral-500">
+    <span class="whitespace-nowrap">動画 <b class="num-display font-normal text-ink text-[20px]">{videoCount}</b>本</span>
+    <span class="mx-1.5 text-ink/20">|</span>
+    <span class="whitespace-nowrap"><b class="num-display font-normal text-ink text-[20px]">{channelCount}</b>人</span>
     <!-- 「最近話題」の並び替えのときだけスクリプトが表示する -->
-    <span class="recent-info hidden block mt-0.5 text-pink-600 whitespace-nowrap">直近{recentDays}日：{recentVideos}本 / {recentChannels}チャンネル</span>
+    <span class="recent-info hidden block mt-0.5 text-rose whitespace-nowrap">直近{recentDays}日：{recentVideos}本 / {recentChannels}チャンネル</span>
   </p>
-  <div class="col-span-3 md:col-span-1 flex items-center justify-between md:justify-end gap-3 min-h-8">
-    {buyable && price !== undefined && <span data-buy class="text-sm text-neutral-700 whitespace-nowrap" title={fromYahoo ? "Yahoo!ショッピングの参考価格" : "楽天市場の参考価格"}>¥{formatCount(price)}</span>}
+  <div class="col-start-2 col-span-2 md:col-start-auto md:col-span-1 flex items-center justify-between md:justify-end gap-3 min-h-8">
+    {buyable && price !== undefined && <span data-buy class="num-display text-[19px] text-ink whitespace-nowrap" title={fromYahoo ? "Yahoo!ショッピングの参考価格" : "楽天市場の参考価格"}>¥{formatCount(price)}</span>}
     <!-- 楽天とYahoo!のボタンを短いラベルで横に並べる（列が狭いため。正式名は aria-label と title に入れる）。
          Yahoo!のボタンには data-buy を付けないので、楽天の画像が読み込めずに楽天のボタンが消えても残る -->
     <div class="flex items-center gap-1.5">
       {
         buyable && link && (
-          <a data-buy href={link} target="_blank" rel="nofollow sponsored noopener" aria-label="楽天市場で見る" title="楽天市場で見る" class="inline-block bg-red-600 text-white text-xs px-3 py-1.5 rounded hover:bg-red-700 whitespace-nowrap">
+          <a data-buy href={link} target="_blank" rel="nofollow sponsored noopener" aria-label="楽天市場で見る" title="楽天市場で見る" class="inline-block bg-ink text-paper text-[11px] tracking-[0.06em] px-3.5 py-2 rounded-full hover:bg-rose transition-colors whitespace-nowrap">
             楽天
           </a>
         )
       }
       {
         yahooLink && (
-          <a href={yahooLink} target="_blank" rel="nofollow sponsored noopener" aria-label="Yahoo!ショッピングで見る" title="Yahoo!ショッピングで見る" class="inline-block bg-white text-red-600 border border-red-600 text-xs px-2.5 py-[5px] rounded hover:bg-red-50 whitespace-nowrap">
+          <a href={yahooLink} target="_blank" rel="nofollow sponsored noopener" aria-label="Yahoo!ショッピングで見る" title="Yahoo!ショッピングで見る" class="inline-block border border-ink/25 text-[11px] tracking-[0.06em] px-3 py-[7px] rounded-full hover:border-ink transition-colors whitespace-nowrap">
             Yahoo!
           </a>
         )

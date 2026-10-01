@@ -1,0 +1,97 @@
+---
+// ヒーローの絵：ロゴの「重なる2つの輪」を大きく描き、左の輪にインフルエンサー、右の輪に話題のコスメを並べる。
+// 2つの輪の重なりが「あの人と、おそろ。」（試作）
+interface Face { src: string; name: string; href: string }
+interface Item { src: string; name: string; href: string }
+interface Props { faces: Face[]; items: Item[] }
+const { faces, items } = Astro.props;
+// 正方形の座標（%）。輪の中心と半径
+const A = { x: 35, y: 50 }, B = { x: 65, y: 50 }, R = 26;
+const place = (c: { x: number; y: number }, deg: number) => ({
+  left: c.x + R * Math.cos((deg * Math.PI) / 180),
+  top: c.y + R * Math.sin((deg * Math.PI) / 180),
+});
+const faceAngles = [118, 152, 186, 220, 254];
+const itemAngles = [-74, -40, -6, 28, 62];
+---
+<div class="hero-rings relative w-full aspect-square select-none [contain:layout]">
+  <svg viewBox="0 0 100 100" class="absolute inset-0 w-full h-full overflow-visible" aria-hidden="true">
+    <defs>
+      <radialGradient id="lens" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="var(--color-pink-100)" />
+        <stop offset="100%" stop-color="var(--color-pink-100)" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+    <circle cx="50" cy="50" r="22" fill="url(#lens)" />
+    <circle class="ring-draw" cx={A.x} cy={A.y} r={R} fill="none" stroke="var(--color-ink)" stroke-opacity="0.55" stroke-width="0.25" pathLength="100" />
+    <circle class="ring-draw" cx={B.x} cy={B.y} r={R} fill="none" stroke="var(--color-rose)" stroke-width="0.35" pathLength="100" style="--d:300ms" />
+    <circle cx={A.x} cy={A.y} r={R + 6} fill="none" stroke="var(--color-ink)" stroke-opacity="0.08" stroke-width="0.15" stroke-dasharray="0.4 1.2" />
+    <circle cx={B.x} cy={B.y} r={R + 6} fill="none" stroke="var(--color-rose)" stroke-opacity="0.18" stroke-width="0.15" stroke-dasharray="0.4 1.2" />
+  </svg>
+
+  <!-- 重なり：サイト名の由来 -->
+  <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-[22%]">
+    <p class="font-display italic text-rose text-[clamp(11px,1.1vw,15px)] leading-none">Osoro</p>
+    <p class="mt-1.5 font-serif font-semibold text-[clamp(12px,1.35vw,19px)] leading-[1.5] whitespace-nowrap">あの人と、<br />おそろ。</p>
+  </div>
+
+  <!-- 左の輪：インフルエンサー -->
+  <div class="orbit absolute inset-0" style={`transform-origin:${A.x}% ${A.y}%;--spin:-1`}>
+    {faces.slice(0, faceAngles.length).map((f, i) => {
+      const p = place(A, faceAngles[i]);
+      const big = i % 2 === 0;
+      return (
+        <a href={f.href} class="orbit-item group absolute -translate-x-1/2 -translate-y-1/2" style={`left:${p.left}%;top:${p.top}%`} title={f.name}>
+          <span class="counter block">
+            <img src={f.src} alt={f.name} class:list={["rounded-full object-cover ring-4 ring-paper shadow-[0_12px_30px_-12px_rgba(29,21,23,0.5)] transition-transform duration-700 ease-out-expo group-hover:scale-110", big ? "w-[clamp(44px,5.2vw,74px)] h-[clamp(44px,5.2vw,74px)]" : "w-[clamp(36px,4.2vw,58px)] h-[clamp(36px,4.2vw,58px)]"]} loading="eager" />
+          </span>
+        </a>
+      );
+    })}
+  </div>
+
+  <!-- 右の輪：話題のコスメ（円で切り抜くので、画像の四隅の宣伝文字は隠れる） -->
+  <div class="orbit absolute inset-0" style={`transform-origin:${B.x}% ${B.y}%;--spin:1`}>
+    {items.slice(0, itemAngles.length).map((it, i) => {
+      const p = place(B, itemAngles[i]);
+      const big = i % 2 === 1;
+      return (
+        <a href={it.href} class="orbit-item group absolute -translate-x-1/2 -translate-y-1/2" style={`left:${p.left}%;top:${p.top}%`} title={it.name}>
+          <span class="counter block">
+            <span class:list={["block rounded-full overflow-hidden bg-white ring-4 ring-paper shadow-[0_12px_30px_-12px_rgba(90,15,49,0.45)] transition-transform duration-700 ease-out-expo group-hover:scale-110", big ? "w-[clamp(48px,5.6vw,80px)] h-[clamp(48px,5.6vw,80px)]" : "w-[clamp(38px,4.4vw,62px)] h-[clamp(38px,4.4vw,62px)]"]}>
+              <img src={it.src} alt={it.name} class="w-full h-full object-contain p-[12%]" loading="eager" />
+            </span>
+          </span>
+        </a>
+      );
+    })}
+  </div>
+
+  <p class="absolute left-[9%] top-[10%] label-caps text-neutral-500">People</p>
+  <p class="absolute right-[9%] bottom-[10%] label-caps text-rose">Cosmetics</p>
+</div>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    .ring-draw {
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      animation: draw 2.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      animation-delay: var(--d, 0ms);
+    }
+    .orbit {
+      animation: spin 140s linear infinite;
+      animation-direction: var(--dir, normal);
+    }
+    .orbit[style*="--spin:-1"] { --dir: reverse; }
+    .orbit .counter {
+      animation: spin 140s linear infinite;
+      animation-direction: reverse;
+    }
+    .orbit[style*="--spin:-1"] .counter { animation-direction: normal; }
+    .hero-rings:hover .orbit,
+    .hero-rings:hover .counter { animation-play-state: paused; }
+  }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>

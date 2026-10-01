@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import { withBase } from "../lib/data";
 import { GA_MEASUREMENT_ID } from "../lib/site-info";
+import Logo from "../components/Logo.astro";
 
 interface Props {
   title: string;
@@ -31,13 +32,14 @@ function largerOgImage(src: string): string {
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
 
 const navLinks = [
-  { href: "/", label: "ホーム", short: "ホーム" },
-  { href: "/ranking/", label: "ランキング", short: "ランキング" },
-  { href: "/feature/", label: "特集", short: "特集" },
-  { href: "/brand-list", label: "ブランド一覧", short: "ブランド" },
-  { href: "/influencer-list", label: "インフルエンサー一覧", short: "インフルエンサー" },
-  { href: "/video-list", label: "動画一覧", short: "動画" },
+  { href: "/ranking/", label: "ランキング", en: "Ranking" },
+  { href: "/feature/", label: "特集", en: "Features" },
+  { href: "/brand-list", label: "ブランド", en: "Brands" },
+  { href: "/influencer-list", label: "インフルエンサー", en: "Influencers" },
+  { href: "/video-list", label: "動画", en: "Videos" },
 ];
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace(/\/$/, ""));
 ---
 
 <html lang="ja">
@@ -52,6 +54,10 @@ const navLinks = [
     <meta name="description" content={description} />
     {canonical && <link rel="canonical" href={canonical} />}
     {noindex && <meta name="robots" content="noindex, follow" />}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500&family=Shippori+Mincho:wght@500;600;700&display=swap" rel="stylesheet" />
+    <meta name="theme-color" content="#faf6f2" />
     <!-- チャンネルアイコン・動画サムネイル・商品画像の主な配信元に事前接続してLCPを短縮する -->
     <link rel="preconnect" href="https://yt3.ggpht.com" crossorigin />
     <link rel="preconnect" href="https://i.ytimg.com" crossorigin />
@@ -98,57 +104,102 @@ const navLinks = [
           return;
         }
         var s = document.createElement("span");
-        s.className = "text-neutral-300 text-xs"; s.textContent = "No Image";
+        s.className = "noimg"; s.textContent = "No image";
         (img.parentElement && img.parentElement.tagName === "A" && img.parentElement.children.length === 1 ? img.parentElement : img).replaceWith(s);
       }, true);
     </script>
   </head>
-  <body class="min-h-screen bg-neutral-50 text-neutral-900 flex flex-col">
-    <header class="bg-white border-b border-neutral-200 md:sticky md:top-0 z-30">
-      <div class="max-w-6xl mx-auto px-4 py-2 md:py-3 flex items-center gap-x-4 gap-y-1 flex-wrap">
-        <a href={withBase("/")} class="text-xl font-bold text-pink-600 shrink-0">OsoroCosme</a>
-        <nav class="order-3 md:order-none w-full md:w-auto -mx-4 px-4 md:mx-0 md:px-0 flex gap-1 md:gap-4 text-sm overflow-x-auto md:overflow-visible whitespace-nowrap">
-          {
-            navLinks.map((link) => (
-              <a href={withBase(link.href)} class="text-neutral-600 hover:text-pink-600 px-1 min-[400px]:px-1.5 py-2 md:p-0 shrink-0 text-[12px] min-[400px]:text-[13px] md:text-sm">
-                <span class="md:hidden">{link.short}</span><span class="hidden md:inline">{link.label}</span>
-              </a>
-            ))
-          }
+  <body class="grain min-h-screen bg-paper text-ink flex flex-col font-sans">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 bg-ink text-white px-3 py-2 text-sm">本文へ</a>
+    <header class="sticky top-0 z-40 bg-paper/85 backdrop-blur-md border-b border-ink/10">
+      <div class="max-w-[1320px] mx-auto px-4 md:px-8 h-14 md:h-[72px] flex items-center gap-6">
+        <a href={withBase("/")} class="text-ink text-[22px] md:text-[26px] shrink-0" aria-label="OsoroCosme ホーム"><Logo /></a>
+        <nav class="hidden lg:flex items-center gap-7 ml-6" aria-label="メイン">
+          {navLinks.map((l) => (
+            <a href={withBase(l.href)} class:list={["group relative text-[13px] tracking-[0.04em] py-2", isCurrent(l.href) ? "text-ink" : "text-neutral-600 hover:text-ink"]} aria-current={isCurrent(l.href) ? "page" : undefined}>
+              {l.label}
+              <span class:list={["absolute left-0 -bottom-0.5 h-px bg-rose transition-all duration-500 ease-out-expo", isCurrent(l.href) ? "w-full" : "w-0 group-hover:w-full"]} />
+            </a>
+          ))}
         </nav>
-        <form action={withBase("/search-result")} method="get" class="ml-auto flex items-center gap-2 flex-1 md:flex-none justify-end min-w-0">
-          <input
-            type="text"
-            name="q"
-            placeholder="コスメ・動画を検索"
-            class="border border-neutral-300 rounded px-3 py-1.5 text-sm w-full min-w-0 md:w-48 max-w-xs focus:outline-none focus:ring-2 focus:ring-pink-300"
-          />
-          <button
-            type="submit"
-            class="bg-pink-600 text-white text-sm px-3 py-1.5 rounded hover:bg-pink-700 shrink-0"
-          >
-            検索
-          </button>
+        <form action={withBase("/search-result")} method="get" role="search" class="ml-auto hidden md:flex items-center gap-2 border-b border-ink/25 focus-within:border-rose transition-colors w-64 xl:w-72">
+          <svg viewBox="0 0 24 24" class="w-4 h-4 text-neutral-500 shrink-0" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+          <input type="search" name="q" placeholder="コスメ・ブランド・動画を検索" aria-label="サイト内検索" class="w-full bg-transparent py-2 text-sm placeholder:text-neutral-400 focus:outline-none" />
         </form>
+        <button type="button" data-search-toggle class="md:hidden ml-auto -mr-2 w-11 h-11 flex items-center justify-center" aria-label="検索を開く" aria-expanded="false" aria-controls="mobile-search">
+          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+        </button>
       </div>
+      <form id="mobile-search" action={withBase("/search-result")} method="get" role="search" class="md:hidden hidden px-4 pb-3">
+        <div class="flex items-center gap-2 border-b border-ink/30 focus-within:border-rose">
+          <input type="search" name="q" placeholder="コスメ・ブランド・動画を検索" aria-label="サイト内検索" class="w-full bg-transparent py-2.5 text-base focus:outline-none" />
+          <button type="submit" class="label-caps text-rose py-2">Search</button>
+        </div>
+      </form>
+      <nav class="lg:hidden border-t border-ink/5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="メイン（スマホ）">
+        <div class="flex gap-5 px-4 md:px-8 whitespace-nowrap">
+          {navLinks.map((l) => (
+            <a href={withBase(l.href)} class:list={["relative text-[13px] py-2.5 shrink-0", isCurrent(l.href) ? "text-ink font-medium" : "text-neutral-600"]}>
+              {l.label}
+              {isCurrent(l.href) && <span class="absolute left-0 right-0 bottom-0 h-px bg-rose" />}
+            </a>
+          ))}
+        </div>
+      </nav>
     </header>
 
-    <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-6 md:py-8">
+    <main id="main" class="flex-1 max-w-[1320px] w-full mx-auto px-4 md:px-8 py-8 md:py-12">
       <slot />
     </main>
 
-    <footer class="bg-white border-t border-neutral-200 mt-12">
-      <div class="max-w-6xl mx-auto px-4 py-6 text-sm text-neutral-500 space-y-3">
-        <nav class="flex flex-wrap gap-x-5 gap-y-1" aria-label="サイト情報">
-          <a href={withBase("/about")} class="hover:text-pink-600">OsoroCosmeについて</a>
-          <a href={withBase("/contact")} class="hover:text-pink-600">お問い合わせ</a>
-          <a href={withBase("/for-creators")} class="hover:text-pink-600">インフルエンサーの方へ</a>
-          <a href={withBase("/privacy")} class="hover:text-pink-600">プライバシーポリシー</a>
-          <a href={withBase("/disclaimer")} class="hover:text-pink-600">免責事項・広告表記</a>
-        </nav>
-        <p class="text-xs text-neutral-400">当サイトは楽天アフィリエイト・バリューコマースなどの広告を利用しており、商品リンクから収益を得ることがあります。</p>
-        <p>&copy; {new Date().getFullYear()} OsoroCosme</p>
+    <footer class="relative bg-ink text-paper mt-16 md:mt-24 overflow-hidden">
+      <div class="max-w-[1320px] mx-auto px-4 md:px-8 pt-16 md:pt-24 pb-10">
+        <div class="grid md:grid-cols-12 gap-10">
+          <div class="md:col-span-5">
+            <p class="eyebrow !text-pink-300 mb-4">The YouTube Cosme Database</p>
+            <p class="font-serif text-xl md:text-2xl leading-relaxed">あの人の愛用コスメを、<br />動画から見つける。</p>
+            <form action={withBase("/search-result")} method="get" role="search" class="mt-8 flex items-center gap-3 border-b border-paper/30 focus-within:border-pink-300 max-w-sm">
+              <input type="search" name="q" placeholder="コスメ・ブランドを検索" aria-label="サイト内検索" class="w-full bg-transparent py-3 text-sm placeholder:text-paper/40 focus:outline-none" />
+              <button type="submit" class="label-caps text-pink-300 shrink-0">Search →</button>
+            </form>
+          </div>
+          <nav class="md:col-span-3 md:col-start-7" aria-label="探す">
+            <p class="label-caps text-paper/40 mb-4">Explore</p>
+            <ul class="space-y-2.5 text-sm">
+              {navLinks.map((l) => <li><a href={withBase(l.href)} class="link-u text-paper/80 hover:text-paper">{l.label}</a></li>)}
+            </ul>
+          </nav>
+          <nav class="md:col-span-3" aria-label="サイト情報">
+            <p class="label-caps text-paper/40 mb-4">About</p>
+            <ul class="space-y-2.5 text-sm">
+              <li><a href={withBase("/about")} class="link-u text-paper/80 hover:text-paper">OsoroCosmeについて</a></li>
+              <li><a href={withBase("/contact")} class="link-u text-paper/80 hover:text-paper">お問い合わせ</a></li>
+              <li><a href={withBase("/for-creators")} class="link-u text-paper/80 hover:text-paper">インフルエンサーの方へ</a></li>
+              <li><a href={withBase("/privacy")} class="link-u text-paper/80 hover:text-paper">プライバシーポリシー</a></li>
+              <li><a href={withBase("/disclaimer")} class="link-u text-paper/80 hover:text-paper">免責事項・広告表記</a></li>
+            </ul>
+          </nav>
+        </div>
+        <svg viewBox="0 0 1000 200" class="block w-full mt-14 md:mt-20 -mb-1 text-paper/[0.08]" aria-hidden="true"><text x="0" y="168" textLength="1000" lengthAdjust="spacingAndGlyphs" fill="currentColor" font-family="Cormorant Garamond, serif" font-style="italic" font-size="220">OsoroCosme</text></svg>
+        <div class="border-t border-paper/15 pt-6 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs text-paper/50">
+          <p>当サイトは楽天アフィリエイト・バリューコマースなどの広告を利用しており、商品リンクから収益を得ることがあります。</p>
+          <p class="font-display text-sm">&copy; {new Date().getFullYear()} OsoroCosme</p>
+        </div>
       </div>
     </footer>
+
+    <script>
+      // スクロールで .reveal を表示する
+      const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -8% 0px" });
+      document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+      // スマホの検索の開閉
+      const t = document.querySelector<HTMLButtonElement>("[data-search-toggle]");
+      const f = document.getElementById("mobile-search");
+      t?.addEventListener("click", () => {
+        const open = f!.classList.toggle("hidden") === false;
+        t.setAttribute("aria-expanded", String(open));
+        if (open) f!.querySelector("input")?.focus();
+      });
+    </script>
   </body>
 </html>

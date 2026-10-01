@@ -92,7 +92,7 @@ const href = withBase(`/influencer/${inf.channel_id}`);
                   alt=""
                   class="max-w-full max-h-full object-contain"
                   loading="lazy"
-                  onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'text-neutral-300 text-[10px]',textContent:'No Image'}))"
+                  onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'noimg',textContent:'No image'}))"
                 />
               </div>
               <p class="mt-1 text-[10px] leading-snug line-clamp-2 group-hover:text-pink-600">{c.name}</p>

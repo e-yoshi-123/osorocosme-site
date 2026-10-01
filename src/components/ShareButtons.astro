@@ -12,20 +12,20 @@ const url = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : Astro.ur
 const t = encodeURIComponent(text);
 const u = encodeURIComponent(url);
 const links = [
-  { method: "x", name: "X", href: `https://x.com/intent/tweet?text=${t}&url=${u}`, cls: "bg-neutral-900 text-white hover:bg-neutral-700 border-neutral-900" },
-  { method: "line", name: "LINE", href: `https://social-plugins.line.me/lineit/share?url=${u}`, cls: "bg-[#06C755] text-white hover:bg-[#05b34c] border-[#06C755]" },
-  { method: "threads", name: "Threads", href: `https://www.threads.com/intent/post?text=${t}&url=${u}`, cls: "bg-white text-neutral-900 hover:bg-neutral-100 border-neutral-300" },
+  { method: "x", name: "X", href: `https://x.com/intent/tweet?text=${t}&url=${u}`, cls: "" },
+  { method: "line", name: "LINE", href: `https://social-plugins.line.me/lineit/share?url=${u}`, cls: "" },
+  { method: "threads", name: "Threads", href: `https://www.threads.com/intent/post?text=${t}&url=${u}`, cls: "" },
 ];
-const btn = "inline-flex items-center justify-center min-h-8 px-3 rounded-full border text-xs font-bold whitespace-nowrap";
+const btn = "inline-flex items-center justify-center min-h-8 px-3.5 rounded-full border border-ink/20 text-[11px] tracking-[0.06em] whitespace-nowrap text-ink transition-colors duration-300 hover:bg-ink hover:text-paper hover:border-ink";
 ---
 
 <div data-share data-url={url} data-text={text} class:list={["flex flex-wrap items-center gap-1.5", className]}>
-  <span class="text-xs text-neutral-500 mr-0.5">{label}</span>
+  <span class="label-caps text-neutral-500 mr-1.5">Share</span><span class="sr-only">{label}</span>
   {links.map((l) => (
     <a href={l.href} target="_blank" rel="noopener" data-share-method={l.method} class:list={[btn, l.cls]}>{l.name}</a>
   ))}
-  <button type="button" data-share-copy class:list={[btn, "bg-white text-neutral-700 hover:bg-neutral-100 border-neutral-300 font-normal"]}>リンクをコピー</button>
-  <button type="button" data-share-native hidden class:list={[btn, "bg-white text-neutral-700 hover:bg-neutral-100 border-neutral-300 font-normal"]}>その他</button>
+  <button type="button" data-share-copy class:list={[btn]}>リンクをコピー</button>
+  <button type="button" data-share-native hidden class:list={[btn]}>その他</button>
 </div>
 
 <script is:inline>

@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import ShareButtons from "../../components/ShareButtons.astro";
 import CosmeticCard from "../../components/CosmeticCard.astro";
+import SectionHead from "../../components/SectionHead.astro";
 import VideoCard from "../../components/VideoCard.astro";
 import {
   getAllVideoEntries,
@@ -95,65 +96,70 @@ const jsonLd = video
       <p class="text-neutral-400">動画が見つかりませんでした。</p>
     ) : (
       <>
-        <div class="aspect-video mb-4 max-w-3xl">
-          <iframe
-            class="w-full h-full rounded-lg"
-            src={`https://www.youtube.com/embed/${video.video_id}`}
-            title={video.title}
-            allowfullscreen
-          />
+        <!-- ===== 動画：左に埋め込み、右に題・投稿者・数字・YouTubeへの導線 ===== -->
+        <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+          <div class="lg:col-span-8">
+            <div class="aspect-video rounded-[24px] overflow-hidden bg-ink shadow-[0_40px_80px_-40px_rgba(29,21,23,0.55)]">
+              <iframe
+                class="w-full h-full"
+                src={`https://www.youtube.com/embed/${video.video_id}`}
+                title={video.title}
+                allowfullscreen
+              />
+            </div>
+          </div>
+          <div class="lg:col-span-4 lg:pt-2">
+            <p class="eyebrow">Video</p>
+            <h1 class="mt-3 font-serif font-semibold text-[22px] md:text-[28px] leading-[1.5] tracking-[-0.02em]">{video.title}</h1>
+            <a href={withBase(`/influencer/${video.channel_id}`)} class="group mt-6 flex items-center gap-3 w-fit">
+              {video.channel_icon && <img src={video.channel_icon} alt="" width="44" height="44" class="w-11 h-11 rounded-full ring-1 ring-ink/10" />}
+              <span><span class="block label-caps text-neutral-500">Influencer</span><span class="block text-sm link-u group-hover:text-rose">{video.channel_title}</span></span>
+            </a>
+            <dl class="mt-6 grid grid-cols-2 border-y border-ink/15 divide-x divide-ink/15">
+              <div class="py-4 pr-3"><dt class="text-[11px] text-neutral-500">投稿日</dt><dd class="num-display text-[22px] mt-1">{(() => { const d = new Date(video.published_at); return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`; })()}</dd></div>
+              <div class="py-4 pl-4"><dt class="text-[11px] text-neutral-500">再生回数</dt><dd class="num-display text-[22px] mt-1">{formatCount(video.view_count)}</dd></div>
+            </dl>
+            {/* 投稿者のチャンネルへ送る導線（181章） */}
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a href={`https://www.youtube.com/watch?v=${video.video_id}`} target="_blank" rel="noopener" class="group inline-flex items-center gap-3 bg-ink text-paper text-sm pl-5 pr-2 py-2 rounded-full hover:bg-[#FF0000] transition-colors duration-500">
+                <span class="w-2 h-2 rounded-full bg-[#FF0000] group-hover:bg-paper" aria-hidden="true"></span>YouTubeで見る<span class="w-8 h-8 rounded-full bg-paper/15 flex items-center justify-center transition-transform duration-500 group-hover:rotate-[-45deg]" aria-hidden="true">→</span>
+              </a>
+              <a href={`https://www.youtube.com/channel/${video.channel_id}`} target="_blank" rel="noopener" class="inline-flex items-center border border-ink/25 text-sm px-5 py-2 rounded-full hover:border-ink transition-colors">チャンネルを見る</a>
+            </div>
+            <ShareButtons text={`${video.channel_title}「${video.title}」で紹介されたコスメ`} class="mt-6" />
+          </div>
         </div>
 
-        <h1 class="text-xl font-bold mb-2">{video.title}</h1>
-
-        <a href={withBase(`/influencer/${video.channel_id}`)} class="flex items-center gap-2 mb-4 w-fit hover:text-pink-600">
-          {video.channel_icon && <img src={video.channel_icon} alt="" width="32" height="32" class="w-8 h-8 rounded-full" />}
-          <span class="text-sm">{video.channel_title}</span>
-        </a>
-
-        <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-neutral-500 mb-3">
-          <span>{new Date(video.published_at).toLocaleDateString("ja-JP")}</span>
-          <span>再生 {formatCount(video.view_count)}</span>
-          {/* 投稿者のチャンネルへ送る導線（181章） */}
-          <a href={`https://www.youtube.com/watch?v=${video.video_id}`} target="_blank" rel="noopener" class="inline-flex items-center min-h-8 px-3 rounded-full border border-neutral-300 text-xs font-bold text-neutral-700 hover:bg-neutral-100">YouTubeで見る</a>
-          <a href={`https://www.youtube.com/channel/${video.channel_id}`} target="_blank" rel="noopener" class="inline-flex items-center min-h-8 px-3 rounded-full border border-neutral-300 text-xs font-bold text-neutral-700 hover:bg-neutral-100">チャンネルを見る</a>
-        </div>
-        <ShareButtons text={`${video.channel_title}「${video.title}」で紹介されたコスメ`} class="mb-6" />
-
-        <p class="text-sm text-neutral-600 leading-relaxed mb-6">{overview}</p>
+        <p class="mt-12 max-w-3xl text-sm leading-[1.9] text-neutral-600">{overview}</p>
 
         {/* 旧AI要約(video.summary)は、生成元・品質が不確かなため非表示にしている。
             データ自体は保持しており、Claudeでの作り直し後に復活させる想定 */}
 
         {validCosmetics.length > 0 && (
-          <>
-            <h2 class="font-bold mb-3">紹介されたコスメ</h2>
-            <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <section class="pt-16 md:pt-24">
+            <SectionHead num="01" en="In this video" title="紹介されたコスメ" lead={`この動画で紹介された${validCosmetics.length}品です。`} />
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-8">
               {validCosmetics.map((c) => (
                 <CosmeticCard brand_id={c.brand_id} brand={c.brand} name_id={c.name_id} name={c.name} rakutenImageHtml={c.rakuten_image_link} />
               ))}
             </div>
-          </>
+          </section>
         )}
 
         {sameChannel.length > 0 && (
-          <section class="mt-10">
-            <h2 class="font-bold mb-3">{video.channel_title}の他の動画</h2>
-            <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {sameChannel.map((v) => <VideoCard video={v} />)}
+          <section class="pt-20 md:pt-28">
+            <SectionHead num="02" en="More from the channel" title={`${video.channel_title}の他の動画`} href={withBase(`/influencer/${video.channel_id}`)} cta="Profile" />
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
+              {sameChannel.map((v) => <div class="min-w-0"><VideoCard video={v} /></div>)}
             </div>
-            <p class="mt-3 text-right text-sm">
-              <a href={withBase(`/influencer/${video.channel_id}`)} class="text-pink-600 hover:underline">{video.channel_title}の使用コスメ一覧を見る →</a>
-            </p>
           </section>
         )}
 
         {sameCosmetics.length > 0 && (
-          <section class="mt-10">
-            <h2 class="font-bold mb-1">同じコスメを紹介している他の動画</h2>
-            <p class="text-xs text-neutral-500 mb-3">この動画で紹介されているコスメが登場する、他のインフルエンサーの動画です。</p>
-            <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {sameCosmetics.map((v) => <VideoCard video={v} />)}
+          <section class="pt-20 md:pt-28">
+            <SectionHead num="03" en="Same cosmetics" title="同じコスメを紹介している他の動画" lead="この動画で紹介されているコスメが登場する、他のインフルエンサーの動画です。" />
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
+              {sameCosmetics.map((v) => <div class="min-w-0"><VideoCard video={v} /></div>)}
             </div>
           </section>
         )}

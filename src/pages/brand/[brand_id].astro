@@ -108,7 +108,7 @@ const jsonLd = [
             <h2 class="font-bold mb-3 border-b border-pink-200 pb-1">
               {sec.tag} <span class="text-sm font-normal text-neutral-400">{sec.group !== sec.tag && sec.group !== "その他" ? `${sec.group}・` : ""}{sec.items.length}品</span>
             </h2>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-8">
               {sec.items.map((c) => (
                 <CosmeticCard
                   brand_id={c.brand_id}

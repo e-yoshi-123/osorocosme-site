@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import ShareButtons from "../../components/ShareButtons.astro";
 import CosmeticTile from "../../components/CosmeticTile.astro";
 import IntroRow from "../../components/IntroRow.astro";
+import SectionHead from "../../components/SectionHead.astro";
 import {
   getUsedCosmeticKeys,
   getAliasRedirects,
@@ -118,141 +119,155 @@ const jsonLd = entry
       <p class="text-neutral-400">商品情報が見つかりませんでした。</p>
     ) : (
       <>
-        <div class="bg-white rounded-lg shadow-sm p-6 mb-8 flex flex-col md:flex-row gap-6">
-          {entry.rakuten_image_link ? (
-            <div
-              data-item-image
-              data-yahoo-link={yahooSwap?.yahoo_text_link}
-              data-yahoo-image={yahooSwap?.yahoo_image_url}
-              class="shrink-0 [&_img]:rounded"
-              set:html={entry.rakuten_image_link}
-            />
-          ) : yahooFallback && (
-            <div class="shrink-0">
-              <a href={entry.yahoo_text_link} target="_blank" rel="nofollow sponsored noopener">
-                <img src={entry.yahoo_image_url} alt={`${entry.brand} ${entry.name}`} width="240" height="240" class="rounded object-contain" />
+        <!-- ===== 商品の表紙：左に額装した画像、右に名前・価格・購入ボタン ===== -->
+        <nav class="mb-8 md:mb-12 flex items-center gap-2 text-[11px] text-neutral-500" aria-label="パンくず">
+          <a href={withBase("/")} class="link-u">Home</a><span aria-hidden="true">/</span>
+          {facts.mainTag ? <a href={categoryUrl(facts.mainTag)} class="link-u">{facts.mainTag}</a> : <span>{entry.category}</span>}
+          <span aria-hidden="true">/</span><span class="truncate text-ink">{entry.name}</span>
+        </nav>
+        <div class="grid md:grid-cols-12 gap-8 md:gap-14 items-start">
+          <div class="md:col-span-6 lg:col-span-5 relative">
+            <div class="product-well aspect-square rounded-[28px] flex items-center justify-center overflow-hidden">
+              {entry.rakuten_image_link ? (
+                <div
+                  data-item-image
+                  data-yahoo-link={yahooSwap?.yahoo_text_link}
+                  data-yahoo-image={yahooSwap?.yahoo_image_url}
+                  class="w-[82%] h-[82%] flex items-center justify-center [&_a]:flex [&_a]:items-center [&_a]:justify-center [&_a]:w-full [&_a]:h-full [&_img]:w-full [&_img]:h-full [&_img]:object-contain [&_img]:rounded-md"
+                  set:html={entry.rakuten_image_link.replace(/(_ex=)\d+x\d+/g, "$1500x500")}
+                />
+              ) : yahooFallback ? (
+                <a href={entry.yahoo_text_link} target="_blank" rel="nofollow sponsored noopener" class="w-[82%] h-[82%] flex items-center justify-center">
+                  <img src={entry.yahoo_image_url} alt={`${entry.brand} ${entry.name}`} width="240" height="240" class="max-w-full max-h-full w-auto h-auto rounded-md object-contain" />
+                </a>
+              ) : (
+                <span class="noimg">No image</span>
+              )}
+            </div>
+            {facts.rank && facts.rank <= 10 && (
+              <a href={categoryUrl(facts.mainTag!)} class="absolute -top-4 right-2 md:-right-5 w-20 h-20 md:w-24 md:h-24 rounded-full bg-ink text-paper flex flex-col items-center justify-center rotate-[8deg] shadow-xl hover:bg-rose transition-colors">
+                <span class="label-caps text-[8px] text-paper/60">Ranking</span>
+                <span class="num-display italic text-[32px] md:text-[40px] leading-none">No.{facts.rank}</span>
               </a>
+            )}
+          </div>
+
+          <div class="md:col-span-6 lg:col-span-7 md:pt-4">
+            <a href={withBase(`/brand/${canonicalBrandId(entry.brand_id)}`)} class="link-u label-caps text-rose">{entry.brand}</a>
+            <h1 class="mt-4 font-serif font-semibold text-[30px] md:text-[44px] leading-[1.3] tracking-[-0.02em] text-balance">{entry.name}</h1>
+            {entry.category && <p class="mt-4 inline-flex items-center gap-2 text-xs text-neutral-600 border border-ink/15 rounded-full px-3 py-1">{entry.category}</p>}
+
+            <div class="mt-8 pt-6 border-t border-ink/10">
+              {buyable && entry.now_price !== undefined && (
+                <p data-buy class="flex items-baseline gap-3"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[34px] leading-none">¥{formatCount(entry.now_price)}</span><span class="text-[11px] text-neutral-500">楽天市場の参考価格{entry.price_updated && `・${formatJaDate(entry.price_updated)}時点`}</span></p>
+              )}
+              {yahooFallback && entry.yahoo_price !== undefined && (
+                <p class="flex items-baseline gap-3"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[34px] leading-none">¥{formatCount(entry.yahoo_price)}</span><span class="text-[11px] text-neutral-500">Yahoo!ショッピングの参考価格{entry.yahoo_price_updated && `・${formatJaDate(entry.yahoo_price_updated)}時点`}</span></p>
+              )}
+              {yahooSwap?.yahoo_price !== undefined && (
+                <p data-yahoo-price hidden class="flex items-baseline gap-3"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[34px] leading-none">¥{formatCount(yahooSwap.yahoo_price)}</span><span class="text-[11px] text-neutral-500">Yahoo!ショッピングの参考価格{yahooSwap.yahoo_price_updated && `・${formatJaDate(yahooSwap.yahoo_price_updated)}時点`}</span></p>
+              )}
+              <!-- 楽天とYahoo!ショッピングのボタン（data-buy の扱いは従来どおり） -->
+              <div class="mt-6 flex flex-wrap gap-3">
+                {buyable && entry.rakuten_text_link && (
+                  <a data-buy href={entry.rakuten_text_link} target="_blank" rel="nofollow sponsored noopener" class="group inline-flex items-center gap-3 bg-ink text-paper text-sm pl-6 pr-2 py-2 rounded-full hover:bg-rose transition-colors duration-500">
+                    楽天市場で見る<span class="w-8 h-8 rounded-full bg-paper/15 flex items-center justify-center transition-transform duration-500 group-hover:rotate-[-45deg]" aria-hidden="true">→</span>
+                  </a>
+                )}
+                {entry.yahoo_text_link && (
+                  <a href={entry.yahoo_text_link} target="_blank" rel="nofollow sponsored noopener" class="group inline-flex items-center gap-3 border border-ink/25 text-sm pl-6 pr-2 py-2 rounded-full hover:border-ink transition-colors duration-500">
+                    Yahoo!ショッピングで見る<span class="w-8 h-8 rounded-full bg-ink/5 flex items-center justify-center transition-transform duration-500 group-hover:rotate-[-45deg]" aria-hidden="true">→</span>
+                  </a>
+                )}
+              </div>
+              <p class="mt-3 text-[10px] text-neutral-400">PR：リンク先での購入により、当サイトに報酬が支払われることがあります。</p>
             </div>
-          )}
-          <div>
-            <a href={withBase(`/brand/${canonicalBrandId(entry.brand_id)}`)} class="text-sm text-pink-600 hover:underline">
-              {entry.brand}
-            </a>
-            <h1 class="text-xl font-bold mt-1 mb-2">{entry.name}</h1>
-            {entry.category && <p class="text-sm text-neutral-500 mb-1">カテゴリ: {entry.category}</p>}
-            {buyable && entry.now_price !== undefined && (
-              <p data-buy class="text-sm text-neutral-500 mb-3">参考価格: ¥{formatCount(entry.now_price)}{entry.price_updated && `（${formatJaDate(entry.price_updated)}時点）`}</p>
-            )}
-            {yahooFallback && entry.yahoo_price !== undefined && (
-              <p class="text-sm text-neutral-500 mb-3">参考価格（Yahoo!ショッピング）: ¥{formatCount(entry.yahoo_price)}{entry.yahoo_price_updated && `（${formatJaDate(entry.yahoo_price_updated)}時点）`}</p>
-            )}
-            {yahooSwap?.yahoo_price !== undefined && (
-              <p data-yahoo-price hidden class="text-sm text-neutral-500 mb-3">参考価格（Yahoo!ショッピング）: ¥{formatCount(yahooSwap.yahoo_price)}{yahooSwap.yahoo_price_updated && `（${formatJaDate(yahooSwap.yahoo_price_updated)}時点）`}</p>
-            )}
-            <!-- 楽天とYahoo!ショッピングのボタンを並べる。Yahoo!は楽天の画像（buyable）とは別に、リンクがあれば出す
-                 （data-buy を付けないので、楽天の画像が読み込めずに楽天のボタンが消えても、Yahoo!のボタンは残る） -->
-            <div class="flex flex-wrap gap-2">
-              {buyable && entry.rakuten_text_link && (
-                <a
-                  data-buy
-                  href={entry.rakuten_text_link}
-                  target="_blank"
-                  rel="nofollow sponsored noopener"
-                  class="inline-block bg-red-600 text-white text-sm px-4 py-2 rounded hover:bg-red-700"
-                >
-                  楽天市場で見る
+
+            <!-- 紹介の実績：動画数・インフルエンサー数・ランキング。文章版は検索エンジン・読み上げ用に残す（sr-only） -->
+            <p class="sr-only">{factSentence}</p>
+            <dl class:list={["mt-8 grid border-y border-ink/15 divide-x divide-ink/15", facts.rank ? "grid-cols-3" : "grid-cols-2"]}>
+              <div class="py-5 pr-3">
+                <dt class="text-[11px] text-neutral-500">紹介動画</dt>
+                <dd class="mt-1 num-display text-[40px] md:text-[56px] leading-none">{facts.videoCount}<span class="font-sans text-xs ml-1 text-neutral-500">本</span></dd>
+              </div>
+              <div class="py-5 px-3 md:px-5">
+                <dt class="text-[11px] text-neutral-500">インフルエンサー</dt>
+                <dd class="mt-1 num-display text-[40px] md:text-[56px] leading-none">{facts.channelCount}<span class="font-sans text-xs ml-1 text-neutral-500">人</span></dd>
+              </div>
+              {facts.rank && (
+                <a href={categoryUrl(facts.mainTag!)} class="group py-5 px-3 md:px-5 block">
+                  <dt class="text-[11px] text-neutral-500 truncate">{facts.mainTag}</dt>
+                  <dd class="mt-1 num-display text-[40px] md:text-[56px] leading-none group-hover:text-rose transition-colors"><span class="italic text-rose">{facts.rank}</span><span class="font-sans text-xs ml-1 text-neutral-500">位 / {facts.rankTotal}品</span></dd>
                 </a>
               )}
-              {entry.yahoo_text_link && (
-                <a
-                  href={entry.yahoo_text_link}
-                  target="_blank"
-                  rel="nofollow sponsored noopener"
-                  class="inline-block bg-white text-red-600 border border-red-600 text-sm px-4 py-2 rounded hover:bg-red-50"
-                >
-                  Yahoo!ショッピングで見る
-                </a>
-              )}
-            </div>
-            <ShareButtons text={`${entry.brand}「${entry.name}」を紹介しているYouTube動画${facts.videoCount}本・インフルエンサー${facts.channelCount}人`} class="mt-4" />
+            </dl>
+            {(() => {
+              const seen = new Set<string>();
+              const faces = facts.introductions.filter((i) => i.channel_icon && !seen.has(i.channel_id) && seen.add(i.channel_id)).slice(0, 8);
+              return faces.length > 0 && (
+                <div class="mt-6 flex items-center gap-4">
+                  <div class="flex -space-x-3">
+                    {faces.map((f) => (
+                      <a href={withBase(`/influencer/${f.channel_id}`)} title={f.channel_title} class="relative hover:z-10 transition-transform duration-500 hover:-translate-y-1">
+                        <img src={f.channel_icon} alt={f.channel_title} width="40" height="40" class="w-10 h-10 rounded-full ring-[3px] ring-paper" loading="lazy" />
+                      </a>
+                    ))}
+                  </div>
+                  <p class="text-xs text-neutral-600 leading-relaxed">{faces[0].channel_title}さんほか、<br class="sm:hidden" />{facts.channelCount}人が紹介</p>
+                </div>
+              );
+            })()}
+            <ShareButtons text={`${entry.brand}「${entry.name}」を紹介しているYouTube動画${facts.videoCount}本・インフルエンサー${facts.channelCount}人`} class="mt-8" />
           </div>
         </div>
 
-        <!-- 紹介の実績：動画数・インフルエンサー数・ランキングの3要素。文章版は検索エンジン・読み上げ用に残す（sr-only） -->
-        <p class="sr-only">{factSentence}</p>
-        <div class:list={["grid gap-3 mb-8", facts.rank ? "grid-cols-3" : "grid-cols-2"]}>
-          <div class="bg-white rounded-lg shadow-sm p-3 sm:p-4 text-center min-w-0">
-            <p class="text-[11px] sm:text-xs text-neutral-500 whitespace-nowrap">紹介動画</p>
-            <p class="mt-1 text-pink-600 font-bold leading-none"><span class="text-2xl sm:text-4xl">{facts.videoCount}</span><span class="text-xs sm:text-sm ml-0.5">本</span></p>
+        <!-- ===== 01 いつ・誰が紹介したか ===== -->
+        <section class="pt-20 md:pt-28">
+          <SectionHead num="01" en="Who used it" title="いつ・誰が紹介したか" lead={`${facts.introductions.length}件の紹介を、新しい順に並べています。`} />
+          <!-- 日付・チャンネル・動画タイトルを固定の列にする。件数が多い商品は、先頭10件だけ表示して残りを折りたたむ -->
+          <div class="text-sm border-t border-ink/15">
+            <ul>
+              {introFirst.map((i) => <IntroRow i={i} />)}
+            </ul>
+            {introRest.length > 0 && (
+              <details class="group/more">
+                <summary class="list-none flex items-center justify-center gap-3 py-5 text-[12px] tracking-[0.1em] cursor-pointer select-none hover:text-rose">
+                  <span>残り{introRest.length}件を表示</span><span class="w-7 h-7 rounded-full border border-ink/20 flex items-center justify-center transition-transform group-open/more:rotate-180" aria-hidden="true">↓</span>
+                </summary>
+                <ul>
+                  {introRest.map((i) => <IntroRow i={i} />)}
+                </ul>
+              </details>
+            )}
           </div>
-          <div class="bg-white rounded-lg shadow-sm p-3 sm:p-4 text-center min-w-0">
-            <p class="text-[11px] sm:text-xs text-neutral-500 whitespace-nowrap"><span class="sm:hidden">インフルエンサー</span><span class="hidden sm:inline">紹介インフルエンサー</span></p>
-            <p class="mt-1 text-pink-600 font-bold leading-none"><span class="text-2xl sm:text-4xl">{facts.channelCount}</span><span class="text-xs sm:text-sm ml-0.5">人</span></p>
-          </div>
-          {facts.rank && (
-            <a href={categoryUrl(facts.mainTag!)} class="bg-white rounded-lg shadow-sm p-3 sm:p-4 text-center min-w-0 hover:shadow-md block">
-              <p class="text-[11px] sm:text-xs text-neutral-500 whitespace-nowrap">人気ランキング</p>
-              <p class="mt-1 text-pink-600 font-bold leading-none"><span class="text-2xl sm:text-4xl">{facts.rank}</span><span class="text-xs sm:text-sm ml-0.5">位</span></p>
-              <p class="mt-1.5 text-[10px] sm:text-xs text-neutral-500 truncate">{facts.mainTag} {facts.rankTotal}品中</p>
-            </a>
-          )}
-        </div>
-
-        <h2 class="font-bold mb-3">いつ・誰が紹介したか（{facts.introductions.length}件）</h2>
-        <!-- 日付・チャンネル・動画タイトルを固定の列にして、長い名前やタイトルは1行で省略する（折り返しで見づらくならないように）。
-             スマホは「日付＋チャンネル」の1行と、その下にタイトル（最大2行）。件数が多い商品は、先頭10件だけ表示して残りを折りたたむ -->
-        <div class="mb-10 bg-white rounded-lg shadow-sm text-sm">
-          <div class="hidden md:grid grid-cols-[6rem_14rem_minmax(0,1fr)] gap-x-4 px-4 py-2 text-xs text-neutral-400 border-b border-neutral-200">
-            <span>紹介日</span><span>チャンネル</span><span>動画</span>
-          </div>
-          <ul class="divide-y divide-neutral-100">
-            {introFirst.map((i) => <IntroRow i={i} />)}
-          </ul>
-          {introRest.length > 0 && (
-            <details class="border-t border-neutral-200">
-              <summary class="px-4 py-2.5 text-xs text-pink-600 cursor-pointer hover:bg-pink-50 select-none">残り{introRest.length}件を表示</summary>
-              <ul class="divide-y divide-neutral-100 border-t border-neutral-200">
-                {introRest.map((i) => <IntroRow i={i} />)}
-              </ul>
-            </details>
-          )}
-        </div>
+        </section>
 
         {coMentioned.length > 0 && (
-          <section class="mb-10">
-            <h2 class="font-bold mb-1">一緒に紹介されているコスメ</h2>
-            <p class="text-xs text-neutral-500 mb-3">{entry.name}を紹介した動画で、あわせて紹介されているコスメです。</p>
-            <div class="grid grid-cols-3 sm:grid-cols-6 gap-3">
+          <section class="pt-20 md:pt-28">
+            <SectionHead num="02" en="Paired with" title="一緒に紹介されているコスメ" lead={`${entry.name}を紹介した動画で、あわせて紹介されているコスメです。`} />
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-8">
               {coMentioned.map((t) => <CosmeticTile tile={t} caption={`${t.together}本の動画で一緒に紹介`} />)}
             </div>
           </section>
         )}
 
         {facts.mainTag && categoryTop.length > 0 && (
-          <section class="mb-10">
-            <h2 class="font-bold mb-1">「{facts.mainTag}」の人気ランキング</h2>
-            <p class="text-xs text-neutral-500 mb-3">{facts.rankTotal}品中、この商品は{facts.rank}位です。</p>
-            <div class="grid grid-cols-3 sm:grid-cols-6 gap-3">
+          <section class="pt-20 md:pt-28">
+            <SectionHead num="03" en="Ranking" title={`「${facts.mainTag}」の人気ランキング`} lead={`${facts.rankTotal}品中、この商品は${facts.rank}位です。`} href={categoryUrl(facts.mainTag)} cta={`All ${facts.rankTotal}`} />
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-8">
               {categoryTop.map(({ rank, tile }) => (
                 <CosmeticTile tile={tile} rank={rank} caption={`${tile.videoCount}本の動画で紹介`} current={tile.brand_id === brand_id && tile.name_id === name_id} />
               ))}
             </div>
-            <p class="mt-3 text-right text-sm">
-              <a href={categoryUrl(facts.mainTag)} class="text-pink-600 hover:underline">「{facts.mainTag}」のランキングをすべて見る（{facts.rankTotal}品） →</a>
-            </p>
           </section>
         )}
 
         {brandTop.length > 0 && (
-          <section class="mb-10">
-            <h2 class="font-bold mb-1">{entry.brand}の人気商品</h2>
-            <p class="text-xs text-neutral-500 mb-3">{entry.brand}の商品のうち、紹介されている動画が多いものです。</p>
-            <div class="grid grid-cols-3 sm:grid-cols-6 gap-3">
+          <section class="pt-20 md:pt-28">
+            <SectionHead num="04" en="From the brand" title={`${entry.brand}の人気商品`} lead={`${entry.brand}の商品のうち、紹介されている動画が多いものです。`} href={withBase(`/brand/${canonicalBrandId(entry.brand_id)}`)} />
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-8">
               {brandTop.map((t) => <CosmeticTile tile={t} showBrand={false} caption={`${t.videoCount}本の動画で紹介`} />)}
             </div>
-            <p class="mt-3 text-right text-sm">
-              <a href={withBase(`/brand/${canonicalBrandId(entry.brand_id)}`)} class="text-pink-600 hover:underline">{entry.brand}の商品をすべて見る →</a>
-            </p>
           </section>
         )}
       </>

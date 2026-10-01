@@ -1,1 +1,320 @@
 @import "tailwindcss";
+
+/*
+  デザインの試作（design-proto）。美容誌のような編集デザインに寄せる。
+  - 地は生成り（paper）、文字は墨（ink）、差し色はブランドのローズ（#E60076、ファビコンと同じ）
+  - Tailwind の pink / neutral をこの配色に置き換えるので、既存のページの色味も一度にそろう
+  - 見出しは明朝（Shippori Mincho）、欧文・数字は Cormorant Garamond、本文は端末の標準のゴシック
+    （Googleフォントの日本語は詰め組み palt が削られているため、本文には使わない）
+*/
+@theme {
+  --color-pink-50: #fbf2f3;
+  --color-pink-100: #f6e3e6;
+  --color-pink-200: #eec6cd;
+  --color-pink-300: #e29cab;
+  --color-pink-400: #d8678c;
+  --color-pink-500: #e2257d;
+  --color-pink-600: #e60076;
+  --color-pink-700: #b4005c;
+  --color-pink-800: #860a46;
+  --color-pink-900: #5a0f31;
+
+  --color-neutral-50: #faf6f2;
+  --color-neutral-100: #f3ede7;
+  --color-neutral-200: #e7dfd7;
+  --color-neutral-300: #d5c9bf;
+  --color-neutral-400: #a99a90;
+  --color-neutral-500: #7e706a;
+  --color-neutral-600: #605450;
+  --color-neutral-700: #463c39;
+  --color-neutral-800: #2e2624;
+  --color-neutral-900: #1d1517;
+  --color-neutral-950: #120c0d;
+
+  --color-paper: #faf6f2;
+  --color-ink: #1d1517;
+  --color-blush: #f4e4e1;
+  --color-rose: #e60076;
+  --color-berry: #5a0f31;
+
+  --font-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Yu Gothic", "Noto Sans JP", Meiryo, system-ui, sans-serif;
+  --font-serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --font-display: "Cormorant Garamond", "Shippori Mincho", serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    overflow-x: clip;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-feature-settings: "palt" 1;
+    letter-spacing: 0.01em;
+    line-height: 1.8;
+  }
+  h1, h2, h3 {
+    font-feature-settings: "palt" 1;
+  }
+  ::selection {
+    background: var(--color-rose);
+    color: #fff;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-rose);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+  /* 見出しの組（番号・欧文ラベル・日本語の題・罫線） */
+  .eyebrow {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    color: var(--color-rose);
+  }
+  .label-caps {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .num-display {
+    font-family: var(--font-display);
+    font-feature-settings: "lnum" 1, "pnum" 1;
+    letter-spacing: -0.01em;
+  }
+
+  /* 下線がのびるリンク */
+  .link-u {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.5s var(--ease-out-expo);
+  }
+  .link-u:hover {
+    background-size: 100% 1px;
+  }
+
+  /* 商品画像の面：白地の画像を淡い面になじませる */
+  .product-well {
+    background: #fff;
+    box-shadow: inset 0 0 0 1px rgb(29 21 23 / 0.06);
+  }
+  .product-well img {
+    border-radius: 4px;
+  }
+  h2.font-serif, h3.font-serif, .font-serif.tighten {
+    letter-spacing: -0.03em;
+  }
+
+  /* アーチ型の額（特集・ヒーロー） */
+  .arch {
+    border-radius: 999px 999px 18px 18px;
+  }
+
+  /* 絞り込みのタブとチップ */
+  .tab, .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    border: 1px solid rgb(29 21 23 / 0.15);
+    border-radius: 999px;
+    transition: background-color 0.4s, color 0.4s, border-color 0.4s;
+  }
+  .tab { padding: 0.45rem 1rem; font-size: 13px; }
+  .chip { padding: 0.3rem 0.8rem; font-size: 12px; }
+  .tab:hover, .chip:hover { border-color: var(--color-ink); }
+  .tab.is-active, .chip.is-active {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    border-color: var(--color-ink);
+  }
+  .tab-n {
+    font-family: var(--font-display);
+    font-size: 0.95em;
+    opacity: 0.55;
+  }
+
+  /* ランキングの順位（1〜3位は大きくローズ） */
+  .rank-badge {
+    font-size: 30px;
+    color: rgb(29 21 23 / 0.45);
+  }
+  .ranking-row.is-top .rank-badge {
+    font-size: 46px;
+    color: var(--color-rose);
+  }
+  /* 左のカテゴリ一覧の現在地 */
+  .side-link { transition: color 0.3s; }
+  .side-link:hover { color: var(--color-rose); }
+  .side-link.is-current {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .side-link.is-current::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--color-rose);
+    margin-right: 0.5em;
+    vertical-align: middle;
+  }
+
+  /* 画像の無い商品：ロゴの輪を薄く描いた共通の表示 */
+  .noimg {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--color-neutral-400);
+  }
+  .noimg::before {
+    content: "";
+    width: 34px;
+    height: 22px;
+    opacity: 0.6;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 40'><circle cx='22' cy='20' r='14' fill='none' stroke='%23a99a90' stroke-width='2.4'/><circle cx='42' cy='20' r='14' fill='none' stroke='%23a99a90' stroke-width='2.4'/></svg>") center / contain no-repeat;
+  }
+
+  /* 紙の質感（ごく薄いノイズ） */
+  .grain::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 60;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+}
+
+/* スクロールで現れる（動きを減らす設定の人には出さない） */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 1s var(--ease-out-expo), transform 1.2s var(--ease-out-expo);
+    transition-delay: var(--d, 0ms);
+  }
+  .reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+  .marquee-track {
+    animation: marquee var(--marquee-s, 60s) linear infinite;
+  }
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+  .float-slow {
+    animation: float 9s ease-in-out infinite;
+  }
+  .hero-line > span {
+    display: inline-block;
+    animation: rise 1.4s var(--ease-out-expo) both;
+    animation-delay: var(--d, 0ms);
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(0.6em); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+/*
+  なじませ用（試作）：まだ個別に作り直していないページの、前の組み方を新しい組み方に読み替える。
+  レイヤーの外に書くので、Tailwind のユーティリティより優先される。作り直したページは別のクラスを使っているので掛からない。
+*/
+main h1.text-xl.font-bold {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(32px, 4.4vw, 56px);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+main h1.text-xl.font-bold::before {
+  content: attr(data-en);
+}
+main h2.font-bold:not(.font-serif) {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(20px, 2vw, 26px);
+  letter-spacing: -0.02em;
+}
+main .bg-white.shadow-sm {
+  box-shadow: 0 0 0 1px rgb(29 21 23 / 0.07);
+  border-radius: 20px;
+}
+main .bg-white.shadow-sm.hover\:shadow-md:hover {
+  box-shadow: 0 0 0 1px rgb(29 21 23 / 0.18), 0 24px 48px -28px rgb(29 21 23 / 0.35);
+}
+main .border-l-4.border-pink-500,
+main .border-l-4.border-pink-300 {
+  border-left-width: 0;
+  padding-left: 0;
+}
+/* 前の組み方のタブ・チップ（丸い枠のボタン）。選択中（ピンクの背景）は墨色の塗りにする */
+main button.rounded-full.border {
+  border-color: rgb(29 21 23 / 0.15);
+  background: transparent;
+  transition: background-color 0.4s, color 0.4s, border-color 0.4s;
+}
+main button.rounded-full.border:hover {
+  border-color: var(--color-ink);
+}
+main button.rounded-full.border.bg-pink-100,
+main button.sort-btn.text-pink-600 {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  border-color: var(--color-ink);
+}
+main button.rounded-full.border.bg-pink-100 .text-neutral-400 {
+  color: rgb(250 246 242 / 0.6);
+}
+main .md\:sticky.bg-neutral-50\/95 {
+  background: rgb(250 246 242 / 0.9);
+}
+
+/* ページの移り変わり：同じサイト内の移動で、ふわっと切り替える（対応ブラウザだけ。JSは使わない） */
+@view-transition {
+  navigation: auto;
+}
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: 0.35s cubic-bezier(0.16, 1, 0.3, 1) both vt-out;
+  }
+  ::view-transition-new(root) {
+    animation: 0.6s cubic-bezier(0.16, 1, 0.3, 1) both vt-in;
+  }
+}
+@keyframes vt-out { to { opacity: 0; transform: translateY(-6px); } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(10px); } }

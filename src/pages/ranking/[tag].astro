@@ -103,34 +103,34 @@ const jsonLd = [
 ---
 
 <Layout title={`${tag}のおすすめ人気ランキング TOP${shownMax}｜YouTuberの紹介数順`} description={description} image={topImage} jsonLd={jsonLd}>
-  <nav class="text-xs text-neutral-500 mb-4" aria-label="パンくず">
-    <a href={withBase("/")} class="hover:text-pink-600">ホーム</a> ›
-    <a href={withBase("/ranking/")} class="hover:text-pink-600">ランキング</a> ›
-    {parent && <><a href={categoryUrl(parent.key)} class="hover:text-pink-600">{parent.key}</a> › </>}
-    <span>{tag}</span>
+  <nav class="text-[11px] text-neutral-500 mb-8 md:mb-12 flex flex-wrap items-center gap-2" aria-label="パンくず">
+    <a href={withBase("/")} class="link-u">Home</a><span aria-hidden="true">/</span>
+    <a href={withBase("/ranking/")} class="link-u">ランキング</a><span aria-hidden="true">/</span>
+    {parent && <><a href={categoryUrl(parent.key)} class="link-u">{parent.key}</a><span aria-hidden="true">/</span></>}
+    <span class="text-ink">{tag}</span>
   </nav>
 
-  <div class="flex gap-6 lg:gap-8 items-start">
+  <div class="flex gap-8 lg:gap-14 items-start">
     <!-- 左: カテゴリの一覧。枠と見出しで「カテゴリを選ぶ場所」だと分かるようにする（PCのみ）。各カテゴリは独立したURL -->
-    <aside class="hidden md:block w-60 shrink-0 sticky top-20 self-start">
-      <div class="bg-white rounded-lg shadow-sm max-h-[calc(100vh-6rem)] overflow-y-auto">
-        <h2 class="sticky top-0 bg-white z-10 px-4 py-3 text-sm font-bold border-b border-neutral-200">カテゴリから探す</h2>
-        <div class="p-3 space-y-4 text-sm">
+    <aside class="hidden md:block w-56 shrink-0 sticky top-24 self-start">
+      <div class="max-h-[calc(100vh-7rem)] overflow-y-auto pr-2 [scrollbar-width:thin]">
+        <h2 class="sticky top-0 bg-paper z-10 pb-3 border-b border-ink/15"><span class="eyebrow block">Categories</span><span class="font-serif text-lg font-semibold">カテゴリから探す</span></h2>
+        <div class="pt-5 space-y-6 text-[13px]">
           {
             nav.map((g) => (
               <div>
-                <div class="text-[11px] font-bold text-neutral-400 tracking-wide mb-1 px-2">{g.group}</div>
+                <div class="label-caps text-neutral-400 mb-2">{g.group}</div>
                 <ul class="space-y-0.5">
                   {g.items.map((it) =>
                     it.kind === "parent" ? (
                       <li>
-                        <a href={categoryUrl(it.name)} class:list={["block px-2 py-1 rounded hover:bg-pink-50 font-medium", { "bg-pink-100": it.name === tag }]} aria-current={it.name === tag ? "page" : undefined}>
+                        <a href={categoryUrl(it.name)} class:list={["side-link block py-1 font-medium", { "is-current": it.name === tag }]} aria-current={it.name === tag ? "page" : undefined}>
                           {it.name} <span class="text-neutral-400 font-normal">({it.count})</span>
                         </a>
-                        <ul class="ml-3 border-l border-neutral-200">
+                        <ul class="ml-1 pl-3 border-l border-ink/10">
                           {it.children.map((c) => (
                             <li>
-                              <a href={categoryUrl(c.name)} class:list={["block pl-2 pr-1 py-0.5 rounded text-[13px] text-neutral-600 hover:bg-pink-50", { "bg-pink-100 font-medium text-neutral-900": c.name === tag }]} aria-current={c.name === tag ? "page" : undefined}>
+                              <a href={categoryUrl(c.name)} class:list={["side-link block py-0.5 text-[12px] text-neutral-600", { "is-current": c.name === tag }]} aria-current={c.name === tag ? "page" : undefined}>
                                 {c.name} <span class="text-neutral-400">({c.count})</span>
                               </a>
                             </li>
@@ -139,7 +139,7 @@ const jsonLd = [
                       </li>
                     ) : (
                       <li>
-                        <a href={categoryUrl(it.name)} class:list={["block px-2 py-1 rounded hover:bg-pink-50", { "bg-pink-100 font-medium": it.name === tag }]} aria-current={it.name === tag ? "page" : undefined}>
+                        <a href={categoryUrl(it.name)} class:list={["side-link block py-1", { "is-current": it.name === tag }]} aria-current={it.name === tag ? "page" : undefined}>
                           {it.name} <span class="text-neutral-400">({it.count})</span>
                         </a>
                       </li>
@@ -155,7 +155,7 @@ const jsonLd = [
 
     <div class="flex-1 min-w-0">
       <!-- スマホ: カテゴリの切り替え（選ぶとそのカテゴリのページへ移動） -->
-      <select id="tag-nav-mobile" class="md:hidden w-full border border-neutral-300 rounded-lg px-3 py-2.5 mb-4 bg-white" aria-label="カテゴリを選ぶ">
+      <select id="tag-nav-mobile" class="md:hidden w-full border-b-2 border-ink bg-transparent px-1 py-3 mb-8 font-serif text-base" aria-label="カテゴリを選ぶ">
         {
           nav.map((g) => (
             <optgroup label={g.group}>
@@ -175,24 +175,24 @@ const jsonLd = [
       </select>
 
       <!-- ① ページの見出し：何のランキングか、何品中いくつ見せているか、まとめ／種類別の行き来、スコアの見方 -->
-      <header class="bg-white rounded-lg shadow-sm mb-6 overflow-hidden">
-        <div class="p-4 md:p-5">
-          <p class="text-xs font-bold text-pink-600 mb-1">{isParent ? "まとめランキング" : "カテゴリ別ランキング"}</p>
-          <h1 class="text-xl md:text-2xl font-bold">{tag} おすすめ人気ランキング</h1>
-          <p class="text-xs text-neutral-500 mt-2">
+      <header class="mb-10">
+        <div>
+          <p class="eyebrow">{isParent ? "Ranking — Overview" : "Ranking — Category"}</p>
+          <h1 class="mt-3 font-serif font-semibold leading-[1.2] tracking-[-0.02em]"><span class="block text-[40px] md:text-[64px]">{tag}</span><span class="block mt-2 text-lg md:text-2xl text-neutral-600">おすすめ人気ランキング</span></h1>
+          <p class="text-[13px] leading-relaxed text-neutral-600 mt-5 max-w-2xl">
             {total}品中、上位{shownMax}位までを紹介しています。YouTubeのコスメ紹介動画での人気スコア順です。
             {isParent && "細かいカテゴリの商品をまとめて、同じ基準で並べています。"}
           </p>
-          <ShareButtons text={`YouTuberが紹介している${tag}の人気ランキング`} class="mt-3" />
+          <ShareButtons text={`YouTuberが紹介している${tag}の人気ランキング`} class="mt-6" />
         </div>
         {
           isParent && (
-            <div class="border-t border-neutral-100 bg-neutral-50 px-4 md:px-5 py-3">
-              <p class="text-xs text-neutral-500 mb-2">種類別に見る（細かいカテゴリのランキング）</p>
+            <div class="mt-8 pt-5 border-t border-ink/10">
+              <p class="label-caps text-neutral-500 mb-3">By type</p>
               <div class="flex flex-wrap gap-2">
                 {page.children.map((c) => (
-                  <a href={categoryUrl(c)} class="text-xs px-3 py-1.5 rounded-full bg-white border border-pink-200 text-pink-700 hover:bg-pink-50">
-                    {c} <span class="text-pink-400">{pages.get(c)!.list.length}品</span>
+                  <a href={categoryUrl(c)} class="chip">
+                    {c} <span class="tab-n">{pages.get(c)!.list.length}</span>
                   </a>
                 ))}
               </div>
@@ -201,15 +201,15 @@ const jsonLd = [
         }
         {
           parent && (
-            <a href={categoryUrl(parent.key)} class="flex items-center justify-between gap-3 border-t border-pink-100 bg-pink-50 px-4 md:px-5 py-3 text-sm text-pink-700 hover:bg-pink-100">
+            <a href={categoryUrl(parent.key)} class="group mt-8 flex items-center justify-between gap-3 border-y border-ink/15 py-4 text-sm hover:text-rose transition-colors">
               <span>「{parent.key}」（{parent.children.join("・")}）をまとめて見る</span>
-              <span class="shrink-0">{parent.list.length}品 →</span>
+              <span class="shrink-0 num-display text-lg">{parent.list.length}<span class="font-sans text-xs ml-0.5">品</span> <span class="inline-block transition-transform group-hover:translate-x-1">→</span></span>
             </a>
           )
         }
-        <details class="border-t border-neutral-100 text-xs text-neutral-600">
-          <summary class="px-4 md:px-5 py-2.5 cursor-pointer select-none text-pink-600 hover:bg-pink-50">スコアの見方</summary>
-          <div class="px-4 md:px-5 pb-4 pt-1 space-y-1.5 leading-relaxed">
+        <details class="border-b border-ink/15 text-xs text-neutral-600">
+          <summary class="py-4 cursor-pointer select-none hover:text-rose flex items-center gap-2"><span class="w-5 h-5 rounded-full border border-ink/25 inline-flex items-center justify-center text-[10px]">?</span>スコアの見方</summary>
+          <div class="pb-5 pt-1 space-y-1.5 leading-relaxed max-w-2xl">
             <p>紹介した動画の<b>合計再生回数</b>、<b>紹介動画の本数</b>、<b>紹介したインフルエンサー（チャンネル）の数</b>から算出した人気スコアの順です。</p>
             <p>再生数が多く、複数の動画・複数のインフルエンサーに紹介されている商品ほど上位になります。同じ人が何本も紹介しているだけの商品より、多くの人に紹介されている商品が上位になりやすいよう、チャンネル数を重めにしています。</p>
             <p class="text-neutral-500">紹介動画が1〜2本の商品は、動画が1本増えるだけで順位が大きく変わります。順位の差が小さい範囲は、目安としてご覧ください。</p>
@@ -221,25 +221,25 @@ const jsonLd = [
       <!-- ② ランキング：並び替えと、一覧（1つの表にまとめ、列の見出しを付ける） -->
       <section aria-label="ランキング">
         <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 mb-2">
-          <h2 class="font-bold">ランキング <span id="range-label" class="text-xs font-normal text-neutral-500"></span></h2>
+          <h2 class="font-serif text-xl font-semibold">ランキング <span id="range-label" class="font-sans text-xs font-normal text-neutral-500 ml-2"></span></h2>
           <div class="flex flex-wrap items-center gap-2 text-xs" role="group" aria-label="並び替え">
-            <span class="text-neutral-500">並び替え</span>
-            <button type="button" class="sort-btn px-3 py-1.5 rounded-full border border-neutral-300 bg-white" data-sort="score">人気スコア順</button>
-            <button type="button" class="sort-btn px-3 py-1.5 rounded-full border border-neutral-300 bg-white" data-sort="videos">紹介動画数順</button>
-            <button type="button" class="sort-btn px-3 py-1.5 rounded-full border border-neutral-300 bg-white" data-sort="channels">紹介チャンネル数順</button>
-            {hasRecent && <button type="button" class="sort-btn px-3 py-1.5 rounded-full border border-neutral-300 bg-white" data-sort="recent">最近話題（直近{RECENT_DAYS}日）</button>}
+            <span class="label-caps text-neutral-500 mr-1">Sort</span>
+            <button type="button" class="sort-btn chip" data-sort="score">人気スコア順</button>
+            <button type="button" class="sort-btn chip" data-sort="videos">紹介動画数順</button>
+            <button type="button" class="sort-btn chip" data-sort="channels">紹介チャンネル数順</button>
+            {hasRecent && <button type="button" class="sort-btn chip" data-sort="recent">最近話題（直近{RECENT_DAYS}日）</button>}
           </div>
         </div>
 
-        <p class="text-xs text-neutral-500 mb-2">価格は楽天市場で確認した時点の参考価格です。最新の価格・在庫は楽天市場でご確認ください。</p>
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-          <div class="hidden md:grid grid-cols-[2.5rem_5.5rem_minmax(0,1fr)_10rem_12rem] gap-x-4 px-4 py-2 bg-neutral-50 border-b border-neutral-200 text-[11px] font-bold text-neutral-500">
+        <p class="text-[11px] text-neutral-500 mb-4">価格は楽天市場で確認した時点の参考価格です。最新の価格・在庫は楽天市場でご確認ください。</p>
+        <div class="border-t-2 border-ink">
+          <div class="hidden md:grid grid-cols-[3.5rem_6rem_minmax(0,1fr)_10rem_12rem] gap-x-5 py-3 border-b border-ink/15 label-caps text-neutral-500">
             <span class="text-center">順位</span>
             <span class="col-span-2">商品</span>
             <span>紹介実績</span>
             <span class="text-right">参考価格・購入</span>
           </div>
-          <ol id="ranking-list" class="divide-y divide-neutral-100" data-initial={INITIAL} data-max={MAX} data-step={STEP}>
+          <ol id="ranking-list" class="divide-y divide-ink/10 border-b border-ink/10" data-initial={INITIAL} data-max={MAX} data-step={STEP}>
             {
               rows.map((x) => (
                 <RankingRow
@@ -268,7 +268,7 @@ const jsonLd = [
         </div>
 
         <div class="mt-4 text-center">
-          <button id="more-btn" type="button" class="hidden px-6 py-2 rounded-full border border-pink-300 text-pink-600 bg-white hover:bg-pink-50 text-sm"></button>
+          <button id="more-btn" type="button" class="hidden mt-4 px-8 py-3 rounded-full border border-ink/25 text-sm tracking-[0.06em] hover:bg-ink hover:text-paper transition-colors duration-500"></button>
           <p id="recent-note" class="hidden mt-2 text-xs text-neutral-400">直近{RECENT_DAYS}日に投稿された動画で紹介された商品だけを、紹介したチャンネル数→動画数の順に並べています。</p>
           <p id="limit-note" class="hidden mt-2 text-xs text-neutral-400">
             {MAX}位までを表示しています。{MAX + 1}位以降は、紹介動画が少なく順位の差が小さいため掲載していません。
@@ -278,8 +278,9 @@ const jsonLd = [
 
       {
         summary.length > 0 && (
-          <section class="mt-10 mb-12 bg-white rounded-lg shadow-sm p-4 md:p-5 text-sm leading-relaxed">
-            <h2 class="font-bold mb-2">YouTubeで人気の{tag}は？</h2>
+          <section class="mt-16 mb-12 rounded-[28px] bg-blush/60 p-6 md:p-10 text-sm leading-relaxed">
+            <p class="eyebrow">Summary</p>
+            <h2 class="mt-1 font-serif text-xl md:text-2xl font-semibold mb-4">YouTubeで人気の{tag}は？</h2>
             <p class="text-neutral-700 mb-2">
               コスメ紹介動画での人気スコアでは、{tag}（{total}品）の1位は{summary[0].r.brand}「{summary[0].r.name}」です。
             </p>
@@ -287,7 +288,7 @@ const jsonLd = [
               {summary.map(({ rank, r }) => (
                 <li>
                   {rank}位：
-                  <a href={withBase(`/cosmetics/${cosmeticSlug(r.brand_id, r.name_id)}`)} class="text-pink-600 hover:underline">{r.brand}「{r.name}」</a>
+                  <a href={withBase(`/cosmetics/${cosmeticSlug(r.brand_id, r.name_id)}`)} class="link-u text-ink font-medium">{r.brand}「{r.name}」</a>
                   <span class="text-neutral-500">（{r.channelCount}人が{r.videoCount}本の動画で紹介）</span>
                 </li>
               ))}
@@ -301,7 +302,7 @@ const jsonLd = [
       <InfluencerLinks title={`${tag}をよく紹介しているインフルエンサー`} items={topInfluencers} unit={`${tag}`} />
 
       <p class="mt-8 text-sm">
-        <a href={withBase("/ranking/")} class="text-pink-600 hover:underline">ほかのカテゴリのランキングを見る →</a>
+        <a href={withBase("/ranking/")} class="link-u">ほかのカテゴリのランキングを見る →</a>
       </p>
     </div>
   </div>
@@ -343,17 +344,11 @@ const jsonLd = [
       li.querySelector(".recent-info")?.classList.toggle("hidden", sortKey !== "recent");
       const top = i < 3;
       li.querySelector(".rank-badge")!.textContent = String(i + 1);
-      li.querySelector(".rank-badge")!.classList.toggle("bg-pink-600", top);
-      li.querySelector(".rank-badge")!.classList.toggle("bg-neutral-400", !top);
-      li.classList.toggle("bg-pink-50", top);
-      li.classList.toggle("bg-white", !top);
+      li.classList.toggle("is-top", top);
     });
     document.querySelectorAll<HTMLButtonElement>(".sort-btn").forEach((b) => {
       const on = b.dataset.sort === sortKey;
-      b.classList.toggle("bg-pink-600", on);
-      b.classList.toggle("text-white", on);
-      b.classList.toggle("border-pink-600", on);
-      b.classList.toggle("bg-white", !on);
+      b.classList.toggle("is-active", on);
     });
     const rangeLabel = document.getElementById("range-label");
     if (rangeLabel) rangeLabel.textContent = `1〜${shown}位を表示中`;

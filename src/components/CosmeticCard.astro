@@ -17,9 +17,9 @@ const yahooEntry = entry?.yahoo_text_link && entry.yahoo_image_url ? entry : und
 const yahooImage = extractImageSrc(rakutenImageHtml) ? undefined : yahooEntry;
 ---
 
-<div class="bg-white rounded-lg shadow-sm p-3 flex flex-col gap-2">
+<div class="group flex flex-col">
   <div
-    class="cosmetic-image-box aspect-square w-full bg-neutral-50 rounded flex items-center justify-center overflow-hidden"
+    class="cosmetic-image-box product-well aspect-square w-full rounded-2xl flex items-center justify-center overflow-hidden"
     data-yahoo-image={rakutenImageHtml ? yahooEntry?.yahoo_image_url : undefined}
     data-yahoo-link={rakutenImageHtml ? yahooEntry?.yahoo_text_link : undefined}
   >
@@ -31,13 +31,13 @@ const yahooImage = extractImageSrc(rakutenImageHtml) ? undefined : yahooEntry;
           <img src={yahooImage.yahoo_image_url} alt={`${brand} ${name}`} loading="lazy" />
         </a>
       ) : (
-        <span class="text-neutral-300 text-xs">No Image</span>
+        <span class="noimg">No image</span>
       )
     }
   </div>
-  <a href={withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`)} class="text-sm hover:text-pink-600">
-    <div class="text-neutral-500 text-xs">{brand}</div>
-    <div class="font-medium line-clamp-2">{name}</div>
+  <a href={withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`)} class="block pt-3">
+    <div class="text-[10px] tracking-[0.14em] uppercase text-neutral-500 truncate">{brand}</div>
+    <div class="mt-1 text-[13px] leading-snug line-clamp-2 group-hover:text-rose transition-colors">{name}</div>
   </a>
 </div>
 
@@ -50,11 +50,13 @@ const yahooImage = extractImageSrc(rakutenImageHtml) ? undefined : yahooEntry;
     height: 100%;
   }
   .cosmetic-image-box :global(img) {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
+    width: 78%;
+    height: 78%;
     object-fit: contain;
-    border-radius: 0.25rem;
+    border-radius: 4px;
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .group:hover .cosmetic-image-box :global(img) {
+    transform: scale(1.06);
   }
 </style>

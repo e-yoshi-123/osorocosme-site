@@ -248,6 +248,11 @@ export function getPopularBrands(limit: number): BrandWithStats[] {
     .slice(0, limit);
 }
 
+/** 楽天の商品画像のURLを、同じ画像の大きいサイズ（最大500×500）に置き換える（試作） */
+export function largerRakutenImage(src: string, size = 500): string {
+  return src.replace(/(thumbnail\.image\.rakuten\.co\.jp\/.*[?&]_ex=)\d+x\d+/, `$1${size}x${size}`);
+}
+
 export function cosmeticSlug(brand_id: string, name_id: string): string {
   return `${brand_id}-${name_id}`;
 }

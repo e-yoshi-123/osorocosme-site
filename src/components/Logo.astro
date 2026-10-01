@@ -1,0 +1,17 @@
+---
+// ロゴ：ファビコンの「鎖のように重なる2つの輪」を線のマークにし、欧文の書体と組む（試作）
+interface Props { class?: string; mark?: boolean; size?: "sm" | "lg" }
+const { class: cls = "", mark = true, size = "sm" } = Astro.props;
+---
+<span class:list={["inline-flex items-center gap-2 leading-none", cls]}>
+  {mark && (
+    <svg viewBox="0 0 64 40" class:list={[size === "lg" ? "w-12" : "w-8", "shrink-0"]} aria-hidden="true">
+      <circle cx="22" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="3.2" />
+      <path d="M42 6 a14 14 0 1 1 0 28 a14 14 0 1 1 0 -28" fill="none" stroke="var(--color-rose)" stroke-width="3.2" />
+      <path d="M28.6 8.6 A14 14 0 0 1 36 20" fill="none" stroke="currentColor" stroke-width="3.2" />
+    </svg>
+  )}
+  <span class="font-display tracking-[-0.01em]" style="font-weight:600">
+    Osoro<span class="italic" style="font-weight:500">Cosme</span>
+  </span>
+</span>
