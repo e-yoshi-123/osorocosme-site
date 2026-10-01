@@ -40,7 +40,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
 >
   <PageHead en="Brands" title="ブランド一覧" lead="動画で紹介されたブランドを、親会社の系列ごとのマップと、五十音順の一覧で探せます。" stats={[{ n: brands.length, label: "ブランド" }]} />
 
-  <section class="band py-10 md:py-12 mb-12">
+  <section class="panel mb-6 md:mb-8">
     <h2 class="font-serif text-[20px] md:text-[22px] font-semibold mb-2 flex items-baseline gap-3"><span class="num-display text-sm text-neutral-400">01</span>系列マップ</h2>
     <p class="text-xs text-neutral-500 mb-4">
       同じ親会社・系列のブランドを、紹介動画数に応じた面積の長方形で示しています。系列の中は「メイク系／両方／スキンケア系」に分け、
@@ -76,6 +76,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
     </div>
   </section>
 
+  <section class="panel">
   <h2 class="font-serif text-[20px] md:text-[22px] font-semibold mb-4 flex items-baseline gap-3"><span class="num-display text-sm text-neutral-400">02</span>五十音順</h2>
   <div class="flex flex-wrap items-center gap-2 mb-8 text-sm">
     <span class="label-caps text-neutral-500 mr-1">Country</span>
@@ -111,6 +112,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
       </section>
     ))
   }
+  </section>
 </Layout>
 
 <script>

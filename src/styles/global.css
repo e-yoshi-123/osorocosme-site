@@ -34,8 +34,6 @@
   --color-paper: #faf6f2;
   --color-ink: #1d1517;
   --color-blush: #f4e4e1;
-  /* エリアの区切りに敷く面（紙より一段濃い）。.band で使う（190章） */
-  --color-sand: #f1e9e1;
   --color-rose: #e60076;
   --color-berry: #5a0f31;
 
@@ -80,11 +78,19 @@
 }
 
 @layer components {
-  /* エリアの区切り：紙より一段濃い面を、本文の幅のまま画面の端まで敷く（横スクロールは出ない）。190章 */
-  .band {
-    background: var(--color-sand);
-    box-shadow: 0 0 0 100vmax var(--color-sand);
-    clip-path: inset(0 -100vmax);
+  /* まとまりを載せる白いカード。紙の背景の上に、角丸と薄い影で浮かせる（190章） */
+  .panel {
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px 16px;
+    box-shadow: 0 0 0 1px rgb(29 21 23 / 0.06), 0 18px 40px -30px rgb(29 21 23 / 0.35);
+  }
+  @media (min-width: 768px) {
+    .panel { border-radius: 28px; padding: 40px; }
+  }
+  /* カードの上では、白い商品の枠を細い線で見せる */
+  .panel .product-well {
+    box-shadow: inset 0 0 0 1px rgb(29 21 23 / 0.09);
   }
   /* 見出しの組（番号・欧文ラベル・日本語の題・罫線） */
   .eyebrow {

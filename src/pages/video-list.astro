@@ -13,6 +13,7 @@ const PAGE_SIZE = 60;
   description={`YouTubeのコスメ紹介動画${gallery.length}本の一覧。新着順・人気順で探せます。`}
 >
   <PageHead en="Videos" title="動画一覧" lead="コスメを紹介しているYouTube動画です。新着順・人気順で並べ替えられます。" stats={[{ n: formatCount(gallery.length), label: "本" }]} />
+  <div class="panel">
   <div class="flex items-center justify-end gap-2 mb-8">
     <span class="label-caps text-neutral-500 mr-1">Sort</span>
     <button id="sort-newest" data-sort="newest" class="sort-btn chip">新着順</button>
@@ -37,6 +38,7 @@ const PAGE_SIZE = 60;
     <button id="load-more-btn" class="mt-4 px-8 py-3 rounded-full border border-ink/25 text-sm hover:bg-ink hover:text-paper transition-colors duration-500" data-page-size={PAGE_SIZE}>
       もっと見る
     </button>
+  </div>
   </div>
 </Layout>
 

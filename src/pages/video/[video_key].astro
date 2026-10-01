@@ -97,6 +97,7 @@ const jsonLd = video
     ) : (
       <>
         <!-- ===== 動画：左に埋め込み、右に題・投稿者・数字・YouTubeへの導線 ===== -->
+        <div class="panel">
         <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           <div class="lg:col-span-8">
             <div class="aspect-video rounded-[24px] overflow-hidden bg-ink shadow-[0_40px_80px_-40px_rgba(29,21,23,0.55)]">
@@ -130,13 +131,14 @@ const jsonLd = video
           </div>
         </div>
 
-        <p class="mt-12 max-w-3xl text-sm leading-[1.9] text-neutral-600">{overview}</p>
+        <p class="mt-8 max-w-3xl text-sm leading-[1.9] text-neutral-600">{overview}</p>
+        </div>
 
         {/* 旧AI要約(video.summary)は、生成元・品質が不確かなため非表示にしている。
             データ自体は保持しており、Claudeでの作り直し後に復活させる想定 */}
 
         {validCosmetics.length > 0 && (
-          <section class="band mt-16 md:mt-24 py-14 md:py-20">
+          <section class="panel mt-8 md:mt-10">
             <SectionHead num="01" en="In this video" title="紹介されたコスメ" lead={`この動画で紹介された${validCosmetics.length}品です。`} />
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-8">
               {validCosmetics.map((c) => (
@@ -147,7 +149,7 @@ const jsonLd = video
         )}
 
         {sameChannel.length > 0 && (
-          <section class="pt-20 md:pt-28">
+          <section class="panel mt-8 md:mt-10">
             <SectionHead num="02" en="More from the channel" title={`${video.channel_title}の他の動画`} href={withBase(`/influencer/${video.channel_id}`)} cta="Profile" />
             <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
               {sameChannel.map((v) => <div class="min-w-0"><VideoCard video={v} /></div>)}
@@ -156,7 +158,7 @@ const jsonLd = video
         )}
 
         {sameCosmetics.length > 0 && (
-          <section class="band mt-20 md:mt-28 py-14 md:py-20">
+          <section class="panel mt-8 md:mt-10">
             <SectionHead num="03" en="Same cosmetics" title="同じコスメを紹介している他の動画" lead="この動画で紹介されているコスメが登場する、他のインフルエンサーの動画です。" />
             <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
               {sameCosmetics.map((v) => <div class="min-w-0"><VideoCard video={v} /></div>)}

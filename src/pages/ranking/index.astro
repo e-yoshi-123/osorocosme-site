@@ -28,11 +28,11 @@ function topImages(tag: string): string[] {
 
   {
     nav.map((g, gi) => (
-      <section class:list={[gi % 2 === 1 ? "band py-10 md:py-12 mb-14" : "mb-14"]}>
+      <section class="panel mb-6 md:mb-8">
         <h2 class="font-serif text-[20px] md:text-[22px] font-semibold mb-4 flex items-baseline gap-3"><span class="num-display text-sm text-neutral-400">{String(gi + 1).padStart(2, "0")}</span>{g.group}</h2>
         {/* 「まとめ」も単独カテゴリも、同じ幅・同じ見た目の行として同列に並べる。
             単独カテゴリは行をクリックでランキングへ。まとめは行をクリックで開き、「全般」か種類別かを選ぶ（<details>なのでJSなしでも動き、リンクはHTMLに残る） */}
-        <ul class="border-t border-ink/15">
+        <ul class="[&>li:last-child]:border-b-0">
           {g.items.map((it) => {
             const imgs = (
               <div class="flex gap-1.5 w-32 sm:w-48 shrink-0">

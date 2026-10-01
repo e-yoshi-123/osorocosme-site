@@ -11,7 +11,7 @@ const list = getPublishedFeatures().map((d) => getFeature(d.slug)!);
   description="YouTubeのコスメ紹介動画を、毎日メイク・プチプラなどのテーマ別に集計した特集。複数のインフルエンサーが紹介しているコスメだけをカテゴリ別にまとめています。"
 >
   <PageHead en="Features" title="特集" lead="動画のタイトルに明記されたテーマで動画を絞り、その動画で紹介されたコスメを集計しています。複数のインフルエンサーが紹介したものだけを載せています。" />
-  <ul class="border-t border-ink/15">
+  <ul class="panel !py-2 md:!py-4 [&>li:last-child>a]:border-b-0">
     {
       list.map((f) => (
         <li>

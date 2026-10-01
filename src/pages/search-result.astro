@@ -10,7 +10,7 @@ import Layout from "../layouts/Layout.astro";
   </header>
   <!-- 種類の切り替え（すべて／ブランド／インフルエンサー／コスメ／動画）。件数0の種類は出さない -->
   <nav id="search-tabs" class="hidden flex flex-wrap gap-2 mb-10 text-sm" aria-label="検索結果の種類"></nav>
-  <div id="search-results" class="space-y-14"></div>
+  <div id="search-results" class="space-y-6 md:space-y-8"></div>
   <p id="search-empty" class="text-neutral-400 hidden">該当するブランド・インフルエンサー・コスメ・動画が見つかりませんでした。別の言い方（英字・カタカナ・略さない名前など）でもお試しください。</p>
 </Layout>
 
@@ -160,17 +160,15 @@ import Layout from "../layouts/Layout.astro";
         .join("");
       listEl.innerHTML = "";
       const targets = tab === "all" ? kinds : [tab];
-      targets.forEach((k, n) => {
+      for (const k of targets) {
         const limit = tab === "all" ? PREVIEW[k] : PAGE;
-        const sec = section(k, results[k], limit, tab === "all");
-        // 種類の切れ目が分かるよう、1つおきに区切りの面を敷く（190章）
-        if (n % 2 === 1) sec.classList.add("band", "py-12");
-        listEl.appendChild(sec);
-      });
+        listEl.appendChild(section(k, results[k], limit, tab === "all"));
+      }
     }
 
     function section(k: Kind, items: string[], limit: number, preview: boolean): HTMLElement {
       const sec = document.createElement("section");
+      sec.className = "panel";
       sec.innerHTML = `
         <h2 class="font-serif text-[20px] md:text-[22px] font-semibold mb-6 flex items-baseline gap-3">${LABELS[k]}<span class="num-display text-sm text-neutral-400">${items.length.toLocaleString("ja-JP")}</span></h2>
         <div class="${GRID[k]}"></div>`;
@@ -206,8 +204,8 @@ import Layout from "../layouts/Layout.astro";
   }
 
   const GRID: Record<Kind, string> = {
-    brand: "grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 border-t border-ink/15",
-    influencer: "grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 border-t border-ink/15",
+    brand: "grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10",
+    influencer: "grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10",
     cosmetic: "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-5 gap-y-8 [&>*]:min-w-0",
     video: "grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10 [&>*]:min-w-0",
   };

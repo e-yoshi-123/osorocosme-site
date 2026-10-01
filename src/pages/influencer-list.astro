@@ -19,24 +19,24 @@ const rest = influencers.slice(MEDIUM_UNTIL);
 >
   <PageHead en="Influencers" title="インフルエンサー一覧" lead="登録者数・掲載動画数・紹介コスメ数から算出した人気順です。上位の方は、最新の動画とよく紹介するコスメも見られます。" stats={[{ n: formatCount(influencers.length), label: "人" }]} />
 
-  <section class="mb-16">
+  <section class="panel mb-6 md:mb-8">
     <h2 class="font-serif text-[20px] md:text-[22px] font-semibold mb-6">注目のインフルエンサー <span class="num-display text-rose ml-1">TOP{LARGE}</span></h2>
     <div class="grid gap-x-6 gap-y-0 lg:grid-cols-3">
       {large.map((inf, i) => <InfluencerFeatureCard influencer={inf} rank={i + 1} size="large" />)}
     </div>
   </section>
 
-  <section class="band py-10 md:py-12 mb-16">
+  <section class="panel mb-6 md:mb-8">
     <h2 class="font-serif text-[20px] md:text-[22px] font-semibold mb-6">人気のインフルエンサー <span class="num-display text-neutral-500 ml-1">{LARGE + 1}–{LARGE + medium.length}</span></h2>
     <div class="grid gap-x-6 gap-y-0 md:grid-cols-2 lg:grid-cols-3">
       {medium.map((inf, i) => <InfluencerFeatureCard influencer={inf} rank={LARGE + i + 1} size="medium" />)}
     </div>
   </section>
 
-  <section>
+  <section class="panel">
     <h2 class="font-serif text-[20px] md:text-[22px] font-semibold mb-6">そのほかのインフルエンサー <span class="num-display text-neutral-500 ml-1">{rest.length}</span></h2>
     <!-- 名簿のように、細い罫線で区切った行で並べる -->
-    <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 border-t border-ink/15">
+    <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10">
       {
         rest.map((inf, i) => (
           <li class="min-w-0 border-b border-ink/10">

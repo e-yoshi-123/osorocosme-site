@@ -1,10 +1,10 @@
 ---
-// 見出しの組：番号（欧文の数字）・欧文のラベル・日本語の題・右端のリンク・下の罫線（試作）
+// 見出しの組：番号（欧文の数字）・欧文のラベル・日本語の題・右端のリンク（カードに載せるので下の罫線は無し。190章）
 interface Props { num?: string; en: string; title: string; lead?: string; href?: string; cta?: string; id?: string }
 const { num, en, title, lead, href, cta = "View all", id } = Astro.props;
 ---
 <header class="reveal mb-8 md:mb-12" id={id}>
-  <div class="flex items-end justify-between gap-6 pb-4 border-b border-ink/15">
+  <div class="flex items-end justify-between gap-6">
     <div class="min-w-0">
       <p class="eyebrow mb-2">{num && <span class="num-display text-ink/40 mr-2">{num}</span>}{en}</p>
       <h2 class="font-serif text-[20px] md:text-[22px] leading-[1.3] font-semibold text-balance">{title}</h2>
