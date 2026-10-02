@@ -11089,22 +11089,6 @@
     "duration": "PT9M28S",
     "cosmetics": [
       {
-        "brand_id": "brand-00003",
-        "brand": "コスメデコルテ",
-        "name_id": "name-00056",
-        "name": "サンシェルター マルチ プロテクション エクストリーム コンフォート",
-        "related_tags": [
-          "乳液"
-        ],
-        "skin_concern": "",
-        "rakuten_image_link": "",
-        "rakuten_text_link": "",
-        "amazon_link": "",
-        "mentions": [
-          "概要欄の使用アイテムに記載"
-        ]
-      },
-      {
         "brand_id": "brand-00012",
         "brand": "NARS",
         "name_id": "name-00018",
@@ -11117,7 +11101,7 @@
         "rakuten_text_link": "",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄の使用アイテムに記載（字幕なし）"
         ]
       },
       {
@@ -11133,7 +11117,7 @@
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fplazastyle%2Fp03mks2686%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fplazastyle%2Fi%2F10040318%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄の使用アイテムに記載（字幕なし）"
         ],
         "now_price": 3850
       },
@@ -11150,7 +11134,7 @@
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00r136h.ftdz47bb.g00r136h.ftdz5d79/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F4901008313931%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11063174%2F&rafcid=wsc_i_is_1011877497265360338",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄の使用アイテムに記載（字幕なし）（14は血色、CL01はクマに）"
         ],
         "now_price": 638
       },
@@ -11167,7 +11151,7 @@
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fpartytime-tokyo%2F2602sq012pwd%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fpartytime-tokyo%2Fi%2F10044454%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄の使用アイテムに記載（字幕なし）"
         ],
         "now_price": 9870
       },
@@ -11184,7 +11168,23 @@
         "rakuten_text_link": "",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄の使用アイテムに記載（字幕なし）"
+        ]
+      },
+      {
+        "brand_id": "brand-00011",
+        "brand": "ケイト",
+        "name_id": "name-00188",
+        "name": "ヴィンテージモードアイズ",
+        "related_tags": [
+          "パウダーアイシャドウ"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
+        "amazon_link": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載（字幕なし）"
         ]
       },
       {
@@ -11200,7 +11200,7 @@
         "rakuten_text_link": "",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄の使用アイテムに記載（字幕なし）"
         ]
       },
       {
@@ -11216,7 +11216,7 @@
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405929%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319500%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄の使用アイテムに記載（字幕なし）"
         ],
         "now_price": 715
       },
@@ -11233,7 +11233,7 @@
         "rakuten_text_link": "",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄の使用アイテムに記載（字幕なし）"
         ]
       },
       {
@@ -11249,23 +11249,7 @@
         "rakuten_text_link": "",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
-        ]
-      },
-      {
-        "brand_id": "brand-00011",
-        "brand": "ケイト",
-        "name_id": "name-00188",
-        "name": "ヴィンテージモードアイズ",
-        "related_tags": [
-          "パウダーアイシャドウ"
-        ],
-        "skin_concern": "",
-        "rakuten_image_link": "",
-        "rakuten_text_link": "",
-        "amazon_link": "",
-        "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄の使用アイテムに記載（字幕なし）"
         ]
       }
     ]
@@ -24025,7 +24009,7 @@
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00q9suh.ftdz4c30.g00q9suh.ftdz55fd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Faxas-co%2Fchokh-4939553040736%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Faxas-co%2Fi%2F10079819%2F&rafcid=wsc_i_is_1011877497265360338",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄の使用アイテムに記載（字幕なし）"
         ],
         "now_price": 820
       },
@@ -24042,7 +24026,7 @@
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fblanc-lapin%2Flmrhl0000012%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fblanc-lapin%2Fi%2F10166564%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄の使用アイテムに記載（字幕なし）"
         ],
         "now_price": 7900
       },
@@ -24059,7 +24043,7 @@
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00svqgh.ftdz4cfb.g00svqgh.ftdz5b8e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Flilyanna%2Fririmew-eyepalette%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Flilyanna%2Fi%2F10000410%2F&rafcid=wsc_i_is_1011877497265360338",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄の使用アイテムに記載（字幕なし）"
         ],
         "now_price": 2640
       },
@@ -24076,7 +24060,7 @@
         "rakuten_text_link": "",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄の使用アイテムに記載（字幕なし）"
         ]
       },
       {
@@ -24092,7 +24076,7 @@
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00tnweh.ftdz4aca.g00tnweh.ftdz5503/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frainmakers-beautyfarm%2Fwon-wls%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frainmakers-beautyfarm%2Fi%2F10000082%2F&rafcid=wsc_i_is_1011877497265360338",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄の使用アイテムに記載（字幕なし）"
         ],
         "now_price": 1430
       },
@@ -24109,7 +24093,7 @@
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00u4xph.ftdz4999.g00u4xph.ftdz5bf4/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fnextera2021%2Flakafruity%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fnextera2021%2Fi%2F10000195%2F&rafcid=wsc_i_is_1011877497265360338",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄の使用アイテムに記載（字幕なし）"
         ],
         "now_price": 1980
       }
@@ -40771,7 +40755,7 @@
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmediva%2F4973167687208%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmediva%2Fi%2F10010904%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ],
         "now_price": 4600
       },
@@ -40788,7 +40772,7 @@
         "rakuten_text_link": "",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ]
       },
       {
@@ -40804,7 +40788,7 @@
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00tcavh.ftdz46f5.g00tcavh.ftdz582f/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Flunasol%2Fr4973167011959%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Flunasol%2Fi%2F10000795%2F&rafcid=wsc_i_is_1011877497265360338",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ],
         "now_price": 7700
       },
@@ -40821,7 +40805,7 @@
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00t7zph.ftdz4291.g00t7zph.ftdz5209/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcinderellabeaute%2F2410ls039mar%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcinderellabeaute%2Fi%2F10041240%2F&rafcid=wsc_i_is_1011877497265360338",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ],
         "now_price": 4920
       },
@@ -40838,7 +40822,7 @@
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00tcavh.ftdz46f5.g00tcavh.ftdz582f/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Flunasol%2Fl0011%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Flunasol%2Fi%2F10000722%2F&rafcid=wsc_i_is_1011877497265360338",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ],
         "now_price": 4620
       },
@@ -40855,7 +40839,7 @@
         "rakuten_text_link": "",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ]
       },
       {
@@ -40871,9 +40855,26 @@
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00s3q0h.ftdz4b99.g00s3q0h.ftdz5f09/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosme-venus%2Faddiction2024lip%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosme-venus%2Fi%2F10011340%2F&rafcid=wsc_i_is_1011877497265360338",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ],
         "now_price": 3900
+      },
+      {
+        "brand_id": "brand-00030",
+        "brand": "アディクション",
+        "name_id": "name-00008",
+        "name": "ザ アイシャドウ パレット +",
+        "related_tags": [
+          "パウダーアイシャドウ"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosme-venus%2F4971710584424%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosme-venus%2Fi%2F10011089%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosme-venus/cabinet/skuimage/topimage/4971710584424-set.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"アディクション ザ アイシャドウ パレット +\" title=\"アディクション ザ アイシャドウ パレット +\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosme-venus%2F4971710584424%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosme-venus%2Fi%2F10011089%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
+        ],
+        "now_price": 5980
       },
       {
         "brand_id": "brand-00030",
@@ -40888,7 +40889,7 @@
         "rakuten_text_link": "",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ]
       },
       {
@@ -40904,7 +40905,7 @@
         "rakuten_text_link": "",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ]
       },
       {
@@ -40920,7 +40921,7 @@
         "rakuten_text_link": "",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ]
       },
       {
@@ -40936,7 +40937,7 @@
         "rakuten_text_link": "",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ]
       },
       {
@@ -40952,7 +40953,7 @@
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsunfinishop%2F80001709%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fsunfinishop%2Fi%2F10000800%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ],
         "now_price": 3872
       },
@@ -40969,7 +40970,7 @@
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Famitysun%2F80001991%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Famitysun%2Fi%2F10003330%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ],
         "now_price": 4752
       },
@@ -40986,7 +40987,7 @@
         "rakuten_text_link": "",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ]
       },
       {
@@ -41002,7 +41003,7 @@
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsakusaku-d%2Fdecorte-lipstick01-20%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fsakusaku-d%2Fi%2F10099235%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ],
         "now_price": 6050
       },
@@ -41019,7 +41020,7 @@
         "rakuten_text_link": "",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ]
       },
       {
@@ -41035,7 +41036,7 @@
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frareu%2F2023012918%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frareu%2Fi%2F10006077%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ],
         "now_price": 4785
       },
@@ -41052,7 +41053,7 @@
         "rakuten_text_link": "",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ]
       },
       {
@@ -41068,7 +41069,7 @@
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00tzvsh.ftdz46e8.g00tzvsh.ftdz5393/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fbestjapangoods%2F10001031%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fbestjapangoods%2Fi%2F10001031%2F&rafcid=wsc_i_is_1011877497265360338",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ],
         "now_price": 5980
       },
@@ -41085,7 +41086,7 @@
         "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00u9loh.ftdz4f0e.g00u9loh.ftdz5efb/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fwinno%2F4514254125533%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fwinno%2Fi%2F10000045%2F&rafcid=wsc_i_is_1011877497265360338",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ],
         "now_price": 6050
       },
@@ -41102,7 +41103,7 @@
         "rakuten_text_link": "",
         "amazon_link": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄に記載（字幕なし。塗り比べ・スウォッチで紹介）"
         ]
       }
     ]
@@ -168014,31 +168015,206 @@
     "check_status": true,
     "cosmetics": [
       {
+        "brand_id": "brand-00132",
+        "brand": "クラランス",
+        "name_id": "name-00002",
+        "name": "フィックス メイクアップ N",
+        "related_tags": [
+          "ミスト状化粧水"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fclarins%2Ffixmakeupn%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fclarins%2Fi%2F10000013%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/clarins/cabinet/img/80106220_s.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"クラランス フィックス メイクアップ N\" title=\"クラランス フィックス メイクアップ N\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fclarins%2Ffixmakeupn%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fclarins%2Fi%2F10000013%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
         "amazon_link": "",
-        "brand": "CLIO",
-        "brand_id": "brand-00128",
-        "name": "キル ラッシュ スーパープルーフ マスカラ エクストリーム ボリューム",
-        "name_id": "name-00103",
+        "mentions": [
+          "概要欄の使用アイテムに記載（字幕なし。ASMRで実際に使用）"
+        ],
+        "now_price": 5060
+      },
+      {
+        "brand_id": "brand-00014",
+        "brand": "ディオール",
+        "name_id": "name-00001",
+        "name": "ディオールスキン フォーエヴァー スキン コレクト コンシーラー",
+        "related_tags": [
+          "コンシーラー"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmelink%2Fc10412789%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmelink%2Fi%2F10066985%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmelink/cabinet/cp20241211/c97348956-3_cp.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ディオール ディオールスキン フォーエヴァー スキン コレクト コンシーラー\" title=\"ディオール ディオールスキン フォーエヴァー スキン コレクト コンシーラー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmelink%2Fc10412789%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmelink%2Fi%2F10066985%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載（字幕なし。ASMRで実際に使用）"
+        ],
+        "now_price": 5600
+      },
+      {
+        "brand_id": "brand-00001",
+        "brand": "セザンヌ",
+        "name_id": "name-00011",
+        "name": "ノーズ＆アイブロウパウダー",
+        "related_tags": [
+          "パウダーアイブロウ"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00q9suh.ftdz4c30.g00q9suh.ftdz55fd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Faxas-co%2Fchokh-4939553040736%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Faxas-co%2Fi%2F10079819%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/axas-co/cabinet/chokh01/4939553040736.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"セザンヌ ノーズ＆アイブロウパウダー\" title=\"セザンヌ ノーズ＆アイブロウパウダー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00q9suh.ftdz4c30.g00q9suh.ftdz55fd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Faxas-co%2Fchokh-4939553040736%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Faxas-co%2Fi%2F10079819%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載（字幕なし。ASMRで実際に使用）"
+        ],
+        "now_price": 820
+      },
+      {
+        "brand_id": "brand-00011",
+        "brand": "ケイト",
+        "name_id": "name-00004",
+        "name": "3DアイブロウカラーN",
+        "related_tags": [
+          "眉マスカラ"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00u0z8h.ftdz4851.g00u0z8h.ftdz5010/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fj-seikatsu%2Fn3994-4973167829417%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fj-seikatsu%2Fi%2F10004018%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/j-seikatsu/cabinet/biiino/item/main-image-7/20240803223834_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ケイト 3DアイブロウカラーN\" title=\"ケイト 3DアイブロウカラーN\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00u0z8h.ftdz4851.g00u0z8h.ftdz5010/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fj-seikatsu%2Fn3994-4973167829417%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fj-seikatsu%2Fi%2F10004018%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載（字幕なし。ASMRで実際に使用）"
+        ],
+        "now_price": 1180
+      },
+      {
+        "brand_id": "brand-01231",
+        "brand": "SHEGLAM",
+        "name_id": "name-00001",
+        "name": "サンスカルプ リキッドシェーディング",
+        "related_tags": [
+          "プレストパウダー"
+        ],
+        "skin_concern": "",
         "rakuten_image_link": "",
         "rakuten_text_link": "",
+        "amazon_link": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載（字幕なし。ASMRで実際に使用）"
+        ]
+      },
+      {
+        "brand_id": "brand-00092",
+        "brand": "Wonjungyo",
+        "name_id": "name-00003",
+        "name": "ウォンジョンヨ Ｗ デイリームードアップパレット",
+        "related_tags": [
+          "パウダーアイシャドウ"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Faxas-co%2Fchokh-4570042582353%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Faxas-co%2Fi%2F10114444%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/axas-co/cabinet/chokh01/4570042582353.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"Wonjungyo ウォンジョンヨ Ｗ デイリームードアップパレット\" title=\"Wonjungyo ウォンジョンヨ Ｗ デイリームードアップパレット\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Faxas-co%2Fchokh-4570042582353%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Faxas-co%2Fi%2F10114444%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載（字幕なし。ASMRで実際に使用）"
+        ],
+        "now_price": 2420
+      },
+      {
+        "brand_id": "brand-00006",
+        "brand": "マジョリカ マジョルカ",
+        "name_id": "name-00003",
+        "name": "シャドーカスタマイズ",
+        "related_tags": [
+          "パウダーアイシャドウ"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmorro%2F20250217195958_94%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fmorro%2Fi%2F10043000%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/morro/cabinet/r_2025021718/20250217195958_94_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"マジョリカ マジョルカ シャドーカスタマイズ\" title=\"マジョリカ マジョルカ シャドーカスタマイズ\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmorro%2F20250217195958_94%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fmorro%2Fi%2F10043000%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載（字幕なし。ASMRで実際に使用）（涙袋用）"
+        ],
+        "now_price": 3062
+      },
+      {
+        "brand_id": "brand-00011",
+        "brand": "ケイト",
+        "name_id": "name-00012",
+        "name": "ダブルラインエキスパート",
+        "related_tags": [
+          "リキッドアイライナー"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00ufauh.ftdz403c.g00ufauh.ftdz5d6e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24-cosmetics%2F4973167279670%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24-cosmetics%2Fi%2F10001793%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24-cosmetics/cabinet/670/4973167279670.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ケイト ダブルラインエキスパート\" title=\"ケイト ダブルラインエキスパート\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00ufauh.ftdz403c.g00ufauh.ftdz5d6e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24-cosmetics%2F4973167279670%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24-cosmetics%2Fi%2F10001793%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載（字幕なし。ASMRで実際に使用）（涙袋用）"
+        ],
+        "now_price": 935
+      },
+      {
+        "brand_id": "brand-00128",
+        "brand": "CLIO",
+        "name_id": "name-00128",
+        "name": "キルラッシュスーパープルーフマスカラファイン",
         "related_tags": [
           "マスカラ"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "",
+        "rakuten_text_link": "",
+        "amazon_link": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載（字幕なし。ASMRで実際に使用）"
+        ]
       },
       {
+        "brand_id": "brand-00037",
+        "brand": "ヒロインメイク",
+        "name_id": "name-00003",
+        "name": "スムースリキッドアイライナー スーパーキープ",
+        "related_tags": [
+          "リキッドアイライナー"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00t269h.ftdz4c99.g00t269h.ftdz5cd0/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Farianakosume%2Fheroine-001%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Farianakosume%2Fi%2F10006877%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/arianakosume/cabinet/main-ariana/heroine-001-ra-rk.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ヒロインメイク スムースリキッドアイライナー スーパーキープ\" title=\"ヒロインメイク スムースリキッドアイライナー スーパーキープ\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00t269h.ftdz4c99.g00t269h.ftdz5cd0/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Farianakosume%2Fheroine-001%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Farianakosume%2Fi%2F10006877%2F&rafcid=wsc_i_is_1011877497265360338",
         "amazon_link": "",
-        "brand": "ケイト",
-        "brand_id": "brand-00011",
-        "name": "リップモンスター",
+        "mentions": [
+          "概要欄の使用アイテムに記載（字幕なし。ASMRで実際に使用）"
+        ],
+        "now_price": 1085
+      },
+      {
+        "brand_id": "brand-00002",
+        "brand": "キャンメイク",
         "name_id": "name-00001",
-        "now_price": 1540,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00r136h.ftdz47bb.g00r136h.ftdz5d79/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405829%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11310814%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24/cabinet/829/405829.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ケイト リップモンスター\" title=\"ケイト リップモンスター\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00r136h.ftdz47bb.g00r136h.ftdz5d79/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405829%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11310814%2F&rafcid=wsc_i_is_1011877497265360338",
+        "name": "クリーミータッチライナー",
+        "related_tags": [
+          "ジェルアイライナー"
+        ],
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405929%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319500%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24/cabinet/929/405929.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"キャンメイク クリーミータッチライナー\" title=\"キャンメイク クリーミータッチライナー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405929%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11319500%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載（字幕なし。ASMRで実際に使用）"
+        ],
+        "now_price": 715
+      },
+      {
+        "brand_id": "brand-00011",
+        "brand": "ケイト",
+        "name_id": "name-00001",
+        "name": "リップモンスター",
         "related_tags": [
           "口紅"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00r136h.ftdz47bb.g00r136h.ftdz5d79/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405829%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11310814%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24/cabinet/829/405829.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ケイト リップモンスター\" title=\"ケイト リップモンスター\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00r136h.ftdz47bb.g00r136h.ftdz5d79/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F405829%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11310814%2F&rafcid=wsc_i_is_1011877497265360338",
+        "amazon_link": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載（字幕なし。ASMRで実際に使用）"
+        ],
+        "now_price": 1540
       }
     ],
     "delete_flg": false,
