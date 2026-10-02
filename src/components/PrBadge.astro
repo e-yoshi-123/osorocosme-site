@@ -1,0 +1,16 @@
+---
+// PR・提供の動画・紹介に付ける印（197章）。tone="solid"はサムネイルの上に重ねる用
+interface Props {
+  tone?: "line" | "solid";
+  class?: string;
+}
+const { tone = "line", class: cls } = Astro.props;
+---
+
+<span
+  class:list={[
+    "inline-flex items-center shrink-0 rounded-full px-1.5 py-[3px] text-[10px] leading-none font-semibold tracking-[0.08em]",
+    tone === "solid" ? "bg-paper/90 text-ink backdrop-blur" : "border border-ink/30 text-neutral-600",
+    cls,
+  ]}
+  title="PR・提供（概要欄の記載、またはYouTubeの有料プロモーションの表示による）">PR</span>

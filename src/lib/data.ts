@@ -5,6 +5,7 @@ import brandMetaData from "../data/brand-meta.json";
 import brandReadings from "../data/brand-readings.json";
 import categoryOverridesData from "../data/category-overrides.json";
 import brandEquivalentsData from "../data/brand_equivalents.json";
+import prVideosData from "../data/pr_videos.json";
 
 export interface Cosmetic {
   brand_id: string;
@@ -177,6 +178,26 @@ export function getAliasRedirects(): { brands: { from: string; to: string }[]; p
  * ここでは常に厳密判定（boolean true のみ有効）に統一する。 */
 export function isVisible(v: Video): boolean {
   return v.check_status === true && v.delete_flg !== true;
+}
+
+/** PR・提供の動画（backend/scripts/pr_check/classify.py が概要欄・YouTubeの有料プロモーションの申告から判定。197章）。
+ * kind: gift=提供品を含む、pr=PR・提供。whole=動画の商品をすべて外す（提供元が書かれていない・店舗の提供）、
+ * brands・products=外すブランド・商品（brand_id_name_id）。 */
+export interface PrInfo {
+  kind: "pr" | "gift";
+  whole: boolean;
+  brands: string[];
+  products: string[];
+}
+const PR_VIDEOS = prVideosData as unknown as Record<string, PrInfo>;
+export function getPrInfo(videoKey: string): PrInfo | undefined {
+  return videoKey === "_comment" ? undefined : PR_VIDEOS[videoKey];
+}
+/** PR・提供としての紹介か。ランキング・最近話題・特集の数には入れない（紹介の一覧には「PR」を付けて残す。197章） */
+export function isPrMention(videoKey: string, brand_id: string, name_id: string): boolean {
+  const p = getPrInfo(videoKey);
+  if (!p) return false;
+  return p.whole || p.brands.includes(brand_id) || p.products.includes(`${brand_id}_${name_id}`);
 }
 
 export function getAllVideoEntries(): VideoEntry[] {
@@ -663,6 +684,7 @@ export function getCosmeticRankings(): CosmeticRanking[] {
       // 商品ページの「紹介動画187本」とランキングの「177本」のように数字が食い違っていた（255品。195章）。
       // どの紹介にもカテゴリが無い商品は、順位を付けられないので最後に除く。
       if (!c.brand_id || !c.name_id) continue;
+      if (isPrMention(v.key, c.brand_id, c.name_id)) continue; // PR・提供の紹介は数えない（197章）
       const key = `${c.brand_id}_${c.name_id}`;
       let e = map.get(key);
       if (!e) {
@@ -904,6 +926,7 @@ function buildFeature(def: FeatureDef) {
   for (const v of videos) {
     for (const c of v.cosmetics || []) {
       if (!c.brand_id || !c.name_id || !c.related_tags?.length) continue;
+      if (isPrMention(v.key, c.brand_id, c.name_id)) continue;
       const tag = c.related_tags.map(rankingTag).find((t) => CATEGORY_TAG_TO_GROUP[t]);
       if (!tag) continue; // 大分類に属さないカテゴリ（その他）は載せない
       const key = `${c.brand_id}_${c.name_id}`;
@@ -1097,6 +1120,7 @@ export function getRecentCounts(): Map<string, { videos: number; channels: numbe
     if (!v.published_at || new Date(v.published_at).getTime() < since) continue;
     for (const c of v.cosmetics || []) {
       if (!c.brand_id || !c.name_id) continue;
+      if (isPrMention(v.key, c.brand_id, c.name_id)) continue;
       const key = `${c.brand_id}_${c.name_id}`;
       let e = acc.get(key);
       if (!e) acc.set(key, (e = { vs: new Set(), cs: new Set() }));
@@ -1125,7 +1149,9 @@ export interface CosmeticFacts {
   mainTag?: string;
   rank?: number;
   rankTotal?: number;
-  introductions: { channel_id: string; channel_title: string; channel_icon?: string; thumbnail?: string; videoKey: string; videoTitle: string; published_at: string }[];
+  /** うちPR・提供としての紹介（ランキングには数えない） */
+  prCount: number;
+  introductions: { channel_id: string; channel_title: string; channel_icon?: string; thumbnail?: string; videoKey: string; videoTitle: string; published_at: string; pr: boolean }[];
 }
 
 /** コスメ詳細用の事実データ。紹介した人・日付（新しい順）、主カテゴリ内での順位など。 */
@@ -1139,11 +1165,13 @@ export function getCosmeticFacts(brand_id: string, name_id: string): CosmeticFac
     videoKey: v.key,
     videoTitle: v.title,
     published_at: v.published_at,
+    pr: isPrMention(v.key, brand_id, name_id),
   }));
   const r = getCosmeticRankings().find((x) => x.brand_id === brand_id && x.name_id === name_id);
   const facts: CosmeticFacts = {
     videoCount: videos.length,
     channelCount: new Set(videos.map((v) => v.channel_id)).size,
+    prCount: introductions.filter((i) => i.pr).length,
     introductions,
   };
   const byTag = getCosmeticRankingsByTag();

@@ -1,5 +1,6 @@
 ---
-import { formatCount, formatDateDot, formatDuration, withBase, getCosmeticListEntry, productImageSrc, type VideoEntry } from "../lib/data";
+import { formatCount, formatDateDot, formatDuration, withBase, getCosmeticListEntry, productImageSrc, getPrInfo, type VideoEntry } from "../lib/data";
+import PrBadge from "./PrBadge.astro";
 
 interface Props {
   video: VideoEntry;
@@ -15,12 +16,14 @@ const thumbs = items
   .filter((src) => src && !seen.has(src) && seen.add(src))
   .slice(0, 4);
 const duration = formatDuration(video.duration);
+const pr = getPrInfo(video.key);
 ---
 
 <a href={withBase(`/video/${video.key}`)} class="group block">
   <div class="relative overflow-hidden rounded-2xl bg-neutral-200">
     <img src={video.thumbnail} alt={video.title} class="w-full aspect-video object-cover transition-transform duration-[1.2s] ease-out-expo group-hover:scale-[1.04]" loading="lazy" />
     <span class="absolute bottom-2.5 right-2.5 bg-ink/75 backdrop-blur text-paper text-xs tracking-wider px-2 py-1 rounded-full">▶ {formatCount(video.view_count)}</span>
+    {pr && <PrBadge tone="solid" class="absolute top-2.5 left-2.5" />}
     {duration && <span class="absolute bottom-2.5 left-2.5 bg-ink/75 backdrop-blur text-paper text-xs tracking-wider px-2 py-1 rounded-full">{duration}</span>}
   </div>
   <div class="pt-3.5">
