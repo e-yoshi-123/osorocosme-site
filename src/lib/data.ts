@@ -514,7 +514,7 @@ export interface InfluencerTopCosmetic {
 export interface InfluencerHighlights {
   /** 最新の動画（投稿日降順） */
   latestVideos: VideoEntry[];
-  /** よく紹介するコスメ（紹介した動画数の多い順。画像のあるものだけ） */
+  /** よく紹介するコスメ（紹介した動画数の多い順。画像のあるものだけ。PR・提供の紹介は数えない） */
   topCosmetics: InfluencerTopCosmetic[];
   /** 紹介が多いカテゴリ。全体の平均より、そのインフルエンサーが多く紹介しているものを優先（特徴が出る）。 */
   topTags: string[];
@@ -530,6 +530,7 @@ export function getInfluencerHighlights(channel_id: string, videoLimit = 3, cosm
     const seen = new Set<string>();
     for (const c of v.cosmetics || []) {
       if (!c.brand_id || !c.name_id || !c.brand || !c.name) continue;
+      if (isPrMention(v.key, c.brand_id, c.name_id)) continue; // PR・提供の紹介は「よく紹介する」に数えない（197章）
       const key = `${c.brand_id}_${c.name_id}`;
       if (seen.has(key)) continue; // 同じ動画内の重複は1本と数える
       seen.add(key);
