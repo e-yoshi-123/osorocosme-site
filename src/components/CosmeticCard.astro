@@ -40,7 +40,7 @@ const yahooImage = extractImageSrc(rakutenImageHtml) ? undefined : yahooEntry;
     }
   </div>
   <a href={withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`)} class="block pt-3">
-    {showBrand && <div class="mb-1 text-xs tracking-[0.14em] uppercase text-neutral-500 truncate">{brand}</div>}
+    {showBrand && <div class="mb-1 text-xs tracking-[0.14em] text-neutral-500 truncate">{brand}</div>}
     <div class="phrase text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors">{name}</div>
     {caption && <div class="mt-1.5 text-xs text-neutral-500">{caption}</div>}
   </a>

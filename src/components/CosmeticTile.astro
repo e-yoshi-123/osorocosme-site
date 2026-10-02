@@ -41,7 +41,7 @@ const { tile, rank, caption, current = false, showBrand = true } = Astro.props;
       )
     }
   </div>
-  {showBrand && <p class="mt-3 text-xs tracking-[0.14em] uppercase text-neutral-500 truncate">{tile.brand}</p>}
+  {showBrand && <p class="mt-3 text-xs tracking-[0.14em] text-neutral-500 truncate">{tile.brand}</p>}
   <p class:list={["phrase text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors", showBrand ? "mt-1" : "mt-3"]}>{tile.name}</p>
   {caption && <p class="mt-1.5 text-xs text-neutral-500">{caption}</p>}
 </a>

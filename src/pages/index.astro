@@ -202,7 +202,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
                   <span class="label-caps text-rose text-[11px]">st</span>
                 </span>
               </div>
-              <p class="mt-4 text-xs tracking-[0.14em] uppercase text-neutral-500">{f.top[0].tile.brand}</p>
+              <p class="mt-4 text-xs tracking-[0.14em] text-neutral-500">{f.top[0].tile.brand}</p>
               <p class="mt-1 font-serif text-lg leading-snug group-hover:text-rose transition-colors tighten">{f.top[0].tile.name}</p>
               <p class="mt-1 text-xs text-neutral-500">{f.top[0].tile.videoCount}本の動画で紹介</p>
             </a>
@@ -216,7 +216,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
                     {tile.imageSrc && <img src={tile.imageSrc} alt="" class="w-full h-full object-contain p-1.5" loading="lazy" />}
                   </span>
                   <span class="min-w-0 flex-1">
-                    <span class="block text-xs tracking-[0.12em] uppercase text-neutral-500 truncate">{tile.brand}</span>
+                    <span class="block text-xs tracking-[0.12em] text-neutral-500 truncate">{tile.brand}</span>
                     <span class="phrase text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors">{tile.name}</span>
                   </span>
                   <span class="text-xs text-neutral-500 shrink-0">{tile.videoCount}<span class="font-sans text-xs ml-0.5">本</span></span>
