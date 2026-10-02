@@ -4,6 +4,7 @@ import ShareButtons from "../../components/ShareButtons.astro";
 import CosmeticTile from "../../components/CosmeticTile.astro";
 import IntroRow from "../../components/IntroRow.astro";
 import SectionHead from "../../components/SectionHead.astro";
+import PageNav from "../../components/PageNav.astro";
 import {
   getUsedCosmeticKeys,
   getAliasRedirects,
@@ -226,8 +227,19 @@ const jsonLd = entry
           </div>
         </div>
 
+        <!-- スマホで縦に長くなるので、各セクションへ飛べる目次の帯を固定で出す -->
+        <PageNav
+          class="mt-6 md:mt-8"
+          items={[
+            { label: `紹介した人 ${facts.introductions.length}`, target: "#who" },
+            ...(coMentioned.length > 0 ? [{ label: "一緒に紹介", target: "#paired" }] : []),
+            ...(facts.mainTag && categoryTop.length > 0 ? [{ label: "ランキング", target: "#ranking" }] : []),
+            ...(brandTop.length > 0 ? [{ label: "同じブランド", target: "#brand-top" }] : []),
+          ]}
+        />
+
         <!-- ===== 01 いつ・誰が紹介したか ===== -->
-        <section class="panel mt-8 md:mt-10">
+        <section id="who" class="panel mt-6 md:mt-8">
           <SectionHead num="01" en="Who used it" title="いつ・誰が紹介したか" lead={`${facts.introductions.length}件の紹介を、新しい順に並べています。`} />
           <!-- 日付・チャンネル・動画タイトルを固定の列にする。件数が多い商品は、先頭10件だけ表示して残りを折りたたむ -->
           <div class="text-sm">
@@ -248,7 +260,7 @@ const jsonLd = entry
         </section>
 
         {coMentioned.length > 0 && (
-          <section class="panel mt-8 md:mt-10">
+          <section id="paired" class="panel mt-8 md:mt-10">
             <SectionHead num="02" en="Paired with" title="一緒に紹介されているコスメ" lead={`${entry.name}を紹介した動画で、あわせて紹介されているコスメです。`} />
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-8">
               {coMentioned.map((t) => <CosmeticTile tile={t} caption={`${t.together}本の動画で一緒に紹介`} />)}
@@ -257,7 +269,7 @@ const jsonLd = entry
         )}
 
         {facts.mainTag && categoryTop.length > 0 && (
-          <section class="panel mt-8 md:mt-10">
+          <section id="ranking" class="panel mt-8 md:mt-10">
             <SectionHead num="03" en="Ranking" title={`「${facts.mainTag}」の人気ランキング`} lead={`${facts.rankTotal}品中、この商品は${facts.rank}位です。`} href={categoryUrl(facts.mainTag)} cta={`All ${facts.rankTotal}`} />
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-8">
               {categoryTop.map(({ rank, tile }) => (
@@ -268,7 +280,7 @@ const jsonLd = entry
         )}
 
         {brandTop.length > 0 && (
-          <section class="panel mt-8 md:mt-10">
+          <section id="brand-top" class="panel mt-8 md:mt-10">
             <SectionHead num="04" en="From the brand" title={`${entry.brand}の人気商品`} lead={`${entry.brand}の商品のうち、紹介されている動画が多いものです。`} href={withBase(`/brand/${canonicalBrandId(entry.brand_id)}`)} />
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-8">
               {brandTop.map((t) => <CosmeticTile tile={t} showBrand={false} caption={`${t.videoCount}本の動画で紹介`} />)}

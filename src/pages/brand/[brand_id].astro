@@ -88,7 +88,8 @@ const COLS: Record<number, string> = { 1: "lg:grid-cols-1", 2: "lg:grid-cols-2",
     ) : (
       <>
         {sections.length > 1 && (
-          <div class="md:sticky md:top-[72px] z-20 bg-paper/90 backdrop-blur-md py-3 mb-10 border-b border-ink/10 text-sm">
+          <div class="filter-sentinel" aria-hidden="true"></div>
+          <div class="filter-bar sticky top-[var(--hdr-h,97px)] z-20 bg-paper/90 backdrop-blur-md py-3 mb-10 border-b border-ink/10 text-sm -mx-4 px-4 sm:mx-0 sm:px-0">
             <div class="flex flex-nowrap sm:flex-wrap gap-1.5 overflow-x-auto sm:overflow-visible -mx-4 px-4 sm:mx-0 sm:px-0 pb-1">
               <button class="group-tab tab shrink-0 whitespace-nowrap" data-group="__all__">
                 すべて <span class="tab-n">{cosmetics.length}</span>
@@ -172,4 +173,70 @@ const COLS: Record<number, string> = { 1: "lg:grid-cols-1", 2: "lg:grid-cols-2",
     })
   );
   if (groupTabs.length > 0) render();
+
+  // 帯が上に貼り付いて下へスクロールしている間は、スマホではカテゴリのチップの段をたたむ（画面の上が帯で埋まらないように）。上へ戻すと開く
+  const bar = document.querySelector<HTMLElement>(".filter-bar");
+  const sentinel = document.querySelector<HTMLElement>(".filter-sentinel");
+  const isStuck = () => !!sentinel && sentinel.getBoundingClientRect().top < (bar?.getBoundingClientRect().top ?? 0) - 1;
+  let lastY = window.scrollY;
+  let holdUntil = 0; // 絞り込みの直後は、一覧の長さが変わってスクロール位置が動くので、たたまない
+  function fold() {
+    const y = window.scrollY;
+    if (Date.now() < holdUntil) { lastY = y; return; }
+    if (Math.abs(y - lastY) < 6) return;
+    setFolded(isStuck() && y > lastY);
+    lastY = y;
+  }
+  // たたんだ分の高さは下の余白で埋め、一覧が跳ねないようにする（mb-10＝2.5rem）
+  function setFolded(on: boolean) {
+    if (!bar || bar.classList.contains("is-folded") === on) return;
+    const h = bar.offsetHeight;
+    bar.classList.toggle("is-folded", on);
+    const d = h - bar.offsetHeight;
+    bar.style.marginBottom = on && d > 0 ? `calc(2.5rem + ${d}px)` : "";
+  }
+  // 絞り込みを変えたとき、下までスクロールしていたら一覧の頭へ戻す
+  function toListTop() {
+    if (isStuck()) sentinel!.scrollIntoView({ block: "start" });
+    lastY = window.scrollY;
+    holdUntil = Date.now() + 500;
+    setFolded(false);
+  }
+  groupTabs.forEach((t) => t.addEventListener("click", toListTop));
+  chips.forEach((c) => c.addEventListener("click", toListTop));
+
+  // 現在地：いま画面に出ているカテゴリの大分類タブ（「すべて」のとき）・カテゴリのチップ（大分類を選んでいるとき）を色で示す
+  const sections = Array.from(document.querySelectorAll<HTMLElement>(".cat-section"));
+  let here: HTMLElement | null = null;
+  function spy() {
+    fold();
+    const line = (bar?.getBoundingClientRect().bottom ?? 0) + 24;
+    const sec = sections.filter((el) => el.offsetParent !== null && el.getBoundingClientRect().top <= line).pop();
+    let el: HTMLElement | null = null;
+    if (sec && isStuck()) {
+      el = activeGroup === "__all__"
+        ? Array.from(groupTabs).find((t) => t.dataset.group === sec.dataset.group) ?? null
+        : activeTag === null ? Array.from(chips).find((c) => c.dataset.tag === sec.dataset.tag && c.offsetParent !== null) ?? null : null;
+    }
+    if (el === here) return;
+    here?.classList.remove("is-here");
+    here = el;
+    if (el) {
+      el.classList.add("is-here");
+      const row = el.parentElement!;
+      row.scrollTo({ left: el.offsetLeft - row.offsetLeft - (row.clientWidth - el.offsetWidth) / 2, behavior: "smooth" });
+    }
+  }
+  let ticking = false;
+  window.addEventListener("scroll", () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => { ticking = false; spy(); });
+  }, { passive: true });
 </script>
+
+<style>
+  @media (max-width: 639px) {
+    .filter-bar.is-folded .chip-row { display: none !important; }
+  }
+</style>

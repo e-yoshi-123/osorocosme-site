@@ -74,6 +74,8 @@
 
 @layer base {
   html {
+    /* ページ内リンクで飛んだ先が、固定のヘッダー・目次の帯に隠れないようにする */
+    scroll-padding-top: calc(var(--hdr-h, 100px) + var(--nav-h, 0px) + 12px);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -202,6 +204,36 @@
     font-size: 0.95em;
     opacity: 0.55;
   }
+
+  /* スクロール中の現在地（絞り込みのタブのうち、いま画面に出ているカテゴリ） */
+  .tab.is-here:not(.is-active), .chip.is-here:not(.is-active) {
+    border-color: var(--color-rose);
+    color: var(--color-rose);
+  }
+
+  /* 上へ戻るボタン */
+  .to-top {
+    position: fixed;
+    right: max(16px, env(safe-area-inset-right));
+    bottom: max(16px, env(safe-area-inset-bottom));
+    z-index: 30;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(29 21 23 / 0.82);
+    color: var(--color-paper);
+    box-shadow: 0 6px 18px -6px rgb(29 21 23 / 0.45);
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    transform: translateY(12px);
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s, background-color 0.3s;
+  }
+  .to-top.is-on { opacity: 1; transform: none; pointer-events: auto; }
+  .to-top:hover { background: var(--color-rose); }
 
   /* ランキングの順位（1〜3位は大きくローズ） */
   .rank-badge {

@@ -1,0 +1,93 @@
+---
+// ページ内の目次の帯：ヘッダーのすぐ下に固定し、いま見ているエリアのチップを色で示す。押すとそのエリアへ移動する。
+// target はCSSセレクタ（例 "#who" や "[data-row='カ']"）。複数に当たるときは、表示中の最初のものへ飛ぶ。
+// 当たる要素がすべて非表示（絞り込みで消えた等）のチップは隠す。絞り込みのあとは window に "pagenav:refresh" を送る。
+interface Item { label: string; target: string; href?: string }
+interface Props { items: Item[]; label?: string; class?: string }
+const { items, label = "このページの目次", class: cls } = Astro.props;
+---
+{items.length >= 2 && (
+<nav class:list={["page-nav sticky z-30 -mx-4 md:-mx-8 px-4 md:px-8 bg-paper/90 backdrop-blur-md border-b border-ink/10", cls]} aria-label={label} data-page-nav>
+  <div class="flex gap-1.5 overflow-x-auto py-2.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    {items.map((it) => (
+      <a href={it.href ?? (it.target.startsWith("#") ? it.target : undefined)} data-target={it.target} class="chip shrink-0 whitespace-nowrap cursor-pointer">{it.label}</a>
+    ))}
+  </div>
+</nav>
+)}
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-page-nav]").forEach((nav) => {
+    const links = Array.from(nav.querySelectorAll<HTMLAnchorElement>("a[data-target]"));
+    const row = links[0]?.parentElement;
+    const root = document.documentElement;
+    const visible = (el: HTMLElement) => el.offsetParent !== null;
+    const targetsOf = (a: HTMLAnchorElement) => Array.from(document.querySelectorAll<HTMLElement>(a.dataset.target!)).filter(visible);
+    const setNavH = () => root.style.setProperty("--nav-h", `${nav.offsetHeight}px`);
+    new ResizeObserver(setNavH).observe(nav);
+
+    let current: HTMLAnchorElement | null = null;
+    let lockUntil = 0; // 押して移動している間は、通り過ぎるエリアで色を変えない
+    function mark(a: HTMLAnchorElement | null) {
+      if (a === current) return;
+      current?.classList.remove("is-active");
+      current?.removeAttribute("aria-current");
+      current = a;
+      if (!a) return;
+      a.classList.add("is-active");
+      a.setAttribute("aria-current", "location");
+      // 帯の中で、選ばれたチップが見える位置まで横に送る
+      if (row) {
+        const left = a.offsetLeft - row.offsetLeft - (row.clientWidth - a.offsetWidth) / 2;
+        row.scrollTo({ left, behavior: "smooth" });
+      }
+    }
+    // 帯の下端より上に頭が出ている最後のエリアを「現在地」とする
+    function spy() {
+      if (Date.now() < lockUntil) return;
+      const line = nav.getBoundingClientRect().bottom + 24;
+      let best: HTMLAnchorElement | null = null;
+      let bestTop = -Infinity;
+      for (const a of links) {
+        if (a.hidden) continue;
+        for (const el of targetsOf(a)) {
+          const top = el.getBoundingClientRect().top;
+          if (top <= line && top > bestTop) { best = a; bestTop = top; }
+        }
+      }
+      // ページの最後まで来たら、最後のエリアを選ぶ（短い最後のエリアが選ばれないままになるのを防ぐ）
+      if (window.innerHeight + window.scrollY >= root.scrollHeight - 4) {
+        const last = [...links].reverse().find((a) => !a.hidden);
+        if (last && targetsOf(last).length) best = last;
+      }
+      mark(best);
+    }
+    function refresh() {
+      links.forEach((a) => (a.hidden = targetsOf(a).length === 0));
+      spy();
+    }
+    let ticking = false;
+    window.addEventListener("scroll", () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { ticking = false; spy(); });
+    }, { passive: true });
+    window.addEventListener("scrollend", () => { lockUntil = 0; spy(); });
+    window.addEventListener("pagenav:refresh", refresh);
+    links.forEach((a) =>
+      a.addEventListener("click", (e) => {
+        const el = targetsOf(a)[0];
+        if (!el) return;
+        e.preventDefault();
+        mark(a);
+        lockUntil = Date.now() + 3000; // 長い距離の移動は時間がかかる。止まったら（scrollend）解く
+        el.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+      })
+    );
+    refresh();
+  });
+</script>
+
+<style>
+  .page-nav { top: var(--hdr-h, 97px); }
+</style>

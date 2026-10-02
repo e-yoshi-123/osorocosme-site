@@ -121,7 +121,8 @@ const jsonLd = influencer
           <section class="panel mt-8 md:mt-10">
             <SectionHead num="01" en="Cosme history" title="使用コスメ遍歴" lead="動画ごとに、紹介したコスメを新しい順に並べています。カテゴリで絞り込めます。" />
 
-            <div class="md:sticky md:top-[72px] z-20 bg-panel/90 backdrop-blur-md py-3 mb-10 border-b border-ink/10 text-sm -mx-4 px-4 md:mx-0 md:px-0">
+            <div class="filter-sentinel" aria-hidden="true"></div>
+            <div class="filter-bar sticky top-[var(--hdr-h,97px)] z-20 bg-panel/90 backdrop-blur-md py-3 mb-10 border-b border-ink/10 text-sm -mx-4 px-4 md:mx-0 md:px-0">
               <div class="flex items-start gap-3">
               <div class="min-w-0 flex-1">
               <div class="flex flex-nowrap sm:flex-wrap gap-1.5 overflow-x-auto sm:overflow-visible -ml-4 pl-4 pr-7 sm:ml-0 sm:px-0 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [mask-image:linear-gradient(to_right,#000_calc(100%-28px),transparent)] sm:[mask-image:none]">
@@ -261,6 +262,37 @@ const jsonLd = influencer
   );
   if (timelineEl) render();
 
+  // 帯が上に貼り付いて下へスクロールしている間は、スマホではカテゴリのチップの段をたたむ（上へ戻すと開く）。絞り込みを変えたら一覧の頭へ戻す
+  const bar = document.querySelector<HTMLElement>(".filter-bar");
+  const sentinel = document.querySelector<HTMLElement>(".filter-sentinel");
+  const isStuck = () => !!sentinel && sentinel.getBoundingClientRect().top < (bar?.getBoundingClientRect().top ?? 0) - 1;
+  let lastY = window.scrollY;
+  let holdUntil = 0; // 絞り込みの直後は、一覧の長さが変わってスクロール位置が動くので、たたまない
+  function fold() {
+    const y = window.scrollY;
+    if (Date.now() < holdUntil) { lastY = y; return; }
+    if (Math.abs(y - lastY) < 6) return;
+    setFolded(isStuck() && y > lastY);
+    lastY = y;
+  }
+  // たたんだ分の高さは下の余白で埋め、一覧が跳ねないようにする（mb-10＝2.5rem）
+  function setFolded(on: boolean) {
+    if (!bar || bar.classList.contains("is-folded") === on) return;
+    const h = bar.offsetHeight;
+    bar.classList.toggle("is-folded", on);
+    const d = h - bar.offsetHeight;
+    bar.style.marginBottom = on && d > 0 ? `calc(2.5rem + ${d}px)` : "";
+  }
+  const toListTop = () => {
+    if (isStuck()) sentinel!.scrollIntoView({ block: "start" });
+    lastY = window.scrollY;
+    holdUntil = Date.now() + 500;
+    setFolded(false);
+  };
+  groupTabs.forEach((t) => t.addEventListener("click", toListTop));
+  chips.forEach((c) => c.addEventListener("click", toListTop));
+  window.addEventListener("scroll", fold, { passive: true });
+
   const toggle = document.getElementById("order-toggle") as HTMLButtonElement | null;
   toggle?.addEventListener("click", () => {
     const asc = toggle.dataset.order === "desc";
@@ -271,6 +303,13 @@ const jsonLd = influencer
       Array.from(timelineEl.children).reverse().forEach((el) => timelineEl.appendChild(el));
       shown = STEP;
       render();
+      toListTop();
     }
   });
 </script>
+
+<style>
+  @media (max-width: 639px) {
+    .filter-bar.is-folded .chip-row { display: none !important; }
+  }
+</style>

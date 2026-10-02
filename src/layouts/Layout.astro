@@ -168,9 +168,14 @@ const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace
       </nav>
     </header>
 
-    <main id="main" class="flex-1 max-w-[1320px] w-full mx-auto px-4 md:px-8 py-8 md:py-12">
+    <main id="main" tabindex="-1" class="focus:outline-none flex-1 max-w-[1320px] w-full mx-auto px-4 md:px-8 py-8 md:py-12">
       <slot />
     </main>
+
+    <!-- 上へ戻るボタン（画面1.5枚分より下にいるときだけ出す） -->
+    <button type="button" id="to-top" class="to-top" aria-label="ページの先頭へ戻る" tabindex="-1">
+      <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
+    </button>
 
     <footer class="relative bg-ink text-paper mt-16 md:mt-24 overflow-hidden">
       <div class="max-w-[1320px] mx-auto px-4 md:px-8 pt-16 md:pt-24 pb-10">
@@ -239,6 +244,25 @@ const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace
           if (rest > 0) btn.textContent = btn.textContent!.replace(/\d+/, String(rest));
           else btn.parentElement!.remove();
         });
+      });
+      // ヘッダーの高さ（スマホは2段・検索を開くと3段）を --hdr-h に入れる。固定の帯の位置と、ページ内リンクで飛んだ先の余白に使う
+      const hdr = document.querySelector<HTMLElement>("body > header");
+      if (hdr) new ResizeObserver(() => document.documentElement.style.setProperty("--hdr-h", `${hdr.offsetHeight}px`)).observe(hdr);
+      // 上へ戻るボタン
+      const toTop = document.getElementById("to-top")!;
+      let toTopOn = false;
+      const updateToTop = () => {
+        const on = window.scrollY > window.innerHeight * 1.5;
+        if (on === toTopOn) return;
+        toTopOn = on;
+        toTop.classList.toggle("is-on", on);
+        toTop.tabIndex = on ? 0 : -1;
+      };
+      window.addEventListener("scroll", updateToTop, { passive: true });
+      updateToTop();
+      toTop.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+        document.getElementById("main")?.focus({ preventScroll: true });
       });
       // スマホの検索の開閉
       const t = document.querySelector<HTMLButtonElement>("[data-search-toggle]");

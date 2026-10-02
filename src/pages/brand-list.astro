@@ -1,5 +1,6 @@
 ---
 import PageHead from "../components/PageHead.astro";
+import PageNav from "../components/PageNav.astro";
 import Layout from "../layouts/Layout.astro";
 import {
   getBrandsWithVideos,
@@ -16,6 +17,19 @@ const brands = getBrandsWithVideos().sort((a, b) =>
   (getBrandReading(a.brand_id) ?? a.name).localeCompare(getBrandReading(b.brand_id) ?? b.name, "ja"),
 );
 const grouped = groupByKana(brands);
+// 五十音の見出し（ア・イ・ウ…）を行（ア行・カ行…）にまとめ、目次の帯から行の頭へ飛べるようにする
+const KANA_ROWS: [string, string][] = [
+  ["ア", "アァイィウゥヴエェオォ"], ["カ", "カガキギクグケゲコゴヵヶ"], ["サ", "サザシジスズセゼソゾ"], ["タ", "タダチヂツヅッテデトド"],
+  ["ナ", "ナニヌネノ"], ["ハ", "ハバパヒビピフブプヘベペホボポ"], ["マ", "マミムメモ"], ["ヤ", "ヤャユュヨョ"], ["ラ", "ラリルレロ"], ["ワ", "ワヮヰヱヲン"],
+];
+const rowOf = (kana: string) => KANA_ROWS.find(([, cs]) => cs.includes(kana))?.[0] ?? "他";
+const usedRows = new Set(Array.from(grouped.keys(), rowOf));
+const firstOfRow = new Set<string>();
+for (const kana of grouped.keys()) if (![...firstOfRow].some((k) => rowOf(k) === rowOf(kana))) firstOfRow.add(kana);
+const navItems = [
+  { label: "系列マップ", target: "#group-map" },
+  ...[...KANA_ROWS.map(([r]) => r), "他"].filter((r) => usedRows.has(r)).map((r) => ({ label: r === "他" ? "英数・他" : r, target: `[data-row="${r}"]`, href: `#row-${r}` })),
+];
 
 const REGIONS = [
   { key: "ALL", label: "すべて" },
@@ -40,7 +54,9 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
 >
   <PageHead en="Brands" title="ブランド一覧" lead="動画で紹介されたブランドを、親会社の系列ごとのマップと、五十音順の一覧で探せます。" stats={[{ n: brands.length, label: "掲載ブランド" }]} />
 
-  <section class="panel mb-6 md:mb-8">
+  <PageNav items={navItems} label="ブランド一覧の目次" class="mb-6 md:mb-8" />
+
+  <section id="group-map" class="panel mb-6 md:mb-8">
     <h2 class="font-serif h-section font-semibold mb-2 flex items-baseline gap-3"><span class="num-display text-sm text-neutral-400">01</span>系列マップ</h2>
     <p class="text-xs text-neutral-500 mb-4">
       同じ親会社・系列のブランドを、紹介動画数に応じた面積の長方形で示しています。系列の中は「メイク系／両方／スキンケア系」に分け、
@@ -92,7 +108,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
 
   {
     Array.from(grouped.entries()).map(([kana, items]) => (
-      <section class="kana-section mb-10">
+      <section class="kana-section mb-10" data-row={rowOf(kana)} id={firstOfRow.has(kana) ? `row-${rowOf(kana)}` : undefined}>
         <h3 class="font-serif text-lg font-semibold text-rose border-b border-ink/15 mb-4 pb-2">{kana}</h3>
         <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-3">
           {items.map((b) => {
@@ -126,6 +142,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
       const any = Array.from(sec.querySelectorAll<HTMLElement>(".brand-item")).some((el) => el.style.display !== "none");
       sec.style.display = any ? "" : "none";
     });
+    window.dispatchEvent(new Event("pagenav:refresh"));
   }
   chips.forEach((c) => c.addEventListener("click", () => show(c.dataset.region!)));
   show("ALL");
