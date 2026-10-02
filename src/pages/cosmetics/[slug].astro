@@ -209,7 +209,7 @@ const jsonLd = entry
                   <div class="flex -space-x-3">
                     {faces.map((f) => (
                       <a href={withBase(`/influencer/${f.channel_id}`)} title={f.channel_title} class="relative hover:z-10 transition-transform duration-500 hover:-translate-y-1">
-                        <img src={f.channel_icon} alt={f.channel_title} width="40" height="40" class="w-10 h-10 rounded-full ring-[3px] ring-paper" loading="lazy" />
+                        <img referrerpolicy="no-referrer" src={f.channel_icon} alt={f.channel_title} width="40" height="40" class="w-10 h-10 rounded-full ring-[3px] ring-paper" loading="lazy" />
                       </a>
                     ))}
                   </div>

@@ -42,8 +42,9 @@ const itemAngles = [-74, -40, -6, 28, 62];
       const big = i % 2 === 0;
       return (
         <a href={f.href} class="orbit-item group absolute pointer-events-auto -translate-x-1/2 -translate-y-1/2" style={`left:${p.left}%;top:${p.top}%`} title={f.name}>
-          <span class="counter block">
-            <img src={f.src} alt={f.name} class:list={["rounded-full object-cover ring-4 ring-paper shadow-[0_12px_30px_-12px_rgba(29,21,23,0.5)] transition-transform duration-700 ease-out-expo group-hover:scale-110", big ? "w-[clamp(44px,5.2vw,74px)] h-[clamp(44px,5.2vw,74px)]" : "w-[clamp(36px,4.2vw,58px)] h-[clamp(36px,4.2vw,58px)]"]} loading="eager" />
+          <span class="counter relative block">
+            <img referrerpolicy="no-referrer" src={f.src} alt={f.name} class:list={["rounded-full object-cover ring-4 ring-paper shadow-[0_12px_30px_-12px_rgba(29,21,23,0.5)] transition-transform duration-700 ease-out-expo group-hover:scale-110", big ? "w-[clamp(44px,5.2vw,74px)] h-[clamp(44px,5.2vw,74px)]" : "w-[clamp(36px,4.2vw,58px)] h-[clamp(36px,4.2vw,58px)]"]} loading="eager" />
+            <span class="orbit-label pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap max-w-[14em] truncate rounded-full bg-ink text-paper text-[12px] leading-none px-2.5 py-1.5 opacity-0 translate-y-1 transition-all duration-500 ease-out-expo group-hover:opacity-100 group-hover:translate-y-0 group-focus-visible:opacity-100 group-focus-visible:translate-y-0">{f.name}</span>
           </span>
         </a>
       );
@@ -57,10 +58,11 @@ const itemAngles = [-74, -40, -6, 28, 62];
       const big = i % 2 === 1;
       return (
         <a href={it.href} class="orbit-item group absolute pointer-events-auto -translate-x-1/2 -translate-y-1/2" style={`left:${p.left}%;top:${p.top}%`} title={it.name}>
-          <span class="counter block">
+          <span class="counter relative block">
             <span class:list={["block rounded-full overflow-hidden bg-white ring-4 ring-paper shadow-[0_12px_30px_-12px_rgba(90,15,49,0.45)] transition-transform duration-700 ease-out-expo group-hover:scale-110", big ? "w-[clamp(48px,5.6vw,80px)] h-[clamp(48px,5.6vw,80px)]" : "w-[clamp(38px,4.4vw,62px)] h-[clamp(38px,4.4vw,62px)]"]}>
               <img src={it.src} alt={it.name} class="w-full h-full object-contain p-[12%]" loading="eager" />
             </span>
+            <span class="orbit-label pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 whitespace-nowrap max-w-[14em] truncate rounded-full bg-ink text-paper text-[12px] leading-none px-2.5 py-1.5 opacity-0 translate-y-1 transition-all duration-500 ease-out-expo group-hover:opacity-100 group-hover:translate-y-0 group-focus-visible:opacity-100 group-focus-visible:translate-y-0">{it.name}</span>
           </span>
         </a>
       );
@@ -72,6 +74,10 @@ const itemAngles = [-74, -40, -6, 28, 62];
 </div>
 
 <style>
+  /* 名前の札が隣の項目や、上に重なる右の輪の層に隠れないよう、触れている輪と項目を前に出す */
+  .orbit { z-index: 1; }
+  .orbit:has(.orbit-item:hover), .orbit:has(.orbit-item:focus-visible) { z-index: 3; }
+  .orbit-item:hover, .orbit-item:focus-visible { z-index: 2; }
   @media (prefers-reduced-motion: no-preference) {
     .ring-draw {
       stroke-dasharray: 100;

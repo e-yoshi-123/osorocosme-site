@@ -17,7 +17,7 @@ const { i } = Astro.props;
   <div class="flex items-center gap-3 min-w-0 md:contents">
     <span class="shrink-0 num-display text-[15px] md:text-lg text-neutral-600 whitespace-nowrap">{formatDateFixed(i.published_at).replaceAll("/", ".")}</span>
     <a href={withBase(`/influencer/${i.channel_id}`)} class="flex items-center gap-2.5 min-w-0 text-sm hover:text-rose transition-colors" title={i.channel_title}>
-      {i.channel_icon && <img src={i.channel_icon} alt="" width="28" height="28" class="w-7 h-7 rounded-full shrink-0" loading="lazy" />}
+      {i.channel_icon && <img referrerpolicy="no-referrer" src={i.channel_icon} alt="" data-name={i.channel_title} width="28" height="28" class="w-7 h-7 rounded-full shrink-0" loading="lazy" />}
       <span class="truncate">{i.channel_title}</span>
     </a>
   </div>

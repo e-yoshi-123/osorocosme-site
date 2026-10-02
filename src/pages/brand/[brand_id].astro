@@ -56,6 +56,9 @@ const jsonLd = [
     : []),
   breadcrumbLd([{ name: "ホーム", path: "/" }, { name: "ブランド一覧", path: "/brand-list" }, { name: brandName, path: `/brand/${brand_id}` }], Astro.site!),
 ];
+// カテゴリのカードの幅（PCの5列の格子で何列ぶんか）と、中の商品の列数。Tailwindが拾えるよう、クラス名をそのまま書く
+const SPAN: Record<number, string> = { 1: "lg:col-span-1", 2: "lg:col-span-2", 3: "lg:col-span-3", 4: "lg:col-span-4", 5: "lg:col-span-5" };
+const COLS: Record<number, string> = { 1: "lg:grid-cols-1", 2: "lg:grid-cols-2", 3: "lg:grid-cols-3", 4: "lg:grid-cols-4", 5: "lg:grid-cols-5" };
 ---
 
 <Layout title={`${brandName}の人気コスメ・紹介動画`} description={description} image={ogImage} jsonLd={jsonLd}>
@@ -104,12 +107,14 @@ const jsonLd = [
             ))}
           </div>
         )}
+        {/* PCでは、品数の少ないカテゴリのカードを横に並べる（全幅のカードに1〜2品だと右が空くため）。5列の格子で、カードの幅を品数に合わせる */}
+        <div class="grid lg:grid-cols-5 gap-6 md:gap-8 lg:grid-flow-dense">
         {sections.map((sec) => (
-          <section class="cat-section panel mb-6 md:mb-8" data-group={sec.group} data-tag={sec.tag}>
-            <h2 class="font-serif text-lg font-semibold mb-5">
-              {sec.tag} <span class="text-xs font-normal text-neutral-500 ml-1">{sec.group !== sec.tag && sec.group !== "その他" ? `${sec.group}・` : ""}{sec.items.length}品</span>
+          <section class:list={["cat-section panel", SPAN[Math.min(5, sec.items.length)], sec.items.length <= 2 && "lg:!px-6"]} data-group={sec.group} data-tag={sec.tag}>
+            <h2 class:list={["font-serif font-semibold mb-5", sec.items.length === 1 ? "text-lg lg:text-[15px] lg:leading-snug" : "text-lg"]}>
+              {sec.tag} <span class:list={["text-xs font-normal text-neutral-500", sec.items.length === 1 ? "ml-1 lg:ml-0 lg:block lg:mt-1" : "ml-1"]}>{sec.group !== sec.tag && sec.group !== "その他" ? `${sec.group}・` : ""}{sec.items.length}品</span>
             </h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-8">
+            <div class:list={["grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8", COLS[Math.min(5, sec.items.length)]]}>
               {sec.items.map((c) => (
                 <CosmeticCard
                   brand_id={c.brand_id}
@@ -122,6 +127,7 @@ const jsonLd = [
             </div>
           </section>
         ))}
+        </div>
       </>
     )
   }

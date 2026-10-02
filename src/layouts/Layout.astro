@@ -92,6 +92,26 @@ const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace
       window.addEventListener("error", function (ev) {
         var img = ev.target;
         if (!img || img.tagName !== "IMG" || img.hasAttribute("onerror") || img.closest("[data-item-image]")) return;
+        // チャンネルアイコン：YouTube側が短時間の多数の読み込みを断ることがある（192章のあとの見直し）。
+        // 少し待って1回だけ読み直し、それでも駄目なら同じ大きさの丸に名前の頭文字を出す
+        if (/yt3\.ggpht\.com|googleusercontent\.com/.test(img.src)) {
+          if (!img.dataset.retried) {
+            img.dataset.retried = "1";
+            var src = img.src;
+            setTimeout(function () { img.src = src + (src.indexOf("?") < 0 ? "?" : "&") + "r=1"; }, 400 + Math.random() * 1200);
+            return;
+          }
+          var link = img.closest("a");
+          var name = (img.alt || img.dataset.name || (link && link.getAttribute("title")) || "").trim();
+          var m = document.createElement("span");
+          m.className = img.className + " avatar-fallback";
+          m.setAttribute("aria-hidden", "true");
+          m.textContent = name ? Array.from(name)[0].toUpperCase() : "";
+          var w = img.getBoundingClientRect().width;
+          if (w) m.style.fontSize = Math.max(10, Math.round(w * 0.42)) + "px";
+          img.replaceWith(m);
+          return;
+        }
         if (!/thumbnail\.image\.rakuten\.co\.jp|item-shopping\.c\.yimg\.jp/.test(img.src)) return;
         var box = img.closest("[data-yahoo-image]");
         if (box && !box.hasAttribute("data-swapped")) {
@@ -192,6 +212,34 @@ const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace
       // スクロールで .reveal を表示する
       const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -8% 0px" });
       document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+      // 横にめくる一覧（data-swipe）の位置を、直後の点（data-swipe-dots）で示す
+      document.querySelectorAll<HTMLElement>("[data-swipe]").forEach((track) => {
+        const dots = track.parentElement?.querySelector<HTMLElement>(":scope > [data-swipe-dots]");
+        const items = Array.from(track.children) as HTMLElement[];
+        if (!dots || items.length < 2) return;
+        dots.classList.add("swipe-dots");
+        const ds = items.map(() => dots.appendChild(document.createElement("span")));
+        const update = () => {
+          const x = track.scrollLeft, max = track.scrollWidth - track.clientWidth;
+          let i = items.findIndex((el) => el.offsetLeft - track.offsetLeft + el.offsetWidth / 2 > x + 16);
+          if (max > 0 && x >= max - 4) i = items.length - 1;
+          ds.forEach((d, k) => d.classList.toggle("is-on", k === Math.max(0, i)));
+        };
+        track.addEventListener("scroll", update, { passive: true });
+        update();
+      });
+      // 「もっと見る」：data-more の一覧の、隠してある子を data-more 件ずつ出す。ボタンは一覧と同じ親の中の data-more-btn
+      document.querySelectorAll<HTMLElement>("[data-more]").forEach((list) => {
+        const btn = list.parentElement?.querySelector<HTMLButtonElement>("[data-more-btn]");
+        const step = Number(list.dataset.more) || 12;
+        btn?.addEventListener("click", () => {
+          const hidden = Array.from(list.children).filter((el) => el.classList.contains("hidden"));
+          hidden.slice(0, step).forEach((el) => el.classList.remove("hidden"));
+          const rest = hidden.length - step;
+          if (rest > 0) btn.textContent = btn.textContent!.replace(/\d+/, String(rest));
+          else btn.parentElement!.remove();
+        });
+      });
       // スマホの検索の開閉
       const t = document.querySelector<HTMLButtonElement>("[data-search-toggle]");
       const f = document.getElementById("mobile-search");

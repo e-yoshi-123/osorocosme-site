@@ -7,10 +7,31 @@ import Layout from "../layouts/Layout.astro";
     <p class="eyebrow">Search</p>
     <h1 class="mt-2 font-serif font-semibold text-[26px] md:text-[30px] leading-[1.35]">検索結果：<span id="search-query" class="text-rose"></span></h1>
     <p id="search-count" class="mt-3 text-sm text-neutral-500"></p>
+    <!-- 言い方を変えて検索し直せるように、今の検索語を入れた入力欄を置く（スマホではヘッダーの検索が隠れているため） -->
+    <form method="get" role="search" class="mt-6 max-w-xl flex items-center gap-3 border-b-2 border-ink focus-within:border-rose transition-colors">
+      <input id="search-input" type="search" name="q" aria-label="検索し直す" placeholder="コスメ名・ブランド・インフルエンサー" class="flex-1 min-w-0 bg-transparent py-2.5 text-base md:text-lg placeholder:text-neutral-400 focus:outline-none" />
+      <button type="submit" class="shrink-0 w-10 h-10 rounded-full bg-ink text-paper flex items-center justify-center transition-colors duration-500 hover:bg-rose" aria-label="検索">
+        <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6" /></svg>
+      </button>
+    </form>
   </header>
   <!-- 種類の切り替え（すべて／ブランド／インフルエンサー／コスメ／動画）。件数0の種類は出さない -->
   <nav id="search-tabs" class="hidden flex flex-wrap gap-2 mb-10 text-sm" aria-label="検索結果の種類"></nav>
-  <div id="search-results" class="space-y-6 md:space-y-8"></div>
+  <div id="search-results" class="space-y-6 md:space-y-8" aria-busy="true">
+    <!-- 検索用のデータを読み込むあいだの仮の表示 -->
+    <div class="panel" data-skeleton aria-label="読み込み中">
+      <div class="skeleton h-4 w-24 rounded-full"></div>
+      <div class="mt-8 grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div class:list={[i >= 2 && "hidden md:block"]}>
+            <div class="skeleton aspect-square rounded-2xl"></div>
+            <div class="skeleton mt-3 h-3 w-1/2 rounded-full"></div>
+            <div class="skeleton mt-2 h-3.5 w-4/5 rounded-full"></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
   <p id="search-empty" class="text-neutral-400 hidden">該当するブランド・インフルエンサー・コスメ・動画が見つかりませんでした。別の言い方（英字・カタカナ・略さない名前など）でもお試しください。</p>
 </Layout>
 
@@ -47,6 +68,12 @@ import Layout from "../layouts/Layout.astro";
   const params = new URLSearchParams(location.search);
   const q = (params.get("q") || "").trim();
   document.getElementById("search-query")!.textContent = q;
+  (document.getElementById("search-input") as HTMLInputElement).value = q;
+  const clearSkeleton = () => {
+    const el = document.getElementById("search-results")!;
+    el.querySelector("[data-skeleton]")?.remove();
+    el.removeAttribute("aria-busy");
+  };
   // 空白区切りの語は、すべてを含むものだけを出す（「クレド ファンデ」など）
   const terms = q.split(/[\s　]+/).map(norm).filter(Boolean);
 
@@ -73,8 +100,13 @@ import Layout from "../layouts/Layout.astro";
   if (terms.length > 0) {
     fetch(`${base}/search-index.json`)
       .then((r) => r.json())
-      .then((idx: Index) => render(idx));
+      .then((idx: Index) => { clearSkeleton(); render(idx); })
+      .catch(() => {
+        clearSkeleton();
+        document.getElementById("search-count")!.textContent = "検索用のデータを読み込めませんでした。時間をおいて、ページを読み込み直してください。";
+      });
   } else {
+    clearSkeleton();
     document.getElementById("search-count")!.textContent = "検索キーワードを入力してください";
   }
 
@@ -222,7 +254,7 @@ import Layout from "../layouts/Layout.astro";
 
   function influencerHtml([id, name, icon, subs, videoCount]: InfRow) {
     const img = icon
-      ? `<img src="${esc(icon)}" alt="" width="40" height="40" class="w-10 h-10 rounded-full shrink-0 ring-1 ring-ink/5" loading="lazy" />`
+      ? `<img referrerpolicy="no-referrer" src="${esc(icon)}" alt="" data-name="${esc(name)}" width="40" height="40" class="w-10 h-10 rounded-full shrink-0 ring-1 ring-ink/5" loading="lazy" />`
       : `<span class="w-10 h-10 rounded-full bg-blush shrink-0"></span>`;
     return `<a href="${base}/influencer/${id}/" class="group flex items-center gap-3 py-3 border-b border-ink/10 min-w-0">
       ${img}

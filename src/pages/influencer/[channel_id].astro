@@ -93,7 +93,7 @@ const jsonLd = influencer
                 <circle cx="50" cy="50" r="49" fill="none" stroke="var(--color-rose)" stroke-width="0.6" stroke-dasharray="40 268" class="origin-center [animation:spin_24s_linear_infinite] motion-reduce:[animation:none]" />
               </svg>
               {influencer.channel_icon ? (
-                <img src={influencer.channel_icon.replace(/=s\d+-/, "=s400-")} alt={influencer.channel_title} width="300" height="300" class="w-full h-full rounded-full object-cover" />
+                <img referrerpolicy="no-referrer" src={influencer.channel_icon.replace(/=s\d+-/, "=s400-")} alt={influencer.channel_title} width="300" height="300" class="w-full h-full rounded-full object-cover" />
               ) : <span class="block w-full h-full rounded-full bg-blush" />}
             </div>
           </div>
@@ -173,16 +173,23 @@ const jsonLd = influencer
               ))}
             </div>
             <p id="timeline-empty" class="text-neutral-400 text-sm" style="display:none">このカテゴリの紹介はありません。</p>
+            <!-- 動画が多い人は1ページがとても長くなる（880品で画面175枚分）ので、8本ずつ出す -->
+            <div class="mt-8 text-center">
+              <button id="timeline-more" type="button" class="tab !px-6" style="display:none"></button>
+            </div>
           </section>
         )}
 
         <section class="panel mt-8 md:mt-10">
           <SectionHead num="02" en="Videos" title="紹介動画" lead={`${videos.length}本の動画を、新しい順に並べています。`} />
-          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
-            {videos.map((v) => (
-              <div class="min-w-0"><VideoCard video={v} /></div>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10" data-more="12">
+            {videos.map((v, i) => (
+              <div class:list={["min-w-0", i >= 8 && "hidden"]}><VideoCard video={v} /></div>
             ))}
           </div>
+          {videos.length > 8 && (
+            <div class="mt-10 text-center"><button type="button" class="tab !px-6" data-more-btn>もっと見る（あと{videos.length - 8}本）</button></div>
+          )}
         </section>
 
         <InfluencerLinks title={`${influencer.channel_title}と同じコスメを使っている人`} items={similar} unit="共通のコスメ" />
@@ -198,6 +205,9 @@ const jsonLd = influencer
   const timelineEl = document.getElementById("timeline");
   const emptyEl = document.getElementById("timeline-empty");
 
+  const moreBtn = document.getElementById("timeline-more") as HTMLButtonElement | null;
+  const STEP = 8;
+  let shown = STEP;
   let activeGroup = "__all__";
   let activeTag: string | null = null; // null = 大分類全体
 
@@ -219,16 +229,26 @@ const jsonLd = influencer
         el.style.display = show ? "" : "none";
         if (show) visible++;
       });
-      block.style.display = visible > 0 ? "" : "none";
       if (visible > 0) visibleBlocks++;
+      block.style.display = visible > 0 && visibleBlocks <= shown ? "" : "none";
     });
     if (emptyEl) emptyEl.style.display = visibleBlocks > 0 ? "none" : "";
+    if (moreBtn) {
+      const rest = visibleBlocks - shown;
+      moreBtn.style.display = rest > 0 ? "" : "none";
+      moreBtn.textContent = `もっと見る（あと${rest}本の動画）`;
+    }
   }
+  moreBtn?.addEventListener("click", () => {
+    shown += STEP;
+    render();
+  });
 
   groupTabs.forEach((t) =>
     t.addEventListener("click", () => {
       activeGroup = t.dataset.group!;
       activeTag = null;
+      shown = STEP;
       render();
     })
   );
@@ -236,16 +256,22 @@ const jsonLd = influencer
   chips.forEach((c) =>
     c.addEventListener("click", () => {
       activeTag = activeTag === c.dataset.tag ? null : c.dataset.tag!;
+      shown = STEP;
       render();
     })
   );
-  if (groupTabs.length > 0) render();
+  if (timelineEl) render();
 
   const toggle = document.getElementById("order-toggle") as HTMLButtonElement | null;
   toggle?.addEventListener("click", () => {
     const asc = toggle.dataset.order === "desc";
     toggle.dataset.order = asc ? "asc" : "desc";
     toggle.textContent = asc ? "古い順" : "新しい順";
-    if (timelineEl) timelineEl.style.flexDirection = asc ? "column-reverse" : "column";
+    // 「もっと見る」が先頭から数えられるよう、見た目でなく並びそのものを逆にする
+    if (timelineEl) {
+      Array.from(timelineEl.children).reverse().forEach((el) => timelineEl.appendChild(el));
+      shown = STEP;
+      render();
+    }
   });
 </script>
