@@ -1318,6 +1318,18 @@ export function productOffer(entry?: CosmeticListEntry, fallbackHtml?: string) {
   return { imageSrc: "", source: undefined, price: undefined, priceUpdated: undefined, rakutenLink: undefined };
 }
 
+/** Amazonアソシエイトのトラッキングタグ（公開して問題ない値） */
+export const AMAZON_ASSOCIATE_TAG = "osorocosme-22";
+
+/**
+ * Amazonでの検索結果へのリンク（アソシエイトタグ付き）。AmazonのAPIは売上の実績が無いと使えないため、
+ * 商品は特定せず「ブランド名＋商品名」の検索結果に飛ばす（206章）。
+ */
+export function amazonSearchUrl(brand: string, name: string): string {
+  const q = `${brand} ${name}`.replace(/\s+/g, " ").trim();
+  return `https://www.amazon.co.jp/s?k=${encodeURIComponent(q)}&tag=${AMAZON_ASSOCIATE_TAG}`;
+}
+
 export function productImageSrc(entry?: CosmeticListEntry, fallbackHtml?: string): string {
   return productOffer(entry, fallbackHtml).imageSrc;
 }
