@@ -7,9 +7,13 @@ interface Props {
   name_id: string;
   name: string;
   rakutenImageHtml?: string;
+  /** ブランド名の行を出すか（ブランドのページでは全部同じ名前になるので出さない） */
+  showBrand?: boolean;
+  /** 補足の1行（例: 「12本の動画で紹介」） */
+  caption?: string;
 }
 
-const { brand_id, brand, name_id, name, rakutenImageHtml } = Astro.props;
+const { brand_id, brand, name_id, name, rakutenImageHtml, showBrand = true, caption } = Astro.props;
 // 楽天の画像が無い商品は、Yahoo!ショッピングの画像があればそれを出す（115章）。
 // 楽天の画像はあっても読み込めない場合に備え、Yahoo!の画像を data-* に持たせる（Layout の共通の処理が差し替える。135章）
 const entry = getCosmeticListEntry(brand_id, name_id);
@@ -36,8 +40,9 @@ const yahooImage = extractImageSrc(rakutenImageHtml) ? undefined : yahooEntry;
     }
   </div>
   <a href={withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`)} class="block pt-3">
-    <div class="text-xs tracking-[0.14em] uppercase text-neutral-500 truncate">{brand}</div>
-    <div class="mt-1 text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors">{name}</div>
+    {showBrand && <div class="mb-1 text-xs tracking-[0.14em] uppercase text-neutral-500 truncate">{brand}</div>}
+    <div class="phrase text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors">{name}</div>
+    {caption && <div class="mt-1.5 text-xs text-neutral-500">{caption}</div>}
   </a>
 </div>
 

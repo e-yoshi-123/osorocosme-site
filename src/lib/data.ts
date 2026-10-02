@@ -294,6 +294,24 @@ export function getVideosUsingCosmetic(brand_id: string, name_id: string): Video
   );
 }
 
+let _videoCountCache: Map<string, number> | null = null;
+/** 商品ごとの紹介動画数（公開中の動画。カテゴリの無い商品も含む）。キーは `${brand_id}_${name_id}` */
+export function getCosmeticVideoCounts(): Map<string, number> {
+  if (_videoCountCache) return _videoCountCache;
+  const m = new Map<string, number>();
+  for (const v of getVisibleVideos()) {
+    const seen = new Set<string>();
+    for (const c of v.cosmetics || []) {
+      if (!c.brand_id || !c.name_id) continue;
+      const key = `${c.brand_id}_${c.name_id}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      m.set(key, (m.get(key) || 0) + 1);
+    }
+  }
+  return (_videoCountCache = m);
+}
+
 export function getCosmeticsForBrand(brand_id: string): Cosmetic[] {
   const map = new Map<string, Cosmetic>();
   for (const v of getVisibleVideos()) {
@@ -641,7 +659,10 @@ export function getCosmeticRankings(): CosmeticRanking[] {
   const map = new Map<string, CosmeticRanking & { videos: Set<string>; channels: Set<string>; tagSet: Set<string> }>();
   for (const v of getVisibleVideos()) {
     for (const c of v.cosmetics || []) {
-      if (!c.brand_id || !c.name_id || !c.related_tags || c.related_tags.length === 0) continue;
+      // カテゴリ（related_tags）の付いていない紹介も、動画数・人数には数える。以前は飛ばしていたので、
+      // 商品ページの「紹介動画187本」とランキングの「177本」のように数字が食い違っていた（255品。195章）。
+      // どの紹介にもカテゴリが無い商品は、順位を付けられないので最後に除く。
+      if (!c.brand_id || !c.name_id) continue;
       const key = `${c.brand_id}_${c.name_id}`;
       let e = map.get(key);
       if (!e) {
@@ -654,7 +675,7 @@ export function getCosmeticRankings(): CosmeticRanking[] {
         map.set(key, e);
       }
       if (!e.rakuten_image_link && c.rakuten_image_link) e.rakuten_image_link = c.rakuten_image_link;
-      c.related_tags.forEach((t) => e!.tagSet.add(rankingTag(t)));
+      (c.related_tags || []).forEach((t) => e!.tagSet.add(rankingTag(t)));
       if (!e.videos.has(v.key)) {
         e.videos.add(v.key);
         e.channels.add(v.channel_id);
@@ -662,7 +683,7 @@ export function getCosmeticRankings(): CosmeticRanking[] {
       }
     }
   }
-  _rankingsCache = Array.from(map.values()).map(({ videos, channels, tagSet, ...e }) => ({
+  _rankingsCache = Array.from(map.values()).filter((e) => e.tagSet.size > 0).map(({ videos, channels, tagSet, ...e }) => ({
     ...e,
     tags: Array.from(tagSet),
     videoCount: videos.size,
@@ -1213,16 +1234,38 @@ export function getBrandTopCosmetics(brand_id: string, excludeNameId: string, li
   return imagesFirst(items).slice(0, limit);
 }
 
+/** 投稿日を日本時間の年・月・日にする。ビルドする端末の時刻帯（手元はJST、ActionsはUTC）で変わらないよう、UTCに9時間足して読む。
+ * 以前はUTCのまま出す場所と端末の時刻帯で出す場所が混ざり、同じ動画の日付がページによって1日ずれていた（195章） */
+export function jstDate(iso: string): { y: number; m: number; d: number } {
+  const t = new Date(new Date(iso).getTime() + 9 * 3600 * 1000);
+  return { y: t.getUTCFullYear(), m: t.getUTCMonth() + 1, d: t.getUTCDate() };
+}
+
 /** 表の列を揃えるための固定幅の日付（例: 2025/09/07）。月・日をゼロ埋めする。 */
 export function formatDateFixed(iso: string): string {
-  const d = new Date(iso);
+  const { y, m, d } = jstDate(iso);
   const pad = (n: number) => String(n).padStart(2, "0");
-  return `${d.getUTCFullYear()}/${pad(d.getUTCMonth() + 1)}/${pad(d.getUTCDate())}`;
+  return `${y}/${pad(m)}/${pad(d)}`;
+}
+
+/** 動画の長さ（YouTubeの PT20M4S 形式）を 20:04 のように直す。分からなければ空文字 */
+export function formatDuration(iso?: string): string {
+  const m = iso?.match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/);
+  if (!m) return "";
+  const [h, min, s] = [m[1], m[2], m[3]].map((x) => Number(x || 0));
+  if (h + min + s === 0) return "";
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return h > 0 ? `${h}:${pad(min)}:${pad(s)}` : `${min}:${pad(s)}`;
+}
+
+/** 点で区切った固定幅の日付（例: 2025.09.07） */
+export function formatDateDot(iso: string): string {
+  return formatDateFixed(iso).replaceAll("/", ".");
 }
 
 export function formatJaDate(iso: string): string {
-  const d = new Date(iso);
-  return `${d.getUTCFullYear()}年${d.getUTCMonth() + 1}月${d.getUTCDate()}日`;
+  const { y, m, d } = jstDate(iso);
+  return `${y}年${m}月${d}日`;
 }
 
 /** Rakuten の画像リンクHTMLから最初の img src を取り出す（構造化データ用）。 */

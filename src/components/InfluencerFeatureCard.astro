@@ -1,5 +1,5 @@
 ---
-import { cosmeticSlug, formatCount, formatJaDate, getInfluencerHighlights, withBase, type InfluencerRanking } from "../lib/data";
+import { cosmeticSlug, formatCount, formatDateDot, getInfluencerHighlights, withBase, type InfluencerRanking } from "../lib/data";
 
 interface Props {
   influencer: InfluencerRanking;
@@ -19,13 +19,13 @@ const href = withBase(`/influencer/${inf.channel_id}`);
   各段の位置と高さが揃い、名前・タグ・統計・動画タイトルの折り返しの違いでずれない。
   （親側は gap-y-0、行間は各カードの gap-y-4 と mb-4 で取る）
 -->
-<div class="min-w-0 rounded-[24px] border border-ink/10 bg-white/60 p-5 mb-6 grid grid-cols-1 grid-rows-subgrid row-span-4 gap-y-5 transition-shadow duration-500 hover:shadow-[0_24px_48px_-28px_rgba(29,21,23,0.35)]">
+<div class="min-w-0 rounded-[24px] border border-ink/10 bg-panel p-5 mb-6 grid grid-cols-1 grid-rows-subgrid row-span-4 gap-y-5 transition-shadow duration-500 hover:shadow-[0_24px_48px_-28px_rgba(29,21,23,0.35)]">
   <!-- 見出し：順位・アイコン・名前・実績 -->
   <div class="flex items-start gap-3">
     <span class:list={["shrink-0 num-display leading-none w-7", large ? "text-[30px]" : "text-[22px]", rank <= 3 ? "text-rose" : "text-neutral-400"]}>{rank}</span>
     {inf.channel_icon && <img referrerpolicy="no-referrer" src={inf.channel_icon} alt="" data-name={inf.channel_title} width={large ? 56 : 44} height={large ? 56 : 44} class:list={["rounded-full shrink-0 ring-1 ring-ink/5", large ? "w-14 h-14" : "w-11 h-11"]} loading="lazy" />}
     <div class="min-w-0 flex-1">
-      <a href={href} class:list={["block font-semibold truncate hover:text-rose transition-colors", large ? "text-lg" : "text-base"]}>{inf.channel_title}</a>
+      <a href={href} class:list={["font-semibold leading-snug line-clamp-2 mb-0.5 hover:text-rose transition-colors", large ? "text-lg" : "text-base"]}>{inf.channel_title}</a>
       <p class="text-xs text-neutral-500 flex flex-wrap gap-x-2">
         <span class="whitespace-nowrap">登録者 {formatCount(inf.subscriber_count)}人</span>
         <span class="whitespace-nowrap">動画 {inf.videoCount}本</span>
@@ -57,7 +57,7 @@ const href = withBase(`/influencer/${inf.channel_id}`);
               <a href={withBase(`/video/${v.key}`)} class="min-w-0 block group">
                 <img src={v.thumbnail} alt="" class="w-full aspect-video object-cover rounded-lg" loading="lazy" />
                 <p class="mt-1 text-xs leading-snug line-clamp-2 group-hover:text-rose">{v.title}</p>
-                <p class="text-xs text-neutral-400">{formatJaDate(v.published_at)}</p>
+                <p class="mt-0.5 num-display font-normal text-xs text-neutral-400 whitespace-nowrap">{formatDateDot(v.published_at)}</p>
               </a>
             ))}
           </div>
@@ -66,8 +66,8 @@ const href = withBase(`/influencer/${inf.channel_id}`);
             <a href={withBase(`/video/${v.key}`)} class="flex items-center gap-2 group">
               <img src={v.thumbnail} alt="" class="w-24 aspect-video object-cover rounded-lg shrink-0" loading="lazy" />
               <span class="min-w-0">
-                <span class="block text-xs leading-snug line-clamp-2 group-hover:text-rose">{v.title}</span>
-                <span class="block text-xs text-neutral-400">{formatJaDate(v.published_at)}</span>
+                <span class="text-xs leading-snug line-clamp-3 group-hover:text-rose">{v.title}</span>
+                <span class="block mt-0.5 num-display font-normal text-xs text-neutral-400 whitespace-nowrap">{formatDateDot(v.published_at)}</span>
               </span>
             </a>
           ))
@@ -106,5 +106,5 @@ const href = withBase(`/influencer/${inf.channel_id}`);
     )
   }
 
-  <a href={href} class="link-u text-xs self-end justify-self-end">{inf.channel_title}の使用コスメをすべて見る →</a>
+  <a href={href} class="link-u text-xs self-end justify-self-end" aria-label={`${inf.channel_title}の使用コスメをすべて見る`}>使用コスメをすべて見る →</a>
 </div>

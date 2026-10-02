@@ -1,21 +1,22 @@
 ---
 // 一覧系のページの見出し：英字の小見出し・題・説明・数字（任意）・右の補足（slot）
-interface Props { en: string; title: string; lead?: string; stats?: { n: string | number; label: string }[] }
+// 数字は「見出し（紹介動画）＋数字＋単位（本）」の組で出す。数字と単位だけを離して置くと、何の数か分かりにくかった（195章）
+interface Props { en: string; title: string; lead?: string; stats?: { n: string | number; label: string; unit?: string }[] }
 const { en, title, lead, stats = [] } = Astro.props;
 ---
 <header class="mb-10 md:mb-14 grid md:grid-cols-12 gap-6 md:gap-10 items-end">
   <div class="md:col-span-8">
     <p class="eyebrow">{en}</p>
-    <h1 class="mt-2 font-serif font-semibold text-[26px] md:text-[30px] leading-[1.35] tracking-[-0.01em]">{title}</h1>
+    <h1 class="mt-2 font-serif font-semibold h-page tracking-[-0.01em]">{title}</h1>
     {lead && <p class="mt-4 text-sm leading-[1.9] text-neutral-600 max-w-2xl">{lead}</p>}
     <slot />
   </div>
   {stats.length > 0 && (
     <dl class="md:col-span-4 flex md:justify-end divide-x divide-ink/15">
       {stats.map((s) => (
-        <div class="px-5 first:pl-0 last:pr-0">
-          <dd class="num-display text-[26px] leading-none">{s.n}</dd>
-          <dt class="mt-1.5 text-xs text-neutral-500">{s.label}</dt>
+        <div class="px-5 first:pl-0 last:pr-0 flex flex-col-reverse">
+          <dd class="mt-1.5 num-display text-[26px] md:text-[30px] leading-none whitespace-nowrap">{s.n}{s.unit && <span class="font-sans font-normal text-xs ml-1 text-neutral-500">{s.unit}</span>}</dd>
+          <dt class="text-xs text-neutral-500 whitespace-nowrap">{s.label}</dt>
         </div>
       ))}
     </dl>

@@ -38,10 +38,10 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
   title="ブランド一覧"
   description="YouTubeのコスメ紹介動画で紹介されたブランドの一覧。国（日本・韓国・その他）や親会社の系列ごとに探せ、系列ごとの紹介動画数も比べられます。"
 >
-  <PageHead en="Brands" title="ブランド一覧" lead="動画で紹介されたブランドを、親会社の系列ごとのマップと、五十音順の一覧で探せます。" stats={[{ n: brands.length, label: "ブランド" }]} />
+  <PageHead en="Brands" title="ブランド一覧" lead="動画で紹介されたブランドを、親会社の系列ごとのマップと、五十音順の一覧で探せます。" stats={[{ n: brands.length, label: "掲載ブランド" }]} />
 
   <section class="panel mb-6 md:mb-8">
-    <h2 class="font-serif text-[20px] md:text-[22px] font-semibold mb-2 flex items-baseline gap-3"><span class="num-display text-sm text-neutral-400">01</span>系列マップ</h2>
+    <h2 class="font-serif h-section font-semibold mb-2 flex items-baseline gap-3"><span class="num-display text-sm text-neutral-400">01</span>系列マップ</h2>
     <p class="text-xs text-neutral-500 mb-4">
       同じ親会社・系列のブランドを、紹介動画数に応じた面積の長方形で示しています。系列の中は「メイク系／両方／スキンケア系」に分け、
       名前が収まるブロックには名前を表示し、小さいものは「ほかNブランド」にまとめました（押すと一覧が開きます）。ブロックを押すとブランドのページへ移動します。
@@ -68,7 +68,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
                   </a>
                 ))}
               </div>
-              <div class="gmap-rest hidden mt-2 text-xs text-neutral-700 bg-white/70 border border-ink/10 rounded-2xl p-4 space-y-1"></div>
+              <div class="gmap-rest hidden mt-2 text-xs text-neutral-700 bg-well border border-ink/10 rounded-2xl p-4 space-y-1"></div>
             </div>
           </div>
         ))
@@ -77,7 +77,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
   </section>
 
   <section class="panel">
-  <h2 class="font-serif text-[20px] md:text-[22px] font-semibold mb-4 flex items-baseline gap-3"><span class="num-display text-sm text-neutral-400">02</span>五十音順</h2>
+  <h2 class="font-serif h-section font-semibold mb-4 flex items-baseline gap-3"><span class="num-display text-sm text-neutral-400">02</span>五十音順</h2>
   <div class="flex flex-wrap items-center gap-2 mb-8 text-sm">
     <span class="label-caps text-neutral-500 mr-1">Country</span>
     {
@@ -138,17 +138,20 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
   type Brand = { name: string; v: number; kind: "MAKE" | "BOTH" | "SKIN"; href: string };
   type R = { x: number; y: number; w: number; h: number };
   const SECTIONS = [
-    { kind: "MAKE", label: "メイク系", hue: 342 },
-    { kind: "BOTH", label: "両方", hue: 25 },
-    { kind: "SKIN", label: "スキンケア系", hue: 160 },
+    { kind: "MAKE", label: "メイク系", short: "メイク", hue: 342 },
+    { kind: "BOTH", label: "両方", short: "両方", hue: 25 },
+    { kind: "SKIN", label: "スキンケア系", short: "スキンケア", hue: 160 },
   ] as const;
   const HEADER = 16;
   const MIN_SECTION_W = 96;
   const PAD = 10;
 
   const ctx = document.createElement("canvas").getContext("2d")!;
-  ctx.font = `11px ${getComputedStyle(document.body).fontFamily}`;
+  // 実際の表示（text-xs＝13px）と同じ大きさで測る。以前は11pxで測っていて、収まる判定の名前が「クリニ…」と切れていた（195章）
+  const FONT = `13px ${getComputedStyle(document.body).fontFamily}`;
+  ctx.font = FONT;
   const textW = (t: string) => ctx.measureText(t).width;
+  const boldW = (t: string) => { ctx.font = `bold ${FONT}`; const w = ctx.measureText(t).width; ctx.font = FONT; return w; };
 
   function squarify(values: number[], rect: R): R[] {
     const total = values.reduce((a, b) => a + b, 0);
@@ -224,7 +227,8 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
       head.className = "absolute text-xs font-bold whitespace-nowrap overflow-hidden";
       head.style.color = `hsl(${sec.hue} 45% 32%)`;
       css(head, { x: area.x, y: 0, w, h: HEADER });
-      head.textContent = `${sec.label}・${sec.total}本`;
+      // 区画が狭いとき（スマホ）は短い書き方にする。以前は「スキンケア系・18」のように右が切れていた
+      head.textContent = [`${sec.label}・${sec.total}本`, `${sec.short}・${sec.total}本`, `${sec.short} ${sec.total}`, sec.short].find((t) => boldW(t) + 4 <= w) ?? sec.short;
       canvas.append(head);
 
       // 名前が収まらない長方形を、2つ以上あれば1つの「ほか」にまとめる（最大3回やり直す）

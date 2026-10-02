@@ -2,86 +2,240 @@
 import Layout from "../layouts/Layout.astro";
 import VideoCard from "../components/VideoCard.astro";
 import PageHead from "../components/PageHead.astro";
-import { getVisibleVideos, getVideoScore, formatCount } from "../lib/data";
+import SectionHead from "../components/SectionHead.astro";
+import {
+  getVisibleVideos,
+  sortByPublishedDesc,
+  formatCount,
+  formatDateDot,
+  formatDuration,
+  toNumber,
+  jstDate,
+  withBase,
+  getCosmeticListEntry,
+  productImageSrc,
+  type VideoEntry,
+} from "../lib/data";
 
-const gallery = [...getVisibleVideos()].sort((a, b) => getVideoScore(b) - getVideoScore(a));
-const PAGE_SIZE = 60;
+// 以前は動画を並べるだけのページだった（ユーザー指摘）。
+// ①いま見られている動画 ②テーマでの絞り込み ③月ごとの見出し ④紹介されたコスメの画像（VideoCard）を足す（196章）
+const all = sortByPublishedDesc(getVisibleVideos());
+const PAGE_SIZE = 48;
+
+const itemCount = (v: VideoEntry) => (v.cosmetics || []).filter((c) => c.brand && c.name && c.brand_id && c.name_id).length;
+const monthOf = (v: VideoEntry) => {
+  const { y, m } = jstDate(v.published_at);
+  return `${y}.${String(m).padStart(2, "0")}`;
+};
+
+// テーマ：動画のタイトルに含まれる語で分ける（特集と同じ考え方。件数の少ないテーマは出さない）
+const THEMES = [
+  { key: "daily", label: "毎日メイク", kw: ["毎日メイク", "デイリーメイク"] },
+  { key: "petit", label: "プチプラ", kw: ["プチプラ", "ドラコス", "ドラッグストア", "100均", "ダイソー"] },
+  { key: "depa", label: "デパコス", kw: ["デパコス"] },
+  { key: "new", label: "新作", kw: ["新作"] },
+  { key: "best", label: "ベスコス", kw: ["ベスコス", "ベストコスメ"] },
+  { key: "haul", label: "購入品", kw: ["購入品"] },
+  { key: "fav", label: "愛用品", kw: ["愛用", "お気に入り"] },
+  { key: "skin", label: "スキンケア", kw: ["スキンケア"] },
+  { key: "korea", label: "韓国コスメ", kw: ["韓国"] },
+  { key: "grwm", label: "GRWM", kw: ["GRWM", "grwm", "Grwm"] },
+  { key: "pouch", label: "ポーチの中身", kw: ["ポーチ"] },
+];
+const themesOf = (v: VideoEntry) => THEMES.filter((t) => t.kw.some((k) => v.title.includes(k))).map((t) => t.key);
+const rows = all.map((v) => ({ v, themes: themesOf(v), month: monthOf(v), items: itemCount(v) }));
+const themes = THEMES.map((t) => ({ ...t, count: rows.filter((r) => r.themes.includes(t.key)).length })).filter((t) => t.count >= 15);
+
+// いま見られている動画：直近の投稿で再生回数の多い5本（30日で足りなければ60日・90日と広げる）
+const newest = all[0] ? new Date(all[0].published_at).getTime() : Date.now();
+const within = (days: number) => all.filter((v) => newest - new Date(v.published_at).getTime() <= days * 86_400_000);
+const spotDays = [30, 60, 90].find((d) => within(d).length >= 5) ?? 90;
+const spotlight = [...within(spotDays)].sort((a, b) => toNumber(b.view_count) - toNumber(a.view_count)).slice(0, 5);
+const recentCount = within(30).length;
+const productThumbs = (v: VideoEntry, n: number) => {
+  const seen = new Set<string>();
+  return (v.cosmetics || [])
+    .filter((c) => c.brand && c.name && c.brand_id && c.name_id)
+    .map((c) => productImageSrc(getCosmeticListEntry(c.brand_id, c.name_id), c.rakuten_image_link))
+    .filter((src) => src && !seen.has(src) && seen.add(src))
+    .slice(0, n);
+};
+const [first, ...others] = spotlight;
 ---
 
 <Layout
   title="コスメ紹介動画一覧"
-  description={`YouTubeのコスメ紹介動画${gallery.length}本の一覧。新着順・人気順で探せます。`}
+  description={`YouTubeのコスメ紹介動画${all.length}本の一覧。毎日メイク・プチプラ・新作などのテーマで絞り込み、新着順・再生回数順で探せます。`}
 >
-  <PageHead en="Videos" title="動画一覧" lead="コスメを紹介しているYouTube動画です。新着順・人気順で並べ替えられます。" stats={[{ n: formatCount(gallery.length), label: "本" }]} />
-  <div class="panel">
-  <div class="flex items-center justify-end gap-2 mb-8">
-    <span class="label-caps text-neutral-500 mr-1">Sort</span>
-    <button id="sort-newest" data-sort="newest" class="sort-btn chip">新着順</button>
-    <button id="sort-popular" data-sort="popular" class="sort-btn chip is-active">人気順</button>
-  </div>
+  <PageHead
+    en="Videos"
+    title="動画一覧"
+    lead="コスメを紹介しているYouTube動画を、紹介されたコスメと一緒に見られます。テーマで絞り込んで、新着順・再生回数順・紹介コスメの多い順に並べ替えられます。"
+    stats={[{ n: formatCount(all.length), label: "紹介動画", unit: "本" }, { n: formatCount(recentCount), label: "直近30日の新着", unit: "本" }]}
+  />
 
-  <div id="video-gallery" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10 [&>*]:min-w-0">
-    {
-      gallery.map((v, i) => (
-        <div
-          class:list={["gallery-item", { hidden: i >= PAGE_SIZE }]}
-          data-published={v.published_at}
-          data-score={getVideoScore(v)}
-        >
-          <VideoCard video={v} />
+  {first && (
+    <section class="panel mb-6 md:mb-8">
+      <SectionHead num="01" en="Most watched" title="いま見られている動画" lead={`直近${spotDays}日に投稿された動画のうち、再生回数の多い5本です。`} />
+      <div class="grid lg:grid-cols-12 gap-x-10 gap-y-8">
+        <a href={withBase(`/video/${first.key}`)} class="group block lg:col-span-7">
+          <div class="relative overflow-hidden rounded-[24px] bg-neutral-200">
+            <img src={first.thumbnail.replace("mqdefault", "hqdefault")} alt={first.title} class="w-full aspect-video object-cover transition-transform duration-[1.2s] ease-out-expo group-hover:scale-[1.03]" />
+            <span class="absolute left-0 top-0 flex items-baseline gap-1 bg-panel rounded-br-[20px] pl-4 pr-3.5 pt-2.5 pb-1.5"><span class="num-display text-rose text-[40px] leading-none">1</span><span class="label-caps text-rose text-[11px]">st</span></span>
+            <span class="absolute bottom-3 right-3 bg-ink/75 backdrop-blur text-paper text-sm tracking-wider px-3 py-1.5 rounded-full">▶ {formatCount(first.view_count)}</span>
+            {formatDuration(first.duration) && <span class="absolute bottom-3 left-3 bg-ink/75 backdrop-blur text-paper text-sm tracking-wider px-3 py-1.5 rounded-full">{formatDuration(first.duration)}</span>}
+          </div>
+          <p class="mt-5 flex items-center gap-2.5 text-sm text-neutral-600">
+            {first.channel_icon && <img referrerpolicy="no-referrer" src={first.channel_icon} alt="" data-name={first.channel_title} width="28" height="28" class="w-7 h-7 rounded-full" />}
+            <span class="truncate">{first.channel_title}</span>
+            <span class="ml-auto shrink-0 whitespace-nowrap text-xs text-neutral-500">{formatDateDot(first.published_at)}</span>
+          </p>
+          <h3 class="mt-2.5 font-serif font-semibold text-[18px] md:text-[21px] leading-[1.5] line-clamp-3 group-hover:text-rose transition-colors">{first.title}</h3>
+          {itemCount(first) > 0 && (
+            <p class="mt-4 flex items-center gap-2">
+              {productThumbs(first, 6).map((src, i) => (
+                <span class:list={["product-well w-12 h-12 md:w-14 md:h-14 rounded-xl overflow-hidden shrink-0 items-center justify-center", i >= 4 ? "hidden sm:flex" : "flex"]}>
+                  <img src={src} alt="" class="w-[86%] h-[86%] object-contain" loading="lazy" onerror="this.parentElement.remove()" />
+                </span>
+              ))}
+              <span class="ml-1 text-xs text-neutral-500 whitespace-nowrap"><b class="num-display text-xl text-ink">{itemCount(first)}</b>品を紹介</span>
+            </p>
+          )}
+        </a>
+        <ol class="lg:col-span-5 [&>li:last-child]:border-b-0 [&>li:first-child>a]:pt-0">
+          {others.map((v, i) => (
+            <li class="border-b border-ink/10">
+              <a href={withBase(`/video/${v.key}`)} class="group flex items-start gap-3 sm:gap-4 py-4">
+                <span class="num-display text-[22px] leading-none w-5 pt-1 shrink-0 text-ink/45 group-hover:text-rose transition-colors">{i + 2}</span>
+                <span class="relative w-28 sm:w-40 shrink-0 overflow-hidden rounded-xl bg-neutral-200">
+                  <img src={v.thumbnail} alt="" class="w-full aspect-video object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105" loading="lazy" />
+                </span>
+                <span class="min-w-0 flex-1">
+                  <span class="block text-xs text-neutral-500 truncate">{v.channel_title}</span>
+                  <span class="mt-0.5 text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors">{v.title}</span>
+                  <span class="mt-1.5 flex flex-wrap gap-x-3 text-xs text-neutral-500"><span class="whitespace-nowrap">▶ {formatCount(v.view_count)}</span><span class="whitespace-nowrap">{itemCount(v)}品を紹介</span></span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  )}
+
+  <section class="panel" id="all">
+    <SectionHead num="02" en="All videos" title="すべての動画" />
+
+    <!-- 絞り込みと並び替え -->
+    <div class="mb-8 md:mb-10 space-y-4">
+      <div class="flex items-start gap-3">
+        <span class="label-caps text-neutral-500 pt-2.5 shrink-0 hidden sm:block">Theme</span>
+        <div class="min-w-0 flex-1 flex flex-nowrap sm:flex-wrap gap-1.5 overflow-x-auto sm:overflow-visible -mx-4 px-4 sm:mx-0 sm:px-0 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="group" aria-label="テーマで絞り込む">
+          <button type="button" class="theme-btn tab shrink-0 whitespace-nowrap is-active" data-theme-key="">すべて <span class="tab-n">{formatCount(all.length)}</span></button>
+          {themes.map((t) => (
+            <button type="button" class="theme-btn tab shrink-0 whitespace-nowrap" data-theme-key={t.key}>{t.label} <span class="tab-n">{t.count}</span></button>
+          ))}
         </div>
-      ))
-    }
-  </div>
+      </div>
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-2 pt-4 border-t border-ink/10">
+        <span class="label-caps text-neutral-500 shrink-0">Sort</span>
+        <div class="flex flex-wrap gap-1.5" role="group" aria-label="並び替え">
+          <button type="button" class="sort-btn chip is-active" data-sort="newest">新着順</button>
+          <button type="button" class="sort-btn chip" data-sort="views">再生回数順</button>
+          <button type="button" class="sort-btn chip" data-sort="items">紹介コスメの多い順</button>
+        </div>
+        <p id="result-count" class="ml-auto text-xs text-neutral-500 whitespace-nowrap" aria-live="polite"></p>
+      </div>
+    </div>
 
-  <div class="text-center mt-8">
-    <button id="load-more-btn" class="mt-4 px-8 py-3 rounded-full border border-ink/25 text-sm hover:bg-ink hover:text-paper transition-colors duration-500" data-page-size={PAGE_SIZE}>
-      もっと見る
-    </button>
-  </div>
-  </div>
+    <div id="video-gallery" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-10 [&>*]:min-w-0">
+      {
+        rows.map((r, i) => (
+          <div
+            class:list={["gallery-item", { hidden: i >= PAGE_SIZE }]}
+            data-published={r.v.published_at}
+            data-views={toNumber(r.v.view_count)}
+            data-items={r.items}
+            data-month={r.month}
+            data-themes={r.themes.join(" ")}
+          >
+            <VideoCard video={r.v} />
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="text-center mt-10">
+      <button id="load-more-btn" type="button" class="px-8 py-3 rounded-full border border-ink/25 text-sm tracking-[0.06em] hover:bg-ink hover:text-paper transition-colors duration-500"></button>
+    </div>
+  </section>
 </Layout>
 
 <script define:vars={{ PAGE_SIZE }}>
-  // --- ギャラリー: 新着順/人気順の切り替え + もっと見る ---
+  // テーマの絞り込み・並び替え・「もっと見る」・月ごとの見出し（新着順のときだけ）
   const gallery = document.getElementById("video-gallery");
-  const loadMoreBtn = document.getElementById("load-more-btn");
-  let currentSort = "popular";
+  const moreBtn = document.getElementById("load-more-btn");
+  const countEl = document.getElementById("result-count");
+  const items = Array.from(gallery.querySelectorAll(".gallery-item")).map((el) => ({
+    el,
+    t: new Date(el.dataset.published).getTime(),
+    views: Number(el.dataset.views),
+    n: Number(el.dataset.items),
+    month: el.dataset.month,
+    themes: el.dataset.themes ? el.dataset.themes.split(" ") : [],
+  }));
+  const params = new URLSearchParams(location.search);
+  let theme = params.get("theme-key") || "";
+  let sort = "newest";
+  let shown = PAGE_SIZE;
 
-  function applySort(sort) {
-    currentSort = sort;
-    const items = Array.from(gallery.querySelectorAll(".gallery-item"));
-    items.sort((a, b) => {
-      if (sort === "popular") {
-        return parseFloat(b.dataset.score) - parseFloat(a.dataset.score);
+  function render() {
+    gallery.querySelectorAll(".month-head").forEach((h) => h.remove());
+    const list = items.filter((x) => !theme || x.themes.includes(theme));
+    list.sort((a, b) => (sort === "views" ? b.views - a.views : sort === "items" ? b.n - a.n || b.t - a.t : b.t - a.t));
+    items.forEach((x) => x.el.classList.add("hidden"));
+    const perMonth = {};
+    list.forEach((x) => (perMonth[x.month] = (perMonth[x.month] || 0) + 1));
+    let last = "";
+    list.forEach((x, i) => {
+      if (i < shown) {
+        if (sort === "newest" && x.month !== last) {
+          last = x.month;
+          const h = document.createElement("div");
+          h.className = "month-head col-span-full flex items-baseline gap-3 " + (i === 0 ? "" : "mt-4");
+          const [y, m] = x.month.split(".");
+          h.innerHTML = `<span class="num-display text-[22px] md:text-[26px] leading-none">${y}<span class="text-rose">.</span>${m}</span><span class="text-xs text-neutral-500 whitespace-nowrap">${perMonth[x.month]}本</span><span class="flex-1 h-px bg-ink/10 self-center"></span>`;
+          gallery.appendChild(h);
+        }
+        x.el.classList.remove("hidden");
       }
-      return new Date(b.dataset.published).getTime() - new Date(a.dataset.published).getTime();
+      gallery.appendChild(x.el);
     });
-    items.forEach((item, i) => {
-      gallery.appendChild(item);
-      item.classList.toggle("hidden", i >= PAGE_SIZE);
-    });
-    if (loadMoreBtn) loadMoreBtn.classList.toggle("hidden", items.length <= PAGE_SIZE);
-
-    document.querySelectorAll(".sort-btn").forEach((btn) => {
-      const active = btn.dataset.sort === sort;
-      btn.classList.toggle("is-active", active);
-    });
+    const rest = list.length - Math.min(shown, list.length);
+    moreBtn.classList.toggle("hidden", rest <= 0);
+    moreBtn.textContent = `もっと見る（あと${rest.toLocaleString("ja-JP")}本）`;
+    countEl.textContent = `${list.length.toLocaleString("ja-JP")}本`;
+    document.querySelectorAll(".theme-btn").forEach((b) => b.classList.toggle("is-active", b.dataset.themeKey === theme));
+    document.querySelectorAll(".sort-btn").forEach((b) => b.classList.toggle("is-active", b.dataset.sort === sort));
   }
 
-  document.querySelectorAll(".sort-btn").forEach((btn) => {
-    btn.addEventListener("click", () => applySort(btn.dataset.sort));
+  document.querySelectorAll(".theme-btn").forEach((b) =>
+    b.addEventListener("click", () => {
+      theme = b.dataset.themeKey;
+      shown = PAGE_SIZE;
+      render();
+    })
+  );
+  document.querySelectorAll(".sort-btn").forEach((b) =>
+    b.addEventListener("click", () => {
+      sort = b.dataset.sort;
+      shown = PAGE_SIZE;
+      render();
+    })
+  );
+  moreBtn.addEventListener("click", () => {
+    shown += PAGE_SIZE;
+    render();
   });
-
-  if (loadMoreBtn) {
-    loadMoreBtn.addEventListener("click", () => {
-      const hidden = gallery.querySelectorAll(".gallery-item.hidden");
-      Array.from(hidden)
-        .slice(0, PAGE_SIZE)
-        .forEach((item) => item.classList.remove("hidden"));
-      if (gallery.querySelectorAll(".gallery-item.hidden").length === 0) {
-        loadMoreBtn.classList.add("hidden");
-      }
-    });
-  }
+  render();
 </script>

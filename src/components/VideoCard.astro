@@ -1,31 +1,44 @@
 ---
-import { formatCount, withBase, type VideoEntry } from "../lib/data";
+import { formatCount, formatDateDot, formatDuration, withBase, getCosmeticListEntry, productImageSrc, type VideoEntry } from "../lib/data";
 
 interface Props {
   video: VideoEntry;
 }
 
 const { video } = Astro.props;
-const validCosmetics = (video.cosmetics || []).filter((c) => c.brand && c.name && c.rakuten_image_link);
-const d = new Date(video.published_at);
+// この動画で紹介されたコスメ。以前は先頭2品の名前を文字で出していたが、途中で切れて読めず、
+// どの動画も同じ見た目になっていた。画像を並べて「何が出てくる動画か」が分かるようにする（196章）
+const items = (video.cosmetics || []).filter((c) => c.brand && c.name && c.brand_id && c.name_id);
+const seen = new Set<string>();
+const thumbs = items
+  .map((c) => productImageSrc(getCosmeticListEntry(c.brand_id, c.name_id), c.rakuten_image_link))
+  .filter((src) => src && !seen.has(src) && seen.add(src))
+  .slice(0, 4);
+const duration = formatDuration(video.duration);
 ---
 
 <a href={withBase(`/video/${video.key}`)} class="group block">
   <div class="relative overflow-hidden rounded-2xl bg-neutral-200">
     <img src={video.thumbnail} alt={video.title} class="w-full aspect-video object-cover transition-transform duration-[1.2s] ease-out-expo group-hover:scale-[1.04]" loading="lazy" />
     <span class="absolute bottom-2.5 right-2.5 bg-ink/75 backdrop-blur text-paper text-xs tracking-wider px-2 py-1 rounded-full">▶ {formatCount(video.view_count)}</span>
+    {duration && <span class="absolute bottom-2.5 left-2.5 bg-ink/75 backdrop-blur text-paper text-xs tracking-wider px-2 py-1 rounded-full">{duration}</span>}
   </div>
   <div class="pt-3.5">
     <p class="flex items-center gap-2 text-xs text-neutral-500 mb-1.5">
       {video.channel_icon && <img referrerpolicy="no-referrer" src={video.channel_icon} alt="" data-name={video.channel_title} width="20" height="20" class="w-5 h-5 rounded-full" loading="lazy" />}
       <span class="truncate">{video.channel_title}</span>
-      <span class="ml-auto text-sm shrink-0">{d.getFullYear()}.{String(d.getMonth() + 1).padStart(2, "0")}.{String(d.getDate()).padStart(2, "0")}</span>
+      <span class="ml-auto shrink-0 whitespace-nowrap">{formatDateDot(video.published_at)}</span>
     </p>
     <h3 class="text-sm leading-relaxed line-clamp-2 group-hover:text-rose transition-colors">{video.title}</h3>
     {
-      validCosmetics.length > 0 && (
-        <p class="mt-2 text-xs text-neutral-500 truncate">
-          <span class="text-rose">●</span> {validCosmetics.slice(0, 2).map((c) => `${c.brand} ${c.name}`).join(" / ")}
+      items.length > 0 && (
+        <p class="mt-2.5 flex items-center gap-1.5">
+          {thumbs.map((src) => (
+            <span class="product-well w-9 h-9 rounded-lg overflow-hidden shrink-0 flex items-center justify-center">
+              <img src={src} alt="" class="w-[86%] h-[86%] object-contain" loading="lazy" onerror="this.parentElement.remove()" />
+            </span>
+          ))}
+          <span class="ml-1 text-xs text-neutral-500 whitespace-nowrap"><b class="num-display text-sm text-ink">{items.length}</b>品を紹介</span>
         </p>
       )
     }

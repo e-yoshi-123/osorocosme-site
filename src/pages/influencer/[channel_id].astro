@@ -16,6 +16,8 @@ import {
   formatCount,
   breadcrumbLd,
   type Cosmetic,
+  formatJaDate,
+  jstDate,
 } from "../../lib/data";
 
 export function getStaticPaths() {
@@ -35,10 +37,7 @@ const timeline = videos
   }))
   .filter((b) => b.items.length > 0);
 
-function formatDate(iso: string): string {
-  const d = new Date(iso);
-  return `${d.getUTCFullYear()}年${d.getUTCMonth() + 1}月${d.getUTCDate()}日`;
-}
+const formatDate = formatJaDate;
 
 // カテゴリごとの紹介コスメ数（同じコスメが複数動画に出ても動画ごとに数える）
 const tagCounts = new Map<string, number>();
@@ -87,7 +86,7 @@ const jsonLd = influencer
         <!-- ===== プロフィール：雑誌の人物紹介のように ===== -->
         <section class="panel grid md:grid-cols-12 gap-8 md:gap-12 items-center">
           <div class="md:col-span-4 lg:col-span-4">
-            <div class="relative w-[62%] md:w-full max-w-[300px] mx-auto aspect-square">
+            <div class="relative w-[62%] md:w-full max-w-[300px] mx-auto mt-5 md:mt-0 aspect-square">
               <svg viewBox="0 0 100 100" class="absolute -inset-[9%] w-[118%] h-[118%] overflow-visible" aria-hidden="true">
                 <circle cx="50" cy="50" r="49" fill="none" stroke="var(--color-ink)" stroke-opacity="0.15" stroke-width="0.3" />
                 <circle cx="50" cy="50" r="49" fill="none" stroke="var(--color-rose)" stroke-width="0.6" stroke-dasharray="40 268" class="origin-center [animation:spin_24s_linear_infinite] motion-reduce:[animation:none]" />
@@ -99,7 +98,7 @@ const jsonLd = influencer
           </div>
           <div class="md:col-span-8 lg:col-span-8">
             <p class="eyebrow">Influencer profile</p>
-            <h1 class="mt-3 font-serif font-semibold text-[24px] md:text-[30px] leading-[1.2] tracking-[-0.02em] text-balance">{influencer.channel_title}</h1>
+            <h1 class="mt-3 font-serif font-semibold h-page tracking-[-0.02em] text-balance">{influencer.channel_title}</h1>
             <p class="mt-5 text-sm leading-[1.9] text-neutral-600 max-w-2xl">{description}</p>
             <dl class="mt-8 grid grid-cols-3 max-w-xl border-y border-ink/15 divide-x divide-ink/15">
               <div class="py-4 pr-3"><dt class="text-xs text-neutral-500">紹介動画</dt><dd class="num-display text-[24px] md:text-[26px] leading-none mt-1">{videos.length}<span class="font-sans text-xs text-neutral-500 ml-1">本</span></dd></div>
@@ -122,10 +121,10 @@ const jsonLd = influencer
           <section class="panel mt-8 md:mt-10">
             <SectionHead num="01" en="Cosme history" title="使用コスメ遍歴" lead="動画ごとに、紹介したコスメを新しい順に並べています。カテゴリで絞り込めます。" />
 
-            <div class="md:sticky md:top-[72px] z-20 bg-white/90 backdrop-blur-md py-3 mb-10 border-b border-ink/10 text-sm -mx-4 px-4 md:mx-0 md:px-0">
+            <div class="md:sticky md:top-[72px] z-20 bg-panel/90 backdrop-blur-md py-3 mb-10 border-b border-ink/10 text-sm -mx-4 px-4 md:mx-0 md:px-0">
               <div class="flex items-start gap-3">
               <div class="min-w-0 flex-1">
-              <div class="flex flex-nowrap sm:flex-wrap gap-1.5 overflow-x-auto sm:overflow-visible -mx-4 px-4 sm:mx-0 sm:px-0 pb-1">
+              <div class="flex flex-nowrap sm:flex-wrap gap-1.5 overflow-x-auto sm:overflow-visible -ml-4 pl-4 pr-7 sm:ml-0 sm:px-0 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [mask-image:linear-gradient(to_right,#000_calc(100%-28px),transparent)] sm:[mask-image:none]">
                 <button class="group-tab tab shrink-0 whitespace-nowrap" data-group="__all__">
                   すべて <span class="tab-n">{totalItems}</span>
                 </button>
@@ -136,7 +135,7 @@ const jsonLd = influencer
                 ))}
               </div>
               {groups.map((g) => (
-                <div class="chip-row flex-nowrap sm:flex-wrap gap-1.5 mt-3 pt-3 border-t border-ink/10 sm:max-h-28 overflow-x-auto sm:overflow-x-visible sm:overflow-y-auto -mx-4 px-4 sm:mx-0 sm:px-0 pb-1" data-group={g.group} style="display:none">
+                <div class="chip-row flex-nowrap sm:flex-wrap gap-1.5 mt-3 pt-3 border-t border-ink/10 sm:max-h-28 overflow-x-auto sm:overflow-x-visible sm:overflow-y-auto -ml-4 pl-4 pr-7 sm:ml-0 sm:px-0 pb-1 [scrollbar-width:none] sm:[scrollbar-width:auto] [mask-image:linear-gradient(to_right,#000_calc(100%-28px),transparent)] sm:[mask-image:none]" data-group={g.group} style="display:none">
                   {g.tags.map((t) => (
                     <button class="cat-chip chip shrink-0 whitespace-nowrap" data-tag={t}>
                       {t} <span class="tab-n">{tagCounts.get(t)}</span>
@@ -154,11 +153,11 @@ const jsonLd = influencer
                 <div class="timeline-block grid md:grid-cols-12 gap-x-10 gap-y-5 py-10 border-b border-ink/10 first:pt-0">
                   <div class="md:col-span-3 min-w-0">
                     <div class="md:sticky md:top-[180px]">
-                      <p class="num-display text-[22px] md:text-[26px] leading-none">{new Date(video.published_at).getUTCFullYear()}<span class="text-rose">.</span>{String(new Date(video.published_at).getUTCMonth() + 1).padStart(2, "0")}<span class="text-rose">.</span>{String(new Date(video.published_at).getUTCDate()).padStart(2, "0")}</p>
+                      <p class="num-display text-[22px] md:text-[26px] leading-none">{jstDate(video.published_at).y}<span class="text-rose">.</span>{String(jstDate(video.published_at).m).padStart(2, "0")}<span class="text-rose">.</span>{String(jstDate(video.published_at).d).padStart(2, "0")}</p>
                       <span class="sr-only">{formatDate(video.published_at)}</span>
                       <a href={withBase(`/video/${video.key}`)} class="group mt-4 flex md:block gap-3 items-start">
                         <span class="block w-28 md:w-full shrink-0 overflow-hidden rounded-xl"><img src={video.thumbnail} alt="" class="w-full aspect-video object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105" loading="lazy" /></span>
-                        <span class="block md:mt-3 text-xs leading-relaxed text-neutral-600 group-hover:text-rose transition-colors line-clamp-3">{video.title}</span>
+                        <span class="md:mt-3 text-xs leading-relaxed text-neutral-600 group-hover:text-rose transition-colors line-clamp-3">{video.title}</span>
                       </a>
                     </div>
                   </div>

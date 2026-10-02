@@ -57,7 +57,7 @@ const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&display=swap" rel="stylesheet" />
-    <meta name="theme-color" content="#faf6f2" />
+    <meta name="theme-color" content="#fdf8f6" />
     <!-- チャンネルアイコン・動画サムネイル・商品画像の主な配信元に事前接続してLCPを短縮する -->
     <link rel="preconnect" href="https://yt3.ggpht.com" crossorigin />
     <link rel="preconnect" href="https://i.ytimg.com" crossorigin />
@@ -157,9 +157,9 @@ const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace
         </div>
       </form>
       <nav class="lg:hidden border-t border-ink/5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="メイン（スマホ）">
-        <div class="flex gap-5 px-4 md:px-8 whitespace-nowrap">
+        <div class="flex justify-between min-[400px]:justify-start gap-3 min-[400px]:gap-5 px-4 md:px-8 whitespace-nowrap text-[13px] min-[380px]:text-sm">
           {navLinks.map((l) => (
-            <a href={withBase(l.href)} class:list={["relative text-sm py-2.5 shrink-0", isCurrent(l.href) ? "text-ink font-medium" : "text-neutral-600"]}>
+            <a href={withBase(l.href)} class:list={["relative py-2.5 shrink-0", isCurrent(l.href) ? "text-ink font-medium" : "text-neutral-600"]}>
               {l.label}
               {isCurrent(l.href) && <span class="absolute left-0 right-0 bottom-0 h-px bg-rose" />}
             </a>

@@ -3,7 +3,7 @@ import PageHead from "../../components/PageHead.astro";
 import Layout from "../../layouts/Layout.astro";
 import ShareButtons from "../../components/ShareButtons.astro";
 import CosmeticCard from "../../components/CosmeticCard.astro";
-import { getBrandsWithVideos, getAliasRedirects, getBrandName, getCosmeticsForBrand, breadcrumbLd, getBrandMeta, getBrandGroups, getBrandCosmeticsByCategory, getBrandTopCosmetics, COUNTRY_NAMES, withBase, cosmeticSlug } from "../../lib/data";
+import { getBrandsWithVideos, getAliasRedirects, getBrandName, getCosmeticsForBrand, breadcrumbLd, getBrandMeta, getBrandGroups, getBrandCosmeticsByCategory, getBrandTopCosmetics, getCosmeticVideoCounts, COUNTRY_NAMES, withBase, cosmeticSlug, formatCount } from "../../lib/data";
 
 export function getStaticPaths() {
   return [
@@ -18,7 +18,10 @@ const { redirectTo } = Astro.props;
 if (redirectTo) return Astro.redirect(withBase(`/brand/${redirectTo}`), 301);
 const brandName = getBrandName(brand_id!) ?? "不明なブランド";
 const cosmetics = getCosmeticsForBrand(brand_id!);
-const sections = getBrandCosmeticsByCategory(brand_id!);
+// カテゴリの中は、紹介動画の多い順に並べる（以前は動画に出てきた順で、どれが人気か分からなかった。195章）
+const videoCounts = getCosmeticVideoCounts();
+const countOf = (c: { brand_id: string; name_id: string }) => videoCounts.get(`${c.brand_id}_${c.name_id}`) ?? 0;
+const sections = getBrandCosmeticsByCategory(brand_id!).map((s) => ({ ...s, items: [...s.items].sort((a, b) => countOf(b) - countOf(a)) }));
 const brandGroups = Array.from(new Set(sections.map((s) => s.group))).map((group) => ({
   group,
   tags: sections.filter((s) => s.group === group).map((s) => s.tag),
@@ -62,7 +65,7 @@ const COLS: Record<number, string> = { 1: "lg:grid-cols-1", 2: "lg:grid-cols-2",
 ---
 
 <Layout title={`${brandName}の人気コスメ・紹介動画`} description={description} image={ogImage} jsonLd={jsonLd}>
-  <PageHead en="Brand" title={brandName} lead={description} stats={[{ n: cosmetics.length, label: "品" }]}>
+  <PageHead en="Brand" title={brandName} lead={description} stats={[{ n: formatCount(stats?.videoCount ?? 0), label: "紹介動画", unit: "本" }, { n: formatCount(cosmetics.length), label: "コスメ", unit: "品" }]}>
     <ShareButtons text={`${brandName}の人気コスメ・YouTubeの紹介動画`} class="mt-5" />
     {
       sisters.length > 0 && (
@@ -122,6 +125,8 @@ const COLS: Record<number, string> = { 1: "lg:grid-cols-1", 2: "lg:grid-cols-2",
                   name_id={c.name_id}
                   name={c.name}
                   rakutenImageHtml={c.rakuten_image_link}
+                  showBrand={false}
+                  caption={`${countOf(c)}本の動画で紹介`}
                 />
               ))}
             </div>

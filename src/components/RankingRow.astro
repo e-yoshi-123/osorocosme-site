@@ -38,11 +38,12 @@ const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
 ---
 
 <!--
-  ランキングの1行（一覧全体は親で1つの表にまとめる）。PC: 順位／画像／商品名／実績／価格と購入ボタンの5列（親に列の見出しがある）。スマホ: 1段目に順位・画像・商品名、2段目に実績、3段目に価格と購入ボタン。
+  ランキングの1行（一覧全体は親で1つの表にまとめる）。広い枠: 順位／画像／商品名／実績／価格と購入ボタンの5列（親に列の見出しがある）。狭い枠: 1段目に順位・画像・商品名、2段目に実績、3段目に価格と購入ボタン。
+  切り替えは画面の幅ではなく、親の枠（@container）の幅で決める。画面の幅で決めていたときは、左にカテゴリ一覧がある768〜1100pxで商品名の列が20pxほどにつぶれ、名前が縦に1文字ずつ並んでいた（195章）。
   data-* と rank-badge は、カテゴリページの並び替え・「もっと見る」のスクリプトが使う。
 -->
 <li
-  class:list={["ranking-row group/row py-5 grid grid-cols-[2.75rem_4.75rem_minmax(0,1fr)] md:grid-cols-[3.5rem_6rem_minmax(0,1fr)_10rem_12rem] gap-x-3 md:gap-x-5 gap-y-3 items-center", { "is-top": top }]}
+  class:list={["ranking-row group/row py-5 grid grid-cols-[2.75rem_4.75rem_minmax(0,1fr)] @3xl:grid-cols-[3.5rem_6rem_minmax(0,1fr)_10rem_12rem] gap-x-3 @3xl:gap-x-5 gap-y-3 items-center", { "is-top": top }]}
   data-base={base}
   data-videos={videoCount}
   data-channels={channelCount}
@@ -68,17 +69,17 @@ const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
   </a>
   <a href={href} class="min-w-0 group">
     <span class="block text-xs tracking-[0.14em] uppercase text-neutral-500 truncate">{brand}</span>
-    <span class="block mt-1 text-[15px] leading-snug line-clamp-2 group-hover:text-rose transition-colors">{name}</span>
+    <span class="phrase mt-1 text-[15px] leading-snug line-clamp-2 group-hover:text-rose transition-colors">{name}</span>
     {subLabel && <span class="inline-block mt-1.5 text-xs border border-ink/15 text-neutral-600 rounded-full px-2 py-0.5">{subLabel}</span>}
   </a>
-  <p class="col-start-2 col-span-2 md:col-start-auto md:col-span-1 text-xs text-neutral-500">
+  <p class="col-start-2 col-span-2 @3xl:col-start-auto @3xl:col-span-1 text-xs text-neutral-500">
     <span class="whitespace-nowrap">動画 <b class="num-display text-ink text-xl">{videoCount}</b>本</span>
     <span class="mx-1.5 text-ink/20">|</span>
     <span class="whitespace-nowrap"><b class="num-display text-ink text-xl">{channelCount}</b>人</span>
     <!-- 「最近話題」の並び替えのときだけスクリプトが表示する -->
     <span class="recent-info hidden block mt-0.5 text-rose whitespace-nowrap">直近{recentDays}日：{recentVideos}本 / {recentChannels}チャンネル</span>
   </p>
-  <div class="col-start-2 col-span-2 md:col-start-auto md:col-span-1 flex items-center justify-between md:justify-end gap-3 min-h-8">
+  <div class="col-start-2 col-span-2 @3xl:col-start-auto @3xl:col-span-1 flex items-center justify-between @3xl:justify-end gap-3 min-h-8">
     {buyable && price !== undefined && <span data-buy class="num-display text-xl text-ink whitespace-nowrap" title={fromYahoo ? "Yahoo!ショッピングの参考価格" : "楽天市場の参考価格"}>¥{formatCount(price)}</span>}
     <!-- 楽天とYahoo!のボタンを短いラベルで横に並べる（列が狭いため。正式名は aria-label と title に入れる）。
          Yahoo!のボタンには data-buy を付けないので、楽天の画像が読み込めずに楽天のボタンが消えても残る -->

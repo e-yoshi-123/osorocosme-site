@@ -1,5 +1,5 @@
 ---
-import { formatDateFixed, withBase } from "../lib/data";
+import { formatDateDot, withBase } from "../lib/data";
 
 interface Props {
   i: { channel_id: string; channel_title: string; channel_icon?: string; thumbnail?: string; videoKey: string; videoTitle: string; published_at: string };
@@ -10,12 +10,12 @@ const { i } = Astro.props;
 
 <!--
   コスメ詳細「いつ・誰が紹介したか」の1行。
-  PC: 固定幅の3列（日付 / チャンネル / 動画）。動画の列はサムネイル＋タイトル（最大2行、全文は title 属性）。
+  PC（1024px以上。タブレット幅では動画の題の列が70pxほどにつぶれるので、スマホと同じ2段にする。195章）: 固定幅の3列（日付 / チャンネル / 動画）。動画の列はサムネイル＋タイトル（最大2行、全文は title 属性）。
   スマホ: 1行目に「日付＋チャンネル」、2行目にサムネイル＋タイトル（最大3行）。
 -->
-<li class="py-4 grid grid-cols-1 gap-y-2 md:grid-cols-[7rem_15rem_minmax(0,1fr)] md:gap-x-6 md:items-center border-b border-ink/10">
-  <div class="flex items-center gap-3 min-w-0 md:contents">
-    <span class="shrink-0 num-display text-[15px] md:text-lg text-neutral-600 whitespace-nowrap">{formatDateFixed(i.published_at).replaceAll("/", ".")}</span>
+<li class="py-4 grid grid-cols-1 gap-y-2 lg:grid-cols-[7rem_15rem_minmax(0,1fr)] lg:gap-x-6 lg:items-center border-b border-ink/10">
+  <div class="flex items-center gap-3 min-w-0 lg:contents">
+    <span class="shrink-0 num-display text-[15px] lg:text-lg text-neutral-600 whitespace-nowrap">{formatDateDot(i.published_at)}</span>
     <a href={withBase(`/influencer/${i.channel_id}`)} class="flex items-center gap-2.5 min-w-0 text-sm hover:text-rose transition-colors" title={i.channel_title}>
       {i.channel_icon && <img referrerpolicy="no-referrer" src={i.channel_icon} alt="" data-name={i.channel_title} width="28" height="28" class="w-7 h-7 rounded-full shrink-0" loading="lazy" />}
       <span class="truncate">{i.channel_title}</span>
@@ -23,6 +23,6 @@ const { i } = Astro.props;
   </div>
   <a href={withBase(`/video/${i.videoKey}`)} class="min-w-0 flex items-center gap-3 group" title={i.videoTitle}>
     {i.thumbnail && <span class="w-28 md:w-36 shrink-0 overflow-hidden rounded-xl"><img src={i.thumbnail} alt="" class="w-full aspect-video object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105" loading="lazy" /></span>}
-    <span class="min-w-0 text-sm leading-relaxed text-neutral-700 group-hover:text-rose transition-colors line-clamp-3 md:line-clamp-2">{i.videoTitle}</span>
+    <span class="min-w-0 text-sm leading-relaxed text-neutral-700 group-hover:text-rose transition-colors line-clamp-3 lg:line-clamp-2">{i.videoTitle}</span>
   </a>
 </li>

@@ -7,12 +7,14 @@ const pages = getRankingPages();
 const nav = getRankingNav();
 const allTags = Array.from(pages.keys());
 
-// 各カテゴリの1〜3位の画像（カテゴリの雰囲気が分かるように）
+// 各カテゴリの上位の画像を3枚（カテゴリの雰囲気が分かるように）。画像の無い商品は飛ばし、次の順位の画像で埋める
+// （「つけまつげ」で3枠のうち2枠が空の白い枠になっていた。195章）
 // 商品が3品未満でも枠の大きさが変わらないよう、常に3枠分を返す（足りない分は空）
 function topImages(tag: string): string[] {
   const imgs = (pages.get(tag)?.list || [])
-    .slice(0, 3)
-    .map((r) => productImageSrc(getCosmeticListEntry(r.brand_id, r.name_id), r.rakuten_image_link));
+    .map((r) => productImageSrc(getCosmeticListEntry(r.brand_id, r.name_id), r.rakuten_image_link))
+    .filter(Boolean)
+    .slice(0, 3);
   while (imgs.length < 3) imgs.push("");
   return imgs;
 }
@@ -29,13 +31,13 @@ function topImages(tag: string): string[] {
   {
     nav.map((g, gi) => (
       <section id={`group-${g.group}`} class="panel mb-6 md:mb-8 scroll-mt-28">
-        <h2 class="font-serif text-[20px] md:text-[22px] font-semibold mb-4 flex items-baseline gap-3"><span class="num-display text-sm text-neutral-400">{String(gi + 1).padStart(2, "0")}</span>{g.group}</h2>
+        <h2 class="font-serif h-section font-semibold mb-4 flex items-baseline gap-3"><span class="num-display text-sm text-neutral-400">{String(gi + 1).padStart(2, "0")}</span>{g.group}</h2>
         {/* 「まとめ」も単独カテゴリも、同じ幅・同じ見た目の行として同列に並べる。
             単独カテゴリは行をクリックでランキングへ。まとめは行をクリックで開き、「全般」か種類別かを選ぶ（<details>なのでJSなしでも動き、リンクはHTMLに残る） */}
         <ul class="[&>li:last-child]:border-b-0">
           {g.items.map((it) => {
             const imgs = (
-              <div class="flex gap-1.5 w-32 sm:w-48 shrink-0">
+              <div class="flex gap-1 sm:gap-1.5 w-[6.5rem] sm:w-48 shrink-0">
                 {topImages(it.name).map((src) => (
                   <div class="product-well flex-1 aspect-square rounded-lg overflow-hidden flex items-center justify-center">
                     {src ? <img src={src} alt="" class="w-[86%] h-[86%] object-contain" loading="lazy" onerror="this.style.visibility='hidden'" /> : null}
@@ -46,24 +48,24 @@ function topImages(tag: string): string[] {
             return (
               <li class="border-b border-ink/10">
                 {it.kind === "single" ? (
-                  <a href={categoryUrl(it.name)} class="group min-w-0 flex items-center gap-4 sm:gap-6 py-4 transition">
+                  <a href={categoryUrl(it.name)} class="group min-w-0 flex items-center gap-3 sm:gap-6 py-4 transition">
                     {imgs}
                     <div class="min-w-0 flex-1">
-                      <p class="font-semibold sm:text-lg group-hover:text-rose transition-colors">{it.name}</p>
-                      <p class="text-xs text-neutral-500 mt-0.5">{it.count}品</p>
+                      <p class="phrase font-semibold leading-snug sm:text-lg group-hover:text-rose transition-colors">{it.name}</p>
+                      <p class="text-xs text-neutral-500 mt-1">{it.count}品</p>
                     </div>
                     <span class="shrink-0 w-9 h-9 rounded-full border border-ink/15 flex items-center justify-center transition-all duration-500 group-hover:bg-ink group-hover:text-paper group-hover:border-ink" aria-hidden="true">→</span>
                   </a>
                 ) : (
                   <details class="group">
-                    <summary class="min-w-0 flex items-center gap-4 sm:gap-6 py-4 cursor-pointer list-none [&::-webkit-details-marker]:hidden hover:[&_p.font-semibold]:text-rose">
+                    <summary class="min-w-0 flex items-center gap-3 sm:gap-6 py-4 cursor-pointer list-none [&::-webkit-details-marker]:hidden hover:[&_p.font-semibold]:text-rose">
                       {imgs}
                       <div class="min-w-0 flex-1">
-                        <p class="font-semibold sm:text-lg transition-colors">
-                          {it.name}
-                          <span class="ml-2 text-xs font-normal border border-rose text-rose rounded-full px-2 py-0.5 align-middle">まとめ</span>
+                        <p class="phrase font-semibold leading-snug sm:text-lg transition-colors">{it.name}</p>
+                        <p class="text-xs text-neutral-500 mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
+                          <span class="whitespace-nowrap border border-rose text-rose rounded-full px-2 leading-[1.5]">まとめ</span>
+                          <span class="whitespace-nowrap">{it.count}品 ／ {it.children.length}種類<span class="hidden sm:inline">から選べます</span></span>
                         </p>
-                        <p class="text-xs text-neutral-500 mt-0.5">{it.count}品 ／ {it.children.length}種類から選べます</p>
                       </div>
                       <span class="text-xs text-neutral-500 shrink-0 hidden sm:inline">種類を選ぶ</span>
                       <span class="shrink-0 w-9 h-9 rounded-full border border-ink/15 flex items-center justify-center transition-transform duration-500 group-open:rotate-90" aria-hidden="true">→</span>
@@ -76,7 +78,7 @@ function topImages(tag: string): string[] {
                           <p class="text-xs opacity-90">{it.count}品 ／ すべてまとめて</p>
                         </a>
                         {it.children.map((c) => (
-                          <a href={categoryUrl(c.name)} class="group min-w-0 block rounded-2xl border border-ink/10 bg-white/60 hover:border-ink/40 transition-colors p-3">
+                          <a href={categoryUrl(c.name)} class="group min-w-0 block rounded-2xl border border-ink/10 hover:border-ink/40 transition-colors p-3">
                             <div class="flex gap-1 mb-1.5">
                               {topImages(c.name).map((src) => (
                                 <div class="product-well flex-1 aspect-square rounded-lg overflow-hidden flex items-center justify-center">

@@ -1,11 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { withBase } from "../lib/data";
 ---
 
 <Layout title="検索結果" noindex>
   <header class="mb-8">
     <p class="eyebrow">Search</p>
-    <h1 class="mt-2 font-serif font-semibold text-[26px] md:text-[30px] leading-[1.35]">検索結果：<span id="search-query" class="text-rose"></span></h1>
+    <h1 class="mt-2 font-serif font-semibold h-page">検索結果：<span id="search-query" class="text-rose"></span></h1>
     <p id="search-count" class="mt-3 text-sm text-neutral-500"></p>
     <!-- 言い方を変えて検索し直せるように、今の検索語を入れた入力欄を置く（スマホではヘッダーの検索が隠れているため） -->
     <form method="get" role="search" class="mt-6 max-w-xl flex items-center gap-3 border-b-2 border-ink focus-within:border-rose transition-colors">
@@ -32,7 +33,17 @@ import Layout from "../layouts/Layout.astro";
       </div>
     </div>
   </div>
-  <p id="search-empty" class="text-neutral-400 hidden">該当するブランド・インフルエンサー・コスメ・動画が見つかりませんでした。別の言い方（英字・カタカナ・略さない名前など）でもお試しください。</p>
+  <!-- 見つからなかったとき：言い直しの案内に加えて、次に行ける場所を出す（文だけだと行き止まりになる。195章） -->
+  <div id="search-empty" class="panel hidden">
+    <p class="font-serif text-lg font-semibold">該当するものが見つかりませんでした</p>
+    <p class="mt-2 text-sm leading-[1.9] text-neutral-600">ブランド・インフルエンサー・コスメ・動画のどれにも当てはまりませんでした。別の言い方（英字・カタカナ・略さない名前など）でもお試しください。</p>
+    <p class="mt-8 label-caps text-neutral-500">Browse</p>
+    <ul class="mt-3 flex flex-wrap gap-2 text-sm">
+      {[["/ranking/", "カテゴリ別ランキング"], ["/brand-list", "ブランド一覧"], ["/influencer-list", "インフルエンサー一覧"], ["/feature/", "特集"], ["/video-list", "動画一覧"]].map(([href, label]) => (
+        <li><a href={withBase(href)} class="tab">{label}</a></li>
+      ))}
+    </ul>
+  </div>
 </Layout>
 
 <script>
@@ -202,7 +213,7 @@ import Layout from "../layouts/Layout.astro";
       const sec = document.createElement("section");
       sec.className = "panel";
       sec.innerHTML = `
-        <h2 class="font-serif text-[20px] md:text-[22px] font-semibold mb-6 flex items-baseline gap-3">${LABELS[k]}<span class="num-display text-sm text-neutral-400">${items.length.toLocaleString("ja-JP")}</span></h2>
+        <h2 class="font-serif h-section font-semibold mb-6 flex items-baseline gap-3">${LABELS[k]}<span class="num-display text-sm text-neutral-400">${items.length.toLocaleString("ja-JP")}</span></h2>
         <div class="${GRID[k]}"></div>`;
       const grid = sec.querySelector("div")!;
       let shown = 0;
@@ -248,7 +259,7 @@ import Layout from "../layouts/Layout.astro";
         <span class="block text-sm font-medium truncate group-hover:text-rose transition-colors">${esc(name)}</span>
         <span class="block text-xs text-neutral-500 truncate">動画 ${videoCount}本・コスメ ${cosmeticCount}品</span>
       </span>
-      <span class="text-rose opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" aria-hidden="true">→</span>
+      <span class="text-neutral-300 group-hover:text-rose group-hover:translate-x-0.5 transition-all duration-300" aria-hidden="true">→</span>
     </a>`;
   }
 
@@ -262,7 +273,7 @@ import Layout from "../layouts/Layout.astro";
         <span class="block text-sm font-medium truncate group-hover:text-rose transition-colors">${esc(name)}</span>
         <span class="block text-xs text-neutral-500 truncate">登録者 ${fmt(subs)}人・動画 ${videoCount}本</span>
       </span>
-      <span class="text-rose opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" aria-hidden="true">→</span>
+      <span class="text-neutral-300 group-hover:text-rose group-hover:translate-x-0.5 transition-all duration-300" aria-hidden="true">→</span>
     </a>`;
   }
 
@@ -273,7 +284,7 @@ import Layout from "../layouts/Layout.astro";
     return `<a href="${base}/cosmetics/${slug}/" class="min-w-0 block group">
       <div class="product-well relative aspect-square rounded-2xl flex items-center justify-center overflow-hidden">${pic}</div>
       <p class="mt-3 text-xs tracking-[0.14em] uppercase text-neutral-500 truncate">${esc(brand)}</p>
-      <p class="mt-1 text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors">${esc(name)}</p>
+      <p class="phrase mt-1 text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors">${esc(name)}</p>
       <p class="mt-1.5 text-xs text-neutral-500">動画 ${videoCount}本で紹介</p>
     </a>`;
   }
@@ -283,7 +294,7 @@ import Layout from "../layouts/Layout.astro";
       <span class="block overflow-hidden rounded-2xl bg-neutral-200"><img src="${esc(thumb)}" alt="" class="w-full aspect-video object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" /></span>
       <span class="block pt-3">
         <span class="block text-xs text-neutral-500 truncate mb-1">${esc(channel)}</span>
-        <span class="block text-sm leading-relaxed line-clamp-2 group-hover:text-rose transition-colors">${esc(title)}</span>
+        <span class="text-sm leading-relaxed line-clamp-2 group-hover:text-rose transition-colors">${esc(title)}</span>
       </span>
     </a>`;
   }

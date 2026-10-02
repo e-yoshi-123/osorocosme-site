@@ -13,19 +13,20 @@ const { title, items, unit } = Astro.props;
 <!-- 人のページへの内部リンク（似た人・カテゴリをよく紹介している人）。履歴171章 -->
 {
   items.length > 0 && (
-    <section class="mb-12">
-      <h2 class="font-bold mb-3">{title}</h2>
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+    <section class="panel mt-8 md:mt-10 mb-12">
+      <h2 class="phrase text-balance font-serif text-xl md:text-[22px] leading-snug font-semibold mb-6">{title}</h2>
+      {/* スマホは1列（2列だと名前が「HIRO BEA…」と切れていた）。名前は2行まで出す（195章） */}
+      <div class="grid grid-cols-1 min-[520px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 md:gap-3">
         {items.map((i) => (
-          <a href={withBase(`/influencer/${i.channel_id}`)} class="min-w-0 bg-white rounded-lg shadow-sm p-3 flex items-center gap-3 hover:shadow-md">
+          <a href={withBase(`/influencer/${i.channel_id}`)} class="group min-w-0 rounded-2xl border border-ink/10 p-2.5 md:p-3 flex items-center gap-2.5 md:gap-3 hover:border-ink/40 transition-colors">
             {i.channel_icon ? (
               <img referrerpolicy="no-referrer" src={i.channel_icon} alt="" data-name={i.channel_title} width="40" height="40" class="w-10 h-10 rounded-full shrink-0" loading="lazy" />
             ) : (
-              <div class="w-10 h-10 rounded-full shrink-0 bg-pink-50" />
+              <div class="w-10 h-10 rounded-full shrink-0 bg-blush" />
             )}
             <div class="min-w-0">
-              <p class="text-sm font-medium truncate">{i.channel_title}</p>
-              <p class="text-xs text-neutral-400">{unit} {i.count}品</p>
+              <p class="text-sm font-medium leading-snug line-clamp-2 group-hover:text-rose transition-colors">{i.channel_title}</p>
+              <p class="mt-0.5 text-xs text-neutral-500 truncate">{unit} {i.count}品</p>
             </div>
           </a>
         ))}
