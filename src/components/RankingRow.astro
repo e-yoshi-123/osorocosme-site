@@ -82,18 +82,19 @@ const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
   <div class="col-start-2 col-span-2 @3xl:col-start-auto @3xl:col-span-1 flex items-center justify-between @3xl:justify-end gap-3 min-h-8">
     {buyable && price !== undefined && <span data-buy class="num-display text-xl text-ink whitespace-nowrap" title={fromYahoo ? "Yahoo!ショッピングの参考価格" : "楽天市場の参考価格"}>¥{formatCount(price)}</span>}
     <!-- 楽天とYahoo!のボタンを短いラベルで横に並べる（列が狭いため。正式名は aria-label と title に入れる）。
-         Yahoo!のボタンには data-buy を付けないので、楽天の画像が読み込めずに楽天のボタンが消えても残る -->
-    <div class="flex items-center gap-1.5">
+         Yahoo!のボタンには data-buy を付けないので、楽天の画像が読み込めずに楽天のボタンが消えても残る。
+         ボタンは幅を決めた2つの枠に置く。片方が無い行でも、価格とボタンの位置が他の行と縦に揃う（205章） -->
+    <div class="grid grid-cols-[3.5rem_4.75rem] items-center gap-1.5">
       {
         buyable && link && (
-          <a data-buy href={link} target="_blank" rel="nofollow sponsored noopener" aria-label="楽天市場で見る" title="楽天市場で見る" class="inline-block bg-ink text-paper text-xs tracking-[0.06em] px-3.5 py-2 rounded-full hover:bg-rose transition-colors whitespace-nowrap">
+          <a data-buy href={link} target="_blank" rel="nofollow sponsored noopener" aria-label="楽天市場で見る" title="楽天市場で見る" class="col-start-1 block text-center bg-ink text-paper text-xs tracking-[0.06em] px-3.5 py-2 rounded-full hover:bg-rose transition-colors whitespace-nowrap">
             楽天
           </a>
         )
       }
       {
         yahooLink && (
-          <a href={yahooLink} target="_blank" rel="nofollow sponsored noopener" aria-label="Yahoo!ショッピングで見る" title="Yahoo!ショッピングで見る" class="inline-block border border-ink/25 text-xs tracking-[0.06em] px-3 py-[7px] rounded-full hover:border-ink transition-colors whitespace-nowrap">
+          <a href={yahooLink} target="_blank" rel="nofollow sponsored noopener" aria-label="Yahoo!ショッピングで見る" title="Yahoo!ショッピングで見る" class="col-start-2 block text-center border border-ink/25 text-xs tracking-[0.06em] px-3 py-[7px] rounded-full hover:border-ink transition-colors whitespace-nowrap">
             Yahoo!
           </a>
         )
