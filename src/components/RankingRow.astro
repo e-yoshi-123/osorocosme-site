@@ -85,11 +85,11 @@ const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
     <!-- 楽天・Yahoo!・Amazonのボタンを短いラベルで横に並べる（列が狭いため。正式名は aria-label と title に入れる）。
          Yahoo!・Amazonのボタンには data-buy を付けないので、楽天の画像が読み込めずに楽天のボタンが消えても残る。
          ボタンは幅を決めた3つの枠に置く。狭い枠では3つ並ぶと幅が足りないため、この段を左端（順位の列）から始め、それでも足りない幅（320px）ではボタンを価格の下に回す。どれかが無い行でも、価格とボタンの位置が他の行と縦に揃う（205章）。
-         Amazonは商品を特定しない検索結果へのリンクなので、全商品に出す（206章） -->
+         Amazonは商品を特定しない検索結果へのリンクなので、全商品に出す。3つとも同じ白い枠にして、どこか1社を特別扱いしない（206章） -->
     <div class="grid grid-cols-[3.25rem_4rem_4.5rem] @3xl:grid-cols-[3.5rem_4.75rem_4.75rem] items-center gap-1.5">
       {
         buyable && link && (
-          <a data-buy href={link} target="_blank" rel="nofollow sponsored noopener" aria-label="楽天市場で見る" title="楽天市場で見る" class="col-start-1 block text-center bg-ink text-paper text-xs @3xl:tracking-[0.06em] px-2 @3xl:px-3.5 py-2 rounded-full hover:bg-rose transition-colors whitespace-nowrap">
+          <a data-buy href={link} target="_blank" rel="nofollow sponsored noopener" aria-label="楽天市場で見る" title="楽天市場で見る" class="col-start-1 block text-center border border-ink/25 text-xs @3xl:tracking-[0.06em] px-2 @3xl:px-3 py-[7px] rounded-full hover:border-ink transition-colors whitespace-nowrap">
             楽天
           </a>
         )

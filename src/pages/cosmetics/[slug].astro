@@ -168,11 +168,11 @@ const jsonLd = entry
               {yahooSwap?.yahoo_price !== undefined && (
                 <p data-yahoo-price hidden class="flex items-baseline gap-3"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[24px] leading-none">¥{formatCount(yahooSwap.yahoo_price)}</span><span class="text-xs text-neutral-500"><span class="inline-block">Yahoo!ショッピングの参考価格</span>{yahooSwap.yahoo_price_updated && <span class="inline-block">・{formatJaDate(yahooSwap.yahoo_price_updated)}時点</span>}</span></p>
               )}
-              <!-- 楽天・Yahoo!ショッピング・Amazonのボタン（data-buy の扱いは従来どおり）。Amazonは検索結果へのリンクで、全商品に出す（206章） -->
+              <!-- 楽天・Yahoo!ショッピング・Amazonのボタン（data-buy の扱いは従来どおり）。Amazonは検索結果へのリンクで、全商品に出す。3つとも同じ白い枠（206章） -->
               <div class="mt-6 flex flex-wrap gap-3">
                 {buyable && entry.rakuten_text_link && (
-                  <a data-buy href={entry.rakuten_text_link} target="_blank" rel="nofollow sponsored noopener" class="group inline-flex items-center gap-3 bg-ink text-paper text-sm pl-6 pr-2 py-2 rounded-full hover:bg-rose transition-colors duration-500">
-                    楽天市場で見る<span class="w-8 h-8 rounded-full bg-paper/15 flex items-center justify-center transition-transform duration-500 group-hover:rotate-[-45deg]" aria-hidden="true">→</span>
+                  <a data-buy href={entry.rakuten_text_link} target="_blank" rel="nofollow sponsored noopener" class="group inline-flex items-center gap-3 border border-ink/25 text-sm pl-6 pr-2 py-2 rounded-full hover:border-ink transition-colors duration-500">
+                    楽天市場で見る<span class="w-8 h-8 rounded-full bg-ink/5 flex items-center justify-center transition-transform duration-500 group-hover:rotate-[-45deg]" aria-hidden="true">→</span>
                   </a>
                 )}
                 {entry.yahoo_text_link && (
