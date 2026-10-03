@@ -16315,31 +16315,38 @@
     "check_status": true,
     "cosmetics": [
       {
-        "amazon_link": "",
-        "brand": "ディオール",
-        "brand_id": "brand-00014",
-        "name": "ディオールスキン フォーエヴァー アンダーカバー",
-        "name_id": "name-00188",
-        "now_price": 8520,
-        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00u0ish.ftdz4edf.g00u0ish.ftdz557d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcoscora%2F225359%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcoscora%2Fi%2F10019459%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/coscora/cabinet/images14/22535980102.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ディオール ディオールスキン フォーエヴァー アンダーカバー\" title=\"ディオール ディオールスキン フォーエヴァー アンダーカバー\"></a>",
-        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00u0ish.ftdz4edf.g00u0ish.ftdz557d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcoscora%2F225359%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcoscora%2Fi%2F10019459%2F&rafcid=wsc_i_is_1011877497265360338",
+        "brand_id": "brand-00083",
+        "brand": "＆be(アンドビー)",
+        "name_id": "name-00001",
+        "name": "ブラックスポンジ",
         "related_tags": [
-          "リキッドファンデーション"
+          "パフ・スポンジ"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fand-be%2Fab004bspg%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fand-be%2Fi%2F10000212%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/and-be/cabinet/08527670/08528069/13533193/imgrc0115585069.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"＆be(アンドビー) ブラックスポンジ\" title=\"＆be(アンドビー) ブラックスポンジ\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fand-be%2Fab004bspg%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fand-be%2Fi%2F10000212%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "最近超お気に入り。BBクリームを&Bのスポンジで"
+        ],
+        "now_price": 770
       },
       {
-        "amazon_link": "",
-        "brand": "キャンメイク",
-        "brand_id": "brand-00002",
-        "name": "レディ&ガールマスカラ",
-        "name_id": "name-00150",
-        "rakuten_image_link": "",
-        "rakuten_text_link": "",
+        "brand_id": "brand-00014",
+        "brand": "ディオール",
+        "name_id": "name-00001",
+        "name": "ディオールスキン フォーエヴァー スキン コレクト コンシーラー",
         "related_tags": [
-          "マスカラ"
+          "コンシーラー"
         ],
-        "skin_concern": ""
+        "skin_concern": "",
+        "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmelink%2Fc10412789%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmelink%2Fi%2F10066985%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmelink/cabinet/cp20241211/c97348956-3_cp.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ディオール ディオールスキン フォーエヴァー スキン コレクト コンシーラー\" title=\"ディオール ディオールスキン フォーエヴァー スキン コレクト コンシーラー\"></a>",
+        "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmelink%2Fc10412789%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmelink%2Fi%2F10066985%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+        "amazon_link": "",
+        "mentions": [
+          "コンシーラーはディオール。クマ・口元のくすみ・小鼻横に"
+        ],
+        "now_price": 5600
       }
     ],
     "delete_flg": false,
