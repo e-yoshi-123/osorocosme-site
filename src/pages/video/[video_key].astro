@@ -21,6 +21,9 @@ import {
   formatDateDot,
   getPrInfo,
   isPrMention,
+  ytThumbLarge,
+  sortByMakeupOrder,
+  cosmeticCategory,
   getBrandName,
 } from "../../lib/data";
 
@@ -30,7 +33,8 @@ export function getStaticPaths() {
 
 const { video_key } = Astro.params;
 const video = getVideoByKey(video_key!);
-const validCosmetics = (video?.cosmetics || []).filter((c) => c.brand && c.name);
+// メイクで使う順（スキンケア→下地→ファンデ→…→リップ→道具）に並べる。同じカテゴリの中は動画で出てきた順（213章）
+const validCosmetics = sortByMakeupOrder((video?.cosmetics || []).filter((c) => c.brand && c.name));
 const cosmeticNames = validCosmetics.slice(0, 5).map((c) => `${c.brand} ${c.name}`).join("、");
 const description = video
   ? `${video.channel_title}が${formatJaDate(video.published_at)}に投稿した動画。紹介コスメ${validCosmetics.length}品` + (cosmeticNames ? `（${cosmeticNames}${validCosmetics.length > 5 ? "ほか" : ""}）` : "") + "。"
@@ -86,7 +90,7 @@ const jsonLd = video
         "@type": "VideoObject",
         name: video.title,
         description: description,
-        thumbnailUrl: video.thumbnail,
+        thumbnailUrl: ytThumbLarge(video.thumbnail),
         uploadDate: video.published_at,
         embedUrl: `https://www.youtube.com/embed/${video.video_id}`,
         contentUrl: video.url,
@@ -106,7 +110,7 @@ const jsonLd = video
   : [];
 ---
 
-<Layout title={video?.title ?? "動画詳細"} description={description} image={video?.thumbnail} ogType="video.other" jsonLd={jsonLd} noindex={noindex}>
+<Layout title={video?.title ?? "動画詳細"} description={description} image={video ? ytThumbLarge(video.thumbnail) : undefined} ogType="video.other" jsonLd={jsonLd} noindex={noindex}>
   {
     !video ? (
       <p class="text-neutral-400">動画が見つかりませんでした。</p>
@@ -156,10 +160,10 @@ const jsonLd = video
 
         {validCosmetics.length > 0 && (
           <section class="panel mt-8 md:mt-10">
-            <SectionHead num="01" en="In this video" title="紹介されたコスメ" lead={`この動画で紹介された${validCosmetics.length}品です。`} />
+            <SectionHead num="01" en="In this video" title="紹介されたコスメ" lead={`この動画で紹介された${validCosmetics.length}品を、スキンケア・ベースメイク・アイメイク・リップの順に、使う順番に並べています。`} />
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-8">
               {validCosmetics.map((c) => (
-                <CosmeticCard brand_id={c.brand_id} brand={c.brand} name_id={c.name_id} name={c.name} rakutenImageHtml={c.rakuten_image_link} caption={isPr(c) ? "PR・提供（ランキングに数えていません）" : undefined} />
+                <CosmeticCard brand_id={c.brand_id} brand={c.brand} name_id={c.name_id} name={c.name} rakutenImageHtml={c.rakuten_image_link} category={cosmeticCategory(c)} caption={isPr(c) ? "PR・提供（ランキングに数えていません）" : undefined} />
               ))}
             </div>
           </section>

@@ -1,5 +1,6 @@
 ---
 import { cosmeticSlug, withBase, extractImageSrc, getCosmeticListEntry } from "../lib/data";
+import PrBadge from "./PrBadge.astro";
 
 interface Props {
   brand_id: string;
@@ -11,9 +12,13 @@ interface Props {
   showBrand?: boolean;
   /** 補足の1行（例: 「12本の動画で紹介」） */
   caption?: string;
+  /** PR・提供としての紹介なら、画像の左上に「PR」の印を重ねる（213章） */
+  pr?: boolean;
+  /** カテゴリ（例: 「化粧下地」）。渡すとブランド名の上に出す（動画ページ。213章） */
+  category?: string;
 }
 
-const { brand_id, brand, name_id, name, rakutenImageHtml, showBrand = true, caption } = Astro.props;
+const { brand_id, brand, name_id, name, rakutenImageHtml, showBrand = true, caption, pr = false, category } = Astro.props;
 // 楽天の画像が無い商品は、Yahoo!ショッピングの画像があればそれを出す（115章）。
 // 楽天の画像はあっても読み込めない場合に備え、Yahoo!の画像を data-* に持たせる（Layout の共通の処理が差し替える。135章）
 const entry = getCosmeticListEntry(brand_id, name_id);
@@ -23,7 +28,7 @@ const yahooImage = extractImageSrc(rakutenImageHtml) ? undefined : yahooEntry;
 
 <div class="group flex flex-col">
   <div
-    class="cosmetic-image-box product-well aspect-square w-full rounded-2xl flex items-center justify-center overflow-hidden"
+    class="cosmetic-image-box product-well relative aspect-square w-full rounded-2xl flex items-center justify-center overflow-hidden"
     data-yahoo-image={rakutenImageHtml ? yahooEntry?.yahoo_image_url : undefined}
     data-yahoo-link={rakutenImageHtml ? yahooEntry?.yahoo_text_link : undefined}
   >
@@ -38,8 +43,10 @@ const yahooImage = extractImageSrc(rakutenImageHtml) ? undefined : yahooEntry;
         <span class="noimg">No image</span>
       )
     }
+    {pr && <PrBadge tone="solid" class="absolute top-2 left-2 pointer-events-none" />}
   </div>
   <a href={withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`)} class="block pt-3">
+    {category && <div class="mb-1.5"><span class="inline-block rounded-full bg-blush px-2 py-0.5 text-[11px] leading-snug text-ink/80">{category}</span></div>}
     {showBrand && <div class="mb-1 text-xs tracking-[0.14em] text-neutral-500 truncate">{brand}</div>}
     <div class="phrase text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors">{name}</div>
     {caption && <div class="mt-1.5 text-xs text-neutral-500">{caption}</div>}
