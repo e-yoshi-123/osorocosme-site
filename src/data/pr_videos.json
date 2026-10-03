@@ -1,5 +1,15 @@
 {
  "_comment": "PR・提供の動画（backend/scripts/pr_check/classify.pyが作る）。whole=動画の商品をすべてランキング等の数から外す、brands・products=外すブランド・商品。外さない動画（提供元の商品が動画に無い等）も、ラベルを付けるために載せる",
+ "-IjzzFBHf7Y": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00226",
+   "brand-00366",
+   "brand-01154"
+  ],
+  "products": []
+ },
  "-O45X6RLP-qBR2-N9GX5": {
   "kind": "pr",
   "whole": false,
@@ -153,6 +163,12 @@
   "brands": [
    "brand-00067"
   ],
+  "products": []
+ },
+ "-O7myeyAiEw": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [],
   "products": []
  },
  "-O8QCt2AiPrEhGdty4Dk": {
@@ -597,10 +613,35 @@
   ],
   "products": []
  },
+ "-UJ_omafodQ": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00077"
+  ],
+  "products": []
+ },
+ "-_HNS2Wjufo": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00072"
+  ],
+  "products": []
+ },
  "-e57V-lJFo8": {
   "kind": "pr",
   "whole": true,
   "brands": [],
+  "products": []
+ },
+ "0TQCDf7hvGw": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00091",
+   "brand-00150"
+  ],
   "products": []
  },
  "0qMCExdFWnA": {
@@ -608,6 +649,14 @@
   "whole": false,
   "brands": [
    "brand-01148"
+  ],
+  "products": []
+ },
+ "1pO05tAvXjI": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00111"
   ],
   "products": []
  },
@@ -626,6 +675,17 @@
   "brands": [],
   "products": []
  },
+ "2rx6VSfIyO4": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00011",
+   "brand-00176",
+   "brand-00312",
+   "brand-01177"
+  ],
+  "products": []
+ },
  "3k6qjIKxotc": {
   "kind": "pr",
   "whole": false,
@@ -634,11 +694,59 @@
   ],
   "products": []
  },
+ "41whwikrU0s": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-01171"
+  ],
+  "products": []
+ },
+ "48Nz-A7sOD4": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00366"
+  ],
+  "products": []
+ },
+ "4HVXlHK1R7I": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00046"
+  ],
+  "products": []
+ },
  "4eEK4fOyLkc": {
   "kind": "pr",
   "whole": false,
   "brands": [
    "brand-00003"
+  ],
+  "products": []
+ },
+ "4zhhUjh0vEk": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00198"
+  ],
+  "products": []
+ },
+ "5Cmv-hM6l5o": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-01108"
+  ],
+  "products": []
+ },
+ "5I6Qin72IdA": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00522"
   ],
   "products": []
  },
@@ -652,6 +760,24 @@
   "kind": "pr",
   "whole": false,
   "brands": [],
+  "products": []
+ },
+ "60xxWxfnhrk": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00446"
+  ],
+  "products": []
+ },
+ "6__1FooSNZg": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00130",
+   "brand-00226",
+   "brand-00366"
+  ],
   "products": []
  },
  "6vOzvo5uOm8": {
@@ -668,6 +794,23 @@
   "brands": [],
   "products": []
  },
+ "7rLs8YBmEgo": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00154",
+   "brand-00366",
+   "brand-01048",
+   "brand-01394"
+  ],
+  "products": []
+ },
+ "7vnULKEbEDM": {
+  "kind": "pr",
+  "whole": true,
+  "brands": [],
+  "products": []
+ },
  "8E4Sbll0Bds": {
   "kind": "gift",
   "whole": false,
@@ -680,11 +823,44 @@
   "brands": [],
   "products": []
  },
+ "8QmH74QkyUQ": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00130",
+   "brand-00138",
+   "brand-00265",
+   "brand-00480",
+   "brand-00835",
+   "brand-01041",
+   "brand-01198"
+  ],
+  "products": []
+ },
  "9T3CYGvYr04": {
   "kind": "pr",
   "whole": false,
   "brands": [
    "brand-01394"
+  ],
+  "products": []
+ },
+ "9_M3zxrxAkQ": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00011",
+   "brand-00020",
+   "brand-00236",
+   "brand-01198"
+  ],
+  "products": []
+ },
+ "ARNl2SFSWko": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00796"
   ],
   "products": []
  },
@@ -700,10 +876,40 @@
   "brands": [],
   "products": []
  },
+ "AyUPhK-ZacY": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-01244"
+  ],
+  "products": []
+ },
  "BA8JgsFYsZ8": {
   "kind": "pr",
   "whole": false,
   "brands": [],
+  "products": []
+ },
+ "CA7Pz4nptK4": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-01091"
+  ],
+  "products": []
+ },
+ "CSTRJn7-LtU": {
+  "kind": "pr",
+  "whole": true,
+  "brands": [],
+  "products": []
+ },
+ "DcnmRLfURoY": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-01171"
+  ],
   "products": []
  },
  "DmcSq5xuVuI": {
@@ -712,6 +918,57 @@
   "brands": [
    "brand-00012"
   ],
+  "products": []
+ },
+ "ELklILxCBwE": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00010"
+  ],
+  "products": []
+ },
+ "ENH6ju4k2PE": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00226",
+   "brand-00366",
+   "brand-01154",
+   "brand-01212"
+  ],
+  "products": []
+ },
+ "Ez4dA8AAoBI": {
+  "kind": "gift",
+  "whole": false,
+  "brands": [
+   "brand-00011",
+   "brand-00016",
+   "brand-00067"
+  ],
+  "products": []
+ },
+ "FzuGEslLQz0": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00122"
+  ],
+  "products": []
+ },
+ "H3aJr1vAthM": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00028"
+  ],
+  "products": []
+ },
+ "HaQfv7ZTEbQ": {
+  "kind": "gift",
+  "whole": false,
+  "brands": [],
   "products": []
  },
  "IF5Voo2fXRc": {
@@ -723,6 +980,12 @@
    "brand-01154",
    "brand-01393"
   ],
+  "products": []
+ },
+ "Ia2Dfg29_88": {
+  "kind": "gift",
+  "whole": false,
+  "brands": [],
   "products": []
  },
  "IpcYhjWW8vk": {
@@ -740,11 +1003,45 @@
   ],
   "products": []
  },
+ "KfF1tsezRFk": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00046"
+  ],
+  "products": []
+ },
+ "KggP2AbVWzM": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-01226"
+  ],
+  "products": []
+ },
+ "LETLp_XHt4Q": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00015"
+  ],
+  "products": []
+ },
  "LRv8KS3DkAY": {
   "kind": "pr",
   "whole": false,
   "brands": [
    "brand-00052"
+  ],
+  "products": []
+ },
+ "LzDNdotyP2g": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00077",
+   "brand-00143",
+   "brand-00366"
   ],
   "products": []
  },
@@ -760,11 +1057,66 @@
   "brands": [],
   "products": []
  },
+ "NB0uZn8MXkM": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00003",
+   "brand-00011",
+   "brand-00040",
+   "brand-00056",
+   "brand-00072",
+   "brand-00719"
+  ],
+  "products": []
+ },
+ "NDVoJSoRTIw": {
+  "kind": "gift",
+  "whole": false,
+  "brands": [
+   "brand-00004",
+   "brand-00010"
+  ],
+  "products": []
+ },
+ "NP_pjLHshCQ": {
+  "kind": "gift",
+  "whole": false,
+  "brands": [
+   "brand-00198"
+  ],
+  "products": []
+ },
  "O9SDYhP6mkw": {
   "kind": "pr",
   "whole": false,
   "brands": [
    "brand-00034"
+  ],
+  "products": []
+ },
+ "PP8F-usOwTM": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00226",
+   "brand-01212"
+  ],
+  "products": []
+ },
+ "Pqb7v1iV9-I": {
+  "kind": "gift",
+  "whole": false,
+  "brands": [
+   "brand-00274"
+  ],
+  "products": []
+ },
+ "RLfBgnaMgg0": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00366"
   ],
   "products": []
  },
@@ -782,12 +1134,43 @@
   "brands": [],
   "products": []
  },
+ "SYjPQ8o1qJo": {
+  "kind": "pr",
+  "whole": true,
+  "brands": [],
+  "products": []
+ },
+ "SuIq6-QvHQM": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00077",
+   "brand-00130",
+   "brand-00160",
+   "brand-00366"
+  ],
+  "products": []
+ },
+ "Swvcs11Zxts": {
+  "kind": "gift",
+  "whole": false,
+  "brands": [
+   "brand-00124"
+  ],
+  "products": []
+ },
  "T-QVITV8LNc": {
   "kind": "pr",
   "whole": false,
   "brands": [
    "brand-00032"
   ],
+  "products": []
+ },
+ "T55t-bmD7sw": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [],
   "products": []
  },
  "T8dXqwqxXYE": {
@@ -799,6 +1182,12 @@
   "products": []
  },
  "UKKE2LkBH2s": {
+  "kind": "pr",
+  "whole": true,
+  "brands": [],
+  "products": []
+ },
+ "Ut9gXzLMA0I": {
   "kind": "pr",
   "whole": true,
   "brands": [],
@@ -816,6 +1205,22 @@
   ],
   "products": []
  },
+ "W7hyA4LSxa4": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00231"
+  ],
+  "products": []
+ },
+ "WOVfqWo9YSU": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00329"
+  ],
+  "products": []
+ },
  "WtcgXjh4EZE": {
   "kind": "pr",
   "whole": false,
@@ -824,10 +1229,24 @@
   ],
   "products": []
  },
+ "XgZgTOLdLNY": {
+  "kind": "pr",
+  "whole": true,
+  "brands": [],
+  "products": []
+ },
  "Z2g1w7QUboE": {
   "kind": "pr",
   "whole": true,
   "brands": [],
+  "products": []
+ },
+ "_AtuyDv-Uw8": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-01108"
+  ],
   "products": []
  },
  "_lnxnso1tG8": {
@@ -846,10 +1265,41 @@
   ],
   "products": []
  },
+ "aU9ZgWzGW8Y": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-01171"
+  ],
+  "products": []
+ },
  "bBK1aUR9UG8": {
   "kind": "pr",
   "whole": false,
   "brands": [],
+  "products": []
+ },
+ "bOVVitjqpPc": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00154"
+  ],
+  "products": []
+ },
+ "bus208y_O0s": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00010",
+   "brand-00021",
+   "brand-00039",
+   "brand-00073",
+   "brand-00330",
+   "brand-00446",
+   "brand-00994",
+   "brand-01171"
+  ],
   "products": []
  },
  "cPYFGpe9UhU": {
@@ -860,11 +1310,56 @@
   ],
   "products": []
  },
+ "e7qlIxeZR3k": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-01099"
+  ],
+  "products": []
+ },
+ "efxZh64kITs": {
+  "kind": "gift",
+  "whole": false,
+  "brands": [
+   "brand-00011",
+   "brand-00159"
+  ],
+  "products": []
+ },
+ "fHrboQpcRQY": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [],
+  "products": []
+ },
+ "fr4PE191bSc": {
+  "kind": "pr",
+  "whole": true,
+  "brands": [],
+  "products": []
+ },
  "fro5TL5MiFo": {
   "kind": "pr",
   "whole": false,
   "brands": [
    "brand-00010"
+  ],
+  "products": []
+ },
+ "ghEViYZ1eoU": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00302"
+  ],
+  "products": []
+ },
+ "hWAjeUgxmJU": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00366"
   ],
   "products": []
  },
@@ -910,11 +1405,46 @@
   ],
   "products": []
  },
+ "lN2m2nceHdI": {
+  "kind": "gift",
+  "whole": false,
+  "brands": [
+   "brand-00225"
+  ],
+  "products": []
+ },
+ "loIMnHhoFmw": {
+  "kind": "gift",
+  "whole": false,
+  "brands": [
+   "brand-00014",
+   "brand-00274"
+  ],
+  "products": []
+ },
  "m67FBrtBVBo": {
   "kind": "gift",
   "whole": false,
   "brands": [
    "brand-00028"
+  ],
+  "products": []
+ },
+ "mWokIZv_jBc": {
+  "kind": "gift",
+  "whole": false,
+  "brands": [
+   "brand-00203",
+   "brand-00274"
+  ],
+  "products": []
+ },
+ "mhxpSa7K2L4": {
+  "kind": "gift",
+  "whole": false,
+  "brands": [
+   "brand-00018",
+   "brand-00203"
   ],
   "products": []
  },
@@ -926,7 +1456,43 @@
   ],
   "products": []
  },
+ "mvvmGIjumM8": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [],
+  "products": []
+ },
+ "nyLQc10tFYc": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00077",
+   "brand-00154",
+   "brand-01048"
+  ],
+  "products": []
+ },
  "o5XncbcGOhQ": {
+  "kind": "pr",
+  "whole": true,
+  "brands": [],
+  "products": []
+ },
+ "oH6ixUqO2Jg": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [],
+  "products": []
+ },
+ "olDlL1hPhYw": {
+  "kind": "gift",
+  "whole": false,
+  "brands": [
+   "brand-00001"
+  ],
+  "products": []
+ },
+ "on26ZcBC9xM": {
   "kind": "pr",
   "whole": true,
   "brands": [],
@@ -952,10 +1518,29 @@
   ],
   "products": []
  },
+ "r8e5lTYZcOY": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00075",
+   "brand-00162",
+   "brand-00965",
+   "brand-01230"
+  ],
+  "products": []
+ },
  "rPDAcNZjDIE": {
   "kind": "pr",
   "whole": true,
   "brands": [],
+  "products": []
+ },
+ "rhdvOYi8MO0": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00980"
+  ],
   "products": []
  },
  "ruOZX4rufjs": {
@@ -974,11 +1559,35 @@
   ],
   "products": []
  },
+ "sajk4YVutIw": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-01027"
+  ],
+  "products": []
+ },
+ "swVBA9TpnTM": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00289"
+  ],
+  "products": []
+ },
  "t5u389fHJ7U": {
   "kind": "pr",
   "whole": false,
   "brands": [
    "brand-00021"
+  ],
+  "products": []
+ },
+ "tQQU84xW1zo": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00501"
   ],
   "products": []
  },
@@ -994,6 +1603,12 @@
   "brands": [
    "brand-01034"
   ],
+  "products": []
+ },
+ "uPaVJJGc6CU": {
+  "kind": "pr",
+  "whole": true,
+  "brands": [],
   "products": []
  },
  "uhM-0nVUmAM": {
@@ -1022,6 +1637,14 @@
   ],
   "products": []
  },
+ "xfVNkuTN27E": {
+  "kind": "gift",
+  "whole": false,
+  "brands": [
+   "brand-00225"
+  ],
+  "products": []
+ },
  "yIVUXQIfVIA": {
   "kind": "pr",
   "whole": false,
@@ -1036,12 +1659,26 @@
   "brands": [],
   "products": []
  },
+ "yrLz8wN8e9Q": {
+  "kind": "pr",
+  "whole": false,
+  "brands": [
+   "brand-00503"
+  ],
+  "products": []
+ },
  "zDwyWCQLbq4": {
   "kind": "pr",
   "whole": false,
   "brands": [
    "brand-00038"
   ],
+  "products": []
+ },
+ "zUUUgu2i_gk": {
+  "kind": "gift",
+  "whole": false,
+  "brands": [],
   "products": []
  }
 }
