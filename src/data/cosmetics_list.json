@@ -5990,7 +5990,7 @@
     "brand": "メイベリン ニューヨーク",
     "brand_id": "brand-00009",
     "category": "マスカラ",
-    "count": 41,
+    "count": 43,
     "name": "メイベリン スカイハイ",
     "name_id": "name-00001",
     "now_price": 1694,
@@ -91477,5 +91477,30 @@
     "rakuten_image_link": "",
     "rakuten_text_link": "",
     "count": 2
+  },
+  "brand-01456_name-00019": {
+    "brand": "ISNTREE",
+    "brand_id": "brand-01456",
+    "name": "オニオン ニューペア ゲルクリーム プラス",
+    "name_id": "name-00019",
+    "category": "フェイスクリーム",
+    "amazon_link": "",
+    "rakuten_image_link": "",
+    "rakuten_text_link": "",
+    "count": 1
+  },
+  "brand-01456_name-00057": {
+    "brand": "ISNTREE",
+    "brand_id": "brand-01456",
+    "name": "オニオン ニューペア アンプル プラス",
+    "name_id": "name-00057",
+    "category": "美容液",
+    "amazon_link": "",
+    "rakuten_image_link": "",
+    "rakuten_text_link": "",
+    "count": 1,
+    "source": "manual",
+    "added": "2026-10-03",
+    "source_url": "https://prtimes.jp/main/html/rd/p/000000001.000175138.html"
   }
 }
