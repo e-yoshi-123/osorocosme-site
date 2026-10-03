@@ -28,6 +28,8 @@ export interface Video {
   thumbnail: string;
   url: string;
   published_at: string;
+  /** 商品データがサイトで最後に変わった日（YYYY-MM-DD）。公開時に stamp_updated_at.py が付ける。無い動画は published_at を使う */
+  updated_at?: string;
   channel_title: string;
   channel_id: string;
   channel_icon?: string;

@@ -10,7 +10,6 @@ import {
   getVideosUsingCosmetic,
   COSMETIC_INDEX_MIN_VIDEOS,
   getVideosByChannel,
-  sortByPublishedDesc,
   cosmeticSlug,
   withBase,
 } from "../lib/data";
@@ -18,15 +17,24 @@ import {
 export const prerender = true;
 
 export const GET: APIRoute = ({ site }) => {
-  // lastmod は「そのページに関係する最新の動画の投稿日」。更新の目安をクローラーに伝える
+  // lastmod は「そのページに関係する動画の、商品データが最後に変わった日」の最新。更新の目安をクローラーに伝える。
+  // 動画ごとの日は updated_at（公開時に付く）と投稿日の遅いほう。古い動画を後から載せたときも、そのページの日付が進む
   const day = (iso?: string) => (iso ? iso.slice(0, 10) : undefined);
-  const newest = (list: { published_at: string }[]) => day(sortByPublishedDesc(list)[0]?.published_at);
+  const touched = (v: { published_at: string; updated_at?: string }) => {
+    const p = day(v.published_at);
+    return v.updated_at && (!p || v.updated_at > p) ? v.updated_at : p;
+  };
+  const newest = (list: { published_at: string; updated_at?: string }[]) =>
+    list.reduce<string | undefined>((m, v) => {
+      const d = touched(v);
+      return d && (!m || d > m) ? d : m;
+    }, undefined);
   const videos = getVisibleVideos();
   const siteNewest = newest(videos);
   const brandNewest = new Map<string, string>();
   for (const v of videos) {
     for (const c of v.cosmetics || []) {
-      const d = day(v.published_at)!;
+      const d = touched(v)!;
       const bid = canonicalBrandId(c.brand_id);
       if (!brandNewest.has(bid) || brandNewest.get(bid)! < d) brandNewest.set(bid, d);
     }
@@ -47,7 +55,7 @@ export const GET: APIRoute = ({ site }) => {
       return [{ path: `/cosmetics/${cosmeticSlug(k.brand_id, k.name_id)}`, lastmod: newest(using) }];
     }),
     ...getInfluencerRanking().map((i) => ({ path: `/influencer/${i.channel_id}`, lastmod: newest(getVideosByChannel(i.channel_id)) })),
-    ...videos.map((v) => ({ path: `/video/${v.key}`, lastmod: day(v.published_at) })),
+    ...videos.map((v) => ({ path: `/video/${v.key}`, lastmod: touched(v) })),
   ];
   const urls = items
     .map((it) => `  <url><loc>${new URL(withBase(it.path), site).href}</loc>${it.lastmod ? `<lastmod>${it.lastmod}</lastmod>` : ""}</url>`)
