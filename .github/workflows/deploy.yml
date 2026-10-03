@@ -30,8 +30,18 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
+      - name: Fetch previous sitemap
+        # IndexNow で送る URL を決めるため、公開中の sitemap を組み直す前に取っておく（213章）
+        run: curl -sf https://osorocosme.com/sitemap.xml -o "$RUNNER_TEMP/prev-sitemap.xml" || true
       - name: Build
         run: npm run build
+      - name: List changed URLs for IndexNow
+        run: node scripts/indexnow.mjs diff "$RUNNER_TEMP/prev-sitemap.xml" dist/sitemap.xml > indexnow-urls.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: indexnow-urls
+          path: indexnow-urls.txt
+          if-no-files-found: ignore
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
@@ -45,3 +55,22 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  # 公開が済んでから、新しく載ったページと lastmod が変わったページを Bing などへ知らせる（213章）。失敗しても公開には影響しない
+  indexnow:
+    needs: deploy
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          sparse-checkout: scripts
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          name: indexnow-urls
+      - name: Submit to IndexNow
+        run: node scripts/indexnow.mjs send indexnow-urls.txt
