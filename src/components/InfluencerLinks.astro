@@ -20,7 +20,7 @@ const { title, items, unit } = Astro.props;
         {items.map((i) => (
           <a href={withBase(`/influencer/${i.channel_id}`)} class="group min-w-0 rounded-2xl border border-ink/10 p-2.5 md:p-3 flex items-center gap-2.5 md:gap-3 hover:border-ink/40 transition-colors">
             {i.channel_icon ? (
-              <img referrerpolicy="no-referrer" src={i.channel_icon} alt="" data-name={i.channel_title} width="40" height="40" class="w-10 h-10 rounded-full shrink-0" loading="lazy" />
+              <img referrerpolicy="no-referrer" src={i.channel_icon} alt={i.channel_title} data-name={i.channel_title} width="40" height="40" class="w-10 h-10 rounded-full shrink-0" loading="lazy" />
             ) : (
               <div class="w-10 h-10 rounded-full shrink-0 bg-blush" />
             )}

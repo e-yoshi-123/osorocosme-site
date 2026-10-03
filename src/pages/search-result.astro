@@ -265,7 +265,7 @@ import { withBase } from "../lib/data";
 
   function influencerHtml([id, name, icon, subs, videoCount]: InfRow) {
     const img = icon
-      ? `<img referrerpolicy="no-referrer" src="${esc(icon)}" alt="" data-name="${esc(name)}" width="40" height="40" class="w-10 h-10 rounded-full shrink-0 ring-1 ring-ink/5" loading="lazy" />`
+      ? `<img referrerpolicy="no-referrer" src="${esc(icon)}" alt="${esc(name)}" data-name="${esc(name)}" width="40" height="40" class="w-10 h-10 rounded-full shrink-0 ring-1 ring-ink/5" loading="lazy" />`
       : `<span class="w-10 h-10 rounded-full bg-blush shrink-0"></span>`;
     return `<a href="${base}/influencer/${id}/" class="group flex items-center gap-3 py-3 border-b border-ink/10 min-w-0">
       ${img}
@@ -279,7 +279,7 @@ import { withBase } from "../lib/data";
 
   function cosmeticHtml([slug, brand, , name, img, , videoCount]: CosRow) {
     const pic = img
-      ? `<img src="${esc(largerRakutenImage(img))}" alt="" class="w-full h-full object-contain p-[11%] transition-transform duration-[1.2s] ease-out-expo group-hover:scale-[1.06]" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'noimg',textContent:'No image'}))" />`
+      ? `<img src="${esc(largerRakutenImage(img))}" alt="${esc(brand)} ${esc(name)}" class="w-full h-full object-contain p-[11%] transition-transform duration-[1.2s] ease-out-expo group-hover:scale-[1.06]" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'noimg',textContent:'No image'}))" />`
       : `<span class="noimg">No image</span>`;
     return `<a href="${base}/cosmetics/${slug}/" class="min-w-0 block group">
       <div class="product-well relative aspect-square rounded-2xl flex items-center justify-center overflow-hidden">${pic}</div>
@@ -291,7 +291,7 @@ import { withBase } from "../lib/data";
 
   function videoHtml([key, title, , , thumb]: VideoRow, channel: string) {
     return `<a href="${base}/video/${key}/" class="group block min-w-0">
-      <span class="block overflow-hidden rounded-2xl bg-neutral-200"><img src="${esc(thumb)}" alt="" class="w-full aspect-video object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" /></span>
+      <span class="block overflow-hidden rounded-2xl bg-neutral-200"><img src="${esc(thumb)}" alt="${esc(title)}" class="w-full aspect-video object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" /></span>
       <span class="block pt-3">
         <span class="block text-xs text-neutral-500 truncate mb-1">${esc(channel)}</span>
         <span class="text-sm leading-relaxed line-clamp-2 group-hover:text-rose transition-colors">${esc(title)}</span>

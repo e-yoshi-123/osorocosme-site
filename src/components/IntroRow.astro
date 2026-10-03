@@ -18,12 +18,12 @@ const { i } = Astro.props;
   <div class="flex items-center gap-3 min-w-0 lg:contents">
     <span class="shrink-0 num-display text-[15px] lg:text-lg text-neutral-600 whitespace-nowrap">{formatDateDot(i.published_at)}</span>
     <a href={withBase(`/influencer/${i.channel_id}`)} class="flex items-center gap-2.5 min-w-0 text-sm hover:text-rose transition-colors" title={i.channel_title}>
-      {i.channel_icon && <img referrerpolicy="no-referrer" src={i.channel_icon} alt="" data-name={i.channel_title} width="28" height="28" class="w-7 h-7 rounded-full shrink-0" loading="lazy" />}
+      {i.channel_icon && <img referrerpolicy="no-referrer" src={i.channel_icon} alt={i.channel_title} data-name={i.channel_title} width="28" height="28" class="w-7 h-7 rounded-full shrink-0" loading="lazy" />}
       <span class="truncate">{i.channel_title}</span>
     </a>
   </div>
   <a href={withBase(`/video/${i.videoKey}`)} class="min-w-0 flex items-center gap-3 group" title={i.videoTitle}>
-    {i.thumbnail && <span class="w-28 md:w-36 shrink-0 overflow-hidden rounded-xl"><img src={i.thumbnail} alt="" class="w-full aspect-video object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105" loading="lazy" /></span>}
+    {i.thumbnail && <span class="w-28 md:w-36 shrink-0 overflow-hidden rounded-xl"><img src={i.thumbnail} alt={i.videoTitle} class="w-full aspect-video object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105" loading="lazy" /></span>}
     <span class="min-w-0 text-sm leading-relaxed text-neutral-700 group-hover:text-rose transition-colors line-clamp-3 lg:line-clamp-2">{i.pr && <PrBadge class="mr-1.5 align-[1px]" />}{i.videoTitle}</span>
   </a>
 </li>

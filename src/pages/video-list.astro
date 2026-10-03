@@ -56,8 +56,8 @@ const productThumbs = (v: VideoEntry, n: number) => {
   const seen = new Set<string>();
   return (v.cosmetics || [])
     .filter((c) => c.brand && c.name && c.brand_id && c.name_id)
-    .map((c) => productImageSrc(getCosmeticListEntry(c.brand_id, c.name_id), c.rakuten_image_link))
-    .filter((src) => src && !seen.has(src) && seen.add(src))
+    .map((c) => ({ src: productImageSrc(getCosmeticListEntry(c.brand_id, c.name_id), c.rakuten_image_link), alt: `${c.brand} ${c.name}` }))
+    .filter((t) => t.src && !seen.has(t.src) && seen.add(t.src))
     .slice(0, n);
 };
 const [first, ...others] = spotlight;
@@ -86,16 +86,16 @@ const [first, ...others] = spotlight;
             {formatDuration(first.duration) && <span class="absolute bottom-3 left-3 bg-ink/75 backdrop-blur text-paper text-sm tracking-wider px-3 py-1.5 rounded-full">{formatDuration(first.duration)}</span>}
           </div>
           <p class="mt-5 flex items-center gap-2.5 text-sm text-neutral-600">
-            {first.channel_icon && <img referrerpolicy="no-referrer" src={first.channel_icon} alt="" data-name={first.channel_title} width="28" height="28" class="w-7 h-7 rounded-full" />}
+            {first.channel_icon && <img referrerpolicy="no-referrer" src={first.channel_icon} alt={first.channel_title} data-name={first.channel_title} width="28" height="28" class="w-7 h-7 rounded-full" />}
             <span class="truncate">{first.channel_title}</span>
             <span class="ml-auto shrink-0 whitespace-nowrap text-xs text-neutral-500">{formatDateDot(first.published_at)}</span>
           </p>
           <h3 class="mt-2.5 font-serif font-semibold text-[18px] md:text-[21px] leading-[1.5] line-clamp-3 group-hover:text-rose transition-colors">{first.title}</h3>
           {itemCount(first) > 0 && (
             <p class="mt-4 flex items-center gap-2">
-              {productThumbs(first, 6).map((src, i) => (
+              {productThumbs(first, 6).map((t, i) => (
                 <span class:list={["product-well w-12 h-12 md:w-14 md:h-14 rounded-xl overflow-hidden shrink-0 items-center justify-center", i >= 4 ? "hidden sm:flex" : "flex"]}>
-                  <img src={src} alt="" class="w-[86%] h-[86%] object-contain" loading="lazy" onerror="this.parentElement.remove()" />
+                  <img src={t.src} alt={t.alt} class="w-[86%] h-[86%] object-contain" loading="lazy" onerror="this.parentElement.remove()" />
                 </span>
               ))}
               <span class="ml-1 text-xs text-neutral-500 whitespace-nowrap"><b class="num-display text-xl text-ink">{itemCount(first)}</b>品を紹介</span>
@@ -108,7 +108,7 @@ const [first, ...others] = spotlight;
               <a href={withBase(`/video/${v.key}`)} class="group flex items-start gap-3 sm:gap-4 py-4">
                 <span class="num-display text-[22px] leading-none w-5 pt-1 shrink-0 text-ink/45 group-hover:text-rose transition-colors">{i + 2}</span>
                 <span class="relative w-28 sm:w-40 shrink-0 overflow-hidden rounded-xl bg-neutral-200">
-                  <img src={v.thumbnail} alt="" class="w-full aspect-video object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105" loading="lazy" />
+                  <img src={v.thumbnail} alt={v.title} class="w-full aspect-video object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105" loading="lazy" />
                 </span>
                 <span class="min-w-0 flex-1">
                   <span class="block text-xs text-neutral-500 truncate">{v.channel_title}</span>

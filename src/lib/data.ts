@@ -970,16 +970,16 @@ export function getFeature(slug: string) {
   return _featureCache.get(slug)!;
 }
 /** 特集の表紙に並べる画像（ホームの特集カード・特集一覧）。各カテゴリの1位を先に、足りなければ2位以下から（大分類が1つの特集でも並ぶように） */
-export function featureCoverImages(slug: string, n = 3): string[] {
+export function featureCoverImages(slug: string, n = 3): { src: string; alt: string }[] {
   const f = getFeature(slug);
   if (!f) return [];
   const depth = Math.max(0, ...f.groups.map((g) => g.items.length));
   const ordered: FeatureItem[] = [];
   for (let i = 0; i < depth; i++) for (const g of f.groups) if (g.items[i]) ordered.push(g.items[i]);
-  const out: string[] = [];
+  const out: { src: string; alt: string }[] = [];
   for (const it of ordered) {
     const src = productImageSrc(getCosmeticListEntry(it.brand_id, it.name_id));
-    if (src && !out.includes(src)) out.push(src);
+    if (src && !out.some((o) => o.src === src)) out.push({ src, alt: `${it.brand} ${it.name}` });
     if (out.length >= n) break;
   }
   return out;

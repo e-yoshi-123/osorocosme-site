@@ -19,9 +19,9 @@ const list = getPublishedFeatures().map((d) => ({ ...getFeature(d.slug)!, imgs: 
           <a href={withBase(`/feature/${f.def.slug}/`)} class="group flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8 py-7 border-b border-ink/10">
             {f.imgs.length > 0 && (
               <span class="shrink-0 flex items-end justify-center gap-2.5 md:gap-3 h-36 md:h-44 sm:w-60 md:w-72 rounded-[22px] bg-blush/70 group-hover:bg-blush px-4 pt-5 overflow-hidden transition-colors duration-700" aria-hidden="true">
-                {f.imgs.map((src, k) => (
+                {f.imgs.map((img, k) => (
                   <span class:list={["arch bg-white overflow-hidden ring-4 ring-white/60 transition-transform duration-[1.2s] ease-out-expo", k === 1 ? "w-[34%] h-full group-hover:-translate-y-1.5" : "w-[28%] h-[78%] group-hover:-translate-y-1"]}>
-                    <img src={src} alt="" class="w-[80%] h-[62%] object-contain mt-[22%] mx-auto" loading="lazy" />
+                    <img src={img.src} alt={img.alt} class="w-[80%] h-[62%] object-contain mt-[22%] mx-auto" loading="lazy" />
                   </span>
                 ))}
               </span>

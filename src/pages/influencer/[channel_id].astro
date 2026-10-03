@@ -157,7 +157,7 @@ const jsonLd = influencer
                       <p class="num-display text-[22px] md:text-[26px] leading-none">{jstDate(video.published_at).y}<span class="text-rose">.</span>{String(jstDate(video.published_at).m).padStart(2, "0")}<span class="text-rose">.</span>{String(jstDate(video.published_at).d).padStart(2, "0")}</p>
                       <span class="sr-only">{formatDate(video.published_at)}</span>
                       <a href={withBase(`/video/${video.key}`)} class="group mt-4 flex md:block gap-3 items-start">
-                        <span class="block w-28 md:w-full shrink-0 overflow-hidden rounded-xl"><img src={video.thumbnail} alt="" class="w-full aspect-video object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105" loading="lazy" /></span>
+                        <span class="block w-28 md:w-full shrink-0 overflow-hidden rounded-xl"><img src={video.thumbnail} alt={video.title} class="w-full aspect-video object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105" loading="lazy" /></span>
                         <span class="md:mt-3 text-xs leading-relaxed text-neutral-600 group-hover:text-rose transition-colors line-clamp-3">{video.title}</span>
                       </a>
                     </div>

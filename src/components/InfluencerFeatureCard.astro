@@ -23,7 +23,7 @@ const href = withBase(`/influencer/${inf.channel_id}`);
   <!-- 見出し：順位・アイコン・名前・実績 -->
   <div class="flex items-start gap-3">
     <span class:list={["shrink-0 num-display leading-none w-7", large ? "text-[30px]" : "text-[22px]", rank <= 3 ? "text-rose" : "text-neutral-400"]}>{rank}</span>
-    {inf.channel_icon && <img referrerpolicy="no-referrer" src={inf.channel_icon} alt="" data-name={inf.channel_title} width={large ? 56 : 44} height={large ? 56 : 44} class:list={["rounded-full shrink-0 ring-1 ring-ink/5", large ? "w-14 h-14" : "w-11 h-11"]} loading="lazy" />}
+    {inf.channel_icon && <img referrerpolicy="no-referrer" src={inf.channel_icon} alt={inf.channel_title} data-name={inf.channel_title} width={large ? 56 : 44} height={large ? 56 : 44} class:list={["rounded-full shrink-0 ring-1 ring-ink/5", large ? "w-14 h-14" : "w-11 h-11"]} loading="lazy" />}
     <div class="min-w-0 flex-1">
       <a href={href} class:list={["font-semibold leading-snug line-clamp-2 mb-0.5 hover:text-rose transition-colors", large ? "text-lg" : "text-base"]}>{inf.channel_title}</a>
       <p class="text-xs text-neutral-500 flex flex-wrap gap-x-2">
@@ -55,7 +55,7 @@ const href = withBase(`/influencer/${inf.channel_id}`);
           <div class="grid grid-cols-3 gap-2">
             {h.latestVideos.map((v) => (
               <a href={withBase(`/video/${v.key}`)} class="min-w-0 block group">
-                <img src={v.thumbnail} alt="" class="w-full aspect-video object-cover rounded-lg" loading="lazy" />
+                <img src={v.thumbnail} alt={v.title} class="w-full aspect-video object-cover rounded-lg" loading="lazy" />
                 <p class="mt-1 text-xs leading-snug line-clamp-2 group-hover:text-rose">{v.title}</p>
                 <p class="mt-0.5 num-display font-normal text-xs text-neutral-400 whitespace-nowrap">{formatDateDot(v.published_at)}</p>
               </a>
@@ -64,7 +64,7 @@ const href = withBase(`/influencer/${inf.channel_id}`);
         ) : (
           h.latestVideos.map((v) => (
             <a href={withBase(`/video/${v.key}`)} class="flex items-center gap-2 group">
-              <img src={v.thumbnail} alt="" class="w-24 aspect-video object-cover rounded-lg shrink-0" loading="lazy" />
+              <img src={v.thumbnail} alt={v.title} class="w-24 aspect-video object-cover rounded-lg shrink-0" loading="lazy" />
               <span class="min-w-0">
                 <span class="text-xs leading-snug line-clamp-3 group-hover:text-rose">{v.title}</span>
                 <span class="block mt-0.5 num-display font-normal text-xs text-neutral-400 whitespace-nowrap">{formatDateDot(v.published_at)}</span>
@@ -89,7 +89,7 @@ const href = withBase(`/influencer/${inf.channel_id}`);
               <div class="product-well aspect-square rounded-xl flex items-center justify-center overflow-hidden">
                 <img
                   src={c.imageSrc}
-                  alt=""
+                  alt={`${c.brand} ${c.name}`}
                   class="w-[86%] h-[86%] object-contain"
                   loading="lazy"
                   onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'noimg',textContent:'No image'}))"

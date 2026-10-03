@@ -10,12 +10,12 @@ const allTags = Array.from(pages.keys());
 // 各カテゴリの上位の画像を3枚（カテゴリの雰囲気が分かるように）。画像の無い商品は飛ばし、次の順位の画像で埋める
 // （「つけまつげ」で3枠のうち2枠が空の白い枠になっていた。195章）
 // 商品が3品未満でも枠の大きさが変わらないよう、常に3枠分を返す（足りない分は空）
-function topImages(tag: string): string[] {
+function topImages(tag: string): { src: string; alt: string }[] {
   const imgs = (pages.get(tag)?.list || [])
-    .map((r) => productImageSrc(getCosmeticListEntry(r.brand_id, r.name_id), r.rakuten_image_link))
-    .filter(Boolean)
+    .map((r) => ({ src: productImageSrc(getCosmeticListEntry(r.brand_id, r.name_id), r.rakuten_image_link), alt: `${r.brand} ${r.name}` }))
+    .filter((t) => t.src)
     .slice(0, 3);
-  while (imgs.length < 3) imgs.push("");
+  while (imgs.length < 3) imgs.push({ src: "", alt: "" });
   return imgs;
 }
 ---
@@ -38,9 +38,9 @@ function topImages(tag: string): string[] {
           {g.items.map((it) => {
             const imgs = (
               <div class="flex gap-1 sm:gap-1.5 w-[6.5rem] sm:w-48 shrink-0">
-                {topImages(it.name).map((src) => (
+                {topImages(it.name).map(({ src, alt }) => (
                   <div class="product-well flex-1 aspect-square rounded-lg overflow-hidden flex items-center justify-center">
-                    {src ? <img src={src} alt="" class="w-[86%] h-[86%] object-contain" loading="lazy" onerror="this.style.visibility='hidden'" /> : null}
+                    {src ? <img src={src} alt={alt} class="w-[86%] h-[86%] object-contain" loading="lazy" onerror="this.style.visibility='hidden'" /> : null}
                   </div>
                 ))}
               </div>
@@ -80,9 +80,9 @@ function topImages(tag: string): string[] {
                         {it.children.map((c) => (
                           <a href={categoryUrl(c.name)} class="group min-w-0 block rounded-2xl border border-ink/10 hover:border-ink/40 transition-colors p-3">
                             <div class="flex gap-1 mb-1.5">
-                              {topImages(c.name).map((src) => (
+                              {topImages(c.name).map(({ src, alt }) => (
                                 <div class="product-well flex-1 aspect-square rounded-lg overflow-hidden flex items-center justify-center">
-                                  {src ? <img src={src} alt="" class="w-[86%] h-[86%] object-contain" loading="lazy" onerror="this.style.visibility='hidden'" /> : null}
+                                  {src ? <img src={src} alt={alt} class="w-[86%] h-[86%] object-contain" loading="lazy" onerror="this.style.visibility='hidden'" /> : null}
                                 </div>
                               ))}
                             </div>

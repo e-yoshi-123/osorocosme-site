@@ -130,7 +130,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
           <HeroRings faces={ringFaces} items={ringItems} />
           {heroItems[0] && (
             <a href={withBase(`/cosmetics/${cosmeticSlug(heroItems[0].r.brand_id, heroItems[0].r.name_id)}`)} class="group reveal mx-auto -mt-4 flex items-center gap-4 max-w-sm bg-paper/90 backdrop-blur rounded-full pl-2 pr-5 py-2 border border-ink/10 shadow-[0_20px_50px_-24px_rgba(29,21,23,0.35)]" style="--d:600ms">
-              <span class="w-12 h-12 rounded-full overflow-hidden bg-white shrink-0 ring-1 ring-ink/5"><img src={heroItems[0].img} alt="" class="w-full h-full object-contain p-1.5" /></span>
+              <span class="w-12 h-12 rounded-full overflow-hidden bg-white shrink-0 ring-1 ring-ink/5"><img src={heroItems[0].img} alt={`${heroItems[0].r.brand} ${heroItems[0].r.name}`} class="w-full h-full object-contain p-1.5" /></span>
               <span class="min-w-0 flex-1">
                 <span class="block label-caps text-rose">Now trending No.1</span>
                 <span class="block text-sm leading-snug truncate group-hover:text-rose transition-colors">{heroItems[0].r.brand} {heroItems[0].r.name}</span>
@@ -167,7 +167,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
                   <li>
                     <a href={withBase(`/brand/${b.brand_id}`)} tabindex={k === 1 ? -1 : undefined} class="group flex items-center gap-3 md:gap-3.5 rounded-full bg-panel pl-1.5 pr-5 md:pr-6 py-1.5 shadow-[0_0_0_1px_rgb(29_21_23/0.07)] transition-shadow duration-500 hover:shadow-[0_0_0_1px_rgb(29_21_23/0.3)]">
                       <span class="w-11 h-11 md:w-[52px] md:h-[52px] rounded-full overflow-hidden bg-white shrink-0 flex items-center justify-center ring-1 ring-ink/5">
-                        {b.img ? <img src={b.img} alt="" class="w-[82%] h-[82%] object-contain transition-transform duration-700 ease-out-expo group-hover:scale-110" loading="lazy" onerror="this.remove()" /> : null}
+                        {b.img ? <img src={b.img} alt={b.name} class="w-[82%] h-[82%] object-contain transition-transform duration-700 ease-out-expo group-hover:scale-110" loading="lazy" onerror="this.remove()" /> : null}
                       </span>
                       <span class:list={["text-[17px] md:text-[20px] leading-none whitespace-nowrap group-hover:text-rose transition-colors", isLatin(b.name) ? "font-display font-semibold" : "font-serif font-semibold"]}>{b.name}</span>
                       <span class="num-display text-xs text-neutral-500 whitespace-nowrap">{b.videoCount}<span class="font-sans font-normal ml-0.5">本</span></span>
@@ -214,7 +214,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
                 <a href={withBase(`/cosmetics/${cosmeticSlug(tile.brand_id, tile.name_id)}`)} class="group flex items-center gap-3 sm:gap-4 py-3">
                   <span class="num-display text-[22px] w-5 sm:w-6 text-ink/45 group-hover:text-rose transition-colors">{rank}</span>
                   <span class="product-well w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden shrink-0">
-                    {tile.imageSrc && <img src={tile.imageSrc} alt="" class="w-full h-full object-contain p-1.5" loading="lazy" />}
+                    {tile.imageSrc && <img src={tile.imageSrc} alt={`${tile.brand} ${tile.name}`} class="w-full h-full object-contain p-1.5" loading="lazy" />}
                   </span>
                   <span class="min-w-0 flex-1">
                     <span class="block text-xs tracking-[0.12em] text-neutral-500 truncate">{tile.brand}</span>
@@ -261,9 +261,9 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
         {featureCards.map((c, i) => (
           <a href={withBase(`/feature/${c.def.slug}/`)} class="reveal group block rounded-[28px] bg-blush/70 hover:bg-blush p-6 md:p-10 transition-colors duration-700" style={`--d:${(i % 2) * 120}ms`}>
             <div class="flex items-end justify-center gap-3 md:gap-5 h-44 md:h-56">
-              {c.imgs.map((src, k) => (
+              {c.imgs.map((img, k) => (
                 <div class:list={["arch bg-white overflow-hidden ring-[5px] ring-white/60 transition-transform duration-[1.2s] ease-out-expo", k === 1 ? "w-[34%] h-full group-hover:-translate-y-2" : "w-[28%] h-[78%] group-hover:-translate-y-1"]}>
-                  <img src={src} alt="" class="w-[80%] h-[62%] object-contain mt-[22%] mx-auto" loading="lazy" />
+                  <img src={img.src} alt={img.alt} class="w-[80%] h-[62%] object-contain mt-[22%] mx-auto" loading="lazy" />
                 </div>
               ))}
             </div>
@@ -291,7 +291,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
             <span class="relative block w-[72%] max-w-[148px] mx-auto aspect-square">
               <span class="absolute inset-0 rounded-full border border-ink/15 scale-[1.12] transition-all duration-700 ease-out-expo group-hover:scale-[1.2] group-hover:border-rose" aria-hidden="true"></span>
               {inf.channel_icon ? (
-                <img referrerpolicy="no-referrer" src={inf.channel_icon.replace(/=s\d+-/, "=s240-")} alt="" data-name={inf.channel_title} class="w-full h-full rounded-full object-cover" loading="lazy" />
+                <img referrerpolicy="no-referrer" src={inf.channel_icon.replace(/=s\d+-/, "=s240-")} alt={inf.channel_title} data-name={inf.channel_title} class="w-full h-full rounded-full object-cover" loading="lazy" />
               ) : (
                 <span class="block w-full h-full rounded-full bg-blush" />
               )}

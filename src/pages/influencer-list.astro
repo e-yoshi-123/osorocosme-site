@@ -42,7 +42,7 @@ const rest = influencers.slice(MEDIUM_UNTIL);
           <li class="min-w-0 border-b border-ink/10">
             <a href={withBase(`/influencer/${inf.channel_id}`)} class="group flex items-center gap-3 py-3">
               <span class="w-8 shrink-0 text-xs text-neutral-400 tabular-nums">{LARGE + medium.length + i + 1}</span>
-              {inf.channel_icon ? <img referrerpolicy="no-referrer" src={inf.channel_icon} alt="" data-name={inf.channel_title} width="40" height="40" class="w-10 h-10 rounded-full shrink-0 ring-1 ring-ink/5" loading="lazy" /> : <span class="w-10 h-10 rounded-full bg-blush shrink-0" />}
+              {inf.channel_icon ? <img referrerpolicy="no-referrer" src={inf.channel_icon} alt={inf.channel_title} data-name={inf.channel_title} width="40" height="40" class="w-10 h-10 rounded-full shrink-0 ring-1 ring-ink/5" loading="lazy" /> : <span class="w-10 h-10 rounded-full bg-blush shrink-0" />}
               <span class="min-w-0 flex-1">
                 <span class="block text-sm font-medium truncate group-hover:text-rose transition-colors">{inf.channel_title}</span>
                 <span class="block text-xs text-neutral-500 truncate">登録者 {formatCount(inf.subscriber_count)}人・動画 {inf.videoCount}本・コスメ {inf.cosmeticCount}品</span>
