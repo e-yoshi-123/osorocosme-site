@@ -823,47 +823,10 @@ export const RANKING_CATEGORY_GROUPS: { group: string; tags: string[] }[] = [
   },
 ];
 
-/** 動画ページの「紹介されたコスメ」を、メイクで使う順（スキンケア→ベース→眉→目→頬→唇→道具→ヘア・ボディ…）に並べるための順番（213章）。
- * ここに無いカテゴリは、RANKING_CATEGORY_GROUPS の順でこの後ろに続く。どこにも無いカテゴリ・カテゴリ不明は最後。 */
-const MAKEUP_ORDER_HEAD = [
-  // スキンケア：落とす→洗う→整える→保湿→守る
-  "オイルクレンジング", "クレンジングバーム", "クレンジングジェル", "クレンジングクリーム", "ミルククレンジング", "リキッドクレンジング", "その他クレンジング", "ポイントメイクリムーバー",
-  "洗顔フォーム", "泡洗顔", "洗顔ジェル", "洗顔石鹸", "洗顔パウダー", "その他洗顔料", "ゴマージュ・ピーリング", "洗い流すパック・マスク",
-  "ブースター・導入液", "トナーパッド", "化粧水", "ミスト状化粧水", "美容液", "シートマスク・パック", "アイケア・アイクリーム",
-  "乳液", "乳液・クリーム", "フェイスクリーム", "オールインワン化粧品", "フェイスオイル・バーム", "ネック・デコルテケア", "日焼け止め・UVケア(顔用)",
-  "スキンケアキット", "トライアル・トラベルキット", "スキンケア美容家電", "美容家電", "その他スキンケア", "その他スキンケアグッズ",
-  // ベースメイク
-  "化粧下地", "BB・CCクリーム", "リキッドファンデーション", "クリーム・ジェルファンデーション", "クッションファンデ", "パウダーファンデーション", "ファンデーション", "その他ファンデーション",
-  "コンシーラー", "ルースパウダー", "プレストパウダー",
-  // 眉・目
-  "アイブロウペンシル", "パウダーアイブロウ", "眉マスカラ", "その他アイブロウ", "アイブロウ",
-  "アイシャドウベース", "パウダーアイシャドウ", "ジェル・クリームアイシャドウ", "アイシャドウ",
-  "ペンシルアイライナー", "ジェルアイライナー", "リキッドアイライナー", "その他アイライナー",
-  "二重まぶた用グッズ", "ビューラー", "マスカラ下地・トップコート", "マスカラ", "つけまつげ", "まつげ美容液", "カラコン",
-  // 頬・立体感・唇
-  "パウダーチーク", "ジェル・クリームチーク", "シェーディング", "ハイライト",
-  "リップケア・リップクリーム", "リップライナー", "口紅", "リップグロス",
-  // 仕上げ・道具
-  "メイクアップキット・パレット", "あぶらとり紙", "メイクブラシ", "パフ・スポンジ", "コットン", "化粧ポーチ", "その他メイクグッズ", "その他キットセット", "その他グッズ",
-];
-const MAKEUP_ORDER: Map<string, number> = (() => {
-  const all = [...MAKEUP_ORDER_HEAD];
-  for (const g of RANKING_CATEGORY_GROUPS) for (const t of g.tags) if (!all.includes(t)) all.push(t);
-  return new Map(all.map((t, i) => [t, i]));
-})();
-/** 動画の中の商品のカテゴリ（補正後の related_tags の先頭。無ければ商品マスタのカテゴリ） */
+/** 動画の中の商品のカテゴリ（補正後の related_tags の先頭。無ければ商品マスタのカテゴリ）。動画ページ・インフルエンサーのページのカードに出す（213章） */
 export function cosmeticCategory(c: { brand_id: string; name_id: string; related_tags?: string[] }): string | undefined {
   return c.related_tags?.[0] || getCosmeticListEntry(c.brand_id, c.name_id)?.category || undefined;
 }
-/** 商品をメイクで使う順に並べる（同じカテゴリの中は元の順のまま） */
-export function sortByMakeupOrder<T extends { brand_id: string; name_id: string; related_tags?: string[] }>(list: T[]): T[] {
-  const key = (c: T) => {
-    const cat = cosmeticCategory(c);
-    return cat !== undefined && MAKEUP_ORDER.has(cat) ? MAKEUP_ORDER.get(cat)! : MAKEUP_ORDER.size;
-  };
-  return list.map((c, i) => ({ c, i, k: key(c) })).sort((a, b) => a.k - b.k || a.i - b.i).map((x) => x.c);
-}
-
 /** タグ一覧を RANKING_CATEGORY_GROUPS の大分類・表示順に並べ直す。定義に無いタグは「その他」へ。 */
 export function groupTagsByCategory(tags: Iterable<string>): { group: string; tags: string[] }[] {
   const present = new Set(tags);

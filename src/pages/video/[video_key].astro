@@ -22,7 +22,6 @@ import {
   getPrInfo,
   isPrMention,
   ytThumbLarge,
-  sortByMakeupOrder,
   cosmeticCategory,
   getBrandName,
 } from "../../lib/data";
@@ -33,8 +32,7 @@ export function getStaticPaths() {
 
 const { video_key } = Astro.params;
 const video = getVideoByKey(video_key!);
-// メイクで使う順（スキンケア→下地→ファンデ→…→リップ→道具）に並べる。同じカテゴリの中は動画で出てきた順（213章）
-const validCosmetics = sortByMakeupOrder((video?.cosmetics || []).filter((c) => c.brand && c.name));
+const validCosmetics = (video?.cosmetics || []).filter((c) => c.brand && c.name);
 const cosmeticNames = validCosmetics.slice(0, 5).map((c) => `${c.brand} ${c.name}`).join("、");
 const description = video
   ? `${video.channel_title}が${formatJaDate(video.published_at)}に投稿した動画。紹介コスメ${validCosmetics.length}品` + (cosmeticNames ? `（${cosmeticNames}${validCosmetics.length > 5 ? "ほか" : ""}）` : "") + "。"
@@ -160,7 +158,7 @@ const jsonLd = video
 
         {validCosmetics.length > 0 && (
           <section class="panel mt-8 md:mt-10">
-            <SectionHead num="01" en="In this video" title="紹介されたコスメ" lead={`この動画で紹介された${validCosmetics.length}品を、スキンケア・ベースメイク・アイメイク・リップの順に、使う順番に並べています。`} />
+            <SectionHead num="01" en="In this video" title="紹介されたコスメ" lead={`この動画で紹介された${validCosmetics.length}品です。`} />
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-8">
               {validCosmetics.map((c) => (
                 <CosmeticCard brand_id={c.brand_id} brand={c.brand} name_id={c.name_id} name={c.name} rakutenImageHtml={c.rakuten_image_link} category={cosmeticCategory(c)} caption={isPr(c) ? "PR・提供（ランキングに数えていません）" : undefined} />
