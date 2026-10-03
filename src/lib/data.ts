@@ -6,6 +6,7 @@ import brandReadings from "../data/brand-readings.json";
 import categoryOverridesData from "../data/category-overrides.json";
 import brandEquivalentsData from "../data/brand_equivalents.json";
 import prVideosData from "../data/pr_videos.json";
+import shortsData from "../data/shorts.json";
 
 export interface Cosmetic {
   brand_id: string;
@@ -180,6 +181,12 @@ export function getAliasRedirects(): { brands: { from: string; to: string }[]; p
  * ここでは常に厳密判定（boolean true のみ有効）に統一する。 */
 export function isVisible(v: Video): boolean {
   return v.check_status === true && v.delete_flg !== true;
+}
+
+/** YouTubeのショートか（公開時に backend/scripts/detect_shorts.py が /shorts/ のURLで判定。3分を超える動画は調べないので false。213章） */
+const SHORTS = shortsData as Record<string, boolean>;
+export function isShort(v: Video): boolean {
+  return SHORTS[v.video_id] === true;
 }
 
 /** PR・提供の動画（backend/scripts/pr_check/classify.py が概要欄・YouTubeの有料プロモーションの申告から判定。197章）。

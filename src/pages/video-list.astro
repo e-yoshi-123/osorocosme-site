@@ -14,6 +14,7 @@ import {
   withBase,
   getCosmeticListEntry,
   productImageSrc,
+  isShort,
   type VideoEntry,
 } from "../lib/data";
 
@@ -21,6 +22,8 @@ import {
 // ①いま見られている動画 ②テーマでの絞り込み ③月ごとの見出し ④紹介されたコスメの画像（VideoCard）を足す（196章）
 const all = sortByPublishedDesc(getVisibleVideos());
 const PAGE_SIZE = 48;
+// ショートは再生回数が桁違いに多くなりやすいので、種類で分けて並べられるようにする（213章）
+const shortCount = all.filter(isShort).length;
 
 const itemCount = (v: VideoEntry) => (v.cosmetics || []).filter((c) => c.brand && c.name && c.brand_id && c.name_id).length;
 const monthOf = (v: VideoEntry) => {
@@ -144,6 +147,12 @@ const [first, ...others] = spotlight;
           <button type="button" class="sort-btn chip" data-sort="views">再生回数順</button>
           <button type="button" class="sort-btn chip" data-sort="items">紹介コスメの多い順</button>
         </div>
+        <span class="label-caps text-neutral-500 shrink-0 sm:ml-3">Type</span>
+        <div class="flex flex-wrap gap-1.5" role="group" aria-label="動画の種類">
+          <button type="button" class="kind-btn chip is-active" data-kind="">すべて</button>
+          <button type="button" class="kind-btn chip" data-kind="long">動画 <span class="tab-n">{formatCount(all.length - shortCount)}</span></button>
+          <button type="button" class="kind-btn chip" data-kind="short">ショート <span class="tab-n">{formatCount(shortCount)}</span></button>
+        </div>
         <p id="result-count" class="ml-auto text-xs text-neutral-500 whitespace-nowrap" aria-live="polite"></p>
       </div>
     </div>
@@ -155,6 +164,7 @@ const [first, ...others] = spotlight;
             class:list={["gallery-item", { hidden: i >= PAGE_SIZE }]}
             data-published={r.v.published_at}
             data-views={toNumber(r.v.view_count)}
+            data-short={isShort(r.v) ? "1" : "0"}
             data-items={r.items}
             data-month={r.month}
             data-themes={r.themes.join(" ")}
@@ -180,6 +190,7 @@ const [first, ...others] = spotlight;
     el,
     t: new Date(el.dataset.published).getTime(),
     views: Number(el.dataset.views),
+    short: el.dataset.short === "1",
     n: Number(el.dataset.items),
     month: el.dataset.month,
     themes: el.dataset.themes ? el.dataset.themes.split(" ") : [],
@@ -187,11 +198,12 @@ const [first, ...others] = spotlight;
   const params = new URLSearchParams(location.search);
   let theme = params.get("theme-key") || "";
   let sort = "newest";
+  let kind = "";
   let shown = PAGE_SIZE;
 
   function render() {
     gallery.querySelectorAll(".month-head").forEach((h) => h.remove());
-    const list = items.filter((x) => !theme || x.themes.includes(theme));
+    const list = items.filter((x) => (!theme || x.themes.includes(theme)) && (!kind || x.short === (kind === "short")));
     list.sort((a, b) => (sort === "views" ? b.views - a.views : sort === "items" ? b.n - a.n || b.t - a.t : b.t - a.t));
     items.forEach((x) => x.el.classList.add("hidden"));
     const perMonth = {};
@@ -217,6 +229,7 @@ const [first, ...others] = spotlight;
     countEl.textContent = `${list.length.toLocaleString("ja-JP")}本`;
     document.querySelectorAll(".theme-btn").forEach((b) => b.classList.toggle("is-active", b.dataset.themeKey === theme));
     document.querySelectorAll(".sort-btn").forEach((b) => b.classList.toggle("is-active", b.dataset.sort === sort));
+    document.querySelectorAll(".kind-btn").forEach((b) => b.classList.toggle("is-active", b.dataset.kind === kind));
   }
 
   document.querySelectorAll(".theme-btn").forEach((b) =>
@@ -229,6 +242,13 @@ const [first, ...others] = spotlight;
   document.querySelectorAll(".sort-btn").forEach((b) =>
     b.addEventListener("click", () => {
       sort = b.dataset.sort;
+      shown = PAGE_SIZE;
+      render();
+    })
+  );
+  document.querySelectorAll(".kind-btn").forEach((b) =>
+    b.addEventListener("click", () => {
+      kind = b.dataset.kind;
       shown = PAGE_SIZE;
       render();
     })
