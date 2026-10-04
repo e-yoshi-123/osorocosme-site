@@ -84,9 +84,9 @@ const brands = brandsData as unknown as Record<string, string>;
 const cosmeticsList = cosmeticsListData as unknown as Record<string, CosmeticListEntry>;
 
 /** 商品のカテゴリの補正（src/data/category-overrides.json）。
- * 商品マスタ（@cosme由来）のカテゴリが実際の種類とずれている商品（例: クッションファンデが化粧下地、アイ用の下地が化粧下地）を、
+ * 商品マスタのカテゴリが実際の種類とずれている商品（例: クッションファンデが化粧下地、アイ用の下地が化粧下地）を、
  * ランキング・カテゴリ表示の全体に一貫して反映するため、読み込み時に動画側のタグと商品マスタのカテゴリを書き換える。
- * マスタ側は週次のスクレイピングで上書きされうるため、サイト側で補正する。キー: "brand_id_name_id"。 */
+ * マスタ側は更新で上書きされうるため、サイト側で補正する。キー: "brand_id_name_id"。 */
 {
   const overrides = categoryOverridesData as unknown as Record<string, { category: string }>;
   for (const v of Object.values(videos)) {
@@ -101,7 +101,7 @@ const cosmeticsList = cosmeticsListData as unknown as Record<string, CosmeticLis
   }
 }
 
-/** 二重登録ブランド（同じブランドが@cosme上で別ページになり、別のbrand_idで登録されているもの。brand_equivalents.json）の統合。
+/** 二重登録ブランド（同じブランドが別のbrand_idで二重に登録されているもの。brand_equivalents.json）の統合。
  * - ブランドページ・一覧・集計は、グループ内で最も小さいbrand_id（＝先に登録された方）に1本化する（canonicalBrandId）。
  * - 商品は、統合先ブランドに同じ名前の商品があれば、その商品に寄せる（動画側の参照を書き換え、紹介数を合算する）。
  *   無いものは商品のIDをそのまま残し（URLを変えない）、表示上のブランド名だけ統合先に揃える。
@@ -677,7 +677,7 @@ export interface CosmeticRanking {
  * 紹介動画の合計再生回数を1倍で加える。チャンネル数を入れることで、同一インフルエンサーが
  * 何本も紹介しただけの商品より、複数の人に支持されている商品が上位に来る。 */
 let _rankingsCache: CosmeticRanking[] | null = null;
-/** ランキングで、細かく分かれたカテゴリを主なカテゴリに寄せる（@cosmeが新しく作った細かいカテゴリ。120章）。
+/** ランキングで、細かく分かれたカテゴリを主なカテゴリに寄せる（後から増えた細かいカテゴリ。120章）。
  * 商品ページの「カテゴリ」表示は元のまま。ランキング・一覧・特集の分類だけに使う。 */
 export const RANKING_TAG_ALIAS: Record<string, string> = {
   リキッドルージュ: "口紅",
@@ -791,7 +791,7 @@ export const RANKING_CATEGORY_GROUPS: { group: string; tags: string[] }[] = [
       "アイケア・アイクリーム", "フェイスオイル・バーム", "日焼け止め・UVケア(顔用)",
       "洗顔ジェル", "泡洗顔", "洗顔フォーム", "洗顔石鹸", "洗顔パウダー", "その他洗顔料", "トナーパッド",
       "ハンドクリーム・ケア", "ハンドソープ・ジェル", "スキンケア美容家電",
-      // 147章：スクレイパーの除外を外して入るカテゴリ
+      // 147章：後から商品マスタに入ったカテゴリ
       "洗い流すパック・マスク", "スキンケアキット", "トライアル・トラベルキット", "ネック・デコルテケア",
       "あぶらとり紙", "美容家電", "その他スキンケア", "その他スキンケアグッズ",
     ],

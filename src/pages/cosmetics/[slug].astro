@@ -77,7 +77,7 @@ const description = entry
   : undefined;
 const imageSrc = extractImageSrc(entry?.rakuten_image_link) || (yahooFallback ? entry?.yahoo_image_url : undefined);
 // Googleの「商品スニペット」は、Productに offers / review / aggregateRating のいずれかが無いと重大な問題として扱われる（Search Consoleの指摘）。
-// このサイトには、根拠のある口コミ・評価は無い（@cosmeの評価点は規約上出さない、YouTubeの紹介は口コミではない）ので、偽って付けない。
+// このサイトには、根拠のある口コミ・評価は無い（YouTubeの紹介は口コミではない）ので、偽って付けない。
 // 同様に、offers.availability（在庫）・hasMerchantReturnPolicy（返品）・shippingDetails（配送）も、
 // 実際の販売者は楽天市場の各ショップでありこのサイトは把握していないため、不正確な値を出さず付けない（いずれもGoogle側も任意項目）。
 // 価格をページに出している商品（＝buyable かつ参考価格あり。ページの表示と一致させる）にだけ offers を付け、それ以外は Product を出さない。
