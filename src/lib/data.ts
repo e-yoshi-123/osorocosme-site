@@ -163,6 +163,25 @@ const productAlias: Record<string, string> = {}; // "統合前brand_id_name_id" 
   }
 }
 
+/** 否定的な紹介（「リピなし」「微妙」「私には合わない」など）。紹介の言葉がすべて否定的な紹介は、
+ * ランキング・最近話題・特集・よく紹介するの数に入れない（紹介の一覧には残す。217章）。
+ * 「〜には向かない」のような注意書き、「似合わない人がいない」、良い評価と並ぶ賛否混在の紹介は否定に数えない。 */
+const NEGATIVE_RE =
+  /リピなし|リピしない|リピート(は)?しない|リピ(は)?ない|二度と|合わなかった(?!方|人)|(?<!似)合わない(?!方|人|場合)|私には似合わない|微妙|イマイチ|いまいち|おすすめ(は)?しない|(?<!には)おすすめできない|オススメしない|お勧めしない|がっかり|期待外れ|期待はずれ|好きじゃない|好きではない|(?<!には)向いていない|(?<!には)向かない|悪化|かぶれ|使わない方がいい|買わなくていい|残念/;
+const POSITIVE_RE =
+  /好き|気に入|おすすめ(?!しない|できない|は)|オススメ(?!しない)|愛用|リピ(買|して|中|確定|\d|ート中|ートして)|最高|優秀|手放せない|一軍|スタメン|良い|良かった|いい(?!か悪いか)|可愛|かわいい|使いやすい|感動|綺麗|きれい|欠かせない|素敵|メリット|検討|また使いたい|似合わない人がいない|似合う似合わない|だが|けれど|ものの|仕上がる|ずっとこれ/;
+const negativeMentions = new Set<string>(); // "動画キー|brand_id_name_id"
+{
+  for (const [key, v] of Object.entries(videos)) {
+    for (const c of v.cosmetics || []) {
+      const ms = (c.mentions || []).map(String);
+      if (ms.length && ms.every((m) => NEGATIVE_RE.test(m) && !POSITIVE_RE.test(m))) {
+        negativeMentions.add(`${key}|${c.brand_id}_${c.name_id}`);
+      }
+    }
+  }
+}
+
 /** 統合前のURLから統合先への転送先。ブランドページと、統合先の商品に寄せた商品のページ。 */
 export function getAliasRedirects(): { brands: { from: string; to: string }[]; products: { from: string; to: string }[] } {
   return {
@@ -221,6 +240,10 @@ export function isPrMention(videoKey: string, brand_id: string, name_id: string)
   const p = getPrInfo(videoKey);
   if (!p) return false;
   return p.whole || p.brands.includes(brand_id) || p.products.includes(`${brand_id}_${name_id}`);
+}
+/** ランキング・最近話題・特集・よく紹介するの数に入れない紹介か（PR・提供、否定的な紹介。197・217章） */
+export function isUncountedMention(videoKey: string, brand_id: string, name_id: string): boolean {
+  return isPrMention(videoKey, brand_id, name_id) || negativeMentions.has(`${videoKey}|${brand_id}_${name_id}`);
 }
 
 export function getAllVideoEntries(): VideoEntry[] {
@@ -553,7 +576,7 @@ export function getInfluencerHighlights(channel_id: string, videoLimit = 3, cosm
     const seen = new Set<string>();
     for (const c of v.cosmetics || []) {
       if (!c.brand_id || !c.name_id || !c.brand || !c.name) continue;
-      if (isPrMention(v.key, c.brand_id, c.name_id)) continue; // PR・提供の紹介は「よく紹介する」に数えない（197章）
+      if (isUncountedMention(v.key, c.brand_id, c.name_id)) continue; // PR・提供・否定的な紹介は「よく紹介する」に数えない（197・217章）
       const key = `${c.brand_id}_${c.name_id}`;
       if (seen.has(key)) continue; // 同じ動画内の重複は1本と数える
       seen.add(key);
@@ -708,7 +731,7 @@ export function getCosmeticRankings(): CosmeticRanking[] {
       // 商品ページの「紹介動画187本」とランキングの「177本」のように数字が食い違っていた（255品。195章）。
       // どの紹介にもカテゴリが無い商品は、順位を付けられないので最後に除く。
       if (!c.brand_id || !c.name_id) continue;
-      if (isPrMention(v.key, c.brand_id, c.name_id)) continue; // PR・提供の紹介は数えない（197章）
+      if (isUncountedMention(v.key, c.brand_id, c.name_id)) continue; // PR・提供・否定的な紹介は数えない（197・217章）
       const key = `${c.brand_id}_${c.name_id}`;
       let e = map.get(key);
       if (!e) {
@@ -954,7 +977,7 @@ function buildFeature(def: FeatureDef) {
   for (const v of videos) {
     for (const c of v.cosmetics || []) {
       if (!c.brand_id || !c.name_id || !c.related_tags?.length) continue;
-      if (isPrMention(v.key, c.brand_id, c.name_id)) continue;
+      if (isUncountedMention(v.key, c.brand_id, c.name_id)) continue;
       const tag = c.related_tags.map(rankingTag).find((t) => CATEGORY_TAG_TO_GROUP[t]);
       if (!tag) continue; // 大分類に属さないカテゴリ（その他）は載せない
       const key = `${c.brand_id}_${c.name_id}`;
@@ -1148,7 +1171,7 @@ export function getRecentCounts(): Map<string, { videos: number; channels: numbe
     if (!v.published_at || new Date(v.published_at).getTime() < since) continue;
     for (const c of v.cosmetics || []) {
       if (!c.brand_id || !c.name_id) continue;
-      if (isPrMention(v.key, c.brand_id, c.name_id)) continue;
+      if (isUncountedMention(v.key, c.brand_id, c.name_id)) continue;
       const key = `${c.brand_id}_${c.name_id}`;
       let e = acc.get(key);
       if (!e) acc.set(key, (e = { vs: new Set(), cs: new Set() }));

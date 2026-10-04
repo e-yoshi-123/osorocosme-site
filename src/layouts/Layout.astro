@@ -40,6 +40,10 @@ const navLinks = [
 ];
 const path = Astro.url.pathname;
 const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace(/\/$/, ""));
+// JSON-LDの中身（題名・チャンネル名など）に閉じタグなどが入っても抜け出せないよう、山かっこ・& をUnicodeエスケープする（217章）
+const JSON_LD_UNSAFE = new RegExp("[\\u003c\\u003e&\\u2028\\u2029]", "g");
+const safeJsonLd = (ld: unknown) =>
+  JSON.stringify(ld).replace(JSON_LD_UNSAFE, (ch) => "\\u" + ch.charCodeAt(0).toString(16).padStart(4, "0"));
 ---
 
 <html lang="ja">
@@ -71,7 +75,7 @@ const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace
     {ogImage && <meta property="og:image" content={ogImage} />}
     <meta name="twitter:card" content={twitterCard} />
     {ogImage && <meta name="twitter:image" content={ogImage} />}
-    {jsonLd.map((ld) => <script type="application/ld+json" set:html={JSON.stringify(ld)} />)}
+    {jsonLd.map((ld) => <script type="application/ld+json" set:html={safeJsonLd(ld)} />)}
     {/* Googleアナリティクス4。開発中の閲覧を数えないよう、本番ビルドのときだけ出す。外部リンク（楽天など）のクリックは拡張計測機能で自動記録される */}
     {import.meta.env.PROD && GA_MEASUREMENT_ID && (
       <>
