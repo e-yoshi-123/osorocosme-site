@@ -78,7 +78,8 @@ const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace
         <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}></script>
         <script is:inline define:vars={{ id: GA_MEASUREMENT_ID }}>
           window.dataLayer = window.dataLayer || [];
-          function gtag() { dataLayer.push(arguments); }
+          // define:vars で関数の中に包まれるので、ほかのスクリプト（シェアボタン等）から呼べるよう window に置く
+          window.gtag = function () { dataLayer.push(arguments); };
           gtag("js", new Date());
           gtag("config", id);
         </script>
