@@ -27607,7 +27607,7 @@
     "brand": "rom&nd",
     "brand_id": "brand-00050",
     "category": "眉マスカラ",
-    "count": 165,
+    "count": 166,
     "name": "ハンオールブロウカラ",
     "name_id": "name-00001",
     "now_price": 825,
@@ -27759,7 +27759,7 @@
     "brand": "rom&nd",
     "brand_id": "brand-00050",
     "category": "パウダーアイシャドウ",
-    "count": 17,
+    "count": 18,
     "name": "ベターザンアイズ",
     "name_id": "name-00009",
     "now_price": 1760,
@@ -28236,7 +28236,7 @@
     "brand": "rom&nd",
     "brand_id": "brand-00050",
     "category": "ジェル・クリームアイシャドウ",
-    "count": 5,
+    "count": 6,
     "name": "ザ ユニバース リキッドグリッター",
     "name_id": "name-00055",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fskindesign%2Fromand-liquid_glitter_02%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fskindesign%2Fi%2F10002163%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/skindesign/cabinet/cosme/romand/liquid_glitter/liquid_glitter_s2.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"rom&nd ザ ユニバース リキッドグリッター\" title=\"rom&nd ザ ユニバース リキッドグリッター\"></a>",
@@ -85120,7 +85120,7 @@
     "amazon_link": "",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fasiabnc%2Fflo%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fasiabnc%2Fi%2F10000383%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/asiabnc/cabinet/13403069/13403073/imgrc0107047245.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"rom&nd ジューシーフラッシュリップオイル\" title=\"rom&nd ジューシーフラッシュリップオイル\"></a>",
     "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fasiabnc%2Fflo%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fasiabnc%2Fi%2F10000383%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-    "count": 19,
+    "count": 20,
     "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fzozo%2F105057689.html",
     "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/zozo_105057689",
     "yahoo_price": 1335,
@@ -102203,6 +102203,17 @@
     "now_price": 980,
     "price_updated": "2026-10-03"
   },
+  "brand-01452_name-00017": {
+    "brand": "&nd by rom&nd",
+    "brand_id": "brand-01452",
+    "name": "Glassy Milky Tone Up",
+    "name_id": "name-00017",
+    "category": "日焼け止め・UVケア(顔用)",
+    "amazon_link": "",
+    "rakuten_image_link": "",
+    "rakuten_text_link": "",
+    "count": 1
+  },
   "brand-00014_name-00631": {
     "brand": "ディオール",
     "brand_id": "brand-00014",
@@ -109443,5 +109454,16 @@
     "yahoo_link_none": true,
     "now_price": 3348,
     "price_updated": "2026-10-03"
+  },
+  "brand-00050_name-00129": {
+    "brand": "rom&nd",
+    "brand_id": "brand-00050",
+    "name": "ベターザンボリューマー",
+    "name_id": "name-00129",
+    "category": "ハイライト",
+    "amazon_link": "",
+    "rakuten_image_link": "",
+    "rakuten_text_link": "",
+    "count": 1
   }
 }
