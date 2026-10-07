@@ -23,7 +23,7 @@
     "brand": "セザンヌ",
     "brand_id": "brand-00001",
     "category": "パウダーチーク",
-    "count": 68,
+    "count": 71,
     "name": "チークブラッシュ",
     "name_id": "name-00002",
     "now_price": 550,
@@ -61,7 +61,7 @@
     "brand": "セザンヌ",
     "brand_id": "brand-00001",
     "category": "パウダーチーク",
-    "count": 67,
+    "count": 69,
     "name": "パールグロウハイライト",
     "name_id": "name-00004",
     "now_price": 660,
@@ -118,7 +118,7 @@
     "brand": "セザンヌ",
     "brand_id": "brand-00001",
     "category": "マスカラ",
-    "count": 6,
+    "count": 7,
     "name": "耐久カールマスカラ",
     "name_id": "name-00007",
     "now_price": 638,
@@ -156,7 +156,7 @@
     "brand": "セザンヌ",
     "brand_id": "brand-00001",
     "category": "コンシーラー",
-    "count": 19,
+    "count": 20,
     "name": "描くアイゾーンコンシーラー",
     "name_id": "name-00009",
     "now_price": 660,
@@ -175,7 +175,7 @@
     "brand": "セザンヌ",
     "brand_id": "brand-00001",
     "category": "リップライナー",
-    "count": 80,
+    "count": 81,
     "name": "影色リップメイカー",
     "name_id": "name-00010",
     "now_price": 660,
@@ -270,7 +270,7 @@
     "brand": "セザンヌ",
     "brand_id": "brand-00001",
     "category": "眉マスカラ",
-    "count": 34,
+    "count": 35,
     "name": "極細アイブロウマスカラ",
     "name_id": "name-00015",
     "now_price": 528,
@@ -681,7 +681,7 @@
     "brand": "セザンヌ",
     "brand_id": "brand-00001",
     "category": "パウダーアイシャドウ",
-    "count": 2,
+    "count": 3,
     "name": "シングルカラーアイシャドウ",
     "name_id": "name-00039",
     "now_price": 440,
@@ -700,7 +700,7 @@
     "brand": "セザンヌ",
     "brand_id": "brand-00001",
     "category": "ルースパウダー",
-    "count": 2,
+    "count": 3,
     "name": "うるふわ仕上げパウダー",
     "name_id": "name-00040",
     "now_price": 858,
@@ -757,7 +757,7 @@
     "brand": "セザンヌ",
     "brand_id": "brand-00001",
     "category": "日焼け止め・UVケア(顔用)",
-    "count": 5,
+    "count": 7,
     "name": "UVウルトラフィットベースEX",
     "name_id": "name-00043",
     "now_price": 748,
@@ -776,7 +776,7 @@
     "brand": "セザンヌ",
     "brand_id": "brand-00001",
     "category": "ジェル・クリームチーク",
-    "count": 26,
+    "count": 27,
     "name": "シェーディングペンシル",
     "name_id": "name-00044",
     "now_price": 1335,
@@ -966,7 +966,7 @@
     "brand": "セザンヌ",
     "brand_id": "brand-00001",
     "category": "口紅",
-    "count": 2,
+    "count": 3,
     "name": "ラスティング リップカラーN",
     "name_id": "name-00055",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkireimitsuketa2%2Fh-b_0004005%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fkireimitsuketa2%2Fi%2F10011591%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/kireimitsuketa2/cabinet/hb_cp_18_9/h-b_0004005_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"セザンヌ ラスティング リップカラーN\" title=\"セザンヌ ラスティング リップカラーN\"></a>",
@@ -1017,6 +1017,17 @@
     "yahoo_price_updated": "2026-10-04",
     "yahoo_item_code": "cosmecom_1000222713",
     "yahoo_seller_id": "cosmecom"
+  },
+  "brand-00001_name-00060": {
+    "amazon_link": "",
+    "brand": "セザンヌ",
+    "brand_id": "brand-00001",
+    "category": "コンシーラー",
+    "count": 1,
+    "name": "ストレッチコンシーラー",
+    "name_id": "name-00060",
+    "rakuten_image_link": "",
+    "rakuten_text_link": ""
   },
   "brand-00001_name-00061": {
     "amazon_link": "",
@@ -1249,7 +1260,7 @@
     "brand": "セザンヌ",
     "brand_id": "brand-00001",
     "category": "コンシーラー",
-    "count": 16,
+    "count": 18,
     "name": "ブライトカラーシーラー",
     "name_id": "name-00076",
     "now_price": 748,
@@ -2028,7 +2039,7 @@
     "brand": "キャンメイク",
     "brand_id": "brand-00002",
     "category": "日焼け止め・UVケア(顔用)",
-    "count": 24,
+    "count": 25,
     "name": "マーメイドスキンジェルUV",
     "name_id": "name-00011",
     "now_price": 2310,
@@ -3384,7 +3395,7 @@
     "brand": "コスメデコルテ",
     "brand_id": "brand-00003",
     "category": "ブースター・導入液",
-    "count": 29,
+    "count": 30,
     "name": "リポソーム アドバンスト リペアセラム",
     "name_id": "name-00003",
     "now_price": 13970,
@@ -7238,7 +7249,7 @@
     "brand": "エリクシール",
     "brand_id": "brand-00010",
     "category": "美容液",
-    "count": 21,
+    "count": 22,
     "name": "エリクシール ザ セラム aa",
     "name_id": "name-00005",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fshopqueen%2Feil20493dc%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fshopqueen%2Fi%2F10000791%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/shopqueen/cabinet/shiseido/elixirsuperieur/imgrc0094683614.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"エリクシール エリクシール ザ セラム aa\" title=\"エリクシール エリクシール ザ セラム aa\"></a>",
@@ -7662,7 +7673,7 @@
     "brand": "ケイト",
     "brand_id": "brand-00011",
     "category": "パウダーアイシャドウ",
-    "count": 77,
+    "count": 78,
     "name": "ポッピングシルエットシャドウ",
     "name_id": "name-00003",
     "now_price": 1540,
@@ -8877,7 +8888,7 @@
     "brand": "NARS",
     "brand_id": "brand-00012",
     "category": "プレストパウダー",
-    "count": 87,
+    "count": 88,
     "name": "ライトリフレクティングセッティングパウダー プレスト N",
     "name_id": "name-00001",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmediva%2F0607845014126%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmediva%2Fi%2F10002309%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmediva/cabinet/skuimage/topimage/settingpowder2.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"NARS ライトリフレクティングセッティングパウダー プレスト N\" title=\"NARS ライトリフレクティングセッティングパウダー プレスト N\"></a>",
@@ -9888,7 +9899,7 @@
     "brand": "クレ・ド・ポー ボーテ",
     "brand_id": "brand-00013",
     "category": "化粧下地",
-    "count": 80,
+    "count": 81,
     "name": "ヴォワールコレクチュールｎ",
     "name_id": "name-00001",
     "now_price": 8250,
@@ -10464,6 +10475,17 @@
     "yahoo_price_updated": "2026-10-04",
     "yahoo_item_code": "une_80001071",
     "yahoo_seller_id": "une"
+  },
+  "brand-00013_name-00056": {
+    "amazon_link": "",
+    "brand": "クレ・ド・ポー ボーテ",
+    "brand_id": "brand-00013",
+    "category": "口紅",
+    "count": 1,
+    "name": "ルージュクレーム マット",
+    "name_id": "name-00056",
+    "rakuten_image_link": "",
+    "rakuten_text_link": ""
   },
   "brand-00013_name-00058": {
     "amazon_link": "",
@@ -12941,7 +12963,7 @@
     "brand": "M・A・C",
     "brand_id": "brand-00016",
     "category": "メイクブラシ",
-    "count": 4,
+    "count": 5,
     "name": "#171S スムースエッジ オールオーバー フェイス ブラシ",
     "name_id": "name-00032",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmaccosmetics%2F116156%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fmaccosmetics%2Fi%2F10001395%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/maccosmetics/cabinet/pdp/thumb_01/261004_mr/116156.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"M・A・C #171S スムースエッジ オールオーバー フェイス ブラシ\" title=\"M・A・C #171S スムースエッジ オールオーバー フェイス ブラシ\"></a>",
@@ -17477,7 +17499,7 @@
     "brand": "無印良品",
     "brand_id": "brand-00026",
     "category": "ブースター・導入液",
-    "count": 13,
+    "count": 14,
     "name": "発酵導入美容液",
     "name_id": "name-00001",
     "now_price": 3490,
@@ -17529,7 +17551,7 @@
     "brand": "無印良品",
     "brand_id": "brand-00026",
     "category": "ブースター・導入液",
-    "count": 5,
+    "count": 6,
     "name": "発酵導入化粧液",
     "name_id": "name-00004",
     "now_price": 1590,
@@ -26956,7 +26978,7 @@
     "brand": "ヴァセリン",
     "brand_id": "brand-00044",
     "category": "フェイスオイル・バーム",
-    "count": 1,
+    "count": 2,
     "name": "オリジナル ピュアスキンジェリー",
     "name_id": "name-00001",
     "now_price": 603,
@@ -27482,7 +27504,7 @@
     "brand": "VT(ブイティー)",
     "brand_id": "brand-00048",
     "category": "ブースター・導入液",
-    "count": 1,
+    "count": 2,
     "name": "リードルショット300",
     "name_id": "name-00003",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000176081%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10152483%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img212/item_1000176081_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"VT(ブイティー) リードルショット300\" title=\"VT(ブイティー) リードルショット300\"></a>",
@@ -32389,6 +32411,17 @@
     "yahoo_item_code": "pureco2nd_prc-s-8724807545",
     "yahoo_seller_id": "pureco2nd"
   },
+  "brand-00058_name-00013": {
+    "amazon_link": "",
+    "brand": "ローラ メルシエ",
+    "brand_id": "brand-00058",
+    "category": "メイクブラシ",
+    "count": 1,
+    "name": "リアル フローレス ファンデーション ブラシ",
+    "name_id": "name-00013",
+    "rakuten_image_link": "",
+    "rakuten_text_link": ""
+  },
   "brand-00058_name-00014": {
     "amazon_link": "",
     "brand": "ローラ メルシエ",
@@ -34033,7 +34066,7 @@
     "brand": "シュウ ウエムラ",
     "brand_id": "brand-00061",
     "category": "メイクブラシ",
-    "count": 2,
+    "count": 3,
     "name": "ペタル 30K パウダー ブラシ",
     "name_id": "name-00075",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fpartytime-tokyo%2F2609su008mut%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fpartytime-tokyo%2Fi%2F10045821%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/partytime-tokyo/cabinet/2609su008mut_001.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"シュウ ウエムラ ペタル 30K パウダー ブラシ\" title=\"シュウ ウエムラ ペタル 30K パウダー ブラシ\"></a>",
@@ -37189,7 +37222,7 @@
     "brand": "d'Alba(ダルバ)",
     "brand_id": "brand-00073",
     "category": "ミスト状化粧水",
-    "count": 46,
+    "count": 47,
     "name": "ホワイトトリュフファーストスプレーセラム",
     "name_id": "name-00016",
     "now_price": 1960,
@@ -39150,7 +39183,7 @@
     "brand": "エスプリーク",
     "brand_id": "brand-00084",
     "category": "メイクブラシ",
-    "count": 1,
+    "count": 2,
     "name": "ファンデーションブラシ",
     "name_id": "name-00002",
     "rakuten_image_link": "",
@@ -40091,6 +40124,17 @@
     "rakuten_text_link": "",
     "rakuten_link_none": true,
     "yahoo_link_none": true
+  },
+  "brand-00090_name-00030": {
+    "amazon_link": "",
+    "brand": "MISSHA（ミシャ）",
+    "brand_id": "brand-00090",
+    "category": "ポイントメイクリムーバー",
+    "count": 1,
+    "name": "パーフェクト リップ＆アイ メイクリムーバー",
+    "name_id": "name-00030",
+    "rakuten_image_link": "",
+    "rakuten_text_link": ""
   },
   "brand-00090_name-00043": {
     "amazon_link": "",
@@ -42950,7 +42994,13 @@
     "name_id": "name-00025",
     "now_price": 2480,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00quioh.ftdz4400.g00quioh.ftdz5207/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fosharecafe%2F10001613%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fosharecafe%2Fi%2F10001613%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/osharecafe/cabinet/product_osk/beauty/6038791.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"プリマヴィスタ スティックコンシーラー\" title=\"プリマヴィスタ スティックコンシーラー\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00quioh.ftdz4400.g00quioh.ftdz5207/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fosharecafe%2F10001613%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fosharecafe%2Fi%2F10001613%2F&rafcid=wsc_i_is_1011877497265360338"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00quioh.ftdz4400.g00quioh.ftdz5207/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fosharecafe%2F10001613%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fosharecafe%2Fi%2F10001613%2F&rafcid=wsc_i_is_1011877497265360338",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fhimawaridg%2F4901301458285.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/himawaridg_4901301458285",
+    "yahoo_price": 2549,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "himawaridg_4901301458285",
+    "yahoo_seller_id": "himawaridg"
   },
   "brand-00110_name-00001": {
     "amazon_link": "",
@@ -43151,7 +43201,13 @@
     "name_id": "name-00010",
     "now_price": 1337,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00sccjh.ftdz4e19.g00sccjh.ftdz56b7/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ffines-f%2F4909978199616%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Ffines-f%2Fi%2F10047569%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/fines-f/cabinet/9/4909978199616.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"アクアレーベル トリートメントミルク （オイルイン） とてもしっとり\" title=\"アクアレーベル トリートメントミルク （オイルイン） とてもしっとり\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00sccjh.ftdz4e19.g00sccjh.ftdz56b7/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ffines-f%2F4909978199616%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Ffines-f%2Fi%2F10047569%2F&rafcid=wsc_i_is_1011877497265360338"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00sccjh.ftdz4e19.g00sccjh.ftdz56b7/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ffines-f%2F4909978199616%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Ffines-f%2Fi%2F10047569%2F&rafcid=wsc_i_is_1011877497265360338",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fforemost%2F4909978199616m.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/foremost_4909978199616m",
+    "yahoo_price": 1401,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "foremost_4909978199616m",
+    "yahoo_seller_id": "foremost"
   },
   "brand-00112_name-00001": {
     "amazon_link": "",
@@ -43220,7 +43276,13 @@
     "name_id": "name-00004",
     "rakuten_image_link": "",
     "rakuten_link_none": true,
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Ftoeikazoku%2Fsmp-71771123-3.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/toeikazoku_smp-71771123-3",
+    "yahoo_price": 1439,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "toeikazoku_smp-71771123-3",
+    "yahoo_seller_id": "toeikazoku"
   },
   "brand-00112_name-00009": {
     "amazon_link": "",
@@ -43370,7 +43432,13 @@
     "name": "リップ コンディショニング バーム",
     "name_id": "name-00067",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fune%2F80002153.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/une_80002153",
+    "yahoo_price": 2860,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "une_80002153",
+    "yahoo_seller_id": "une"
   },
   "brand-00112_name-00074": {
     "amazon_link": "",
@@ -43463,7 +43531,13 @@
     "name_id": "name-00003",
     "now_price": 1430,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00s4hbh.ftdz4480.g00s4hbh.ftdz5a26/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frevlon%2F10000353%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frevlon%2Fi%2F10000353%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/revlon/cabinet/eye/imgrc0100304556.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"レブロン ダズル アイシャドウ クアッド\" title=\"レブロン ダズル アイシャドウ クアッド\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00s4hbh.ftdz4480.g00s4hbh.ftdz5a26/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frevlon%2F10000353%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frevlon%2Fi%2F10000353%2F&rafcid=wsc_i_is_1011877497265360338"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00s4hbh.ftdz4480.g00s4hbh.ftdz5a26/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frevlon%2F10000353%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frevlon%2Fi%2F10000353%2F&rafcid=wsc_i_is_1011877497265360338",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fkirei-mitsuketa%2Fh-b-0010243.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/kirei-mitsuketa_h-b-0010243",
+    "yahoo_price": 1540,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "kirei-mitsuketa_h-b-0010243",
+    "yahoo_seller_id": "kirei-mitsuketa"
   },
   "brand-00113_name-00004": {
     "amazon_link": "",
@@ -43589,7 +43663,8 @@
     "name_id": "name-00014",
     "rakuten_image_link": "",
     "rakuten_link_none": true,
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00113_name-00015": {
     "amazon_link": "",
@@ -43657,7 +43732,13 @@
     "name_id": "name-00018",
     "now_price": 1540,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000193836%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10161766%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img212/item_1000193836_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"レブロン ジェリー ティント リップ セラム\" title=\"レブロン ジェリー ティント リップ セラム\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000193836%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10161766%2F&rafcid=wsc_i_is_1011877497265360338"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000193836%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10161766%2F&rafcid=wsc_i_is_1011877497265360338",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fcosme-nana%2F1067105000.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/cosme-nana_1067105000",
+    "yahoo_price": 1540,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "cosme-nana_1067105000",
+    "yahoo_seller_id": "cosme-nana"
   },
   "brand-00113_name-00019": {
     "amazon_link": "",
@@ -43726,7 +43807,13 @@
     "name_id": "name-00022",
     "now_price": 1760,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00s4hbh.ftdz4480.g00s4hbh.ftdz5a26/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frevlon%2F10000289%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frevlon%2Fi%2F10000289%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/revlon/cabinet/lip/imgrc0088739521.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"レブロン カラーステイ サテン インク\" title=\"レブロン カラーステイ サテン インク\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00s4hbh.ftdz4480.g00s4hbh.ftdz5a26/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frevlon%2F10000289%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frevlon%2Fi%2F10000289%2F&rafcid=wsc_i_is_1011877497265360338"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00s4hbh.ftdz4480.g00s4hbh.ftdz5a26/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frevlon%2F10000289%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frevlon%2Fi%2F10000289%2F&rafcid=wsc_i_is_1011877497265360338",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fsoukai%2F4951445244084.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/soukai_4951445244084",
+    "yahoo_price": 2308,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "soukai_4951445244084",
+    "yahoo_seller_id": "soukai"
   },
   "brand-00113_name-00028": {
     "amazon_link": "",
@@ -43883,7 +43970,13 @@
     "name_id": "name-00003",
     "rakuten_image_link": "",
     "rakuten_link_none": true,
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fune%2F80002536.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/une_80002536",
+    "yahoo_price": 7276,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "une_80002536",
+    "yahoo_seller_id": "une"
   },
   "brand-00117_name-00004": {
     "amazon_link": "",
@@ -43965,7 +44058,13 @@
     "name": "エスト ロングラスティング ルースパウダー",
     "name_id": "name-00018",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fmimicoquette%2Fs63973.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/mimicoquette_s63973",
+    "yahoo_price": 6336,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "mimicoquette_s63973",
+    "yahoo_seller_id": "mimicoquette"
   },
   "brand-00117_name-00020": {
     "amazon_link": "",
@@ -44072,7 +44171,8 @@
     "name_id": "name-00038",
     "rakuten_image_link": "",
     "rakuten_link_none": true,
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00117_name-00046": {
     "amazon_link": "",
@@ -44214,7 +44314,8 @@
     "name_id": "name-00004",
     "now_price": 4210,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcoscora%2F360455%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcoscora%2Fi%2F10053922%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/coscora/cabinet/rb260711fe6e311156/360455.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ベアミネラル ベアプロ 16HR パウダー ファンデーション\" title=\"ベアミネラル ベアプロ 16HR パウダー ファンデーション\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcoscora%2F360455%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcoscora%2Fi%2F10053922%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcoscora%2F360455%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcoscora%2Fi%2F10053922%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+    "yahoo_link_none": true
   },
   "brand-00119_name-00005": {
     "amazon_link": "",
@@ -44274,7 +44375,8 @@
     "name": "ベアプロ 24HR リキッド ファンデーション",
     "name_id": "name-00011",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00119_name-00020": {
     "amazon_link": "",
@@ -44298,7 +44400,8 @@
     "name": "プレシジョン フェイス ブラシ",
     "name_id": "name-00021",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00119_name-00026": {
     "amazon_link": "",
@@ -44322,7 +44425,8 @@
     "name": "オリジナル ミネラル コンシーラー",
     "name_id": "name-00045",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00119_name-00049": {
     "amazon_link": "",
@@ -44333,7 +44437,8 @@
     "name": "ソフト フォーカス フェイス ブラシ",
     "name_id": "name-00049",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00119_name-00071": {
     "amazon_link": "",
@@ -44496,7 +44601,13 @@
     "name_id": "name-00007",
     "now_price": 2728,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000186886%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10159947%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img208/item_1000186886_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"アリィー(ALLIE) クロノビューティ スムースジェルＵＶ\" title=\"アリィー(ALLIE) クロノビューティ スムースジェルＵＶ\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000186886%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10159947%2F&rafcid=wsc_i_is_1011877497265360338"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000186886%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10159947%2F&rafcid=wsc_i_is_1011877497265360338",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Ftoeikazoku%2Fsmp-85007271.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/toeikazoku_smp-85007271",
+    "yahoo_price": 950,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "toeikazoku_smp-85007271",
+    "yahoo_seller_id": "toeikazoku"
   },
   "brand-00122_name-00008": {
     "amazon_link": "",
@@ -45200,7 +45311,13 @@
     "name": "アドバンスドアイデンティティ アイブラウペンシル",
     "name_id": "name-00025",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fzozo%2F62416920.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/zozo_62416920",
+    "yahoo_price": 1650,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "zozo_62416920",
+    "yahoo_seller_id": "zozo"
   },
   "brand-00125_name-00031": {
     "amazon_link": "",
@@ -45705,7 +45822,8 @@
     "name": "スキン PFCT UV フルイド",
     "name_id": "name-00033",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00127_name-00041": {
     "amazon_link": "",
@@ -46361,7 +46479,13 @@
     "name": "エッセンシャルリップチークタップブラー",
     "name_id": "name-00072",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Flucky-happy%2F4582.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/lucky-happy_4582",
+    "yahoo_price": 1870,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "lucky-happy_4582",
+    "yahoo_seller_id": "lucky-happy"
   },
   "brand-00128_name-00102": {
     "amazon_link": "",
@@ -46584,7 +46708,13 @@
     "name": "スキンケアUV　03　シミができやすい肌環境",
     "name_id": "name-00011",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fkirindo%2F4901301423917-pk.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/kirindo_4901301423917-pk",
+    "yahoo_price": 3300,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "kirindo_4901301423917-pk",
+    "yahoo_seller_id": "kirindo"
   },
   "brand-00129_name-00012": {
     "amazon_link": "",
@@ -46822,7 +46952,13 @@
     "name_id": "name-00018",
     "now_price": 2640,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000210051%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10168364%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img223/item_1000210051_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"Torriden (トリデン) セルメイジング コラーゲン ファーミング クリーム\" title=\"Torriden (トリデン) セルメイジング コラーゲン ファーミング クリーム\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000210051%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10168364%2F&rafcid=wsc_i_is_1011877497265360338"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000210051%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10168364%2F&rafcid=wsc_i_is_1011877497265360338",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fcosmecom%2F1000210051.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/cosmecom_1000210051",
+    "yahoo_price": 2640,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "cosmecom_1000210051",
+    "yahoo_seller_id": "cosmecom"
   },
   "brand-00130_name-00019": {
     "amazon_link": "",
@@ -47233,7 +47369,8 @@
     "name": "ファーミング EX トリートメント エッセンス ローション N",
     "name_id": "name-00027",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00132_name-00045": {
     "amazon_link": "",
@@ -47448,7 +47585,13 @@
     "name_id": "name-00006",
     "now_price": 1680,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00t6mrh.ftdz4311.g00t6mrh.ftdz5228/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fso-netmo%2F1643382122%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fso-netmo%2Fi%2F10001583%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/so-netmo/cabinet/compass1643382121.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"Carte(カルテ) カルテＨＤ モイスチュア ハンドクリーム\" title=\"Carte(カルテ) カルテＨＤ モイスチュア ハンドクリーム\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00t6mrh.ftdz4311.g00t6mrh.ftdz5228/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fso-netmo%2F1643382122%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fso-netmo%2Fi%2F10001583%2F&rafcid=wsc_i_is_1011877497265360338"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00t6mrh.ftdz4311.g00t6mrh.ftdz5228/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fso-netmo%2F1643382122%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fso-netmo%2Fi%2F10001583%2F&rafcid=wsc_i_is_1011877497265360338",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fsundrugec%2F4971710539929.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/sundrugec_4971710539929",
+    "yahoo_price": 1650,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "sundrugec_4971710539929",
+    "yahoo_seller_id": "sundrugec"
   },
   "brand-00133_name-00010": {
     "amazon_link": "",
@@ -47460,7 +47603,13 @@
     "name_id": "name-00010",
     "now_price": 1925,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qf42h.ftdz428e.g00qf42h.ftdz5fec/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fretailer%2Fcarte-0012%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fretailer%2Fi%2F10058587%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/retailer/cabinet/09634473/carte-0012-m.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"Carte(カルテ) カルテＨＤ モイスチュア ミストローション\" title=\"Carte(カルテ) カルテＨＤ モイスチュア ミストローション\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qf42h.ftdz428e.g00qf42h.ftdz5fec/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fretailer%2Fcarte-0012%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fretailer%2Fi%2F10058587%2F&rafcid=wsc_i_is_1011877497265360338"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qf42h.ftdz428e.g00qf42h.ftdz5fec/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fretailer%2Fcarte-0012%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fretailer%2Fi%2F10058587%2F&rafcid=wsc_i_is_1011877497265360338",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fgoodsania%2F4971710524116.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/goodsania_4971710524116",
+    "yahoo_price": 990,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "goodsania_4971710524116",
+    "yahoo_seller_id": "goodsania"
   },
   "brand-00133_name-00011": {
     "amazon_link": "",
@@ -47491,7 +47640,13 @@
     "name_id": "name-00013",
     "now_price": 1480,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qf42h.ftdz428e.g00qf42h.ftdz5fec/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fretailer%2Fcarte-0024%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fretailer%2Fi%2F10058603%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/retailer/cabinet/09634473/carte-0024-m.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"Carte(カルテ) カルテＨＤ バランスケア ゲル\" title=\"Carte(カルテ) カルテＨＤ バランスケア ゲル\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qf42h.ftdz428e.g00qf42h.ftdz5fec/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fretailer%2Fcarte-0024%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fretailer%2Fi%2F10058603%2F&rafcid=wsc_i_is_1011877497265360338"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qf42h.ftdz428e.g00qf42h.ftdz5fec/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fretailer%2Fcarte-0024%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fretailer%2Fi%2F10058603%2F&rafcid=wsc_i_is_1011877497265360338",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Feckyorindo%2F4971710586534-2.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/eckyorindo_4971710586534-2",
+    "yahoo_price": 5170,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "eckyorindo_4971710586534-2",
+    "yahoo_seller_id": "eckyorindo"
   },
   "brand-00133_name-00015": {
     "amazon_link": "",
@@ -47875,7 +48030,13 @@
     "name": "アイブロウリキッド",
     "name_id": "name-00016",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fmaplecosme-y%2F4909978166762.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/maplecosme-y_4909978166762",
+    "yahoo_price": 2735,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "maplecosme-y_4909978166762",
+    "yahoo_seller_id": "maplecosme-y"
   },
   "brand-00135_name-00019": {
     "amazon_link": "",
@@ -49156,7 +49317,8 @@
     "name": "ガラクナイアシン エッセンスパッド",
     "name_id": "name-00022",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00143_name-00061": {
     "amazon_link": "",
@@ -49167,7 +49329,8 @@
     "name": "4GFアイラッシュアンプル",
     "name_id": "name-00061",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00144_name-00001": {
     "amazon_link": "",
@@ -49271,7 +49434,13 @@
     "name": "パリュール ゴールド スキン フルイド",
     "name_id": "name-00012",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fbellcosme%2F11314541.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/bellcosme_11314541",
+    "yahoo_price": 7798,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "bellcosme_11314541",
+    "yahoo_seller_id": "bellcosme"
   },
   "brand-00144_name-00015": {
     "amazon_link": "",
@@ -49358,7 +49527,13 @@
     "name": "パリュール ゴールド スキン D-マイクロパウダー",
     "name_id": "name-00021",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fcosmetch%2F3346470440685.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/cosmetch_3346470440685",
+    "yahoo_price": 9780,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "cosmetch_3346470440685",
+    "yahoo_seller_id": "cosmetch"
   },
   "brand-00144_name-00030": {
     "amazon_link": "",
@@ -49426,7 +49601,13 @@
     "name": "スーパーティップス　スーパーリップ",
     "name_id": "name-00048",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fbellcosme%2F11310467.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/bellcosme_11310467",
+    "yahoo_price": 3249,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "bellcosme_11310467",
+    "yahoo_seller_id": "bellcosme"
   },
   "brand-00144_name-00057": {
     "amazon_link": "",
@@ -49456,7 +49637,13 @@
     "name": "テラコッタ フルイド",
     "name_id": "name-00060",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fcosmetch%2F3346470442320.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/cosmetch_3346470442320",
+    "yahoo_price": 7800,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "cosmetch_3346470442320",
+    "yahoo_seller_id": "cosmetch"
   },
   "brand-00144_name-00062": {
     "amazon_link": "",
@@ -49674,7 +49861,13 @@
     "name": "アクア アレゴリア ハンドクリーム ローザ ロッサ",
     "name_id": "name-00146",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fcosmetch%2F3346470148659.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/cosmetch_3346470148659",
+    "yahoo_price": 7750,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "cosmetch_3346470148659",
+    "yahoo_seller_id": "cosmetch"
   },
   "brand-00144_name-00179": {
     "amazon_link": "",
@@ -49699,7 +49892,8 @@
     "name": "アベイユ ロイヤル アイクリーム N",
     "name_id": "name-00261",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00144_name-00404": {
     "amazon_link": "",
@@ -49767,7 +49961,13 @@
     "name": "ミネラルカラーチーク",
     "name_id": "name-00066",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fzozo%2F55280163.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/zozo_55280163",
+    "yahoo_price": 3520,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "zozo_55280163",
+    "yahoo_seller_id": "zozo"
   },
   "brand-00146_name-00001": {
     "amazon_link": "",
@@ -49874,7 +50074,13 @@
     "name_id": "name-00008",
     "now_price": 825,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000141127%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10132552%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img2016/item_1000141127_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"エチュード コントゥアパウダー ノーズシャドウブラシ\" title=\"エチュード コントゥアパウダー ノーズシャドウブラシ\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000141127%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10132552%2F&rafcid=wsc_i_is_1011877497265360338"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000141127%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10132552%2F&rafcid=wsc_i_is_1011877497265360338",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fcosmecom%2F1000141127.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/cosmecom_1000141127",
+    "yahoo_price": 825,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "cosmecom_1000141127",
+    "yahoo_seller_id": "cosmecom"
   },
   "brand-00146_name-00009": {
     "amazon_link": "",
@@ -50340,7 +50546,8 @@
     "name": "グリッターロックアイズ",
     "name_id": "name-00143",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00146_name-00152": {
     "amazon_link": "",
@@ -50418,7 +50625,8 @@
     "name": "スーパースリム プルーフブラシライナー",
     "name_id": "name-00219",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00146_name-00284": {
     "amazon_link": "",
@@ -50616,7 +50824,13 @@
     "name": "モイスチャー ミストローション II (しっとり)",
     "name_id": "name-00001",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fkenkousyoppumy%2F4987305035264-3.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/kenkousyoppumy_4987305035264-3",
+    "yahoo_price": 7780,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "kenkousyoppumy_4987305035264-3",
+    "yahoo_seller_id": "kenkousyoppumy"
   },
   "brand-00152_name-00005": {
     "amazon_link": "",
@@ -50987,7 +51201,8 @@
     "name": "ウォーターバンク クリーム2 EX",
     "name_id": "name-00073",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00153_name-00087": {
     "amazon_link": "",
@@ -51010,7 +51225,13 @@
     "name": "スムージーメイクアップセラム",
     "name_id": "name-00095",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fpureco%2Fprc-s-8694827443.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/pureco_prc-s-8694827443",
+    "yahoo_price": 2252,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "pureco_prc-s-8694827443",
+    "yahoo_seller_id": "pureco"
   },
   "brand-00154_name-00009": {
     "amazon_link": "",
@@ -51097,7 +51318,8 @@
     "name": "センテラ ウォータージェルシート アンプルマスク",
     "name_id": "name-00013",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00154_name-00015": {
     "amazon_link": "",
@@ -51122,7 +51344,8 @@
     "name": "センテラスージングクリーム",
     "name_id": "name-00017",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00154_name-00018": {
     "amazon_link": "",
@@ -51166,7 +51389,8 @@
     "name": "センテラヒアルーシカブルーセラム",
     "name_id": "name-00034",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00154_name-00053": {
     "amazon_link": "",
@@ -51333,7 +51557,13 @@
     "name": "ピュア ナチュラル エッセンスローション UV",
     "name_id": "name-00015",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fy-kojima%2F4961989104829.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/y-kojima_4961989104829",
+    "yahoo_price": 1270,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "y-kojima_4961989104829",
+    "yahoo_seller_id": "y-kojima"
   },
   "brand-00159_name-00018": {
     "amazon_link": "",
@@ -51410,7 +51640,13 @@
     "name": "フルフィットプロポリスシナジートナー",
     "name_id": "name-00003",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fkscojp%2F901620525.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/kscojp_901620525",
+    "yahoo_price": 2980,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "kscojp_901620525",
+    "yahoo_seller_id": "kscojp"
   },
   "brand-00160_name-00004": {
     "amazon_link": "",
@@ -51435,7 +51671,13 @@
     "name": "ウルトラライト透明UVクリーム",
     "name_id": "name-00011",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fludiaplus1221%2Fcosrx-f-08.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/ludiaplus1221_cosrx-f-08",
+    "yahoo_price": 1550,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "ludiaplus1221_cosrx-f-08",
+    "yahoo_seller_id": "ludiaplus1221"
   },
   "brand-00160_name-00014": {
     "amazon_link": "",
@@ -51707,7 +51949,13 @@
     "name": "トーンアップUVスティック",
     "name_id": "name-00017",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fkurasinomi%2F0741-029932.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/kurasinomi_0741-029932",
+    "yahoo_price": 980,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "kurasinomi_0741-029932",
+    "yahoo_seller_id": "kurasinomi"
   },
   "brand-00164_name-00001": {
     "amazon_link": "",
@@ -51827,7 +52075,8 @@
     "name": "TF リップ ペンシル",
     "name_id": "name-00014",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00165_name-00019": {
     "amazon_link": "",
@@ -51838,7 +52087,13 @@
     "name": "リップ カラー サテン マット",
     "name_id": "name-00019",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Ftreasurebeauty%2F11216028.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/treasurebeauty_11216028",
+    "yahoo_price": 2921,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "treasurebeauty_11216028",
+    "yahoo_seller_id": "treasurebeauty"
   },
   "brand-00165_name-00020": {
     "amazon_link": "",
@@ -51897,7 +52152,13 @@
     "name": "アーキテクチャー ソフト マット ブラーリング ファンデーション",
     "name_id": "name-00035",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Ftreasurebeauty%2F55511442.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/treasurebeauty_55511442",
+    "yahoo_price": 9600,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "treasurebeauty_55511442",
+    "yahoo_seller_id": "treasurebeauty"
   },
   "brand-00165_name-00044": {
     "amazon_link": "",
@@ -51961,7 +52222,8 @@
     "name": "シェイド アンド イルミネイト ファンデーション ブラシ 2.5",
     "name_id": "name-00122",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00165_name-00138": {
     "amazon_link": "",
@@ -52532,7 +52794,13 @@
     "name": "B.A カラーズ コレクティッド カラースティック リップカラー・ブラッシュ",
     "name_id": "name-00030",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fbest-c-p%2F8132fp.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/best-c-p_8132fp",
+    "yahoo_price": 4620,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "best-c-p_8132fp",
+    "yahoo_seller_id": "best-c-p"
   },
   "brand-00175_name-00035": {
     "amazon_link": "",
@@ -52746,7 +53014,13 @@
     "name_id": "name-00029",
     "rakuten_image_link": "",
     "rakuten_link_none": true,
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fnorganic%2Fnp-vieessence-y01.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/norganic_np-vieessence-y01",
+    "yahoo_price": 9240,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "norganic_np-vieessence-y01",
+    "yahoo_seller_id": "norganic"
   },
   "brand-00178_name-00001": {
     "amazon_link": "",
@@ -52776,7 +53050,13 @@
     "name": "シアー モイスト パウダー",
     "name_id": "name-00002",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fkohgendo%2F1015974.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/kohgendo_1015974",
+    "yahoo_price": 4840,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "kohgendo_1015974",
+    "yahoo_seller_id": "kohgendo"
   },
   "brand-00178_name-00016": {
     "amazon_link": "",
@@ -52804,7 +53084,13 @@
     "name": "グロス フィルム ファンデーション",
     "name_id": "name-00025",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fmarket-sakaei1231%2F4589651801724.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/market-sakaei1231_4589651801724",
+    "yahoo_price": 3588,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "market-sakaei1231_4589651801724",
+    "yahoo_seller_id": "market-sakaei1231"
   },
   "brand-00178_name-00109": {
     "amazon_link": "",
@@ -52815,7 +53101,13 @@
     "name": "アイシャドウ ブレンディングブラシ",
     "name_id": "name-00109",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fzozo%2F93028407.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/zozo_93028407",
+    "yahoo_price": 2860,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "zozo_93028407",
+    "yahoo_seller_id": "zozo"
   },
   "brand-00179_name-00001": {
     "amazon_link": "",
@@ -53181,7 +53473,13 @@
     "name": "アンレーベル　V　コンプリート　シートマスク",
     "name_id": "name-00029",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fjoiedebeaute%2Ful223-1.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/joiedebeaute_ul223-1",
+    "yahoo_price": 880,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "joiedebeaute_ul223-1",
+    "yahoo_seller_id": "joiedebeaute"
   },
   "brand-00187_name-00001": {
     "amazon_link": "",
@@ -53407,7 +53705,13 @@
     "name": "ザ･リフレッシング ミスト",
     "name_id": "name-00045",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fbellcosme%2F12310968.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/bellcosme_12310968",
+    "yahoo_price": 14250,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "bellcosme_12310968",
+    "yahoo_seller_id": "bellcosme"
   },
   "brand-00188_name-00001": {
     "amazon_link": "",
@@ -53545,7 +53849,13 @@
     "name": "メディケイティッド エクストラクリーム",
     "name_id": "name-00008",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fyamada-denki%2F7692788018.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/yamada-denki_7692788018",
+    "yahoo_price": 805,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "yamada-denki_7692788018",
+    "yahoo_seller_id": "yamada-denki"
   },
   "brand-00193_name-00016": {
     "amazon_link": "",
@@ -53556,7 +53866,13 @@
     "name": "メディケイティッド ポイント集中ケア",
     "name_id": "name-00016",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fdrugpure%2F4901301355393-1jvte.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/drugpure_4901301355393-1jvte",
+    "yahoo_price": 1128,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "drugpure_4901301355393-1jvte",
+    "yahoo_seller_id": "drugpure"
   },
   "brand-00194_name-00001": {
     "amazon_link": "",
@@ -53567,7 +53883,13 @@
     "name": "リプラスティ R.C. クリーム",
     "name_id": "name-00001",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Ftreasurebeauty%2F12510801.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/treasurebeauty_12510801",
+    "yahoo_price": 10835,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "treasurebeauty_12510801",
+    "yahoo_seller_id": "treasurebeauty"
   },
   "brand-00194_name-00002": {
     "amazon_link": "",
@@ -54148,7 +54470,8 @@
     "name": "フィーJカールマスカラ 02 ボリュームアンドカール",
     "name_id": "name-00026",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00198_name-00033": {
     "amazon_link": "",
@@ -54159,7 +54482,8 @@
     "name": "フィーデカ目デュアルライナー",
     "name_id": "name-00033",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00198_name-00034": {
     "amazon_link": "",
@@ -54419,7 +54743,8 @@
     "name": "ダイヤモンドライト マルチユース ハイライター",
     "name_id": "name-00009",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00202_name-00019": {
     "amazon_link": "",
@@ -54517,7 +54842,13 @@
     "name": "メディア　アイブロウペンシルAA",
     "name_id": "name-00006",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fdrug%2F4973167006733x3-ma.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/drug_4973167006733x3-ma",
+    "yahoo_price": 1597,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "drug_4973167006733x3-ma",
+    "yahoo_seller_id": "drug"
   },
   "brand-00203_name-00007": {
     "amazon_link": "",
@@ -54604,7 +54935,13 @@
     "name": "メディア　UVプロテクトベースR",
     "name_id": "name-00013",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fcosme-village%2F4973167827994-c.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/cosme-village_4973167827994-c",
+    "yahoo_price": 880,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "cosme-village_4973167827994-c",
+    "yahoo_seller_id": "cosme-village"
   },
   "brand-00203_name-00017": {
     "amazon_link": "",
@@ -54786,7 +55123,13 @@
     "name": "スティックパテ",
     "name_id": "name-00042",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fcosme-village%2F4964596703065-c.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/cosme-village_4964596703065-c",
+    "yahoo_price": 1180,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "cosme-village_4964596703065-c",
+    "yahoo_seller_id": "cosme-village"
   },
   "brand-00204_name-00047": {
     "amazon_link": "",
@@ -54810,7 +55153,13 @@
     "name": "by365 パウダリーUVクリーム",
     "name_id": "name-00002",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fkusuriaoki%2F60000000017656.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/kusuriaoki_60000000017656",
+    "yahoo_price": 5382,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "kusuriaoki_60000000017656",
+    "yahoo_seller_id": "kusuriaoki"
   },
   "brand-00205_name-00006": {
     "amazon_link": "",
@@ -54821,7 +55170,13 @@
     "name": "by365 パウダリーUVクリーム トーンアップ",
     "name_id": "name-00006",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fbeautiful-marche%2F26032901-1540.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/beautiful-marche_26032901-1540",
+    "yahoo_price": 2175,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "beautiful-marche_26032901-1540",
+    "yahoo_seller_id": "beautiful-marche"
   },
   "brand-00205_name-00024": {
     "amazon_link": "",
@@ -54866,7 +55221,13 @@
     "name": "ジョリ・エ ジョリ・エ クリーミィアイライナー",
     "name_id": "name-00019",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fcosmetch%2F4531560301536.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/cosmetch_4531560301536",
+    "yahoo_price": 730,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "cosmetch_4531560301536",
+    "yahoo_seller_id": "cosmetch"
   },
   "brand-00212_name-00001": {
     "amazon_link": "",
@@ -55475,7 +55836,13 @@
     "name": "ディープトリートメントオイル",
     "name_id": "name-00012",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fzozo%2F92620891.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/zozo_92620891",
+    "yahoo_price": 3450,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "zozo_92620891",
+    "yahoo_seller_id": "zozo"
   },
   "brand-00218_name-00013": {
     "amazon_link": "",
@@ -55713,7 +56080,13 @@
     "name": "K-パレット　毛穴消しプライマー",
     "name_id": "name-00050",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fohgiri-store%2Fkpalette6306.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/ohgiri-store_kpalette6306",
+    "yahoo_price": 1498,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "ohgiri-store_kpalette6306",
+    "yahoo_seller_id": "ohgiri-store"
   },
   "brand-00224_name-00010": {
     "amazon_link": "",
@@ -55725,7 +56098,13 @@
     "name_id": "name-00010",
     "now_price": 2750,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00r222h.ftdz45c3.g00r222h.ftdz5d59/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fayura%2F74039%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fayura%2Fi%2F10000805%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/ayura/cabinet/i/74000/08730926/74039_award.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"アユーラ セラムオプティマイザー\" title=\"アユーラ セラムオプティマイザー\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00r222h.ftdz45c3.g00r222h.ftdz5d59/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fayura%2F74039%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fayura%2Fi%2F10000805%2F&rafcid=wsc_i_is_1011877497265360338"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00r222h.ftdz45c3.g00r222h.ftdz5d59/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fayura%2F74039%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fayura%2Fi%2F10000805%2F&rafcid=wsc_i_is_1011877497265360338",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Farcom-shop%2Fay74039.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/arcom-shop_ay74039",
+    "yahoo_price": 2630,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "arcom-shop_ay74039",
+    "yahoo_seller_id": "arcom-shop"
   },
   "brand-00224_name-00032": {
     "amazon_link": "",
@@ -55876,14 +56255,15 @@
     "name": "ハイ　コントロール　ファンデーション　ブラシ",
     "name_id": "name-00080",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00226_name-00001": {
     "amazon_link": "",
     "brand": "MEDICUBE(メディキューブ)",
     "brand_id": "brand-00226",
     "category": "美容液",
-    "count": 9,
+    "count": 10,
     "name": "PDRNピンクアンプル",
     "name_id": "name-00001",
     "now_price": 2800,
@@ -55983,7 +56363,13 @@
     "name": "ゼロ毛穴1DAYセラム",
     "name_id": "name-00008",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fkscojp%2F1039909660.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/kscojp_1039909660",
+    "yahoo_price": 2680,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "kscojp_1039909660",
+    "yahoo_seller_id": "kscojp"
   },
   "brand-00226_name-00009": {
     "amazon_link": "",
@@ -55994,7 +56380,8 @@
     "name": "PDRNピンクビタコーティングマスク",
     "name_id": "name-00009",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00226_name-00010": {
     "amazon_link": "",
@@ -56093,7 +56480,8 @@
     "name": "もち肌コラーゲンセラム3.0",
     "name_id": "name-00028",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00226_name-00031": {
     "amazon_link": "",
@@ -56193,7 +56581,13 @@
     "name": "PDRNピンククリーム",
     "name_id": "name-00046",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fk-beauty%2Fmedcrm004.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/k-beauty_medcrm004",
+    "yahoo_price": 2786,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "k-beauty_medcrm004",
+    "yahoo_seller_id": "k-beauty"
   },
   "brand-00226_name-00049": {
     "amazon_link": "",
@@ -56231,7 +56625,13 @@
     "name": "コウジ酸ターメリックゲルマスク",
     "name_id": "name-00056",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fpureco%2Fprc-s-8676974658.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/pureco_prc-s-8676974658",
+    "yahoo_price": 522,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "pureco_prc-s-8676974658",
+    "yahoo_seller_id": "pureco"
   },
   "brand-00226_name-00060": {
     "amazon_link": "",
@@ -56316,7 +56716,8 @@
     "name": "PDRNピンクコラーゲンボールクリーム",
     "name_id": "name-00111",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00226_name-00112": {
     "amazon_link": "",
@@ -56327,7 +56728,8 @@
     "name": "PDRNピンクコラーゲンエクソソームショット2000",
     "name_id": "name-00112",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00228_name-00009": {
     "amazon_link": "",
@@ -57080,7 +57482,8 @@
     "name": "ビーベルベットフルイドファンデーション",
     "name_id": "name-00091",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00231_name-00117": {
     "amazon_link": "",
@@ -57603,7 +58006,13 @@
     "name_id": "name-00022",
     "now_price": 3850,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00rf71h.ftdz4dd6.g00rf71h.ftdz5231/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstylife%2Fnk7492%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fstylife%2Fi%2F14898685%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/stylife/cabinet/item/492/nk7492-01_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"Celvoke オムニコンシャス ラッシュ\" title=\"Celvoke オムニコンシャス ラッシュ\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00rf71h.ftdz4dd6.g00rf71h.ftdz5231/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstylife%2Fnk7492%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fstylife%2Fi%2F14898685%2F&rafcid=wsc_i_is_1011877497265360338"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00rf71h.ftdz4dd6.g00rf71h.ftdz5231/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstylife%2Fnk7492%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fstylife%2Fi%2F14898685%2F&rafcid=wsc_i_is_1011877497265360338",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fzozo%2F89423306.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/zozo_89423306",
+    "yahoo_price": 3850,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "zozo_89423306",
+    "yahoo_seller_id": "zozo"
   },
   "brand-00236_name-00025": {
     "amazon_link": "",
@@ -58446,7 +58855,13 @@
     "name": "ReFa CARAT",
     "name_id": "name-00021",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fmtgec%2F9640802001.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/mtgec_9640802001",
+    "yahoo_price": 29480,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "mtgec_9640802001",
+    "yahoo_seller_id": "mtgec"
   },
   "brand-00245_name-00050": {
     "amazon_link": "",
@@ -58552,7 +58967,13 @@
     "name": "カラーメインテナイザー　（Ｓ）",
     "name_id": "name-00022",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Furbancosme-y%2F4973167015247-v.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/urbancosme-y_4973167015247-v",
+    "yahoo_price": 2944,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "urbancosme-y_4973167015247-v",
+    "yahoo_seller_id": "urbancosme-y"
   },
   "brand-00252_name-00041": {
     "amazon_link": "",
@@ -58564,7 +58985,13 @@
     "name_id": "name-00041",
     "now_price": 4547,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00pvuhh.ftdz4175.g00pvuhh.ftdz5cbf/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fc-urban%2F4973167538753%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fc-urban%2Fi%2F10015924%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/c-urban/cabinet/image/lbsu250213.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"リサージ ブライトニングセラムUV\" title=\"リサージ ブライトニングセラムUV\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00pvuhh.ftdz4175.g00pvuhh.ftdz5cbf/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fc-urban%2F4973167538753%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fc-urban%2Fi%2F10015924%2F&rafcid=wsc_i_is_1011877497265360338"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00pvuhh.ftdz4175.g00pvuhh.ftdz5cbf/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fc-urban%2F4973167538753%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fc-urban%2Fi%2F10015924%2F&rafcid=wsc_i_is_1011877497265360338",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fjeune101%2F4973167538753.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/jeune101_4973167538753",
+    "yahoo_price": 4250,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "jeune101_4973167538753",
+    "yahoo_seller_id": "jeune101"
   },
   "brand-00252_name-00066": {
     "amazon_link": "",
@@ -58614,7 +59041,13 @@
     "name_id": "name-00002",
     "now_price": 6050,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000173466%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10151869%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img2031/item_1000173466_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"DECENCIA(ディセンシア) ディセンシア クリーム\" title=\"DECENCIA(ディセンシア) ディセンシア クリーム\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000173466%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10151869%2F&rafcid=wsc_i_is_1011877497265360338"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000173466%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10151869%2F&rafcid=wsc_i_is_1011877497265360338",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fzozo%2F86468505.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/zozo_86468505",
+    "yahoo_price": 7150,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "zozo_86468505",
+    "yahoo_seller_id": "zozo"
   },
   "brand-00253_name-00003": {
     "amazon_link": "",
@@ -58784,7 +59217,13 @@
     "name": "オーバルマルチジェルライナー",
     "name_id": "name-00015",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fcosmecom%2F1000207512.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/cosmecom_1000207512",
+    "yahoo_price": 1430,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "cosmecom_1000207512",
+    "yahoo_seller_id": "cosmecom"
   },
   "brand-00255_name-00021": {
     "amazon_link": "",
@@ -58795,7 +59234,13 @@
     "name": "アイラッシュフィックス",
     "name_id": "name-00021",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Ffabric-cute%2F4972915031249.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/fabric-cute_4972915031249",
+    "yahoo_price": 1010,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "fabric-cute_4972915031249",
+    "yahoo_seller_id": "fabric-cute"
   },
   "brand-00255_name-00030": {
     "amazon_link": "",
@@ -58807,7 +59252,13 @@
     "name_id": "name-00030",
     "now_price": 980,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00txe8h.ftdz4bb5.g00txe8h.ftdz586c/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fn-yakuhin%2F4972915031249-1kea%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fn-yakuhin%2Fi%2F10009317%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/n-yakuhin/cabinet/syouhin5/4972915031249.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ドーリーウインク ドーリーウインクアイラッシュフィックス ハードタイプ\" title=\"ドーリーウインク ドーリーウインクアイラッシュフィックス ハードタイプ\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00txe8h.ftdz4bb5.g00txe8h.ftdz586c/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fn-yakuhin%2F4972915031249-1kea%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fn-yakuhin%2Fi%2F10009317%2F&rafcid=wsc_i_is_1011877497265360338"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00txe8h.ftdz4bb5.g00txe8h.ftdz586c/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fn-yakuhin%2F4972915031249-1kea%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fn-yakuhin%2Fi%2F10009317%2F&rafcid=wsc_i_is_1011877497265360338",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Ffabric-cute%2F4972915031249.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/fabric-cute_4972915031249",
+    "yahoo_price": 1010,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "fabric-cute_4972915031249",
+    "yahoo_seller_id": "fabric-cute"
   },
   "brand-00257_name-00001": {
     "amazon_link": "",
@@ -59148,7 +59599,13 @@
     "name": "テラクネ365 薬用アクネクリーム",
     "name_id": "name-00023",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fcosmecom%2F1000206286.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/cosmecom_1000206286",
+    "yahoo_price": 3080,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "cosmecom_1000206286",
+    "yahoo_seller_id": "cosmecom"
   },
   "brand-00264_name-00026": {
     "amazon_link": "",
@@ -59217,7 +59674,13 @@
     "name_id": "name-00003",
     "now_price": 2420,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00r452h.ftdz44ae.g00r452h.ftdz5b24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fehac%2F4582619580990%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fehac%2Fi%2F10207059%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/ehac/cabinet/gazo87/4582619580990.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ByUR バイユア プランプハニー デイリーアクアセラムマスク\" title=\"ByUR バイユア プランプハニー デイリーアクアセラムマスク\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00r452h.ftdz44ae.g00r452h.ftdz5b24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fehac%2F4582619580990%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fehac%2Fi%2F10207059%2F&rafcid=wsc_i_is_1011877497265360338"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00r452h.ftdz44ae.g00r452h.ftdz5b24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fehac%2F4582619580990%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fehac%2Fi%2F10207059%2F&rafcid=wsc_i_is_1011877497265360338",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fbestone%2F1009817000.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/bestone_1009817000",
+    "yahoo_price": 1730,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "bestone_1009817000",
+    "yahoo_seller_id": "bestone"
   },
   "brand-00265_name-00004": {
     "amazon_link": "",
@@ -59243,7 +59706,7 @@
     "brand": "ByUR",
     "brand_id": "brand-00265",
     "category": "フェイスオイル・バーム",
-    "count": 4,
+    "count": 5,
     "name": "セラムフィット ボリューミング グロースティック",
     "name_id": "name-00006",
     "now_price": 1840,
@@ -59443,7 +59906,13 @@
     "name": "クリーンリセット ミルキー クレンジングウォーター",
     "name_id": "name-00050",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fcosme-nana%2F1009835200.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/cosme-nana_1009835200",
+    "yahoo_price": 2520,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "cosme-nana_1009835200",
+    "yahoo_seller_id": "cosme-nana"
   },
   "brand-00266_name-00001": {
     "amazon_link": "",
@@ -59568,7 +60037,13 @@
     "name": "バニラコ デューグロウティント",
     "name_id": "name-00007",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fcosmecom%2F1000205641.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/cosmecom_1000205641",
+    "yahoo_price": 1790,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "cosmecom_1000205641",
+    "yahoo_seller_id": "cosmecom"
   },
   "brand-00266_name-00008": {
     "amazon_link": "",
@@ -59723,7 +60198,8 @@
     "name": "アイラブスタイル アイライナーペンシル",
     "name_id": "name-00081",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00266_name-00106": {
     "amazon_link": "",
@@ -59879,7 +60355,8 @@
     "name": "サンカットR フレグランスUV プロテクトスプレー 桜",
     "name_id": "name-00028",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00269_name-00002": {
     "amazon_link": "",
@@ -60045,7 +60522,8 @@
     "name_id": "name-00004",
     "now_price": 1650,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00umnoh.ftdz4875.g00umnoh.ftdz565e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ftheordinary%2For-12%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Ftheordinary%2Fi%2F10000016%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/theordinary/cabinet/item_img/point/2506ma/or-12b.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"The Ordinary LA5+HAフェイスセラム\" title=\"The Ordinary LA5+HAフェイスセラム\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00umnoh.ftdz4875.g00umnoh.ftdz565e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ftheordinary%2For-12%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Ftheordinary%2Fi%2F10000016%2F&rafcid=wsc_i_is_1011877497265360338"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00umnoh.ftdz4875.g00umnoh.ftdz565e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ftheordinary%2For-12%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Ftheordinary%2Fi%2F10000016%2F&rafcid=wsc_i_is_1011877497265360338",
+    "yahoo_link_none": true
   },
   "brand-00273_name-00009": {
     "amazon_link": "",
@@ -60379,7 +60857,13 @@
     "name": "HDスキン マットベルベットコンパクト",
     "name_id": "name-00020",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fzozo%2F71156132.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/zozo_71156132",
+    "yahoo_price": 6820,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "zozo_71156132",
+    "yahoo_seller_id": "zozo"
   },
   "brand-00274_name-00022": {
     "amazon_link": "",
@@ -60546,7 +61030,13 @@
     "name": "ステップ1プライマー シャインコントロール",
     "name_id": "name-00059",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fzozo%2F54427212.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/zozo_54427212",
+    "yahoo_price": 5390,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "zozo_54427212",
+    "yahoo_seller_id": "zozo"
   },
   "brand-00274_name-00063": {
     "amazon_link": "",
@@ -60610,7 +61100,13 @@
     "name": "HDスキン オールインワンパレット",
     "name_id": "name-00069",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fune%2F80001961.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/une_80001961",
+    "yahoo_price": 15730,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "une_80001961",
+    "yahoo_seller_id": "une"
   },
   "brand-00274_name-00086": {
     "amazon_link": "",
@@ -60621,7 +61117,13 @@
     "name": "プレシジョンハイライトブラシ 144",
     "name_id": "name-00086",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fzozo%2F75910390.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/zozo_75910390",
+    "yahoo_price": 5500,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "zozo_75910390",
+    "yahoo_seller_id": "zozo"
   },
   "brand-00274_name-00101": {
     "amazon_link": "",
@@ -60701,7 +61203,13 @@
     "name": "リップブラシ 300",
     "name_id": "name-00115",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fzozo%2F79637634.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/zozo_79637634",
+    "yahoo_price": 3300,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "zozo_79637634",
+    "yahoo_seller_id": "zozo"
   },
   "brand-00274_name-00120": {
     "amazon_link": "",
@@ -60727,7 +61235,13 @@
     "name_id": "name-00129",
     "rakuten_image_link": "",
     "rakuten_link_none": true,
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fzozo%2F79670869.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/zozo_79670869",
+    "yahoo_price": 1100,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "zozo_79670869",
+    "yahoo_seller_id": "zozo"
   },
   "brand-00275_name-00061": {
     "amazon_link": "",
@@ -60959,7 +61473,13 @@
     "name": "ブラックローズ プレシャスオイル",
     "name_id": "name-00020",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fcosmeparfaite%2F3473311320001.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/cosmeparfaite_3473311320001",
+    "yahoo_price": 25800,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "cosmeparfaite_3473311320001",
+    "yahoo_seller_id": "cosmeparfaite"
   },
   "brand-00282_name-00028": {
     "amazon_link": "",
@@ -60989,7 +61509,8 @@
     "name": "フィト サーンズ エクラ",
     "name_id": "name-00036",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00282_name-00053": {
     "amazon_link": "",
@@ -61095,7 +61616,8 @@
     "name": "インスタント コレクト",
     "name_id": "name-00108",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00282_name-00114": {
     "amazon_link": "",
@@ -61186,7 +61708,8 @@
     "name": "シアースティックハイライト",
     "name_id": "name-00037",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00285_name-00050": {
     "amazon_link": "",
@@ -61304,7 +61827,8 @@
     "name": "弱酸性pHシートマスク グルタチオンソームフィット",
     "name_id": "name-00019",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00287_name-00025": {
     "amazon_link": "",
@@ -61334,7 +61858,8 @@
     "name": "水分草ヒアルロン日焼け止めプロテクションチューブ",
     "name_id": "name-00040",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00289_name-00001": {
     "amazon_link": "",
@@ -61940,7 +62465,8 @@
     "name_id": "name-00013",
     "rakuten_image_link": "",
     "rakuten_link_none": true,
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00301_name-00014": {
     "amazon_link": "",
@@ -62141,7 +62667,7 @@
     "brand": "SKINFOOD(スキンフード)",
     "brand_id": "brand-00312",
     "category": "化粧水",
-    "count": 17,
+    "count": 18,
     "name": "キャロットカロテン カーミングウォーターパッド",
     "name_id": "name-00001",
     "now_price": 3080,
@@ -62219,7 +62745,13 @@
     "name": "ポテト マデカソ スージングパッド",
     "name_id": "name-00025",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fzozo%2F83471510.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/zozo_83471510",
+    "yahoo_price": 3080,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "zozo_83471510",
+    "yahoo_seller_id": "zozo"
   },
   "brand-00312_name-00026": {
     "amazon_link": "",
@@ -62330,7 +62862,7 @@
     "brand": "too cool for school",
     "brand_id": "brand-00317",
     "category": "ペンシルアイライナー",
-    "count": 78,
+    "count": 79,
     "name": "アートクラススマッジングアンダーライナー",
     "name_id": "name-00003",
     "now_price": 1580,
@@ -62700,7 +63232,13 @@
     "name": "プッシュアップカーラー",
     "name_id": "name-00006",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Flargo1991%2Ffk16178-a2405.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/largo1991_fk16178-a2405",
+    "yahoo_price": 685,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "largo1991_fk16178-a2405",
+    "yahoo_seller_id": "largo1991"
   },
   "brand-00329_name-00001": {
     "amazon_link": "",
@@ -63077,7 +63615,8 @@
     "name": "トーン アイブロウペンシル",
     "name_id": "name-00094",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00333_name-00007": {
     "amazon_link": "",
@@ -63088,7 +63627,13 @@
     "name": "ティンカーウィンク 涙袋アイカラー",
     "name_id": "name-00007",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fcosmecom%2F1000142151.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/cosmecom_1000142151",
+    "yahoo_price": 1320,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "cosmecom_1000142151",
+    "yahoo_seller_id": "cosmecom"
   },
   "brand-00334_name-00006": {
     "amazon_link": "",
@@ -63150,7 +63695,8 @@
     "name_id": "name-00010",
     "rakuten_image_link": "",
     "rakuten_link_none": true,
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00334_name-00013": {
     "amazon_link": "",
@@ -63175,7 +63721,13 @@
     "name_id": "name-00014",
     "rakuten_image_link": "",
     "rakuten_link_none": true,
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fwanpaku-shop%2F4278-003713.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/wanpaku-shop_4278-003713",
+    "yahoo_price": 2480,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "wanpaku-shop_4278-003713",
+    "yahoo_seller_id": "wanpaku-shop"
   },
   "brand-00334_name-00015": {
     "amazon_link": "",
@@ -63218,7 +63770,13 @@
     "name_id": "name-00019",
     "now_price": 2580,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fskgroup%2F4580171669139-2%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fskgroup%2Fi%2F10007073%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/skgroup/cabinet/12606894/paraye33.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"パラドゥ アウトドア ガードUV\" title=\"パラドゥ アウトドア ガードUV\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fskgroup%2F4580171669139-2%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fskgroup%2Fi%2F10007073%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fskgroup%2F4580171669139-2%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fskgroup%2Fi%2F10007073%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fskgroup%2F4580171669139-2.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/skgroup_4580171669139-2",
+    "yahoo_price": 2580,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "skgroup_4580171669139-2",
+    "yahoo_seller_id": "skgroup"
   },
   "brand-00334_name-00020": {
     "amazon_link": "",
@@ -63230,7 +63788,13 @@
     "name_id": "name-00020",
     "rakuten_image_link": "",
     "rakuten_link_none": true,
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fwanpaku-shop%2F3941-001442.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/wanpaku-shop_3941-001442",
+    "yahoo_price": 1999,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "wanpaku-shop_3941-001442",
+    "yahoo_seller_id": "wanpaku-shop"
   },
   "brand-00337_name-00003": {
     "amazon_link": "",
@@ -63242,7 +63806,13 @@
     "name_id": "name-00003",
     "now_price": 4510,
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000193481%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10164064%2F&rafcid=wsc_i_is_1011877497265360338\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmecomonline/cabinet/item-img216/item_1000193481_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"UNMIX フェイスグロウ\" title=\"UNMIX フェイスグロウ\"></a>",
-    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000193481%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10164064%2F&rafcid=wsc_i_is_1011877497265360338"
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/g00qawwh.ftdz432e.g00qawwh.ftdz555d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000193481%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmecomonline%2Fi%2F10164064%2F&rafcid=wsc_i_is_1011877497265360338",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fcosmecom%2F1000223466.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/cosmecom_1000223466",
+    "yahoo_price": 4510,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "cosmecom_1000223466",
+    "yahoo_seller_id": "cosmecom"
   },
   "brand-00338_name-00001": {
     "amazon_link": "",
@@ -63380,7 +63950,7 @@
     "brand": "ホワイトショット",
     "brand_id": "brand-00348",
     "category": "日焼け止め・UVケア(顔用)",
-    "count": 12,
+    "count": 13,
     "name": "ホワイトショット セラムUV",
     "name_id": "name-00002",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ffancylifecosme%2F308431%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Ffancylifecosme%2Fi%2F10000617%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/fancylifecosme/cabinet/12759776/31159-rank01.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ホワイトショット ホワイトショット セラムUV\" title=\"ホワイトショット ホワイトショット セラムUV\"></a>",
@@ -63794,7 +64364,8 @@
     "name": "ウォーター グロス ティント",
     "name_id": "name-00029",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00350_name-00030": {
     "amazon_link": "",
@@ -63933,7 +64504,13 @@
     "name": "ヴァイブランスマスク",
     "name_id": "name-00002",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fserafinet-y%2Fs-4562202601615.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/serafinet-y_s-4562202601615",
+    "yahoo_price": 10210,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "serafinet-y_s-4562202601615",
+    "yahoo_seller_id": "serafinet-y"
   },
   "brand-00355_name-00003": {
     "amazon_link": "",
@@ -64104,7 +64681,13 @@
     "name": "リップスリーピングマスク",
     "name_id": "name-00002",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fzozo%2F63367093.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/zozo_63367093",
+    "yahoo_price": 2970,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "zozo_63367093",
+    "yahoo_seller_id": "zozo"
   },
   "brand-00361_name-00003": {
     "amazon_link": "",
@@ -64153,7 +64736,13 @@
     "name": "イルミナス ベルベット",
     "name_id": "name-00006",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fkscojp%2F984254221.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/kscojp_984254221",
+    "yahoo_price": 6980,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "kscojp_984254221",
+    "yahoo_seller_id": "kscojp"
   },
   "brand-00361_name-00008": {
     "amazon_link": "",
@@ -64297,7 +64886,13 @@
     "name": "N. ポリッシュオイル",
     "name_id": "name-00001",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fbb-2023%2Fn-poil150.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/bb-2023_n-poil150",
+    "yahoo_price": 3280,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "bb-2023_n-poil150",
+    "yahoo_seller_id": "bb-2023"
   },
   "brand-00366_name-00001": {
     "amazon_link": "",
@@ -64666,7 +65261,13 @@
     "name": "ブロウシャドウ ペンシル",
     "name_id": "name-00097",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fzozo%2F66948230.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/zozo_66948230",
+    "yahoo_price": 2420,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "zozo_66948230",
+    "yahoo_seller_id": "zozo"
   },
   "brand-00369_name-00001": {
     "amazon_link": "",
@@ -64715,7 +65316,13 @@
     "name": "透明UVスプレーF",
     "name_id": "name-00004",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fmugigokoro-y%2F4992440034737.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/mugigokoro-y_4992440034737",
+    "yahoo_price": 2255,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "mugigokoro-y_4992440034737",
+    "yahoo_seller_id": "mugigokoro-y"
   },
   "brand-00369_name-00006": {
     "amazon_link": "",
@@ -64783,7 +65390,13 @@
     "name": "ヘパトリート 薬用保湿ハンドクリーム",
     "name_id": "name-00004",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fbenkyoudou%2Fth-teikei-4582118951499.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/benkyoudou_th-teikei-4582118951499",
+    "yahoo_price": 1108,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "benkyoudou_th-teikei-4582118951499",
+    "yahoo_seller_id": "benkyoudou"
   },
   "brand-00375_name-00001": {
     "amazon_link": "",
@@ -64884,7 +65497,8 @@
     "name": "ヒアルロニック アンプル クレンジングウォーター",
     "name_id": "name-00001",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00379_name-00002": {
     "amazon_link": "",
@@ -64975,7 +65589,13 @@
     "name": "フローレスセラム ハイドレイティング",
     "name_id": "name-00037",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fya-man%2Fr2104a.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/ya-man_r2104a",
+    "yahoo_price": 3300,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "ya-man_r2104a",
+    "yahoo_seller_id": "ya-man"
   },
   "brand-00379_name-00068": {
     "amazon_link": "",
@@ -64986,7 +65606,13 @@
     "name": "フローレスセラム ホワイト",
     "name_id": "name-00068",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fya-man%2Fr2306c.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/ya-man_r2306c",
+    "yahoo_price": 3850,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "ya-man_r2306c",
+    "yahoo_seller_id": "ya-man"
   },
   "brand-00379_name-00096": {
     "amazon_link": "",
@@ -64997,7 +65623,13 @@
     "name": "クリアスキンナノスチーマー",
     "name_id": "name-00096",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fcandy%2F062-4901.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/candy_062-4901",
+    "yahoo_price": 27500,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "candy_062-4901",
+    "yahoo_seller_id": "candy"
   },
   "brand-00379_name-00103": {
     "amazon_link": "",
@@ -65008,7 +65640,13 @@
     "name": "WAVY ニードルリフトポインター",
     "name_id": "name-00103",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fkou511125%2Fyam-an15wcc.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/kou511125_yam-an15wcc",
+    "yahoo_price": 1630,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "kou511125_yam-an15wcc",
+    "yahoo_seller_id": "kou511125"
   },
   "brand-00384_name-00001": {
     "amazon_link": "",
@@ -65076,7 +65714,8 @@
     "name": "新・pHバランストーナー",
     "name_id": "name-00019",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_link_none": true
   },
   "brand-00387_name-00004": {
     "amazon_link": "",
@@ -65163,7 +65802,13 @@
     "name": "グロウインチーク",
     "name_id": "name-00029",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fzagzag%2F4901433161480.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/zagzag_4901433161480",
+    "yahoo_price": 1320,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "zagzag_4901433161480",
+    "yahoo_seller_id": "zagzag"
   },
   "brand-00388_name-00001": {
     "amazon_link": "",
@@ -65517,7 +66162,13 @@
     "name": "プロバイオダームコラーゲンリモデリングセラムゲルマスク",
     "name_id": "name-00051",
     "rakuten_image_link": "",
-    "rakuten_text_link": ""
+    "rakuten_text_link": "",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fzozo%2F100482423.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/zozo_100482423",
+    "yahoo_price": 605,
+    "yahoo_price_updated": "2026-10-07",
+    "yahoo_item_code": "zozo_100482423",
+    "yahoo_seller_id": "zozo"
   },
   "brand-00394_name-00052": {
     "amazon_link": "",
@@ -69652,6 +70303,17 @@
     "yahoo_item_code": "matsuya-cosme_07773-1",
     "yahoo_seller_id": "matsuya-cosme"
   },
+  "brand-00011_name-00184": {
+    "brand": "ケイト",
+    "brand_id": "brand-00011",
+    "name": "ジュレリープクッションファンデーション",
+    "name_id": "name-00184",
+    "category": "クッションファンデ",
+    "amazon_link": "",
+    "rakuten_image_link": "",
+    "rakuten_text_link": "",
+    "count": 1
+  },
   "brand-00005_name-00693": {
     "brand": "DHC",
     "brand_id": "brand-00005",
@@ -71276,7 +71938,7 @@
     "amazon_link": "",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmaccosmetics%2F60284%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fmaccosmetics%2Fi%2F10000566%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/maccosmetics/cabinet/pdp/thumb_01/261004_mr/60284.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"M・A・C パウダー キス ヘイジー マット リップスティック\" title=\"M・A・C パウダー キス ヘイジー マット リップスティック\"></a>",
     "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmaccosmetics%2F60284%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fmaccosmetics%2Fi%2F10000566%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-    "count": 33,
+    "count": 34,
     "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Ftreasurebeauty%2F20311060.html",
     "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/treasurebeauty_20311060",
     "yahoo_price": 3666,
@@ -71342,7 +72004,7 @@
     "amazon_link": "",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmemorning%2F2208100467%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmemorning%2Fi%2F10003212%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmemorning/cabinet/ma/mac/2208100467.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"M・A・C スキンフィニッシュ カラーストラック ブラッシュ\" title=\"M・A・C スキンフィニッシュ カラーストラック ブラッシュ\"></a>",
     "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmemorning%2F2208100467%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmemorning%2Fi%2F10003212%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-    "count": 11,
+    "count": 12,
     "yahoo_link_none": true,
     "now_price": 6250,
     "price_updated": "2026-10-03"
@@ -72609,7 +73271,7 @@
     "amazon_link": "",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmatsukiyo%2F4939553530732%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fmatsukiyo%2Fi%2F10580880%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/matsukiyo/cabinet/d0110/4939553530732_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"セザンヌ セラムクッションファンデーション\" title=\"セザンヌ セラムクッションファンデーション\"></a>",
     "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmatsukiyo%2F4939553530732%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fmatsukiyo%2Fi%2F10580880%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-    "count": 32,
+    "count": 34,
     "now_price": 1155,
     "price_updated": "2026-10-03",
     "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fmanekipanda%2F4939553530725.html",
@@ -72628,7 +73290,7 @@
     "amazon_link": "",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F4939553530923%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11430437%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rakuten24/cabinet/923/4939553530923.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"セザンヌ アイブロウ＆シェードパウダー\" title=\"セザンヌ アイブロウ＆シェードパウダー\"></a>",
     "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frakuten24%2F4939553530923%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frakuten24%2Fi%2F11430437%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-    "count": 26,
+    "count": 27,
     "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fkirei-mitsuketa2%2Fh-b-0013780.html",
     "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/kirei-mitsuketa2_h-b-0013780",
     "yahoo_price": 693,
@@ -72666,7 +73328,7 @@
     "amazon_link": "",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkirei-mitsuketa%2Fh-b_0013778%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fkirei-mitsuketa%2Fi%2F10020000%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/kirei-mitsuketa/cabinet/hb_p39_18_9/h-b_0013778_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"セザンヌ 極細アイライナーEXプラス\" title=\"セザンヌ 極細アイライナーEXプラス\"></a>",
     "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkirei-mitsuketa%2Fh-b_0013778%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fkirei-mitsuketa%2Fi%2F10020000%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-    "count": 13,
+    "count": 14,
     "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fkirei-mitsuketa2%2Fh-b-0013778.html",
     "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/kirei-mitsuketa2_h-b-0013778",
     "yahoo_price": 693,
@@ -74626,7 +75288,7 @@
     "amazon_link": "",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmemorning%2F2209100213%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmemorning%2Fi%2F10003468%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/cosmemorning/cabinet/ra/lunasol/2209100213.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"ルナソル スキンフュージングフィルター\" title=\"ルナソル スキンフュージングフィルター\"></a>",
     "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmemorning%2F2209100213%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fcosmemorning%2Fi%2F10003468%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-    "count": 7,
+    "count": 8,
     "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fkoshinohonpo%2Fkanebo466-s.html",
     "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/koshinohonpo_kanebo466-s",
     "yahoo_price": 3850,
@@ -75467,7 +76129,7 @@
     "amazon_link": "",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fbibian%2F4969527511979-8%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fbibian%2Fi%2F10003535%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/bibian/cabinet/08865229/09156330/imgrc0188310473.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"アルビオン アルビオン スタジオ ミルク ファンデーション\" title=\"アルビオン アルビオン スタジオ ミルク ファンデーション\"></a>",
     "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fbibian%2F4969527511979-8%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fbibian%2Fi%2F10003535%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-    "count": 16,
+    "count": 18,
     "now_price": 7650,
     "price_updated": "2026-10-03",
     "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fangel-devil%2F4969527512013.html",
@@ -77185,7 +77847,7 @@
     "amazon_link": "",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frareu%2F20260715015%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frareu%2Fi%2F10020490%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rareu/cabinet/13126474/imgrc0192323052.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"NARS クリームチークブラシ ＃１７\" title=\"NARS クリームチークブラシ ＃１７\"></a>",
     "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frareu%2F20260715015%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frareu%2Fi%2F10020490%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-    "count": 5,
+    "count": 6,
     "now_price": 6820,
     "price_updated": "2026-10-03",
     "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fune%2F80002768.html",
@@ -79155,7 +79817,7 @@
     "amazon_link": "",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fhewuakaneshop%2F202508220046%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fhewuakaneshop%2Fi%2F10011859%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/hewuakaneshop/cabinet/4973167016657.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"SUQQU(スック) ザ ファンデーション e\" title=\"SUQQU(スック) ザ ファンデーション e\"></a>",
     "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fhewuakaneshop%2F202508220046%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fhewuakaneshop%2Fi%2F10011859%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-    "count": 14,
+    "count": 15,
     "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fpureco%2Fprc-s-8618026324.html",
     "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/pureco_prc-s-8618026324",
     "yahoo_price": 12691,
@@ -79219,7 +79881,7 @@
     "amazon_link": "",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Flaneige-r%2Fjuicepopbox_lip_tint%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Flaneige-r%2Fi%2F10000194%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/laneige-r/cabinet/event/12815854/juicepopbox_0528.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"LANEIGE(ラネージュ) ジュースポップボックスリップティント\" title=\"LANEIGE(ラネージュ) ジュースポップボックスリップティント\"></a>",
     "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Flaneige-r%2Fjuicepopbox_lip_tint%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Flaneige-r%2Fi%2F10000194%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-    "count": 24,
+    "count": 25,
     "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fcosmecom%2F1000227045.html",
     "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/cosmecom_1000227045",
     "yahoo_price": 2310,
@@ -86210,7 +86872,7 @@
     "amazon_link": "",
     "rakuten_image_link": "",
     "rakuten_text_link": "",
-    "count": 2,
+    "count": 3,
     "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fmarbleshop%2F101382-b.html",
     "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/marbleshop_101382-b",
     "yahoo_price": 217800,
@@ -86579,6 +87241,17 @@
     "yahoo_price_updated": "2026-10-04",
     "yahoo_item_code": "cosmecom_1000230469",
     "yahoo_seller_id": "cosmecom"
+  },
+  "brand-00952_name-00013": {
+    "brand": "ナイス＆クイック",
+    "brand_id": "brand-00952",
+    "name": "ボタニカルモイストオイルクレンジング",
+    "name_id": "name-00013",
+    "category": "オイルクレンジング",
+    "amazon_link": "",
+    "rakuten_image_link": "",
+    "rakuten_text_link": "",
+    "count": 1
   },
   "brand-00078_name-00177": {
     "brand": "MEDIHEAL(メディヒール)",
@@ -87174,6 +87847,17 @@
     "yahoo_item_code": "zozo_97102535",
     "yahoo_seller_id": "zozo"
   },
+  "brand-00330_name-00115": {
+    "brand": "to/one",
+    "brand_id": "brand-00330",
+    "name": "ドリーム フローラ ブースター セラム",
+    "name_id": "name-00115",
+    "category": "ブースター・導入液",
+    "amazon_link": "",
+    "rakuten_image_link": "",
+    "rakuten_text_link": "",
+    "count": 1
+  },
   "brand-00330_name-00117": {
     "brand": "to/one",
     "brand_id": "brand-00330",
@@ -87209,6 +87893,17 @@
     "yahoo_price_updated": "2026-10-04",
     "yahoo_item_code": "zozo_102628560",
     "yahoo_seller_id": "zozo"
+  },
+  "brand-00330_name-00119": {
+    "brand": "to/one",
+    "brand_id": "brand-00330",
+    "name": "ドリーム フローラ エッセンス ウォーター",
+    "name_id": "name-00119",
+    "category": "化粧水",
+    "amazon_link": "",
+    "rakuten_image_link": "",
+    "rakuten_text_link": "",
+    "count": 1
   },
   "brand-00330_name-00120": {
     "brand": "to/one",
@@ -97103,7 +97798,7 @@
     "amazon_link": "",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fyayoi-cosme%2Fka065198%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fyayoi-cosme%2Fi%2F10016341%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/yayoi-cosme/cabinet/09201782/13927321/4973167065198_1.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"メディア クリームファンデーションＳ\" title=\"メディア クリームファンデーションＳ\"></a>",
     "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fyayoi-cosme%2Fka065198%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fyayoi-cosme%2Fi%2F10016341%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-    "count": 3,
+    "count": 4,
     "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fcosmecom%2F1000236568.html",
     "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/cosmecom_1000236568",
     "yahoo_price": 1540,
@@ -97806,7 +98501,7 @@
     "amazon_link": "",
     "rakuten_image_link": "",
     "rakuten_text_link": "",
-    "count": 1
+    "count": 2
   },
   "brand-01163_name-00004": {
     "brand": "ポール ＆ ジョー",
@@ -99345,7 +100040,7 @@
     "amazon_link": "",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fzhy0226%2F4514254235363%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fzhy0226%2Fi%2F10000001%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/zhy0226/cabinet/13525658/imgrc0111097683.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"SHISEIDO エッセンス スキンセッティング パウダー\" title=\"SHISEIDO エッセンス スキンセッティング パウダー\"></a>",
     "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fzhy0226%2F4514254235363%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fzhy0226%2Fi%2F10000001%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-    "count": 74,
+    "count": 75,
     "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fune%2F80002430.html",
     "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/une_80002430",
     "yahoo_price": 5775,
@@ -99747,7 +100442,7 @@
     "amazon_link": "",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fzhy0226%2F4514254246856%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fzhy0226%2Fi%2F10000141%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/zhy0226/cabinet/13595824/imgrc0111691169.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"SHISEIDO エッセンス スキンスムース ファンデーション\" title=\"SHISEIDO エッセンス スキンスムース ファンデーション\"></a>",
     "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fzhy0226%2F4514254246856%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fzhy0226%2Fi%2F10000141%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-    "count": 29,
+    "count": 30,
     "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fune%2F80002804.html",
     "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/une_80002804",
     "yahoo_price": 8349,
@@ -103049,7 +103744,7 @@
     "amazon_link": "",
     "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frareu%2F20260820009%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frareu%2Fi%2F10020614%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/rareu/cabinet/13126474/2956.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"FAS FAS ザ プランプ セラム ファンデーション\" title=\"FAS FAS ザ プランプ セラム ファンデーション\"></a>",
     "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frareu%2F20260820009%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Frareu%2Fi%2F10020614%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
-    "count": 14,
+    "count": 15,
     "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fdnfal%2Ffas146675.html",
     "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/dnfal_fas146675",
     "yahoo_price": 7700,
@@ -107445,6 +108140,17 @@
     "yahoo_item_code": "cosmeparfaite_4979000210200",
     "yahoo_seller_id": "cosmeparfaite"
   },
+  "brand-00008_name-00243": {
+    "brand": "SK-II",
+    "brand_id": "brand-00008",
+    "name": "フェイシャル トリートメント クレンザー",
+    "name_id": "name-00243",
+    "category": "洗顔フォーム",
+    "amazon_link": "",
+    "rakuten_image_link": "",
+    "rakuten_text_link": "",
+    "count": 1
+  },
   "brand-00008_name-00244": {
     "brand": "SK-II",
     "brand_id": "brand-00008",
@@ -109430,6 +110136,17 @@
     "yahoo_price_updated": "2026-10-07",
     "yahoo_item_code": "cabe-bata_03230",
     "yahoo_seller_id": "cabe-bata"
+  },
+  "brand-00046_name-00054": {
+    "brand": "ラ ロッシュ ポゼ",
+    "brand_id": "brand-00046",
+    "name": "トレリアン フォーミングクレンザー",
+    "name_id": "name-00054",
+    "category": "洗顔フォーム",
+    "amazon_link": "",
+    "rakuten_image_link": "",
+    "rakuten_text_link": "",
+    "count": 1
   },
   "brand-00046_name-00064": {
     "brand": "ラ ロッシュ ポゼ",
@@ -112146,6 +112863,17 @@
     "name": "フリージング ヘッドショット ドーンフォレスト",
     "name_id": "name-00150",
     "category": "頭皮ケア",
+    "amazon_link": "",
+    "rakuten_image_link": "",
+    "rakuten_text_link": "",
+    "count": 1
+  },
+  "brand-00367_name-00168": {
+    "brand": "OSAJI(オサジ)",
+    "brand_id": "brand-00367",
+    "name": "デューイー スタイリング オイル",
+    "name_id": "name-00168",
+    "category": "アウトバストリートメント",
     "amazon_link": "",
     "rakuten_image_link": "",
     "rakuten_text_link": "",
@@ -117369,6 +118097,17 @@
     "name": "ヒアルインテカディープハイドレーションアンプル",
     "name_id": "name-00015",
     "category": "美容液",
+    "amazon_link": "",
+    "rakuten_image_link": "",
+    "rakuten_text_link": "",
+    "count": 1
+  },
+  "brand-01525_name-00019": {
+    "brand": "makeprem",
+    "brand_id": "brand-01525",
+    "name": "PDRNポアクレイクレンジングミルク",
+    "name_id": "name-00019",
+    "category": "ミルククレンジング",
     "amazon_link": "",
     "rakuten_image_link": "",
     "rakuten_text_link": "",
