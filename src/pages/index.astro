@@ -101,7 +101,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
         <p class="reveal mt-8 text-[15px] md:text-base leading-[2] text-neutral-600 max-w-lg" style="--d:300ms">
           YouTubeのコスメ紹介動画<b class="font-medium text-ink">{formatCount(visible.length)}本</b>を読み解き、インフルエンサー<b class="font-medium text-ink">{formatCount(influencerCount)}人</b>が実際に紹介したコスメを、ひとつのデータベースにまとめました。
         </p>
-        <form action={withBase("/search-result")} method="get" role="search" class="reveal mt-10 max-w-xl group" style="--d:400ms">
+        <form action={withBase("/search-result")} method="get" role="search" data-suggest class="reveal mt-10 max-w-xl group" style="--d:400ms">
           <label for="hero-q" class="label-caps text-neutral-500">Search</label>
           <div class="mt-2 flex items-center gap-3 border-b-2 border-ink focus-within:border-rose transition-colors">
             <input id="hero-q" type="search" name="q" placeholder="コスメ名・ブランド・インフルエンサー" class="flex-1 min-w-0 bg-transparent py-3 text-lg md:text-xl font-serif placeholder:text-neutral-400 placeholder:text-[15px] min-[400px]:placeholder:text-lg md:placeholder:text-xl focus:outline-none" />

@@ -9,7 +9,7 @@ import { withBase } from "../lib/data";
     <h1 class="mt-2 font-serif font-semibold h-page">検索結果：<span id="search-query" class="text-rose"></span></h1>
     <p id="search-count" class="mt-3 text-sm text-neutral-500"></p>
     <!-- 言い方を変えて検索し直せるように、今の検索語を入れた入力欄を置く（スマホではヘッダーの検索が隠れているため） -->
-    <form method="get" role="search" class="mt-6 max-w-xl flex items-center gap-3 border-b-2 border-ink focus-within:border-rose transition-colors">
+    <form method="get" role="search" data-suggest class="mt-6 max-w-xl flex items-center gap-3 border-b-2 border-ink focus-within:border-rose transition-colors">
       <input id="search-input" type="search" name="q" aria-label="検索し直す" placeholder="コスメ名・ブランド・インフルエンサー" class="flex-1 min-w-0 bg-transparent py-2.5 text-base md:text-lg placeholder:text-neutral-400 focus:outline-none" />
       <button type="submit" class="shrink-0 w-10 h-10 rounded-full bg-ink text-paper flex items-center justify-center transition-colors duration-500 hover:bg-rose" aria-label="検索">
         <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6" /></svg>
@@ -47,6 +47,8 @@ import { withBase } from "../lib/data";
 </Layout>
 
 <script>
+  import { norm, splitTerms } from "../lib/search-norm";
+
   type BrandRow = [string, string, string, number, number];
   type InfRow = [string, string, string, number, number];
   type CosRow = [string, string, number, string, string, string, number];
@@ -57,19 +59,6 @@ import { withBase } from "../lib/data";
   const base = import.meta.env.BASE_URL.endsWith("/")
     ? import.meta.env.BASE_URL.slice(0, -1)
     : import.meta.env.BASE_URL;
-
-  /** 表記ゆれを吸収する正規化：全角半角・大小文字・ひらがな/カタカナをそろえ、記号と空白を除く。
-   * 「クレド」で「クレ・ド・ポー ボーテ」、「ロムアンド」「romand」で「rom&nd」が引けるようにする。 */
-  const norm = (s: string) =>
-    s
-      .normalize("NFKC")
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[̀-ͯ]/g, "") // é → e（Clé de Peau など）。濁点は下で戻す
-      .normalize("NFC")
-      .replace(/[ぁ-ゖ]/g, (ch) => String.fromCharCode(ch.charCodeAt(0) + 0x60))
-      .replace(/ヴァ/g, "バ").replace(/ヴィ/g, "ビ").replace(/ヴェ/g, "ベ").replace(/ヴォ/g, "ボ").replace(/ヴ/g, "ブ")
-      .replace(/[\s・･·.,\-‐－_&＆'’"!！?？()（）［］\[\]「」『』/／~〜:：+＋#＃*＊]/g, "");
 
   const esc = (s: string) =>
     s.replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch]!);
@@ -86,7 +75,7 @@ import { withBase } from "../lib/data";
     el.removeAttribute("aria-busy");
   };
   // 空白区切りの語は、すべてを含むものだけを出す（「クレド ファンデ」など）
-  const terms = q.split(/[\s　]+/).map(norm).filter(Boolean);
+  const terms = splitTerms(q);
 
   const LABELS: Record<Kind, string> = { brand: "ブランド", influencer: "インフルエンサー", cosmetic: "コスメ", video: "動画" };
   // 「すべて」で各種類を何件まで見せるか
