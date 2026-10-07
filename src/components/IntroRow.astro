@@ -1,29 +1,82 @@
 ---
-import { formatDateDot, withBase } from "../lib/data";
+import { formatDateDot, withBase, type CosmeticIntro } from "../lib/data";
 import PrBadge from "./PrBadge.astro";
 
 interface Props {
-  i: { channel_id: string; channel_title: string; channel_icon?: string; thumbnail?: string; videoKey: string; videoTitle: string; published_at: string; pr?: boolean };
+  i: CosmeticIntro;
+  /** 新しい順での位置（並び替えを戻すときの基準） */
+  pos: number;
+  /** 公開中の肌悩みページの slug（チップをリンクにする） */
+  concernPages: Set<string>;
+  /** スクリプトなしでは隠す行（先頭10件より後） */
+  extra?: boolean;
 }
 
-const { i } = Astro.props;
+const { i, pos, concernPages, extra = false } = Astro.props;
+const views = i.views >= 10_000 ? `${(i.views / 10_000).toFixed(1).replace(/\.0$/, "")}万回` : `${i.views.toLocaleString("ja-JP")}回`;
+// 同じ節が複数の悩みに当たることがある（「赤み・クマをカバー」など）ので、発言は重ねて出さない
+const quotes = [...new Set(i.concerns.map((c) => c.quote))];
 ---
 
 <!--
   コスメ詳細「いつ・誰が紹介したか」の1行。
   PC（1024px以上。タブレット幅では動画の題の列が70pxほどにつぶれるので、スマホと同じ2段にする。195章）: 固定幅の3列（日付 / チャンネル / 動画）。動画の列はサムネイル＋タイトル（最大2行、全文は title 属性）。
   スマホ: 1行目に「日付＋チャンネル」、2行目にサムネイル＋タイトル（最大3行）。
+  チャンネルの下に発信力（インフルエンサー一覧と同じスコアの順位と、それを5段階にした●）、動画の下に再生回数、肌悩みに触れた紹介なら悩みのチップと発言を出す（228章）。
+  data-* は並び替え（新しい順・再生数順・発信力順）のスクリプトが使う。
 -->
-<li class="py-4 grid grid-cols-1 gap-y-2 lg:grid-cols-[7rem_15rem_minmax(0,1fr)] lg:gap-x-6 lg:items-center border-b border-ink/10">
+<li
+  class="intro-row py-4 grid grid-cols-1 gap-y-2 lg:grid-cols-[7rem_15rem_minmax(0,1fr)] lg:gap-x-6 lg:items-center border-b border-ink/10"
+  data-pos={pos}
+  data-views={i.views}
+  data-score={i.influenceScore}
+  hidden={extra}
+>
   <div class="flex items-center gap-3 min-w-0 lg:contents">
     <span class="shrink-0 num-display text-[15px] lg:text-lg text-neutral-600 whitespace-nowrap">{formatDateDot(i.published_at)}</span>
-    <a href={withBase(`/influencer/${i.channel_id}`)} class="flex items-center gap-2.5 min-w-0 text-sm hover:text-rose transition-colors" title={i.channel_title}>
-      {i.channel_icon && <img referrerpolicy="no-referrer" src={i.channel_icon} alt={i.channel_title} data-name={i.channel_title} width="28" height="28" class="w-7 h-7 rounded-full shrink-0" loading="lazy" />}
-      <span class="truncate">{i.channel_title}</span>
-    </a>
+    <div class="min-w-0">
+      <a href={withBase(`/influencer/${i.channel_id}`)} class="flex items-center gap-2.5 min-w-0 text-sm hover:text-rose transition-colors" title={i.channel_title}>
+        {i.channel_icon && <img referrerpolicy="no-referrer" src={i.channel_icon} alt={i.channel_title} data-name={i.channel_title} width="28" height="28" class="w-7 h-7 rounded-full shrink-0" loading="lazy" />}
+        <span class="truncate">{i.channel_title}</span>
+      </a>
+      {
+        i.influence > 0 && (
+          <a href={withBase("/influencer-list")} class="mt-1 lg:ml-[2.375rem] flex w-fit items-center gap-1.5 text-xs text-neutral-500 whitespace-nowrap hover:text-rose" title={`発信力 ${i.influence}/5（発信力スコア${i.influenceRank}位。登録者数・掲載動画数・紹介コスメ数から算出）`}>
+            <span class="inline-flex gap-[3px]" role="img" aria-label={`発信力 5段階中${i.influence}`}>
+              {[1, 2, 3, 4, 5].map((n) => (
+                <span class:list={["w-[7px] h-[7px] rounded-full", n <= i.influence ? "bg-rose" : "bg-ink/12"]} />
+              ))}
+            </span>
+            <span>発信力{i.influenceRank}位</span>
+          </a>
+        )
+      }
+    </div>
   </div>
-  <a href={withBase(`/video/${i.videoKey}`)} class="min-w-0 flex items-center gap-3 group" title={i.videoTitle}>
-    {i.thumbnail && <span class="w-28 md:w-36 shrink-0 overflow-hidden rounded-xl"><img src={i.thumbnail} alt={i.videoTitle} class="w-full aspect-video object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105" loading="lazy" /></span>}
-    <span class="min-w-0 text-sm leading-relaxed text-neutral-700 group-hover:text-rose transition-colors line-clamp-3 lg:line-clamp-2">{i.pr && <PrBadge class="mr-1.5 align-[1px]" />}{i.videoTitle}</span>
-  </a>
+  <div class="min-w-0">
+    <a href={withBase(`/video/${i.videoKey}`)} class="min-w-0 flex items-center gap-3 group" title={i.videoTitle}>
+      {i.thumbnail && <span class="w-28 md:w-36 shrink-0 overflow-hidden rounded-xl"><img src={i.thumbnail} alt={i.videoTitle} class="w-full aspect-video object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105" loading="lazy" /></span>}
+      <span class="min-w-0">
+        <span class="block text-sm leading-relaxed text-neutral-700 group-hover:text-rose transition-colors line-clamp-3 lg:line-clamp-2">{i.pr && <PrBadge class="mr-1.5 align-[1px]" />}{i.videoTitle}</span>
+        {i.views > 0 && <span class="block mt-0.5 text-xs text-neutral-500">再生 {views}</span>}
+      </span>
+    </a>
+    {
+      i.concerns.length > 0 && (
+        <div class="mt-2.5 rounded-xl bg-blush/60 px-3 py-2 text-[13px] leading-relaxed text-neutral-700">
+          <span class="inline-flex flex-wrap items-center gap-1.5 mr-1.5 align-middle">
+            <span class="text-xs text-neutral-500">肌悩み</span>
+            {i.concerns.map((c) =>
+              concernPages.has(c.slug) ? (
+                <a href={withBase(`/concern/${c.slug}/`)} class="text-xs text-rose border border-rose/40 rounded-full px-2 py-0.5 hover:bg-rose hover:text-white transition-colors">{c.name}</a>
+              ) : (
+                <span class="text-xs text-neutral-600 border border-ink/15 rounded-full px-2 py-0.5">{c.name}</span>
+              )
+            )}
+          </span>
+          <span class="align-middle">{quotes.map((q) => `「${q}」`).join("")}</span>
+        </div>
+      )
+    }
+  </div>
 </li>

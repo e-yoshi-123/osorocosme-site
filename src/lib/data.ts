@@ -227,8 +227,39 @@ export function getAllVideoEntries(): VideoEntry[] {
   return Object.entries(videos).map(([key, v]) => ({ key, ...v }));
 }
 
+// ビルドが長くなった（12,000ページで15分）ので、掲載中の動画の一覧と、商品・チャンネルから動画を引く索引を1回だけ作る（228章）。
+// 呼び出し側が並べ替えても壊れないよう、返すのは毎回コピー（要素の動画は共有）
+let _visibleCache: VideoEntry[] | null = null;
+let _byCosmetic: Map<string, VideoEntry[]> | null = null;
+let _byChannel: Map<string, VideoEntry[]> | null = null;
+function visibleVideosShared(): VideoEntry[] {
+  if (!_visibleCache) _visibleCache = getAllVideoEntries().filter(isVisible);
+  return _visibleCache;
+}
+function videoIndexes() {
+  if (!_byCosmetic || !_byChannel) {
+    _byCosmetic = new Map();
+    _byChannel = new Map();
+    for (const v of visibleVideosShared()) {
+      const ch = _byChannel.get(v.channel_id);
+      if (ch) ch.push(v);
+      else _byChannel.set(v.channel_id, [v]);
+      const seen = new Set<string>();
+      for (const c of v.cosmetics || []) {
+        const k = `${c.brand_id}_${c.name_id}`;
+        if (seen.has(k)) continue;
+        seen.add(k);
+        const list = _byCosmetic.get(k);
+        if (list) list.push(v);
+        else _byCosmetic.set(k, [v]);
+      }
+    }
+  }
+  return { byCosmetic: _byCosmetic, byChannel: _byChannel };
+}
+
 export function getVisibleVideos(): VideoEntry[] {
-  return getAllVideoEntries().filter(isVisible);
+  return visibleVideosShared().slice();
 }
 
 export function getVideoByKey(key: string): VideoEntry | undefined {
@@ -264,7 +295,12 @@ function brandsWithPages(): Set<string> {
   return (brandsWithPagesCache ??= new Set(getBrandsWithVideos().map((b) => b.brand_id)));
 }
 
+let _brandsWithVideos: BrandWithStats[] | null = null;
 export function getBrandsWithVideos(): BrandWithStats[] {
+  if (!_brandsWithVideos) _brandsWithVideos = buildBrandsWithVideos();
+  return _brandsWithVideos.map((b) => ({ ...b }));
+}
+function buildBrandsWithVideos(): BrandWithStats[] {
   const videoSets = new Map<string, Set<string>>();
   const cosmeticSets = new Map<string, Set<string>>();
   for (const v of getVisibleVideos()) {
@@ -333,9 +369,7 @@ export function getUsedCosmeticKeys(): { brand_id: string; name_id: string }[] {
 export const COSMETIC_INDEX_MIN_VIDEOS = 2;
 
 export function getVideosUsingCosmetic(brand_id: string, name_id: string): VideoEntry[] {
-  return getVisibleVideos().filter((v) =>
-    (v.cosmetics || []).some((c) => c.brand_id === brand_id && c.name_id === name_id)
-  );
+  return (videoIndexes().byCosmetic.get(`${brand_id}_${name_id}`) || []).slice();
 }
 
 let _videoCountCache: Map<string, number> | null = null;
@@ -391,7 +425,12 @@ export function getRelatedCosmetics(brand_id: string, name_id: string, tags: str
 
 /** influencer-list は現行実装通り、可視/非可視を問わず全動画から導出する
  * （channel_title ではなく channel_id で重複排除するようバグ修正済み）。 */
+let _influencers: Influencer[] | null = null;
 export function getAllInfluencers(): Influencer[] {
+  if (!_influencers) _influencers = buildAllInfluencers();
+  return _influencers.slice();
+}
+function buildAllInfluencers(): Influencer[] {
   const map = new Map<string, Influencer>();
   for (const v of getAllVideoEntries()) {
     if (!v.channel_id) continue;
@@ -407,12 +446,14 @@ export function getAllInfluencers(): Influencer[] {
   return Array.from(map.values());
 }
 
+let _influencerById: Map<string, Influencer> | null = null;
 export function getInfluencerByChannelId(channel_id: string): Influencer | undefined {
-  return getAllInfluencers().find((i) => i.channel_id === channel_id);
+  if (!_influencerById) _influencerById = new Map(getAllInfluencers().map((i) => [i.channel_id, i]));
+  return _influencerById.get(channel_id);
 }
 
 export function getVideosByChannel(channel_id: string): VideoEntry[] {
-  return getVisibleVideos().filter((v) => v.channel_id === channel_id);
+  return (videoIndexes().byChannel.get(channel_id) || []).slice();
 }
 
 // チャンネルごとの紹介コスメ（brand_id_name_id）の集合。人どうし・カテゴリと人をつなぐ内部リンクに使う（履歴171章）
@@ -476,7 +517,12 @@ export interface InfluencerRanking extends Influencer {
  * 桁の違いが大きい（登録者数は万〜百万、動画数は1〜数十、コスメ数は1〜数百）ため
  * 対数スケールに揃えたうえで合算し、視聴者数だけでなく「このサイトでの活躍度」も
  * 反映されるよう動画数・コスメ数をやや厚めに重み付けしている。 */
+let _influencerRanking: InfluencerRanking[] | null = null;
 export function getInfluencerRanking(): InfluencerRanking[] {
+  if (!_influencerRanking) _influencerRanking = buildInfluencerRanking();
+  return _influencerRanking.slice();
+}
+function buildInfluencerRanking(): InfluencerRanking[] {
   const result: InfluencerRanking[] = [];
   for (const inf of getAllInfluencers()) {
     const videos = getVideosByChannel(inf.channel_id);
@@ -846,6 +892,8 @@ const CATEGORY_TAG_TO_GROUP: Record<string, string> = Object.fromEntries(
 export interface FeatureDef {
   slug: string;
   name: string;
+  /** 一覧の表紙に大きく敷く英語名（CoverArt） */
+  en?: string;
   /** タイトルにこのうちどれかを含む動画を対象にする */
   keywords: string[];
   lead: string;
@@ -862,12 +910,14 @@ export interface FeatureDef {
 export const FEATURES: FeatureDef[] = [
   {
     slug: "daily-makeup",
+    en: "Daily",
     name: "毎日メイク",
     keywords: ["毎日メイク", "デイリーメイク"],
     lead: "インフルエンサーが日々のメイクで使っているコスメを、「毎日メイク」動画から集めました。特別な日ではなく普段使いで選ばれているコスメが分かります。",
   },
   {
     slug: "petit-price",
+    en: "Petit",
     name: "プチプラ・ドラコス",
     keywords: ["プチプラ", "ドラコス", "ドラッグストア", "100均", "ダイソー"],
     lead: "プチプラ・ドラッグストア・100均をテーマにした動画で紹介されたコスメを集めました。手に取りやすい価格帯で、複数の人が紹介しているものだけを載せています。",
@@ -875,6 +925,7 @@ export const FEATURES: FeatureDef[] = [
   // 178章で追加（ユーザー判断）。どれも3チャンネル以上が紹介した商品が20品以上ある軸
   {
     slug: "new-release",
+    en: "New",
     publishFrom: "2026-10-21",
     recentDays: 365,
     name: "新作コスメ",
@@ -883,6 +934,7 @@ export const FEATURES: FeatureDef[] = [
   },
   {
     slug: "best-cosme",
+    en: "Best",
     publishFrom: "2026-12-02",
     recentDays: 365,
     name: "ベスコス",
@@ -891,6 +943,7 @@ export const FEATURES: FeatureDef[] = [
   },
   {
     slug: "skincare",
+    en: "Skin",
     publishFrom: "2026-10-07",
     name: "スキンケア",
     keywords: ["スキンケア"],
@@ -900,6 +953,7 @@ export const FEATURES: FeatureDef[] = [
   },
   {
     slug: "korean-cosme",
+    en: "Korea",
     publishFrom: "2026-11-04",
     name: "韓国コスメ",
     keywords: ["韓国", "Qoo10", "オリヤン", "オリーブヤング"],
@@ -907,6 +961,7 @@ export const FEATURES: FeatureDef[] = [
   },
   {
     slug: "favorites",
+    en: "Repeat",
     publishFrom: "2026-11-18",
     name: "愛用品・リピート",
     keywords: ["愛用", "リピ"],
@@ -1016,21 +1071,23 @@ export function featureCoverImages(slug: string, n = 3): { src: string; alt: str
 export interface ConcernDef {
   slug: string;
   name: string;
+  /** 一覧の表紙に大きく敷く英語名（CoverArt） */
+  en: string;
   /** 言及の文（読点・句点で区切った1節）にこれが含まれれば、その悩みの紹介とみなす */
   pattern: RegExp;
   lead: string;
 }
 export const CONCERNS: ConcernDef[] = [
-  { slug: "pores", name: "毛穴", pattern: /毛穴/, lead: "毛穴を隠したい・目立たなくしたいときに、インフルエンサーが使っているコスメです。下地・パウダーから洗顔・スキンケアまで、「毛穴」に触れて紹介されたものを集めました。" },
-  { slug: "dryness", name: "乾燥", pattern: /乾燥|カサカサ|粉吹/, lead: "乾燥肌・乾燥する季節に、インフルエンサーが使っているコスメです。「乾燥しない」「乾燥肌でも使える」と紹介されたものを集めました。" },
-  { slug: "oil", name: "テカリ・化粧崩れ", pattern: /テカ|皮脂|崩れにく|崩れ防止|化粧崩れ/, lead: "テカリや化粧崩れを防ぎたいときに、インフルエンサーが使っているコスメです。「崩れにくい」「皮脂を抑える」と紹介されたものを集めました。" },
-  { slug: "spots", name: "シミ・そばかす", pattern: /シミ|そばかす|色素沈着|美白/, lead: "シミ・そばかすをカバーしたり、美白ケアをしたりするときに、インフルエンサーが使っているコスメです。" },
-  { slug: "redness", name: "赤み", pattern: /赤み|赤ら/, lead: "頬や小鼻の赤みを抑えたいときに、インフルエンサーが使っているコスメです。コントロールカラー・コンシーラー・鎮静ケアなどを集めました。" },
-  { slug: "dullness", name: "くすみ", pattern: /くすみ|くすん/, lead: "肌のくすみを飛ばしたいときに、インフルエンサーが使っているコスメです。トーンアップ下地・ブライトニングケアなどを集めました。" },
-  { slug: "dark-circles", name: "クマ", pattern: /クマ/, lead: "目の下のクマを隠したいときに、インフルエンサーが使っているコスメです。コンシーラー・カラー下地などを集めました。" },
-  { slug: "wrinkles", name: "シワ・たるみ", pattern: /シワ|しわ|たるみ|エイジング/, lead: "シワ・たるみなどのエイジングケアで、インフルエンサーが使っているコスメです。" },
-  { slug: "acne", name: "ニキビ・肌荒れ", pattern: /ニキビ|にきび|肌荒れ|吹き出物/, lead: "ニキビ・肌荒れのときや、ニキビ跡を隠したいときに、インフルエンサーが使っているコスメです。" },
-  { slug: "sensitive", name: "敏感肌", pattern: /敏感|低刺激/, lead: "敏感肌・肌がゆらぐときに、インフルエンサーが使っているコスメです。「低刺激」「敏感肌でも使える」と紹介されたものを集めました。" },
+  { slug: "pores", en: "Pores", name: "毛穴", pattern: /毛穴/, lead: "毛穴を隠したい・目立たなくしたいときに、インフルエンサーが使っているコスメです。下地・パウダーから洗顔・スキンケアまで、「毛穴」に触れて紹介されたものを集めました。" },
+  { slug: "dryness", en: "Dry", name: "乾燥", pattern: /乾燥|カサカサ|粉吹/, lead: "乾燥肌・乾燥する季節に、インフルエンサーが使っているコスメです。「乾燥しない」「乾燥肌でも使える」と紹介されたものを集めました。" },
+  { slug: "oil", en: "Shine", name: "テカリ・化粧崩れ", pattern: /テカ|皮脂|崩れにく|崩れ防止|化粧崩れ/, lead: "テカリや化粧崩れを防ぎたいときに、インフルエンサーが使っているコスメです。「崩れにくい」「皮脂を抑える」と紹介されたものを集めました。" },
+  { slug: "spots", en: "Spots", name: "シミ・そばかす", pattern: /シミ|そばかす|色素沈着|美白/, lead: "シミ・そばかすをカバーしたり、美白ケアをしたりするときに、インフルエンサーが使っているコスメです。" },
+  { slug: "redness", en: "Red", name: "赤み", pattern: /赤み|赤ら/, lead: "頬や小鼻の赤みを抑えたいときに、インフルエンサーが使っているコスメです。コントロールカラー・コンシーラー・鎮静ケアなどを集めました。" },
+  { slug: "dullness", en: "Dull", name: "くすみ", pattern: /くすみ|くすん/, lead: "肌のくすみを飛ばしたいときに、インフルエンサーが使っているコスメです。トーンアップ下地・ブライトニングケアなどを集めました。" },
+  { slug: "dark-circles", en: "Dark", name: "クマ", pattern: /クマ/, lead: "目の下のクマを隠したいときに、インフルエンサーが使っているコスメです。コンシーラー・カラー下地などを集めました。" },
+  { slug: "wrinkles", en: "Lines", name: "シワ・たるみ", pattern: /シワ|しわ|たるみ|エイジング/, lead: "シワ・たるみなどのエイジングケアで、インフルエンサーが使っているコスメです。" },
+  { slug: "acne", en: "Acne", name: "ニキビ・肌荒れ", pattern: /ニキビ|にきび|肌荒れ|吹き出物/, lead: "ニキビ・肌荒れのときや、ニキビ跡を隠したいときに、インフルエンサーが使っているコスメです。" },
+  { slug: "sensitive", en: "Calm", name: "敏感肌", pattern: /敏感|低刺激/, lead: "敏感肌・肌がゆらぐときに、インフルエンサーが使っているコスメです。「低刺激」「敏感肌でも使える」と紹介されたものを集めました。" },
 ];
 /** 悪い評価の言い方。HARD があれば数えない。SOFT は「〜な方におすすめ」のような良い言い方（POS）が同じ節に無いときだけ数えない */
 const CONCERN_NEG_HARD = /向かな|合わな|注意|悪化|イマイチ|微妙|残念|カサつ[いく]た/;
@@ -1123,6 +1180,18 @@ export function concernCoverImages(slug: string, n = 3): { src: string; alt: str
     }
   }
   return out;
+}
+
+/** 一覧の表紙の画像を、前のカードで使った画像と重ならないように3枚ずつ選ぶ（228章） */
+export function distinctCovers<T>(list: T[], candidates: (x: T) => { src: string; alt: string }[], n = 3): (T & { imgs: { src: string; alt: string }[] })[] {
+  const used = new Set<string>();
+  return list.map((x) => {
+    const all = candidates(x);
+    const fresh = all.filter((i) => !used.has(i.src));
+    const imgs = (fresh.length >= n ? fresh : [...fresh, ...all.filter((i) => used.has(i.src))]).slice(0, n);
+    imgs.forEach((i) => used.add(i.src));
+    return { ...x, imgs };
+  });
 }
 
 /** 商品ページの構造化データ（Product.category）用に、単一のカテゴリ名（例:「アイブロウペンシル」）を
@@ -1294,23 +1363,74 @@ export interface CosmeticFacts {
   rankTotal?: number;
   /** うちPR・提供としての紹介（ランキングには数えない） */
   prCount: number;
-  introductions: { channel_id: string; channel_title: string; channel_icon?: string; thumbnail?: string; videoKey: string; videoTitle: string; published_at: string; pr: boolean }[];
+  introductions: CosmeticIntro[];
+}
+export interface CosmeticIntro {
+  channel_id: string;
+  channel_title: string;
+  channel_icon?: string;
+  thumbnail?: string;
+  videoKey: string;
+  videoTitle: string;
+  published_at: string;
+  pr: boolean;
+  /** 動画の再生回数（並び替え用） */
+  views: number;
+  /** 発信力：インフルエンサー一覧と同じスコア（getInfluencerRanking）と、その順位・5段階（influenceOf） */
+  influenceScore: number;
+  influenceRank: number;
+  influence: number;
+  /** この動画で、この商品を肌悩みに触れて紹介した節（228章） */
+  concerns: { slug: string; name: string; quote: string }[];
 }
 
+/** 発信力の5段階の区切り（インフルエンサー一覧での順位の上位◯％。上位5％が5、20％までが4、40％までが3、70％までが2） */
+export const INFLUENCE_TOP_SHARES = [0.05, 0.2, 0.4, 0.7];
+let _influenceCache: Map<string, { score: number; rank: number; level: number; total: number }> | null = null;
+/** インフルエンサー一覧と同じスコア（発信力スコア）・順位から、発信力（5段階）を返す */
+export function influenceOf(channel_id: string): { score: number; rank: number; level: number; total: number } {
+  if (!_influenceCache) {
+    const list = getInfluencerRanking();
+    const total = list.length;
+    _influenceCache = new Map(
+      list.map((inf, i) => {
+        const share = (i + 1) / total;
+        const level = 5 - INFLUENCE_TOP_SHARES.filter((s) => share > s).length;
+        return [inf.channel_id, { score: inf.score, rank: i + 1, level, total }];
+      })
+    );
+  }
+  return _influenceCache.get(channel_id) || { score: 0, rank: 0, level: 0, total: _influenceCache.size };
+}
+
+let _rankingByKey: Map<string, CosmeticRanking> | null = null;
 /** コスメ詳細用の事実データ。紹介した人・日付（新しい順）、主カテゴリ内での順位など。 */
 export function getCosmeticFacts(brand_id: string, name_id: string): CosmeticFacts {
   const videos = sortByPublishedDesc(getVideosUsingCosmetic(brand_id, name_id));
-  const introductions = videos.map((v) => ({
-    channel_id: v.channel_id,
-    channel_title: v.channel_title,
-    channel_icon: v.channel_icon,
-    thumbnail: v.thumbnail,
-    videoKey: v.key,
-    videoTitle: v.title,
-    published_at: v.published_at,
-    pr: isPrMention(v.key, brand_id, name_id),
-  }));
-  const r = getCosmeticRankings().find((x) => x.brand_id === brand_id && x.name_id === name_id);
+  const introductions: CosmeticIntro[] = videos.map((v) => {
+    const c = (v.cosmetics || []).find((x) => x.brand_id === brand_id && x.name_id === name_id);
+    const inf = influenceOf(v.channel_id);
+    return {
+      channel_id: v.channel_id,
+      channel_title: v.channel_title,
+      channel_icon: v.channel_icon,
+      thumbnail: v.thumbnail,
+      videoKey: v.key,
+      videoTitle: v.title,
+      published_at: v.published_at,
+      pr: isPrMention(v.key, brand_id, name_id),
+      views: toNumber(v.view_count),
+      influenceScore: inf.score,
+      influenceRank: inf.rank,
+      influence: inf.level,
+      concerns: CONCERNS.flatMap((d) => {
+        const quote = concernClause(c?.mentions, d.pattern);
+        return quote ? [{ slug: d.slug, name: d.name, quote }] : [];
+      }),
+    };
+  });
+  if (!_rankingByKey) _rankingByKey = new Map(getCosmeticRankings().map((x) => [`${x.brand_id}_${x.name_id}`, x]));
+  const r = _rankingByKey.get(`${brand_id}_${name_id}`);
   const facts: CosmeticFacts = {
     videoCount: videos.length,
     channelCount: new Set(videos.map((v) => v.channel_id)).size,

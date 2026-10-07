@@ -1,10 +1,11 @@
 ---
 import PageHead from "../../components/PageHead.astro";
+import CoverArt from "../../components/CoverArt.astro";
 import Layout from "../../layouts/Layout.astro";
-import { getPublishedFeatures, getFeature, featureCoverImages, withBase } from "../../lib/data";
+import { getPublishedFeatures, getFeature, featureCoverImages, distinctCovers, withBase } from "../../lib/data";
 
 // 各特集の上位コスメの画像を表紙にする（ホームの特集カードと同じ選び方）
-const list = getPublishedFeatures().map((d) => ({ ...getFeature(d.slug)!, imgs: featureCoverImages(d.slug) }));
+const list = distinctCovers(getPublishedFeatures().map((d) => getFeature(d.slug)!), (f) => featureCoverImages(f.def.slug, 12));
 ---
 
 <Layout
@@ -14,18 +15,10 @@ const list = getPublishedFeatures().map((d) => ({ ...getFeature(d.slug)!, imgs: 
   <PageHead en="Features" title="特集" lead="動画のタイトルに明記されたテーマで動画を絞り、その動画で紹介されたコスメを集計しています。複数のインフルエンサーが紹介したものだけを載せています。" />
   <ul class="panel !py-2 md:!py-4 [&>li:last-child>a]:border-b-0">
     {
-      list.map((f) => (
+      list.map((f, idx) => (
         <li>
           <a href={withBase(`/feature/${f.def.slug}/`)} class="group flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8 py-7 border-b border-ink/10">
-            {f.imgs.length > 0 && (
-              <span class="shrink-0 flex items-end justify-center gap-2.5 md:gap-3 h-36 md:h-44 sm:w-60 md:w-72 rounded-[22px] bg-blush/70 group-hover:bg-blush px-4 pt-5 overflow-hidden transition-colors duration-700" aria-hidden="true">
-                {f.imgs.map((img, k) => (
-                  <span class:list={["arch bg-white overflow-hidden ring-4 ring-white/60 transition-transform duration-[1.2s] ease-out-expo", k === 1 ? "w-[34%] h-full group-hover:-translate-y-1.5" : "w-[28%] h-[78%] group-hover:-translate-y-1"]}>
-                    <img src={img.src} alt={img.alt} class="w-[80%] h-[62%] object-contain mt-[22%] mx-auto" loading="lazy" />
-                  </span>
-                ))}
-              </span>
-            )}
+            {f.imgs.length > 0 && <CoverArt imgs={f.imgs} index={idx} word={f.def.en || ""} />}
             <span class="flex items-start gap-6 flex-1 min-w-0">
               <span class="flex-1 min-w-0">
                 <span class="block font-serif text-lg md:text-xl font-semibold group-hover:text-rose transition-colors">{f.def.name}動画で人気のコスメ</span>

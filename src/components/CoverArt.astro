@@ -1,0 +1,77 @@
+---
+/**
+ * 特集一覧・肌悩み一覧の表紙（228章）。どのカードも同じ見た目で退屈だったので、カードごとに
+ * 地の色（6色）・画像の並べ方（3通り）を順に変え、テーマの英語名を大きな文字の柄として敷く。
+ * 色は淡い地にするので、文字・画像の読みやすさは変わらない。
+ */
+interface Props {
+  imgs: { src: string; alt: string }[];
+  /** 一覧の中での位置。色と並べ方をこれで決める */
+  index: number;
+  /** 背景に大きく敷く語（例: Pores） */
+  word: string;
+}
+const { imgs, index, word } = Astro.props;
+const TINTS = ["#f6e3e6", "#f8e8dc", "#e4ece2", "#e2e9f0", "#ece4f1", "#f4eed9"];
+const INKS = ["#b4005c", "#a8532a", "#4f6b4a", "#3f5f7f", "#6b4b86", "#86701f"];
+const tint = TINTS[index % TINTS.length];
+const ink = INKS[index % INKS.length];
+const layout = index % 3;
+// 英字は、並べ方ごとに画像と重ならない場所に置く（アーチ: 左上、円: 右下、カード: 下）
+const wordPos = ["left-3 top-1.5 !text-[34px] md:!text-[38px]", "right-3 bottom-0", "left-3 bottom-0"][layout];
+---
+
+<span
+  class="cover-art relative shrink-0 block h-36 md:h-44 sm:w-60 md:w-72 rounded-[22px] overflow-hidden transition-[filter] duration-700 group-hover:brightness-[0.97]"
+  style={`background:${tint};--cover-ink:${ink}`}
+  aria-hidden="true"
+>
+  <span class:list={["absolute font-serif font-bold leading-none text-[40px] md:text-[48px] tracking-tight whitespace-nowrap select-none", wordPos]} style="color:var(--cover-ink);opacity:.28">{word}</span>
+  {
+    layout === 0 && (
+      <span class="absolute inset-0 flex items-end justify-center gap-2.5 md:gap-3 px-4 pt-5">
+        {imgs.map((img, k) => (
+          <span class:list={["arch bg-white overflow-hidden ring-4 ring-white/60 transition-transform duration-[1.2s] ease-out-expo", k === 1 ? "w-[34%] h-[74%] group-hover:-translate-y-1.5" : "w-[28%] h-[58%] group-hover:-translate-y-1"]}>
+            <img src={img.src} alt={img.alt} class="w-[80%] h-[62%] object-contain mt-[22%] mx-auto" loading="lazy" />
+          </span>
+        ))}
+      </span>
+    )
+  }
+  {
+    layout === 1 && (
+      <span class="absolute inset-0">
+        {imgs.map((img, k) => (
+          <span
+            class:list={[
+              "absolute rounded-full bg-white overflow-hidden ring-4 ring-white/70 shadow-sm flex items-center justify-center transition-transform duration-[1.2s] ease-out-expo",
+              k === 0 && "w-[38%] aspect-square left-[6%] top-[10%] group-hover:-translate-y-1",
+              k === 1 && "w-[32%] aspect-square left-[36%] top-[30%] z-10 group-hover:-translate-y-1.5",
+              k === 2 && "w-[26%] aspect-square right-[8%] top-[6%] group-hover:-translate-y-1",
+            ]}
+          >
+            <img src={img.src} alt={img.alt} class="w-[70%] h-[70%] object-contain" loading="lazy" />
+          </span>
+        ))}
+      </span>
+    )
+  }
+  {
+    layout === 2 && (
+      <span class="absolute inset-0">
+        {imgs.map((img, k) => (
+          <span
+            class:list={[
+              "absolute bg-white overflow-hidden rounded-2xl ring-4 ring-white/70 shadow-sm flex items-center justify-center transition-transform duration-[1.2s] ease-out-expo",
+              k === 0 && "w-[28%] h-[54%] left-[12%] top-[10%] -rotate-6 group-hover:-rotate-3",
+              k === 1 && "w-[32%] h-[64%] left-[34%] top-[5%] z-10 group-hover:-translate-y-1.5",
+              k === 2 && "w-[28%] h-[54%] right-[12%] top-[12%] rotate-6 group-hover:rotate-3",
+            ]}
+          >
+            <img src={img.src} alt={img.alt} class="w-[78%] h-[70%] object-contain" loading="lazy" />
+          </span>
+        ))}
+      </span>
+    )
+  }
+</span>

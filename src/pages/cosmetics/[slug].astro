@@ -26,6 +26,7 @@ import {
   breadcrumbLd,
   productCategoryPath,
   amazonSearchUrl,
+  getPublishedConcerns,
 } from "../../lib/data";
 
 export function getStaticPaths() {
@@ -64,8 +65,8 @@ const categoryTop = facts.mainTag ? getCategoryTop(facts.mainTag, 6) : [];
 const brandTop = getBrandTopCosmetics(brand_id, name_id, 6);
 
 const INTRO_SHOWN = 10;
-const introFirst = facts.introductions.slice(0, INTRO_SHOWN);
-const introRest = facts.introductions.slice(INTRO_SHOWN);
+const concernPages = new Set(getPublishedConcerns().map((c) => c.slug));
+const concernIntroCount = facts.introductions.filter((i) => i.concerns.length > 0).length;
 const factSentence = entry
   ? `${entry.brand}「${entry.name}」は、YouTubeのコスメ紹介動画${facts.videoCount}本・インフルエンサー${facts.channelCount}人に紹介されています` +
     (facts.rank ? `。「${facts.mainTag}」カテゴリの人気ランキングでは${facts.rankTotal}品中${facts.rank}位です。` : "。")
@@ -240,21 +241,30 @@ const jsonLd = entry
 
         <!-- ===== 01 いつ・誰が紹介したか ===== -->
         <section id="who" class="panel mt-6 md:mt-8">
-          <SectionHead num="01" en="Who used it" title="いつ・誰が紹介したか" lead={`${facts.introductions.length}件の紹介を、新しい順に並べています。`} />
-          <!-- 日付・チャンネル・動画タイトルを固定の列にする。件数が多い商品は、先頭10件だけ表示して残りを折りたたむ -->
+          <SectionHead
+            num="01"
+            en="Who used it"
+            title="いつ・誰が紹介したか"
+            lead={`${facts.introductions.length}件の紹介${concernIntroCount > 0 ? `（うち肌悩みに触れた紹介${concernIntroCount}件）` : ""}。●の数は投稿者の発信力（登録者数・掲載動画数・紹介コスメ数から算出したスコアの順位。上位5％・20％・40％・70％で5段階）です。`}
+          />
+          <!-- 並び替え（スクリプトで行う。スクリプトなしでは新しい順の先頭10件だけ） -->
+          {facts.introductions.length > 1 && (
+            <div class="flex flex-wrap items-center gap-2 text-xs mb-2" role="group" aria-label="並び替え">
+              <span class="label-caps text-neutral-500 mr-1">Sort</span>
+              <button type="button" class="intro-sort chip is-active" data-sort="date">新しい順</button>
+              <button type="button" class="intro-sort chip" data-sort="views">再生数順</button>
+              <button type="button" class="intro-sort chip" data-sort="subs">発信力順</button>
+            </div>
+          )}
+          <!-- 日付・チャンネル・動画タイトルを固定の列にする。件数が多い商品は、先頭10件だけ表示して残りは「残りを表示」で出す -->
           <div class="text-sm">
-            <ul>
-              {introFirst.map((i) => <IntroRow i={i} />)}
+            <ul id="intro-list" data-initial={INTRO_SHOWN}>
+              {facts.introductions.map((i, k) => <IntroRow i={i} pos={k} concernPages={concernPages} extra={k >= INTRO_SHOWN} />)}
             </ul>
-            {introRest.length > 0 && (
-              <details class="group/more">
-                <summary class="list-none flex items-center justify-center gap-3 py-5 text-xs tracking-[0.1em] cursor-pointer select-none hover:text-rose">
-                  <span>残り{introRest.length}件を表示</span><span class="w-7 h-7 rounded-full border border-ink/20 flex items-center justify-center transition-transform group-open/more:rotate-180" aria-hidden="true">↓</span>
-                </summary>
-                <ul>
-                  {introRest.map((i) => <IntroRow i={i} />)}
-                </ul>
-              </details>
+            {facts.introductions.length > INTRO_SHOWN && (
+              <button type="button" id="intro-more" class="w-full flex items-center justify-center gap-3 py-5 text-xs tracking-[0.1em] cursor-pointer select-none hover:text-rose">
+                <span>残り{facts.introductions.length - INTRO_SHOWN}件を表示</span><span class="w-7 h-7 rounded-full border border-ink/20 flex items-center justify-center" aria-hidden="true">↓</span>
+              </button>
             )}
           </div>
         </section>
@@ -291,6 +301,43 @@ const jsonLd = entry
     )
   }
 </Layout>
+
+<script>
+  // 「いつ・誰が紹介したか」の並び替え（新しい順・再生数順・発信力順）と「残りを表示」（228章）
+  const introList = document.getElementById("intro-list");
+  if (introList) {
+    const rows = Array.from(introList.querySelectorAll<HTMLLIElement>(".intro-row"));
+    const INITIAL = Number(introList.dataset.initial);
+    const more = document.getElementById("intro-more");
+    let all = false;
+    let key = "date";
+    const n = (li: HTMLLIElement, k: string) => Number(li.dataset[k]);
+    const cmp: Record<string, (a: HTMLLIElement, b: HTMLLIElement) => number> = {
+      date: (a, b) => n(a, "pos") - n(b, "pos"),
+      views: (a, b) => n(b, "views") - n(a, "views") || n(a, "pos") - n(b, "pos"),
+      subs: (a, b) => n(b, "score") - n(a, "score") || n(b, "views") - n(a, "views") || n(a, "pos") - n(b, "pos"),
+    };
+    const render = () => {
+      rows.sort(cmp[key]).forEach((li, i) => {
+        introList.appendChild(li);
+        li.hidden = !all && i >= INITIAL;
+      });
+      document.querySelectorAll<HTMLButtonElement>(".intro-sort").forEach((b) => b.classList.toggle("is-active", b.dataset.sort === key));
+      more?.classList.toggle("hidden", all);
+    };
+    document.querySelectorAll<HTMLButtonElement>(".intro-sort").forEach((b) =>
+      b.addEventListener("click", () => {
+        key = b.dataset.sort || "date";
+        render();
+      })
+    );
+    more?.addEventListener("click", () => {
+      all = true;
+      render();
+    });
+  }
+</script>
+
 
 <script is:inline>
   // 画像のURLはあっても実際に読み込めない場合（楽天側で画像が消えている）は、購入できないリンクの可能性が高いので、価格・購入ボタンを取り除く。
