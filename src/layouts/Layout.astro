@@ -158,10 +158,12 @@ const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace
           <button type="submit" class="label-caps text-rose py-2">Search</button>
         </div>
       </form>
-      <nav class="lg:hidden border-t border-ink/5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="メイン（スマホ）">
-        <div class="flex justify-between min-[400px]:justify-start gap-3 min-[400px]:gap-5 px-4 md:px-8 whitespace-nowrap text-[13px] min-[380px]:text-sm">
+      <!-- 6項目だと390px幅に収まらない（228章）。右端をぼかして続きがあることを示し、端まで送ったらぼかしを消す（下のスクリプト） -->
+      <nav id="mobile-nav" class="nav-fade lg:hidden border-t border-ink/5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="メイン（スマホ）">
+        <!-- 間隔は8px（12pxだと390px幅で6項目が収まらない）。横スクロールの入れ物では右の余白が幅に数えられないので、末尾に余白の要素を置く（228章） -->
+        <div class="flex justify-between min-[400px]:justify-start gap-2 min-[400px]:gap-5 pl-4 md:pl-8 whitespace-nowrap text-[13px] min-[380px]:text-sm after:content-[''] after:shrink-0 after:w-2 md:after:w-6">
           {navLinks.map((l) => (
-            <a href={withBase(l.href)} class:list={["relative py-2.5 shrink-0", isCurrent(l.href) ? "text-ink font-medium" : "text-neutral-600"]}>
+            <a href={withBase(l.href)} aria-current={isCurrent(l.href) ? "page" : undefined} class:list={["relative py-2.5 shrink-0", isCurrent(l.href) ? "text-ink font-medium" : "text-neutral-600"]}>
               {l.label}
               {isCurrent(l.href) && <span class="absolute left-0 right-0 bottom-0 h-px bg-rose" />}
             </a>
@@ -216,6 +218,16 @@ const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace
     </footer>
 
     <script>
+      // スマホのナビ：今いるページの項目が隠れていれば見える位置まで送り、右端まで送ったらぼかしを消す（228章）
+      const mnav = document.getElementById("mobile-nav");
+      if (mnav) {
+        const cur = mnav.querySelector<HTMLElement>('[aria-current="page"]');
+        if (cur && cur.offsetLeft + cur.offsetWidth > mnav.clientWidth) mnav.scrollLeft = cur.offsetLeft - 16;
+        const edge = () => mnav.classList.toggle("at-end", mnav.scrollLeft + mnav.clientWidth >= mnav.scrollWidth - 2);
+        mnav.addEventListener("scroll", edge, { passive: true });
+        window.addEventListener("resize", edge);
+        edge();
+      }
       // スクロールで .reveal を表示する
       const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -8% 0px" });
       document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
