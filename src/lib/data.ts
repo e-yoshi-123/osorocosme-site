@@ -1010,6 +1010,121 @@ export function featureCoverImages(slug: string, n = 3): { src: string; alt: str
   return out;
 }
 
+/** 肌悩みから探す（/concern/<slug>/。228章）。商品ごとの言及（字幕の発言の要約）に悩みの語がある紹介だけを数える。
+ * AIの推測（skin_profile・skin_concern）は使わず、インフルエンサーが実際に言ったことを根拠にする（68章の方針）。
+ * 「乾燥肌には向かない」のような悪い評価は数えない。特集と違い、悩みごとのページは一度に出す（ユーザー判断、228章）。 */
+export interface ConcernDef {
+  slug: string;
+  name: string;
+  /** 言及の文（読点・句点で区切った1節）にこれが含まれれば、その悩みの紹介とみなす */
+  pattern: RegExp;
+  lead: string;
+}
+export const CONCERNS: ConcernDef[] = [
+  { slug: "pores", name: "毛穴", pattern: /毛穴/, lead: "毛穴を隠したい・目立たなくしたいときに、インフルエンサーが使っているコスメです。下地・パウダーから洗顔・スキンケアまで、「毛穴」に触れて紹介されたものを集めました。" },
+  { slug: "dryness", name: "乾燥", pattern: /乾燥|カサカサ|粉吹/, lead: "乾燥肌・乾燥する季節に、インフルエンサーが使っているコスメです。「乾燥しない」「乾燥肌でも使える」と紹介されたものを集めました。" },
+  { slug: "oil", name: "テカリ・化粧崩れ", pattern: /テカ|皮脂|崩れにく|崩れ防止|化粧崩れ/, lead: "テカリや化粧崩れを防ぎたいときに、インフルエンサーが使っているコスメです。「崩れにくい」「皮脂を抑える」と紹介されたものを集めました。" },
+  { slug: "spots", name: "シミ・そばかす", pattern: /シミ|そばかす|色素沈着|美白/, lead: "シミ・そばかすをカバーしたり、美白ケアをしたりするときに、インフルエンサーが使っているコスメです。" },
+  { slug: "redness", name: "赤み", pattern: /赤み|赤ら/, lead: "頬や小鼻の赤みを抑えたいときに、インフルエンサーが使っているコスメです。コントロールカラー・コンシーラー・鎮静ケアなどを集めました。" },
+  { slug: "dullness", name: "くすみ", pattern: /くすみ|くすん/, lead: "肌のくすみを飛ばしたいときに、インフルエンサーが使っているコスメです。トーンアップ下地・ブライトニングケアなどを集めました。" },
+  { slug: "dark-circles", name: "クマ", pattern: /クマ/, lead: "目の下のクマを隠したいときに、インフルエンサーが使っているコスメです。コンシーラー・カラー下地などを集めました。" },
+  { slug: "wrinkles", name: "シワ・たるみ", pattern: /シワ|しわ|たるみ|エイジング/, lead: "シワ・たるみなどのエイジングケアで、インフルエンサーが使っているコスメです。" },
+  { slug: "acne", name: "ニキビ・肌荒れ", pattern: /ニキビ|にきび|肌荒れ|吹き出物/, lead: "ニキビ・肌荒れのときや、ニキビ跡を隠したいときに、インフルエンサーが使っているコスメです。" },
+  { slug: "sensitive", name: "敏感肌", pattern: /敏感|低刺激/, lead: "敏感肌・肌がゆらぐときに、インフルエンサーが使っているコスメです。「低刺激」「敏感肌でも使える」と紹介されたものを集めました。" },
+];
+/** 悪い評価の言い方。HARD があれば数えない。SOFT は「〜な方におすすめ」のような良い言い方（POS）が同じ節に無いときだけ数えない */
+const CONCERN_NEG_HARD = /向かな|合わな|注意|悪化|イマイチ|微妙|残念|カサつ[いく]た/;
+const CONCERN_NEG_SOFT = /かも|苦手|意見|目立つ(?!方|人)|しやすい$|荒れた|ができ|乾燥する感じ|乾燥を感じ(?!な)|しみ[たる]|ヒリヒリ|ピリ/;
+const CONCERN_POS = /おすすめ|ぜひ|ぴったり|いい|良い|方に|人に|さんに|でも|ない|ず$|にく|づら/;
+/** 言及から、その悩みに触れている節（悪い評価を除く）を返す */
+function concernClause(mentions: string[] | undefined, pattern: RegExp): string | undefined {
+  for (const m of mentions || []) {
+    for (const cl of m.split(/[。、,，]/)) {
+      const t = cl.trim();
+      if (!t || !pattern.test(t)) continue;
+      if (CONCERN_NEG_HARD.test(t)) continue;
+      if (CONCERN_NEG_SOFT.test(t) && !CONCERN_POS.test(t.replace(CONCERN_NEG_SOFT, ""))) continue;
+      return t;
+    }
+  }
+  return undefined;
+}
+export const CONCERN_PER_GROUP = 10;
+export interface ConcernItem extends FeatureItem {
+  /** 根拠の発言（再生回数の多い動画のもの） */
+  quote: string;
+  quoteChannel: string;
+}
+const _concernCache = new Map<string, ReturnType<typeof buildConcern>>();
+function buildConcern(def: ConcernDef) {
+  const map = new Map<string, ConcernItem & { vs: Set<string>; cs: Set<string>; views: number; qv: number }>();
+  const videoKeys = new Set<string>();
+  const channels = new Set<string>();
+  for (const v of getVisibleVideos()) {
+    for (const c of v.cosmetics || []) {
+      if (!c.brand_id || !c.name_id || !c.related_tags?.length) continue;
+      if (isPrMention(v.key, c.brand_id, c.name_id)) continue;
+      const tag = c.related_tags.map(rankingTag).find((t) => CATEGORY_TAG_TO_GROUP[t]);
+      if (!tag) continue;
+      const quote = concernClause(c.mentions, def.pattern);
+      if (!quote) continue;
+      const key = `${c.brand_id}_${c.name_id}`;
+      let e = map.get(key);
+      if (!e) {
+        e = { brand_id: c.brand_id, brand: c.brand, name_id: c.name_id, name: c.name, tag, videoCount: 0, channelCount: 0, vs: new Set(), cs: new Set(), views: 0, quote, quoteChannel: v.channel_title, qv: -1 };
+        map.set(key, e);
+      }
+      if (e.vs.has(v.key)) continue;
+      const views = toNumber(v.view_count);
+      e.vs.add(v.key);
+      e.cs.add(v.channel_id);
+      e.views += views;
+      if (views > e.qv) Object.assign(e, { quote, quoteChannel: v.channel_title, qv: views });
+      videoKeys.add(v.key);
+      channels.add(v.channel_id);
+    }
+  }
+  const items = Array.from(map.values())
+    .map((e) => ({ ...e, videoCount: e.vs.size, channelCount: e.cs.size }))
+    .filter((e) => e.channelCount >= FEATURE_MIN_CHANNELS)
+    .sort((a, b) => b.channelCount - a.channelCount || b.videoCount - a.videoCount || b.views - a.views || a.name.localeCompare(b.name, "ja"));
+  const groups = RANKING_CATEGORY_GROUPS.map((g) => ({
+    group: g.group,
+    items: items.filter((e) => CATEGORY_TAG_TO_GROUP[e.tag] === g.group).slice(0, CONCERN_PER_GROUP),
+  })).filter((g) => g.items.length > 0);
+  return { def, videoCount: videoKeys.size, channelCount: channels.size, itemCount: items.length, groups };
+}
+export function getConcern(slug: string) {
+  const def = CONCERNS.find((d) => d.slug === slug);
+  if (!def) return undefined;
+  if (!_concernCache.has(slug)) _concernCache.set(slug, buildConcern(def));
+  return _concernCache.get(slug)!;
+}
+/** 公開する悩み（載せる商品が FEATURE_MIN_ITEMS 品以上）。ページ・入口・サイトマップはすべてこれを使う */
+export function getPublishedConcerns(): ConcernDef[] {
+  return CONCERNS.filter((d) => {
+    const c = getConcern(d.slug)!;
+    return c.groups.reduce((n, g) => n + g.items.length, 0) >= FEATURE_MIN_ITEMS;
+  });
+}
+/** 悩みの入口に並べる画像（各カテゴリの1位から） */
+export function concernCoverImages(slug: string, n = 3): { src: string; alt: string }[] {
+  const c = getConcern(slug);
+  if (!c) return [];
+  const depth = Math.max(0, ...c.groups.map((g) => g.items.length));
+  const out: { src: string; alt: string }[] = [];
+  for (let i = 0; i < depth && out.length < n; i++) {
+    for (const g of c.groups) {
+      const it = g.items[i];
+      if (!it) continue;
+      const src = productImageSrc(getCosmeticListEntry(it.brand_id, it.name_id));
+      if (src && !out.some((o) => o.src === src)) out.push({ src, alt: `${it.brand} ${it.name}` });
+      if (out.length >= n) break;
+    }
+  }
+  return out;
+}
+
 /** 商品ページの構造化データ（Product.category）用に、単一のカテゴリ名（例:「アイブロウペンシル」）を
  * 「コスメ・美容 > 大分類 > カテゴリ名」の階層テキストに変換する（Search Consoleの「category の値が無効」指摘への対応）。
  * 大分類は RANKING_CATEGORY_GROUPS と同じ区分を使う（未定義のカテゴリは「その他」）。 */

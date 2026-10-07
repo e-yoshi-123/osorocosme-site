@@ -1,0 +1,42 @@
+---
+import PageHead from "../../components/PageHead.astro";
+import Layout from "../../layouts/Layout.astro";
+import { getPublishedConcerns, getConcern, concernCoverImages, withBase } from "../../lib/data";
+
+// 各悩みの上位コスメの画像を表紙にする（特集一覧と同じ見せ方）
+const list = getPublishedConcerns().map((d) => ({ ...getConcern(d.slug)!, imgs: concernCoverImages(d.slug) }));
+---
+
+<Layout
+  title="肌悩みから探す（インフルエンサーが使うコスメ）"
+  description="毛穴・乾燥・テカリ・赤み・クマなどの肌悩みごとに、YouTubeでインフルエンサーがその悩みに触れて紹介したコスメを集計。複数の人が紹介したものだけを、実際の発言とあわせて載せています。"
+>
+  <PageHead en="Skin concerns" title="肌悩みから探す" lead="動画の中で、その悩みに触れて紹介されたコスメを集めました。複数のインフルエンサーが紹介したものだけを、どう紹介されたかとあわせて載せています。" />
+  <ul class="panel !py-2 md:!py-4 [&>li:last-child>a]:border-b-0">
+    {
+      list.map((c) => (
+        <li>
+          <a href={withBase(`/concern/${c.def.slug}/`)} class="group flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8 py-7 border-b border-ink/10">
+            {c.imgs.length > 0 && (
+              <span class="shrink-0 flex items-end justify-center gap-2.5 md:gap-3 h-36 md:h-44 sm:w-60 md:w-72 rounded-[22px] bg-blush/70 group-hover:bg-blush px-4 pt-5 overflow-hidden transition-colors duration-700" aria-hidden="true">
+                {c.imgs.map((img, k) => (
+                  <span class:list={["arch bg-white overflow-hidden ring-4 ring-white/60 transition-transform duration-[1.2s] ease-out-expo", k === 1 ? "w-[34%] h-full group-hover:-translate-y-1.5" : "w-[28%] h-[78%] group-hover:-translate-y-1"]}>
+                    <img src={img.src} alt={img.alt} class="w-[80%] h-[62%] object-contain mt-[22%] mx-auto" loading="lazy" />
+                  </span>
+                ))}
+              </span>
+            )}
+            <span class="flex items-start gap-6 flex-1 min-w-0">
+              <span class="flex-1 min-w-0">
+                <span class="block font-serif text-lg md:text-xl font-semibold group-hover:text-rose transition-colors">{c.def.name}</span>
+                <span class="block text-xs text-neutral-500 mt-1.5">{c.itemCount}品・{c.channelCount}チャンネルの紹介から集計</span>
+                <span class="block text-sm leading-relaxed text-neutral-600 mt-3 max-w-3xl">{c.def.lead}</span>
+              </span>
+              <span class="hidden sm:flex shrink-0 mt-1 w-10 h-10 rounded-full border border-ink/15 items-center justify-center transition-all duration-500 group-hover:bg-ink group-hover:text-paper group-hover:border-ink" aria-hidden="true">→</span>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Layout>

@@ -3,37 +3,35 @@ import PageHead from "../../components/PageHead.astro";
 import Layout from "../../layouts/Layout.astro";
 import ShareButtons from "../../components/ShareButtons.astro";
 import RankingRow from "../../components/RankingRow.astro";
-import VideoCard from "../../components/VideoCard.astro";
 import {
-  getPublishedFeatures,
+  getPublishedConcerns,
+  getConcern,
   FEATURE_MIN_CHANNELS,
-  FEATURE_PER_GROUP,
-  getFeature,
+  CONCERN_PER_GROUP,
   getCosmeticListEntry,
   productOffer,
   cosmeticSlug,
   categoryUrl,
   hasRankingPage,
-  formatJaDate,
   withBase,
   breadcrumbLd,
 } from "../../lib/data";
 
 export function getStaticPaths() {
-  return getPublishedFeatures().map((f) => ({ params: { slug: f.slug }, props: { slug: f.slug } }));
+  return getPublishedConcerns().map((c) => ({ params: { slug: c.slug }, props: { slug: c.slug } }));
 }
 
 const { slug } = Astro.props;
-const f = getFeature(slug)!;
-const others = getPublishedFeatures().filter((x) => x.slug !== slug);
-const total = f.groups.reduce((n, g) => n + g.items.length, 0);
+const c = getConcern(slug)!;
+const others = getPublishedConcerns().filter((x) => x.slug !== slug);
+const total = c.groups.reduce((n, g) => n + g.items.length, 0);
 
-// 表示用データ。価格・楽天とYahoo!のリンク・画像は cosmetics_list.json を正とする（ランキングページと同じ）
-const groups = f.groups.map((g) => ({
+// 表示用データ。価格・楽天とYahoo!のリンク・画像は cosmetics_list.json を正とする（特集・ランキングと同じ）
+const groups = c.groups.map((g) => ({
   group: g.group,
   rows: g.items.map((it, i) => {
     const entry = getCosmeticListEntry(it.brand_id, it.name_id);
-    const offer = productOffer(entry); // 楽天の画像が無ければYahoo!の画像・価格（115章）
+    const offer = productOffer(entry);
     return {
       it,
       rank: i + 1,
@@ -42,22 +40,21 @@ const groups = f.groups.map((g) => ({
       link: offer.rakutenLink,
       fromYahoo: offer.source === "yahoo",
       yahooLink: entry?.yahoo_text_link || undefined,
-      subLabel: it.tag,
     };
   }),
 }));
 
-const title = `${f.def.name}動画で人気のコスメ（カテゴリ別）`;
+const title = `${c.def.name}が気になる人に。インフルエンサーが使うコスメ（カテゴリ別）`;
 const first = groups[0]?.rows[0]?.it;
 const description =
-  `YouTubeの「${f.def.name}」をテーマにした動画${f.videoCount}本（${f.channelCount}チャンネル）で紹介されたコスメを、カテゴリ別に集計。` +
-  `${FEATURE_MIN_CHANNELS}人以上が紹介したコスメだけを載せています。` +
+  `YouTubeのコスメ紹介で「${c.def.name}」に触れて紹介されたコスメを、カテゴリ別に集計（${c.videoCount}本の動画・${c.channelCount}チャンネル）。` +
+  `${FEATURE_MIN_CHANNELS}人以上が紹介したものだけを、実際の発言とあわせて載せています。` +
   (first ? `${first.tag}では${first.brand}「${first.name}」などが上位です。` : "");
 const topImage = groups.flatMap((g) => g.rows).find((r) => r.imageSrc)?.imageSrc;
 const crumbs = [
   { name: "ホーム", path: "/" },
-  { name: "特集", path: "/feature/" },
-  { name: f.def.name, path: `/feature/${slug}/` },
+  { name: "肌悩みから探す", path: "/concern/" },
+  { name: c.def.name, path: `/concern/${slug}/` },
 ];
 const jsonLd = [
   {
@@ -82,21 +79,21 @@ const jsonLd = [
 <Layout title={title} description={description} image={topImage} jsonLd={jsonLd}>
   <nav class="text-xs text-neutral-500 mb-8 flex flex-wrap gap-2" aria-label="パンくず">
     <a href={withBase("/")} class="link-u">Home</a><span aria-hidden="true">/</span>
-    <a href={withBase("/feature/")} class="link-u">特集</a><span aria-hidden="true">/</span>
-    <span>{f.def.name}</span>
+    <a href={withBase("/concern/")} class="link-u">肌悩みから探す</a><span aria-hidden="true">/</span>
+    <span>{c.def.name}</span>
   </nav>
 
-  <PageHead en="Feature" title={`${f.def.name}動画で人気のコスメ`} lead={f.def.lead}>
-    <ShareButtons text={`${f.def.name}動画で人気のコスメ`} class="mt-5" />
+  <PageHead en="Skin concerns" title={`${c.def.name}が気になる人に`} lead={c.def.lead}>
+    <ShareButtons text={`${c.def.name}が気になる人に。インフルエンサーが使うコスメ`} class="mt-5" />
   </PageHead>
 
   <div class="rounded-[24px] bg-blush/60 p-6 mb-12 text-sm text-neutral-600 leading-relaxed">
     <p class="label-caps text-neutral-500 mb-2">How we count</p>
     <ul class="list-disc pl-5 space-y-1">
-      <li>対象：{f.def.recentDays && <>直近{Math.round(f.def.recentDays / 30)}か月に投稿され、</>}タイトルに「{f.def.keywords.join("」「")}」のいずれかを含む動画 <b>{f.videoCount}本</b>（<b>{f.channelCount}チャンネル</b>）</li>
-      <li>掲載条件：<b>{FEATURE_MIN_CHANNELS}チャンネル以上</b>が紹介したコスメのみ（1人が何本も紹介しただけのものは除外）</li>
-      <li>並び順：紹介したチャンネル数 → 紹介動画数 → 合計再生回数。各カテゴリ上位{FEATURE_PER_GROUP}品まで</li>
-      {f.newest && <li>最新の対象動画：{formatJaDate(f.newest)}投稿</li>}
+      <li>対象：動画の中で「{c.def.name}」に触れて紹介されたコスメ（<b>{c.videoCount}本</b>の動画・<b>{c.channelCount}チャンネル</b>）。「{c.def.name}には向かない」のような評価は数えていません</li>
+      <li>掲載条件：<b>{FEATURE_MIN_CHANNELS}チャンネル以上</b>が紹介したコスメのみ</li>
+      <li>並び順：紹介したチャンネル数 → 紹介動画数 → 合計再生回数。各カテゴリ上位{CONCERN_PER_GROUP}品まで</li>
+      <li>「」内は、再生回数の多い動画での紹介のされ方です（動画の発言を要約したもの）</li>
     </ul>
   </div>
 
@@ -121,14 +118,16 @@ const jsonLd = [
                 fromYahoo={r.fromYahoo}
                 link={r.link}
                 yahooLink={r.yahooLink}
-                subLabel={r.subLabel}
+                subLabel={r.it.tag}
+                quote={r.it.quote}
+                quoteBy={r.it.quoteChannel}
               />
             ))}
           </ol>
         </div>
         <p class="mt-2 text-xs text-neutral-500">
           {g.rows
-            .map((r) => r.subLabel)
+            .map((r) => r.it.tag)
             .filter((v, i, a) => a.indexOf(v) === i)
             .map((t, i) => (
               <>
@@ -141,27 +140,18 @@ const jsonLd = [
     ))
   }
 
-  <p class="text-xs text-neutral-500 mb-8">価格は楽天市場で確認した時点の参考価格です。最新の価格・在庫は楽天市場でご確認ください。</p>
+  <p class="text-xs text-neutral-500 mb-8">価格は楽天市場で確認した時点の参考価格です。最新の価格・在庫は楽天市場でご確認ください。肌に合うかどうかには個人差があります。</p>
 
-  <section class="panel mb-6 md:mb-8">
-    <h2 class="font-serif h-section font-semibold mb-4">対象になった動画（再生回数の多い順）</h2>
-    <p class="text-xs text-neutral-500 mb-3">実際にどう使っているかは、動画で確認できます。</p>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {f.sample.map((v) => <VideoCard video={v} />)}
-    </div>
-  </section>
-
-  <ShareButtons text={`${f.def.name}動画で人気のコスメ`} label="この特集をシェア" class="mb-10" />
+  <ShareButtons text={`${c.def.name}が気になる人に。インフルエンサーが使うコスメ`} label="このページをシェア" class="mb-10" />
 
   <p class="text-sm">
     {
       others.map((o) => (
         <>
-          <a href={withBase(`/feature/${o.slug}/`)} class="link-u text-ink">{o.name}動画で人気のコスメ →</a>{" "}
+          <a href={withBase(`/concern/${o.slug}/`)} class="link-u text-ink">{o.name} →</a>{" "}
         </>
       ))
     }
-    <a href={withBase("/concern/")} class="link-u text-ink">肌悩みから探す →</a>{" "}
     <a href={withBase("/ranking/")} class="link-u text-ink">カテゴリ別ランキング →</a>
   </p>
 </Layout>
