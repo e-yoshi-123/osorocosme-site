@@ -4,6 +4,7 @@ import VideoCard from "../components/VideoCard.astro";
 import CosmeticTile from "../components/CosmeticTile.astro";
 import SectionHead from "../components/SectionHead.astro";
 import HeroRings from "../components/HeroRings.astro";
+import CoverArt from "../components/CoverArt.astro";
 import {
   getVisibleVideos,
   getPopularBrands,
@@ -21,6 +22,7 @@ import {
   getPublishedFeatures,
   getFeature,
   featureCoverImages,
+  distinctCovers,
   getCosmeticListEntry,
   productImageSrc,
   getRecentCounts,
@@ -60,11 +62,8 @@ const siteLd = {
     "query-input": "required name=search_term_string",
   },
 };
-// 特集カード用: 各特集の上位コスメの画像（最大3つ）と、集計元の動画数
-const featureCards = getPublishedFeatures().map((d) => {
-  const f = getFeature(d.slug)!;
-  return { def: d, videoCount: f.videoCount, channelCount: f.channelCount, imgs: featureCoverImages(d.slug) };
-});
+// 特集カード用: 特集一覧と同じ表紙（CoverArt）。画像の選び方・色・並べ方も一覧とそろえる（231章）
+const featureCards = distinctCovers(getPublishedFeatures().map((d) => getFeature(d.slug)!), (f) => featureCoverImages(f.def.slug, 12));
 
 // ヒーローの表紙：最近話題のコスメ上位3品（画像のあるもの）
 const heroItems = trending
@@ -259,15 +258,9 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
       <SectionHead num="03" en="Features" title="特集" lead="動画のタイトルに書かれたテーマごとに、よく紹介されたコスメを集めました。" href={withBase("/feature/")} />
       <div class="grid sm:grid-cols-2 gap-6 md:gap-8">
         {featureCards.map((c, i) => (
-          <a href={withBase(`/feature/${c.def.slug}/`)} class="reveal group block rounded-[28px] bg-blush/70 hover:bg-blush p-6 md:p-10 transition-colors duration-700" style={`--d:${(i % 2) * 120}ms`}>
-            <div class="flex items-end justify-center gap-3 md:gap-5 h-44 md:h-56">
-              {c.imgs.map((img, k) => (
-                <div class:list={["arch bg-white overflow-hidden ring-[5px] ring-white/60 transition-transform duration-[1.2s] ease-out-expo", k === 1 ? "w-[34%] h-full group-hover:-translate-y-2" : "w-[28%] h-[78%] group-hover:-translate-y-1"]}>
-                  <img src={img.src} alt={img.alt} class="w-[80%] h-[62%] object-contain mt-[22%] mx-auto" loading="lazy" />
-                </div>
-              ))}
-            </div>
-            <div class="mt-8 flex items-end justify-between gap-4">
+          <a href={withBase(`/feature/${c.def.slug}/`)} class="reveal group block rounded-[28px] border border-ink/10 hover:bg-blush/40 p-4 md:p-6 transition-colors duration-700" style={`--d:${(i % 2) * 120}ms`}>
+            {c.imgs.length > 0 && <CoverArt imgs={c.imgs} index={i} word={c.def.en || ""} size="wide" />}
+            <div class="mt-6 px-2 md:px-4 pb-2 flex items-end justify-between gap-4">
               <div>
                 <p class="eyebrow">Feature</p>
                 <p class="mt-1 font-serif text-[20px] md:text-[22px] font-semibold leading-snug">{c.def.name}動画で<br />人気のコスメ</p>

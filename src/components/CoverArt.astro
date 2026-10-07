@@ -10,26 +10,31 @@ interface Props {
   index: number;
   /** 背景に大きく敷く語（例: Pores） */
   word: string;
+  /** list: 一覧の行の左に置く固定幅（既定）／wide: ホームの特集カードのように幅いっぱい */
+  size?: "list" | "wide";
 }
-const { imgs, index, word } = Astro.props;
+const { imgs, index, word, size = "list" } = Astro.props;
 const TINTS = ["#f6e3e6", "#f8e8dc", "#e4ece2", "#e2e9f0", "#ece4f1", "#f4eed9"];
 const INKS = ["#b4005c", "#a8532a", "#4f6b4a", "#3f5f7f", "#6b4b86", "#86701f"];
 const tint = TINTS[index % TINTS.length];
 const ink = INKS[index % INKS.length];
 const layout = index % 3;
+// 画像の並びは一覧の行の表紙（288×176）と同じ縦横比の枠に入れて中央に置く。横長のカードや
+// スマホの幅いっぱいの表紙でも、円が大きくなりすぎて切れたり、並びが間延びしたりしないように（231章）
+const stage = "absolute inset-y-0 left-1/2 -translate-x-1/2 h-full max-w-full aspect-[288/176]";
 // 英字は、並べ方ごとに画像と重ならない場所に置く（アーチ: 左上、円: 右下、カード: 下）
 const wordPos = ["left-3 top-1.5 !text-[34px] md:!text-[38px]", "right-3 bottom-0", "left-3 bottom-0"][layout];
 ---
 
 <span
-  class="cover-art relative shrink-0 block h-36 md:h-44 sm:w-60 md:w-72 rounded-[22px] overflow-hidden transition-[filter] duration-700 group-hover:brightness-[0.97]"
+  class:list={["cover-art relative shrink-0 block rounded-[22px] overflow-hidden transition-[filter] duration-700 group-hover:brightness-[0.97]", size === "wide" ? "w-full h-44 md:h-56" : "h-36 md:h-44 sm:w-60 md:w-72"]}
   style={`background:${tint};--cover-ink:${ink}`}
   aria-hidden="true"
 >
   <span class:list={["absolute font-serif font-bold leading-none text-[40px] md:text-[48px] tracking-tight whitespace-nowrap select-none", wordPos]} style="color:var(--cover-ink);opacity:.28">{word}</span>
   {
     layout === 0 && (
-      <span class="absolute inset-0 flex items-end justify-center gap-2.5 md:gap-3 px-4 pt-5">
+      <span class:list={[stage, "flex items-end justify-center gap-2.5 md:gap-3 px-4 pt-5"]}>
         {imgs.map((img, k) => (
           <span class:list={["arch bg-white overflow-hidden ring-4 ring-white/60 transition-transform duration-[1.2s] ease-out-expo", k === 1 ? "w-[34%] h-[74%] group-hover:-translate-y-1.5" : "w-[28%] h-[58%] group-hover:-translate-y-1"]}>
             <img src={img.src} alt={img.alt} class="w-[80%] h-[62%] object-contain mt-[22%] mx-auto" loading="lazy" />
@@ -40,7 +45,7 @@ const wordPos = ["left-3 top-1.5 !text-[34px] md:!text-[38px]", "right-3 bottom-
   }
   {
     layout === 1 && (
-      <span class="absolute inset-0">
+      <span class={stage}>
         {imgs.map((img, k) => (
           <span
             class:list={[
@@ -58,7 +63,7 @@ const wordPos = ["left-3 top-1.5 !text-[34px] md:!text-[38px]", "right-3 bottom-
   }
   {
     layout === 2 && (
-      <span class="absolute inset-0">
+      <span class={stage}>
         {imgs.map((img, k) => (
           <span
             class:list={[
