@@ -1316,6 +1316,7 @@ function buildIngredient(def: IngredientDef) {
   const labels = Array.from(labelCount.entries()).sort((a, b) => b[1] - a[1]).map(([l]) => l);
   return {
     def,
+    all,
     itemCount: all.length,
     quotedCount: all.filter((e) => e.quote).length,
     channelCount: new Set(all.flatMap((e) => [...e.cs])).size,
@@ -1351,6 +1352,93 @@ export function ingredientCoverImages(slug: string, n = 3): { src: string; alt: 
   }
   return out;
 }
+/** 肌悩み×成分（/concern/<悩み>/<成分>/。5-2、253章）。組は運営者が決めず、同じ言及（1つの発言の要約）に悩みの語
+ * （悪い評価を除く。concernClause）と成分の語が両方ある紹介の数で決める。ページに載せるのは、成分のページに載る商品
+ * （全成分にその成分がある・2チャンネル以上）のうち、その悩みに触れて紹介されたもの。一緒に語られた商品を先に出す。
+ * 成分が悩みに効くとは書かない（薬機法。239章）。「一緒に語られた」という事実と、発言・全成分だけを示す */
+export const CONCERN_INGREDIENT_MIN_MENTIONS = 5;
+interface CIProduct { quote: string; quoteChannel: string; qv: number; pair: boolean }
+interface CIPair { mentions: Set<string>; prods: Map<string, CIProduct> }
+let _ciIndex: Map<string, CIPair> | null = null;
+function concernIngredientIndex(): Map<string, CIPair> {
+  if (_ciIndex) return _ciIndex;
+  const idx = new Map<string, CIPair>();
+  for (const v of getVisibleVideos()) {
+    const views = toNumber(v.view_count);
+    for (const c of v.cosmetics || []) {
+      if (!c.brand_id || !c.name_id || !c.mentions?.length) continue;
+      if (isPrMention(v.key, c.brand_id, c.name_id)) continue;
+      const key = `${c.brand_id}_${c.name_id}`;
+      for (const cd of CONCERNS) {
+        const clause = concernClause(c.mentions, cd.pattern);
+        if (!clause) continue;
+        for (const ing of INGREDIENTS) {
+          const pairMention = c.mentions.find((m) => ing.pattern.test(m) && concernClause([m], cd.pattern));
+          const hasLabels = !!ingredientLabels[key]?.[ing.slug];
+          if (!pairMention && !hasLabels) continue;
+          const pk = `${cd.slug}|${ing.slug}`;
+          let p = idx.get(pk);
+          if (!p) idx.set(pk, (p = { mentions: new Set(), prods: new Map() }));
+          if (pairMention) p.mentions.add(`${v.key}|${key}`);
+          if (!hasLabels) continue;
+          const quote = pairMention ? pairMention.trim() : clause;
+          const e = p.prods.get(key);
+          // 一緒に語られた発言を、悩みだけの発言より優先する。同じ種類なら再生回数の多い動画のもの
+          if (!e || (!!pairMention && !e.pair) || (!!pairMention === e.pair && views > e.qv)) {
+            p.prods.set(key, { quote, quoteChannel: v.channel_title, qv: views, pair: !!pairMention || !!e?.pair });
+          }
+        }
+      }
+    }
+  }
+  return (_ciIndex = idx);
+}
+export interface ConcernIngredientItem extends IngredientItem {
+  /** 悩みと成分が同じ発言で語られた商品か */
+  pair: boolean;
+}
+const _ciCache = new Map<string, ReturnType<typeof buildConcernIngredient>>();
+function buildConcernIngredient(cd: ConcernDef, ing: IngredientDef) {
+  const p = concernIngredientIndex().get(`${cd.slug}|${ing.slug}`);
+  const g = getIngredient(ing.slug)!;
+  const all: ConcernIngredientItem[] = g.all
+    .filter((e) => p?.prods.has(`${e.brand_id}_${e.name_id}`))
+    .map((e) => {
+      const q = p!.prods.get(`${e.brand_id}_${e.name_id}`)!;
+      return { ...e, quote: q.quote, quoteChannel: q.quoteChannel, pair: q.pair };
+    })
+    .sort((a, b) => Number(b.pair) - Number(a.pair) || b.channelCount - a.channelCount || b.videoCount - a.videoCount || a.name.localeCompare(b.name, "ja"));
+  const sectionOf = (e: IngredientItem) => INGREDIENT_SECTION_OF[e.tag] || SECTION_OTHER;
+  const sections = [...INGREDIENT_SECTIONS.map((x) => x.name), SECTION_OTHER]
+    .map((name) => {
+      const list = all.filter((e) => sectionOf(e) === name);
+      return { name, items: list.slice(0, INGREDIENT_PER_SECTION), rest: Math.max(0, list.length - INGREDIENT_PER_SECTION) };
+    })
+    .filter((x) => x.items.length > 0);
+  return { concern: cd, ingredient: ing, mentionCount: p?.mentions.size || 0, itemCount: all.length, pairCount: all.filter((e) => e.pair).length, sections };
+}
+export function getConcernIngredient(concernSlug: string, ingredientSlug: string) {
+  const cd = CONCERNS.find((d) => d.slug === concernSlug);
+  const ing = INGREDIENTS.find((d) => d.slug === ingredientSlug);
+  if (!cd || !ing) return undefined;
+  const k = `${concernSlug}|${ingredientSlug}`;
+  if (!_ciCache.has(k)) _ciCache.set(k, buildConcernIngredient(cd, ing));
+  return _ciCache.get(k)!;
+}
+/** 公開する肌悩み×成分（一緒に語られた紹介が CONCERN_INGREDIENT_MIN_MENTIONS 件以上で、載せる商品が INGREDIENT_MIN_ITEMS 品以上）。
+ * 一緒に語られた数の多い順。ページ・悩みと成分のページの帯・サイトマップはすべてこれを使う */
+let _ciPublished: ReturnType<typeof getConcernIngredient>[] | null = null;
+export function getPublishedConcernIngredients() {
+  if (_ciPublished) return _ciPublished;
+  const concerns = getPublishedConcerns();
+  const ings = getPublishedIngredients();
+  const out = concerns
+    .flatMap((cd) => ings.map((ing) => getConcernIngredient(cd.slug, ing.slug)!))
+    .filter((x) => x.mentionCount >= CONCERN_INGREDIENT_MIN_MENTIONS && x.itemCount >= INGREDIENT_MIN_ITEMS)
+    .sort((a, b) => b.mentionCount - a.mentionCount);
+  return (_ciPublished = out);
+}
+
 /** 全成分の出典の表示名（例：「公式サイト」「楽天市場 ◯◯公式ショップ」） */
 export function ingredientSourceLabel(info: IngredientInfo): string {
   return info.source === "official" ? "公式サイト" : `楽天市場 ${info.shop || "メーカー公式ショップ"}`;

@@ -6,6 +6,7 @@ import RankingRow from "../../components/RankingRow.astro";
 import {
   getPublishedConcerns,
   getConcern,
+  getPublishedConcernIngredients,
   FEATURE_MIN_CHANNELS,
   CONCERN_PER_GROUP,
   getCosmeticListEntry,
@@ -24,6 +25,7 @@ export function getStaticPaths() {
 const { slug } = Astro.props;
 const c = getConcern(slug)!;
 const others = getPublishedConcerns().filter((x) => x.slug !== slug);
+const withIngredients = getPublishedConcernIngredients().filter((x) => x.concern.slug === slug);
 const total = c.groups.reduce((n, g) => n + g.items.length, 0);
 
 // 表示用データ。価格・楽天とYahoo!のリンク・画像は cosmetics_list.json を正とする（特集・ランキングと同じ）
@@ -96,6 +98,22 @@ const jsonLd = [
       <li>「」内は、再生回数の多い動画での紹介のされ方です（動画の発言を要約したもの）</li>
     </ul>
   </div>
+
+  {
+    withIngredients.length > 0 && (
+      <section class="mb-12" aria-labelledby="ci-band">
+        <h2 id="ci-band" class="font-serif h-section font-semibold mb-2">よく一緒に語られる成分</h2>
+        <p class="text-xs text-neutral-500 mb-4">動画の1つの発言の中で「{c.def.name}」と一緒に語られた回数の多い成分です。成分の効果を示すものではありません。</p>
+        <div class="flex flex-wrap gap-2">
+          {withIngredients.map((o) => (
+            <a href={withBase(`/concern/${o.concern.slug}/${o.ingredient.slug}/`)} class="rounded-full border border-ink/15 bg-white/70 px-4 py-2 text-sm text-ink hover:border-ink/40">
+              {o.ingredient.name}<span class="ml-2 text-xs text-neutral-500">{o.mentionCount}件</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )
+  }
 
   {
     groups.map((g) => (

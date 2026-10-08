@@ -1,0 +1,184 @@
+---
+import PageHead from "../../../components/PageHead.astro";
+import Layout from "../../../layouts/Layout.astro";
+import ShareButtons from "../../../components/ShareButtons.astro";
+import RankingRow from "../../../components/RankingRow.astro";
+import {
+  getPublishedConcernIngredients,
+  getConcernIngredient,
+  ingredientSourceLabel,
+  INGREDIENT_MIN_CHANNELS,
+  INGREDIENT_PER_SECTION,
+  CONCERN_INGREDIENT_MIN_MENTIONS,
+  getCosmeticListEntry,
+  productOffer,
+  cosmeticSlug,
+  withBase,
+  breadcrumbLd,
+} from "../../../lib/data";
+
+// 肌悩み×成分（5-2、253章）。組は「同じ発言で一緒に語られた紹介の数」で決め、運営者は選ばない
+export function getStaticPaths() {
+  return getPublishedConcernIngredients().map((x) => ({
+    params: { slug: x.concern.slug, ingredient: x.ingredient.slug },
+    props: { slug: x.concern.slug, ingredient: x.ingredient.slug },
+  }));
+}
+
+const { slug, ingredient } = Astro.props;
+const x = getConcernIngredient(slug, ingredient)!;
+const cn = x.concern.name;
+const ing = x.ingredient.name;
+const published = getPublishedConcernIngredients();
+const sameConcern = published.filter((o) => o.concern.slug === slug && o.ingredient.slug !== ingredient);
+const sameIngredient = published.filter((o) => o.ingredient.slug === ingredient && o.concern.slug !== slug);
+
+const sections = x.sections.map((s) => ({
+  ...s,
+  rows: s.items.map((it, i) => {
+    const entry = getCosmeticListEntry(it.brand_id, it.name_id);
+    const offer = productOffer(entry);
+    const labels = it.labels.map((l) => (it.active.includes(l) ? `${l}（有効成分）` : l)).join("、");
+    return {
+      it,
+      rank: i + 1,
+      imageSrc: offer.imageSrc,
+      price: offer.price,
+      link: offer.rakutenLink,
+      fromYahoo: offer.source === "yahoo",
+      yahooLink: entry?.yahoo_text_link || undefined,
+      note: `全成分の表示：${labels}（出典：${ingredientSourceLabel(it.info)}）`,
+    };
+  }),
+}));
+
+const title = `「${cn}」と「${ing}」が一緒に語られたスキンケア。インフルエンサーが使うコスメ（全成分から）`;
+const first = sections.flatMap((s) => s.rows)[0]?.it;
+const description =
+  `YouTubeのコスメ紹介で「${cn}」に触れて紹介され、公式サイトなどの全成分に${ing}があるスキンケア${x.itemCount}品。` +
+  `${cn}と${ing}が同じ発言で語られた紹介は${x.mentionCount}件あります。` +
+  (first ? `${first.brand}「${first.name}」などを、実際の発言とあわせて載せています。` : "");
+const topImage = sections.flatMap((s) => s.rows).find((r) => r.imageSrc)?.imageSrc;
+const path = `/concern/${slug}/${ingredient}/`;
+const crumbs = [
+  { name: "ホーム", path: "/" },
+  { name: "肌悩みから探す", path: "/concern/" },
+  { name: cn, path: `/concern/${slug}/` },
+  { name: ing, path },
+];
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: title,
+    numberOfItems: x.itemCount,
+    itemListElement: sections
+      .flatMap((s) => s.rows)
+      .slice(0, 10)
+      .map((r, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: `${r.it.brand} ${r.it.name}`,
+        url: new URL(withBase(`/cosmetics/${cosmeticSlug(r.it.brand_id, r.it.name_id)}`), Astro.site!).href,
+      })),
+  },
+  breadcrumbLd(crumbs, Astro.site!),
+];
+const lead = `動画の中で「${cn}」に触れて紹介されたスキンケアのうち、全成分に${ing}が入っているものです。${cn}と${ing}が同じ発言の中で語られた商品を先に載せています。`;
+const share = `「${cn}」と「${ing}」が一緒に語られたスキンケア`;
+---
+
+<Layout title={title} description={description} image={topImage} jsonLd={jsonLd}>
+  <nav class="text-xs text-neutral-500 mb-8 flex flex-wrap gap-2" aria-label="パンくず">
+    <a href={withBase("/")} class="link-u">Home</a><span aria-hidden="true">/</span>
+    <a href={withBase("/concern/")} class="link-u">肌悩みから探す</a><span aria-hidden="true">/</span>
+    <a href={withBase(`/concern/${slug}/`)} class="link-u">{cn}</a><span aria-hidden="true">/</span>
+    <span>{ing}</span>
+  </nav>
+
+  <PageHead en="Concern × Ingredient" title={`${cn} × ${ing}`} lead={lead}>
+    <ShareButtons text={share} class="mt-5" />
+  </PageHead>
+
+  <div class="rounded-[24px] bg-blush/60 p-6 mb-12 text-sm text-neutral-600 leading-relaxed">
+    <p class="label-caps text-neutral-500 mb-2">How we count</p>
+    <ul class="list-disc pl-5 space-y-1 [overflow-wrap:anywhere]">
+      <li>組の選び方：運営者が選ばず、1つの発言の中で「{cn}」と「{ing}」が一緒に語られた紹介の数で決めています（この組は<b>{x.mentionCount}件</b>。{CONCERN_INGREDIENT_MIN_MENTIONS}件以上の組だけページにしています）</li>
+      <li>対象：「{cn}」に触れて紹介され（「{cn}には向かない」のような評価は数えていません）、各ブランドの公式サイトなどの全成分に{ing}の表示名があるスキンケア<b>{x.itemCount}品</b></li>
+      <li>掲載条件：<b>{INGREDIENT_MIN_CHANNELS}チャンネル以上</b>が紹介したコスメのみ（PR・提供の紹介は数えていません）</li>
+      <li>並び順：{cn}と{ing}が同じ発言で語られた商品（{x.pairCount}品）を先にし、紹介したチャンネル数 → 紹介動画数の順。区分ごとに上位{INGREDIENT_PER_SECTION}品まで</li>
+      <li>「」内は、動画での紹介のされ方です（動画の発言を要約したもの）</li>
+    </ul>
+  </div>
+
+  {
+    sections.map((s) => (
+      <section class="panel mb-6 md:mb-8">
+        <h2 class="font-serif h-section font-semibold mb-4">{s.name}</h2>
+        <div class="@container">
+          <ol class="divide-y divide-ink/10">
+            {s.rows.map((r) => (
+              <RankingRow
+                rank={r.rank}
+                base={r.rank}
+                brand_id={r.it.brand_id}
+                brand={r.it.brand}
+                name_id={r.it.name_id}
+                name={r.it.name}
+                imageSrc={r.imageSrc}
+                videoCount={r.it.videoCount}
+                channelCount={r.it.channelCount}
+                price={r.price}
+                fromYahoo={r.fromYahoo}
+                link={r.link}
+                yahooLink={r.yahooLink}
+                subLabel={r.it.tag || undefined}
+                quote={r.it.quote}
+                quoteBy={r.it.quoteChannel}
+                note={r.note}
+              />
+            ))}
+          </ol>
+        </div>
+        {s.rest > 0 && <p class="mt-2 text-xs text-neutral-500">ほかに{s.rest}品あります（紹介したチャンネル数の少ないもの）。</p>}
+      </section>
+    ))
+  }
+
+  <p class="text-xs text-neutral-500 mb-8 leading-relaxed">
+    このページは、動画の中で{cn}と{ing}が一緒に語られたという事実と、各ブランドが公開している全成分をまとめたもので、{ing}が{cn}に効くことを示すものではありません。全成分は改良などで変わることがあるため、購入の際は商品の表示をご確認ください。肌に合うかどうかには個人差があります。価格は楽天市場で確認した時点の参考価格です。
+  </p>
+
+  <ShareButtons text={share} label="このページをシェア" class="mb-10" />
+
+  <div class="text-sm space-y-2">
+    <p>
+      <a href={withBase(`/concern/${slug}/`)} class="link-u text-ink">{cn}が気になる人に（カテゴリ別）→</a>{" "}
+      <a href={withBase(`/ingredient/${ingredient}/`)} class="link-u text-ink">{ing}が入ったスキンケア →</a>
+    </p>
+    {
+      sameConcern.length > 0 && (
+        <p>
+          <span class="text-neutral-500">「{cn}」と一緒に語られるほかの成分：</span>
+          {sameConcern.map((o) => (
+            <>
+              <a href={withBase(`/concern/${slug}/${o.ingredient.slug}/`)} class="link-u text-ink">{o.ingredient.name}</a>{" "}
+            </>
+          ))}
+        </p>
+      )
+    }
+    {
+      sameIngredient.length > 0 && (
+        <p>
+          <span class="text-neutral-500">「{ing}」と一緒に語られるほかの肌悩み：</span>
+          {sameIngredient.map((o) => (
+            <>
+              <a href={withBase(`/concern/${o.concern.slug}/${ingredient}/`)} class="link-u text-ink">{o.concern.name}</a>{" "}
+            </>
+          ))}
+        </p>
+      )
+    }
+  </div>
+</Layout>
