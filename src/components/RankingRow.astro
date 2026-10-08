@@ -30,9 +30,11 @@ interface Props {
   /** 肌悩みのページで、根拠の発言（言及）とその投稿者を商品名の下に出す（228章） */
   quote?: string;
   quoteBy?: string;
+  /** 成分のページで、全成分の表示名と出典を商品名の下に出す（246章） */
+  note?: string;
 }
 
-const { rank, base, brand_id, brand, name_id, name, imageSrc, videoCount, channelCount, price, link, yahooLink, fromYahoo = false, extra = false, subLabel, recentVideos = 0, recentChannels = 0, recentDays = 90, quote, quoteBy } = Astro.props;
+const { rank, base, brand_id, brand, name_id, name, imageSrc, videoCount, channelCount, price, link, yahooLink, fromYahoo = false, extra = false, subLabel, recentVideos = 0, recentChannels = 0, recentDays = 90, quote, quoteBy, note } = Astro.props;
 const top = rank <= 3;
 // 画像の無い商品（＝楽天側に出品が無い・画像が消えている）は、購入できないリンクの可能性が高いので、価格・購入ボタンを出さない。
 // 画像のURLはあっても、実際に読み込めない場合は、下の onerror で価格・購入ボタンを取り除く。
@@ -76,6 +78,7 @@ const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
     <span class="phrase mt-1 text-[15px] leading-snug line-clamp-2 group-hover:text-rose transition-colors">{name}</span>
     {subLabel && <span class="inline-block mt-1.5 text-xs border border-ink/15 text-neutral-600 rounded-full px-2 py-0.5">{subLabel}</span>}
     {quote && <span class="block mt-1.5 text-[13px] leading-relaxed text-neutral-600 line-clamp-2">「{quote}」{quoteBy && <span class="text-neutral-500">（{quoteBy}）</span>}</span>}
+    {note && <span class="block mt-1 text-xs leading-relaxed text-neutral-500 line-clamp-2 [overflow-wrap:anywhere]">{note}</span>}
   </a>
   <p class="col-start-2 col-span-2 @3xl:col-start-auto @3xl:col-span-1 text-xs text-neutral-500">
     <span class="whitespace-nowrap">動画 <b class="num-display text-ink text-xl">{videoCount}</b>本</span>

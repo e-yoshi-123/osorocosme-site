@@ -1,0 +1,39 @@
+---
+import PageHead from "../../components/PageHead.astro";
+import CoverArt from "../../components/CoverArt.astro";
+import Layout from "../../layouts/Layout.astro";
+import { getPublishedIngredients, getIngredient, ingredientCoverImages, distinctCovers, INGREDIENT_MIN_CHANNELS, withBase } from "../../lib/data";
+
+// 各成分の上位コスメの画像を表紙にする（肌悩みの一覧と同じ見せ方）
+const list = distinctCovers(getPublishedIngredients().map((d) => getIngredient(d.slug)!), (g) => ingredientCoverImages(g.def.slug, 12));
+const lead = `各ブランドの公式サイトなどに掲載されている全成分から、その成分が入っているスキンケアを集めました。YouTubeで${INGREDIENT_MIN_CHANNELS}人以上のインフルエンサーが使っているものだけを、成分に触れた発言とあわせて載せています。`;
+---
+
+<Layout
+  title="成分から探す（インフルエンサーが使うスキンケア）"
+  description={`ビタミンC・セラミド・ナイアシンアミド・レチノールなどの成分ごとに、公式の全成分にその成分があるスキンケアを、YouTubeで${INGREDIENT_MIN_CHANNELS}人以上のインフルエンサーが使っているものから集めました。`}
+>
+  <PageHead en="Ingredients" title="成分から探す" lead={lead} />
+  <ul class="panel !py-2 md:!py-4 [&>li:last-child>a]:border-b-0">
+    {
+      list.map((g, idx) => (
+        <li>
+          <a href={withBase(`/ingredient/${g.def.slug}/`)} class="group flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8 py-7 border-b border-ink/10">
+            {g.imgs.length > 0 && <CoverArt imgs={g.imgs} index={idx} word={g.def.en} />}
+            <span class="flex items-start gap-6 flex-1 min-w-0">
+              <span class="flex-1 min-w-0">
+                <span class="block font-serif text-lg md:text-xl font-semibold group-hover:text-rose transition-colors">{g.def.name}</span>
+                <span class="block text-xs text-neutral-500 mt-1.5">{g.itemCount}品（うち{g.def.name}に触れた紹介がある{g.quotedCount}品）</span>
+                <span class="block text-sm leading-relaxed text-neutral-600 mt-3 max-w-3xl">全成分の表示名：{g.labels.slice(0, 4).join("、")}{g.labels.length > 4 ? " など" : ""}</span>
+              </span>
+              <span class="hidden sm:flex shrink-0 mt-1 w-10 h-10 rounded-full border border-ink/15 items-center justify-center transition-all duration-500 group-hover:bg-ink group-hover:text-paper group-hover:border-ink" aria-hidden="true">→</span>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <p class="text-xs text-neutral-500 mt-8 leading-relaxed">
+    全成分は、各ブランドの公式サイト（掲載が無い商品は楽天市場のメーカー公式ショップ）の表示を写したものです。改良などで変わることがあるため、購入の際は商品の表示をご確認ください。成分の効果・効能を示すものではありません。
+  </p>
+</Layout>

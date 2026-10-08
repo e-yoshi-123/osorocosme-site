@@ -7,6 +7,7 @@ import categoryOverridesData from "../data/category-overrides.json";
 import brandEquivalentsData from "../data/brand_equivalents.json";
 import prVideosData from "../data/pr_videos.json";
 import shortsData from "../data/shorts.json";
+import ingredientsData from "../data/ingredients.json";
 
 export interface Cosmetic {
   brand_id: string;
@@ -1180,6 +1181,163 @@ export function concernCoverImages(slug: string, n = 3): { src: string; alt: str
     }
   }
   return out;
+}
+
+/** 成分から探す（/ingredient/<slug>/。242〜246章）。各ブランドの公式サイト（無ければ楽天市場のメーカー公式ショップ）に
+ * 掲載された全成分に、その成分の表示名がある商品を載せる（言及の有無は条件にしない）。並びは、その成分に触れた言及がある商品を先にし、
+ * 次に紹介したチャンネル数の順。全成分は backend/scripts/ingredients/ で原文と見比べて採用したもの、表示名の対応は ingredient_map.py。
+ * 薬機法に配慮し、成分の効果・効能の説明は書かない（根拠はインフルエンサーの発言と全成分の事実だけ。239章） */
+export interface IngredientDef {
+  slug: string;
+  name: string;
+  en: string;
+  /** 言及（字幕の発言の要約）でその成分に触れているとみなす語（build_targets.py の INGREDIENT_WORDS と同じ） */
+  pattern: RegExp;
+}
+export const INGREDIENTS: IngredientDef[] = [
+  { slug: "vitamin-c", name: "ビタミンC", en: "Vitamin C", pattern: /ビタミンC|ビタC|ＶＣ|\bVC\b|アスコルビ/ },
+  { slug: "ceramide", name: "セラミド", en: "Ceramide", pattern: /セラミド/ },
+  { slug: "niacinamide", name: "ナイアシンアミド", en: "Niacinamide", pattern: /ナイアシンアミド/ },
+  { slug: "retinol", name: "レチノール", en: "Retinol", pattern: /レチノ|レチナ/ },
+  { slug: "tranexamic-acid", name: "トラネキサム酸", en: "Tranexamic", pattern: /トラネキサム/ },
+  { slug: "hyaluronic-acid", name: "ヒアルロン酸", en: "Hyaluronic", pattern: /ヒアルロン/ },
+  { slug: "pdrn", name: "PDRN", en: "PDRN", pattern: /PDRN|ＰＤＲＮ/ },
+  { slug: "cica", name: "シカ（ツボクサエキス）", en: "Cica", pattern: /シカ|CICA|ツボクサ/ },
+  { slug: "glycyrrhizic-acid", name: "グリチルリチン酸", en: "Glycyrrhizic", pattern: /グリチルリチン/ },
+  { slug: "azelaic-acid", name: "アゼライン酸", en: "Azelaic", pattern: /アゼライン/ },
+  { slug: "peptide", name: "ペプチド", en: "Peptide", pattern: /ペプチド/ },
+  { slug: "acids", name: "AHA・BHA", en: "Acids", pattern: /AHA|BHA|PHA|LHA|サリチル酸|グリコール酸/ },
+];
+/** 掲載する条件：紹介したチャンネル数がこれ以上（全成分を集めた対象と同じ。242章） */
+export const INGREDIENT_MIN_CHANNELS = 2;
+/** 載せる商品がこれ未満の成分は、ページを出さない */
+export const INGREDIENT_MIN_ITEMS = 5;
+/** 区分ごとに載せる品数の上限 */
+export const INGREDIENT_PER_SECTION = 15;
+/** 成分のページの区分（スキンケアは大分類が1つなので、使う順に細かく分ける） */
+export const INGREDIENT_SECTIONS: { name: string; tags: string[] }[] = [
+  { name: "クレンジング・洗顔", tags: ["オイルクレンジング", "クレンジングバーム", "クレンジングジェル", "クレンジングクリーム", "ミルククレンジング", "リキッドクレンジング", "その他クレンジング", "洗顔ジェル", "泡洗顔", "洗顔フォーム", "洗顔石鹸", "洗顔パウダー", "その他洗顔料", "ゴマージュ・ピーリング", "ポイントメイクリムーバー"] },
+  { name: "化粧水・導入液", tags: ["ブースター・導入液", "化粧水", "ミスト状化粧水", "トナーパッド"] },
+  { name: "美容液・パック", tags: ["美容液", "シートマスク・パック", "洗い流すパック・マスク", "アイケア・アイクリーム"] },
+  { name: "乳液・クリーム", tags: ["乳液", "フェイスクリーム", "乳液・クリーム", "オールインワン化粧品", "フェイスオイル・バーム", "ネック・デコルテケア"] },
+  { name: "日焼け止め・下地", tags: ["日焼け止め・UVケア(顔用)", "日焼け止めクリーム", "化粧下地", "BB・CCクリーム", "クッションファンデ", "リキッドファンデーション", "クリーム・ジェルファンデーション", "コンシーラー", "プレストパウダー", "ルースパウダー"] },
+];
+const INGREDIENT_SECTION_OF: Record<string, string> = Object.fromEntries(INGREDIENT_SECTIONS.flatMap((g) => g.tags.map((t) => [t, g.name])));
+const SECTION_OTHER = "その他";
+
+export interface IngredientInfo {
+  source: "official" | "rakuten";
+  url: string;
+  shop?: string;
+  active: string[];
+  items: string[];
+}
+const ingredientProducts = (ingredientsData as { products: Record<string, IngredientInfo> }).products;
+const ingredientLabels = (ingredientsData as { labels: Record<string, Record<string, string[]>> }).labels;
+/** 商品の全成分（出典つき）。集めていない商品は undefined */
+export function getIngredientInfo(brand_id: string, name_id: string): IngredientInfo | undefined {
+  return ingredientProducts[`${brand_id}_${name_id}`];
+}
+/** 商品の全成分に当たった成分（成分のページがあるものだけ） */
+export function getIngredientsOfCosmetic(brand_id: string, name_id: string): { def: IngredientDef; labels: string[] }[] {
+  const hit = ingredientLabels[`${brand_id}_${name_id}`] || {};
+  const published = new Set(getPublishedIngredients().map((d) => d.slug));
+  return INGREDIENTS.filter((d) => hit[d.slug] && published.has(d.slug)).map((d) => ({ def: d, labels: hit[d.slug] }));
+}
+export interface IngredientItem extends FeatureItem {
+  /** その成分に触れた発言（再生回数の多い動画のもの）。無ければ空 */
+  quote?: string;
+  quoteChannel?: string;
+  /** 全成分で当たった表示名 */
+  labels: string[];
+  /** 当たった表示名のうち、医薬部外品の有効成分 */
+  active: string[];
+  info: IngredientInfo;
+}
+const _ingredientCache = new Map<string, ReturnType<typeof buildIngredient>>();
+function buildIngredient(def: IngredientDef) {
+  const map = new Map<string, IngredientItem & { vs: Set<string>; cs: Set<string>; views: number; qv: number }>();
+  for (const v of getVisibleVideos()) {
+    for (const c of v.cosmetics || []) {
+      if (!c.brand_id || !c.name_id) continue;
+      const key = `${c.brand_id}_${c.name_id}`;
+      const labels = ingredientLabels[key]?.[def.slug];
+      if (!labels) continue;
+      if (isPrMention(v.key, c.brand_id, c.name_id)) continue;
+      const info = ingredientProducts[key];
+      const tag = (c.related_tags || []).map(rankingTag).find((t) => CATEGORY_TAG_TO_GROUP[t]) || "";
+      let e = map.get(key);
+      if (!e) {
+        e = { brand_id: c.brand_id, brand: c.brand, name_id: c.name_id, name: c.name, tag, videoCount: 0, channelCount: 0, vs: new Set(), cs: new Set(), views: 0, qv: -1,
+          labels, active: labels.filter((x) => info.active.includes(x)), info };
+        map.set(key, e);
+      }
+      if (e.vs.has(v.key)) continue;
+      const views = toNumber(v.view_count);
+      e.vs.add(v.key);
+      e.cs.add(v.channel_id);
+      e.views += views;
+      const quote = concernClause(c.mentions, def.pattern);
+      if (quote && views > e.qv) Object.assign(e, { quote, quoteChannel: v.channel_title, qv: views });
+    }
+  }
+  const all = Array.from(map.values())
+    .map((e) => ({ ...e, videoCount: e.vs.size, channelCount: e.cs.size }))
+    .filter((e) => e.channelCount >= INGREDIENT_MIN_CHANNELS)
+    .sort((a, b) => Number(!!b.quote) - Number(!!a.quote) || b.channelCount - a.channelCount || b.videoCount - a.videoCount || b.views - a.views || a.name.localeCompare(b.name, "ja"));
+  const sectionOf = (e: IngredientItem) => INGREDIENT_SECTION_OF[e.tag] || SECTION_OTHER;
+  const sections = [...INGREDIENT_SECTIONS.map((g) => g.name), SECTION_OTHER]
+    .map((name) => {
+      const list = all.filter((e) => sectionOf(e) === name);
+      return { name, items: list.slice(0, INGREDIENT_PER_SECTION), rest: Math.max(0, list.length - INGREDIENT_PER_SECTION) };
+    })
+    .filter((g) => g.items.length > 0);
+  // ページに出す表示名の一覧（多い順）
+  const labelCount = new Map<string, number>();
+  // 配合率などの末尾の括弧書き（「(2.0%)」「(20,000ppm)」）は外して数える
+  const plain = (x: string) => x.normalize("NFKC").replace(/\s*\([^()]*\)\s*$/, "").trim();
+  for (const e of all) for (const l of new Set(e.labels.map(plain))) labelCount.set(l, (labelCount.get(l) || 0) + 1);
+  const labels = Array.from(labelCount.entries()).sort((a, b) => b[1] - a[1]).map(([l]) => l);
+  return {
+    def,
+    itemCount: all.length,
+    quotedCount: all.filter((e) => e.quote).length,
+    channelCount: new Set(all.flatMap((e) => [...e.cs])).size,
+    officialCount: all.filter((e) => e.info.source === "official").length,
+    labels,
+    sections,
+  };
+}
+export function getIngredient(slug: string) {
+  const def = INGREDIENTS.find((d) => d.slug === slug);
+  if (!def) return undefined;
+  if (!_ingredientCache.has(slug)) _ingredientCache.set(slug, buildIngredient(def));
+  return _ingredientCache.get(slug)!;
+}
+/** 公開する成分（載せる商品が INGREDIENT_MIN_ITEMS 品以上）。ページ・入口・サイトマップはすべてこれを使う */
+export function getPublishedIngredients(): IngredientDef[] {
+  return INGREDIENTS.filter((d) => getIngredient(d.slug)!.itemCount >= INGREDIENT_MIN_ITEMS);
+}
+/** 成分の入口に並べる画像（各区分の1位から） */
+export function ingredientCoverImages(slug: string, n = 3): { src: string; alt: string }[] {
+  const g = getIngredient(slug);
+  if (!g) return [];
+  const out: { src: string; alt: string }[] = [];
+  const depth = Math.max(0, ...g.sections.map((s) => s.items.length));
+  for (let i = 0; i < depth && out.length < n; i++) {
+    for (const s of g.sections) {
+      const it = s.items[i];
+      if (!it) continue;
+      const src = productImageSrc(getCosmeticListEntry(it.brand_id, it.name_id));
+      if (src && !out.some((o) => o.src === src)) out.push({ src, alt: `${it.brand} ${it.name}` });
+      if (out.length >= n) break;
+    }
+  }
+  return out;
+}
+/** 全成分の出典の表示名（例：「公式サイト」「楽天市場 ◯◯公式ショップ」） */
+export function ingredientSourceLabel(info: IngredientInfo): string {
+  return info.source === "official" ? "公式サイト" : `楽天市場 ${info.shop || "メーカー公式ショップ"}`;
 }
 
 /** 一覧の表紙の画像を、前のカードで使った画像と重ならないように3枚ずつ選ぶ（228章） */

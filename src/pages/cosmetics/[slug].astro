@@ -27,6 +27,9 @@ import {
   productCategoryPath,
   amazonSearchUrl,
   getPublishedConcerns,
+  getIngredientInfo,
+  getIngredientsOfCosmetic,
+  ingredientSourceLabel,
 } from "../../lib/data";
 
 export function getStaticPaths() {
@@ -65,6 +68,10 @@ const categoryTop = facts.mainTag ? getCategoryTop(facts.mainTag, 6) : [];
 const brandTop = getBrandTopCosmetics(brand_id, name_id, 6);
 
 const INTRO_SHOWN = 10;
+// 全成分（公式サイト、無ければ楽天市場のメーカー公式ショップの表示。246章）と、その全成分に当たる成分のページ
+const ingredientInfo = getIngredientInfo(brand_id, name_id);
+const ingredientPages = ingredientInfo ? getIngredientsOfCosmetic(brand_id, name_id) : [];
+const otherItems = ingredientInfo ? ingredientInfo.items.filter((x) => !ingredientInfo.active.includes(x)) : [];
 const concernPages = new Set(getPublishedConcerns().map((c) => c.slug));
 const concernIntroCount = facts.introductions.filter((i) => i.concerns.length > 0).length;
 const factSentence = entry
@@ -233,6 +240,7 @@ const jsonLd = entry
           class="mt-6 md:mt-8"
           items={[
             { label: `紹介した人 ${facts.introductions.length}`, target: "#who" },
+            ...(ingredientInfo ? [{ label: "全成分", target: "#ingredients" }] : []),
             ...(coMentioned.length > 0 ? [{ label: "一緒に紹介", target: "#paired" }] : []),
             ...(facts.mainTag && categoryTop.length > 0 ? [{ label: "ランキング", target: "#ranking" }] : []),
             ...(brandTop.length > 0 ? [{ label: "同じブランド", target: "#brand-top" }] : []),
@@ -268,6 +276,33 @@ const jsonLd = entry
             )}
           </div>
         </section>
+
+        {ingredientInfo && (
+          <section id="ingredients" class="panel mt-8 md:mt-10">
+            <SectionHead en="Ingredients" title="全成分" lead={`${ingredientSourceLabel(ingredientInfo)}に掲載されている全成分の表示です。改良などで変わることがあるため、購入の際は商品の表示をご確認ください。`} />
+            <div class="text-sm leading-relaxed text-neutral-700 space-y-2 [overflow-wrap:anywhere]">
+              {ingredientInfo.active.length > 0 ? (
+                <>
+                  <p><span class="label-caps text-neutral-500 mr-2">有効成分</span>{ingredientInfo.active.join("、")}</p>
+                  <p><span class="label-caps text-neutral-500 mr-2">その他の成分</span>{otherItems.join("、")}</p>
+                </>
+              ) : (
+                <p>{ingredientInfo.items.join("、")}</p>
+              )}
+              <p class="text-xs text-neutral-500">
+                出典：<a href={ingredientInfo.url} target="_blank" rel="nofollow noopener" class="link-u">{ingredientSourceLabel(ingredientInfo)}</a>
+              </p>
+            </div>
+            {ingredientPages.length > 0 && (
+              <p class="mt-5 flex flex-wrap gap-2 text-xs">
+                <span class="text-neutral-500 mr-1 self-center">成分から探す：</span>
+                {ingredientPages.map((p) => (
+                  <a href={withBase(`/ingredient/${p.def.slug}/`)} class="text-rose border border-rose/40 rounded-full px-2 py-0.5 hover:bg-rose hover:text-white transition-colors">{p.def.name}</a>
+                ))}
+              </p>
+            )}
+          </section>
+        )}
 
         {coMentioned.length > 0 && (
           <section id="paired" class="panel mt-8 md:mt-10">
