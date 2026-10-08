@@ -1,0 +1,106 @@
+---
+// マイコスメ（5-3・5-4）：今使っているコスメを登録すると、同じコスメを使っているインフルエンサーの愛用品からおすすめを出す。
+// 一覧はこの端末のブラウザにだけ保存し、OsoroCosmeには送らない（決定事項）。中身はすべて scripts/my-cosme-page.ts が描く
+import Layout from "../layouts/Layout.astro";
+import PageHead from "../components/PageHead.astro";
+import SectionHead from "../components/SectionHead.astro";
+import { withBase } from "../lib/data";
+import { GOOGLE_CLIENT_ID } from "../lib/site-info";
+
+const lead =
+  "今使っているコスメを登録すると、同じコスメを使っているインフルエンサーが紹介しているコスメから、おすすめを出します。登録した一覧はこの端末のブラウザにだけ保存され、OsoroCosmeには送られません。";
+const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full border border-ink/20 text-xs tracking-[0.04em] hover:border-ink transition-colors cursor-pointer";
+---
+
+<Layout
+  title="マイコスメ（使っているコスメからおすすめを探す）"
+  description="今使っているコスメを登録すると、同じコスメを使っているYouTubeのインフルエンサーの愛用品から、乗り換え候補やまだ持っていないカテゴリのおすすめを出します。登録はブラウザ内だけに保存され、会員登録は要りません。"
+  noindex
+>
+  <PageHead en="My Cosme" title="マイコスメ" lead={lead} />
+
+  <div id="my-cosme" data-google-client-id={GOOGLE_CLIENT_ID}>
+    <p data-loading class="panel text-sm text-neutral-500">読み込んでいます…</p>
+    <noscript><p class="panel text-sm text-neutral-500">このページはJavaScriptを使います。ブラウザの設定でJavaScriptを有効にしてください。</p></noscript>
+
+    <div data-ready hidden>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-start">
+        <!-- 登録した一覧と、商品の追加 -->
+        <section class="panel min-w-0 lg:col-span-5 lg:sticky lg:top-[calc(var(--hdr-h,72px)+1.5rem)] lg:max-h-[calc(100vh-var(--hdr-h,72px)-3rem)] lg:overflow-y-auto">
+          <SectionHead en="Your cosme" title="使っているコスメ" lead="ブランド名や商品名で探して追加します。商品ページの「マイコスメに追加」からも登録できます。" />
+          <div class="relative">
+            <label class="flex items-center gap-2 border-b border-ink/25 focus-within:border-rose transition-colors">
+              <svg viewBox="0 0 24 24" class="w-4 h-4 text-neutral-500 shrink-0" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+              <input type="search" data-search placeholder="例：キャンメイク 下地" aria-label="追加するコスメを探す" autocomplete="off" class="w-full min-w-0 bg-transparent py-2.5 text-base md:text-sm placeholder:text-neutral-400 focus:outline-none" />
+            </label>
+            <ul data-search-results hidden class="mt-2 py-1 rounded-2xl bg-white ring-1 ring-ink/10 max-h-[26rem] overflow-y-auto overscroll-contain"></ul>
+          </div>
+          <p class="mt-6 text-xs text-neutral-500">登録 <span data-count class="num-display text-base text-ink">0</span> 品</p>
+          <p data-empty class="mt-3 text-sm leading-relaxed text-neutral-500">まだ登録されていません。上の欄で探すか、右の人気のコスメから追加してください。</p>
+          <ul data-list class="mt-1 [&>li:last-child]:border-b-0"></ul>
+        </section>
+
+        <div class="min-w-0 lg:col-span-7 space-y-6 md:space-y-8">
+          <!-- 何も登録していないとき：人気のコスメから選ぶ -->
+          <section data-popular hidden class="panel">
+            <SectionHead en="Start here" title="人気のコスメから選ぶ" lead="紹介している動画が多いコスメです。使っているものを追加してください。" />
+            <div data-popular-list class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-8"></div>
+          </section>
+
+          <div data-rec hidden class="space-y-6 md:space-y-8">
+            <section class="panel">
+              <SectionHead en="Swap" title="同じカテゴリの乗り換え候補" lead="登録したコスメと同じカテゴリで、同じコスメを使っているインフルエンサーが紹介しているものです。" />
+              <div data-rec-swap class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-8"></div>
+            </section>
+            <section class="panel">
+              <SectionHead en="Discover" title="まだ持っていないカテゴリから" lead="登録したコスメに無いカテゴリで、同じコスメを使っているインフルエンサーが紹介しているものです。" />
+              <div data-rec-new class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-8"></div>
+            </section>
+            <section class="panel">
+              <SectionHead en="Influencers" title="同じコスメを使っているインフルエンサー" lead="登録したコスメを多く紹介している人です。愛用品の一覧が参考になります。" />
+              <ul data-rec-inf class="grid sm:grid-cols-2 gap-x-6"></ul>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      <!-- 保存と引き継ぎ -->
+      <section class="panel mt-6 md:mt-8">
+        <SectionHead en="Save & move" title="保存と引き継ぎ" lead="一覧はこの端末のブラウザに自動で保存されます。ブラウザのデータを消すと一覧も消えるので、ほかの端末へ移すときや控えを取るときは、ファイルに書き出してください。" />
+        <div class="flex flex-wrap gap-2">
+          <button type="button" data-action="export" class={btn}>ファイルに書き出す</button>
+          <button type="button" data-action="import" class={btn}>ファイルから読み込む</button>
+          <input type="file" data-import-file accept="application/json,.json" hidden />
+          <button type="button" data-action="clear" class={`${btn} text-neutral-500`}>一覧をすべて消す</button>
+        </div>
+        {GOOGLE_CLIENT_ID && (
+          <div data-drive class="mt-8 pt-6 border-t border-ink/10">
+            <p class="text-sm font-medium">Googleドライブで端末をまたいで使う</p>
+            <p class="mt-2 text-xs leading-relaxed text-neutral-600 max-w-3xl">
+              一覧を、あなたのGoogleドライブの「アプリ専用の保存場所」に置きます（ドライブのファイル一覧には出ず、OsoroCosmeからはこの保存場所しか読み書きできません）。
+              メールアドレスや名前は受け取らず、OsoroCosmeのサーバーにも一覧は送られません。
+            </p>
+            <div data-drive-off class="mt-4">
+              <button type="button" data-action="drive-sync" class={btn}>Googleドライブと同期を始める</button>
+            </div>
+            <div data-drive-on hidden class="mt-4 flex flex-wrap gap-2">
+              <button type="button" data-action="drive-sync" class={btn}>同期する</button>
+              <button type="button" data-action="drive-off" class={`${btn} text-neutral-500`}>連携をやめる</button>
+              <button type="button" data-action="drive-erase" class={`${btn} text-neutral-500`}>ドライブの保存を消して連携をやめる</button>
+            </div>
+          </div>
+        )}
+        <p data-status role="status" aria-live="polite" class="mt-4 text-xs leading-relaxed text-neutral-600 min-h-[1.25rem]"></p>
+      </section>
+
+      <p class="text-xs text-neutral-500 mt-8 leading-relaxed">
+        おすすめは、登録したコスメを紹介したインフルエンサーが、ほかに紹介しているコスメの数から出しています（PR・提供の紹介は数えていません）。
+        効果・効能や肌への合い方を示すものではありません。保存の扱いは<a href={withBase("/privacy")} class="link-u">プライバシーポリシー</a>をご覧ください。
+      </p>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import "../scripts/my-cosme-page";
+</script>

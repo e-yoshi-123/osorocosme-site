@@ -253,7 +253,15 @@ const jsonLd = entry
                 </div>
               );
             })()}
-            <ShareButtons text={`${entry.brand}「${entry.name}」を紹介しているYouTube動画${facts.videoCount}本・インフルエンサー${facts.channelCount}人`} class="mt-8" />
+            <!-- マイコスメ（5-4）：今使っているコスメとして、この端末のブラウザに登録する。表示はスクリプトで切り替える（スクリプトなしでは出さない） -->
+            <div data-mycosme hidden class="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2">
+              <button type="button" data-mycosme-toggle data-slug={cosmeticSlug(brand_id, name_id)} data-name={`${entry.brand} ${entry.name}`} aria-pressed="false" class="group inline-flex items-center gap-2 min-h-10 px-5 rounded-full border border-rose/50 text-sm text-rose hover:bg-rose hover:text-white aria-pressed:bg-rose aria-pressed:text-white transition-colors cursor-pointer">
+                <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path class="group-aria-pressed:hidden" d="M12 5v14M5 12h14" /><path class="hidden group-aria-pressed:block" d="m5 12.5 4.5 4.5L19 7" /></svg>
+                <span data-label>使っている（マイコスメに追加）</span>
+              </button>
+              <a href={withBase("/my-cosme/")} class="link-u text-xs text-neutral-600">マイコスメでおすすめを見る →</a>
+            </div>
+            <ShareButtons text={`${entry.brand}「${entry.name}」を紹介しているYouTube動画${facts.videoCount}本・インフルエンサー${facts.channelCount}人`} class="mt-6" />
           </div>
         </div>
 
@@ -360,6 +368,30 @@ const jsonLd = entry
 </Layout>
 
 <script>
+  // マイコスメに追加・外す（5-4。保存はこの端末のブラウザだけ）
+  import { has, add, remove, onChange } from "../../scripts/my-cosme-store";
+  const myBox = document.querySelector<HTMLElement>("[data-mycosme]");
+  const myBtn = document.querySelector<HTMLButtonElement>("[data-mycosme-toggle]");
+  if (myBox && myBtn) {
+    const slug = myBtn.dataset.slug!;
+    const paint = () => {
+      const on = has(slug);
+      myBtn.setAttribute("aria-pressed", String(on));
+      myBtn.querySelector("[data-label]")!.textContent = on ? "マイコスメに登録済み" : "使っている（マイコスメに追加）";
+    };
+    myBtn.addEventListener("click", () => {
+      const on = has(slug);
+      const ok = on ? remove(slug) : add(slug, myBtn.dataset.name);
+      if (!ok) myBtn.querySelector("[data-label]")!.textContent = "このブラウザでは保存できません";
+      else paint();
+      const g = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
+      if (typeof g === "function") g("event", "my_cosme", { action: on ? "remove" : "add" }); // どの商品かは送らない
+    });
+    onChange(paint);
+    paint();
+    myBox.hidden = false;
+  }
+
   // 「いつ・誰が紹介したか」の並び替え（新しい順・再生数順・発信力順）と「残りを表示」（228章）
   const introList = document.getElementById("intro-list");
   if (introList) {

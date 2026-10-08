@@ -6,6 +6,9 @@ import {
   getInfluencerRanking,
   getCosmeticListEntry,
   canonicalBrandId,
+  isPrMention,
+  getAliasRedirects,
+  getProductRedirects,
   cosmeticSlug,
   productImageSrc,
   toNumber,
@@ -86,4 +89,42 @@ export function buildSearchIndex(): SearchIndex {
 
   cache = { b, i, c, v };
   return cache;
+}
+
+/** マイコスメ（/my-cosme/）のおすすめの元データ（recommend.json。5-3）。おすすめはブラウザで計算する（scripts/my-cosme-page.ts）。
+ * 「自分のコスメを使っている人が、ほかに使っているコスメ」を出すため、チャンネルごとに紹介したコスメの番号を持つ（PR・提供の紹介は数えない。197章）。
+ * - b（ブランド）: [名前, 検索用の別名]（索引の b と同じ順）
+ * - c（コスメ）: [slug, ブランド名, bの番号, 商品名, 画像, カテゴリ, 動画数]（索引の c と同じ順。容量を抑えるため、ブランド名は b の名前と同じなら空にし、
+ *   画像は楽天の決まった前後を省く：「~」で始まるもの）
+ * - ch（チャンネル）: [channel_id, 名前, アイコン, cの番号の配列]
+ * - r（転送）: { 旧slug: 新slug }（保存した商品が、表記揺れの統合などで別の商品に寄せられたとき） */
+export const RAKUTEN_IMG_HEAD = "https://thumbnail.image.rakuten.co.jp/@0_mall/";
+export const RAKUTEN_IMG_TAIL = "?_ex=240x240";
+export function buildRecommendIndex() {
+  const idx = buildSearchIndex();
+  const cosIdx = new Map(idx.c.map((row, n) => [String(row[0]), n]));
+  const shortImg = (src: string) =>
+    src.startsWith(RAKUTEN_IMG_HEAD) && src.endsWith(RAKUTEN_IMG_TAIL) ? `~${src.slice(RAKUTEN_IMG_HEAD.length, -RAKUTEN_IMG_TAIL.length)}` : src;
+  const c = idx.c.map((row) => {
+    const slug = String(row[0]);
+    const [brand_id, name_id] = [slug.slice(0, slug.indexOf("-name-")), slug.slice(slug.indexOf("-name-") + 1)];
+    const entry = getCosmeticListEntry(brand_id, name_id);
+    const brandName = Number(row[2]) >= 0 && idx.b[Number(row[2])][1] === row[1] ? "" : row[1];
+    return [slug, brandName, row[2], row[3], shortImg(String(row[4])), entry?.category || String(row[5]).split(" ")[0] || "", row[6]];
+  });
+  const byChannel = new Map<string, { title: string; icon: string; items: Set<number> }>();
+  for (const v of getVisibleVideos()) {
+    for (const x of v.cosmetics || []) {
+      if (!x.brand_id || !x.name_id || isPrMention(v.key, x.brand_id, x.name_id)) continue;
+      const n = cosIdx.get(cosmeticSlug(x.brand_id, x.name_id));
+      if (n === undefined) continue;
+      let ch = byChannel.get(v.channel_id);
+      if (!ch) byChannel.set(v.channel_id, (ch = { title: v.channel_title, icon: v.channel_icon || "", items: new Set() }));
+      ch.items.add(n);
+    }
+  }
+  const ch = [...byChannel.entries()].map(([id, x]) => [id, x.title, x.icon, [...x.items].sort((a, b) => a - b)]);
+  const r: Record<string, string> = {};
+  for (const x of [...getAliasRedirects().products, ...getProductRedirects()]) r[x.from] = x.to;
+  return { b: idx.b.map((x) => [x[1], x[2]]), c, ch, r };
 }
