@@ -463,6 +463,3 @@ main .md\:sticky.bg-neutral-50\/95 {
   to { background-position: -50% 0; }
 }
 
-/* スマホのナビの右端のぼかし（続きがあることを示す。端まで送ったら .at-end で消す。228章） */
-.nav-fade { mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent); -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent); }
-.nav-fade.at-end { mask-image: none; -webkit-mask-image: none; }

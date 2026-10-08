@@ -1,0 +1,46 @@
+---
+// ヘッダーの「探す」を押すと上から降りてくる領域（パソコン、lg以上。248章）。
+// カテゴリ（ランキング）・肌悩み・成分・特集を一望できるようにする。開け閉めは Layout.astro のスクリプト（data-menu-toggle）。
+// HTMLに入れておくので、閉じていても検索エンジンはリンクをたどれる。
+import { getMenuData, withBase } from "../lib/data";
+
+const m = getMenuData();
+const cols = [
+  // 幅（12列のうち）：カテゴリ5・肌悩み2・成分3（2列に並べる）・特集2
+  { title: "肌悩みから探す", all: "/concern/", items: m.concerns, span: "col-span-2", twoCols: false },
+  { title: "成分から探す", all: "/ingredient/", items: m.ingredients, span: "col-span-3", twoCols: true },
+  { title: "特集", all: "/feature/", items: m.features, span: "col-span-2", twoCols: false },
+].filter((c) => c.items.length > 0);
+---
+
+<div id="mega-menu" data-menu hidden class="absolute left-0 right-0 top-full bg-paper border-b border-ink/10 shadow-[0_24px_48px_-24px_rgba(0,0,0,0.25)]">
+  <div class="max-w-[1320px] mx-auto px-8 py-8 grid grid-cols-12 gap-8 text-sm">
+    <section class="col-span-5" aria-labelledby="mega-cat">
+      <p class="flex items-baseline justify-between mb-4">
+        <span id="mega-cat" class="label-caps text-neutral-500">カテゴリから探す</span>
+        <a href={withBase("/ranking/")} class="text-xs text-neutral-500 hover:text-rose">すべてのカテゴリ →</a>
+      </p>
+      <div class="grid grid-cols-3 gap-x-6 gap-y-5">
+        {m.categories.map((g) => (
+          <div>
+            <p class="text-xs text-neutral-400 mb-1.5">{g.group}</p>
+            <ul class="space-y-1">
+              {g.items.map((it) => <li><a href={withBase(it.path)} class="hover:text-rose">{it.label}</a></li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+    {cols.map((c) => (
+      <section class:list={[c.span, "border-l border-ink/10 pl-6"]}>
+        <p class="flex items-baseline justify-between mb-4 gap-2">
+          <span class="label-caps text-neutral-500">{c.title}</span>
+          <a href={withBase(c.all)} class="text-xs text-neutral-500 hover:text-rose shrink-0">一覧 →</a>
+        </p>
+        <ul class:list={[c.twoCols ? "grid grid-cols-2 gap-x-4 gap-y-1" : "space-y-1"]}>
+          {c.items.map((it) => <li><a href={withBase(it.path)} class="hover:text-rose">{it.label}</a></li>)}
+        </ul>
+      </section>
+    ))}
+  </div>
+</div>

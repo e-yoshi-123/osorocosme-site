@@ -1,7 +1,7 @@
 import { norm, splitTerms } from "../lib/search-norm";
 
 /** 検索欄の候補：data-suggest を付けたフォームの入力欄で、2文字目から、ブランド・インフルエンサー・コスメの名前の候補と、
- * 肌悩み・成分・特集・カテゴリのランキングのページ（247章）を出す。何も入力せずに触れたときは「探し方」のパネル（data-explore）を出す。
+ * 肌悩み・成分・特集・カテゴリのランキングのページ（247章）を出す。
  * 候補の索引（search-suggest.json）は、入力欄に初めて触れたときに読む。
  * ↑↓で選び、Enterでそのページへ（選んでいなければ普通に検索）、Escで閉じる。 */
 
@@ -108,13 +108,6 @@ function attach(form: HTMLFormElement) {
   // 候補は入力欄を囲む枠の真下に、同じ幅で出す。スマホでは検索欄がロゴの横で狭いので、ヘッダーの下に画面の幅いっぱいで出す（247章）
   const box = input.parentElement!;
   box.style.position = "relative";
-  // 何も入力せずに触れたときの「探し方」のパネル（ExplorePanel.astro。HTMLに入っている）
-  const explore = form.querySelector<HTMLElement>("[data-explore]");
-  if (explore && explore.parentElement !== box) box.appendChild(explore);
-  explore?.addEventListener("mousedown", (e) => e.preventDefault());
-  const showExplore = (on: boolean) => {
-    if (explore) explore.hidden = !on;
-  };
   const list = document.createElement("div");
   list.id = id;
   list.setAttribute("role", "listbox");
@@ -136,7 +129,6 @@ function attach(form: HTMLFormElement) {
   let seq = 0;
 
   const close = () => {
-    showExplore(false);
     list.hidden = true;
     active = -1;
     input.setAttribute("aria-expanded", "false");
@@ -166,7 +158,6 @@ function attach(form: HTMLFormElement) {
     });
     const all = `<a href="${base}/search-result?q=${encodeURIComponent(q)}" class="flex items-center gap-2 mt-1 px-4 pt-3 pb-2 border-t border-ink/10 text-sm text-rose hover:underline">「${esc(q)}」の検索結果をすべて見る<span aria-hidden="true">→</span></a>`;
     list.innerHTML = rows.join("") + all;
-    showExplore(false);
     list.hidden = false;
     input.setAttribute("aria-expanded", "true");
     active = -1;
@@ -176,11 +167,7 @@ function attach(form: HTMLFormElement) {
     const q = input.value.trim();
     const terms = splitTerms(q);
     const my = ++seq;
-    if (terms.join("").length < MIN_CHARS) {
-      close();
-      if (!q) showExplore(true); // 空欄に戻したら探し方を出す
-      return;
-    }
+    if (terms.join("").length < MIN_CHARS) return close();
     let p: Prepared;
     try {
       p = await load();
@@ -195,11 +182,9 @@ function attach(form: HTMLFormElement) {
   input.addEventListener("focus", () => {
     load().catch(() => {});
     if (input.value.trim()) update();
-    else showExplore(true);
   }, { passive: true });
   input.addEventListener("input", update);
   input.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && explore && !explore.hidden) return showExplore(false);
     if (e.isComposing || list.hidden) return; // 日本語の変換中のEnter・矢印は変換に使う
     if (e.key === "ArrowDown") {
       e.preventDefault();

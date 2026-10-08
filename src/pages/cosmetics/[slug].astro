@@ -27,6 +27,8 @@ import {
   productCategoryPath,
   amazonSearchUrl,
   getPublishedConcerns,
+  hasRankingPage,
+  CONCERNS,
   getIngredientInfo,
   getIngredientsOfCosmetic,
   ingredientSourceLabel,
@@ -74,6 +76,14 @@ const ingredientPages = ingredientInfo ? getIngredientsOfCosmetic(brand_id, name
 const otherItems = ingredientInfo ? ingredientInfo.items.filter((x) => !ingredientInfo.active.includes(x)) : [];
 const concernPages = new Set(getPublishedConcerns().map((c) => c.slug));
 const concernIntroCount = facts.introductions.filter((i) => i.concerns.length > 0).length;
+// 名前の下に、この商品が載っている探し方のページ（カテゴリのランキング・肌悩み・成分）を並べる。
+// Googleから商品ページに着地した人が、同じカテゴリ・悩み・成分の別の商品へ移れるようにする（248章）
+const concernLinks = CONCERNS.filter((d) => concernPages.has(d.slug) && facts.introductions.some((i) => i.concerns.some((c) => c.slug === d.slug)));
+const findLinks = [
+  ...(entry?.category && hasRankingPage(entry.category) ? [{ label: `${entry.category}のランキング`, path: `/ranking/${encodeURIComponent(entry.category)}/` }] : []),
+  ...concernLinks.map((d) => ({ label: `肌悩み：${d.name}`, path: `/concern/${d.slug}/` })),
+  ...ingredientPages.map((p) => ({ label: `成分：${p.def.name}`, path: `/ingredient/${p.def.slug}/` })),
+];
 const factSentence = entry
   ? `${entry.brand}「${entry.name}」は、YouTubeのコスメ紹介動画${facts.videoCount}本・インフルエンサー${facts.channelCount}人に紹介されています` +
     (facts.rank ? `。「${facts.mainTag}」カテゴリの人気ランキングでは${facts.rankTotal}品中${facts.rank}位です。` : "。")
@@ -165,7 +175,13 @@ const jsonLd = entry
           <div class="md:col-span-7 md:pt-4">
             <a href={withBase(`/brand/${canonicalBrandId(entry.brand_id)}`)} class="link-u text-xs font-bold tracking-[0.14em] text-rose">{entry.brand}</a>
             <h1 class="mt-4 font-serif font-semibold phrase text-[24px] md:text-[26px] lg:text-[30px] leading-[1.3] tracking-[-0.02em] text-balance">{entry.name}</h1>
-            {entry.category && <p class="mt-4 inline-flex items-center gap-2 text-xs text-neutral-600 border border-ink/15 rounded-full px-3 py-1">{entry.category}</p>}
+            {findLinks.length > 0 ? (
+              <p class="mt-4 flex flex-wrap gap-1.5">
+                {findLinks.map((l) => <a href={withBase(l.path)} class="text-xs text-neutral-600 border border-ink/15 rounded-full px-3 py-1 hover:border-rose hover:text-rose transition-colors">{l.label}</a>)}
+              </p>
+            ) : (
+              entry.category && <p class="mt-4 inline-flex items-center gap-2 text-xs text-neutral-600 border border-ink/15 rounded-full px-3 py-1">{entry.category}</p>
+            )}
 
             <div class="mt-8 pt-6 border-t border-ink/10">
               {buyable && entry.now_price !== undefined && (

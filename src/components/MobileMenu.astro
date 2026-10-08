@@ -1,0 +1,58 @@
+---
+// スマホ・タブレット（lg未満）のメニュー。右上の☰で、ヘッダーの下に画面いっぱいで出す（248章）。
+// 上に主な一覧（ランキング・インフルエンサー・ブランド・動画）、下に探し方（カテゴリ・肌悩み・成分・特集）を折りたたみで並べる。
+import { getMenuData, withBase } from "../lib/data";
+
+interface Props { links: { href: string; label: string; en: string }[] }
+const { links } = Astro.props;
+const m = getMenuData();
+const sections = [
+  { title: "肌悩みから探す", all: "/concern/", items: m.concerns },
+  { title: "成分から探す", all: "/ingredient/", items: m.ingredients },
+  { title: "特集", all: "/feature/", items: m.features },
+].filter((s) => s.items.length > 0);
+---
+
+<div id="mobile-menu" data-menu data-lock hidden class="lg:hidden fixed inset-x-0 top-14 md:top-[72px] bottom-0 z-40 bg-paper overflow-y-auto overscroll-contain border-t border-ink/10">
+  <nav class="px-4 md:px-8 pt-4 pb-16 max-w-2xl mx-auto" aria-label="メニュー">
+    <ul class="grid grid-cols-2 gap-2 mb-6">
+      {links.map((l) => (
+        <li>
+          <a href={withBase(l.href)} class="block rounded-2xl bg-white ring-1 ring-ink/10 px-4 py-3">
+            <span class="block label-caps text-[10px] text-rose">{l.en}</span>
+            <span class="block text-sm mt-0.5">{l.label}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <details class="group border-t border-ink/10" open>
+      <summary class="flex items-center justify-between py-4 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+        <span class="font-medium">カテゴリから探す</span><span class="text-neutral-400 transition-transform group-open:rotate-180" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="pb-4 space-y-3">
+        {m.categories.map((g) => (
+          <div>
+            <p class="text-xs text-neutral-400 mb-1.5">{g.group}</p>
+            <p class="flex flex-wrap gap-1.5">
+              {g.items.map((it) => <a href={withBase(it.path)} class="text-xs border border-ink/15 rounded-full px-2.5 py-1">{it.label}</a>)}
+            </p>
+          </div>
+        ))}
+        <a href={withBase("/ranking/")} class="inline-block text-xs text-rose">すべてのカテゴリ →</a>
+      </div>
+    </details>
+    {sections.map((s) => (
+      <details class="group border-t border-ink/10" open>
+        <summary class="flex items-center justify-between py-4 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+          <span class="font-medium">{s.title}</span><span class="text-neutral-400 transition-transform group-open:rotate-180" aria-hidden="true">⌄</span>
+        </summary>
+        <div class="pb-4">
+          <p class="flex flex-wrap gap-1.5">
+            {s.items.map((it) => <a href={withBase(it.path)} class="text-xs border border-ink/15 rounded-full px-2.5 py-1">{it.label}</a>)}
+          </p>
+          <a href={withBase(s.all)} class="inline-block mt-3 text-xs text-rose">一覧 →</a>
+        </div>
+      </details>
+    ))}
+  </nav>
+</div>

@@ -1384,6 +1384,29 @@ export function getExploreEntries(): ExploreEntry[] {
   return out;
 }
 
+/** ヘッダーの「探す」メニュー（パソコンは上から降りてくる領域、スマホは全画面のメニュー。248章）の中身。
+ * カテゴリは、ランキングの大分類ごとに、品数の多いページ（「〜全般」のまとめを含む）を MENU_CATEGORY_PER_GROUP 件ずつ */
+export const MENU_CATEGORY_GROUPS = ["ベースメイク", "アイメイク", "チーク・リップ", "スキンケア", "アイブロウ", "ヘアケア"];
+const MENU_CATEGORY_PER_GROUP = 4;
+export interface MenuLink { label: string; path: string }
+let _menuCache: { categories: { group: string; items: MenuLink[] }[]; concerns: MenuLink[]; ingredients: MenuLink[]; features: MenuLink[] } | undefined;
+export function getMenuData() {
+  if (_menuCache) return _menuCache;
+  const nav = getRankingNav();
+  const categories = MENU_CATEGORY_GROUPS.map((group) => {
+    const items = (nav.find((g) => g.group === group)?.items || [])
+      .slice()
+      .sort((a, b) => b.count - a.count)
+      .slice(0, MENU_CATEGORY_PER_GROUP)
+      .map((it) => ({ label: it.name.replace(/全般$/, ""), path: `/ranking/${encodeURIComponent(it.name)}/` }));
+    return { group, items };
+  }).filter((g) => g.items.length > 0);
+  const ex = getExploreEntries();
+  const pick = (kind: ExploreEntry["kind"]) => ex.filter((e) => e.kind === kind).map((e) => ({ label: e.label, path: e.path }));
+  _menuCache = { categories, concerns: pick("肌悩み"), ingredients: pick("成分"), features: pick("特集") };
+  return _menuCache;
+}
+
 /** 一覧の表紙の画像を、前のカードで使った画像と重ならないように3枚ずつ選ぶ（228章） */
 export function distinctCovers<T>(list: T[], candidates: (x: T) => { src: string; alt: string }[], n = 3): (T & { imgs: { src: string; alt: string }[] })[] {
   const used = new Set<string>();

@@ -4,7 +4,6 @@ import VideoCard from "../components/VideoCard.astro";
 import CosmeticTile from "../components/CosmeticTile.astro";
 import SectionHead from "../components/SectionHead.astro";
 import HeroRings from "../components/HeroRings.astro";
-import CoverArt from "../components/CoverArt.astro";
 import {
   getVisibleVideos,
   getPopularBrands,
@@ -21,13 +20,12 @@ import {
   categoryUrl,
   getPublishedFeatures,
   getFeature,
-  featureCoverImages,
-  distinctCovers,
   getCosmeticListEntry,
   productImageSrc,
   getRecentCounts,
   cosmeticSlug,
   getBrandTopCosmetics,
+  getMenuData,
 } from "../lib/data";
 
 const visible = getVisibleVideos();
@@ -62,8 +60,20 @@ const siteLd = {
     "query-input": "required name=search_term_string",
   },
 };
-// 特集カード用: 特集一覧と同じ表紙（CoverArt）。画像の選び方・色・並べ方も一覧とそろえる（231章）
-const featureCards = distinctCovers(getPublishedFeatures().map((d) => getFeature(d.slug)!), (f) => featureCoverImages(f.def.slug, 12));
+// 特集：表紙つきの大きなカードはほとんど見られていなかった（GA4で平均9秒）ので、小さな一覧にする（248章）
+const featureCards = getPublishedFeatures().map((d) => getFeature(d.slug)!);
+// 「探し方」の入口：ヘッダーの「探す」と同じ中身（カテゴリ・肌悩み・成分）と、人から探す入口（248章）
+const menu = getMenuData();
+const findBlocks = [
+  { en: "Category", title: "カテゴリから探す", all: "/ranking/", items: menu.categories.flatMap((g) => g.items.slice(0, 2)) },
+  { en: "Concerns", title: "肌悩みから探す", all: "/concern/", items: menu.concerns },
+  { en: "Ingredients", title: "成分から探す", all: "/ingredient/", items: menu.ingredients },
+  { en: "People", title: "人・ブランドから探す", all: "/influencer-list", items: [
+    { label: "インフルエンサー一覧", path: "/influencer-list" },
+    { label: "ブランド一覧", path: "/brand-list" },
+    { label: "新着の紹介動画", path: "/video-list" },
+  ] },
+].filter((b) => b.items.length > 0);
 
 // ヒーローの表紙：最近話題のコスメ上位3品（画像のあるもの）
 const heroItems = trending
@@ -140,6 +150,24 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
           )}
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ===== FIND：探し方の入口。ヘッダーの「探す」と同じ中身を、トップでは最初から見せる（248章） ===== -->
+  <section class="panel mb-12 md:mb-16" aria-labelledby="find-title">
+    <h2 id="find-title" class="sr-only">探し方</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-8">
+      {findBlocks.map((b) => (
+        <div>
+          <p class="flex items-baseline justify-between gap-2 mb-3">
+            <span><span class="block eyebrow">{b.en}</span><span class="block font-serif text-lg font-semibold mt-0.5">{b.title}</span></span>
+            <a href={withBase(b.all)} class="text-xs text-neutral-500 hover:text-rose shrink-0">一覧 →</a>
+          </p>
+          <p class="flex flex-wrap gap-1.5">
+            {b.items.map((it) => <a href={withBase(it.path)} class="text-xs border border-ink/15 rounded-full px-2.5 py-1 hover:border-rose hover:text-rose transition-colors">{it.label}</a>)}
+          </p>
+        </div>
+      ))}
     </div>
   </section>
 
@@ -252,25 +280,23 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
     </section>
   )}
 
-  <!-- ===== 03 FEATURES ===== -->
+  <!-- ===== 03 FEATURES：小さな一覧（248章） ===== -->
   {featureCards.length > 0 && (
     <section class="panel mt-8 md:mt-10">
       <SectionHead num="03" en="Features" title="特集" lead="動画のタイトルに書かれたテーマごとに、よく紹介されたコスメを集めました。" href={withBase("/feature/")} />
-      <div class="grid sm:grid-cols-2 gap-6 md:gap-8">
-        {featureCards.map((c, i) => (
-          <a href={withBase(`/feature/${c.def.slug}/`)} class="reveal group block rounded-[28px] border border-ink/10 hover:bg-blush/40 p-4 md:p-6 transition-colors duration-700" style={`--d:${(i % 2) * 120}ms`}>
-            {c.imgs.length > 0 && <CoverArt imgs={c.imgs} index={i} word={c.def.en || ""} size="wide" />}
-            <div class="mt-6 px-2 md:px-4 pb-2 flex items-end justify-between gap-4">
-              <div>
-                <p class="eyebrow">Feature</p>
-                <p class="mt-1 font-serif text-[20px] md:text-[22px] font-semibold leading-snug">{c.def.name}動画で<br />人気のコスメ</p>
-                <p class="mt-2 text-xs text-neutral-600">{c.videoCount}本の動画・{c.channelCount}チャンネルから集計</p>
-              </div>
-              <span class="shrink-0 w-11 h-11 rounded-full border border-ink/25 flex items-center justify-center transition-all duration-500 ease-out-expo group-hover:bg-ink group-hover:text-paper" aria-hidden="true">→</span>
-            </div>
-          </a>
+      <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {featureCards.map((c) => (
+          <li>
+            <a href={withBase(`/feature/${c.def.slug}/`)} class="group flex items-center justify-between gap-4 rounded-2xl border border-ink/10 hover:bg-blush/40 px-5 py-4 transition-colors">
+              <span class="min-w-0">
+                <span class="block font-serif text-[17px] font-semibold leading-snug group-hover:text-rose transition-colors">{c.def.name}</span>
+                <span class="block mt-1 text-xs text-neutral-500">{c.videoCount}本の動画・{c.channelCount}チャンネルから集計</span>
+              </span>
+              <span class="shrink-0 w-9 h-9 rounded-full border border-ink/20 flex items-center justify-center transition-all duration-500 group-hover:bg-ink group-hover:text-paper" aria-hidden="true">→</span>
+            </a>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   )}
 
