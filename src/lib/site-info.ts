@@ -7,4 +7,4 @@ export const POLICY_UPDATED = "2026年10月8日";
 export const GA_MEASUREMENT_ID = "G-2FPCHCMB22";
 // マイコスメのGoogleドライブ同期（5-4の案B）に使う、Google CloudのOAuthクライアントID（公開されるID。秘密ではない）。
 // 空のあいだは、マイコスメのページにGoogleドライブの欄を出さない（ブラウザ内の保存とファイルの書き出し・読み込みだけ）
-export const GOOGLE_CLIENT_ID = "";
+export const GOOGLE_CLIENT_ID = "132520648308-3th6me11gtf7rrq1ta2ir6rdpok6jk0p.apps.googleusercontent.com";
