@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import { withBase } from "../lib/data";
 import { GA_MEASUREMENT_ID } from "../lib/site-info";
+import ExplorePanel from "../components/ExplorePanel.astro";
 import Logo from "../components/Logo.astro";
 
 interface Props {
@@ -31,15 +32,24 @@ function largerOgImage(src: string): string {
 }
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
 
+// 上のメニューは4項目に絞る。肌悩み・成分・特集は検索欄の入口（ExplorePanel）と候補から入る（247章）。
+// フッターには全部を並べる（どのページからもたどれる入口を減らさない）
 const navLinks = [
   { href: "/ranking/", label: "ランキング", en: "Ranking" },
-  { href: "/feature/", label: "特集", en: "Features" },
-  { href: "/concern/", label: "肌悩み", en: "Concerns" },
-  { href: "/ingredient/", label: "成分", en: "Ingredients" },
   { href: "/brand-list", label: "ブランド", en: "Brands" },
   { href: "/influencer-list", label: "インフルエンサー", en: "Influencers" },
   { href: "/video-list", label: "動画", en: "Videos" },
 ];
+const footerLinks = [
+  { href: "/ranking/", label: "ランキング" },
+  { href: "/concern/", label: "肌悩みから探す" },
+  { href: "/ingredient/", label: "成分から探す" },
+  { href: "/feature/", label: "特集" },
+  { href: "/brand-list", label: "ブランド" },
+  { href: "/influencer-list", label: "インフルエンサー" },
+  { href: "/video-list", label: "動画" },
+];
+const SEARCH_PLACEHOLDER = "コスメ・肌悩み・成分で探す";
 const path = Astro.url.pathname;
 const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace(/\/$/, ""));
 ---
@@ -135,7 +145,7 @@ const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace
   <body class="min-h-screen bg-paper text-ink flex flex-col font-sans">
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 bg-ink text-white px-3 py-2 text-sm">本文へ</a>
     <header class="sticky top-0 z-40 bg-paper/85 backdrop-blur-md border-b border-ink/10">
-      <div class="max-w-[1320px] mx-auto px-4 md:px-8 h-14 md:h-[72px] flex items-center gap-6">
+      <div class="max-w-[1320px] mx-auto px-4 md:px-8 h-14 md:h-[72px] flex items-center gap-4 md:gap-6">
         <a href={withBase("/")} class="text-ink text-[20px] md:text-[22px] shrink-0" aria-label="OsoroCosme ホーム"><Logo /></a>
         <nav class="hidden lg:flex items-center gap-7 ml-6" aria-label="メイン">
           {navLinks.map((l) => (
@@ -145,24 +155,17 @@ const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace
             </a>
           ))}
         </nav>
-        <form action={withBase("/search-result")} method="get" role="search" data-suggest class="ml-auto hidden md:flex items-center gap-2 border-b border-ink/25 focus-within:border-rose transition-colors w-64 xl:w-72">
+        <!-- 検索欄はスマホでも常に出す（247章。肌悩み・成分・特集の入口を兼ねるので、ボタンの奥に隠さない）。
+             スマホでは入力欄の文字を16pxにする（iOSで、16px未満の入力欄に触れると画面が拡大されるため） -->
+        <form action={withBase("/search-result")} method="get" role="search" data-suggest class="ml-auto flex flex-1 md:flex-none min-w-0 items-center gap-2 border-b border-ink/25 focus-within:border-rose transition-colors md:w-72 xl:w-96">
           <svg viewBox="0 0 24 24" class="w-4 h-4 text-neutral-500 shrink-0" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
-          <input type="search" name="q" placeholder="コスメ・ブランド・動画を検索" aria-label="サイト内検索" class="w-full bg-transparent py-2 text-sm placeholder:text-neutral-400 focus:outline-none" />
+          <input type="search" name="q" placeholder={SEARCH_PLACEHOLDER} aria-label="サイト内検索" class="w-full min-w-0 bg-transparent py-2 text-base md:text-sm placeholder:text-neutral-400 placeholder:text-sm focus:outline-none" />
+          <ExplorePanel />
         </form>
-        <button type="button" data-search-toggle class="md:hidden ml-auto -mr-2 w-11 h-11 flex items-center justify-center" aria-label="検索を開く" aria-expanded="false" aria-controls="mobile-search">
-          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
-        </button>
       </div>
-      <form id="mobile-search" action={withBase("/search-result")} method="get" role="search" data-suggest class="md:hidden hidden px-4 pb-3">
-        <div class="flex items-center gap-2 border-b border-ink/30 focus-within:border-rose">
-          <input type="search" name="q" placeholder="コスメ・ブランド・動画を検索" aria-label="サイト内検索" class="w-full bg-transparent py-2.5 text-base focus:outline-none" />
-          <button type="submit" class="label-caps text-rose py-2">Search</button>
-        </div>
-      </form>
-      <!-- 6項目だと390px幅に収まらない（228章）。右端をぼかして続きがあることを示し、端まで送ったらぼかしを消す（下のスクリプト） -->
+      <!-- 4項目（247章）。狭い幅でも収まるが、念のため横スクロールとぼかしの仕組みは残す（228章） -->
       <nav id="mobile-nav" class="nav-fade lg:hidden border-t border-ink/5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="メイン（スマホ）">
-        <!-- 間隔は8px（12pxだと390px幅で6項目が収まらない）。横スクロールの入れ物では右の余白が幅に数えられないので、末尾に余白の要素を置く（228章） -->
-        <div class="flex justify-between min-[400px]:justify-start gap-2 min-[400px]:gap-5 pl-4 md:pl-8 whitespace-nowrap text-[13px] min-[380px]:text-sm after:content-[''] after:shrink-0 after:w-2 md:after:w-6">
+        <div class="flex justify-between sm:justify-start gap-4 sm:gap-7 px-4 md:px-8 whitespace-nowrap text-sm">
           {navLinks.map((l) => (
             <a href={withBase(l.href)} aria-current={isCurrent(l.href) ? "page" : undefined} class:list={["relative py-2.5 shrink-0", isCurrent(l.href) ? "text-ink font-medium" : "text-neutral-600"]}>
               {l.label}
@@ -196,7 +199,7 @@ const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace
           <nav class="md:col-span-3 md:col-start-7" aria-label="探す">
             <p class="label-caps text-paper/40 mb-4">Explore</p>
             <ul class="space-y-2.5 text-sm">
-              {navLinks.map((l) => <li><a href={withBase(l.href)} class="link-u text-paper/80 hover:text-paper">{l.label}</a></li>)}
+              {footerLinks.map((l) => <li><a href={withBase(l.href)} class="link-u text-paper/80 hover:text-paper">{l.label}</a></li>)}
             </ul>
           </nav>
           <nav class="md:col-span-3" aria-label="サイト情報">
@@ -279,14 +282,6 @@ const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace
       toTop.addEventListener("click", () => {
         window.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
         document.getElementById("main")?.focus({ preventScroll: true });
-      });
-      // スマホの検索の開閉
-      const t = document.querySelector<HTMLButtonElement>("[data-search-toggle]");
-      const f = document.getElementById("mobile-search");
-      t?.addEventListener("click", () => {
-        const open = f!.classList.toggle("hidden") === false;
-        t.setAttribute("aria-expanded", String(open));
-        if (open) f!.querySelector("input")?.focus();
       });
     </script>
   </body>

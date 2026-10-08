@@ -1,13 +1,15 @@
 import { norm, splitTerms } from "../lib/search-norm";
 
-/** 検索欄の候補：data-suggest を付けたフォームの入力欄で、2文字目から、ブランド・インフルエンサー・コスメの名前の候補を出す。
+/** 検索欄の候補：data-suggest を付けたフォームの入力欄で、2文字目から、ブランド・インフルエンサー・コスメの名前の候補と、
+ * 肌悩み・成分・特集・カテゴリのランキングのページ（247章）を出す。何も入力せずに触れたときは「探し方」のパネル（data-explore）を出す。
  * 候補の索引（search-suggest.json）は、入力欄に初めて触れたときに読む。
  * ↑↓で選び、Enterでそのページへ（選んでいなければ普通に検索）、Escで閉じる。 */
 
 type BrandRow = [string, string, string, number];
 type InfRow = [string, string, string, number];
 type CosRow = [string, string, number, string, number, string];
-interface SuggestIndex { b: BrandRow[]; i: InfRow[]; c: CosRow[] }
+type ExploreRow = [string, string, string, string, number];
+interface SuggestIndex { b: BrandRow[]; i: InfRow[]; c: CosRow[]; x?: ExploreRow[] }
 interface Prepared {
   idx: SuggestIndex;
   brandNames: string[][];
@@ -15,12 +17,13 @@ interface Prepared {
   infNames: string[];
   cosNames: string[];
   cosHay: string[];
+  exNames: string[][];
 }
 interface Item { kind: string; href: string; label: string; sub: string; icon?: string }
 
 const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL.slice(0, -1) : import.meta.env.BASE_URL;
 const MIN_CHARS = 2;
-const LIMIT = { brand: 4, influencer: 3, cosmetic: 6 };
+const LIMIT = { brand: 4, influencer: 3, cosmetic: 6, explore: 4 };
 
 let loading: Promise<Prepared> | undefined;
 function load(): Promise<Prepared> {
@@ -38,6 +41,7 @@ function load(): Promise<Prepared> {
         cosNames,
         // カテゴリでも引ける（「キャンメイク 下地」）。並びは商品名との一致を優先する
         cosHay: idx.c.map((c, n) => `${norm(c[1])}|${c[2] >= 0 ? brandHay[c[2]] : ""}|${cosNames[n]}|${c[5].split(" ").map(norm).join("|")}`),
+        exNames: (idx.x || []).map((x) => x[3].split(" ").map(norm).filter(Boolean)),
       };
     })
     .catch((e) => {
@@ -74,7 +78,17 @@ function suggest(p: Prepared, terms: string[]): Item[] {
   // コスメは商品名に当たるものを先に（ブランド名だけで当たるものは、ブランドの候補があれば十分なため）
   const cos = top(p.idx.c, (n) => nameScore([p.cosNames[n]], terms), (n) => p.cosHay[n], (c) => c[4], LIMIT.cosmetic);
 
+  // 肌悩み・成分・特集・ランキングのページ。語の一部に当たるもの（「ビタミン」→ビタミンC）も拾い、当たり方の強い順・品数の多い順
+  const ex = top(p.idx.x || [], (n) => nameScore(p.exNames[n], terms), (n) => p.exNames[n].join("|"), (x) => x[4], LIMIT.explore);
+  const exItems = ex.map(({ r: x }) => ({
+    kind: "探し方",
+    href: `${base}${x[2]}`,
+    label: x[0] === "ランキング" ? `${x[1]}のランキング` : x[0] === "肌悩み" ? `肌悩み：${x[1]}` : x[0] === "成分" ? `成分：${x[1]}が入ったスキンケア` : `特集：${x[1]}`,
+    sub: `${x[4]}品`,
+  }));
   const groups: { s: number; items: Item[] }[] = [
+    // 探し方のページは、名前にほぼそのまま当たったとき（前方一致以上）は先頭に出す
+    { s: (ex[0]?.s ?? 0) >= 2 ? 4 : ex[0]?.s ?? 0, items: exItems },
     { s: brands[0]?.s ?? 0, items: brands.map(({ r: b }) => ({ kind: "ブランド", href: `${base}/brand/${b[0]}/`, label: b[1], sub: `動画 ${b[3]}本` })) },
     { s: infs[0]?.s ?? 0, items: infs.map(({ r: i }) => ({ kind: "インフルエンサー", href: `${base}/influencer/${i[0]}/`, label: i[1], sub: `動画 ${i[3]}本`, icon: i[2] })) },
     { s: cos[0]?.s ?? 0, items: cos.map(({ r: c }) => ({ kind: "コスメ", href: `${base}/cosmetics/${c[0]}/`, label: c[3], sub: c[1] })) },
@@ -91,16 +105,23 @@ function attach(form: HTMLFormElement) {
   const input = form.querySelector<HTMLInputElement>('input[name="q"]');
   if (!input) return;
   const id = `suggest-${++uid}`;
-  // 候補は入力欄を囲む枠の真下に、同じ幅で出す（スマホの検索はフォームに余白があり、フォームに合わせると画面の端まで広がるため）
+  // 候補は入力欄を囲む枠の真下に、同じ幅で出す。スマホでは検索欄がロゴの横で狭いので、ヘッダーの下に画面の幅いっぱいで出す（247章）
   const box = input.parentElement!;
   box.style.position = "relative";
+  // 何も入力せずに触れたときの「探し方」のパネル（ExplorePanel.astro。HTMLに入っている）
+  const explore = form.querySelector<HTMLElement>("[data-explore]");
+  if (explore && explore.parentElement !== box) box.appendChild(explore);
+  explore?.addEventListener("mousedown", (e) => e.preventDefault());
+  const showExplore = (on: boolean) => {
+    if (explore) explore.hidden = !on;
+  };
   const list = document.createElement("div");
   list.id = id;
   list.setAttribute("role", "listbox");
   list.setAttribute("aria-label", "検索の候補");
   list.hidden = true;
   list.className =
-    "absolute left-0 right-0 top-full mt-2 z-50 max-h-[min(70vh,28rem)] overflow-y-auto overscroll-contain rounded-2xl bg-white text-ink text-left shadow-[0_12px_40px_-12px_rgba(0,0,0,0.25)] ring-1 ring-ink/10 py-2";
+    "absolute left-0 right-0 top-full mt-2 max-md:fixed max-md:inset-x-3 max-md:top-[3.75rem] max-md:mt-0 z-50 max-h-[min(70vh,28rem)] overflow-y-auto overscroll-contain rounded-2xl bg-white text-ink text-left shadow-[0_12px_40px_-12px_rgba(0,0,0,0.25)] ring-1 ring-ink/10 py-2";
   box.appendChild(list);
   // 候補を押しても入力欄から焦点を外さない（Safariはリンクに焦点が移らず、先に閉じて押せなくなるため）
   list.addEventListener("mousedown", (e) => e.preventDefault());
@@ -115,6 +136,7 @@ function attach(form: HTMLFormElement) {
   let seq = 0;
 
   const close = () => {
+    showExplore(false);
     list.hidden = true;
     active = -1;
     input.setAttribute("aria-expanded", "false");
@@ -144,6 +166,7 @@ function attach(form: HTMLFormElement) {
     });
     const all = `<a href="${base}/search-result?q=${encodeURIComponent(q)}" class="flex items-center gap-2 mt-1 px-4 pt-3 pb-2 border-t border-ink/10 text-sm text-rose hover:underline">「${esc(q)}」の検索結果をすべて見る<span aria-hidden="true">→</span></a>`;
     list.innerHTML = rows.join("") + all;
+    showExplore(false);
     list.hidden = false;
     input.setAttribute("aria-expanded", "true");
     active = -1;
@@ -153,7 +176,11 @@ function attach(form: HTMLFormElement) {
     const q = input.value.trim();
     const terms = splitTerms(q);
     const my = ++seq;
-    if (terms.join("").length < MIN_CHARS) return close();
+    if (terms.join("").length < MIN_CHARS) {
+      close();
+      if (!q) showExplore(true); // 空欄に戻したら探し方を出す
+      return;
+    }
     let p: Prepared;
     try {
       p = await load();
@@ -168,9 +195,11 @@ function attach(form: HTMLFormElement) {
   input.addEventListener("focus", () => {
     load().catch(() => {});
     if (input.value.trim()) update();
+    else showExplore(true);
   }, { passive: true });
   input.addEventListener("input", update);
   input.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && explore && !explore.hidden) return showExplore(false);
     if (e.isComposing || list.hidden) return; // 日本語の変換中のEnter・矢印は変換に使う
     if (e.key === "ArrowDown") {
       e.preventDefault();

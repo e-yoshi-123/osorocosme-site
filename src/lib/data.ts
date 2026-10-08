@@ -1340,6 +1340,50 @@ export function ingredientSourceLabel(info: IngredientInfo): string {
   return info.source === "official" ? "公式サイト" : `楽天市場 ${info.shop || "メーカー公式ショップ"}`;
 }
 
+/** 検索欄から入る「探し方」のページ（肌悩み・成分・特集・カテゴリのランキング。247章）。
+ * 上のメニューは4項目に絞り、これらは検索欄の入口（何も入力せずに触れたときのパネル）と、入力したときの候補から入る */
+export interface ExploreEntry {
+  kind: "肌悩み" | "成分" | "特集" | "ランキング";
+  label: string;
+  path: string;
+  /** 候補で引ける語（名前と、言及の語の別名） */
+  words: string[];
+  count: number;
+}
+/** 言及の語の正規表現（/シミ|そばかす|色素沈着/）から、候補で引ける語を取り出す */
+function patternWords(re: RegExp): string[] {
+  return re.source
+    .replace(/\\b|\(\?[!=<][^)]*\)/g, "")
+    .split("|")
+    .map((w) => w.replace(/[\\^$()[\]?*+.{}]/g, ""))
+    .filter((w) => w.length >= 2);
+}
+let _exploreCache: ExploreEntry[] | undefined;
+export function getExploreEntries(): ExploreEntry[] {
+  if (_exploreCache) return _exploreCache;
+  const out: ExploreEntry[] = [];
+  for (const d of getPublishedConcerns()) {
+    const c = getConcern(d.slug)!;
+    // 「乾燥肌」「敏感肌」のように「肌」を付けた言い方でも引けるようにする
+    const ws = [d.name, ...patternWords(d.pattern)];
+    out.push({ kind: "肌悩み", label: d.name, path: `/concern/${d.slug}/`, words: [...ws, ...ws.filter((w) => !w.endsWith("肌")).map((w) => `${w}肌`)], count: c.itemCount });
+  }
+  for (const d of getPublishedIngredients()) {
+    out.push({ kind: "成分", label: d.name, path: `/ingredient/${d.slug}/`, words: [d.name, d.en, ...patternWords(d.pattern)], count: getIngredient(d.slug)!.itemCount });
+  }
+  for (const d of getPublishedFeatures()) {
+    const f = getFeature(d.slug)!;
+    out.push({ kind: "特集", label: d.name, path: `/feature/${d.slug}/`, words: [d.name, ...d.keywords], count: f.groups.reduce((n, g) => n + g.items.length, 0) });
+  }
+  for (const [tag, page] of getRankingPages()) {
+    out.push({ kind: "ランキング", label: tag, path: `/ranking/${encodeURIComponent(tag)}/`, words: [tag, ...tag.split(/[・()（）]/)].filter((w) => w.length >= 2), count: page.list.length });
+  }
+  // 引ける語は空白で区切って渡すので、語の中の空白（「Vitamin C」）は詰め、重複を除く
+  for (const e of out) e.words = [...new Set(e.words.map((w) => w.replace(/\s+/g, "")))];
+  _exploreCache = out;
+  return out;
+}
+
 /** 一覧の表紙の画像を、前のカードで使った画像と重ならないように3枚ずつ選ぶ（228章） */
 export function distinctCovers<T>(list: T[], candidates: (x: T) => { src: string; alt: string }[], n = 3): (T & { imgs: { src: string; alt: string }[] })[] {
   const used = new Set<string>();
