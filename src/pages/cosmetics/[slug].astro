@@ -8,6 +8,7 @@ import PageNav from "../../components/PageNav.astro";
 import {
   getUsedCosmeticKeys,
   getAliasRedirects,
+  getProductRedirects,
   canonicalBrandId,
   getCosmeticListEntry,
   getVideosUsingCosmetic,
@@ -42,6 +43,11 @@ export function getStaticPaths() {
     })),
     // 二重登録ブランドの統合で、統合先の商品に寄せた商品の統合前のURLは、統合先の商品ページへ転送する
     ...getAliasRedirects().products.map((r) => ({
+      params: { slug: r.from },
+      props: { brand_id: "", name_id: "", redirectTo: r.to },
+    })),
+    // 表記揺れの統合で寄せた商品（今は使われていない側）の旧URLは、寄せ先の商品ページへ転送する（251章）
+    ...getProductRedirects().map((r) => ({
       params: { slug: r.from },
       props: { brand_id: "", name_id: "", redirectTo: r.to },
     })),

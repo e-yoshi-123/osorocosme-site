@@ -8,6 +8,7 @@ import brandEquivalentsData from "../data/brand_equivalents.json";
 import prVideosData from "../data/pr_videos.json";
 import shortsData from "../data/shorts.json";
 import ingredientsData from "../data/ingredients.json";
+import productRedirectsData from "../data/product-redirects.json";
 
 export interface Cosmetic {
   brand_id: string;
@@ -176,6 +177,21 @@ export function getAliasRedirects(): { brands: { from: string; to: string }[]; p
       to: to.replace("_", "-"),
     })),
   };
+}
+
+/** 表記揺れの統合（backend の lib/dedupe.py）で寄せた商品の旧URLから、寄せ先の商品ページへの転送先。
+ * 対応表は公開時に trim_public_catalog.py が書く（{寄せた側のキー: 寄せ先のキー}）。寄せ先にページがあるものだけ。
+ * 二重登録ブランドの統合の転送（getAliasRedirects）と重なるものは、そちらを優先する。251章 */
+export function getProductRedirects(): { from: string; to: string }[] {
+  const used = new Set(getUsedCosmeticKeys().map((k) => `${k.brand_id}_${k.name_id}`));
+  const aliasFrom = new Set(Object.keys(productAlias));
+  const out: { from: string; to: string }[] = [];
+  for (const [from, to0] of Object.entries(productRedirectsData as Record<string, string>)) {
+    const to = productAlias[to0] ?? to0;
+    if (used.has(from) || aliasFrom.has(from) || !used.has(to)) continue;
+    out.push({ from: from.replace("_", "-"), to: to.replace("_", "-") });
+  }
+  return out;
 }
 
 /** 現行WordPress実装は check_status の判定がページごとに不統一（緩い/厳密が混在するバグ）。
