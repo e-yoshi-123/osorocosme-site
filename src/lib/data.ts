@@ -1407,6 +1407,19 @@ export function getMenuData() {
   return _menuCache;
 }
 
+/** 検索欄の案内文で順に見せる例（249章）。このサイトならではの探し方（成分・人の名前・肌悩み×カテゴリ・ブランド）を、データから選ぶ */
+let _searchExamples: string[] | undefined;
+export function getSearchExamples(): string[] {
+  if (_searchExamples) return _searchExamples;
+  const ings = getPublishedIngredients().map((d) => ({ d, n: getIngredient(d.slug)!.itemCount })).sort((a, b) => b.n - a.n);
+  const ing = ings.find((x) => x.d.slug === "niacinamide")?.d.name || ings[0]?.d.name;
+  const person = getInfluencerRanking()[0]?.channel_title;
+  const concern = getPublishedConcerns()[0]?.name.split("・")[0];
+  const brand = getPopularBrands(1)[0]?.name;
+  _searchExamples = [ing, person, concern && `${concern} 下地`, brand].filter((x): x is string => !!x).map((x) => `例：${x}`);
+  return _searchExamples;
+}
+
 /** 一覧の表紙の画像を、前のカードで使った画像と重ならないように3枚ずつ選ぶ（228章） */
 export function distinctCovers<T>(list: T[], candidates: (x: T) => { src: string; alt: string }[], n = 3): (T & { imgs: { src: string; alt: string }[] })[] {
   const used = new Set<string>();

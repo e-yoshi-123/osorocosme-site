@@ -1,6 +1,6 @@
 ---
 import "../styles/global.css";
-import { withBase } from "../lib/data";
+import { withBase, getSearchExamples } from "../lib/data";
 import { GA_MEASUREMENT_ID } from "../lib/site-info";
 import MegaMenu from "../components/MegaMenu.astro";
 import MobileMenu from "../components/MobileMenu.astro";
@@ -52,7 +52,9 @@ const footerLinks = [
 ];
 const path = Astro.url.pathname;
 const isCurrent = (href: string) => href !== "/" && path.startsWith(href.replace(/\/$/, ""));
-const SEARCH_PLACEHOLDER = "コスメ・成分で探す";
+const SEARCH_PLACEHOLDER = "フリーワードで探す";
+// 案内文に数秒ごとに出す例（成分・人の名前・肌悩み×カテゴリ・ブランド。249章）。切り替えは scripts/search-suggest.ts
+const searchExamples = getSearchExamples();
 // 「探す」の中のページ（肌悩み・成分・特集）にいるときは「探す」に下線を引く
 const inExplore = /^\/(concern|ingredient|feature)(\/|$)/.test(path.replace(import.meta.env.BASE_URL.replace(/\/$/, ""), ""));
 ---
@@ -166,7 +168,7 @@ const inExplore = /^\/(concern|ingredient|feature)(\/|$)/.test(path.replace(impo
         <!-- 検索欄はスマホでも常に出す（247章）。スマホでは入力欄の文字を16pxにする（iOSで、16px未満の入力欄に触れると画面が拡大されるため） -->
         <form action={withBase("/search-result")} method="get" role="search" data-suggest class="ml-auto flex flex-1 lg:flex-none min-w-0 items-center gap-2 border-b border-ink/25 focus-within:border-rose transition-colors lg:w-72 xl:w-96">
           <svg viewBox="0 0 24 24" class="w-4 h-4 text-neutral-500 shrink-0" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
-          <input type="search" name="q" placeholder={SEARCH_PLACEHOLDER} aria-label="サイト内検索" class="w-full min-w-0 bg-transparent py-2 text-base md:text-sm placeholder:text-neutral-400 placeholder:text-sm focus:outline-none" />
+          <input type="search" name="q" placeholder={SEARCH_PLACEHOLDER} data-examples={JSON.stringify(searchExamples)} aria-label="サイト内検索" class="w-full min-w-0 bg-transparent py-2 text-base md:text-sm placeholder:text-neutral-400 placeholder:text-sm focus:outline-none" />
         </form>
         <button type="button" data-menu-toggle aria-controls="mobile-menu" aria-expanded="false" aria-label="メニューを開く" class="lg:hidden group -mr-2 w-11 h-11 shrink-0 flex items-center justify-center cursor-pointer">
           <svg viewBox="0 0 24 24" class="w-6 h-6 group-aria-expanded:hidden" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>

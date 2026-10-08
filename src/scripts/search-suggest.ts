@@ -209,3 +209,18 @@ function attach(form: HTMLFormElement) {
 }
 
 document.querySelectorAll<HTMLFormElement>("form[data-suggest]").forEach(attach);
+
+/** 検索欄の案内文：「フリーワードで探す」と、data-examples の例（「例：ナイアシンアミド」等）を数秒ごとに順に出す（249章）。
+ * 欄に触れている間・何か入力されている間は止める。動きを抑える設定の端末では切り替えない */
+function rotatePlaceholder(input: HTMLInputElement) {
+  const examples: string[] = JSON.parse(input.dataset.examples || "[]");
+  if (!examples.length || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const texts = [input.placeholder, ...examples];
+  let n = 0;
+  setInterval(() => {
+    if (document.activeElement === input || input.value || document.hidden) return;
+    n = (n + 1) % texts.length;
+    input.placeholder = texts[n];
+  }, 3500);
+}
+document.querySelectorAll<HTMLInputElement>("input[data-examples]").forEach(rotatePlaceholder);
