@@ -15,7 +15,7 @@ interface Props {
 const { i, pos, concernPages, extra = false } = Astro.props;
 const views = i.views >= 10_000 ? `${(i.views / 10_000).toFixed(1).replace(/\.0$/, "")}万回` : `${i.views.toLocaleString("ja-JP")}回`;
 // 同じ節が複数の悩みに当たることがある（「赤み・クマをカバー」など）ので、発言は重ねて出さない
-const quotes = [...new Set(i.concerns.map((c) => c.quote))];
+const quotes = [...new Set(i.concerns.map((c) => c.quote).filter(Boolean))]; // 効能を言い切る発言は空（253章）
 ---
 
 <!--

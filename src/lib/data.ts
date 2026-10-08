@@ -1110,24 +1110,38 @@ export const CONCERNS: ConcernDef[] = [
 const CONCERN_NEG_HARD = /向かな|合わな|注意|悪化|イマイチ|微妙|残念|カサつ[いく]た/;
 const CONCERN_NEG_SOFT = /かも|苦手|意見|目立つ(?!方|人)|しやすい$|荒れた|ができ|乾燥する感じ|乾燥を感じ(?!な)|しみ[たる]|ヒリヒリ|ピリ/;
 const CONCERN_POS = /おすすめ|ぜひ|ぴったり|いい|良い|方に|人に|さんに|でも|ない|ず$|にく|づら/;
-/** 言及から、その悩みに触れている節（悪い評価を除く）を返す */
-function concernClause(mentions: string[] | undefined, pattern: RegExp): string | undefined {
+/** 言及から、その悩みに触れている節（悪い評価を除く）をすべて返す */
+function concernClauses(mentions: string[] | undefined, pattern: RegExp): string[] {
+  const out: string[] = [];
   for (const m of mentions || []) {
     for (const cl of m.split(/[。、,，]/)) {
       const t = cl.trim();
       if (!t || !pattern.test(t)) continue;
       if (CONCERN_NEG_HARD.test(t)) continue;
       if (CONCERN_NEG_SOFT.test(t) && !CONCERN_POS.test(t.replace(CONCERN_NEG_SOFT, ""))) continue;
-      return t;
+      out.push(t);
     }
   }
-  return undefined;
+  return out;
+}
+/** その悩みに触れている最初の節（数える・数えないの判定に使う） */
+function concernClause(mentions: string[] | undefined, pattern: RegExp): string | undefined {
+  return concernClauses(mentions, pattern)[0];
+}
+/** 効能を言い切る言い方。悩み・成分のページは広告と見なされうるので、発言の引用でもこれを含むものは出さない
+ * （薬機法：一般化粧品が言える効能は56項目だけ。体験談でも効能の保証に見える使い方は不可。ユーザー判断、253章）。
+ * 数える・数えないの判定には使わない（引用として出すかどうかだけ） */
+export const EFFICACY_RE = /効[くかきけい]|効果|改善|治[らりるれろっしす]|治療|消え|消す|消し|なく(?:な|し)|無く(?:な|し)|薄く(?:な|し)|減[らりるれっ]|小さくな|引き締|リフトアップ|若返|再生|即効|根本|完治/;
+/** 引用に出してよい節（効能を言い切らないもの）。無ければ undefined */
+function quotableClause(mentions: string[] | undefined, pattern: RegExp): string | undefined {
+  return concernClauses(mentions, pattern).find((t) => !EFFICACY_RE.test(t));
 }
 export const CONCERN_PER_GROUP = 10;
 export interface ConcernItem extends FeatureItem {
   /** 根拠の発言（再生回数の多い動画のもの） */
-  quote: string;
-  quoteChannel: string;
+  /** 根拠の発言（効能を言い切る発言しか無い商品は無し） */
+  quote?: string;
+  quoteChannel?: string;
 }
 const _concernCache = new Map<string, ReturnType<typeof buildConcern>>();
 function buildConcern(def: ConcernDef) {
@@ -1140,12 +1154,12 @@ function buildConcern(def: ConcernDef) {
       if (isPrMention(v.key, c.brand_id, c.name_id)) continue;
       const tag = c.related_tags.map(rankingTag).find((t) => CATEGORY_TAG_TO_GROUP[t]);
       if (!tag) continue;
-      const quote = concernClause(c.mentions, def.pattern);
-      if (!quote) continue;
+      if (!concernClause(c.mentions, def.pattern)) continue;
+      const quote = quotableClause(c.mentions, def.pattern);
       const key = `${c.brand_id}_${c.name_id}`;
       let e = map.get(key);
       if (!e) {
-        e = { brand_id: c.brand_id, brand: c.brand, name_id: c.name_id, name: c.name, tag, videoCount: 0, channelCount: 0, vs: new Set(), cs: new Set(), views: 0, quote, quoteChannel: v.channel_title, qv: -1 };
+        e = { brand_id: c.brand_id, brand: c.brand, name_id: c.name_id, name: c.name, tag, videoCount: 0, channelCount: 0, vs: new Set(), cs: new Set(), views: 0, quote: undefined, quoteChannel: undefined, qv: -1 };
         map.set(key, e);
       }
       if (e.vs.has(v.key)) continue;
@@ -1153,7 +1167,7 @@ function buildConcern(def: ConcernDef) {
       e.vs.add(v.key);
       e.cs.add(v.channel_id);
       e.views += views;
-      if (views > e.qv) Object.assign(e, { quote, quoteChannel: v.channel_title, qv: views });
+      if (quote && views > e.qv) Object.assign(e, { quote, quoteChannel: v.channel_title, qv: views });
       videoKeys.add(v.key);
       channels.add(v.channel_id);
     }
@@ -1264,6 +1278,8 @@ export interface IngredientItem extends FeatureItem {
   /** その成分に触れた発言（再生回数の多い動画のもの）。無ければ空 */
   quote?: string;
   quoteChannel?: string;
+  /** その成分に触れた言及があるか（引用を出さない商品も含む。並び順に使う） */
+  mentioned: boolean;
   /** 全成分で当たった表示名 */
   labels: string[];
   /** 当たった表示名のうち、医薬部外品の有効成分 */
@@ -1284,7 +1300,7 @@ function buildIngredient(def: IngredientDef) {
       const tag = (c.related_tags || []).map(rankingTag).find((t) => CATEGORY_TAG_TO_GROUP[t]) || "";
       let e = map.get(key);
       if (!e) {
-        e = { brand_id: c.brand_id, brand: c.brand, name_id: c.name_id, name: c.name, tag, videoCount: 0, channelCount: 0, vs: new Set(), cs: new Set(), views: 0, qv: -1,
+        e = { brand_id: c.brand_id, brand: c.brand, name_id: c.name_id, name: c.name, tag, videoCount: 0, channelCount: 0, vs: new Set(), cs: new Set(), views: 0, qv: -1, mentioned: false,
           labels, active: labels.filter((x) => info.active.includes(x)), info };
         map.set(key, e);
       }
@@ -1293,14 +1309,15 @@ function buildIngredient(def: IngredientDef) {
       e.vs.add(v.key);
       e.cs.add(v.channel_id);
       e.views += views;
-      const quote = concernClause(c.mentions, def.pattern);
+      if (concernClause(c.mentions, def.pattern)) e.mentioned = true;
+      const quote = quotableClause(c.mentions, def.pattern);
       if (quote && views > e.qv) Object.assign(e, { quote, quoteChannel: v.channel_title, qv: views });
     }
   }
   const all = Array.from(map.values())
     .map((e) => ({ ...e, videoCount: e.vs.size, channelCount: e.cs.size }))
     .filter((e) => e.channelCount >= INGREDIENT_MIN_CHANNELS)
-    .sort((a, b) => Number(!!b.quote) - Number(!!a.quote) || b.channelCount - a.channelCount || b.videoCount - a.videoCount || b.views - a.views || a.name.localeCompare(b.name, "ja"));
+    .sort((a, b) => Number(b.mentioned) - Number(a.mentioned) || b.channelCount - a.channelCount || b.videoCount - a.videoCount || b.views - a.views || a.name.localeCompare(b.name, "ja"));
   const sectionOf = (e: IngredientItem) => INGREDIENT_SECTION_OF[e.tag] || SECTION_OTHER;
   const sections = [...INGREDIENT_SECTIONS.map((g) => g.name), SECTION_OTHER]
     .map((name) => {
@@ -1318,7 +1335,7 @@ function buildIngredient(def: IngredientDef) {
     def,
     all,
     itemCount: all.length,
-    quotedCount: all.filter((e) => e.quote).length,
+    quotedCount: all.filter((e) => e.mentioned).length,
     channelCount: new Set(all.flatMap((e) => [...e.cs])).size,
     officialCount: all.filter((e) => e.info.source === "official").length,
     labels,
@@ -1357,7 +1374,7 @@ export function ingredientCoverImages(slug: string, n = 3): { src: string; alt: 
  * （全成分にその成分がある・2チャンネル以上）のうち、その悩みに触れて紹介されたもの。一緒に語られた商品を先に出す。
  * 成分が悩みに効くとは書かない（薬機法。239章）。「一緒に語られた」という事実と、発言・全成分だけを示す */
 export const CONCERN_INGREDIENT_MIN_MENTIONS = 5;
-interface CIProduct { quote: string; quoteChannel: string; qv: number; pair: boolean }
+interface CIProduct { quote?: string; quoteChannel?: string; qv: number; pair: boolean; /** 引用が一緒に語られた発言か */ qPair: boolean }
 interface CIPair { mentions: Set<string>; prods: Map<string, CIProduct> }
 let _ciIndex: Map<string, CIPair> | null = null;
 function concernIngredientIndex(): Map<string, CIPair> {
@@ -1381,11 +1398,17 @@ function concernIngredientIndex(): Map<string, CIPair> {
           if (!p) idx.set(pk, (p = { mentions: new Set(), prods: new Map() }));
           if (pairMention) p.mentions.add(`${v.key}|${key}`);
           if (!hasLabels) continue;
-          const quote = pairMention ? pairMention.trim() : clause;
+          // 引用は効能を言い切らないものだけ。一緒に語られた発言（全体）→悩みに触れた節の順に探す
+          const safePair = c.mentions.find((m) => ing.pattern.test(m) && concernClause([m], cd.pattern) && !EFFICACY_RE.test(m));
+          const quote = safePair?.trim() || quotableClause(c.mentions, cd.pattern);
+          const qPair = !!safePair;
           const e = p.prods.get(key);
-          // 一緒に語られた発言を、悩みだけの発言より優先する。同じ種類なら再生回数の多い動画のもの
-          if (!e || (!!pairMention && !e.pair) || (!!pairMention === e.pair && views > e.qv)) {
-            p.prods.set(key, { quote, quoteChannel: v.channel_title, qv: views, pair: !!pairMention || !!e?.pair });
+          const pair = !!pairMention || !!e?.pair;
+          if (!e) p.prods.set(key, { quote, quoteChannel: quote ? v.channel_title : undefined, qv: quote ? views : -1, pair, qPair });
+          else {
+            e.pair = pair;
+            // 一緒に語られた発言を、悩みだけの発言より優先する。同じ種類なら再生回数の多い動画のもの
+            if (quote && (!e.quote || (qPair && !e.qPair) || (qPair === e.qPair && views > e.qv))) Object.assign(e, { quote, quoteChannel: v.channel_title, qv: views, qPair });
           }
         }
       }
@@ -1405,7 +1428,7 @@ function buildConcernIngredient(cd: ConcernDef, ing: IngredientDef) {
     .filter((e) => p?.prods.has(`${e.brand_id}_${e.name_id}`))
     .map((e) => {
       const q = p!.prods.get(`${e.brand_id}_${e.name_id}`)!;
-      return { ...e, quote: q.quote, quoteChannel: q.quoteChannel, pair: q.pair };
+      return { ...e, quote: q.quote, quoteChannel: q.quote ? q.quoteChannel : undefined, pair: q.pair };
     })
     .sort((a, b) => Number(b.pair) - Number(a.pair) || b.channelCount - a.channelCount || b.videoCount - a.videoCount || a.name.localeCompare(b.name, "ja"));
   const sectionOf = (e: IngredientItem) => INGREDIENT_SECTION_OF[e.tag] || SECTION_OTHER;
@@ -1766,8 +1789,8 @@ export function getCosmeticFacts(brand_id: string, name_id: string): CosmeticFac
       influenceRank: inf.rank,
       influence: inf.level,
       concerns: CONCERNS.flatMap((d) => {
-        const quote = concernClause(c?.mentions, d.pattern);
-        return quote ? [{ slug: d.slug, name: d.name, quote }] : [];
+        if (!concernClause(c?.mentions, d.pattern)) return [];
+        return [{ slug: d.slug, name: d.name, quote: quotableClause(c?.mentions, d.pattern) || "" }];
       }),
     };
   });
