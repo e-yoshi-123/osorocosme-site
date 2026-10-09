@@ -1,4 +1,5 @@
 ---
+import HowWeCount from "../../../components/HowWeCount.astro";
 import PageHead from "../../../components/PageHead.astro";
 import Layout from "../../../layouts/Layout.astro";
 import ShareButtons from "../../../components/ShareButtons.astro";
@@ -100,8 +101,7 @@ const share = `「${cn}」と「${ing}」が一緒に語られたスキンケア
     <ShareButtons text={share} class="mt-5" />
   </PageHead>
 
-  <div class="rounded-[24px] bg-blush/60 p-6 mb-12 text-sm text-neutral-600 leading-relaxed">
-    <p class="label-caps text-neutral-500 mb-2">How we count</p>
+  <HowWeCount>
     <ul class="list-disc pl-5 space-y-1 [overflow-wrap:anywhere]">
       <li>組の選び方：運営者が選ばず、1つの発言の中で「{cn}」と「{ing}」が一緒に語られた紹介の数で決めています（この組は<b>{x.mentionCount}件</b>。{CONCERN_INGREDIENT_MIN_MENTIONS}件以上の組だけページにしています）</li>
       <li>対象：「{cn}」に触れて紹介され（「{cn}には向かない」のような評価は数えていません）、各ブランドの公式サイトなどの全成分に{ing}の表示名があるスキンケア<b>{x.itemCount}品</b></li>
@@ -109,7 +109,7 @@ const share = `「${cn}」と「${ing}」が一緒に語られたスキンケア
       <li>並び順：{cn}と{ing}が同じ発言で語られた商品（{x.pairCount}品）を先にし、紹介したチャンネル数 → 紹介動画数の順。区分ごとに上位{INGREDIENT_PER_SECTION}品まで</li>
       <li>「」内は、動画での紹介のされ方です（動画の発言を要約したもの）</li>
     </ul>
-  </div>
+  </HowWeCount>
 
   {
     sections.map((s) => (

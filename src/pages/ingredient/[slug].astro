@@ -1,4 +1,5 @@
 ---
+import HowWeCount from "../../components/HowWeCount.astro";
 import PageHead from "../../components/PageHead.astro";
 import Layout from "../../layouts/Layout.astro";
 import ShareButtons from "../../components/ShareButtons.astro";
@@ -91,8 +92,7 @@ const lead = `全成分に${name}が入っているスキンケアのうち、Yo
     <ShareButtons text={`${name}が入ったスキンケア。インフルエンサーが使うコスメ`} class="mt-5" />
   </PageHead>
 
-  <div class="rounded-[24px] bg-blush/60 p-6 mb-12 text-sm text-neutral-600 leading-relaxed">
-    <p class="label-caps text-neutral-500 mb-2">How we count</p>
+  <HowWeCount>
     <ul class="list-disc pl-5 space-y-1 [overflow-wrap:anywhere]">
       <li>対象：各ブランドの公式サイトに掲載されている全成分（掲載が無い商品は楽天市場のメーカー公式ショップの表示）に、次の表示名があるスキンケア<b>{g.itemCount}品</b>（うち公式サイトから{g.officialCount}品）</li>
       <li>数えた表示名：{g.labels.join("、")}</li>
@@ -100,7 +100,7 @@ const lead = `全成分に${name}が入っているスキンケアのうち、Yo
       <li>並び順：動画の中で{name}に触れて紹介された商品（{g.quotedCount}品）を先にし、紹介したチャンネル数 → 紹介動画数 → 合計再生回数の順。区分ごとに上位{INGREDIENT_PER_SECTION}品まで</li>
       <li>「」内は、再生回数の多い動画での紹介のされ方です（動画の発言を要約したもの）</li>
     </ul>
-  </div>
+  </HowWeCount>
 
   {
     withConcerns.length > 0 && (

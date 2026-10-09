@@ -1,4 +1,5 @@
 ---
+import HowWeCount from "../../components/HowWeCount.astro";
 import PageHead from "../../components/PageHead.astro";
 import Layout from "../../layouts/Layout.astro";
 import ShareButtons from "../../components/ShareButtons.astro";
@@ -89,15 +90,14 @@ const jsonLd = [
     <ShareButtons text={`${c.def.name}が気になる人に。インフルエンサーが使うコスメ`} class="mt-5" />
   </PageHead>
 
-  <div class="rounded-[24px] bg-blush/60 p-6 mb-12 text-sm text-neutral-600 leading-relaxed">
-    <p class="label-caps text-neutral-500 mb-2">How we count</p>
+  <HowWeCount>
     <ul class="list-disc pl-5 space-y-1">
       <li>対象：動画の中で「{c.def.name}」に触れて紹介されたコスメ（<b>{c.videoCount}本</b>の動画・<b>{c.channelCount}チャンネル</b>）。「{c.def.name}には向かない」のような評価は数えていません</li>
       <li>掲載条件：<b>{FEATURE_MIN_CHANNELS}チャンネル以上</b>が紹介したコスメのみ</li>
       <li>並び順：紹介したチャンネル数 → 紹介動画数 → 合計再生回数。各カテゴリ上位{CONCERN_PER_GROUP}品まで</li>
       <li>「」内は、再生回数の多い動画での紹介のされ方です（動画の発言を要約したもの）</li>
     </ul>
-  </div>
+  </HowWeCount>
 
   {
     withIngredients.length > 0 && (

@@ -1,4 +1,5 @@
 ---
+import HowWeCount from "../../components/HowWeCount.astro";
 import PageHead from "../../components/PageHead.astro";
 import Layout from "../../layouts/Layout.astro";
 import ShareButtons from "../../components/ShareButtons.astro";
@@ -90,15 +91,14 @@ const jsonLd = [
     <ShareButtons text={`${f.def.name}動画で人気のコスメ`} class="mt-5" />
   </PageHead>
 
-  <div class="rounded-[24px] bg-blush/60 p-6 mb-12 text-sm text-neutral-600 leading-relaxed">
-    <p class="label-caps text-neutral-500 mb-2">How we count</p>
+  <HowWeCount>
     <ul class="list-disc pl-5 space-y-1">
       <li>対象：{f.def.recentDays && <>直近{Math.round(f.def.recentDays / 30)}か月に投稿され、</>}タイトルに「{f.def.keywords.join("」「")}」のいずれかを含む動画 <b>{f.videoCount}本</b>（<b>{f.channelCount}チャンネル</b>）</li>
       <li>掲載条件：<b>{FEATURE_MIN_CHANNELS}チャンネル以上</b>が紹介したコスメのみ（1人が何本も紹介しただけのものは除外）</li>
       <li>並び順：紹介したチャンネル数 → 紹介動画数 → 合計再生回数。各カテゴリ上位{FEATURE_PER_GROUP}品まで</li>
       {f.newest && <li>最新の対象動画：{formatJaDate(f.newest)}投稿</li>}
     </ul>
-  </div>
+  </HowWeCount>
 
   {
     groups.map((g) => (
