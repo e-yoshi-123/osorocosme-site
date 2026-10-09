@@ -171,9 +171,9 @@ const inExplore = /^\/(concern|ingredient|feature)(\/|$)/.test(path.replace(impo
           <svg viewBox="0 0 24 24" class="w-4 h-4 text-neutral-500 shrink-0" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
           <input type="search" name="q" placeholder={SEARCH_PLACEHOLDER} data-examples={JSON.stringify(searchExamples)} aria-label="サイト内検索" class="w-full min-w-0 bg-transparent py-2 text-base md:text-sm placeholder:text-neutral-400 placeholder:text-sm focus:outline-none" />
         </form>
-        <!-- マイコスメ（5-3・5-4）：ハートの印（259章でかばんから変更）に、登録した品数（使っている＋気になる）を出す（件数は scripts/my-cosme-store.ts のブラウザ内の保存から） -->
-        <a href={withBase("/my-cosme/")} aria-label="マイコスメ" title="マイコスメ" aria-current={isCurrent("/my-cosme/") ? "page" : undefined} class:list={["relative shrink-0 w-10 h-10 -mx-1 flex items-center justify-center rounded-full transition-colors", isCurrent("/my-cosme/") ? "text-rose" : "text-neutral-600 hover:text-ink"]}>
-          <svg viewBox="0 0 24 24" class="w-[22px] h-[22px]" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.1a4.3 4.3 0 0 1 7.5 2.7C19.5 15.4 12 20 12 20Z" /></svg>
+        <!-- マイコスメ（5-3・5-4）：人型の印（マイページの意味。259章でかばん→ハート→人型に変更）に、登録した品数（使っている＋気になる）を出す（件数は scripts/my-cosme-store.ts のブラウザ内の保存から） -->
+        <a href={withBase("/my-cosme/")} aria-label="マイコスメ" title="マイコスメ（マイページ）" aria-current={isCurrent("/my-cosme/") ? "page" : undefined} class:list={["relative shrink-0 w-10 h-10 -mx-1 flex items-center justify-center rounded-full transition-colors", isCurrent("/my-cosme/") ? "text-rose" : "text-neutral-600 hover:text-ink"]}>
+          <svg viewBox="0 0 24 24" class="w-[22px] h-[22px]" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8" /><path d="M4.8 20c.9-3.6 3.7-5.6 7.2-5.6s6.3 2 7.2 5.6" /></svg>
           <span data-mycosme-count hidden class="absolute top-0.5 right-0 min-w-4 h-4 px-1 rounded-full bg-rose text-white text-[10px] leading-4 text-center font-medium"></span>
         </a>
         <button type="button" data-menu-toggle aria-controls="mobile-menu" aria-expanded="false" aria-label="メニューを開く" class="lg:hidden group -mr-2 w-11 h-11 shrink-0 flex items-center justify-center cursor-pointer">

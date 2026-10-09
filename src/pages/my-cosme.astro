@@ -78,11 +78,15 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
             <div>
               <h3 class="font-medium text-ink">このあと開くGoogleの画面</h3>
               <ol class="mt-1 list-decimal pl-5 space-y-0.5">
-                <li>Googleの小さな画面が開き、使うGoogleアカウントを選びます（ログインしていなければ、Googleの画面でログインします）。画面にあなたのメールアドレスが出ますが、これはGoogleが「どのアカウントか」を示しているだけで、OsoroCosmeには渡りません。</li>
-                <li>OsoroCosmeに許可する内容が表示されます。「Googleドライブの<strong>設定データ</strong>」のような言い方になりますが、これは上の図の「専用の小さな保存場所」のことです（表示の文言はGoogleが決めています）。</li>
-                <li>「続行」や「許可」を押すと画面が閉じ、このページで同期が終わります。</li>
+                <li>「Google でログイン」の小さな画面が開き、「アカウントを選択してください」と出ます。使うGoogleアカウントを選んでください（ログインしていなければ、Googleの画面でログインします）。</li>
+                <li>「osorocosme.com が Google アカウントへのアクセスを求めています」という画面になり、許可する内容として「Google ドライブでのアプリ独自の<strong>設定データ</strong>の参照、作成、削除」と出ます。この「アプリ独自の設定データ」が、上の図の「OsoroCosme専用の小さな保存場所」のことです。写真や書類など、ドライブのほかのファイルは含まれません。</li>
+                <li>「次へ」を押すと画面が閉じ、このページで同期が終わります。やめるときは「キャンセル」を押してください。</li>
               </ol>
-              <p class="mt-2 text-xs text-neutral-500">画面が開かないときは、ブラウザのポップアップの許可を確かめてください。</p>
+              <ul class="mt-2 text-xs leading-relaxed text-neutral-500 list-disc pl-5 space-y-0.5">
+                <li>Googleの画面にはあなたのメールアドレスが出ますが、これはGoogleが「どのアカウントか」を示しているだけで、OsoroCosmeには渡りません。</li>
+                <li>画面の文言はGoogleが決めているもので、OsoroCosmeは変えられません。「プライバシー ポリシーや利用規約へのリンクが表示されない理由」という案内が出ることがあります。OsoroCosmeのプライバシーポリシーは<a href={withBase("/privacy")} class="link-u">こちら</a>から読めます。</li>
+                <li>画面が開かないときは、ブラウザのポップアップの許可を確かめてください。</li>
+              </ul>
             </div>
 
             <div>
@@ -173,7 +177,7 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
             <p class="mt-2 text-xs leading-relaxed text-neutral-600 max-w-3xl">
               一覧を、あなたのGoogleドライブの「アプリ専用の保存場所」に置きます（ドライブのファイル一覧には出ず、OsoroCosmeからはこの保存場所しか読み書きできません）。
               メールアドレスや名前は受け取らず、OsoroCosmeのサーバーにも一覧は送られません。
-              Googleの確認画面では、この保存場所が「Googleドライブでの独自の設定データ」のように表示されます（表示の文言はGoogleが決めています）。
+              Googleの確認画面では、この保存場所が「Google ドライブでのアプリ独自の設定データ」と表示されます（表示の文言はGoogleが決めています）。
             </p>
             <div data-drive-off class="mt-4">
               <button type="button" data-action="drive-sync" class={btn}>Googleドライブと同期を始める</button>
