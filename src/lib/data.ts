@@ -755,6 +755,7 @@ export const RANKING_TAG_ALIAS: Record<string, string> = {
   拭き取り化粧水: "化粧水",
   リキッドアイブロウ: "その他アイブロウ",
   "スリーピングマスク・パック": "シートマスク・パック",
+  カラーリップケア: "リップケア・リップクリーム", // 265章
 };
 export function rankingTag(tag: string): string {
   return RANKING_TAG_ALIAS[tag] ?? tag;
