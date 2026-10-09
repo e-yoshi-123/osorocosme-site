@@ -186,6 +186,123 @@ function renderConcernRec(p: Prepared, d: MyCosmeData) {
     .join("");
 }
 
+// ---- あなたへのおすすめ（264章）：3つの理由をまとめて、その人だけの数品にする ----
+// 理由ごとに0〜1にそろえて足す：①同じコスメを使う人（下のおすすめと同じ点数÷候補の最大）②選んだ肌悩みに触れて紹介した人数
+// （その悩みで一番多い品を1）③登録したコスメと同じ成分（成分の近さ）。理由が重なる品ほど上に出し、カテゴリは1品ずつ。
+// 理由は「〇〇に触れて紹介」「同じ成分」のように事実だけを書く（効能は書かない）。
+const FORYOU_LIMIT = 6, FORYOU_MULTI = 0.5;
+function renderForYou(p: Prepared, d: MyCosmeData) {
+  const box = $("[data-foryou]");
+  const mine = new Set<number>();
+  for (const s of Object.keys(d.items)) {
+    const n = resolve(p, s);
+    if (n !== undefined) mine.add(n);
+  }
+  const concerns = myConcerns(p, d);
+  box.hidden = mine.size === 0 && concerns.length === 0;
+  if (box.hidden) return;
+
+  // ①同じコスメを使う人
+  const weight = new Map<number, number>();
+  p.idx.ch.forEach((ch, k) => {
+    let w = 0;
+    for (const n of ch[3]) if (mine.has(n)) w++;
+    if (w > 0) weight.set(k, w);
+  });
+  const raw = new Map<number, number>(), support = new Map<number, number>();
+  for (const [k, w] of weight)
+    for (const n of p.idx.ch[k][3]) {
+      if (mine.has(n) || p.chCount[n] < 2) continue;
+      raw.set(n, (raw.get(n) || 0) + w);
+      support.set(n, (support.get(n) || 0) + 1);
+    }
+  const co = new Map<number, number>();
+  for (const [n, s] of raw) if ((support.get(n) || 0) >= MIN_SUPPORT) co.set(n, s / Math.sqrt(p.chCount[n]));
+  const coMax = Math.max(0, ...co.values());
+  // ②肌悩み：品ごとに一番当てはまる悩み（紹介した人数がその悩みの一番多い品に近いほど1）
+  const con = new Map<number, { v: number; name: string; cnt: number; also: string[] }>();
+  for (const [, name, ns, cnt] of concerns) {
+    const top = cnt[0] || 1;
+    ns.forEach((n, i) => {
+      if (mine.has(n)) return;
+      const v = cnt[i] / top, cur = con.get(n);
+      if (!cur) con.set(n, { v, name, cnt: cnt[i], also: [] });
+      else if (v > cur.v) con.set(n, { v, name, cnt: cnt[i], also: [...cur.also, cur.name] });
+      else cur.also.push(name);
+    });
+  }
+  // ③成分：登録したコスメに入っている成分を、候補がどれだけ覆うか
+  const ings = (n: number) => p.idx.gi[n] || [];
+  const profile = new Map<number, number>();
+  for (const n of mine) for (const g of ings(n)) profile.set(g, (profile.get(g) || 0) + 1);
+  const mass = [...profile.values()].reduce((a, b) => a + b, 0);
+  const ing = new Map<number, number>();
+  if (mass)
+    for (const key of Object.keys(p.idx.gi)) {
+      const n = Number(key);
+      if (mine.has(n) || p.chCount[n] < MIN_SUPPORT) continue;
+      const v = ings(n).reduce((a, g) => a + (profile.get(g) || 0), 0) / mass;
+      if (v > 0) ing.set(n, v);
+    }
+
+  const cands = new Set<number>([...co.keys(), ...con.keys(), ...ing.keys()]);
+  const ranked = [...cands]
+    .map((n) => {
+      const a = coMax ? (co.get(n) || 0) / coMax : 0, b = con.get(n)?.v || 0, c = ing.get(n) || 0;
+      const hits = (a > 0 ? 1 : 0) + (b > 0 ? 1 : 0) + (c > 0 ? 1 : 0);
+      return { n, s: a + b + c + FORYOU_MULTI * (hits - 1) };
+    })
+    .sort((x, y) => y.s - x.s || p.idx.c[y.n][6] - p.idx.c[x.n][6]);
+  // カテゴリは1品ずつ。ブランドもまず1品ずつにし、足りなければ同じブランドの2品目で埋める（1ブランドに偏らないように）
+  const per = new Set<string>();
+  const picks: number[] = [];
+  for (const brandOnce of [true, false]) {
+    const brands = new Set(picks.map((n) => p.idx.c[n][2]));
+    for (const { n } of ranked) {
+      if (picks.length >= FORYOU_LIMIT) break;
+      const cat = p.idx.c[n][5], b = p.idx.c[n][2];
+      if (picks.includes(n) || (cat && per.has(cat)) || (brandOnce && b >= 0 && brands.has(b))) continue;
+      if (cat) per.add(cat);
+      brands.add(b);
+      picks.push(n);
+    }
+  }
+
+  // 理由の行：登録したコスメの名前を添える（どの品と同じ人・同じ成分か）
+  const short = (n: number) => esc(p.idx.c[n][3].length > 16 ? `${p.idx.c[n][3].slice(0, 15)}…` : p.idx.c[n][3]);
+  const usedIng = new Map<number, number>();
+  const reasons = (n: number) => {
+    const out: string[] = [];
+    const k = con.get(n);
+    if (k) out.push(`「${esc([k.name, ...k.also].join("」「"))}」に触れて${k.cnt}人が紹介`);
+    if (co.has(n)) {
+      // この品を紹介した人がよく使っている、あなたのコスメ
+      const hit = new Map<number, number>();
+      for (const [ck] of weight) if (p.idx.ch[ck][3].includes(n)) for (const m of p.idx.ch[ck][3]) if (mine.has(m)) hit.set(m, (hit.get(m) || 0) + 1);
+      const best = [...hit.entries()].sort((a, b) => b[1] - a[1])[0];
+      if (best) out.push(`あなたの「${short(best[0])}」を使う${support.get(n)}人も紹介`);
+    }
+    if (ing.has(n)) {
+      // 同じ成分ばかり並ばないよう、まだ理由に出していない成分を先に選ぶ
+      const g = ings(n).filter((x) => profile.has(x)).sort((a, b) => (usedIng.get(a) || 0) - (usedIng.get(b) || 0) || profile.get(b)! - profile.get(a)!)[0];
+      if (g !== undefined) usedIng.set(g, (usedIng.get(g) || 0) + 1);
+      const src = [...mine].find((m) => ings(m).includes(g));
+      if (g !== undefined && src !== undefined) out.push(`${esc(p.idx.g[g][1])}入り（あなたの「${short(src)}」と同じ）`);
+    }
+    return out.slice(0, 3);
+  };
+  const cap = (n: number) =>
+    `${p.idx.c[n][5] ? `<span class="block truncate">${esc(p.idx.c[n][5])}</span>` : ""}` +
+    reasons(n).map((r) => `<span class="mt-0.5 flex gap-1"><span class="text-rose shrink-0" aria-hidden="true">✓</span><span class="min-w-0">${r}</span></span>`).join("");
+
+  const who = concerns.length ? `${concerns.map((k) => k[1]).join("・")}が気になる` : "";
+  const has = mine.size ? `${mine.size}品を使っている` : "";
+  $("[data-foryou-title]").textContent = `${[who, has].filter(Boolean).join("、")}あなたへ`;
+  $("[data-foryou-list]").innerHTML = picks.length
+    ? picks.map((n) => tile(p, n, cap(n), d)).join("")
+    : `<p class="col-span-full text-sm text-neutral-500">まだ候補がありません。使っているコスメや肌悩みを足すと出てきます。</p>`;
+}
+
 // ---- 商品を探して追加 ----
 function nameScore(name: string, terms: string[]): number {
   const joined = terms.join("");
@@ -446,6 +563,7 @@ async function main() {
   const renderAll = (d: MyCosmeData) => {
     renderList(p, d);
     renderConcernChips(p, d);
+    renderForYou(p, d);
     renderConcernRec(p, d);
     renderRecommend(p, d);
     renderSearch(p, d);
