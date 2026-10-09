@@ -350,6 +350,11 @@ function setStatus(msg: string, error = false) {
   const el = $("[data-status]");
   el.textContent = msg;
   el.classList.toggle("text-rose", error);
+  // 上部の帯にも同じ文を出す（上のボタンで同期したとき、下の欄まで見に行かなくて済むように。259章）
+  const top = $("[data-status-top]");
+  top.textContent = msg;
+  top.hidden = !msg;
+  top.classList.toggle("text-rose", error);
 }
 function downloadFile() {
   const blob = new Blob([exportText(load())], { type: "application/json" });
@@ -387,9 +392,11 @@ function renderDrive() {
   box.querySelector<HTMLElement>("[data-drive-off]")!.hidden = on;
   // ページ上部の案内
   const top = root.querySelector<HTMLElement>("[data-drive-top]");
-  if (top) top.textContent = on ? "Googleドライブと同期する" : "Googleドライブと同期";
+  if (top) top.textContent = on ? "同期する" : "Googleドライブと同期";
+  const topOff = root.querySelector<HTMLElement>("[data-drive-top-off]");
+  if (topOff) topOff.hidden = !on;
   $("[data-save-note]").textContent = on
-    ? "この端末はGoogleドライブと連携しています。ほかの端末の変更を取り込むときは「同期する」を押してください。"
+    ? "この端末はGoogleドライブと同期しています。ほかの端末の変更を取り込むときは「同期する」を、やめるときは「同期をやめる」を押してください。"
     : "一覧はこの端末のブラウザにだけ保存されます。ほかの端末でも使うときや控えを取るときは、Googleドライブとの同期かファイルへの書き出しをどうぞ。";
 }
 async function driveSync() {
@@ -406,11 +413,18 @@ async function driveSync() {
 async function driveDisconnect(erase: boolean) {
   try {
     await disconnect(clientId, erase);
-    setStatus(erase ? "Googleドライブの保存を消して、連携をやめました。この端末の一覧は残っています。" : "Googleドライブとの連携をやめました。ドライブの保存とこの端末の一覧は残っています。");
+    setStatus(erase ? "Googleドライブの保存を消して、同期をやめました。この端末の一覧は残っています。" : "Googleドライブとの同期をやめました。ドライブの保存とこの端末の一覧は残っています。");
   } catch (e) {
     setStatus((e as Error).message, true);
   }
   renderDrive();
+}
+function showDriveIntro() {
+  const box = $("[data-drive-intro]");
+  box.hidden = false;
+  box.scrollIntoView({ behavior: "smooth", block: "start" });
+  box.focus({ preventScroll: true });
+  track("drive_intro");
 }
 let pushTimer: number | undefined;
 function afterLocalChange() {
@@ -518,7 +532,15 @@ async function main() {
       save(d);
       setStatus("一覧（使っている・気になる・肌悩み）を空にしました。");
       afterLocalChange();
-    } else if (act === "drive-sync") driveSync();
+    } else if (act === "drive-sync") {
+      // まだつないでいない端末では、Googleの画面を開く前にしくみの説明を出す（259章）
+      if (isConnected()) driveSync();
+      else showDriveIntro();
+    } else if (act === "drive-intro") showDriveIntro();
+    else if (act === "drive-go") {
+      $("[data-drive-intro]").hidden = true;
+      driveSync(); // ボタンを押した処理の中から呼ぶ（ポップアップが止められないように）
+    } else if (act === "drive-intro-close") $("[data-drive-intro]").hidden = true;
     else if (act === "drive-off") driveDisconnect(false);
     else if (act === "drive-erase") driveDisconnect(true);
   });

@@ -32,9 +32,70 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
         <p class="flex-1 min-w-[16rem]" data-save-note>一覧はこの端末のブラウザにだけ保存されます。ほかの端末でも使うときや控えを取るときは、Googleドライブとの同期かファイルへの書き出しをどうぞ。</p>
         <div class="flex flex-wrap items-center gap-2">
           {GOOGLE_CLIENT_ID && <button type="button" data-action="drive-sync" data-drive-top class={`${btn} bg-white`}>Googleドライブと同期</button>}
+          {GOOGLE_CLIENT_ID && <button type="button" data-action="drive-off" data-drive-top-off hidden class={`${btn} bg-white text-neutral-500`}>同期をやめる</button>}
           <a href="#save" class={`${btn} bg-white`}>保存と引き継ぎ<span aria-hidden="true" class="ml-1">↓</span></a>
         </div>
+        <p data-status-top hidden class="w-full text-xs leading-relaxed"></p>
       </div>
+
+      <!-- Googleドライブ同期のしくみ（259章）。まだつないでいない端末で「同期」を押したとき、Googleの画面を開く前にこれを出す。
+           Googleの画面（別ウィンドウ）に移ると不安になる人がいるので、知識が無くても分かる言葉で、受け取らないもの・流れ・やめ方を書く -->
+      {GOOGLE_CLIENT_ID && (
+        <section data-drive-intro hidden tabindex="-1" class="panel mb-6 md:mb-8 scroll-mt-[calc(var(--hdr-h,72px)+1rem)] focus:outline-none">
+          <SectionHead en="How it works" title="Googleドライブとの同期のしくみ" lead="同期を始める前に、何が起きるのかをご説明します。" />
+          <div class="space-y-6 text-sm leading-relaxed text-neutral-700 max-w-3xl">
+            <div>
+              <h3 class="font-medium text-ink">何をするの？</h3>
+              <p class="mt-1">あなたのマイコスメ（登録したコスメと肌悩みのリスト）を、<strong>あなた自身のGoogleドライブ</strong>にしまっておきます。別のスマホやパソコンでも、同じGoogleアカウントで「同期」を押せば、同じリストが使えます。</p>
+            </div>
+
+            <!-- しくみの図：リストは「この端末」と「あなたのGoogleドライブ」の間だけを行き来し、OsoroCosmeのサーバーは通らない -->
+            <div class="rounded-2xl bg-pink-50 ring-1 ring-rose/15 p-4 sm:p-5">
+              <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <div class="flex-1 rounded-xl bg-white ring-1 ring-ink/10 px-4 py-3 text-center">
+                  <p class="text-xs text-neutral-500">あなたのスマホ・パソコン</p>
+                  <p class="mt-0.5 font-medium text-ink">このブラウザ</p>
+                </div>
+                <p class="text-center text-xs text-rose shrink-0" aria-hidden="true"><span class="hidden sm:inline">⇄</span><span class="sm:hidden">⇅</span><span class="block">リストだけ</span></p>
+                <div class="flex-1 rounded-xl bg-white ring-1 ring-ink/10 px-4 py-3 text-center">
+                  <p class="text-xs text-neutral-500">あなたのGoogleドライブの中の</p>
+                  <p class="mt-0.5 font-medium text-ink">OsoroCosme専用の小さな保存場所</p>
+                </div>
+              </div>
+              <p class="mt-4 text-xs text-neutral-600 text-center">OsoroCosmeのサーバー：<strong class="text-ink">通りません・何も保存しません</strong></p>
+            </div>
+
+            <div>
+              <h3 class="font-medium text-ink">OsoroCosmeが受け取らないもの</h3>
+              <ul class="mt-1 list-disc pl-5 space-y-0.5">
+                <li>メールアドレス・お名前・プロフィール写真</li>
+                <li>Googleのパスワード（パスワードはGoogleの画面に入れるもので、OsoroCosmeには届きません）</li>
+                <li>ドライブにある写真・書類などのファイル（専用の保存場所の外は、見ることも触ることもできません）</li>
+                <li>登録したコスメや肌悩みの中身（OsoroCosmeには会員の仕組みもデータベースも無く、リストを預かるサーバーがありません）</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 class="font-medium text-ink">このあと開くGoogleの画面</h3>
+              <ol class="mt-1 list-decimal pl-5 space-y-0.5">
+                <li>Googleの小さな画面が開き、使うGoogleアカウントを選びます（ログインしていなければ、Googleの画面でログインします）。画面にあなたのメールアドレスが出ますが、これはGoogleが「どのアカウントか」を示しているだけで、OsoroCosmeには渡りません。</li>
+                <li>OsoroCosmeに許可する内容が表示されます。「Googleドライブの<strong>設定データ</strong>」のような言い方になりますが、これは上の図の「専用の小さな保存場所」のことです（表示の文言はGoogleが決めています）。</li>
+                <li>「続行」や「許可」を押すと画面が閉じ、このページで同期が終わります。</li>
+              </ol>
+              <p class="mt-2 text-xs text-neutral-500">画面が開かないときは、ブラウザのポップアップの許可を確かめてください。</p>
+            </div>
+
+            <div>
+              <h3 class="font-medium text-ink">やめたいときは</h3>
+              <p class="mt-1">このページの「同期をやめる」でいつでもやめられます。ドライブにしまったリストも消したいときは、ページ下の「ドライブの保存を消して同期をやめる」を押してください。Googleアカウントの設定（「サードパーティ製のアプリとサービス」）からも、OsoroCosmeへの許可を取り消せます。</p>
+            </div>
+          </div>
+          <div class="mt-6 flex flex-wrap gap-2">
+            <button type="button" data-action="drive-go" class="inline-flex items-center justify-center min-h-10 px-5 rounded-full bg-rose text-white text-sm hover:opacity-90 transition-opacity cursor-pointer">Googleの画面へ進む</button>
+            <button type="button" data-action="drive-intro-close" class={btn}>今はやめておく</button>
+          </div>
+        </section>
+      )}
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-start">
         <!-- 登録した一覧と、商品の追加 -->
@@ -116,11 +177,12 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
             </p>
             <div data-drive-off class="mt-4">
               <button type="button" data-action="drive-sync" class={btn}>Googleドライブと同期を始める</button>
+              <button type="button" data-action="drive-intro" class="ml-2 text-xs text-rose hover:underline cursor-pointer">しくみを読む</button>
             </div>
             <div data-drive-on hidden class="mt-4 flex flex-wrap gap-2">
               <button type="button" data-action="drive-sync" class={btn}>同期する</button>
-              <button type="button" data-action="drive-off" class={`${btn} text-neutral-500`}>連携をやめる</button>
-              <button type="button" data-action="drive-erase" class={`${btn} text-neutral-500`}>ドライブの保存を消して連携をやめる</button>
+              <button type="button" data-action="drive-off" class={`${btn} text-neutral-500`}>同期をやめる</button>
+              <button type="button" data-action="drive-erase" class={`${btn} text-neutral-500`}>ドライブの保存を消して同期をやめる</button>
             </div>
           </div>
         )}
