@@ -419,11 +419,8 @@ async function driveDisconnect(erase: boolean) {
   }
   renderDrive();
 }
-function showDriveIntro() {
-  const box = $("[data-drive-intro]");
-  box.hidden = false;
-  box.scrollIntoView({ behavior: "smooth", block: "start" });
-  box.focus({ preventScroll: true });
+function showDriveHowto() {
+  $("[data-drive]").scrollIntoView({ behavior: "smooth", block: "start" });
   track("drive_intro");
 }
 let pushTimer: number | undefined;
@@ -533,14 +530,10 @@ async function main() {
       setStatus("一覧（使っている・気になる・肌悩み）を空にしました。");
       afterLocalChange();
     } else if (act === "drive-sync") {
-      // まだつないでいない端末では、Googleの画面を開く前にしくみの説明を出す（259章）
+      // まだつないでいない端末では、Googleの画面を開く前に、下の「同期のしくみ」へ案内する（259章）
       if (isConnected()) driveSync();
-      else showDriveIntro();
-    } else if (act === "drive-intro") showDriveIntro();
-    else if (act === "drive-go") {
-      $("[data-drive-intro]").hidden = true;
-      driveSync(); // ボタンを押した処理の中から呼ぶ（ポップアップが止められないように）
-    } else if (act === "drive-intro-close") $("[data-drive-intro]").hidden = true;
+      else showDriveHowto();
+    } else if (act === "drive-start") driveSync(); // ボタンを押した処理の中から呼ぶ（ポップアップが止められないように）
     else if (act === "drive-off") driveDisconnect(false);
     else if (act === "drive-erase") driveDisconnect(true);
   });
