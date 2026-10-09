@@ -91,6 +91,12 @@ const sameCosmetics = Array.from(overlap.values())
   .slice(0, RELATED)
   .map((x) => x.v);
 
+// 紹介した場面（時刻）へのリンク（266章）。"m:ss"・"h:mm:ss"を秒にする。読めない値は出さない
+const sceneSeconds = (t?: string) => {
+  if (!t || !/^\d+(:\d{1,2}){1,2}$/.test(t)) return undefined;
+  return t.split(":").reduce((a, x) => a * 60 + Number(x), 0);
+};
+
 const viewCountNum = video?.view_count !== undefined ? Number(video.view_count) : NaN;
 const jsonLd = video
   ? [
@@ -131,9 +137,11 @@ const jsonLd = video
           <div class="lg:col-span-8">
             <div class="aspect-video rounded-[24px] overflow-hidden bg-ink shadow-[0_40px_80px_-40px_rgba(29,21,23,0.55)]">
               <iframe
+                id="video-player"
                 class="w-full h-full"
                 src={`https://www.youtube.com/embed/${video.video_id}`}
                 title={video.title}
+                allow="autoplay; encrypted-media; picture-in-picture"
                 allowfullscreen
               />
             </div>
@@ -191,9 +199,23 @@ const jsonLd = video
           <section id="cosmetics" class="panel mt-8 md:mt-10 scroll-mt-24">
             <SectionHead num="01" en="In this video" title="紹介されたコスメ" lead={`この動画で紹介された${validCosmetics.length}品です。`} />
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-8">
-              {validCosmetics.map((c) => (
-                <CosmeticCard brand_id={c.brand_id} brand={c.brand} name_id={c.name_id} name={c.name} rakutenImageHtml={c.rakuten_image_link} category={cosmeticCategory(c)} caption={isPr(c) ? "PR・提供（ランキングに数えていません）" : undefined} />
-              ))}
+              {validCosmetics.map((c) => {
+                const sec = sceneSeconds(c.time_in_video);
+                return (
+                  <div class="flex flex-col">
+                    <CosmeticCard brand_id={c.brand_id} brand={c.brand} name_id={c.name_id} name={c.name} rakutenImageHtml={c.rakuten_image_link} category={cosmeticCategory(c)} caption={isPr(c) ? "PR・提供（ランキングに数えていません）" : undefined} />
+                    {sec !== undefined && (
+                      <a
+                        href={`https://www.youtube.com/watch?v=${video.video_id}&t=${sec}s`}
+                        target="_blank"
+                        rel="noopener"
+                        data-seek={sec}
+                        class="scene-seek mt-2 inline-flex w-fit items-center gap-1.5 rounded-full border border-rose/40 px-3 py-1 text-xs text-rose hover:bg-rose hover:text-paper transition-colors"
+                      ><span aria-hidden="true">▶</span>{c.time_in_video}の場面から再生</a>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </section>
         )}
@@ -218,4 +240,16 @@ const jsonLd = video
       </>
     )
   }
+  {/* 「◯:◯◯の場面から再生」：ページ上の埋め込みをその時刻から再生し、動画の位置まで戻す（JSが無ければYouTubeの該当時刻へ） */}
+  <script is:inline>
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest && e.target.closest("a.scene-seek");
+      const player = document.getElementById("video-player");
+      if (!a || !player) return;
+      e.preventDefault();
+      player.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
+      const base = player.src.split("?")[0];
+      player.src = `${base}?start=${a.dataset.seek}&autoplay=1`;
+    });
+  </script>
 </Layout>

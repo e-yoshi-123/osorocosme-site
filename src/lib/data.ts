@@ -22,6 +22,8 @@ export interface Cosmetic {
   amazon_link?: string;
   now_price?: number;
   mentions?: string[];
+  /** 動画の中で紹介された時刻（"m:ss" または "h:mm:ss"）。266章の試し */
+  time_in_video?: string;
 }
 
 export interface Video {
