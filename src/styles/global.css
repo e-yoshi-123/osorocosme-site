@@ -426,6 +426,12 @@ main button.sort-btn.text-pink-600 {
   color: var(--color-paper);
   border-color: var(--color-ink);
 }
+/* 押した状態の切り替えボタン（マイコスメの「使っている」「気になる」・肌悩み。259章）は、上の透明の指定に負けないようピンクで塗る */
+main button.rounded-full.border[aria-pressed="true"] {
+  background: var(--color-rose);
+  color: #fff;
+  border-color: var(--color-rose);
+}
 main button.rounded-full.border.bg-pink-100 .text-neutral-400 {
   color: rgb(250 246 242 / 0.6);
 }

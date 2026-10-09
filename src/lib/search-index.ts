@@ -12,6 +12,8 @@ import {
   cosmeticSlug,
   getIngredientsOfCosmetic,
   getPublishedIngredients,
+  getPublishedConcerns,
+  getConcern,
   productImageSrc,
   toNumber,
 } from "./data";
@@ -138,5 +140,12 @@ export function buildRecommendIndex() {
     const hit = getIngredientsOfCosmetic(brand_id, name_id).map((x) => g.findIndex((d) => d.slug === x.def.slug)).filter((k) => k >= 0);
     if (hit.length) gi[n] = hit;
   });
-  return { b: idx.b.map((x) => [x[1], x[2]]), c, ch, r, g: g.map((d) => [d.slug, d.name]), gi };
+  // 肌悩み（/concern/ と同じ集計。228章）：[slug, 名前, 商品の番号の並び（紹介した人の多い順）, 同じ並びの紹介した人数]。マイコスメで悩みを選んだときに使う（259章）
+  const k = getPublishedConcerns().map((d) => {
+    const rows = getConcern(d.slug)!.items
+      .map((it) => [cosIdx.get(cosmeticSlug(it.brand_id, it.name_id)), it.channelCount] as const)
+      .filter((x): x is readonly [number, number] => x[0] !== undefined);
+    return [d.slug, d.name, rows.map((x) => x[0]), rows.map((x) => x[1])];
+  });
+  return { b: idx.b.map((x) => [x[1], x[2]]), c, ch, r, g: g.map((d) => [d.slug, d.name]), gi, k };
 }

@@ -253,11 +253,15 @@ const jsonLd = entry
                 </div>
               );
             })()}
-            <!-- マイコスメ（5-4）：今使っているコスメとして、この端末のブラウザに登録する。表示はスクリプトで切り替える（スクリプトなしでは出さない） -->
-            <div data-mycosme hidden class="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2">
-              <button type="button" data-mycosme-toggle data-slug={cosmeticSlug(brand_id, name_id)} data-name={`${entry.brand} ${entry.name}`} aria-pressed="false" class="group inline-flex items-center gap-2 min-h-10 px-5 rounded-full border border-rose/50 text-sm text-rose hover:bg-rose hover:text-white aria-pressed:bg-rose aria-pressed:text-white transition-colors cursor-pointer">
+            <!-- マイコスメ（5-4）：使っているコスメ・気になるコスメとして、この端末のブラウザに登録する（同じ商品は片方にだけ入る。259章）。表示はスクリプトで切り替える（スクリプトなしでは出さない） -->
+            <div data-mycosme hidden class="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2" data-slug={cosmeticSlug(brand_id, name_id)} data-name={`${entry.brand} ${entry.name}`}>
+              <button type="button" data-mycosme-toggle="items" aria-pressed="false" class="group inline-flex items-center gap-2 min-h-10 px-5 rounded-full border border-rose/50 text-sm text-rose hover:bg-rose hover:text-white aria-pressed:bg-rose aria-pressed:text-white transition-colors cursor-pointer">
                 <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path class="group-aria-pressed:hidden" d="M12 5v14M5 12h14" /><path class="hidden group-aria-pressed:block" d="m5 12.5 4.5 4.5L19 7" /></svg>
-                <span data-label>使っている（マイコスメに追加）</span>
+                <span data-label>使っている</span>
+              </button>
+              <button type="button" data-mycosme-toggle="wish" aria-pressed="false" class="group inline-flex items-center gap-2 min-h-10 px-5 rounded-full border border-rose/50 text-sm text-rose hover:bg-rose hover:text-white aria-pressed:bg-rose aria-pressed:text-white transition-colors cursor-pointer">
+                <svg viewBox="0 0 24 24" class="w-4 h-4 group-aria-pressed:fill-current" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z" /></svg>
+                <span data-label>気になる</span>
               </button>
               <a href={withBase("/my-cosme/")} class="link-u text-xs text-neutral-600">マイコスメでおすすめを見る →</a>
             </div>
@@ -368,25 +372,32 @@ const jsonLd = entry
 </Layout>
 
 <script>
-  // マイコスメに追加・外す（5-4。保存はこの端末のブラウザだけ）
-  import { has, add, remove, onChange } from "../../scripts/my-cosme-store";
+  // マイコスメの「使っている」「気になる」に入れる・外す（5-4。保存はこの端末のブラウザだけ。同じ商品は片方にだけ入る）
+  import { has, add, remove, onChange, type ListKind } from "../../scripts/my-cosme-store";
   const myBox = document.querySelector<HTMLElement>("[data-mycosme]");
-  const myBtn = document.querySelector<HTMLButtonElement>("[data-mycosme-toggle]");
-  if (myBox && myBtn) {
-    const slug = myBtn.dataset.slug!;
+  if (myBox) {
+    const slug = myBox.dataset.slug!;
+    const btns = Array.from(myBox.querySelectorAll<HTMLButtonElement>("[data-mycosme-toggle]"));
+    const LABEL: Record<ListKind, [string, string]> = { items: ["使っている", "使っている（登録済み）"], wish: ["気になる", "気になる（登録済み）"] };
     const paint = () => {
-      const on = has(slug);
-      myBtn.setAttribute("aria-pressed", String(on));
-      myBtn.querySelector("[data-label]")!.textContent = on ? "マイコスメに登録済み" : "使っている（マイコスメに追加）";
+      for (const b of btns) {
+        const kind = b.dataset.mycosmeToggle as ListKind;
+        const on = has(slug, kind);
+        b.setAttribute("aria-pressed", String(on));
+        b.querySelector("[data-label]")!.textContent = LABEL[kind][on ? 1 : 0];
+      }
     };
-    myBtn.addEventListener("click", () => {
-      const on = has(slug);
-      const ok = on ? remove(slug) : add(slug, myBtn.dataset.name);
-      if (!ok) myBtn.querySelector("[data-label]")!.textContent = "このブラウザでは保存できません";
-      else paint();
-      const g = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
-      if (typeof g === "function") g("event", "my_cosme", { action: on ? "remove" : "add" }); // どの商品かは送らない
-    });
+    for (const b of btns) {
+      b.addEventListener("click", () => {
+        const kind = b.dataset.mycosmeToggle as ListKind;
+        const on = has(slug, kind);
+        const ok = on ? remove(slug, kind) : add(slug, myBox.dataset.name, kind);
+        if (!ok) b.querySelector("[data-label]")!.textContent = "このブラウザでは保存できません";
+        else paint();
+        const g = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
+        if (typeof g === "function") g("event", "my_cosme", { action: `${kind === "wish" ? "wish_" : ""}${on ? "remove" : "add"}` }); // どの商品かは送らない
+      });
+    }
     onChange(paint);
     paint();
     myBox.hidden = false;

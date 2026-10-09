@@ -1,5 +1,7 @@
 ---
 // マイコスメ（5-3・5-4）：今使っているコスメを登録すると、同じコスメを使っているインフルエンサーの愛用品からおすすめを出す。
+// 気になるコスメも、使っているコスメとは別の一覧として控えられる（259章。おすすめの計算には使わない）。
+// 肌悩みも選べ、/concern/ と同じ集計（その悩みに触れて紹介した人の数）から「肌悩みから」の欄を出し、ほかのおすすめも少し上げる（259章）。
 // 一覧はこの端末のブラウザにだけ保存し、OsoroCosmeには送らない（決定事項）。中身はすべて scripts/my-cosme-page.ts が描く
 import Layout from "../layouts/Layout.astro";
 import PageHead from "../components/PageHead.astro";
@@ -8,7 +10,8 @@ import { withBase } from "../lib/data";
 import { GOOGLE_CLIENT_ID } from "../lib/site-info";
 
 const lead =
-  "今使っているコスメを登録すると、同じコスメを使っているインフルエンサーが紹介しているコスメから、おすすめを出します。登録した一覧はこの端末のブラウザにだけ保存され、OsoroCosmeには送られません。";
+  "今使っているコスメや肌悩みを登録すると、同じコスメを使っているインフルエンサーや、その肌悩みに触れて紹介されたコスメから、おすすめを出します。気になるコスメも別の一覧に控えておけます。";
+const tab = "flex-1 min-h-10 rounded-full text-sm transition-colors cursor-pointer aria-selected:bg-ink aria-selected:text-white text-neutral-600 hover:text-ink";
 const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full border border-ink/20 text-xs tracking-[0.04em] hover:border-ink transition-colors cursor-pointer";
 ---
 
@@ -24,10 +27,23 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
     <noscript><p class="panel text-sm text-neutral-500">このページはJavaScriptを使います。ブラウザの設定でJavaScriptを有効にしてください。</p></noscript>
 
     <div data-ready hidden>
+      <!-- 保存先と引き継ぎの案内（引き継ぎの欄はページの一番下にあり気づきにくいので、上にも短く出す。259章） -->
+      <div class="mb-6 md:mb-8 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-2xl bg-pink-50 ring-1 ring-rose/15 px-4 py-3 text-xs leading-relaxed text-neutral-700">
+        <p class="flex-1 min-w-[16rem]" data-save-note>一覧はこの端末のブラウザにだけ保存されます。ほかの端末でも使うときや控えを取るときは、Googleドライブとの同期かファイルへの書き出しをどうぞ。</p>
+        <div class="flex flex-wrap items-center gap-2">
+          {GOOGLE_CLIENT_ID && <button type="button" data-action="drive-sync" data-drive-top class={`${btn} bg-white`}>Googleドライブと同期</button>}
+          <a href="#save" class={`${btn} bg-white`}>保存と引き継ぎ<span aria-hidden="true" class="ml-1">↓</span></a>
+        </div>
+      </div>
+
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-start">
         <!-- 登録した一覧と、商品の追加 -->
         <section class="panel min-w-0 lg:col-span-5 lg:sticky lg:top-[calc(var(--hdr-h,72px)+1.5rem)] lg:max-h-[calc(100vh-var(--hdr-h,72px)-3rem)] lg:overflow-y-auto">
-          <SectionHead en="Your cosme" title="使っているコスメ" lead="ブランド名や商品名で探して追加します。商品ページの「マイコスメに追加」からも登録できます。" />
+          <SectionHead en="Your cosme" title="あなたのコスメ" lead="ブランド名や商品名で探して追加します。商品ページの「使っている」「気になる」からも登録できます。" />
+          <div role="tablist" aria-label="一覧の切り替え" class="mb-5 flex gap-1 p-1 rounded-full bg-ink/5">
+            <button type="button" role="tab" data-tab="items" aria-selected="true" class={tab}>使っている <span data-count-items class="num-display">0</span></button>
+            <button type="button" role="tab" data-tab="wish" aria-selected="false" class={tab}>気になる <span data-count-wish class="num-display">0</span></button>
+          </div>
           <div class="relative">
             <label class="flex items-center gap-2 border-b border-ink/25 focus-within:border-rose transition-colors">
               <svg viewBox="0 0 24 24" class="w-4 h-4 text-neutral-500 shrink-0" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
@@ -35,15 +51,28 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
             </label>
             <ul data-search-results hidden class="mt-2 py-1 rounded-2xl bg-white ring-1 ring-ink/10 max-h-[26rem] overflow-y-auto overscroll-contain"></ul>
           </div>
-          <p class="mt-6 text-xs text-neutral-500">登録 <span data-count class="num-display text-base text-ink">0</span> 品</p>
-          <p data-empty class="mt-3 text-sm leading-relaxed text-neutral-500">まだ登録されていません。上の欄で探すか、右の人気のコスメから追加してください。</p>
+          <p class="mt-6 text-xs text-neutral-500"><span data-list-title>使っている</span> <span data-count class="num-display text-base text-ink">0</span> 品</p>
+          <p data-empty class="mt-3 text-sm leading-relaxed text-neutral-500"></p>
           <ul data-list class="mt-1 [&>li:last-child]:border-b-0"></ul>
+
+          <!-- 肌悩み（259章）：選んだ悩みに触れて紹介されたコスメを、右の「肌悩みから」とおすすめに使う -->
+          <div class="mt-8 pt-6 border-t border-ink/10">
+            <p class="text-sm font-medium">気になる肌悩み</p>
+            <p class="mt-1 text-xs leading-relaxed text-neutral-500">選ぶと、その悩みに触れてインフルエンサーが紹介したコスメをおすすめに出します。</p>
+            <div data-concerns class="mt-3 flex flex-wrap gap-2"></div>
+          </div>
         </section>
 
         <div class="min-w-0 lg:col-span-7 space-y-6 md:space-y-8">
+          <!-- 肌悩みから（悩みを選んだときだけ。コスメが未登録でも出す） -->
+          <section data-rec-concern hidden class="panel">
+            <SectionHead en="Concerns" title="肌悩みから" lead="選んだ肌悩みに触れて、インフルエンサーが紹介しているコスメです（紹介した人の多い順。使っているコスメに入れたものは除いています）。効果を示すものではありません。" />
+            <div data-rec-concern-list class="space-y-8"></div>
+          </section>
+
           <!-- 何も登録していないとき：人気のコスメから選ぶ -->
           <section data-popular hidden class="panel">
-            <SectionHead en="Start here" title="人気のコスメから選ぶ" lead="紹介している動画が多いコスメです。使っているものを追加してください。" />
+            <SectionHead en="Start here" title="人気のコスメから選ぶ" lead="紹介している動画が多いコスメです。使っているものを追加すると、おすすめが出ます。" />
             <div data-popular-list class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-8"></div>
           </section>
 
@@ -69,8 +98,8 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
       </div>
 
       <!-- 保存と引き継ぎ -->
-      <section class="panel mt-6 md:mt-8">
-        <SectionHead en="Save & move" title="保存と引き継ぎ" lead="一覧はこの端末のブラウザに自動で保存されます。ブラウザのデータを消すと一覧も消えるので、ほかの端末へ移すときや控えを取るときは、ファイルに書き出してください。" />
+      <section id="save" class="panel mt-6 md:mt-8 scroll-mt-[calc(var(--hdr-h,72px)+1rem)]">
+        <SectionHead en="Save & move" title="保存と引き継ぎ" lead="一覧（使っている・気になる・肌悩み）はこの端末のブラウザに自動で保存されます。ブラウザのデータを消すと一覧も消えるので、ほかの端末へ移すときや控えを取るときは、ファイルに書き出してください。" />
         <div class="flex flex-wrap gap-2">
           <button type="button" data-action="export" class={btn}>ファイルに書き出す</button>
           <button type="button" data-action="import" class={btn}>ファイルから読み込む</button>
@@ -99,7 +128,7 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
       </section>
 
       <p class="text-xs text-neutral-500 mt-8 leading-relaxed">
-        おすすめは、登録したコスメを紹介したインフルエンサーが、ほかに紹介しているコスメの数から出しています（PR・提供の紹介は数えていません）。
+        おすすめは、使っているコスメとして登録したものを紹介したインフルエンサーが、ほかに紹介しているコスメの数から出しています（PR・提供の紹介は数えていません）。
         効果・効能や肌への合い方を示すものではありません。保存の扱いは<a href={withBase("/privacy")} class="link-u">プライバシーポリシー</a>をご覧ください。
       </p>
     </div>

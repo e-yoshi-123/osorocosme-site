@@ -1,4 +1,7 @@
-/** マイコスメのページ（/my-cosme/）：登録した一覧・商品の追加・おすすめ（5-3）・書き出しと読み込み・Googleドライブ同期（5-4）。
+/** マイコスメのページ（/my-cosme/）：登録した一覧（使っている・気になる）・商品の追加・おすすめ（5-3）・書き出しと読み込み・Googleドライブ同期（5-4）。
+ * おすすめは「使っている」だけから出す。「気になる」は控えの一覧（259章）。
+ * 肌悩み（259章）：選んだ悩みごとに、/concern/ と同じ集計（悩みに触れて紹介した人の数）で「肌悩みから」の欄を出す。
+ * ほかのおすすめでも、選んだ悩みで紹介された商品は点数を CONCERN_WEIGHT 倍だけ上げる。
  * 元データは recommend.json（lib/search-index.ts の buildRecommendIndex）。計算はすべてブラウザの中で行い、一覧はどこにも送らない。
  *
  * おすすめの考え方：登録したコスメを紹介したインフルエンサー（チャンネル）が、ほかに紹介しているコスメを集める。
@@ -8,7 +11,7 @@
  * 成分の近さ（5-3）：登録したコスメの公式の全成分に入っている成分（成分のページがあるもの）を数え、候補の成分がそれをどれだけ覆うか（0〜1）で
  * 点数を最大 ING_WEIGHT 倍まで上げる。よく入っている成分ごとに、その成分が入ったスキンケアの欄も出す。効能は書かず、成分名の事実だけを出す。 */
 import { norm, splitTerms } from "../lib/search-norm";
-import { load, add, remove, save, merge, sanitize, exportText, onChange, type MyCosmeData } from "./my-cosme-store";
+import { load, add, remove, has, save, merge, sanitize, exportText, onChange, type MyCosmeData, type ListKind } from "./my-cosme-store";
 import { sync, pushIfConnected, disconnect, isConnected } from "./my-cosme-drive";
 
 type CosRow = [string, string, number, string, string, string, number];
@@ -21,6 +24,8 @@ interface RecIndex {
   g: [string, string][];
   /** 商品の番号 → 全成分に入っている成分（g の番号） */
   gi: Record<string, number[]>;
+  /** 肌悩み：[slug, 名前, 商品の番号（紹介した人の多い順）, 同じ並びの紹介した人数] */
+  k: [string, string, number[], number[]][];
 }
 
 const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL.slice(0, -1) : import.meta.env.BASE_URL;
@@ -28,6 +33,9 @@ const IMG_HEAD = "https://thumbnail.image.rakuten.co.jp/@0_mall/";
 const root = document.getElementById("my-cosme")!;
 const clientId = root.dataset.googleClientId || "";
 const $ = <T extends HTMLElement = HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
+/** 左の欄で開いている一覧 */
+let tab: ListKind = "items";
+const LIST_LABEL = { items: "使っている", wish: "気になる" } as const;
 
 const esc = (s: string) => s.replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch]!);
 const img = (s: string, size = 300) => (s.startsWith("~") ? `${IMG_HEAD}${s.slice(1)}?_ex=${size}x${size}` : s);
@@ -71,15 +79,20 @@ function resolve(p: Prepared, slug: string): number | undefined {
 }
 
 // ---- 表示の部品 ----
-function tile(p: Prepared, n: number, caption: string, opts: { added?: boolean } = {}): string {
+/** おすすめ等の商品に付ける「使っている」「気になる」のボタン（押すと入れる・もう一度押すと外す） */
+function listButtons(slug: string, d: MyCosmeData): string {
+  const b = (kind: ListKind, icon: string) => {
+    const on = !!d[kind][slug];
+    return `<button type="button" data-toggle="${kind}" data-slug="${esc(slug)}" aria-pressed="${on}" class="inline-flex items-center gap-1 min-h-8 px-3 rounded-full text-xs border transition-colors cursor-pointer ${on ? "bg-rose border-rose text-white" : "border-rose/40 text-rose hover:bg-rose/10"}">${on ? "✓" : icon} ${LIST_LABEL[kind]}</button>`;
+  };
+  return `<div class="mt-2 flex flex-wrap gap-1.5">${b("items", "＋")}${b("wish", "♡")}</div>`;
+}
+function tile(p: Prepared, n: number, caption: string, d: MyCosmeData): string {
   const c = p.idx.c[n];
   const src = img(c[4]);
   const pic = src
     ? `<img src="${esc(src)}" alt="${esc(`${c[1]} ${c[3]}`)}" loading="lazy" class="w-full h-full object-contain p-[11%]" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'noimg',textContent:'No image'}))" />`
     : `<span class="noimg">No image</span>`;
-  const btn = opts.added
-    ? `<span class="mt-2 inline-flex text-xs text-neutral-400">登録済み</span>`
-    : `<button type="button" data-add="${esc(c[0])}" class="mt-2 inline-flex items-center gap-1 min-h-8 text-xs text-rose border border-rose/40 rounded-full px-3 hover:bg-rose hover:text-white transition-colors cursor-pointer">＋ マイコスメに追加</button>`;
   return `<div class="min-w-0">
     <a href="${base}/cosmetics/${esc(c[0])}/" class="block group">
       <div class="product-well relative aspect-square rounded-2xl flex items-center justify-center overflow-hidden">${pic}</div>
@@ -87,22 +100,35 @@ function tile(p: Prepared, n: number, caption: string, opts: { added?: boolean }
       <p class="mt-1 phrase text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors">${esc(c[3])}</p>
     </a>
     <p class="mt-1.5 text-xs leading-relaxed text-neutral-500">${caption}</p>
-    ${btn}
+    ${listButtons(c[0], d)}
   </div>`;
 }
 
 // ---- 登録した一覧 ----
+const EMPTY_TEXT = {
+  items: "まだ登録されていません。上の欄で探すか、右の人気のコスメから追加してください。",
+  wish: "まだありません。上の欄で探すか、おすすめや商品ページの「気になる」から追加してください。買って使い始めたら「使い始めた」で「使っている」へ移せます。",
+};
 function renderList(p: Prepared, d: MyCosmeData) {
-  const entries = Object.entries(d.items).sort((a, b) => b[1].t - a[1].t);
+  const entries = Object.entries(d[tab]).sort((a, b) => b[1].t - a[1].t);
   $("[data-count]").textContent = String(entries.length);
+  $("[data-count-items]").textContent = String(Object.keys(d.items).length);
+  $("[data-count-wish]").textContent = String(Object.keys(d.wish).length);
+  $("[data-list-title]").textContent = LIST_LABEL[tab];
+  for (const b of root.querySelectorAll<HTMLElement>("[data-tab]")) b.setAttribute("aria-selected", String(b.dataset.tab === tab));
   const list = $("[data-list]");
+  $("[data-empty]").textContent = EMPTY_TEXT[tab];
   $("[data-empty]").hidden = entries.length > 0;
+  const rmBtn = (slug: string, label: string) =>
+    `<button type="button" data-remove="${esc(slug)}" data-kind="${tab}" class="shrink-0 w-9 h-9 rounded-full text-neutral-500 hover:bg-ink/5 hover:text-ink cursor-pointer" aria-label="${esc(label)}を一覧から外す">×</button>`;
+  const moveBtn = (slug: string) =>
+    tab === "wish" ? `<button type="button" data-move="${esc(slug)}" class="shrink-0 min-h-8 px-3 rounded-full border border-rose/40 text-xs text-rose hover:bg-rose hover:text-white transition-colors cursor-pointer">使い始めた</button>` : "";
   list.innerHTML = entries
     .map(([slug, it]) => {
       const n = resolve(p, slug);
       if (n === undefined) {
         // サイトに載らなくなった商品（紹介した動画が非公開になった等）。名前だけ出し、消せるようにしておく
-        return `<li class="flex items-center gap-3 py-3 border-b border-ink/10"><span class="w-12 h-12 shrink-0 rounded-xl product-well"></span><span class="flex-1 min-w-0 text-sm text-neutral-500">${esc(it.n || slug)}<span class="block text-xs">いまは掲載していない商品です</span></span><button type="button" data-remove="${esc(slug)}" class="shrink-0 w-9 h-9 rounded-full hover:bg-ink/5 cursor-pointer" aria-label="一覧から外す">×</button></li>`;
+        return `<li class="flex items-center gap-3 py-3 border-b border-ink/10"><span class="w-12 h-12 shrink-0 rounded-xl product-well"></span><span class="flex-1 min-w-0 text-sm text-neutral-500">${esc(it.n || slug)}<span class="block text-xs">いまは掲載していない商品です</span></span>${rmBtn(slug, it.n || "この商品")}</li>`;
       }
       const c = p.idx.c[n];
       const src = img(c[4], 128);
@@ -112,8 +138,50 @@ function renderList(p: Prepared, d: MyCosmeData) {
           <span class="block text-xs text-neutral-500 truncate">${esc(c[1])}${c[5] ? `・${esc(c[5])}` : ""}</span>
           <span class="block text-sm truncate group-hover:text-rose transition-colors">${esc(c[3])}</span>
         </a>
-        <button type="button" data-remove="${esc(slug)}" class="shrink-0 w-9 h-9 rounded-full text-neutral-500 hover:bg-ink/5 hover:text-ink cursor-pointer" aria-label="${esc(c[3])}を一覧から外す">×</button>
+        ${moveBtn(slug)}${rmBtn(slug, c[3])}
       </li>`;
+    })
+    .join("");
+}
+
+// ---- 肌悩み ----
+/** 選んだ悩み（選んだ順） */
+function myConcerns(p: Prepared, d: MyCosmeData) {
+  return p.idx.k.filter((k) => d.concerns[k[0]]).sort((a, b) => d.concerns[a[0]].t - d.concerns[b[0]].t);
+}
+function renderConcernChips(p: Prepared, d: MyCosmeData) {
+  $("[data-concerns]").innerHTML = p.idx.k
+    .map(([slug, name]) => {
+      const on = !!d.concerns[slug];
+      return `<button type="button" data-concern="${esc(slug)}" aria-pressed="${on}" class="min-h-9 px-4 rounded-full text-xs border transition-colors cursor-pointer ${on ? "bg-rose border-rose text-white" : "border-ink/20 text-neutral-700 hover:border-ink"}">${on ? "✓ " : ""}${esc(name)}</button>`;
+    })
+    .join("");
+}
+const CONCERN_LIMIT = 6, CONCERN_PER_CAT = 2;
+function renderConcernRec(p: Prepared, d: MyCosmeData) {
+  const box = $("[data-rec-concern]");
+  const sel = myConcerns(p, d);
+  box.hidden = sel.length === 0;
+  if (!sel.length) return;
+  const mine = new Set(Object.keys(d.items).map((s) => resolve(p, s)));
+  $("[data-rec-concern-list]").innerHTML = sel
+    .map(([slug, name, ns, cnt]) => {
+      const per = new Map<string, number>();
+      const list: [number, number][] = [];
+      ns.forEach((n, i) => {
+        if (list.length >= CONCERN_LIMIT || mine.has(n)) return;
+        const cat = p.idx.c[n][5];
+        if ((per.get(cat) || 0) >= CONCERN_PER_CAT) return;
+        per.set(cat, (per.get(cat) || 0) + 1);
+        list.push([n, cnt[i]]);
+      });
+      if (!list.length) return "";
+      const cap = (n: number, c: number) => `${p.idx.c[n][5] ? `<span class="block truncate">${esc(p.idx.c[n][5])}</span>` : ""}<span class="block">「${esc(name)}」に触れて${c}人が紹介</span>`;
+      return `<div class="min-w-0">
+        <h3 class="text-sm font-medium">${esc(name)}</h3>
+        <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-8">${list.map(([n, c]) => tile(p, n, cap(n, c), d)).join("")}</div>
+        <a href="${base}/concern/${esc(slug)}/" class="mt-4 inline-block text-xs text-rose hover:underline">${esc(name)}に触れて紹介されたコスメをもっと見る →</a>
+      </div>`;
     })
     .join("");
 }
@@ -140,17 +208,20 @@ function renderSearch(p: Prepared, d: MyCosmeData) {
     .map((x) => ({ ...x, s: nameScore(p.names[x.n], terms) }))
     .sort((a, b) => b.s - a.s || b.c[6] - a.c[6])
     .slice(0, 8);
-  const mine = new Set(Object.keys(d.items).map((s) => resolve(p, s)));
+  const mine = new Set(Object.keys(d[tab]).map((s) => resolve(p, s)));
+  const other: ListKind = tab === "items" ? "wish" : "items";
+  const inOther = new Set(Object.keys(d[other]).map((s) => resolve(p, s)));
   out.hidden = false;
   out.innerHTML = hits.length
     ? hits
         .map(({ n, c }) => {
           const src = img(c[4], 128);
           const on = mine.has(n);
-          return `<li><button type="button" ${on ? "disabled" : `data-add="${esc(c[0])}"`} class="w-full flex items-center gap-3 px-3 py-2 text-left rounded-xl ${on ? "opacity-60" : "hover:bg-pink-100 cursor-pointer"}">
+          const label = on ? "登録済み" : inOther.has(n) ? `＋ ${LIST_LABEL[tab]}へ移す` : "＋ 追加";
+          return `<li><button type="button" ${on ? "disabled" : `data-add="${esc(c[0])}" data-kind="${tab}"`} class="w-full flex items-center gap-3 px-3 py-2 text-left rounded-xl ${on ? "opacity-60" : "hover:bg-pink-100 cursor-pointer"}">
             <span class="w-10 h-10 shrink-0 rounded-lg product-well flex items-center justify-center overflow-hidden">${src ? `<img src="${esc(src)}" alt="" loading="lazy" class="w-full h-full object-contain p-0.5" onerror="this.remove()" />` : ""}</span>
             <span class="flex-1 min-w-0"><span class="block text-xs text-neutral-500 truncate">${esc(c[1])}${c[5] ? `・${esc(c[5])}` : ""}</span><span class="block text-sm truncate">${esc(c[3])}</span></span>
-            <span class="shrink-0 text-xs ${on ? "text-neutral-400" : "text-rose"}">${on ? "登録済み" : "＋ 追加"}</span>
+            <span class="shrink-0 text-xs ${on ? "text-neutral-400" : "text-rose"}">${label}</span>
           </button></li>`;
         })
         .join("")
@@ -159,7 +230,7 @@ function renderSearch(p: Prepared, d: MyCosmeData) {
 
 // ---- おすすめ ----
 const SWAP_LIMIT = 12, SWAP_PER_CAT = 3, NEW_LIMIT = 12, NEW_PER_CAT = 2, INF_LIMIT = 8, MIN_SUPPORT = 2;
-const ING_WEIGHT = 0.5, ING_TOP = 2, ING_LIMIT = 6;
+const ING_WEIGHT = 0.5, ING_TOP = 2, ING_LIMIT = 6, CONCERN_WEIGHT = 0.5;
 function renderRecommend(p: Prepared, d: MyCosmeData) {
   const mine = new Set<number>();
   for (const s of Object.keys(d.items)) {
@@ -172,7 +243,7 @@ function renderRecommend(p: Prepared, d: MyCosmeData) {
     box.hidden = true;
     popular.hidden = false;
     // まだ何も登録していないとき：紹介の多いコスメから選べるようにする（c は動画数の多い順）
-    $("[data-popular-list]").innerHTML = p.idx.c.slice(0, 12).map((_, n) => tile(p, n, `${p.idx.c[n][6]}本の動画で紹介`)).join("");
+    $("[data-popular-list]").innerHTML = p.idx.c.slice(0, 12).map((_, n) => tile(p, n, `${p.idx.c[n][6]}本の動画で紹介`, d)).join("");
     return;
   }
   popular.hidden = true;
@@ -199,9 +270,12 @@ function renderRecommend(p: Prepared, d: MyCosmeData) {
   for (const n of mine) for (const g of ings(n)) profile.set(g, (profile.get(g) || 0) + 1);
   const mass = [...profile.values()].reduce((a, b) => a + b, 0);
   const near = (n: number) => (mass ? ings(n).reduce((a, g) => a + (profile.get(g) || 0), 0) / mass : 0);
+  // 選んだ肌悩みで紹介された商品 → 悩みの名前
+  const byConcern = new Map<number, string[]>();
+  for (const [, name, ns] of myConcerns(p, d)) for (const n of ns) byConcern.set(n, [...(byConcern.get(n) || []), name]);
   const ranked = [...score.entries()]
     .filter(([n]) => (support.get(n) || 0) >= MIN_SUPPORT)
-    .map(([n, s]) => ({ n, s: (s / Math.sqrt(p.chCount[n])) * (1 + ING_WEIGHT * near(n)) }))
+    .map(([n, s]) => ({ n, s: (s / Math.sqrt(p.chCount[n])) * (1 + ING_WEIGHT * near(n)) * (byConcern.has(n) ? 1 + CONCERN_WEIGHT : 1) }))
     .sort((a, b) => b.s - a.s || p.idx.c[b.n][6] - p.idx.c[a.n][6]);
 
   const myCats = new Set([...mine].map((n) => p.idx.c[n][5]).filter(Boolean));
@@ -222,12 +296,12 @@ function renderRecommend(p: Prepared, d: MyCosmeData) {
   const shared = (n: number) => ings(n).filter((g) => profile.has(g)).map((g) => p.idx.g[g][1]);
   const caption = (n: number) => {
     const same = shared(n);
-    return `${p.idx.c[n][5] ? `<span class="block truncate">${esc(p.idx.c[n][5])}</span>` : ""}<span class="block">同じコスメを使う${support.get(n)}人が紹介</span>${same.length ? `<span class="block truncate">同じ成分：${esc(same.join("・"))}</span>` : ""}`;
+    return `${p.idx.c[n][5] ? `<span class="block truncate">${esc(p.idx.c[n][5])}</span>` : ""}<span class="block">同じコスメを使う${support.get(n)}人が紹介</span>${byConcern.has(n) ? `<span class="block truncate">「${esc(byConcern.get(n)!.join("」「"))}」でも紹介</span>` : ""}${same.length ? `<span class="block truncate">同じ成分：${esc(same.join("・"))}</span>` : ""}`;
   };
 
   const fill = (sel: string, list: number[], none: string) => {
     const el = $(sel);
-    el.innerHTML = list.length ? list.map((n) => tile(p, n, caption(n))).join("") : `<p class="col-span-full text-sm text-neutral-500">${none}</p>`;
+    el.innerHTML = list.length ? list.map((n) => tile(p, n, caption(n), d)).join("") : `<p class="col-span-full text-sm text-neutral-500">${none}</p>`;
   };
   fill("[data-rec-swap]", swap, "まだ候補がありません。コスメを登録すると出てきます。");
   fill("[data-rec-new]", fresh, "まだ候補がありません。コスメを登録すると出てきます。");
@@ -252,7 +326,7 @@ function renderRecommend(p: Prepared, d: MyCosmeData) {
       const cap = (n: number) => `${p.idx.c[n][5] ? `<span class="block truncate">${esc(p.idx.c[n][5])}</span>` : ""}<span class="block">${p.chCount[n]}人が紹介</span>`;
       return `<div class="min-w-0">
         <h3 class="text-sm font-medium">${esc(name)}<span class="ml-2 text-xs text-neutral-500">登録したコスメ${cnt}品の全成分に入っています</span></h3>
-        <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-8">${list.map((n) => tile(p, n, cap(n))).join("")}</div>
+        <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-8">${list.map((n) => tile(p, n, cap(n), d)).join("")}</div>
         <a href="${base}/ingredient/${esc(slug)}/" class="mt-4 inline-block text-xs text-rose hover:underline">${esc(name)}が入ったコスメをもっと見る →</a>
       </div>`;
     })
@@ -294,10 +368,9 @@ async function importFile(file: File) {
   try {
     const got = sanitize(JSON.parse(await file.text()));
     if (!got) throw new Error();
-    const before = Object.keys(load().items).length;
     const merged = merge(load(), got);
     save(merged);
-    setStatus(`読み込みました（${Object.keys(merged.items).length - before}品を追加、合計${Object.keys(merged.items).length}品）。`);
+    setStatus(`読み込みました（使っている${Object.keys(merged.items).length}品・気になる${Object.keys(merged.wish).length}品）。`);
     track("import");
     afterLocalChange();
   } catch {
@@ -312,12 +385,18 @@ function renderDrive() {
   const on = isConnected();
   box.querySelector<HTMLElement>("[data-drive-on]")!.hidden = !on;
   box.querySelector<HTMLElement>("[data-drive-off]")!.hidden = on;
+  // ページ上部の案内
+  const top = root.querySelector<HTMLElement>("[data-drive-top]");
+  if (top) top.textContent = on ? "Googleドライブと同期する" : "Googleドライブと同期";
+  $("[data-save-note]").textContent = on
+    ? "この端末はGoogleドライブと連携しています。ほかの端末の変更を取り込むときは「同期する」を押してください。"
+    : "一覧はこの端末のブラウザにだけ保存されます。ほかの端末でも使うときや控えを取るときは、Googleドライブとの同期かファイルへの書き出しをどうぞ。";
 }
 async function driveSync() {
   setStatus("Googleドライブと同期しています…");
   try {
     const n = await sync(clientId);
-    setStatus(`Googleドライブと同期しました（${n}品）。ほかの端末でも、このページの「同期する」で同じ一覧になります。`);
+    setStatus(`Googleドライブと同期しました（使っている${n.items}品・気になる${n.wish}品）。ほかの端末でも、このページの「同期する」で同じ一覧になります。`);
     track("drive_sync");
   } catch (e) {
     setStatus((e as Error).message, true);
@@ -355,6 +434,8 @@ async function main() {
   $("[data-ready]").hidden = false;
   const renderAll = (d: MyCosmeData) => {
     renderList(p, d);
+    renderConcernChips(p, d);
+    renderConcernRec(p, d);
     renderRecommend(p, d);
     renderSearch(p, d);
   };
@@ -364,19 +445,50 @@ async function main() {
 
   root.addEventListener("click", (e) => {
     const t = e.target as HTMLElement;
-    const addBtn = t.closest<HTMLElement>("[data-add]");
-    if (addBtn) {
-      const n = p.bySlug.get(addBtn.dataset.add!);
-      const c = n !== undefined ? p.idx.c[n] : undefined;
-      if (!add(addBtn.dataset.add!, c ? `${c[1]} ${c[3]}` : undefined)) setStatus("このブラウザでは保存できませんでした（プライベートブラウズでは保存できないことがあります）。", true);
-      track("add");
+    const nameOf = (slug: string) => {
+      const n = p.bySlug.get(slug);
+      return n !== undefined ? `${p.idx.c[n][1]} ${p.idx.c[n][3]}` : undefined;
+    };
+    const put = (slug: string, kind: ListKind) => {
+      if (!add(slug, nameOf(slug), kind)) setStatus("このブラウザでは保存できませんでした（プライベートブラウズでは保存できないことがあります）。", true);
+      track(kind === "wish" ? "wish_add" : "add");
+      afterLocalChange();
+    };
+    const cBtn = t.closest<HTMLElement>("[data-concern]");
+    if (cBtn) {
+      const slug = cBtn.dataset.concern!;
+      const on = load().concerns[slug];
+      if (on) remove(slug, "concerns");
+      else add(slug, undefined, "concerns");
+      track(on ? "concern_remove" : "concern_add");
       afterLocalChange();
       return;
     }
+    const tabBtn = t.closest<HTMLElement>("[data-tab]");
+    if (tabBtn) {
+      tab = tabBtn.dataset.tab as ListKind;
+      renderAll(load());
+      return;
+    }
+    const addBtn = t.closest<HTMLElement>("[data-add]");
+    if (addBtn) return put(addBtn.dataset.add!, (addBtn.dataset.kind as ListKind) || "items");
+    const tog = t.closest<HTMLElement>("[data-toggle]");
+    if (tog) {
+      const kind = tog.dataset.toggle as ListKind;
+      const slug = tog.dataset.slug!;
+      if (!has(slug, kind)) return put(slug, kind);
+      remove(slug, kind);
+      track(kind === "wish" ? "wish_remove" : "remove");
+      afterLocalChange();
+      return;
+    }
+    const mv = t.closest<HTMLElement>("[data-move]");
+    if (mv) return put(mv.dataset.move!, "items");
     const rm = t.closest<HTMLElement>("[data-remove]");
     if (rm) {
-      remove(rm.dataset.remove!);
-      track("remove");
+      const kind = (rm.dataset.kind as ListKind) || "items";
+      remove(rm.dataset.remove!, kind);
+      track(kind === "wish" ? "wish_remove" : "remove");
       afterLocalChange();
       return;
     }
@@ -384,7 +496,8 @@ async function main() {
     if (act === "export") downloadFile();
     else if (act === "import") $<HTMLInputElement>("[data-import-file]").click();
     else if (act === "clear") {
-      if (!Object.keys(load().items).length) return;
+      const cur = load();
+      if (!Object.keys(cur.items).length && !Object.keys(cur.wish).length && !Object.keys(cur.concerns).length) return;
       // 押し間違いで消えないよう、2回押したときだけ消す（確認のダイアログは出さない）
       const btn = t.closest<HTMLElement>("[data-action]")!;
       if (!btn.dataset.armed) {
@@ -397,9 +510,13 @@ async function main() {
       const d = load();
       const now = Date.now();
       for (const s of Object.keys(d.items)) d.removed[s] = now;
+      for (const s of Object.keys(d.wish)) d.wishRemoved[s] = now;
+      for (const s of Object.keys(d.concerns)) d.concernsRemoved[s] = now;
       d.items = {};
+      d.wish = {};
+      d.concerns = {};
       save(d);
-      setStatus("一覧を空にしました。");
+      setStatus("一覧（使っている・気になる・肌悩み）を空にしました。");
       afterLocalChange();
     } else if (act === "drive-sync") driveSync();
     else if (act === "drive-off") driveDisconnect(false);

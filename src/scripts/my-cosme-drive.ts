@@ -114,8 +114,8 @@ async function upload(d: MyCosmeData, fileId?: string): Promise<void> {
 
 let fileIdCache: string | undefined;
 
-/** ドライブの一覧と、この端末の一覧を合わせて、両方に書く。戻り値は合わせたあとの件数 */
-export async function sync(clientId: string): Promise<number> {
+/** ドライブの一覧と、この端末の一覧を合わせて、両方に書く。戻り値は合わせたあとの件数（使っている・気になる） */
+export async function sync(clientId: string): Promise<{ items: number; wish: number }> {
   await getToken(clientId);
   setConnected(true);
   const id = (fileIdCache ??= await findFile());
@@ -126,7 +126,7 @@ export async function sync(clientId: string): Promise<number> {
   if (!same(merged, local)) save(merged);
   if (!remote || !same(merged, remote)) await upload(merged, id);
   if (!id) fileIdCache = await findFile();
-  return Object.keys(merged.items).length;
+  return { items: Object.keys(merged.items).length, wish: Object.keys(merged.wish).length };
 }
 
 /** このページで一覧を変えたとき、つないでいる間（トークンが有効な間）だけ、ドライブにも書く */

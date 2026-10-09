@@ -1180,7 +1180,7 @@ function buildConcern(def: ConcernDef) {
     group: g.group,
     items: items.filter((e) => CATEGORY_TAG_TO_GROUP[e.tag] === g.group).slice(0, CONCERN_PER_GROUP),
   })).filter((g) => g.items.length > 0);
-  return { def, videoCount: videoKeys.size, channelCount: channels.size, itemCount: items.length, groups };
+  return { def, videoCount: videoKeys.size, channelCount: channels.size, itemCount: items.length, groups, items };
 }
 export function getConcern(slug: string) {
   const def = CONCERNS.find((d) => d.slug === slug);
