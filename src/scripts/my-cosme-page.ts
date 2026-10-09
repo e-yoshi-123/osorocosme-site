@@ -536,10 +536,6 @@ async function driveDisconnect(erase: boolean) {
   }
   renderDrive();
 }
-function showDriveHowto() {
-  $("[data-drive]").scrollIntoView({ behavior: "smooth", block: "start" });
-  track("drive_intro");
-}
 let pushTimer: number | undefined;
 function afterLocalChange() {
   // つないでいる間は、変えた一覧をドライブにも書く（続けて変えたときは最後の1回だけ）
@@ -647,11 +643,12 @@ async function main() {
       save(d);
       setStatus("一覧（使っている・気になる・肌悩み）を空にしました。");
       afterLocalChange();
-    } else if (act === "drive-sync") {
-      // まだつないでいない端末では、Googleの画面を開く前に、下の「同期のしくみ」へ案内する（259章）
-      if (isConnected()) driveSync();
-      else showDriveHowto();
-    } else if (act === "drive-start") driveSync(); // ボタンを押した処理の中から呼ぶ（ポップアップが止められないように）
+    } else if (act === "drive-sync" || act === "drive-start") {
+      // まだつないでいない端末でも、押したらすぐGoogleの画面を開く（ボタンを押した処理の中から呼ぶ：ポップアップが止められないように）。
+      // 259章では説明へスクロールさせていたが、上部に「同期について詳細を確認する↓」が別にあり、役割が重なっていた（264章）
+      if (!isConnected()) track("drive_start");
+      driveSync();
+    }
     else if (act === "drive-off") driveDisconnect(false);
     else if (act === "drive-erase") driveDisconnect(true);
   });
