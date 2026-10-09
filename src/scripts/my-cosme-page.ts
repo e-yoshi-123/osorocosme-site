@@ -4,13 +4,24 @@
  * おすすめの考え方：登録したコスメを紹介したインフルエンサー（チャンネル）が、ほかに紹介しているコスメを集める。
  * チャンネルの重みは、登録したコスメのうちそのチャンネルが紹介した品数（好みが近いほど重い）。
  * 点数＝重みの合計÷√（その商品を紹介したチャンネル数）。割らないと、誰の一覧にも出る定番ばかりが上に来る（試した結果、√で割るのが釣り合った）。
- * 2チャンネル以上から挙がった商品だけを出す（1人だけの好みに引っ張られないように）。PR・提供の紹介は元データの時点で除いてある。 */
+ * 2チャンネル以上から挙がった商品だけを出す（1人だけの好みに引っ張られないように）。PR・提供の紹介は元データの時点で除いてある。
+ * 成分の近さ（5-3）：登録したコスメの公式の全成分に入っている成分（成分のページがあるもの）を数え、候補の成分がそれをどれだけ覆うか（0〜1）で
+ * 点数を最大 ING_WEIGHT 倍まで上げる。よく入っている成分ごとに、その成分が入ったスキンケアの欄も出す。効能は書かず、成分名の事実だけを出す。 */
 import { norm, splitTerms } from "../lib/search-norm";
 import { load, add, remove, save, merge, sanitize, exportText, onChange, type MyCosmeData } from "./my-cosme-store";
 import { sync, pushIfConnected, disconnect, isConnected } from "./my-cosme-drive";
 
 type CosRow = [string, string, number, string, string, string, number];
-interface RecIndex { b: [string, string][]; c: CosRow[]; ch: [string, string, string, number[]][]; r: Record<string, string> }
+interface RecIndex {
+  b: [string, string][];
+  c: CosRow[];
+  ch: [string, string, string, number[]][];
+  r: Record<string, string>;
+  /** 成分：[slug, 名前] */
+  g: [string, string][];
+  /** 商品の番号 → 全成分に入っている成分（g の番号） */
+  gi: Record<string, number[]>;
+}
 
 const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL.slice(0, -1) : import.meta.env.BASE_URL;
 const IMG_HEAD = "https://thumbnail.image.rakuten.co.jp/@0_mall/";
@@ -148,6 +159,7 @@ function renderSearch(p: Prepared, d: MyCosmeData) {
 
 // ---- おすすめ ----
 const SWAP_LIMIT = 12, SWAP_PER_CAT = 3, NEW_LIMIT = 12, NEW_PER_CAT = 2, INF_LIMIT = 8, MIN_SUPPORT = 2;
+const ING_WEIGHT = 0.5, ING_TOP = 2, ING_LIMIT = 6;
 function renderRecommend(p: Prepared, d: MyCosmeData) {
   const mine = new Set<number>();
   for (const s of Object.keys(d.items)) {
@@ -181,9 +193,15 @@ function renderRecommend(p: Prepared, d: MyCosmeData) {
       support.set(n, (support.get(n) || 0) + 1);
     }
   }
+  // 登録したコスメの成分（成分 → それが入っている登録品の数）
+  const ings = (n: number) => p.idx.gi[n] || [];
+  const profile = new Map<number, number>();
+  for (const n of mine) for (const g of ings(n)) profile.set(g, (profile.get(g) || 0) + 1);
+  const mass = [...profile.values()].reduce((a, b) => a + b, 0);
+  const near = (n: number) => (mass ? ings(n).reduce((a, g) => a + (profile.get(g) || 0), 0) / mass : 0);
   const ranked = [...score.entries()]
     .filter(([n]) => (support.get(n) || 0) >= MIN_SUPPORT)
-    .map(([n, s]) => ({ n, s: s / Math.sqrt(p.chCount[n]) }))
+    .map(([n, s]) => ({ n, s: (s / Math.sqrt(p.chCount[n])) * (1 + ING_WEIGHT * near(n)) }))
     .sort((a, b) => b.s - a.s || p.idx.c[b.n][6] - p.idx.c[a.n][6]);
 
   const myCats = new Set([...mine].map((n) => p.idx.c[n][5]).filter(Boolean));
@@ -201,7 +219,11 @@ function renderRecommend(p: Prepared, d: MyCosmeData) {
   };
   const swap = pick(ranked.filter(({ n }) => myCats.has(p.idx.c[n][5])), SWAP_LIMIT, SWAP_PER_CAT);
   const fresh = pick(ranked.filter(({ n }) => p.idx.c[n][5] && !myCats.has(p.idx.c[n][5])), NEW_LIMIT, NEW_PER_CAT);
-  const caption = (n: number) => `${p.idx.c[n][5] ? `<span class="block truncate">${esc(p.idx.c[n][5])}</span>` : ""}<span class="block">同じコスメを使う${support.get(n)}人が紹介</span>`;
+  const shared = (n: number) => ings(n).filter((g) => profile.has(g)).map((g) => p.idx.g[g][1]);
+  const caption = (n: number) => {
+    const same = shared(n);
+    return `${p.idx.c[n][5] ? `<span class="block truncate">${esc(p.idx.c[n][5])}</span>` : ""}<span class="block">同じコスメを使う${support.get(n)}人が紹介</span>${same.length ? `<span class="block truncate">同じ成分：${esc(same.join("・"))}</span>` : ""}`;
+  };
 
   const fill = (sel: string, list: number[], none: string) => {
     const el = $(sel);
@@ -209,6 +231,32 @@ function renderRecommend(p: Prepared, d: MyCosmeData) {
   };
   fill("[data-rec-swap]", swap, "まだ候補がありません。コスメを登録すると出てきます。");
   fill("[data-rec-new]", fresh, "まだ候補がありません。コスメを登録すると出てきます。");
+
+  // よく入っている成分から：登録品に多く入っている成分ごとに、その成分が全成分にある商品（2チャンネル以上）を出す（欄どうしで重ねない）。
+  // 並びは上のおすすめの点数（無ければ紹介したチャンネル数）
+  const ingBox = $("[data-rec-ing]");
+  const top = [...profile.entries()].sort((a, b) => b[1] - a[1] || a[0] - b[0]).slice(0, ING_TOP);
+  ingBox.hidden = top.length === 0;
+  const rankOf = new Map(ranked.map(({ n, s }) => [n, s]));
+  const shown = new Set<number>(); // 前の成分の欄に出した商品は、次の欄には出さない
+  $("[data-rec-ing-list]").innerHTML = top
+    .map(([g, cnt]) => {
+      const [slug, name] = p.idx.g[g];
+      const list = Object.keys(p.idx.gi)
+        .map(Number)
+        .filter((n) => !mine.has(n) && !shown.has(n) && p.chCount[n] >= MIN_SUPPORT && ings(n).includes(g))
+        .sort((a, b) => (rankOf.get(b) ?? -1) - (rankOf.get(a) ?? -1) || p.chCount[b] - p.chCount[a] || p.idx.c[b][6] - p.idx.c[a][6])
+        .slice(0, ING_LIMIT);
+      if (!list.length) return "";
+      for (const n of list) shown.add(n);
+      const cap = (n: number) => `${p.idx.c[n][5] ? `<span class="block truncate">${esc(p.idx.c[n][5])}</span>` : ""}<span class="block">${p.chCount[n]}人が紹介</span>`;
+      return `<div class="min-w-0">
+        <h3 class="text-sm font-medium">${esc(name)}<span class="ml-2 text-xs text-neutral-500">登録したコスメ${cnt}品の全成分に入っています</span></h3>
+        <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-8">${list.map((n) => tile(p, n, cap(n))).join("")}</div>
+        <a href="${base}/ingredient/${esc(slug)}/" class="mt-4 inline-block text-xs text-rose hover:underline">${esc(name)}が入ったコスメをもっと見る →</a>
+      </div>`;
+    })
+    .join("");
 
   // 好みが近いインフルエンサー：登録したコスメを多く紹介している順
   const infs = [...weight.entries()].sort((a, b) => b[1] - a[1] || p.idx.ch[b[0]][3].length - p.idx.ch[a[0]][3].length).slice(0, INF_LIMIT);

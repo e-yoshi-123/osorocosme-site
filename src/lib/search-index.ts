@@ -10,6 +10,8 @@ import {
   getAliasRedirects,
   getProductRedirects,
   cosmeticSlug,
+  getIngredientsOfCosmetic,
+  getPublishedIngredients,
   productImageSrc,
   toNumber,
 } from "./data";
@@ -97,7 +99,9 @@ export function buildSearchIndex(): SearchIndex {
  * - c（コスメ）: [slug, ブランド名, bの番号, 商品名, 画像, カテゴリ, 動画数]（索引の c と同じ順。容量を抑えるため、ブランド名は b の名前と同じなら空にし、
  *   画像は楽天の決まった前後を省く：「~」で始まるもの）
  * - ch（チャンネル）: [channel_id, 名前, アイコン, cの番号の配列]
- * - r（転送）: { 旧slug: 新slug }（保存した商品が、表記揺れの統合などで別の商品に寄せられたとき） */
+ * - r（転送）: { 旧slug: 新slug }（保存した商品が、表記揺れの統合などで別の商品に寄せられたとき）
+ * - g（成分）: [slug, 名前]（成分のページがあるものだけ。INGREDIENTS の順）
+ * - gi（商品の成分）: { cの番号: gの番号の配列 }（公式の全成分にその成分がある商品だけ。成分の近さをおすすめに使う） */
 export const RAKUTEN_IMG_HEAD = "https://thumbnail.image.rakuten.co.jp/@0_mall/";
 export const RAKUTEN_IMG_TAIL = "?_ex=240x240";
 export function buildRecommendIndex() {
@@ -126,5 +130,13 @@ export function buildRecommendIndex() {
   const ch = [...byChannel.entries()].map(([id, x]) => [id, x.title, x.icon, [...x.items].sort((a, b) => a - b)]);
   const r: Record<string, string> = {};
   for (const x of [...getAliasRedirects().products, ...getProductRedirects()]) r[x.from] = x.to;
-  return { b: idx.b.map((x) => [x[1], x[2]]), c, ch, r };
+  const g = getPublishedIngredients();
+  const gi: Record<number, number[]> = {};
+  idx.c.forEach((row, n) => {
+    const slug = String(row[0]);
+    const [brand_id, name_id] = [slug.slice(0, slug.indexOf("-name-")), slug.slice(slug.indexOf("-name-") + 1)];
+    const hit = getIngredientsOfCosmetic(brand_id, name_id).map((x) => g.findIndex((d) => d.slug === x.def.slug)).filter((k) => k >= 0);
+    if (hit.length) gi[n] = hit;
+  });
+  return { b: idx.b.map((x) => [x[1], x[2]]), c, ch, r, g: g.map((d) => [d.slug, d.name]), gi };
 }
