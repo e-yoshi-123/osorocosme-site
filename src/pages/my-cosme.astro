@@ -56,7 +56,9 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
           <div class="relative">
             <label class="flex items-center gap-2 border-b border-ink/25 focus-within:border-rose transition-colors">
               <svg viewBox="0 0 24 24" class="w-4 h-4 text-neutral-500 shrink-0" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
-              <input type="search" data-search placeholder="例：キャンメイク 下地" aria-label="追加するコスメを探す" autocomplete="off" class="w-full min-w-0 bg-transparent py-2.5 text-base md:text-sm placeholder:text-neutral-400 focus:outline-none" />
+              <input type="search" data-search placeholder="例：キャンメイク 下地" aria-label="追加するコスメを探す" autocomplete="off" class="w-full min-w-0 bg-transparent py-2.5 text-base md:text-sm placeholder:text-neutral-400 focus:outline-none [&::-webkit-search-cancel-button]:appearance-none" />
+              <!-- 入れた文字を消す（ブラウザの標準の×は出し方が揃わないので隠して、こちらを出す。264章） -->
+              <button type="button" data-search-clear hidden aria-label="入力した文字を消す" class="shrink-0 w-8 h-8 -mr-1 rounded-full flex items-center justify-center text-neutral-500 hover:bg-ink/5 hover:text-ink cursor-pointer"><svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
             </label>
             <ul data-search-results hidden class="mt-2 py-1 rounded-2xl bg-white ring-1 ring-ink/10 max-h-[26rem] overflow-y-auto overscroll-contain"></ul>
           </div>

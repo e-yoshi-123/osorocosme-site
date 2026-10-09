@@ -313,6 +313,7 @@ function nameScore(name: string, terms: string[]): number {
 function renderSearch(p: Prepared, d: MyCosmeData) {
   const input = $<HTMLInputElement>("[data-search]");
   const out = $("[data-search-results]");
+  $("[data-search-clear]").hidden = !input.value;
   const terms = splitTerms(input.value.trim());
   if (terms.join("").length < 2) {
     out.innerHTML = "";
@@ -596,7 +597,12 @@ async function main() {
       return;
     }
     const addBtn = t.closest<HTMLElement>("[data-add]");
-    if (addBtn) return put(addBtn.dataset.add!, (addBtn.dataset.kind as ListKind) || "items");
+    if (addBtn) {
+      // 選んだら検索の文字と候補を閉じる（追加した品は左の一覧に出る。264章）
+      clearSearch(false);
+      return put(addBtn.dataset.add!, (addBtn.dataset.kind as ListKind) || "items");
+    }
+    if (t.closest("[data-search-clear]")) return clearSearch(true);
     const tog = t.closest<HTMLElement>("[data-toggle]");
     if (tog) {
       const kind = tog.dataset.toggle as ListKind;
@@ -653,6 +659,13 @@ async function main() {
     else if (act === "drive-erase") driveDisconnect(true);
   });
   $<HTMLInputElement>("[data-search]").addEventListener("input", () => renderSearch(p, load()));
+  /** 検索の文字を消して候補を閉じる（focus＝続けて入力できるよう入力欄に戻す） */
+  function clearSearch(focus: boolean) {
+    const input = $<HTMLInputElement>("[data-search]");
+    input.value = "";
+    renderSearch(p, load());
+    if (focus) input.focus();
+  }
   $<HTMLInputElement>("[data-import-file]").addEventListener("change", (e) => {
     const input = e.target as HTMLInputElement;
     const f = input.files?.[0];
