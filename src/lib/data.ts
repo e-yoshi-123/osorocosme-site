@@ -167,6 +167,17 @@ const productAlias: Record<string, string> = {}; // "統合前brand_id_name_id" 
   }
 }
 
+// 楽天のリンク・画像・価格は cosmetics_list だけに持つ（videos.json の写しは267章でやめた）。動画の商品には、ここで写して使う
+for (const v of Object.values(videos)) {
+  for (const c of v.cosmetics ?? []) {
+    const e = cosmeticsList[`${c.brand_id}_${c.name_id}`];
+    if (!e) continue;
+    c.rakuten_image_link = e.rakuten_image_link;
+    c.rakuten_text_link = e.rakuten_text_link;
+    c.now_price = e.now_price;
+  }
+}
+
 /** 統合前のURLから統合先への転送先。ブランドページと、統合先の商品に寄せた商品のページ。 */
 export function getAliasRedirects(): { brands: { from: string; to: string }[]; products: { from: string; to: string }[] } {
   return {
