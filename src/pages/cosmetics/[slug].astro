@@ -27,6 +27,7 @@ import {
   breadcrumbLd,
   productCategoryPath,
   amazonSearchUrl,
+  matsukiyoSearchUrl,
   getPublishedConcerns,
   hasRankingPage,
   CONCERNS,
@@ -90,6 +91,7 @@ const findLinks = [
   ...concernLinks.map((d) => ({ label: `肌悩み：${d.name}`, path: `/concern/${d.slug}/` })),
   ...ingredientPages.map((p) => ({ label: `成分：${p.def.name}`, path: `/ingredient/${p.def.slug}/` })),
 ];
+const matsukiyoLink = entry ? matsukiyoSearchUrl(entry.brand_id, entry.brand, entry.name) : undefined;
 const factSentence = entry
   ? `${entry.brand}「${entry.name}」は、YouTubeのコスメ紹介動画${facts.videoCount}本・インフルエンサー${facts.channelCount}人に紹介されています` +
     (facts.rank ? `。「${facts.mainTag}」カテゴリの人気ランキングでは${facts.rankTotal}品中${facts.rank}位です。` : "。")
@@ -214,6 +216,12 @@ const jsonLd = entry
                 <a href={amazonSearchUrl(entry.brand, entry.name)} target="_blank" rel="nofollow sponsored noopener" class="group inline-flex items-center gap-3 border border-ink/25 text-sm pl-6 pr-2 py-2 rounded-full hover:border-ink transition-colors duration-500">
                   Amazonで探す<span class="w-8 h-8 rounded-full bg-ink/5 flex items-center justify-center transition-transform duration-500 group-hover:rotate-[-45deg]" aria-hidden="true">→</span>
                 </a>
+                {/* マツキヨココカラはドラッグストアのブランドの商品だけ。検索結果へのリンク（271章） */}
+                {matsukiyoLink && (
+                  <a href={matsukiyoLink} target="_blank" rel="nofollow sponsored noopener" class="group inline-flex items-center gap-3 border border-ink/25 text-sm pl-6 pr-2 py-2 rounded-full hover:border-ink transition-colors duration-500">
+                    マツキヨココカラで探す<span class="w-8 h-8 rounded-full bg-ink/5 flex items-center justify-center transition-transform duration-500 group-hover:rotate-[-45deg]" aria-hidden="true">→</span>
+                  </a>
+                )}
               </div>
               <p class="mt-3 text-xs text-neutral-400">PR：リンク先での購入により、当サイトに報酬が支払われることがあります。</p>
             </div>

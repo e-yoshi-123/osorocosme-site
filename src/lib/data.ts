@@ -9,6 +9,7 @@ import prVideosData from "../data/pr_videos.json";
 import shortsData from "../data/shorts.json";
 import ingredientsData from "../data/ingredients.json";
 import productRedirectsData from "../data/product-redirects.json";
+import matsukiyoBrandsData from "../data/matsukiyo-brands.json";
 
 export interface Cosmetic {
   brand_id: string;
@@ -1969,6 +1970,26 @@ export const AMAZON_ASSOCIATE_TAG = "osorocosme-22";
 export function amazonSearchUrl(brand: string, name: string): string {
   const q = `${brand} ${name}`.replace(/\s+/g, " ").trim();
   return `https://www.amazon.co.jp/s?k=${encodeURIComponent(q)}&tag=${AMAZON_ASSOCIATE_TAG}`;
+}
+
+/** バリューコマースのサイトID（OsoroCosme）と、マツキヨココカラのプログラムのMyLinkのpid（公開して問題ない値） */
+const VC_SID = "3782874";
+const MATSUKIYO_VC_PID = "892723835";
+const matsukiyoBrands = (matsukiyoBrandsData as { brands: Record<string, { name: string; keyword?: string }> }).brands;
+
+/**
+ * マツキヨココカラオンラインストアでの検索結果へのリンク（バリューコマースのMyLink）。商品を特定するAPIが無いので、
+ * Amazonと同じく検索結果に飛ばす。ドラッグストアで売っているブランド（matsukiyo-brands.json）の商品だけで、それ以外は undefined（271章）。
+ * 検索語は「ブランドの呼び方＋商品名の頭の2語」。商品名の後ろの版・色の表記まで入れると、マツキヨの表記と合わずに0件になりやすいため。
+ */
+export function matsukiyoSearchUrl(brandId: string, brand: string, name: string): string | undefined {
+  const b = matsukiyoBrands[brandId];
+  if (!b) return undefined;
+  const brandWord = b.keyword ?? brand;
+  const words = name.replace(/[（(][^）)]*[）)]/g, " ").split(/[\s　]+/).filter((w) => w && w !== brand && w !== brandWord);
+  const q = [brandWord, ...words.slice(0, 2)].join(" ").replace(/\s+/g, " ").trim();
+  const target = `https://www.matsukiyococokara-online.com/store/catalogsearch/result?search_keyword=${encodeURIComponent(q)}&layout=1`;
+  return `https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=${VC_SID}&pid=${MATSUKIYO_VC_PID}&vc_url=${encodeURIComponent(target)}`;
 }
 
 export function productImageSrc(entry?: CosmeticListEntry, fallbackHtml?: string): string {
