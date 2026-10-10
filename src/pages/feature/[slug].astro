@@ -10,6 +10,10 @@ import {
   FEATURE_MIN_CHANNELS,
   FEATURE_PER_GROUP,
   getFeature,
+  featureTitle,
+  currentRakutenEvent,
+  RAKUTEN_PER_BAND,
+  RAKUTEN_PER_GROUP_IN_BAND,
   getCosmeticListEntry,
   productOffer,
   cosmeticSlug,
@@ -28,10 +32,14 @@ const { slug } = Astro.props;
 const f = getFeature(slug)!;
 const others = getPublishedFeatures().filter((x) => x.slug !== slug);
 const total = f.groups.reduce((n, g) => n + g.items.length, 0);
+const isRakuten = f.def.kind === "rakuten";
+const event = isRakuten ? currentRakutenEvent() : undefined;
+const heading = featureTitle(f.def);
 
 // 表示用データ。価格・楽天とYahoo!のリンク・画像は cosmetics_list.json を正とする（ランキングページと同じ）
 const groups = f.groups.map((g) => ({
   group: g.group,
+  note: "note" in g ? (g.note as string) : "",
   rows: g.items.map((it, i) => {
     const entry = getCosmeticListEntry(it.brand_id, it.name_id);
     const offer = productOffer(entry); // 楽天の画像が無ければYahoo!の画像・価格（115章）
@@ -44,14 +52,19 @@ const groups = f.groups.map((g) => ({
       fromYahoo: offer.source === "yahoo",
       yahooLink: entry?.yahoo_text_link || undefined,
       subLabel: it.tag,
+      priceUpdated: offer.priceUpdated,
     };
   }),
 }));
 
-const title = `${f.def.name}動画で人気のコスメ（カテゴリ別）`;
+const title = isRakuten ? `${heading}（価格帯別・YouTubeの紹介数順）` : `${heading}（カテゴリ別）`;
 const first = groups[0]?.rows[0]?.it;
-const description =
-  `YouTubeの「${f.def.name}」をテーマにした動画${f.videoCount}本（${f.channelCount}チャンネル）で紹介されたコスメを、カテゴリ別に集計。` +
+// 楽天の特集の価格の確認日（載せた商品の中で最も古い日）
+const oldestPriceDate = groups.flatMap((g) => g.rows).map((r) => r.priceUpdated).filter(Boolean).sort()[0];
+const description = isRakuten
+  ? `楽天市場で買えるコスメのうち、YouTubeで${FEATURE_MIN_CHANNELS}人以上が紹介したものを価格帯別に${total}品。お買い物マラソン・スーパーSALEの買い物の参考に。` +
+    groups.map((g) => g.rows[0] && `${g.group}では${g.rows[0].it.brand}「${g.rows[0].it.name}」`).filter(Boolean).slice(0, 2).join("、") + "などが上位です。"
+  : `YouTubeの「${f.def.name}」をテーマにした動画${f.videoCount}本（${f.channelCount}チャンネル）で紹介されたコスメを、カテゴリ別に集計。` +
   `${FEATURE_MIN_CHANNELS}人以上が紹介したコスメだけを載せています。` +
   (first ? `${first.tag}では${first.brand}「${first.name}」などが上位です。` : "");
 const topImage = groups.flatMap((g) => g.rows).find((r) => r.imageSrc)?.imageSrc;
@@ -84,13 +97,29 @@ const jsonLd = [
   <nav class="text-xs text-neutral-500 mb-8 flex flex-wrap gap-2" aria-label="パンくず">
     <a href={withBase("/")} class="link-u">Home</a><span aria-hidden="true">/</span>
     <a href={withBase("/feature/")} class="link-u">特集</a><span aria-hidden="true">/</span>
-    <span>{f.def.name}</span>
+    <span>{isRakuten ? heading : f.def.name}</span>
   </nav>
 
-  <PageHead en="Feature" title={`${f.def.name}動画で人気のコスメ`} lead={f.def.lead}>
-    <ShareButtons text={`${f.def.name}動画で人気のコスメ`} class="mt-5" />
+  <PageHead en="Feature" title={heading} lead={f.def.lead}>
+    <ShareButtons text={heading} class="mt-5" />
   </PageHead>
 
+  {event && (
+    <p class="panel !py-4 mb-6 md:mb-8 text-sm">
+      <b class="text-rose">{event.name}</b>：{event.period}。期間中の価格・ポイントは楽天市場の商品ページでご確認ください。
+    </p>
+  )}
+
+  {isRakuten ? (
+  <HowWeCount>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>対象：楽天市場の商品ページ・価格が確認できたコスメのうち、<b>{FEATURE_MIN_CHANNELS}チャンネル以上</b>が紹介したもの（紹介した動画 <b>{f.videoCount}本</b>・<b>{f.channelCount}チャンネル</b>）</li>
+      <li>並び順：紹介したチャンネル数 → 紹介動画数 → 合計再生回数。各価格帯の上位{RAKUTEN_PER_BAND}品まで（同じ大分類からは{RAKUTEN_PER_GROUP_IN_BAND}品まで）</li>
+      <li>価格帯は、楽天市場で確認した時点の価格（税込）で分けています{oldestPriceDate && <>（{formatJaDate(oldestPriceDate)}以降に確認）</>}。セール中は価格が変わることがあります</li>
+      <li>ポイントの倍率・クーポンは載せていません</li>
+    </ul>
+  </HowWeCount>
+  ) : (
   <HowWeCount>
     <ul class="list-disc pl-5 space-y-1">
       <li>対象：{f.def.recentDays && <>直近{Math.round(f.def.recentDays / 30)}か月に投稿され、</>}タイトルに「{f.def.keywords.join("」「")}」のいずれかを含む動画 <b>{f.videoCount}本</b>（<b>{f.channelCount}チャンネル</b>）</li>
@@ -99,11 +128,12 @@ const jsonLd = [
       {f.newest && <li>最新の対象動画：{formatJaDate(f.newest)}投稿</li>}
     </ul>
   </HowWeCount>
+  )}
 
   {
     groups.map((g) => (
       <section class="panel mb-6 md:mb-8">
-        <h2 class="font-serif h-section font-semibold mb-4">{g.group}</h2>
+        <h2 class="font-serif h-section font-semibold mb-4">{g.group}{g.note && <span class="ml-3 text-sm font-sans font-normal text-neutral-500">{g.note}</span>}</h2>
         <div class="@container">
           <ol class="divide-y divide-ink/10">
             {g.rows.map((r) => (
@@ -143,6 +173,7 @@ const jsonLd = [
 
   <p class="text-xs text-neutral-500 mb-8">価格は楽天市場で確認した時点の参考価格です。最新の価格・在庫は楽天市場でご確認ください。</p>
 
+  {f.sample.length > 0 && (
   <section class="panel mb-6 md:mb-8">
     <h2 class="font-serif h-section font-semibold mb-4">対象になった動画（再生回数の多い順）</h2>
     <p class="text-xs text-neutral-500 mb-3">実際にどう使っているかは、動画で確認できます。</p>
@@ -150,14 +181,15 @@ const jsonLd = [
       {f.sample.map((v) => <VideoCard video={v} />)}
     </div>
   </section>
+  )}
 
-  <ShareButtons text={`${f.def.name}動画で人気のコスメ`} label="この特集をシェア" class="mb-10" />
+  <ShareButtons text={heading} label="この特集をシェア" class="mb-10" />
 
   <p class="text-sm">
     {
       others.map((o) => (
         <>
-          <a href={withBase(`/feature/${o.slug}/`)} class="link-u text-ink">{o.name}動画で人気のコスメ →</a>{" "}
+          <a href={withBase(`/feature/${o.slug}/`)} class="link-u text-ink">{featureTitle(o)} →</a>{" "}
         </>
       ))
     }

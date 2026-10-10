@@ -938,6 +938,8 @@ export interface FeatureDef {
   recentDays?: number;
   /** 大分類ごとに載せる品数（省略時 FEATURE_PER_GROUP）。大分類を1つに絞った特集で増やす */
   perGroup?: number;
+  /** "rakuten"：動画のタイトルで絞らず、楽天の価格・リンクがある商品を価格帯別に並べる（keywords はサイト内検索の語にだけ使う。272章） */
+  kind?: "rakuten";
 }
 export const FEATURES: FeatureDef[] = [
   {
@@ -991,10 +993,20 @@ export const FEATURES: FeatureDef[] = [
     keywords: ["韓国", "Qoo10", "オリヤン", "オリーブヤング"],
     lead: "韓国コスメ・Qoo10・オリーブヤングをテーマにした動画で紹介されたコスメを集めました。",
   },
+  // 272章で追加（ユーザー判断で「タイトルの語で絞る」の例外）。楽天ブラックフライデー（11月下旬）・スーパーSALE（12月上旬）の前に出す
+  {
+    slug: "rakuten",
+    en: "Rakuten",
+    kind: "rakuten",
+    publishFrom: "2026-11-18",
+    name: "楽天で買える人気コスメ",
+    keywords: ["楽天", "お買い物マラソン", "スーパーセール", "スーパーSALE", "ブラックフライデー"],
+    lead: "楽天市場で買えるコスメのうち、YouTubeでよく紹介されているものを価格帯別に集めました。お買い物マラソンの買いまわりや、スーパーSALEで何を買うか迷ったときの参考にどうぞ。",
+  },
   {
     slug: "favorites",
     en: "Repeat",
-    publishFrom: "2026-11-18",
+    publishFrom: "2026-12-16",
     name: "愛用品・リピート",
     keywords: ["愛用", "リピ"],
     lead: "「愛用品」「リピート買い」をテーマにした動画で紹介されたコスメを集めました。使い続けられているものが分かります。",
@@ -1005,6 +1017,26 @@ export const FEATURE_MIN_CHANNELS = 3;
 export const FEATURE_PER_GROUP = 5;
 /** 載せる商品がこれ未満の特集は、公開日を過ぎても出さない（中身の薄いページを作らない） */
 export const FEATURE_MIN_ITEMS = 15;
+
+/** 楽天の特集の価格帯（税込の円、min以上max未満）。note は見出しの横の一言 */
+export const RAKUTEN_PRICE_BANDS: { label: string; min: number; max: number; note: string }[] = [
+  { label: "1,000円未満", min: 0, max: 1000, note: "ほかの商品と合わせて買うときに" },
+  { label: "1,000円台", min: 1000, max: 2000, note: "買いまわりの1店舗分に" },
+  { label: "2,000〜4,999円", min: 2000, max: 5000, note: "" },
+  { label: "5,000円以上", min: 5000, max: Infinity, note: "ポイントの多い日にまとめて" },
+];
+export const RAKUTEN_PER_BAND = 10;
+/** 1つの価格帯に、同じ大分類（ベースメイク・アイ等）から載せる品数の上限（同じ種類ばかり並ばないように） */
+export const RAKUTEN_PER_GROUP_IN_BAND = 3;
+/** 楽天のイベント。ビルドの日（JST）が start〜end の日付の間なら、楽天の特集に帯を出す（毎日7時に組み直す）。
+ * 日付は楽天の公式の告知が出てから足す（予想の記事の日付は入れない）。end は終わる日付（01:59に終わるならその日） */
+export const RAKUTEN_EVENTS: { name: string; start: string; end: string; period: string }[] = [
+  // 例：{ name: "楽天スーパーSALE", start: "2026-12-03", end: "2026-12-10", period: "12月3日（木）20:00〜12月10日（木）01:59" },
+];
+export function currentRakutenEvent() {
+  const today = todayJst();
+  return RAKUTEN_EVENTS.find((e) => e.start <= today && today < e.end);
+}
 
 /** ビルド時点（JST）の日付 YYYY-MM-DD */
 function todayJst(): string {
@@ -1024,6 +1056,8 @@ export function getPublishedFeatures(): FeatureDef[] {
 
 export interface FeatureItem {
   brand_id: string;
+  /** 楽天の特集だけ：大分類 */
+  group?: string;
   brand: string;
   name_id: string;
   name: string;
@@ -1035,7 +1069,7 @@ const _featureCache = new Map<string, ReturnType<typeof buildFeature>>();
 function buildFeature(def: FeatureDef) {
   const since = def.recentDays ? Date.now() - def.recentDays * 86_400_000 : 0;
   const videos = getVisibleVideos().filter(
-    (v) => def.keywords.some((k) => (v.title || "").includes(k)) && (!since || (!!v.published_at && new Date(v.published_at).getTime() >= since))
+    (v) => def.kind === "rakuten" || def.keywords.some((k) => (v.title || "").includes(k)) && (!since || (!!v.published_at && new Date(v.published_at).getTime() >= since))
   );
   const map = new Map<string, FeatureItem & { vs: Set<string>; cs: Set<string>; views: number }>();
   for (const v of videos) {
@@ -1061,6 +1095,7 @@ function buildFeature(def: FeatureDef) {
     .map((e) => ({ ...e, videoCount: e.vs.size, channelCount: e.cs.size }))
     .filter((e) => e.channelCount >= FEATURE_MIN_CHANNELS)
     .sort((a, b) => b.channelCount - a.channelCount || b.videoCount - a.videoCount || b.views - a.views || a.name.localeCompare(b.name, "ja"));
+  if (def.kind === "rakuten") return { ...rakutenFeatureBody(def, items), sample: [] as VideoEntry[], newest: undefined };
   const groups = RANKING_CATEGORY_GROUPS.filter((g) => !def.groups || def.groups.includes(g.group)).map((g) => ({
     group: g.group,
     items: items.filter((e) => CATEGORY_TAG_TO_GROUP[e.tag] === g.group).slice(0, def.perGroup ?? FEATURE_PER_GROUP),
@@ -1074,6 +1109,37 @@ function buildFeature(def: FeatureDef) {
     sample,
     newest: sortByPublishedDesc(videos)[0]?.published_at,
   };
+}
+/** 楽天の特集：楽天の画像・価格・リンクがある商品だけを、価格帯ごとに紹介チャンネル数の順で並べる */
+function rakutenFeatureBody(def: FeatureDef, items: FeatureItem[]) {
+  const groups = RAKUTEN_PRICE_BANDS.map((b) => {
+    const perGroup = new Map<string, number>();
+    const out: FeatureItem[] = [];
+    for (const e of items) {
+      if (out.length >= RAKUTEN_PER_BAND) break;
+      const offer = productOffer(getCosmeticListEntry(e.brand_id, e.name_id));
+      if (offer.source !== "rakuten" || !offer.rakutenLink || !offer.price) continue;
+      if (offer.price < b.min || offer.price >= b.max) continue;
+      const g = CATEGORY_TAG_TO_GROUP[e.tag];
+      if ((perGroup.get(g) || 0) >= RAKUTEN_PER_GROUP_IN_BAND) continue;
+      perGroup.set(g, (perGroup.get(g) || 0) + 1);
+      out.push({ ...e, group: g });
+    }
+    return { group: b.label, note: b.note, items: out };
+  }).filter((g) => g.items.length > 0);
+  const vs = new Set<string>();
+  const cs = new Set<string>();
+  for (const v of getVisibleVideos()) {
+    if (groups.some((g) => g.items.some((it) => (v.cosmetics || []).some((c) => c.brand_id === it.brand_id && c.name_id === it.name_id)))) {
+      vs.add(v.key);
+      cs.add(v.channel_id);
+    }
+  }
+  return { def, videoCount: vs.size, channelCount: cs.size, groups };
+}
+/** 特集の見出し（一覧・ホーム・ページの見出し） */
+export function featureTitle(def: FeatureDef): string {
+  return def.kind === "rakuten" ? def.name : `${def.name}動画で人気のコスメ`;
 }
 export function getFeature(slug: string) {
   const def = FEATURES.find((f) => f.slug === slug);

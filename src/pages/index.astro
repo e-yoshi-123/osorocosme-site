@@ -283,14 +283,14 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
   <!-- ===== 03 FEATURES：小さな一覧（248章） ===== -->
   {featureCards.length > 0 && (
     <section class="panel mt-8 md:mt-10">
-      <SectionHead num="03" en="Features" title="特集" lead="動画のタイトルに書かれたテーマごとに、よく紹介されたコスメを集めました。" href={withBase("/feature/")} />
+      <SectionHead num="03" en="Features" title="特集" lead="テーマごとに、よく紹介されたコスメを集めました。" href={withBase("/feature/")} />
       <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {featureCards.map((c) => (
           <li>
             <a href={withBase(`/feature/${c.def.slug}/`)} class="group flex items-center justify-between gap-4 rounded-2xl border border-ink/10 hover:bg-blush/40 px-5 py-4 transition-colors">
               <span class="min-w-0">
                 <span class="block font-serif text-[17px] font-semibold leading-snug group-hover:text-rose transition-colors">{c.def.name}</span>
-                <span class="block mt-1 text-xs text-neutral-500">{c.videoCount}本の動画・{c.channelCount}チャンネルから集計</span>
+                <span class="block mt-1 text-xs text-neutral-500">{c.def.kind === "rakuten" ? "楽天市場の価格帯別" : `${c.videoCount}本の動画・${c.channelCount}チャンネルから集計`}</span>
               </span>
               <span class="shrink-0 w-9 h-9 rounded-full border border-ink/20 flex items-center justify-center transition-all duration-500 group-hover:bg-ink group-hover:text-paper" aria-hidden="true">→</span>
             </a>

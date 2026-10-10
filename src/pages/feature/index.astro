@@ -2,7 +2,7 @@
 import PageHead from "../../components/PageHead.astro";
 import CoverArt from "../../components/CoverArt.astro";
 import Layout from "../../layouts/Layout.astro";
-import { getPublishedFeatures, getFeature, featureCoverImages, distinctCovers, withBase } from "../../lib/data";
+import { getPublishedFeatures, getFeature, featureTitle, featureCoverImages, distinctCovers, withBase } from "../../lib/data";
 
 // 各特集の上位コスメの画像を表紙にする（ホームの特集カードと同じ選び方）
 const list = distinctCovers(getPublishedFeatures().map((d) => getFeature(d.slug)!), (f) => featureCoverImages(f.def.slug, 12));
@@ -12,7 +12,7 @@ const list = distinctCovers(getPublishedFeatures().map((d) => getFeature(d.slug)
   title="特集（動画から集計したコスメ）"
   description="YouTubeのコスメ紹介動画を、毎日メイク・プチプラなどのテーマ別に集計した特集。複数のインフルエンサーが紹介しているコスメだけをカテゴリ別にまとめています。"
 >
-  <PageHead en="Features" title="特集" lead="動画のタイトルに明記されたテーマで動画を絞り、その動画で紹介されたコスメを集計しています。複数のインフルエンサーが紹介したものだけを載せています。" />
+  <PageHead en="Features" title="特集" lead="動画のタイトルに明記されたテーマなどで、紹介されたコスメを集計しています。複数のインフルエンサーが紹介したものだけを載せています。" />
   <ul class="panel !py-2 md:!py-4 [&>li:last-child>a]:border-b-0">
     {
       list.map((f, idx) => (
@@ -21,8 +21,8 @@ const list = distinctCovers(getPublishedFeatures().map((d) => getFeature(d.slug)
             {f.imgs.length > 0 && <CoverArt imgs={f.imgs} index={idx} word={f.def.en || ""} />}
             <span class="flex items-start gap-6 flex-1 min-w-0">
               <span class="flex-1 min-w-0">
-                <span class="block font-serif text-lg md:text-xl font-semibold group-hover:text-rose transition-colors">{f.def.name}動画で人気のコスメ</span>
-                <span class="block text-xs text-neutral-500 mt-1.5">{f.videoCount}本の動画・{f.channelCount}チャンネルから集計</span>
+                <span class="block font-serif text-lg md:text-xl font-semibold group-hover:text-rose transition-colors">{featureTitle(f.def)}</span>
+                <span class="block text-xs text-neutral-500 mt-1.5">{f.def.kind === "rakuten" ? "楽天市場の価格帯別" : `${f.videoCount}本の動画・${f.channelCount}チャンネルから集計`}</span>
                 <span class="block text-sm leading-relaxed text-neutral-600 mt-3 max-w-3xl">{f.def.lead}</span>
               </span>
               <span class="hidden sm:flex shrink-0 mt-1 w-10 h-10 rounded-full border border-ink/15 items-center justify-center transition-all duration-500 group-hover:bg-ink group-hover:text-paper group-hover:border-ink" aria-hidden="true">→</span>
