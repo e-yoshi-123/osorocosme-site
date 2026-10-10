@@ -63,6 +63,8 @@ for (const g of groups) {
   for (const b of timeline) for (const c of b.items) if ((c.related_tags || []).some((t) => set.has(t))) n++;
   groupCounts.set(g.group, n);
 }
+// タイトルの品数は、同じコスメを何度紹介しても1品と数える（271章）
+const uniqueItems = new Set(timeline.flatMap((b) => b.items.map((c) => `${c.brand_id}_${c.name_id}`))).size;
 const description = influencer
   ? `${influencer.channel_title}のコスメ紹介動画${videos.length}本から、使用コスメ${totalItems}品をカテゴリ別・投稿日順にまとめています。いつどのコスメを紹介していたか、使用コスメの変遷を確認できます。`
   : undefined;
@@ -83,7 +85,7 @@ const jsonLd = influencer
   : [];
 ---
 
-<Layout title={influencer ? `${influencer.channel_title}の使用コスメ一覧・愛用コスメ遍歴` : "インフルエンサー詳細"} description={description} image={influencer?.channel_icon} jsonLd={jsonLd}>
+<Layout title={influencer ? `${influencer.channel_title}のメイク・愛用コスメ一覧（${uniqueItems}品）` : "インフルエンサー詳細"} description={description} image={influencer?.channel_icon} jsonLd={jsonLd}>
   {
     !influencer ? (
       <p class="text-neutral-400">インフルエンサーが見つかりませんでした。</p>

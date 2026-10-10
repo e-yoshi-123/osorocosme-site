@@ -64,7 +64,7 @@ const SPAN: Record<number, string> = { 1: "lg:col-span-1", 2: "lg:col-span-2", 3
 const COLS: Record<number, string> = { 1: "lg:grid-cols-1", 2: "lg:grid-cols-2", 3: "lg:grid-cols-3", 4: "lg:grid-cols-4", 5: "lg:grid-cols-5" };
 ---
 
-<Layout title={`${brandName}の人気コスメ・紹介動画`} description={description} image={ogImage} jsonLd={jsonLd}>
+<Layout title={`${brandName}のおすすめ人気コスメ（YouTuberの紹介数順）`} description={description} image={ogImage} jsonLd={jsonLd}>
   <PageHead en="Brand" title={brandName} lead={description} stats={[{ n: formatCount(stats?.videoCount ?? 0), label: "紹介動画", unit: "本" }, { n: formatCount(cosmetics.length), label: "コスメ", unit: "品" }]}>
     <ShareButtons text={`${brandName}の人気コスメ・YouTubeの紹介動画`} class="mt-5" />
     {

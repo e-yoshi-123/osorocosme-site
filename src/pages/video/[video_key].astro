@@ -40,6 +40,8 @@ const cosmeticNames = validCosmetics.slice(0, 5).map((c) => `${c.brand} ${c.name
 const description = video
   ? `${video.channel_title}が${formatJaDate(video.published_at)}に投稿した動画。紹介コスメ${validCosmetics.length}品` + (cosmeticNames ? `（${cosmeticNames}${validCosmetics.length > 5 ? "ほか" : ""}）` : "") + "。"
   : undefined;
+// YouTubeと同じタイトルでは検索結果で並ぶだけなので、このページの中身（紹介コスメの一覧）を先頭に出す（動画タイトルは長く、後ろに付けると切れるため。271章）
+const pageTitle = video ? (validCosmetics.length ? `【紹介コスメ${validCosmetics.length}品】${video.title}` : video.title) : "動画詳細";
 // 非掲載（check_status未確認・削除済み）の動画はsitemapに載せておらず、内容も未確認なので検索に出さない
 const noindex = !!video && !isVisible(video);
 
@@ -125,7 +127,7 @@ const jsonLd = video
   : [];
 ---
 
-<Layout title={video?.title ?? "動画詳細"} description={description} image={video ? ytThumbLarge(video.thumbnail) : undefined} ogType="video.other" jsonLd={jsonLd} noindex={noindex}>
+<Layout title={pageTitle} description={description} image={video ? ytThumbLarge(video.thumbnail) : undefined} ogType="video.other" jsonLd={jsonLd} noindex={noindex}>
   {
     !video ? (
       <p class="text-neutral-400">動画が見つかりませんでした。</p>
