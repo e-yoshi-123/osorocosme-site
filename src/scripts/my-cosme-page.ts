@@ -191,6 +191,32 @@ function renderConcernRec(p: Prepared, d: MyCosmeData) {
 // （その悩みで一番多い品を1）③登録したコスメと同じ成分（成分の近さ）。理由が重なる品ほど上に出し、カテゴリは1品ずつ。
 // 理由は「〇〇に触れて紹介」「同じ成分」のように事実だけを書く（効能は書かない）。
 const FORYOU_LIMIT = 6, FORYOU_MULTI = 0.5;
+// カテゴリで絞る（274章）：中くらいの粒度のカテゴリ（ページ側で、ランキングの「まとめ」などで束ねたもの）のボタン。
+// 選んだものはこの端末にだけ覚えておく
+const CATS = JSON.parse(root.dataset.foryouCatMap || "[]") as [string, string[]][];
+const CAT_OF = new Map(CATS.flatMap(([name, tags]) => tags.map((t) => [t, name] as const)));
+const CAT_ORDER = new Map(CATS.map(([name], i) => [name, i]));
+/** ボタンを出す、候補の最少の品数 */
+const CAT_MIN = 3;
+/** はじめに出すボタンの数（残りは「ほかのカテゴリ」で開く） */
+const CAT_SHOW = 12;
+let catsOpen = false;
+const FORYOU_CAT_KEY = "osorocosme-foryou-cat";
+let forYouCat = "";
+try {
+  forYouCat = localStorage.getItem(FORYOU_CAT_KEY) || "";
+} catch {
+  /* 保存できない環境では、毎回「すべて」から */
+}
+function setForYouCat(g: string) {
+  forYouCat = g;
+  try {
+    if (g) localStorage.setItem(FORYOU_CAT_KEY, g);
+    else localStorage.removeItem(FORYOU_CAT_KEY);
+  } catch {
+    /* 覚えられなくても絞り込みはできる */
+  }
+}
 function renderForYou(p: Prepared, d: MyCosmeData) {
   const box = $("[data-foryou]");
   const mine = new Set<number>();
@@ -253,15 +279,43 @@ function renderForYou(p: Prepared, d: MyCosmeData) {
       return { n, s: a + b + c + FORYOU_MULTI * (hits - 1) };
     })
     .sort((x, y) => y.s - x.s || p.idx.c[y.n][6] - p.idx.c[x.n][6]);
-  // カテゴリは1品ずつ。ブランドもまず1品ずつにし、足りなければ同じブランドの2品目で埋める（1ブランドに偏らないように）
+  // カテゴリのボタン：候補が CAT_MIN 品以上あるカテゴリ。関係の深い（上位の候補を多く持つ）CAT_SHOW 個を先に、ランキングと同じ順で出す
+  const catOf = (n: number) => CAT_OF.get(p.idx.c[n][5]) || p.idx.c[n][5];
+  const count = new Map<string, number>(), first = new Map<string, number>();
+  ranked.forEach(({ n }, i) => {
+    const c = catOf(n);
+    if (!c) return;
+    count.set(c, (count.get(c) || 0) + 1);
+    if (!first.has(c)) first.set(c, i);
+  });
+  const avail = [...count].filter(([, k]) => k >= CAT_MIN).map(([c]) => c);
+  const byOrder = (a: string, b: string) => (CAT_ORDER.get(a) ?? 1e9) - (CAT_ORDER.get(b) ?? 1e9) || a.localeCompare(b, "ja");
+  const top = [...avail].sort((a, b) => first.get(a)! - first.get(b)!).slice(0, CAT_SHOW);
+  const sel = avail.includes(forYouCat) ? forYouCat : "";
+  if (sel && !top.includes(sel)) top.push(sel);
+  const rest = avail.filter((c) => !top.includes(c)).sort(byOrder);
+  const chip = (c: string, label: string) => {
+    const on = c === sel;
+    return `<button type="button" data-foryou-cat="${esc(c)}" aria-pressed="${on}" class="min-h-9 px-4 rounded-full text-xs border transition-colors cursor-pointer ${on ? "bg-ink border-ink text-white" : "border-ink/20 text-neutral-700 hover:border-ink"}">${esc(label)}</button>`;
+  };
+  const cats = $("[data-foryou-cats]");
+  cats.hidden = avail.length < 2;
+  cats.innerHTML =
+    chip("", "すべて") +
+    [...top.sort(byOrder), ...(catsOpen ? rest : [])].map((c) => chip(c, c)).join("") +
+    (rest.length ? `<button type="button" data-foryou-more class="min-h-9 px-4 rounded-full text-xs text-neutral-500 hover:text-ink cursor-pointer">${catsOpen ? "閉じる" : `ほかのカテゴリ（${rest.length}）`}</button>` : "");
+  const pool = sel ? ranked.filter(({ n }) => catOf(n) === sel) : ranked;
+  // 細かいカテゴリは1品ずつ。ブランドもまず1品ずつにし、足りなければ同じブランドの2品目で埋める（1ブランドに偏らないように）。
+  // カテゴリで絞ったときは、それでも足りなければ同じ細かいカテゴリの2品目でも埋める（「化粧水」と「ミスト状化粧水」だけ、のように細かいカテゴリが少ない）
   const per = new Set<string>();
   const picks: number[] = [];
-  for (const brandOnce of [true, false]) {
+  const passes: [boolean, boolean][] = [[true, true], [false, true], ...(sel ? [[false, false] as [boolean, boolean]] : [])];
+  for (const [brandOnce, catOnce] of passes) {
     const brands = new Set(picks.map((n) => p.idx.c[n][2]));
-    for (const { n } of ranked) {
+    for (const { n } of pool) {
       if (picks.length >= FORYOU_LIMIT) break;
       const cat = p.idx.c[n][5], b = p.idx.c[n][2];
-      if (picks.includes(n) || (cat && per.has(cat)) || (brandOnce && b >= 0 && brands.has(b))) continue;
+      if (picks.includes(n) || (catOnce && cat && per.has(cat)) || (brandOnce && b >= 0 && brands.has(b))) continue;
       if (cat) per.add(cat);
       brands.add(b);
       picks.push(n);
@@ -580,6 +634,18 @@ async function main() {
       track(kind === "wish" ? "wish_add" : "add");
       afterLocalChange();
     };
+    if (t.closest("[data-foryou-more]")) {
+      catsOpen = !catsOpen;
+      renderForYou(p, load());
+      return;
+    }
+    const fBtn = t.closest<HTMLElement>("[data-foryou-cat]");
+    if (fBtn) {
+      setForYouCat(fBtn.dataset.foryouCat || "");
+      renderForYou(p, load());
+      track("foryou_cat");
+      return;
+    }
     const cBtn = t.closest<HTMLElement>("[data-concern]");
     if (cBtn) {
       const slug = cBtn.dataset.concern!;

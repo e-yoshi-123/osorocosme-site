@@ -6,12 +6,34 @@
 import Layout from "../layouts/Layout.astro";
 import PageHead from "../components/PageHead.astro";
 import SectionHead from "../components/SectionHead.astro";
-import { withBase } from "../lib/data";
+import { withBase, RANKING_CATEGORY_GROUPS, RANKING_PARENTS, RANKING_TAG_ALIAS } from "../lib/data";
 import { GOOGLE_CLIENT_ID } from "../lib/site-info";
 
 const lead =
   "今使っているコスメや肌悩みを登録すると、同じコスメを使っているインフルエンサーや、その肌悩みに触れて紹介されたコスメから、おすすめを出します。気になるコスメも別の一覧に控えておけます。";
 const tab = "flex-1 min-h-10 rounded-full text-sm transition-colors cursor-pointer aria-selected:bg-ink aria-selected:text-white text-neutral-600 hover:text-ink";
+// For youのカテゴリの絞り込み（274章）：細かいカテゴリを、ランキングの「まとめ」（ファンデーション全般など）と下の束ねで中くらいの粒度にする。
+// [ボタンの名前, 細かいカテゴリ] をランキングの大分類の順に並べて渡す
+const FORYOU_EXTRA: { name: string; tags: string[] }[] = [
+  { name: "洗顔", tags: ["洗顔ジェル", "泡洗顔", "洗顔フォーム", "洗顔石鹸", "洗顔パウダー", "その他洗顔料"] },
+  { name: "日焼け止め", tags: ["日焼け止め・UVケア(顔用)", "日焼け止めクリーム", "日焼け止め・UVケア(ボディ用)", "日焼け止めスプレー"] },
+  { name: "ボディソープ", tags: ["ボディソープ", "ボディ石鹸"] },
+  { name: "ボディクリーム・ローション", tags: ["ボディクリーム・オイル", "ボディローション・ミルク"] },
+  { name: "デオドラント", tags: ["デオドラント・制汗剤", "デオドラント・制汗剤・汗ケア"] },
+  { name: "脱毛・除毛", tags: ["脱毛・除毛", "脱毛・除毛ケア"] },
+  { name: "入浴剤", tags: ["入浴剤", "入浴剤・浴用料"] },
+  { name: "香水", tags: ["香水・フレグランス(レディース・ウィメンズ)", "香水・フレグランス(メンズ)", "香水・フレグランス(その他)", "オードパルファム", "オードトワレ", "オーデコロン"] },
+];
+const midOf = new Map([...RANKING_PARENTS.map((r) => ({ name: r.name.replace(/全般$/, ""), tags: r.tags })), ...FORYOU_EXTRA].flatMap((m) => m.tags.map((t) => [t, m.name] as const)));
+const foryouCats: [string, string[]][] = [];
+for (const t of RANKING_CATEGORY_GROUPS.flatMap((g) => g.tags)) {
+  const name = midOf.get(t) || t;
+  const cur = foryouCats.find(([n]) => n === name);
+  if (cur) cur[1].push(t);
+  else foryouCats.push([name, [t]]);
+}
+// 商品のカテゴリには、ランキングで寄せる前の表記（リップスティック→口紅 など）もあるので、寄せ先と同じボタンに入れる
+for (const [from, to] of Object.entries(RANKING_TAG_ALIAS)) foryouCats.find(([n]) => n === (midOf.get(to) || to))?.[1].push(from);
 const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full border border-ink/20 text-xs tracking-[0.04em] hover:border-ink transition-colors cursor-pointer";
 ---
 
@@ -28,7 +50,7 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
     </p>
   </PageHead>
 
-  <div id="my-cosme" data-google-client-id={GOOGLE_CLIENT_ID}>
+  <div id="my-cosme" data-google-client-id={GOOGLE_CLIENT_ID} data-foryou-cat-map={JSON.stringify(foryouCats)}>
     <p data-loading class="panel text-sm text-neutral-500">読み込んでいます…</p>
     <noscript><p class="panel text-sm text-neutral-500">このページはJavaScriptを使います。ブラウザの設定でJavaScriptを有効にしてください。</p></noscript>
 
@@ -80,8 +102,10 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
             <header class="mb-8 md:mb-12">
               <p class="eyebrow mb-2">For you</p>
               <h2 data-foryou-title class="font-serif h-section u-25">あなたへ</h2>
-              <p class="u-8">使っているコスメ・気になる肌悩みから、理由が重なるものを選びました（カテゴリごとに1品）。効果を示すものではありません。</p>
+              <p class="u-8">使っているコスメ・気になる肌悩みから、理由が重なるものを選びました（細かいカテゴリごとに1品）。下のボタンで、見たいカテゴリに絞れます。効果を示すものではありません。</p>
             </header>
+            {/* カテゴリで絞る（274章）：候補が3品以上あるカテゴリだけを出す */}
+            <div data-foryou-cats role="group" aria-label="カテゴリで絞る" class="-mt-4 md:-mt-8 mb-8 flex flex-wrap gap-2"></div>
             <div data-foryou-list class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-8"></div>
           </section>
 
