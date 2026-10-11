@@ -22,28 +22,28 @@ const thumb = ytThumb(video.thumbnail);
 ---
 
 <a href={withBase(`/video/${video.key}`)} class="group block">
-  <div class="relative overflow-hidden rounded-2xl bg-neutral-200">
-    <img src={thumb.src} srcset={thumb.srcset} sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" onload={THUMB_FALLBACK} alt={video.title} class="w-full aspect-video object-cover transition-transform duration-[1.2s] ease-out-expo group-hover:scale-[1.04]" loading="lazy" />
-    <span class="absolute bottom-2.5 right-2.5 bg-ink/75 backdrop-blur text-paper text-xs tracking-wider px-2 py-1 rounded-full">▶ {formatCount(video.view_count)}</span>
+  <div class="overflow-hidden vcard-12">
+    <img src={thumb.src} srcset={thumb.srcset} sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" onload={THUMB_FALLBACK} alt={video.title} class="vcard-4" loading="lazy" />
+    <span class="vcard-2">▶ {formatCount(video.view_count)}</span>
     {pr && <PrBadge tone="solid" class="absolute top-2.5 left-2.5" />}
-    {(duration || short) && <span class="absolute bottom-2.5 left-2.5 bg-ink/75 backdrop-blur text-paper text-xs tracking-wider px-2 py-1 rounded-full">{short ? `ショート${duration ? ` ${duration}` : ""}` : duration}</span>}
+    {(duration || short) && <span class="vcard-3">{short ? `ショート${duration ? ` ${duration}` : ""}` : duration}</span>}
   </div>
   <div class="pt-3.5">
-    <p class="flex items-center gap-2 text-xs text-neutral-500 mb-1.5">
-      {video.channel_icon && <img referrerpolicy="no-referrer" src={video.channel_icon} alt={video.channel_title} data-name={video.channel_title} width="20" height="20" class="w-5 h-5 rounded-full" loading="lazy" />}
+    <p class="vcard-6">
+      {video.channel_icon && <img referrerpolicy="no-referrer" src={video.channel_icon} alt={video.channel_title} data-name={video.channel_title} width="20" height="20" class="vcard-10" loading="lazy" />}
       <span class="truncate">{video.channel_title}</span>
-      <span class="ml-auto shrink-0 whitespace-nowrap">{formatDateDot(video.published_at)}</span>
+      <span class="vcard-8">{formatDateDot(video.published_at)}</span>
     </p>
-    <h3 class="text-sm leading-relaxed line-clamp-2 group-hover:text-rose transition-colors">{video.title}</h3>
+    <h3 class="vcard-5">{video.title}</h3>
     {
       items.length > 0 && (
-        <p class="mt-2.5 flex items-center gap-1.5">
+        <p class="vcard-9">
           {thumbs.map((t) => (
-            <span class="product-well w-9 h-9 rounded-lg overflow-hidden shrink-0 flex items-center justify-center">
-              <img src={t.src} alt={t.alt} class="w-[86%] h-[86%] object-contain" loading="lazy" onerror="this.parentElement.remove()" />
+            <span class="product-well overflow-hidden vcard-11">
+              <img src={t.src} alt={t.alt} class="u-4" loading="lazy" data-err="remove-parent" />
             </span>
           ))}
-          <span class="ml-1 text-xs text-neutral-500 whitespace-nowrap"><b class="num-display text-sm text-ink">{items.length}</b>品を紹介</span>
+          <span class="u-10"><b class="num-display u-12">{items.length}</b>品を紹介</span>
         </p>
       )
     }

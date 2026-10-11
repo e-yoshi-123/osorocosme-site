@@ -8,9 +8,9 @@ const { items, label = "このページの目次", class: cls } = Astro.props;
 ---
 {items.length >= 2 && (
 <nav class:list={["page-nav sticky z-30 -mx-4 md:-mx-8 px-4 md:px-8 bg-paper/90 backdrop-blur-md border-b border-ink/10", cls]} aria-label={label} data-page-nav>
-  <div class="flex gap-1.5 overflow-x-auto py-2.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+  <div class="pagenav-2">
     {items.map((it) => (
-      <a href={it.href ?? (it.target.startsWith("#") ? it.target : undefined)} data-target={it.target} class="chip shrink-0 whitespace-nowrap cursor-pointer">{it.label}</a>
+      <a href={it.href ?? (it.target.startsWith("#") ? it.target : undefined)} data-target={it.target} class="chip pagenav-1">{it.label}</a>
     ))}
   </div>
 </nav>

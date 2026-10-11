@@ -76,7 +76,7 @@ const inExplore = /^\/(concern|ingredient|feature)(\/|$)/.test(path.replace(impo
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&display=swap" rel="stylesheet" />
     <meta name="theme-color" content="#fdf8f6" />
-    <!-- チャンネルアイコン・動画サムネイル・商品画像の主な配信元に事前接続してLCPを短縮する -->
+    {/* チャンネルアイコン・動画サムネイル・商品画像の主な配信元に事前接続してLCPを短縮する */}
     <link rel="preconnect" href="https://yt3.ggpht.com" crossorigin />
     <link rel="preconnect" href="https://i.ytimg.com" crossorigin />
     <link rel="preconnect" href="https://thumbnail.image.rakuten.co.jp" crossorigin />
@@ -103,126 +103,88 @@ const inExplore = /^\/(concern|ingredient|feature)(\/|$)/.test(path.replace(impo
         </script>
       </>
     )}
-    <!-- 商品画像が読み込めない（店が画像を差し替えて古いURLが消えた等）ときの共通の処理（135章）。
+    {/* 商品画像が読み込めない（店が画像を差し替えて古いURLが消えた等）ときの共通の処理（135章）。
          Yahoo!ショッピングの画像があれば差し替え、無ければ「No Image」にする。
-         自前の onerror を持つ画像（ランキング行・タイル）と、商品ページの画像（data-item-image、専用のスクリプト）は対象外。
-         画像の error はバブルしないので、キャプチャで拾う。body より前に置き、読み込み中の失敗も取りこぼさない -->
-    <script is:inline>
-      window.addEventListener("error", function (ev) {
-        var img = ev.target;
-        if (!img || img.tagName !== "IMG" || img.hasAttribute("onerror") || img.closest("[data-item-image]")) return;
-        // チャンネルアイコン：YouTube側が短時間の多数の読み込みを断ることがある（192章のあとの見直し）。
-        // 少し待って1回だけ読み直し、それでも駄目なら同じ大きさの丸に名前の頭文字を出す
-        if (/yt3\.ggpht\.com|googleusercontent\.com/.test(img.src)) {
-          if (!img.dataset.retried) {
-            img.dataset.retried = "1";
-            var src = img.src;
-            setTimeout(function () { img.src = src + (src.indexOf("?") < 0 ? "?" : "&") + "r=1"; }, 400 + Math.random() * 1200);
-            return;
-          }
-          var link = img.closest("a");
-          var name = (img.alt || img.dataset.name || (link && link.getAttribute("title")) || "").trim();
-          var m = document.createElement("span");
-          m.className = img.className + " avatar-fallback";
-          m.setAttribute("aria-hidden", "true");
-          m.textContent = name ? Array.from(name)[0].toUpperCase() : "";
-          var w = img.getBoundingClientRect().width;
-          if (w) m.style.fontSize = Math.max(10, Math.round(w * 0.42)) + "px";
-          img.replaceWith(m);
-          return;
-        }
-        if (!/thumbnail\.image\.rakuten\.co\.jp|item-shopping\.c\.yimg\.jp/.test(img.src)) return;
-        var box = img.closest("[data-yahoo-image]");
-        if (box && !box.hasAttribute("data-swapped")) {
-          box.setAttribute("data-swapped", "");
-          var a = document.createElement("a");
-          a.href = box.getAttribute("data-yahoo-link"); a.target = "_blank"; a.rel = "nofollow sponsored noopener";
-          var y = document.createElement("img");
-          y.src = box.getAttribute("data-yahoo-image"); y.alt = img.alt; y.loading = "lazy";
-          a.appendChild(y); box.replaceChildren(a);
-          return;
-        }
-        var s = document.createElement("span");
-        s.className = "noimg"; s.textContent = "No image";
-        (img.parentElement && img.parentElement.tagName === "A" && img.parentElement.children.length === 1 ? img.parentElement : img).replaceWith(s);
-      }, true);
-    </script>
+         data-err を付けた画像（ランキング行・タイルなど）はその指定どおりに処理し、商品ページの画像（data-item-image、専用のスクリプト）は対象外。
+         ページごとに埋め込むと全体で約30MBになるので、public/js/img-error.js に置く（273章）。
+         画像の error はバブルしないので、キャプチャで拾う。body より前に置き、読み込み中の失敗も取りこぼさない */}
+    <script is:inline src={withBase("/js/img-error.js")}></script>
   </head>
-  <body class="min-h-screen bg-paper text-ink flex flex-col font-sans">
+  <body class="lay-16">
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 bg-ink text-white px-3 py-2 text-sm">本文へ</a>
-    <header class="sticky top-0 z-40 bg-paper/85 backdrop-blur-md border-b border-ink/10">
-      <div class="max-w-[1320px] mx-auto px-4 md:px-8 h-14 md:h-[72px] flex items-center gap-3 md:gap-6">
-        <a href={withBase("/")} class="text-ink text-[20px] md:text-[22px] shrink-0" aria-label="OsoroCosme ホーム"><Logo /></a>
+    <header class="lay-12">
+      <div class="lay-8">
+        <a href={withBase("/")} class="lay-19" aria-label="OsoroCosme ホーム"><Logo /></a>
         <nav class="hidden lg:flex items-center gap-7 ml-6" aria-label="メイン">
           <button type="button" data-menu-toggle aria-controls="mega-menu" aria-expanded="false" class:list={["group relative inline-flex items-center gap-1 text-sm tracking-[0.04em] py-2 cursor-pointer", inExplore ? "text-ink" : "text-neutral-600 hover:text-ink"]}>
             探す
-            <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 transition-transform duration-300 group-aria-expanded:rotate-180" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
-            <span class:list={["absolute left-0 -bottom-0.5 h-px bg-rose transition-all duration-500 ease-out-expo", inExplore ? "w-full" : "w-0 group-hover:w-full"]} />
+            <svg viewBox="0 0 24 24" class="lay-11" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+            <span class:list={["nav-line", inExplore ? "w-full" : "w-0 group-hover:w-full"]} />
           </button>
           {navLinks.map((l) => (
-            <a href={withBase(l.href)} class:list={["group relative text-sm tracking-[0.04em] py-2", isCurrent(l.href) ? "text-ink" : "text-neutral-600 hover:text-ink"]} aria-current={isCurrent(l.href) ? "page" : undefined}>
+            <a href={withBase(l.href)} class:list={["group nav-link", isCurrent(l.href) ? "text-ink" : "text-neutral-600 hover:text-ink"]} aria-current={isCurrent(l.href) ? "page" : undefined}>
               {l.label}
-              <span class:list={["absolute left-0 -bottom-0.5 h-px bg-rose transition-all duration-500 ease-out-expo", isCurrent(l.href) ? "w-full" : "w-0 group-hover:w-full"]} />
+              <span class:list={["nav-line", isCurrent(l.href) ? "w-full" : "w-0 group-hover:w-full"]} />
             </a>
           ))}
         </nav>
-        <!-- 検索欄はスマホでも常に出す（247章）。スマホでは入力欄の文字を16pxにする（iOSで、16px未満の入力欄に触れると画面が拡大されるため） -->
-        <form action={withBase("/search-result")} method="get" role="search" data-suggest class="ml-auto flex flex-1 lg:flex-none min-w-0 items-center gap-2 border-b border-ink/25 focus-within:border-rose transition-colors lg:w-72 xl:w-96">
-          <svg viewBox="0 0 24 24" class="w-4 h-4 text-neutral-500 shrink-0" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
-          <input type="search" name="q" placeholder={SEARCH_PLACEHOLDER} data-examples={JSON.stringify(searchExamples)} aria-label="サイト内検索" class="w-full min-w-0 bg-transparent py-2 text-base md:text-sm placeholder:text-neutral-400 placeholder:text-sm focus:outline-none" />
+        {/* 検索欄はスマホでも常に出す（247章）。スマホでは入力欄の文字を16pxにする（iOSで、16px未満の入力欄に触れると画面が拡大されるため） */}
+        <form action={withBase("/search-result")} method="get" role="search" data-suggest class="lay-2">
+          <svg viewBox="0 0 24 24" class="u-18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+          <input type="search" name="q" placeholder={SEARCH_PLACEHOLDER} data-examples={JSON.stringify(searchExamples)} aria-label="サイト内検索" class="lay-3" />
         </form>
-        <!-- マイコスメ（5-3・5-4）：人型の印（マイページの意味。259章でかばん→ハート→人型に変更。通知のように見えるので品数の数字は出さない） -->
+        {/* マイコスメ（5-3・5-4）：人型の印（マイページの意味。259章でかばん→ハート→人型に変更。通知のように見えるので品数の数字は出さない） */}
         <a href={withBase("/my-cosme/")} aria-label="マイコスメ" title="マイコスメ（マイページ）" aria-current={isCurrent("/my-cosme/") ? "page" : undefined} class:list={["relative shrink-0 w-10 h-10 -mx-1 flex items-center justify-center rounded-full transition-colors", isCurrent("/my-cosme/") ? "text-rose" : "text-neutral-600 hover:text-ink"]}>
           <svg viewBox="0 0 24 24" class="w-[22px] h-[22px]" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8" /><path d="M4.8 20c.9-3.6 3.7-5.6 7.2-5.6s6.3 2 7.2 5.6" /></svg>
         </a>
-        <button type="button" data-menu-toggle aria-controls="mobile-menu" aria-expanded="false" aria-label="メニューを開く" class="lg:hidden group -mr-2 w-11 h-11 shrink-0 flex items-center justify-center cursor-pointer">
-          <svg viewBox="0 0 24 24" class="w-6 h-6 group-aria-expanded:hidden" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
-          <svg viewBox="0 0 24 24" class="w-6 h-6 hidden group-aria-expanded:block" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+        <button type="button" data-menu-toggle aria-controls="mobile-menu" aria-expanded="false" aria-label="メニューを開く" class="group lay-7">
+          <svg viewBox="0 0 24 24" class="lay-23" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+          <svg viewBox="0 0 24 24" class="hidden w-6 h-6 group-aria-expanded:block" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
         </button>
       </div>
       <MegaMenu />
     </header>
     <MobileMenu links={navLinks} />
 
-    <main id="main" tabindex="-1" class="focus:outline-none flex-1 max-w-[1320px] w-full mx-auto px-4 md:px-8 py-8 md:py-12">
+    <main id="main" tabindex="-1" class="lay-9">
       <slot />
     </main>
 
-    <!-- 上へ戻るボタン（画面1.5枚分より下にいるときだけ出す） -->
+    {/* 上へ戻るボタン（画面1.5枚分より下にいるときだけ出す） */}
     <button type="button" id="to-top" class="to-top" aria-label="ページの先頭へ戻る" tabindex="-1">
       <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
     </button>
 
-    <footer class="relative bg-ink text-paper mt-16 md:mt-24 overflow-hidden">
-      <div class="max-w-[1320px] mx-auto px-4 md:px-8 pt-16 md:pt-24 pb-10">
-        <div class="grid md:grid-cols-12 gap-10">
+    <footer class="overflow-hidden lay-27">
+      <div class="lay-15">
+        <div class="lay-26">
           <div class="md:col-span-5">
             <p class="eyebrow !text-pink-300 mb-4">The YouTube Cosme Database</p>
-            <p class="font-serif text-xl md:text-2xl leading-relaxed">あの人の愛用コスメを、<br />動画から見つける。</p>
-            <form action={withBase("/search-result")} method="get" role="search" class="mt-8 flex items-center gap-3 border-b border-paper/30 focus-within:border-pink-300 max-w-sm">
-              <input type="search" name="q" placeholder="コスメ・ブランドを検索" aria-label="サイト内検索" class="w-full bg-transparent py-3 text-sm placeholder:text-paper/40 focus:outline-none" />
-              <button type="submit" class="label-caps text-pink-300 shrink-0">Search →</button>
+            <p class="font-serif lay-28">あの人の愛用コスメを、<br />動画から見つける。</p>
+            <form action={withBase("/search-result")} method="get" role="search" class="lay-6">
+              <input type="search" name="q" placeholder="コスメ・ブランドを検索" aria-label="サイト内検索" class="lay-10" />
+              <button type="submit" class="label-caps lay-24">Search →</button>
             </form>
           </div>
-          <nav class="md:col-span-3 md:col-start-7" aria-label="探す">
-            <p class="label-caps text-paper/40 mb-4">Explore</p>
-            <ul class="space-y-2.5 text-sm">
-              {footerLinks.map((l) => <li><a href={withBase(l.href)} class="link-u text-paper/80 hover:text-paper">{l.label}</a></li>)}
+          <nav class="lay-25" aria-label="探す">
+            <p class="label-caps lay-13">Explore</p>
+            <ul class="lay-21">
+              {footerLinks.map((l) => <li><a href={withBase(l.href)} class="link-u lay-1">{l.label}</a></li>)}
             </ul>
           </nav>
           <nav class="md:col-span-3" aria-label="サイト情報">
-            <p class="label-caps text-paper/40 mb-4">About</p>
-            <ul class="space-y-2.5 text-sm">
-              <li><a href={withBase("/about")} class="link-u text-paper/80 hover:text-paper">OsoroCosmeについて</a></li>
-              <li><a href={withBase("/contact")} class="link-u text-paper/80 hover:text-paper">お問い合わせ</a></li>
-              <li><a href={withBase("/for-creators")} class="link-u text-paper/80 hover:text-paper">インフルエンサーの方へ</a></li>
-              <li><a href={withBase("/privacy")} class="link-u text-paper/80 hover:text-paper">プライバシーポリシー</a></li>
-              <li><a href={withBase("/disclaimer")} class="link-u text-paper/80 hover:text-paper">免責事項・広告表記</a></li>
+            <p class="label-caps lay-13">About</p>
+            <ul class="lay-21">
+              <li><a href={withBase("/about")} class="link-u lay-1">OsoroCosmeについて</a></li>
+              <li><a href={withBase("/contact")} class="link-u lay-1">お問い合わせ</a></li>
+              <li><a href={withBase("/for-creators")} class="link-u lay-1">インフルエンサーの方へ</a></li>
+              <li><a href={withBase("/privacy")} class="link-u lay-1">プライバシーポリシー</a></li>
+              <li><a href={withBase("/disclaimer")} class="link-u lay-1">免責事項・広告表記</a></li>
             </ul>
           </nav>
         </div>
-        <svg viewBox="0 0 1000 200" class="block w-full mt-14 md:mt-20 -mb-1 text-paper/[0.08]" aria-hidden="true"><text x="0" y="168" textLength="1000" lengthAdjust="spacingAndGlyphs" fill="currentColor" font-family="Cormorant Garamond, serif" font-style="italic" font-size="220">OsoroCosme</text></svg>
-        <div class="border-t border-paper/15 pt-6 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs text-paper/50">
+        <svg viewBox="0 0 1000 200" class="lay-17" aria-hidden="true"><text x="0" y="168" textLength="1000" lengthAdjust="spacingAndGlyphs" fill="currentColor" font-family="Cormorant Garamond, serif" font-style="italic" font-size="220">OsoroCosme</text></svg>
+        <div class="lay-4">
           <p>当サイトは楽天アフィリエイト・バリューコマースなどの広告を利用しており、商品リンクから収益を得ることがあります。</p>
           <p class="font-display text-sm">&copy; {new Date().getFullYear()} OsoroCosme</p>
         </div>

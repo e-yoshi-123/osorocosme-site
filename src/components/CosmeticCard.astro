@@ -26,9 +26,9 @@ const yahooEntry = entry?.yahoo_text_link && entry.yahoo_image_url ? entry : und
 const yahooImage = extractImageSrc(rakutenImageHtml) ? undefined : yahooEntry;
 ---
 
-<div class="group flex flex-col">
+<div class="group card-5">
   <div
-    class="cosmetic-image-box product-well relative aspect-square w-full rounded-2xl flex items-center justify-center overflow-hidden"
+    class="cosmetic-image-box product-well overflow-hidden card-7"
     data-yahoo-image={rakutenImageHtml ? yahooEntry?.yahoo_image_url : undefined}
     data-yahoo-link={rakutenImageHtml ? yahooEntry?.yahoo_text_link : undefined}
   >
@@ -45,11 +45,11 @@ const yahooImage = extractImageSrc(rakutenImageHtml) ? undefined : yahooEntry;
     }
     {pr && <PrBadge tone="solid" class="absolute top-2 left-2 pointer-events-none" />}
   </div>
-  <a href={withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`)} class="block pt-3">
-    {category && <div class="mb-1.5"><span class="inline-block rounded-full bg-blush px-2 py-0.5 text-[11px] leading-snug text-ink/80">{category}</span></div>}
-    {showBrand && <div class="mb-1 text-xs tracking-[0.14em] text-neutral-500 truncate">{brand}</div>}
-    <div class="phrase text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors">{name}</div>
-    {caption && <div class="mt-1.5 text-xs text-neutral-500">{caption}</div>}
+  <a href={withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`)} class="card-6">
+    {category && <div class="mb-1.5"><span class="card-3">{category}</span></div>}
+    {showBrand && <div class="card-4">{brand}</div>}
+    <div class="phrase card-2">{name}</div>
+    {caption && <div class="u-2">{caption}</div>}
   </a>
 </div>
 

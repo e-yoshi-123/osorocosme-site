@@ -41,7 +41,7 @@ function topImages(tag: string): { src: string; alt: string }[] {
               <div class="flex gap-1 sm:gap-1.5 w-[6.5rem] sm:w-48 shrink-0">
                 {topImages(it.name).map(({ src, alt }) => (
                   <div class="product-well flex-1 aspect-square rounded-lg overflow-hidden flex items-center justify-center">
-                    {src ? <img src={src} alt={alt} class="w-[86%] h-[86%] object-contain" loading="lazy" onerror="this.style.visibility='hidden'" /> : null}
+                    {src ? <img src={src} alt={alt} class="u-4" loading="lazy" data-err="hide" /> : null}
                   </div>
                 ))}
               </div>
@@ -83,7 +83,7 @@ function topImages(tag: string): { src: string; alt: string }[] {
                             <div class="flex gap-1 mb-1.5">
                               {topImages(c.name).map(({ src, alt }) => (
                                 <div class="product-well flex-1 aspect-square rounded-lg overflow-hidden flex items-center justify-center">
-                                  {src ? <img src={src} alt={alt} class="w-[86%] h-[86%] object-contain" loading="lazy" onerror="this.style.visibility='hidden'" /> : null}
+                                  {src ? <img src={src} alt={alt} class="u-4" loading="lazy" data-err="hide" /> : null}
                                 </div>
                               ))}
                             </div>
@@ -104,7 +104,7 @@ function topImages(tag: string): { src: string; alt: string }[] {
   }
 </Layout>
 
-<!-- 旧URL（/ranking#カテゴリ名）へのリンクを、カテゴリごとのページへ転送する -->
+{/* 旧URL（/ranking#カテゴリ名）へのリンクを、カテゴリごとのページへ転送する */}
 <script is:inline define:vars={{ tags: allTags, base: withBase("/ranking/") }}>
   var h = decodeURIComponent(location.hash.slice(1));
   if (h && tags.indexOf(h) !== -1) location.replace(base + encodeURIComponent(h) + "/");

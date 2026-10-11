@@ -93,7 +93,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
   description={`YouTubeのコスメ紹介動画${visible.length}本から、インフルエンサー${influencerCount}人が使ったコスメ${cosmeticCount}品を集めました。PR・提供を除いたカテゴリ別ランキングや、インフルエンサーごとの使用コスメ遍歴で探せます。`}
   jsonLd={[siteLd]}
 >
-  <!-- ===== HERO：雑誌の表紙のように、大きな見出しと話題のコスメの額装 ===== -->
+  {/* ===== HERO：雑誌の表紙のように、大きな見出しと話題のコスメの額装 ===== */}
   <section class="relative -mt-8 md:-mt-12 pt-10 md:pt-16 pb-16 md:pb-24">
     <div class="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-12 gap-12 lg:gap-8 items-center">
       <div class="lg:col-span-7 relative z-10">
@@ -133,13 +133,13 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
         </dl>
       </div>
 
-      <!-- 表紙の絵：重なる2つの輪（人とコスメ） -->
+      {/* 表紙の絵：重なる2つの輪（人とコスメ） */}
       <div class="lg:col-span-5 relative">
         <div class="relative mx-auto w-full max-w-[560px] px-[3%]">
           <HeroRings faces={ringFaces} items={ringItems} />
           {heroItems[0] && (
             <a href={withBase(`/cosmetics/${cosmeticSlug(heroItems[0].r.brand_id, heroItems[0].r.name_id)}`)} class="group reveal mx-auto -mt-4 flex items-center gap-4 max-w-sm bg-paper/90 backdrop-blur rounded-full pl-2 pr-5 py-2 border border-ink/10 shadow-[0_20px_50px_-24px_rgba(29,21,23,0.35)]" style="--d:600ms">
-              <span class="w-12 h-12 rounded-full overflow-hidden bg-white shrink-0 ring-1 ring-ink/5"><img src={heroItems[0].img} alt={`${heroItems[0].r.brand} ${heroItems[0].r.name}`} class="w-full h-full object-contain p-1.5" /></span>
+              <span class="w-12 h-12 rounded-full overflow-hidden bg-white shrink-0 ring-1 ring-ink/5"><img src={heroItems[0].img} alt={`${heroItems[0].r.brand} ${heroItems[0].r.name}`} class="u-19" /></span>
               <span class="min-w-0 flex-1">
                 <span class="block label-caps text-rose">Now trending No.1</span>
                 <span class="block text-sm leading-snug truncate group-hover:text-rose transition-colors">{heroItems[0].r.brand} {heroItems[0].r.name}</span>
@@ -153,7 +153,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
     </div>
   </section>
 
-  <!-- ===== FIND：探し方の入口。ヘッダーの「探す」と同じ中身を、トップでは最初から見せる（248章） ===== -->
+  {/* ===== FIND：探し方の入口。ヘッダーの「探す」と同じ中身を、トップでは最初から見せる（248章） ===== */}
   <section class="panel mb-12 md:mb-16" aria-labelledby="find-title">
     <h2 id="find-title" class="sr-only">探し方</h2>
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-8">
@@ -161,9 +161,9 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
         <div>
           <p class="flex items-baseline justify-between gap-2 mb-3">
             <span><span class="block eyebrow">{b.en}</span><span class="block font-serif text-lg font-semibold mt-0.5">{b.title}</span></span>
-            <a href={withBase(b.all)} class="text-xs text-neutral-500 hover:text-rose shrink-0">一覧 →</a>
+            <a href={withBase(b.all)} class="u-9">一覧 →</a>
           </p>
-          <p class="flex flex-wrap gap-1.5">
+          <p class="u-6">
             {b.items.map((it) => <a href={withBase(it.path)} class="text-xs border border-ink/15 rounded-full px-2.5 py-1 hover:border-rose hover:text-rose transition-colors">{it.label}</a>)}
           </p>
         </div>
@@ -171,8 +171,8 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
     </div>
   </section>
 
-  <!-- ===== MARQUEE：人気ブランドの札が2段で逆向きに流れる =====
-       以前は名前の文字だけを1段で流していて、さびしく見えた（ユーザー指摘）。ブランドごとに、いちばん紹介されている商品の写真・名前・紹介動画の本数を1枚の札にする -->
+  {/* ===== MARQUEE：人気ブランドの札が2段で逆向きに流れる =====
+       以前は名前の文字だけを1段で流していて、さびしく見えた（ユーザー指摘）。ブランドごとに、いちばん紹介されている商品の写真・名前・紹介動画の本数を1枚の札にする */}
   <section class="relative -mx-4 md:-mx-8 pt-2 pb-2" aria-label="人気ブランド">
     <div class="px-4 md:px-8 mb-5 flex items-end justify-between gap-6">
       <div>
@@ -181,7 +181,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
       </div>
       <a href={withBase("/brand-list")} class="group shrink-0 inline-flex items-center gap-2 text-xs font-bold tracking-[0.2em] uppercase">
         <span class="link-u hidden sm:inline">All brands</span>
-        <span class="inline-flex w-8 h-8 rounded-full border border-ink/20 items-center justify-center transition-all duration-500 ease-out-expo group-hover:bg-ink group-hover:text-paper group-hover:border-ink" aria-hidden="true">→</span>
+        <span class="u-5" aria-hidden="true">→</span>
       </a>
     </div>
     <div class="space-y-3 md:space-y-4 [mask-image:linear-gradient(to_right,transparent,#000_6%,#000_94%,transparent)]">
@@ -194,7 +194,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
                   <li>
                     <a href={withBase(`/brand/${b.brand_id}`)} tabindex={k === 1 ? -1 : undefined} class="group flex items-center gap-3 md:gap-3.5 rounded-full bg-panel pl-1.5 pr-5 md:pr-6 py-1.5 shadow-[0_0_0_1px_rgb(29_21_23/0.07)] transition-shadow duration-500 hover:shadow-[0_0_0_1px_rgb(29_21_23/0.3)]">
                       <span class="w-11 h-11 md:w-[52px] md:h-[52px] rounded-full overflow-hidden bg-white shrink-0 flex items-center justify-center ring-1 ring-ink/5">
-                        {b.img ? <img src={b.img} alt={b.name} class="w-[82%] h-[82%] object-contain transition-transform duration-700 ease-out-expo group-hover:scale-110" loading="lazy" onerror="this.remove()" /> : null}
+                        {b.img ? <img src={b.img} alt={b.name} class="w-[82%] h-[82%] object-contain transition-transform duration-700 ease-out-expo group-hover:scale-110" loading="lazy" data-err="remove" /> : null}
                       </span>
                       <span class:list={["text-[17px] md:text-[20px] leading-none whitespace-nowrap group-hover:text-rose transition-colors", isLatin(b.name) ? "font-display font-semibold" : "font-serif font-semibold"]}>{b.name}</span>
                       <span class="num-display text-xs text-neutral-500 whitespace-nowrap">{b.videoCount}<span class="font-sans font-normal ml-0.5">本</span></span>
@@ -209,10 +209,10 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
     </div>
   </section>
 
-  <!-- ===== 01 RANKING ===== -->
+  {/* ===== 01 RANKING ===== */}
   <section class="panel mt-12 md:mt-16">
     <SectionHead num="01" en="Ranking" title="いま、よく紹介されているコスメ" lead="紹介動画の数・紹介したインフルエンサーの数・再生回数から出した人気順です（PR・提供の紹介は数えていません）。商品数の多い3つのカテゴリを先に。" href={withBase("/ranking/")} cta="All categories" />
-    <!-- スマホでは3つのカテゴリを横にめくる（縦に積むと画面2枚半になるため） -->
+    {/* スマホでは3つのカテゴリを横にめくる（縦に積むと画面2枚半になるため） */}
     <div class="-mx-4 px-4 md:-mx-10 md:px-10 lg:mx-0 lg:px-0 flex lg:grid lg:grid-cols-3 gap-5 md:gap-8 lg:gap-10 overflow-x-auto lg:overflow-visible snap-x snap-mandatory scroll-px-4 md:scroll-px-10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-swipe>
       {featuredFull.map((f, fi) => (
         <article class="reveal min-w-0 shrink-0 w-[86%] sm:w-[58%] lg:w-auto snap-start" style={`--d:${fi * 120}ms`}>
@@ -241,7 +241,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
                 <a href={withBase(`/cosmetics/${cosmeticSlug(tile.brand_id, tile.name_id)}`)} class="group flex items-center gap-3 sm:gap-4 py-3">
                   <span class="num-display text-[22px] w-5 sm:w-6 text-ink/45 group-hover:text-rose transition-colors">{rank}</span>
                   <span class="product-well w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden shrink-0">
-                    {tile.imageSrc && <img src={tile.imageSrc} alt={`${tile.brand} ${tile.name}`} class="w-full h-full object-contain p-1.5" loading="lazy" />}
+                    {tile.imageSrc && <img src={tile.imageSrc} alt={`${tile.brand} ${tile.name}`} class="u-19" loading="lazy" />}
                   </span>
                   <span class="min-w-0 flex-1">
                     <span class="block text-xs tracking-[0.12em] text-neutral-500 truncate">{tile.brand}</span>
@@ -259,9 +259,9 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
     <p class="mt-6 text-sm"><a href={withBase("/ranking/repeat/")} class="link-u text-rose">同じ人が時期をあけて何度も使っている「リピートされているコスメ」 →</a></p>
   </section>
 
-  <!-- ===== 02 TRENDING ===== -->
+  {/* ===== 02 TRENDING ===== */}
   {trending.length > 0 && (
-    <section class="panel mt-8 md:mt-10">
+    <section class="panel u-14">
       <SectionHead num="02" en="Trending now" title="最近話題のコスメ" lead={`直近${RECENT_DAYS}日に投稿された動画で、紹介したインフルエンサーが多い順です。`} />
       <div class="-mx-4 md:mx-0 px-4 md:px-0 flex md:grid md:grid-cols-4 gap-4 md:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-swipe>
         {trending.slice(0, 8).map((c, i) => {
@@ -281,9 +281,9 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
     </section>
   )}
 
-  <!-- ===== 03 FEATURES：小さな一覧（248章） ===== -->
+  {/* ===== 03 FEATURES：小さな一覧（248章） ===== */}
   {featureCards.length > 0 && (
-    <section class="panel mt-8 md:mt-10">
+    <section class="panel u-14">
       <SectionHead num="03" en="Features" title="特集" lead="テーマごとに、よく紹介されたコスメを集めました。" href={withBase("/feature/")} />
       <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {featureCards.map((c) => (
@@ -301,8 +301,8 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
     </section>
   )}
 
-  <!-- ===== 04 INFLUENCERS ===== -->
-  <section class="panel mt-8 md:mt-10">
+  {/* ===== 04 INFLUENCERS ===== */}
+  <section class="panel u-14">
     <SectionHead num="04" en="Influencers" title="人気のインフルエンサー" lead="登録者数と、このサイトに載っている動画・コスメの数から並べています。" href={withBase("/influencer-list")} />
     <ol class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-10">
       {popularInfluencers.map((inf, i) => (
@@ -325,8 +325,8 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
     </ol>
   </section>
 
-  <!-- ===== 05 CATEGORIES：文字だけの索引 ===== -->
-  <section class="panel mt-8 md:mt-10">
+  {/* ===== 05 CATEGORIES：文字だけの索引 ===== */}
+  <section class="panel u-14">
     <SectionHead num="05" en="Index" title="カテゴリから探す" href={withBase("/ranking/")} cta="Rankings" />
     <ul class="grid md:grid-cols-2 md:gap-x-12 [&>li:last-child]:border-b-0 md:[&>li:nth-last-child(2):nth-child(odd)]:border-b-0">
       {categoryGroups.map((g, i) => (
@@ -342,15 +342,15 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
     </ul>
   </section>
 
-  <!-- ===== 06 LATEST VIDEOS ===== -->
-  <section class="panel mt-8 md:mt-10">
+  {/* ===== 06 LATEST VIDEOS ===== */}
+  <section class="panel u-14">
     <SectionHead num="06" en="Latest videos" title="新着の紹介動画" href={withBase("/video-list")} />
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10">
+    <div class="u-20">
       {latestVideos.map((v, i) => <div class:list={["reveal min-w-0", i >= 4 && "hidden sm:block"]} style={`--d:${(i % 4) * 80}ms`}><VideoCard video={v} /></div>)}
     </div>
   </section>
 
-  <!-- ===== HOW TO USE ===== -->
+  {/* ===== HOW TO USE ===== */}
   <section class="mt-24 md:mt-36 -mb-8 md:-mb-12 -mx-4 md:-mx-8 px-4 md:px-8 py-16 md:py-24 bg-blush/60 rounded-[32px]">
     <div class="max-w-5xl mx-auto">
       <p class="eyebrow text-center">How to use</p>

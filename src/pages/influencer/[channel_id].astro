@@ -91,7 +91,7 @@ const jsonLd = influencer
       <p class="text-neutral-400">インフルエンサーが見つかりませんでした。</p>
     ) : (
       <>
-        <!-- ===== プロフィール：雑誌の人物紹介のように ===== -->
+        {/* ===== プロフィール：雑誌の人物紹介のように ===== */}
         <section class="panel grid md:grid-cols-12 gap-8 md:gap-12 items-center">
           <div class="md:col-span-4 lg:col-span-4">
             <div class="relative w-[62%] md:w-full max-w-[300px] mx-auto mt-5 md:mt-0 aspect-square">
@@ -109,14 +109,14 @@ const jsonLd = influencer
             <h1 class="mt-3 font-serif font-semibold h-page tracking-[-0.02em] text-balance">{influencer.channel_title}</h1>
             <p class="mt-5 text-sm leading-[1.9] text-neutral-600 max-w-2xl">{description}</p>
             <dl class="mt-8 grid grid-cols-3 max-w-xl border-y border-ink/15 divide-x divide-ink/15">
-              <div class="py-4 pr-3"><dt class="text-xs text-neutral-500">紹介動画</dt><dd class="num-display text-[24px] md:text-[26px] leading-none mt-1">{videos.length}<span class="font-sans text-xs text-neutral-500 ml-1">本</span></dd></div>
-              <div class="py-4 px-3 md:px-5"><dt class="text-xs text-neutral-500">使用コスメ</dt><dd class="num-display text-[24px] md:text-[26px] leading-none mt-1">{totalItems}<span class="font-sans text-xs text-neutral-500 ml-1">品</span></dd></div>
-              <div class="py-4 px-3 md:px-5"><dt class="text-xs text-neutral-500">登録者</dt><dd class="num-display text-[24px] md:text-[26px] leading-none mt-1">{influencer.subscriber_count ? formatCount(Number(influencer.subscriber_count) >= 10000 ? Math.round(Number(influencer.subscriber_count) / 10000) : Number(influencer.subscriber_count)) : "—"}<span class="font-sans text-xs text-neutral-500 ml-1">{Number(influencer.subscriber_count) >= 10000 ? "万人" : "人"}</span></dd></div>
+              <div class="py-4 pr-3"><dt class="u-11">紹介動画</dt><dd class="num-display text-[24px] md:text-[26px] leading-none mt-1">{videos.length}<span class="font-sans text-xs text-neutral-500 ml-1">本</span></dd></div>
+              <div class="py-4 px-3 md:px-5"><dt class="u-11">使用コスメ</dt><dd class="num-display text-[24px] md:text-[26px] leading-none mt-1">{totalItems}<span class="font-sans text-xs text-neutral-500 ml-1">品</span></dd></div>
+              <div class="py-4 px-3 md:px-5"><dt class="u-11">登録者</dt><dd class="num-display text-[24px] md:text-[26px] leading-none mt-1">{influencer.subscriber_count ? formatCount(Number(influencer.subscriber_count) >= 10000 ? Math.round(Number(influencer.subscriber_count) / 10000) : Number(influencer.subscriber_count)) : "—"}<span class="font-sans text-xs text-neutral-500 ml-1">{Number(influencer.subscriber_count) >= 10000 ? "万人" : "人"}</span></dd></div>
             </dl>
             <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
               {/* 投稿者のチャンネルへ送る導線（181章） */}
-              <a href={`https://www.youtube.com/channel/${influencer.channel_id}`} target="_blank" rel="noopener" class="group inline-flex items-center gap-3 bg-ink text-paper text-sm pl-5 pr-2 py-2 rounded-full hover:bg-[#FF0000] transition-colors duration-500">
-                <span class="w-2 h-2 rounded-full bg-[#FF0000] group-hover:bg-paper" aria-hidden="true"></span>YouTubeチャンネルを見る<span class="w-8 h-8 rounded-full bg-paper/15 flex items-center justify-center transition-transform duration-500 group-hover:rotate-[-45deg]" aria-hidden="true">→</span>
+              <a href={`https://www.youtube.com/channel/${influencer.channel_id}`} target="_blank" rel="noopener" class="group u-13">
+                <span class="u-23" aria-hidden="true"></span>YouTubeチャンネルを見る<span class="u-15" aria-hidden="true">→</span>
               </a>
               <ShareButtons text={`${influencer.channel_title}さんの使用コスメ一覧・愛用コスメ遍歴`} />
             </div>
@@ -126,7 +126,7 @@ const jsonLd = influencer
         </section>
 
         {timeline.length > 0 && (
-          <section class="panel mt-8 md:mt-10">
+          <section class="panel u-14">
             <SectionHead num="01" en="Cosme history" title="使用コスメ遍歴" lead={`動画ごとに、紹介したコスメを新しい順に並べています。カテゴリで絞り込めます。${prCount > 0 ? "「PR」の印は、PR・提供として紹介されたコスメです（ランキングには数えていません）。" : ""}`} />
 
             <div class="filter-sentinel" aria-hidden="true"></div>
@@ -144,9 +144,9 @@ const jsonLd = influencer
                 ))}
               </div>
               {groups.map((g) => (
-                <div class="chip-row flex-nowrap sm:flex-wrap gap-1.5 mt-3 pt-3 border-t border-ink/10 sm:max-h-28 overflow-x-auto sm:overflow-x-visible sm:overflow-y-auto -ml-4 pl-4 pr-7 sm:ml-0 sm:px-0 pb-1 [scrollbar-width:none] sm:[scrollbar-width:auto] [mask-image:linear-gradient(to_right,#000_calc(100%-28px),transparent)] sm:[mask-image:none]" data-group={g.group} style="display:none">
+                <div class="chip-row inf-1" data-group={g.group} style="display:none">
                   {g.tags.map((t) => (
-                    <button class="cat-chip chip shrink-0 whitespace-nowrap" data-tag={t}>
+                    <button class="chip cat-chip u-17" data-tag={t}>
                       {t} <span class="tab-n">{tagCounts.get(t)}</span>
                     </button>
                   ))}
@@ -157,20 +157,20 @@ const jsonLd = influencer
               </div>
             </div>
 
-            <div id="timeline" class="flex flex-col">
+            <div id="timeline" class="u-16">
               {timeline.map(({ video, items }) => (
-                <div class="timeline-block grid md:grid-cols-12 gap-x-10 gap-y-5 py-10 border-b border-ink/10 first:pt-0">
+                <div class="timeline-block inf-3">
                   <div class="md:col-span-3 min-w-0">
                     <div class="md:sticky md:top-[180px]">
                       <p class="num-display text-[22px] md:text-[26px] leading-none">{jstDate(video.published_at).y}<span class="text-rose">.</span>{String(jstDate(video.published_at).m).padStart(2, "0")}<span class="text-rose">.</span>{String(jstDate(video.published_at).d).padStart(2, "0")}</p>
                       <span class="sr-only">{formatDate(video.published_at)}</span>
                       <a href={withBase(`/video/${video.key}`)} class="group mt-4 flex md:block gap-3 items-start">
-                        <span class="relative block w-28 md:w-full shrink-0 overflow-hidden rounded-xl">{getPrInfo(video.key) && <PrBadge tone="solid" class="absolute top-1.5 left-1.5 z-[1]" />}<img src={video.thumbnail} alt={video.title} class="w-full aspect-video object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105" loading="lazy" /></span>
-                        <span class="md:mt-3 text-xs leading-relaxed text-neutral-600 group-hover:text-rose transition-colors line-clamp-3">{video.title}</span>
+                        <span class="relative block w-28 md:w-full shrink-0 overflow-hidden rounded-xl">{getPrInfo(video.key) && <PrBadge tone="solid" class="absolute top-1.5 left-1.5 z-[1]" />}<img src={video.thumbnail} alt={video.title} class="u-3" loading="lazy" /></span>
+                        <span class="inf-2">{video.title}</span>
                       </a>
                     </div>
                   </div>
-                  <div class="md:col-span-9 min-w-0 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8">
+                  <div class="inf-4">
                     {items.map((c) => (
                       <div class="history-item" data-tags={(c.related_tags || []).join(",")}>
                         <CosmeticCard brand_id={c.brand_id} brand={c.brand} name_id={c.name_id} name={c.name} rakutenImageHtml={c.rakuten_image_link} pr={isPrMention(video.key, c.brand_id, c.name_id)} category={cosmeticCategory(c)} />
@@ -181,16 +181,16 @@ const jsonLd = influencer
               ))}
             </div>
             <p id="timeline-empty" class="text-neutral-400 text-sm" style="display:none">このカテゴリの紹介はありません。</p>
-            <!-- 動画が多い人は1ページがとても長くなる（880品で画面175枚分）ので、8本ずつ出す -->
+            {/* 動画が多い人は1ページがとても長くなる（880品で画面175枚分）ので、8本ずつ出す */}
             <div class="mt-8 text-center">
               <button id="timeline-more" type="button" class="tab !px-6" style="display:none"></button>
             </div>
           </section>
         )}
 
-        <section class="panel mt-8 md:mt-10">
+        <section class="panel u-14">
           <SectionHead num="02" en="Videos" title="紹介動画" lead={`${videos.length}本の動画を、新しい順に並べています。`} />
-          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10" data-more="12">
+          <div class="u-20" data-more="12">
             {videos.map((v, i) => (
               <div class:list={["min-w-0", i >= 8 && "hidden"]}><VideoCard video={v} /></div>
             ))}

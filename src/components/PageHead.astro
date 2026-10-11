@@ -11,7 +11,7 @@ const { en, title, lead, stats = [] } = Astro.props;
       <p class="eyebrow">{en}</p>
       {stats.length > 0 && (
         <p class="md:hidden text-xs text-neutral-500 whitespace-nowrap">
-          {stats.map((s, i) => <span class:list={[i > 0 && "ml-3"]}>{s.label} <span class="num-display text-sm text-ink">{s.n}</span>{s.unit}</span>)}
+          {stats.map((s, i) => <span class:list={[i > 0 && "ml-3"]}>{s.label} <span class="num-display u-12">{s.n}</span>{s.unit}</span>)}
         </p>
       )}
     </div>

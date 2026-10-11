@@ -469,3 +469,164 @@ main .md\:sticky.bg-neutral-50\/95 {
   to { background-position: -50% 0; }
 }
 
+
+/*
+  よく繰り返すクラスの組み合わせ（273章）。公開サイトの容量（GitHub Pagesの上限1GB）を減らすため、ページに何千回も出る長い class="…" を
+  短い名前にまとめた。中身は元のユーティリティそのまま（見た目は変わらない）。名前の頭は部品（tile=CosmeticTile、card=CosmeticCard、
+  vcard=VideoCard、intro=IntroRow、rrow=RankingRow、mmenu=MobileMenu、mega=MegaMenu、lay=Layout、shead=SectionHead、home=トップ、item=商品ページ、u=複数の部品）。
+  元と同じくユーティリティのレイヤーに置く。
+*/
+@layer utilities {
+  .mmenu-1 { @apply text-xs border border-ink/15 rounded-full px-2.5 py-1; }
+  .tile-1 { @apply w-full h-full object-contain p-[11%] transition-transform duration-[1.2s] ease-out-expo group-hover:scale-[1.06]; }
+  .lay-1 { @apply text-paper/80 hover:text-paper; }
+  .card-2 { @apply text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors; }
+  .card-3 { @apply inline-block rounded-full bg-blush px-2 py-0.5 text-[11px] leading-snug text-ink/80; }
+  .mmenu-2 { @apply flex items-center justify-between py-4 cursor-pointer list-none [&::-webkit-details-marker]:hidden; }
+  .tile-3 { @apply mt-3 text-xs tracking-[0.14em] text-neutral-500 truncate; }
+  .intro-1 { @apply py-4 grid grid-cols-1 gap-y-2 lg:grid-cols-[7rem_15rem_minmax(0,1fr)] lg:gap-x-6 lg:items-center border-b border-ink/10; }
+  .u-2 { @apply mt-1.5 text-xs text-neutral-500; }
+  .intro-2 { @apply block text-sm leading-relaxed text-neutral-700 group-hover:text-rose transition-colors line-clamp-3 lg:line-clamp-2; }
+  .card-4 { @apply mb-1 text-xs tracking-[0.14em] text-neutral-500 truncate; }
+  .intro-3 { @apply mt-1 lg:ml-[2.375rem] flex w-fit items-center gap-1.5 text-xs text-neutral-500 whitespace-nowrap hover:text-rose; }
+  .u-3 { @apply w-full aspect-video object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105; }
+  .vcard-2 { @apply absolute bottom-2.5 right-2.5 bg-ink/75 backdrop-blur text-paper text-xs tracking-wider px-2 py-1 rounded-full; }
+  .u-4 { @apply w-[86%] h-[86%] object-contain; }
+  .vcard-3 { @apply absolute bottom-2.5 left-2.5 bg-ink/75 backdrop-blur text-paper text-xs tracking-wider px-2 py-1 rounded-full; }
+  .vcard-4 { @apply w-full aspect-video object-cover transition-transform duration-[1.2s] ease-out-expo group-hover:scale-[1.04]; }
+  .u-5 { @apply inline-flex w-8 h-8 rounded-full border border-ink/20 items-center justify-center transition-all duration-500 ease-out-expo group-hover:bg-ink group-hover:text-paper group-hover:border-ink; }
+  .item-2 { @apply inline-flex items-center gap-3 border border-ink/25 text-sm pl-6 pr-2 py-2 rounded-full hover:border-ink transition-colors duration-500; }
+  .intro-4 { @apply shrink-0 text-[15px] lg:text-lg text-neutral-600 whitespace-nowrap; }
+  .intro-5 { @apply flex items-center gap-2.5 min-w-0 text-sm hover:text-rose transition-colors; }
+  .u-6 { @apply flex flex-wrap gap-1.5; }
+  .item-3 { @apply w-8 h-8 rounded-full bg-ink/5 flex items-center justify-center transition-transform duration-500 group-hover:rotate-[-45deg]; }
+  .vcard-5 { @apply text-sm leading-relaxed line-clamp-2 group-hover:text-rose transition-colors; }
+  .ifcard-1 { @apply min-w-0 block; }
+  .rrow-1 { @apply col-start-3 block text-center border border-ink/25 text-xs @3xl:tracking-[0.06em] px-2 @3xl:px-3 py-[7px] rounded-full hover:border-ink transition-colors whitespace-nowrap; }
+  .rrow-2 { @apply col-start-1 col-span-3 pl-[0.25rem] @3xl:pl-0 @3xl:col-start-auto @3xl:col-span-1 flex flex-wrap items-center justify-between @3xl:justify-end gap-x-3 gap-y-2 min-h-8; }
+  .u-8 { @apply mt-4 text-sm text-neutral-600 max-w-2xl leading-relaxed; }
+  .u-9 { @apply text-xs text-neutral-500 hover:text-rose shrink-0; }
+  .lay-2 { @apply ml-auto flex flex-1 lg:flex-none min-w-0 items-center gap-2 border-b border-ink/25 focus-within:border-rose transition-colors lg:w-72 xl:w-96; }
+  .mega-1 { @apply flex items-baseline justify-between mb-4 gap-2; }
+  .rrow-3 { @apply col-start-1 block text-center border border-ink/25 text-xs @3xl:tracking-[0.06em] px-2 @3xl:px-3 py-[7px] rounded-full hover:border-ink transition-colors whitespace-nowrap; }
+  .vcard-6 { @apply flex items-center gap-2 text-xs text-neutral-500 mb-1.5; }
+  .mmenu-6 { @apply lg:hidden fixed inset-x-0 top-14 md:top-[72px] bottom-0 z-40 bg-paper overflow-y-auto overscroll-contain border-t border-ink/10; }
+  .lay-3 { @apply w-full min-w-0 bg-transparent py-2 text-base md:text-sm placeholder:text-neutral-400 placeholder:text-sm focus:outline-none; }
+  .u-10 { @apply ml-1 text-xs text-neutral-500 whitespace-nowrap; }
+  .lay-4 { @apply border-t border-paper/15 pt-6 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs text-paper/50; }
+  .intro-7 { @apply flex items-center gap-3 min-w-0 lg:contents; }
+  .rrow-4 { @apply col-start-2 block text-center border border-ink/25 text-xs @3xl:tracking-[0.06em] px-2 @3xl:px-3 py-[7px] rounded-full hover:border-ink transition-colors whitespace-nowrap; }
+  .shead-2 { @apply flex items-end justify-between gap-6; }
+  .card-5 { @apply flex flex-col; }
+  .mmenu-7 { @apply border-t border-ink/10; }
+  .item-4 { @apply text-xs text-neutral-600 border border-ink/15 rounded-full px-3 py-1 hover:border-rose hover:text-rose transition-colors; }
+  .mega-2 { @apply absolute left-0 right-0 top-full bg-paper border-b border-ink/10 shadow-[0_24px_48px_-24px_rgba(0,0,0,0.25)]; }
+  .item-5 { @apply relative hover:z-10 transition-transform duration-500 hover:-translate-y-1; }
+  .pagenav-1 { @apply shrink-0 whitespace-nowrap cursor-pointer; }
+  .item-6 { @apply grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-8; }
+  .intro-8 { @apply min-w-0 flex items-center gap-3; }
+  .intro-9 { @apply block mt-0.5 text-xs text-neutral-500; }
+  .rrow-5 { @apply grid grid-cols-[3.25rem_4rem_4.5rem] @3xl:grid-cols-[3.5rem_4.75rem_4.75rem] items-center gap-1.5; }
+  .item-7 { @apply w-[82%] h-[82%] flex items-center justify-center [&_a]:flex [&_a]:items-center [&_a]:justify-center [&_a]:w-full [&_a]:h-full [&_img]:w-full [&_img]:h-full [&_img]:object-contain [&_img]:rounded-md; }
+  .lay-6 { @apply mt-8 flex items-center gap-3 border-b border-paper/30 focus-within:border-pink-300 max-w-sm; }
+  .lay-7 { @apply lg:hidden -mr-2 w-11 h-11 shrink-0 flex items-center justify-center cursor-pointer; }
+  .shead-3 { @apply text-ink/40 mr-2; }
+  .item-8 { @apply mt-1 text-[26px] lg:text-[30px] leading-none whitespace-nowrap; }
+  .rrow-7 { @apply w-[86%] h-[86%] object-contain transition-transform duration-700 ease-out-expo group-hover/row:scale-105; }
+  .rrow-8 { @apply mt-1 text-[15px] leading-snug line-clamp-2 group-hover:text-rose transition-colors; }
+  .lay-8 { @apply max-w-[1320px] mx-auto px-4 md:px-8 h-14 md:h-[72px] flex items-center gap-3 md:gap-6; }
+  .vcard-8 { @apply ml-auto shrink-0 whitespace-nowrap; }
+  .lay-9 { @apply focus:outline-none flex-1 max-w-[1320px] w-full mx-auto px-4 md:px-8 py-8 md:py-12; }
+  .mmenu-9 { @apply block text-sm mt-0.5; }
+  .rrow-9 { @apply col-start-2 col-span-2 @3xl:col-start-auto @3xl:col-span-1 text-xs text-neutral-500; }
+  .lay-10 { @apply w-full bg-transparent py-3 text-sm placeholder:text-paper/40 focus:outline-none; }
+  .vcard-9 { @apply mt-2.5 flex items-center gap-1.5; }
+  .intro-10 { @apply w-7 h-7 rounded-full shrink-0; }
+  .u-11 { @apply text-xs text-neutral-500; }
+  .lay-11 { @apply w-3.5 h-3.5 transition-transform duration-300 group-aria-expanded:rotate-180; }
+  .u-12 { @apply text-sm text-ink; }
+  .lay-12 { @apply sticky top-0 z-40 bg-paper/85 backdrop-blur-md border-b border-ink/10; }
+  .item-10 { @apply font-sans text-xs ml-1 text-neutral-500; }
+  .mega-3 { @apply max-w-[1320px] mx-auto px-8 py-8 grid grid-cols-12 gap-8 text-sm; }
+  .item-11 { @apply w-10 h-10 rounded-full ring-[3px] ring-paper; }
+  .shead-4 { @apply mb-8 md:mb-12; }
+  .item-12 { @apply mt-1 text-[26px] lg:text-[30px] leading-none whitespace-nowrap group-hover:text-rose transition-colors; }
+  .card-6 { @apply block pt-3; }
+  .lay-13 { @apply text-paper/40 mb-4; }
+  .lay-15 { @apply max-w-[1320px] mx-auto px-4 md:px-8 pt-16 md:pt-24 pb-10; }
+  .intro-11 { @apply inline-flex gap-[3px]; }
+  .vid-2 { @apply mt-1.5 text-xs leading-snug line-clamp-2 group-hover:text-rose; }
+  .rrow-11 { @apply block text-xs tracking-[0.14em] text-neutral-500 truncate; }
+  .lay-16 { @apply min-h-screen bg-paper text-ink flex flex-col font-sans; }
+  .rrow-12 { @apply text-ink text-xl; }
+  .inf-1 { @apply flex-nowrap sm:flex-wrap gap-1.5 mt-3 pt-3 border-t border-ink/10 sm:max-h-28 overflow-x-auto sm:overflow-x-visible sm:overflow-y-auto -ml-4 pl-4 pr-7 sm:ml-0 sm:px-0 pb-1 [scrollbar-width:none] sm:[scrollbar-width:auto] [mask-image:linear-gradient(to_right,#000_calc(100%-28px),transparent)] sm:[mask-image:none]; }
+  .lay-17 { @apply block w-full mt-14 md:mt-20 -mb-1 text-paper/[0.08]; }
+  .pagenav-2 { @apply flex gap-1.5 overflow-x-auto py-2.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden; }
+  .vcard-10 { @apply w-5 h-5 rounded-full; }
+  .u-13 { @apply inline-flex items-center gap-3 bg-ink text-paper text-sm pl-5 pr-2 py-2 rounded-full hover:bg-[#FF0000] transition-colors duration-500; }
+  .rrow-13 { @apply leading-none text-center; }
+  .lay-19 { @apply text-ink text-[20px] md:text-[22px] shrink-0; }
+  .u-14 { @apply mt-8 md:mt-10; }
+  .u-15 { @apply w-8 h-8 rounded-full bg-paper/15 flex items-center justify-center transition-transform duration-500 group-hover:rotate-[-45deg]; }
+  .mmenu-10 { @apply px-4 md:px-8 pt-4 pb-16 max-w-2xl mx-auto; }
+  .mega-4 { @apply text-xs text-neutral-500 hover:text-rose; }
+  .mega-5 { @apply flex items-baseline justify-between mb-4; }
+  .lay-21 { @apply space-y-2.5 text-sm; }
+  .rrow-14 { @apply text-xl text-ink whitespace-nowrap; }
+  .rrow-15 { @apply inline-block mt-1.5 text-xs border border-ink/15 text-neutral-600 rounded-full px-2 py-0.5; }
+  .item-14 { @apply mt-6 flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-4; }
+  .item-15 { @apply mb-8 md:mb-12 flex items-center gap-2 text-xs text-neutral-500; }
+  .u-16 { @apply flex flex-col; }
+  .intro-13 { @apply mt-2.5 rounded-xl bg-blush/60 px-3 py-2 text-[13px] leading-relaxed text-neutral-700; }
+  .lay-23 { @apply w-6 h-6 group-aria-expanded:hidden; }
+  .u-17 { @apply shrink-0 whitespace-nowrap; }
+  .u-18 { @apply w-4 h-4 text-neutral-500 shrink-0; }
+  .lay-24 { @apply text-pink-300 shrink-0; }
+  .vid-3 { @apply inline-flex items-center border border-ink/25 text-sm px-5 py-2 rounded-full hover:border-ink transition-colors; }
+  .mega-6 { @apply grid grid-cols-3 gap-x-6 gap-y-5; }
+  .item-16 { @apply grid md:grid-cols-12 gap-8 md:gap-14 items-start; }
+  .u-19 { @apply w-full h-full object-contain p-1.5; }
+  .u-20 { @apply grid sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10; }
+  .influencerlinks-1 { @apply min-w-0 rounded-2xl border border-ink/10 p-2.5 md:p-3 flex items-center gap-2.5 md:gap-3 hover:border-ink/40 transition-colors; }
+  .lay-25 { @apply md:col-span-3 md:col-start-7; }
+  .item-17 { @apply mt-8 flex flex-wrap items-center gap-x-4 gap-y-2; }
+  .item-18 { @apply text-xs text-neutral-500 leading-snug line-clamp-2; }
+  .lay-26 { @apply grid md:grid-cols-12 gap-10; }
+  .mmenu-11 { @apply grid grid-cols-2 gap-2 mb-6; }
+  .intro-14 { @apply inline-flex flex-wrap items-center gap-1.5 mr-1.5 align-middle; }
+  .inf-2 { @apply md:mt-3 text-xs leading-relaxed text-neutral-600 group-hover:text-rose transition-colors line-clamp-3; }
+  .item-19 { @apply text-xs text-neutral-600 leading-relaxed; }
+  .inf-3 { @apply grid md:grid-cols-12 gap-x-10 gap-y-5 py-10 border-b border-ink/10 first:pt-0; }
+  .item-20 { @apply w-4 h-4 group-aria-pressed:fill-current; }
+  .u-21 { @apply mt-6 flex flex-wrap gap-3; }
+  .item-21 { @apply flex items-baseline gap-3; }
+  .inf-4 { @apply md:col-span-9 min-w-0 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8; }
+  .brand-1 { @apply flex-nowrap sm:flex-wrap gap-1.5 mt-2 pt-2 border-t border-ink/10 sm:max-h-28 overflow-x-auto sm:overflow-x-visible sm:overflow-y-auto -mx-4 px-4 sm:mx-0 sm:px-0 pb-1; }
+  .vid-7 { @apply mt-6 grid grid-cols-2 border-y border-ink/15 divide-x divide-ink/15; }
+  .u-22 { @apply mt-8 pt-6 border-t border-ink/10; }
+  .u-23 { @apply w-2 h-2 rounded-full bg-[#FF0000] group-hover:bg-paper; }
+  .tile-4 { @apply relative aspect-square rounded-2xl flex items-center justify-center; }
+  .vcard-11 { @apply w-9 h-9 rounded-lg shrink-0 flex items-center justify-center; }
+  .card-7 { @apply relative aspect-square w-full rounded-2xl flex items-center justify-center; }
+  .u-24 { @apply text-xs mb-1.5; }
+  .mmenu-12 { @apply transition-transform group-open:rotate-180; }
+  .u-25 { @apply leading-[1.3] font-semibold text-balance; }
+  .mmenu-13 { @apply block text-[10px]; }
+  .intro-15 { @apply w-28 md:w-36 shrink-0 rounded-xl; }
+  .vcard-12 { @apply relative rounded-2xl bg-neutral-200; }
+  .mmenu-14 { @apply inline-block mt-3 text-xs; }
+  .rrow-16 { @apply block aspect-square rounded-xl flex items-center justify-center; }
+  .item-22 { @apply mt-4 font-semibold text-[24px] md:text-[26px] lg:text-[30px] leading-[1.3] tracking-[-0.02em] text-balance; }
+  .lay-27 { @apply relative bg-ink text-paper mt-16 md:mt-24; }
+  .item-23 { @apply aspect-square rounded-[28px] flex items-center justify-center; }
+  .lay-28 { @apply text-xl md:text-2xl leading-relaxed; }
+  .vid-8 { @apply aspect-video rounded-[24px] bg-ink shadow-[0_40px_80px_-40px_rgba(29,21,23,0.55)]; }
+  .vid-9 { @apply mt-3 font-semibold text-[20px] md:text-[22px] leading-[1.5] tracking-[-0.02em]; }
+  .vid-10 { @apply shrink-0 inline-flex items-center gap-1 text-[13px] font-semibold py-1.5; }
+  /* 式で組み立てる class:list の決まった部分と、メガメニューのリンク（中のaに付けず、ulから指定する） */
+  .share-btn { @apply inline-flex items-center justify-center min-h-8 px-3.5 border-ink/20 text-xs tracking-[0.06em] whitespace-nowrap text-ink transition-colors duration-300 hover:bg-ink hover:text-paper hover:border-ink; }
+  .nav-line { @apply absolute left-0 -bottom-0.5 h-px bg-rose transition-all duration-500 ease-out-expo; }
+  .nav-link { @apply relative text-sm tracking-[0.04em] py-2; }
+  .tile-name { @apply text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors; }
+  .mega-links a { @apply hover:text-rose; }
+}

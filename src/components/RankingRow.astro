@@ -43,11 +43,11 @@ const amazonLink = amazonSearchUrl(brand, name);
 const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
 ---
 
-<!--
+{/*
   ランキングの1行（一覧全体は親で1つの表にまとめる）。広い枠: 順位／画像／商品名／実績／価格と購入ボタンの5列（親に列の見出しがある）。狭い枠: 1段目に順位・画像・商品名、2段目に実績、3段目に価格と購入ボタン。
   切り替えは画面の幅ではなく、親の枠（@container）の幅で決める。画面の幅で決めていたときは、左にカテゴリ一覧がある768〜1100pxで商品名の列が20pxほどにつぶれ、名前が縦に1文字ずつ並んでいた（195章）。
   data-* と rank-badge は、カテゴリページの並び替え・「もっと見る」のスクリプトが使う。
--->
+*/}
 <li
   class:list={["ranking-row group/row py-5 grid grid-cols-[2.75rem_4.75rem_minmax(0,1fr)] @3xl:grid-cols-[3.5rem_6rem_minmax(0,1fr)_10rem_16rem] gap-x-3 @3xl:gap-x-5 gap-y-3 items-center", { "is-top": top }]}
   data-base={base}
@@ -57,16 +57,16 @@ const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
   data-recent-channels={recentChannels}
   hidden={extra}
 >
-  <span class="rank-badge num-display leading-none text-center">{rank}</span>
-  <a href={href} class="product-well block aspect-square rounded-xl flex items-center justify-center overflow-hidden" tabindex="-1" aria-hidden="true">
+  <span class="rank-badge num-display rrow-13">{rank}</span>
+  <a href={href} class="product-well overflow-hidden rrow-16" tabindex="-1" aria-hidden="true">
     {
       imageSrc ? (
         <img
           src={imageSrc}
           alt={`${brand} ${name}`}
-          class="w-[86%] h-[86%] object-contain transition-transform duration-700 ease-out-expo group-hover/row:scale-105"
+          class="rrow-7"
           loading="lazy"
-          onerror="var li=this.closest('li');this.replaceWith(Object.assign(document.createElement('span'),{className:'noimg',textContent:'No image'}));if(li)li.querySelectorAll('[data-buy]').forEach(function(e){e.remove()})"
+          data-err="noimg-row"
         />
       ) : (
         <span class="noimg">No image</span>
@@ -74,41 +74,41 @@ const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
     }
   </a>
   <a href={href} class="min-w-0 group">
-    <span class="block text-xs tracking-[0.14em] text-neutral-500 truncate">{brand}</span>
-    <span class="phrase mt-1 text-[15px] leading-snug line-clamp-2 group-hover:text-rose transition-colors">{name}</span>
-    {subLabel && <span class="inline-block mt-1.5 text-xs border border-ink/15 text-neutral-600 rounded-full px-2 py-0.5">{subLabel}</span>}
+    <span class="rrow-11">{brand}</span>
+    <span class="phrase rrow-8">{name}</span>
+    {subLabel && <span class="rrow-15">{subLabel}</span>}
     {quote && <span class="block mt-1.5 text-[13px] leading-relaxed text-neutral-600 line-clamp-2">「{quote}」{quoteBy && <span class="text-neutral-500">（{quoteBy}）</span>}</span>}
     {note && <span class="block mt-1 text-xs leading-relaxed text-neutral-500 line-clamp-2 [overflow-wrap:anywhere]">{note}</span>}
   </a>
-  <p class="col-start-2 col-span-2 @3xl:col-start-auto @3xl:col-span-1 text-xs text-neutral-500">
-    <span class="whitespace-nowrap">動画 <b class="num-display text-ink text-xl">{videoCount}</b>本</span>
+  <p class="rrow-9">
+    <span class="whitespace-nowrap">動画 <b class="num-display rrow-12">{videoCount}</b>本</span>
     <span class="mx-1.5 text-ink/20">|</span>
-    <span class="whitespace-nowrap"><b class="num-display text-ink text-xl">{channelCount}</b>人</span>
-    <!-- 「最近話題」の並び替えのときだけスクリプトが表示する -->
-    <span class="recent-info hidden block mt-0.5 text-rose whitespace-nowrap">直近{recentDays}日：{recentVideos}本 / {recentChannels}チャンネル</span>
+    <span class="whitespace-nowrap"><b class="num-display rrow-12">{channelCount}</b>人</span>
+    {/* 「最近話題」の並び替えのときだけスクリプトが表示する */}
+    <span class="recent-info hidden text-rose block mt-0.5 whitespace-nowrap">直近{recentDays}日：{recentVideos}本 / {recentChannels}チャンネル</span>
   </p>
-  <div class="col-start-1 col-span-3 pl-[0.25rem] @3xl:pl-0 @3xl:col-start-auto @3xl:col-span-1 flex flex-wrap items-center justify-between @3xl:justify-end gap-x-3 gap-y-2 min-h-8">
-    {buyable && price !== undefined && <span data-buy class="num-display text-xl text-ink whitespace-nowrap" title={fromYahoo ? "Yahoo!ショッピングの参考価格" : "楽天市場の参考価格"}>¥{formatCount(price)}</span>}
-    <!-- 楽天・Yahoo!・Amazonのボタンを短いラベルで横に並べる（列が狭いため。正式名は aria-label と title に入れる）。
+  <div class="rrow-2">
+    {buyable && price !== undefined && <span data-buy class="num-display rrow-14" title={fromYahoo ? "Yahoo!ショッピングの参考価格" : "楽天市場の参考価格"}>¥{formatCount(price)}</span>}
+    {/* 楽天・Yahoo!・Amazonのボタンを短いラベルで横に並べる（列が狭いため。正式名は aria-label と title に入れる）。
          Yahoo!・Amazonのボタンには data-buy を付けないので、楽天の画像が読み込めずに楽天のボタンが消えても残る。
          ボタンは幅を決めた3つの枠に置く。狭い枠では3つ並ぶと幅が足りないため、この段を左端（順位の列）から始め、それでも足りない幅（320px）ではボタンを価格の下に回す。どれかが無い行でも、価格とボタンの位置が他の行と縦に揃う（205章）。
-         Amazonは商品を特定しない検索結果へのリンクなので、全商品に出す。3つとも同じ白い枠にして、どこか1社を特別扱いしない（206章） -->
-    <div class="grid grid-cols-[3.25rem_4rem_4.5rem] @3xl:grid-cols-[3.5rem_4.75rem_4.75rem] items-center gap-1.5">
+         Amazonは商品を特定しない検索結果へのリンクなので、全商品に出す。3つとも同じ白い枠にして、どこか1社を特別扱いしない（206章） */}
+    <div class="rrow-5">
       {
         buyable && link && (
-          <a data-buy href={link} target="_blank" rel="nofollow sponsored noopener" aria-label="楽天市場で見る" title="楽天市場で見る" class="col-start-1 block text-center border border-ink/25 text-xs @3xl:tracking-[0.06em] px-2 @3xl:px-3 py-[7px] rounded-full hover:border-ink transition-colors whitespace-nowrap">
+          <a data-buy href={link} target="_blank" rel="nofollow sponsored noopener" aria-label="楽天市場で見る" title="楽天市場で見る" class="rrow-3">
             楽天
           </a>
         )
       }
       {
         yahooLink && (
-          <a href={yahooLink} target="_blank" rel="nofollow sponsored noopener" aria-label="Yahoo!ショッピングで見る" title="Yahoo!ショッピングで見る" class="col-start-2 block text-center border border-ink/25 text-xs @3xl:tracking-[0.06em] px-2 @3xl:px-3 py-[7px] rounded-full hover:border-ink transition-colors whitespace-nowrap">
+          <a href={yahooLink} target="_blank" rel="nofollow sponsored noopener" aria-label="Yahoo!ショッピングで見る" title="Yahoo!ショッピングで見る" class="rrow-4">
             Yahoo!
           </a>
         )
       }
-      <a href={amazonLink} target="_blank" rel="nofollow sponsored noopener" aria-label="Amazonで探す" title="Amazonで探す（検索結果）" class="col-start-3 block text-center border border-ink/25 text-xs @3xl:tracking-[0.06em] px-2 @3xl:px-3 py-[7px] rounded-full hover:border-ink transition-colors whitespace-nowrap">
+      <a href={amazonLink} target="_blank" rel="nofollow sponsored noopener" aria-label="Amazonで探す" title="Amazonで探す（検索結果）" class="rrow-1">
         Amazon
       </a>
     </div>

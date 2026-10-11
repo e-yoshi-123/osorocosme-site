@@ -155,21 +155,21 @@ const jsonLd = entry
       <p class="text-neutral-400">商品情報が見つかりませんでした。</p>
     ) : (
       <>
-        <!-- ===== 商品の表紙：左に額装した画像、右に名前・価格・購入ボタン ===== -->
-        <nav class="mb-8 md:mb-12 flex items-center gap-2 text-xs text-neutral-500" aria-label="パンくず">
+        {/* ===== 商品の表紙：左に額装した画像、右に名前・価格・購入ボタン ===== */}
+        <nav class="item-15" aria-label="パンくず">
           <a href={withBase("/")} class="link-u">Home</a><span aria-hidden="true">/</span>
           {facts.mainTag ? <a href={categoryUrl(facts.mainTag)} class="link-u">{facts.mainTag}</a> : <span>{entry.category}</span>}
           <span aria-hidden="true">/</span><span class="truncate text-ink">{entry.name}</span>
         </nav>
-        <div class="panel grid md:grid-cols-12 gap-8 md:gap-14 items-start">
+        <div class="panel item-16">
           <div class="md:col-span-5 relative">
-            <div class="product-well aspect-square rounded-[28px] flex items-center justify-center overflow-hidden">
+            <div class="product-well overflow-hidden item-23">
               {entry.rakuten_image_link ? (
                 <div
                   data-item-image
                   data-yahoo-link={yahooSwap?.yahoo_text_link}
                   data-yahoo-image={yahooSwap?.yahoo_image_url}
-                  class="w-[82%] h-[82%] flex items-center justify-center [&_a]:flex [&_a]:items-center [&_a]:justify-center [&_a]:w-full [&_a]:h-full [&_img]:w-full [&_img]:h-full [&_img]:object-contain [&_img]:rounded-md"
+                  class="item-7"
                   set:html={entry.rakuten_image_link.replace(/(_ex=)\d+x\d+/g, "$1500x500")}
                 />
               ) : yahooFallback ? (
@@ -190,65 +190,65 @@ const jsonLd = entry
 
           <div class="md:col-span-7 md:pt-4">
             <a href={withBase(`/brand/${canonicalBrandId(entry.brand_id)}`)} class="link-u text-xs font-bold tracking-[0.14em] text-rose">{entry.brand}</a>
-            <h1 class="mt-4 font-serif font-semibold phrase text-[24px] md:text-[26px] lg:text-[30px] leading-[1.3] tracking-[-0.02em] text-balance">{entry.name}</h1>
+            <h1 class="font-serif phrase item-22">{entry.name}</h1>
             {findLinks.length > 0 ? (
               <p class="mt-4 flex flex-wrap gap-1.5">
-                {findLinks.map((l) => <a href={withBase(l.path)} class="text-xs text-neutral-600 border border-ink/15 rounded-full px-3 py-1 hover:border-rose hover:text-rose transition-colors">{l.label}</a>)}
+                {findLinks.map((l) => <a href={withBase(l.path)} class="item-4">{l.label}</a>)}
               </p>
             ) : (
               entry.category && <p class="mt-4 inline-flex items-center gap-2 text-xs text-neutral-600 border border-ink/15 rounded-full px-3 py-1">{entry.category}</p>
             )}
 
-            <div class="mt-8 pt-6 border-t border-ink/10">
+            <div class="u-22">
               {buyable && entry.now_price !== undefined && (
-                <p data-buy class="flex items-baseline gap-3"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[24px] leading-none">¥{formatCount(entry.now_price)}</span><span class="text-xs text-neutral-500"><span class="inline-block">楽天市場の参考価格</span>{entry.price_updated && <span class="inline-block">・{formatJaDate(entry.price_updated)}時点</span>}</span></p>
+                <p data-buy class="item-21"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[24px] leading-none">¥{formatCount(entry.now_price)}</span><span class="u-11"><span class="inline-block">楽天市場の参考価格</span>{entry.price_updated && <span class="inline-block">・{formatJaDate(entry.price_updated)}時点</span>}</span></p>
               )}
               {yahooFallback && entry.yahoo_price !== undefined && (
-                <p class="flex items-baseline gap-3"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[24px] leading-none">¥{formatCount(entry.yahoo_price)}</span><span class="text-xs text-neutral-500"><span class="inline-block">Yahoo!ショッピングの参考価格</span>{entry.yahoo_price_updated && <span class="inline-block">・{formatJaDate(entry.yahoo_price_updated)}時点</span>}</span></p>
+                <p class="item-21"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[24px] leading-none">¥{formatCount(entry.yahoo_price)}</span><span class="u-11"><span class="inline-block">Yahoo!ショッピングの参考価格</span>{entry.yahoo_price_updated && <span class="inline-block">・{formatJaDate(entry.yahoo_price_updated)}時点</span>}</span></p>
               )}
               {yahooSwap?.yahoo_price !== undefined && (
-                <p data-yahoo-price hidden class="flex items-baseline gap-3"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[24px] leading-none">¥{formatCount(yahooSwap.yahoo_price)}</span><span class="text-xs text-neutral-500"><span class="inline-block">Yahoo!ショッピングの参考価格</span>{yahooSwap.yahoo_price_updated && <span class="inline-block">・{formatJaDate(yahooSwap.yahoo_price_updated)}時点</span>}</span></p>
+                <p data-yahoo-price hidden class="item-21"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[24px] leading-none">¥{formatCount(yahooSwap.yahoo_price)}</span><span class="u-11"><span class="inline-block">Yahoo!ショッピングの参考価格</span>{yahooSwap.yahoo_price_updated && <span class="inline-block">・{formatJaDate(yahooSwap.yahoo_price_updated)}時点</span>}</span></p>
               )}
-              <!-- 楽天・Yahoo!ショッピング・Amazonのボタン（data-buy の扱いは従来どおり）。Amazonは検索結果へのリンクで、全商品に出す。3つとも同じ白い枠（206章） -->
-              <div class="mt-6 flex flex-wrap gap-3">
+              {/* 楽天・Yahoo!ショッピング・Amazonのボタン（data-buy の扱いは従来どおり）。Amazonは検索結果へのリンクで、全商品に出す。3つとも同じ白い枠（206章） */}
+              <div class="u-21">
                 {buyable && entry.rakuten_text_link && (
-                  <a data-buy href={entry.rakuten_text_link} target="_blank" rel="nofollow sponsored noopener" class="group inline-flex items-center gap-3 border border-ink/25 text-sm pl-6 pr-2 py-2 rounded-full hover:border-ink transition-colors duration-500">
-                    楽天市場で見る<span class="w-8 h-8 rounded-full bg-ink/5 flex items-center justify-center transition-transform duration-500 group-hover:rotate-[-45deg]" aria-hidden="true">→</span>
+                  <a data-buy href={entry.rakuten_text_link} target="_blank" rel="nofollow sponsored noopener" class="group item-2">
+                    楽天市場で見る<span class="item-3" aria-hidden="true">→</span>
                   </a>
                 )}
                 {entry.yahoo_text_link && (
-                  <a href={entry.yahoo_text_link} target="_blank" rel="nofollow sponsored noopener" class="group inline-flex items-center gap-3 border border-ink/25 text-sm pl-6 pr-2 py-2 rounded-full hover:border-ink transition-colors duration-500">
-                    Yahoo!ショッピングで見る<span class="w-8 h-8 rounded-full bg-ink/5 flex items-center justify-center transition-transform duration-500 group-hover:rotate-[-45deg]" aria-hidden="true">→</span>
+                  <a href={entry.yahoo_text_link} target="_blank" rel="nofollow sponsored noopener" class="group item-2">
+                    Yahoo!ショッピングで見る<span class="item-3" aria-hidden="true">→</span>
                   </a>
                 )}
-                <a href={amazonSearchUrl(entry.brand, entry.name)} target="_blank" rel="nofollow sponsored noopener" class="group inline-flex items-center gap-3 border border-ink/25 text-sm pl-6 pr-2 py-2 rounded-full hover:border-ink transition-colors duration-500">
-                  Amazonで探す<span class="w-8 h-8 rounded-full bg-ink/5 flex items-center justify-center transition-transform duration-500 group-hover:rotate-[-45deg]" aria-hidden="true">→</span>
+                <a href={amazonSearchUrl(entry.brand, entry.name)} target="_blank" rel="nofollow sponsored noopener" class="group item-2">
+                  Amazonで探す<span class="item-3" aria-hidden="true">→</span>
                 </a>
                 {/* マツキヨココカラはドラッグストアのブランドの商品だけ。検索結果へのリンク（271章） */}
                 {matsukiyoLink && (
-                  <a href={matsukiyoLink} target="_blank" rel="nofollow sponsored noopener" class="group inline-flex items-center gap-3 border border-ink/25 text-sm pl-6 pr-2 py-2 rounded-full hover:border-ink transition-colors duration-500">
-                    マツキヨココカラで探す<span class="w-8 h-8 rounded-full bg-ink/5 flex items-center justify-center transition-transform duration-500 group-hover:rotate-[-45deg]" aria-hidden="true">→</span>
+                  <a href={matsukiyoLink} target="_blank" rel="nofollow sponsored noopener" class="group item-2">
+                    マツキヨココカラで探す<span class="item-3" aria-hidden="true">→</span>
                   </a>
                 )}
               </div>
               <p class="mt-3 text-xs text-neutral-400">PR：リンク先での購入により、当サイトに報酬が支払われることがあります。</p>
             </div>
 
-            <!-- 紹介の実績：動画数・インフルエンサー数・ランキング。文章版は検索エンジン・読み上げ用に残す（sr-only） -->
+            {/* 紹介の実績：動画数・インフルエンサー数・ランキング。文章版は検索エンジン・読み上げ用に残す（sr-only） */}
             <p class="sr-only">{factSentence}</p>
             <dl class:list={["mt-8 grid border-y border-ink/15 divide-x divide-ink/15 [&>*]:flex [&>*]:flex-col [&>*]:justify-between", facts.rank ? "grid-cols-3" : "grid-cols-2"]}>
               <div class="py-5 pr-3">
-                <dt class="text-xs text-neutral-500">紹介動画</dt>
-                <dd class="mt-1 num-display text-[26px] lg:text-[30px] leading-none whitespace-nowrap">{facts.videoCount}<span class="font-sans text-xs ml-1 text-neutral-500">本</span></dd>
+                <dt class="u-11">紹介動画</dt>
+                <dd class="num-display item-8">{facts.videoCount}<span class="item-10">本</span></dd>
               </div>
               <div class="py-5 px-3 md:px-5">
-                <dt class="text-xs text-neutral-500">紹介した人</dt>
-                <dd class="mt-1 num-display text-[26px] lg:text-[30px] leading-none whitespace-nowrap">{facts.channelCount}<span class="font-sans text-xs ml-1 text-neutral-500">人</span></dd>
+                <dt class="u-11">紹介した人</dt>
+                <dd class="num-display item-8">{facts.channelCount}<span class="item-10">人</span></dd>
               </div>
               {facts.rank && (
                 <a href={categoryUrl(facts.mainTag!)} class="group py-5 px-3 md:px-5">
-                  <dt class="text-xs text-neutral-500 leading-snug line-clamp-2">{facts.mainTag}</dt>
-                  <dd class="mt-1 num-display text-[26px] lg:text-[30px] leading-none whitespace-nowrap group-hover:text-rose transition-colors"><span class="text-rose">{facts.rank}</span><span class="font-sans text-xs ml-1 text-neutral-500">位<span class="text-neutral-400"> / {facts.rankTotal}品</span></span></dd>
+                  <dt class="item-18">{facts.mainTag}</dt>
+                  <dd class="num-display item-12"><span class="text-rose">{facts.rank}</span><span class="item-10">位<span class="text-neutral-400"> / {facts.rankTotal}品</span></span></dd>
                 </a>
               )}
             </dl>
@@ -267,26 +267,26 @@ const jsonLd = entry
               const seen = new Set<string>();
               const faces = facts.introductions.filter((i) => i.channel_icon && !seen.has(i.channel_id) && seen.add(i.channel_id)).slice(0, 8);
               return faces.length > 0 && (
-                <div class="mt-6 flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-4">
+                <div class="item-14">
                   <div class="flex -space-x-3">
                     {faces.map((f) => (
-                      <a href={withBase(`/influencer/${f.channel_id}`)} title={f.channel_title} class="relative hover:z-10 transition-transform duration-500 hover:-translate-y-1">
-                        <img referrerpolicy="no-referrer" src={f.channel_icon} alt={f.channel_title} width="40" height="40" class="w-10 h-10 rounded-full ring-[3px] ring-paper" loading="lazy" />
+                      <a href={withBase(`/influencer/${f.channel_id}`)} title={f.channel_title} class="item-5">
+                        <img referrerpolicy="no-referrer" src={f.channel_icon} alt={f.channel_title} width="40" height="40" class="item-11" loading="lazy" />
                       </a>
                     ))}
                   </div>
-                  <p class="text-xs text-neutral-600 leading-relaxed">{faces[0].channel_title}さんほか、{facts.channelCount}人が紹介</p>
+                  <p class="item-19">{faces[0].channel_title}さんほか、{facts.channelCount}人が紹介</p>
                 </div>
               );
             })()}
-            <!-- マイコスメ（5-4）：使っているコスメ・気になるコスメとして、この端末のブラウザに登録する（同じ商品は片方にだけ入る。259章）。表示はスクリプトで切り替える（スクリプトなしでは出さない） -->
-            <div data-mycosme hidden class="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2" data-slug={cosmeticSlug(brand_id, name_id)} data-name={`${entry.brand} ${entry.name}`}>
-              <button type="button" data-mycosme-toggle="items" aria-pressed="false" class="group inline-flex items-center gap-2 min-h-10 px-5 rounded-full border border-rose/50 text-sm text-rose hover:bg-rose hover:text-white aria-pressed:bg-rose aria-pressed:text-white transition-colors cursor-pointer">
+            {/* マイコスメ（5-4）：使っているコスメ・気になるコスメとして、この端末のブラウザに登録する（同じ商品は片方にだけ入る。259章）。表示はスクリプトで切り替える（スクリプトなしでは出さない） */}
+            <div data-mycosme hidden class="item-17" data-slug={cosmeticSlug(brand_id, name_id)} data-name={`${entry.brand} ${entry.name}`}>
+              <button type="button" data-mycosme-toggle="items" aria-pressed="false" class="group rounded-full border text-rose inline-flex items-center gap-2 min-h-10 px-5 border-rose/50 text-sm hover:bg-rose hover:text-white aria-pressed:bg-rose aria-pressed:text-white transition-colors cursor-pointer">
                 <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path class="group-aria-pressed:hidden" d="M12 5v14M5 12h14" /><path class="hidden group-aria-pressed:block" d="m5 12.5 4.5 4.5L19 7" /></svg>
                 <span data-label>使っている</span>
               </button>
-              <button type="button" data-mycosme-toggle="wish" aria-pressed="false" class="group inline-flex items-center gap-2 min-h-10 px-5 rounded-full border border-rose/50 text-sm text-rose hover:bg-rose hover:text-white aria-pressed:bg-rose aria-pressed:text-white transition-colors cursor-pointer">
-                <svg viewBox="0 0 24 24" class="w-4 h-4 group-aria-pressed:fill-current" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z" /></svg>
+              <button type="button" data-mycosme-toggle="wish" aria-pressed="false" class="group rounded-full border text-rose inline-flex items-center gap-2 min-h-10 px-5 border-rose/50 text-sm hover:bg-rose hover:text-white aria-pressed:bg-rose aria-pressed:text-white transition-colors cursor-pointer">
+                <svg viewBox="0 0 24 24" class="item-20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z" /></svg>
                 <span data-label>気になる</span>
               </button>
               <a href={withBase("/my-cosme/")} class="link-u text-xs text-neutral-600">マイコスメでおすすめを見る →</a>
@@ -295,7 +295,7 @@ const jsonLd = entry
           </div>
         </div>
 
-        <!-- スマホで縦に長くなるので、各セクションへ飛べる目次の帯を固定で出す -->
+        {/* スマホで縦に長くなるので、各セクションへ飛べる目次の帯を固定で出す */}
         <PageNav
           class="mt-6 md:mt-8"
           items={[
@@ -307,7 +307,7 @@ const jsonLd = entry
           ]}
         />
 
-        <!-- ===== 01 いつ・誰が紹介したか ===== -->
+        {/* ===== 01 いつ・誰が紹介したか ===== */}
         <section id="who" class="panel mt-6 md:mt-8">
           <SectionHead
             num="01"
@@ -315,7 +315,7 @@ const jsonLd = entry
             title="いつ・誰が紹介したか"
             lead={`${facts.introductions.length}件の紹介${concernIntroCount > 0 ? `（うち肌悩みに触れた紹介${concernIntroCount}件）` : ""}。●の数は投稿者の発信力（登録者数・掲載動画数・紹介コスメ数から算出したスコアの順位。上位5％・20％・40％・70％で5段階）です。`}
           />
-          <!-- 並び替え（スクリプトで行う。スクリプトなしでは新しい順の先頭10件だけ） -->
+          {/* 並び替え（スクリプトで行う。スクリプトなしでは新しい順の先頭10件だけ） */}
           {facts.introductions.length > 1 && (
             <div class="flex flex-wrap items-center gap-2 text-xs mb-2" role="group" aria-label="並び替え">
               <span class="label-caps text-neutral-500 mr-1">Sort</span>
@@ -324,7 +324,7 @@ const jsonLd = entry
               <button type="button" class="intro-sort chip" data-sort="subs">発信力順</button>
             </div>
           )}
-          <!-- 日付・チャンネル・動画タイトルを固定の列にする。件数が多い商品は、先頭10件だけ表示して残りは「残りを表示」で出す -->
+          {/* 日付・チャンネル・動画タイトルを固定の列にする。件数が多い商品は、先頭10件だけ表示して残りは「残りを表示」で出す */}
           <div class="text-sm">
             <ul id="intro-list" data-initial={INTRO_SHOWN}>
               {facts.introductions.map((i, k) => <IntroRow i={i} pos={k} concernPages={concernPages} extra={k >= INTRO_SHOWN} />)}
@@ -338,7 +338,7 @@ const jsonLd = entry
         </section>
 
         {ingredientInfo && (
-          <section id="ingredients" class="panel mt-8 md:mt-10">
+          <section id="ingredients" class="panel u-14">
             <SectionHead en="Ingredients" title="全成分" lead={`${ingredientSourceLabel(ingredientInfo)}に掲載されている全成分の表示です。改良などで変わることがあるため、購入の際は商品の表示をご確認ください。`} />
             <div class="text-sm leading-relaxed text-neutral-700 space-y-2 [overflow-wrap:anywhere]">
               {ingredientInfo.active.length > 0 ? (
@@ -349,7 +349,7 @@ const jsonLd = entry
               ) : (
                 <p>{ingredientInfo.items.join("、")}</p>
               )}
-              <p class="text-xs text-neutral-500">
+              <p class="u-11">
                 出典：<a href={ingredientInfo.url} target="_blank" rel="nofollow noopener" class="link-u">{ingredientSourceLabel(ingredientInfo)}</a>
               </p>
             </div>
@@ -365,18 +365,18 @@ const jsonLd = entry
         )}
 
         {coMentioned.length > 0 && (
-          <section id="paired" class="panel mt-8 md:mt-10">
+          <section id="paired" class="panel u-14">
             <SectionHead num="02" en="Paired with" title="一緒に紹介されているコスメ" lead={`${entry.name}を紹介した動画で、あわせて紹介されているコスメです。`} />
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-8">
+            <div class="item-6">
               {coMentioned.map((t) => <CosmeticTile tile={t} caption={`${t.together}本の動画で一緒に紹介`} />)}
             </div>
           </section>
         )}
 
         {facts.mainTag && categoryTop.length > 0 && (
-          <section id="ranking" class="panel mt-8 md:mt-10">
+          <section id="ranking" class="panel u-14">
             <SectionHead num="03" en="Ranking" title={`「${facts.mainTag}」の人気ランキング`} lead={`${facts.rankTotal}品中、この商品は${facts.rank}位です。`} href={categoryUrl(facts.mainTag)} cta={`All ${facts.rankTotal}`} />
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-8">
+            <div class="item-6">
               {categoryTop.map(({ rank, tile }) => (
                 <CosmeticTile tile={tile} rank={rank} caption={`${tile.videoCount}本の動画で紹介`} current={tile.brand_id === brand_id && tile.name_id === name_id} />
               ))}
@@ -385,9 +385,9 @@ const jsonLd = entry
         )}
 
         {brandTop.length > 0 && (
-          <section id="brand-top" class="panel mt-8 md:mt-10">
+          <section id="brand-top" class="panel u-14">
             <SectionHead num="04" en="From the brand" title={`${entry.brand}の人気商品`} lead={`${entry.brand}の商品のうち、紹介されている動画が多いものです。`} href={withBase(`/brand/${canonicalBrandId(entry.brand_id)}`)} />
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-8">
+            <div class="item-6">
               {brandTop.map((t) => <CosmeticTile tile={t} showBrand={false} caption={`${t.videoCount}本の動画で紹介`} />)}
             </div>
           </section>
@@ -465,7 +465,7 @@ const jsonLd = entry
 </script>
 
 
-<script is:inline>
+<script>
   // 画像のURLはあっても実際に読み込めない場合（楽天側で画像が消えている）は、購入できないリンクの可能性が高いので、価格・購入ボタンを取り除く。
   // Yahoo!ショッピングの画像があれば、そちらの画像と価格に差し替える（115章）
   (function () {

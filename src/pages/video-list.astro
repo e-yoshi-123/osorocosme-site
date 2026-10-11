@@ -100,10 +100,10 @@ const [first, ...others] = spotlight;
             <p class="mt-4 flex items-center gap-2">
               {productThumbs(first, 6).map((t, i) => (
                 <span class:list={["product-well w-12 h-12 md:w-14 md:h-14 rounded-xl overflow-hidden shrink-0 items-center justify-center", i >= 4 ? "hidden sm:flex" : "flex"]}>
-                  <img src={t.src} alt={t.alt} class="w-[86%] h-[86%] object-contain" loading="lazy" onerror="this.parentElement.remove()" />
+                  <img src={t.src} alt={t.alt} class="u-4" loading="lazy" data-err="remove-parent" />
                 </span>
               ))}
-              <span class="ml-1 text-xs text-neutral-500 whitespace-nowrap"><b class="num-display text-xl text-ink">{itemCount(first)}</b>品を紹介</span>
+              <span class="u-10"><b class="num-display text-xl text-ink">{itemCount(first)}</b>品を紹介</span>
             </p>
           )}
         </a>
@@ -113,7 +113,7 @@ const [first, ...others] = spotlight;
               <a href={withBase(`/video/${v.key}`)} class="group flex items-start gap-3 sm:gap-4 py-4">
                 <span class="num-display text-[22px] leading-none w-5 pt-1 shrink-0 text-ink/45 group-hover:text-rose transition-colors">{i + 2}</span>
                 <span class="relative w-28 sm:w-40 shrink-0 overflow-hidden rounded-xl bg-neutral-200">
-                  <img src={v.thumbnail} alt={v.title} class="w-full aspect-video object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105" loading="lazy" />
+                  <img src={v.thumbnail} alt={v.title} class="u-3" loading="lazy" />
                 </span>
                 <span class="min-w-0 flex-1">
                   <span class="block text-xs text-neutral-500 truncate">{v.channel_title}</span>
@@ -131,7 +131,7 @@ const [first, ...others] = spotlight;
   <section class="panel" id="all">
     <SectionHead num="02" en="All videos" title="すべての動画" />
 
-    <!-- 絞り込みと並び替え -->
+    {/* 絞り込みと並び替え */}
     <div class="mb-8 md:mb-10 space-y-4">
       <div class="flex items-start gap-3">
         <span class="label-caps text-neutral-500 pt-2.5 shrink-0 hidden sm:block">Theme</span>
@@ -144,13 +144,13 @@ const [first, ...others] = spotlight;
       </div>
       <div class="flex flex-wrap items-center gap-x-3 gap-y-2 pt-4 border-t border-ink/10">
         <span class="label-caps text-neutral-500 shrink-0">Sort</span>
-        <div class="flex flex-wrap gap-1.5" role="group" aria-label="並び替え">
+        <div class="u-6" role="group" aria-label="並び替え">
           <button type="button" class="sort-btn chip is-active" data-sort="newest">新着順</button>
           <button type="button" class="sort-btn chip" data-sort="views">再生回数順</button>
           <button type="button" class="sort-btn chip" data-sort="items">紹介コスメの多い順</button>
         </div>
         <span class="label-caps text-neutral-500 shrink-0 sm:ml-3">Type</span>
-        <div class="flex flex-wrap gap-1.5" role="group" aria-label="動画の種類">
+        <div class="u-6" role="group" aria-label="動画の種類">
           <button type="button" class="kind-btn chip is-active" data-kind="">すべて</button>
           <button type="button" class="kind-btn chip" data-kind="long">動画 <span class="tab-n">{formatCount(all.length - shortCount)}</span></button>
           <button type="button" class="kind-btn chip" data-kind="short">ショート <span class="tab-n">{formatCount(shortCount)}</span></button>

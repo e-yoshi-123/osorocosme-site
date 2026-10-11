@@ -13,28 +13,28 @@ const sections = [
 ].filter((s) => s.items.length > 0);
 ---
 
-<div id="mobile-menu" data-menu data-lock hidden class="lg:hidden fixed inset-x-0 top-14 md:top-[72px] bottom-0 z-40 bg-paper overflow-y-auto overscroll-contain border-t border-ink/10">
-  <nav class="px-4 md:px-8 pt-4 pb-16 max-w-2xl mx-auto" aria-label="メニュー">
-    <ul class="grid grid-cols-2 gap-2 mb-6">
+<div id="mobile-menu" data-menu data-lock hidden class="mmenu-6">
+  <nav class="mmenu-10" aria-label="メニュー">
+    <ul class="mmenu-11">
       {links.map((l) => (
         <li>
-          <a href={withBase(l.href)} class="block rounded-2xl bg-white ring-1 ring-ink/10 px-4 py-3">
-            <span class="block label-caps text-[10px] text-rose">{l.en}</span>
-            <span class="block text-sm mt-0.5">{l.label}</span>
+          <a href={withBase(l.href)} class="bg-white block rounded-2xl ring-1 ring-ink/10 px-4 py-3">
+            <span class="label-caps text-rose mmenu-13">{l.en}</span>
+            <span class="mmenu-9">{l.label}</span>
           </a>
         </li>
       ))}
     </ul>
-    <details class="group border-t border-ink/10" open>
-      <summary class="flex items-center justify-between py-4 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-        <span class="font-medium">カテゴリから探す</span><span class="text-neutral-400 transition-transform group-open:rotate-180" aria-hidden="true">⌄</span>
+    <details class="group mmenu-7" open>
+      <summary class="mmenu-2">
+        <span class="font-medium">カテゴリから探す</span><span class="text-neutral-400 mmenu-12" aria-hidden="true">⌄</span>
       </summary>
       <div class="pb-4 space-y-3">
         {m.categories.map((g) => (
           <div>
-            <p class="text-xs text-neutral-400 mb-1.5">{g.group}</p>
-            <p class="flex flex-wrap gap-1.5">
-              {g.items.map((it) => <a href={withBase(it.path)} class="text-xs border border-ink/15 rounded-full px-2.5 py-1">{it.label}</a>)}
+            <p class="text-neutral-400 u-24">{g.group}</p>
+            <p class="u-6">
+              {g.items.map((it) => <a href={withBase(it.path)} class="mmenu-1">{it.label}</a>)}
             </p>
           </div>
         ))}
@@ -42,15 +42,15 @@ const sections = [
       </div>
     </details>
     {sections.map((s) => (
-      <details class="group border-t border-ink/10" open>
-        <summary class="flex items-center justify-between py-4 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-          <span class="font-medium">{s.title}</span><span class="text-neutral-400 transition-transform group-open:rotate-180" aria-hidden="true">⌄</span>
+      <details class="group mmenu-7" open>
+        <summary class="mmenu-2">
+          <span class="font-medium">{s.title}</span><span class="text-neutral-400 mmenu-12" aria-hidden="true">⌄</span>
         </summary>
         <div class="pb-4">
-          <p class="flex flex-wrap gap-1.5">
-            {s.items.map((it) => <a href={withBase(it.path)} class="text-xs border border-ink/15 rounded-full px-2.5 py-1">{it.label}</a>)}
+          <p class="u-6">
+            {s.items.map((it) => <a href={withBase(it.path)} class="mmenu-1">{it.label}</a>)}
           </p>
-          <a href={withBase(s.all)} class="inline-block mt-3 text-xs text-rose">一覧 →</a>
+          <a href={withBase(s.all)} class="text-rose mmenu-14">一覧 →</a>
         </div>
       </details>
     ))}

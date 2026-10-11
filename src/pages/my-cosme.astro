@@ -21,7 +21,7 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
   noindex
 >
   <PageHead en="My Cosme" title="マイコスメ" lead={lead}>
-    <!-- ヘッダーの人型の印から来た人に「自分用のページ」と伝えつつ、会員登録が要らないことも示す（「マイページ」と名付けると会員制と誤解されるため。259章） -->
+    {/* ヘッダーの人型の印から来た人に「自分用のページ」と伝えつつ、会員登録が要らないことも示す（「マイページ」と名付けると会員制と誤解されるため。259章） */}
     <p class="mt-3 inline-flex items-center gap-2 rounded-full bg-pink-50 ring-1 ring-rose/15 px-3 py-1 text-xs text-neutral-700">
       <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 text-rose shrink-0" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8" /><path d="M4.8 20c.9-3.6 3.7-5.6 7.2-5.6s6.3 2 7.2 5.6" /></svg>
       あなた専用のページです。会員登録・ログインは要りません。
@@ -33,7 +33,7 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
     <noscript><p class="panel text-sm text-neutral-500">このページはJavaScriptを使います。ブラウザの設定でJavaScriptを有効にしてください。</p></noscript>
 
     <div data-ready hidden>
-      <!-- 保存先と引き継ぎの案内（引き継ぎの欄はページの一番下にあり気づきにくいので、上にも短く出す。259章） -->
+      {/* 保存先と引き継ぎの案内（引き継ぎの欄はページの一番下にあり気づきにくいので、上にも短く出す。259章） */}
       <div class="mb-6 md:mb-8 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-2xl bg-pink-50 ring-1 ring-rose/15 px-4 py-3 text-xs leading-relaxed text-neutral-700">
         <p class="flex-1 min-w-[16rem]" data-save-note>一覧はこの端末のブラウザにだけ保存されます。ほかの端末でも使うときや控えを取るときは、Googleドライブとの同期かファイルへの書き出しをどうぞ。</p>
         <div class="flex flex-wrap items-center gap-2">
@@ -46,7 +46,7 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
 
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-start">
-        <!-- 登録した一覧と、商品の追加 -->
+        {/* 登録した一覧と、商品の追加 */}
         <section class="panel min-w-0 lg:col-span-5 lg:sticky lg:top-[calc(var(--hdr-h,72px)+1.5rem)] lg:max-h-[calc(100vh-var(--hdr-h,72px)-3rem)] lg:overflow-y-auto">
           <SectionHead en="Your cosme" title="あなたのコスメ" lead="ブランド名や商品名で探して追加します。商品ページの「使っている」「気になる」からも登録できます。" />
           <div role="tablist" aria-label="一覧の切り替え" class="mb-5 flex gap-1 p-1 rounded-full bg-ink/5">
@@ -55,9 +55,9 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
           </div>
           <div class="relative">
             <label class="flex items-center gap-2 border-b border-ink/25 focus-within:border-rose transition-colors">
-              <svg viewBox="0 0 24 24" class="w-4 h-4 text-neutral-500 shrink-0" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+              <svg viewBox="0 0 24 24" class="u-18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
               <input type="search" data-search placeholder="例：キャンメイク 下地" aria-label="追加するコスメを探す" autocomplete="off" class="w-full min-w-0 bg-transparent py-2.5 text-base md:text-sm placeholder:text-neutral-400 focus:outline-none [&::-webkit-search-cancel-button]:appearance-none" />
-              <!-- 入れた文字を消す（ブラウザの標準の×は出し方が揃わないので隠して、こちらを出す。264章） -->
+              {/* 入れた文字を消す（ブラウザの標準の×は出し方が揃わないので隠して、こちらを出す。264章） */}
               <button type="button" data-search-clear hidden aria-label="入力した文字を消す" class="shrink-0 w-8 h-8 -mr-1 rounded-full flex items-center justify-center text-neutral-500 hover:bg-ink/5 hover:text-ink cursor-pointer"><svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
             </label>
             <ul data-search-results hidden class="mt-2 py-1 rounded-2xl bg-white ring-1 ring-ink/10 max-h-[26rem] overflow-y-auto overscroll-contain"></ul>
@@ -66,8 +66,8 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
           <p data-empty class="mt-3 text-sm leading-relaxed text-neutral-500"></p>
           <ul data-list class="mt-1 [&>li:last-child]:border-b-0"></ul>
 
-          <!-- 肌悩み（259章）：選んだ悩みに触れて紹介されたコスメを、右の「肌悩みから」とおすすめに使う -->
-          <div class="mt-8 pt-6 border-t border-ink/10">
+          {/* 肌悩み（259章）：選んだ悩みに触れて紹介されたコスメを、右の「肌悩みから」とおすすめに使う */}
+          <div class="u-22">
             <p class="text-sm font-medium">気になる肌悩み</p>
             <p class="mt-1 text-xs leading-relaxed text-neutral-500">選ぶと、その悩みに触れてインフルエンサーが紹介したコスメをおすすめに出します。</p>
             <div data-concerns class="mt-3 flex flex-wrap gap-2"></div>
@@ -75,23 +75,23 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
         </section>
 
         <div class="min-w-0 lg:col-span-7 space-y-6 md:space-y-8">
-          <!-- あなたへのおすすめ（264章）：同じコスメを使う人・肌悩み・成分の3つの理由をまとめた数品 -->
+          {/* あなたへのおすすめ（264章）：同じコスメを使う人・肌悩み・成分の3つの理由をまとめた数品 */}
           <section data-foryou hidden class="panel">
             <header class="mb-8 md:mb-12">
               <p class="eyebrow mb-2">For you</p>
-              <h2 data-foryou-title class="font-serif h-section leading-[1.3] font-semibold text-balance">あなたへ</h2>
-              <p class="mt-4 text-sm text-neutral-600 max-w-2xl leading-relaxed">使っているコスメ・気になる肌悩みから、理由が重なるものを選びました（カテゴリごとに1品）。効果を示すものではありません。</p>
+              <h2 data-foryou-title class="font-serif h-section u-25">あなたへ</h2>
+              <p class="u-8">使っているコスメ・気になる肌悩みから、理由が重なるものを選びました（カテゴリごとに1品）。効果を示すものではありません。</p>
             </header>
             <div data-foryou-list class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-8"></div>
           </section>
 
-          <!-- 肌悩みから（悩みを選んだときだけ。コスメが未登録でも出す） -->
+          {/* 肌悩みから（悩みを選んだときだけ。コスメが未登録でも出す） */}
           <section data-rec-concern hidden class="panel">
             <SectionHead en="Concerns" title="肌悩みから" lead="選んだ肌悩みに触れて、インフルエンサーが紹介しているコスメです（紹介した人の多い順。使っているコスメに入れたものは除いています）。効果を示すものではありません。" />
             <div data-rec-concern-list class="space-y-8"></div>
           </section>
 
-          <!-- 何も登録していないとき：人気のコスメから選ぶ -->
+          {/* 何も登録していないとき：人気のコスメから選ぶ */}
           <section data-popular hidden class="panel">
             <SectionHead en="Start here" title="人気のコスメから選ぶ" lead="紹介している動画が多いコスメです。使っているものを追加すると、おすすめが出ます。" />
             <div data-popular-list class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-8"></div>
@@ -118,7 +118,7 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
         </div>
       </div>
 
-      <!-- 保存と引き継ぎ -->
+      {/* 保存と引き継ぎ */}
       <section id="save" class="panel mt-6 md:mt-8 scroll-mt-[calc(var(--hdr-h,72px)+1rem)]">
         <SectionHead en="Save & move" title="保存と引き継ぎ" lead="一覧（使っている・気になる・肌悩み）はこの端末のブラウザに自動で保存されます。ブラウザのデータを消すと一覧も消えるので、ほかの端末へ移すときや控えを取るときは、ファイルに書き出してください。" />
         <div class="flex flex-wrap gap-2">
@@ -127,8 +127,8 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
           <input type="file" data-import-file accept="application/json,.json" hidden />
           <button type="button" data-action="clear" class={`${btn} text-neutral-500`}>一覧をすべて消す</button>
         </div>
-        <!-- Googleドライブ同期のしくみ（259章）。Googleの画面（別ウィンドウ）に移ると不安になる人がいるので、知識が無くても分かる言葉で、
-             受け取らないもの・流れ（Googleの画面の実際の文言）・やめ方を、同期のボタンの前に常に出しておく -->
+        {/* Googleドライブ同期のしくみ（259章）。Googleの画面（別ウィンドウ）に移ると不安になる人がいるので、知識が無くても分かる言葉で、
+             受け取らないもの・流れ（Googleの画面の実際の文言）・やめ方を、同期のボタンの前に常に出しておく */}
         {GOOGLE_CLIENT_ID && (
           <div data-drive id="drive" class="mt-8 pt-6 border-t border-ink/10 scroll-mt-[calc(var(--hdr-h,72px)+1rem)]">
             <h3 class="text-base font-medium">Googleドライブとの同期のしくみ</h3>
@@ -139,16 +139,16 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
                 <p class="mt-1">あなたのマイコスメ（登録したコスメと肌悩みのリスト）を、<strong>あなた自身のGoogleドライブ</strong>にしまっておきます。別のスマホやパソコンでも、同じGoogleアカウントで「同期」を押せば、同じリストが使えます。</p>
               </div>
 
-              <!-- しくみの図：リストは「この端末」と「あなたのGoogleドライブ」の間だけを行き来し、OsoroCosmeのサーバーは通らない -->
+              {/* しくみの図：リストは「この端末」と「あなたのGoogleドライブ」の間だけを行き来し、OsoroCosmeのサーバーは通らない */}
               <div class="rounded-2xl bg-pink-50 ring-1 ring-rose/15 p-4 sm:p-5">
                 <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                   <div class="flex-1 rounded-xl bg-white ring-1 ring-ink/10 px-4 py-3 text-center">
-                    <p class="text-xs text-neutral-500">あなたのスマホ・パソコン</p>
+                    <p class="u-11">あなたのスマホ・パソコン</p>
                     <p class="mt-0.5 font-medium text-ink">このブラウザ</p>
                   </div>
                   <p class="text-center text-xs text-rose shrink-0" aria-hidden="true"><span class="hidden sm:inline">⇄</span><span class="sm:hidden">⇅</span><span class="block">リストだけ</span></p>
                   <div class="flex-1 rounded-xl bg-white ring-1 ring-ink/10 px-4 py-3 text-center">
-                    <p class="text-xs text-neutral-500">あなたのGoogleドライブの中の</p>
+                    <p class="u-11">あなたのGoogleドライブの中の</p>
                     <p class="mt-0.5 font-medium text-ink">OsoroCosme専用の小さな保存場所</p>
                   </div>
                 </div>

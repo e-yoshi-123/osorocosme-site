@@ -8,7 +8,7 @@ import { withBase } from "../lib/data";
     <p class="eyebrow">Search</p>
     <h1 class="mt-2 font-serif font-semibold h-page">検索結果：<span id="search-query" class="text-rose"></span></h1>
     <p id="search-count" class="mt-3 text-sm text-neutral-500"></p>
-    <!-- 言い方を変えて検索し直せるように、今の検索語を入れた入力欄を置く（スマホではヘッダーの検索が隠れているため） -->
+    {/* 言い方を変えて検索し直せるように、今の検索語を入れた入力欄を置く（スマホではヘッダーの検索が隠れているため） */}
     <form method="get" role="search" data-suggest class="mt-6 max-w-xl flex items-center gap-3 border-b-2 border-ink focus-within:border-rose transition-colors">
       <input id="search-input" type="search" name="q" aria-label="検索し直す" placeholder="コスメ名・ブランド・インフルエンサー" class="flex-1 min-w-0 bg-transparent py-2.5 text-base md:text-lg placeholder:text-neutral-400 focus:outline-none" />
       <button type="submit" class="shrink-0 w-10 h-10 rounded-full bg-ink text-paper flex items-center justify-center transition-colors duration-500 hover:bg-rose" aria-label="検索">
@@ -16,10 +16,10 @@ import { withBase } from "../lib/data";
       </button>
     </form>
   </header>
-  <!-- 種類の切り替え（すべて／ブランド／インフルエンサー／コスメ／動画）。件数0の種類は出さない -->
+  {/* 種類の切り替え（すべて／ブランド／インフルエンサー／コスメ／動画）。件数0の種類は出さない */}
   <nav id="search-tabs" class="hidden flex flex-wrap gap-2 mb-10 text-sm" aria-label="検索結果の種類"></nav>
   <div id="search-results" class="space-y-6 md:space-y-8" aria-busy="true">
-    <!-- 検索用のデータを読み込むあいだの仮の表示 -->
+    {/* 検索用のデータを読み込むあいだの仮の表示 */}
     <div class="panel" data-skeleton aria-label="読み込み中">
       <div class="skeleton h-4 w-24 rounded-full"></div>
       <div class="mt-8 grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6">
@@ -33,7 +33,7 @@ import { withBase } from "../lib/data";
       </div>
     </div>
   </div>
-  <!-- 見つからなかったとき：言い直しの案内に加えて、次に行ける場所を出す（文だけだと行き止まりになる。195章） -->
+  {/* 見つからなかったとき：言い直しの案内に加えて、次に行ける場所を出す（文だけだと行き止まりになる。195章） */}
   <div id="search-empty" class="panel hidden">
     <p class="font-serif text-lg font-semibold">該当するものが見つかりませんでした</p>
     <p class="mt-2 text-sm leading-[1.9] text-neutral-600">ブランド・インフルエンサー・コスメ・動画のどれにも当てはまりませんでした。別の言い方（英字・カタカナ・略さない名前など）でもお試しください。</p>

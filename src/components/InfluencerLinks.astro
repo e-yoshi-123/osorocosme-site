@@ -10,7 +10,7 @@ interface Props {
 const { title, items, unit } = Astro.props;
 ---
 
-<!-- 人のページへの内部リンク（似た人・カテゴリをよく紹介している人）。履歴171章 -->
+{/* 人のページへの内部リンク（似た人・カテゴリをよく紹介している人）。履歴171章 */}
 {
   items.length > 0 && (
     <section class="panel mt-8 md:mt-10 mb-12">
@@ -18,7 +18,7 @@ const { title, items, unit } = Astro.props;
       {/* スマホは1列（2列だと名前が「HIRO BEA…」と切れていた）。名前は2行まで出す（195章） */}
       <div class="grid grid-cols-1 min-[520px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 md:gap-3">
         {items.map((i) => (
-          <a href={withBase(`/influencer/${i.channel_id}`)} class="group min-w-0 rounded-2xl border border-ink/10 p-2.5 md:p-3 flex items-center gap-2.5 md:gap-3 hover:border-ink/40 transition-colors">
+          <a href={withBase(`/influencer/${i.channel_id}`)} class="group influencerlinks-1">
             {i.channel_icon ? (
               <img referrerpolicy="no-referrer" src={i.channel_icon} alt={i.channel_title} data-name={i.channel_title} width="40" height="40" class="w-10 h-10 rounded-full shrink-0" loading="lazy" />
             ) : (

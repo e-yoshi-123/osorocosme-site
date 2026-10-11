@@ -101,9 +101,9 @@ const COLS: Record<number, string> = { 1: "lg:grid-cols-1", 2: "lg:grid-cols-2",
               ))}
             </div>
             {brandGroups.map((g) => (
-              <div class="chip-row flex-nowrap sm:flex-wrap gap-1.5 mt-2 pt-2 border-t border-ink/10 sm:max-h-28 overflow-x-auto sm:overflow-x-visible sm:overflow-y-auto -mx-4 px-4 sm:mx-0 sm:px-0 pb-1" data-group={g.group} style="display:none">
+              <div class="chip-row brand-1" data-group={g.group} style="display:none">
                 {sections.filter((sec) => sec.group === g.group).map((sec) => (
-                  <button class="cat-chip chip shrink-0 whitespace-nowrap" data-tag={sec.tag}>
+                  <button class="chip cat-chip u-17" data-tag={sec.tag}>
                     {sec.tag} <span class="tab-n">{sec.items.length}</span>
                   </button>
                 ))}

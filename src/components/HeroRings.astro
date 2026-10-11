@@ -29,13 +29,13 @@ const itemAngles = [-74, -40, -6, 28, 62];
     <circle cx={B.x} cy={B.y} r={R + 6} fill="none" stroke="var(--color-rose)" stroke-opacity="0.18" stroke-width="0.15" stroke-dasharray="0.4 1.2" />
   </svg>
 
-  <!-- 重なり：サイト名の由来 -->
+  {/* 重なり：サイト名の由来 */}
   <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-[22%]">
     <p class="font-display font-semibold text-rose text-[clamp(12px,1.1vw,15px)] leading-none">Osoro</p>
     <p class="mt-1.5 font-serif font-semibold text-[clamp(13px,1.35vw,19px)] leading-[1.5] whitespace-nowrap">あの人と、<br />おそろ。</p>
   </div>
 
-  <!-- 左の輪：インフルエンサー -->
+  {/* 左の輪：インフルエンサー */}
   <div class="orbit absolute inset-0 pointer-events-none" style={`transform-origin:${A.x}% ${A.y}%;--spin:-1`}>
     {faces.slice(0, faceAngles.length).map((f, i) => {
       const p = place(A, faceAngles[i]);
@@ -51,7 +51,7 @@ const itemAngles = [-74, -40, -6, 28, 62];
     })}
   </div>
 
-  <!-- 右の輪：話題のコスメ（円で切り抜くので、画像の四隅の宣伝文字は隠れる） -->
+  {/* 右の輪：話題のコスメ（円で切り抜くので、画像の四隅の宣伝文字は隠れる） */}
   <div class="orbit absolute inset-0 pointer-events-none" style={`transform-origin:${B.x}% ${B.y}%;--spin:1`}>
     {items.slice(0, itemAngles.length).map((it, i) => {
       const p = place(B, itemAngles[i]);
