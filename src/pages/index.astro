@@ -90,7 +90,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
 
 <Layout
   title="コスメ紹介動画から探すコスメデータベース"
-  description={`YouTubeのコスメ紹介動画${visible.length}本から、インフルエンサー${influencerCount}人が使ったコスメ${cosmeticCount}品を集めました。カテゴリ別ランキングや、インフルエンサーごとの使用コスメ遍歴で探せます。`}
+  description={`YouTubeのコスメ紹介動画${visible.length}本から、インフルエンサー${influencerCount}人が使ったコスメ${cosmeticCount}品を集めました。PR・提供を除いたカテゴリ別ランキングや、インフルエンサーごとの使用コスメ遍歴で探せます。`}
   jsonLd={[siteLd]}
 >
   <!-- ===== HERO：雑誌の表紙のように、大きな見出しと話題のコスメの額装 ===== -->
@@ -108,7 +108,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
           <span class="hero-line block whitespace-nowrap"><span style="--d:120ms">動画から見つかる。</span></span>
         </h1>
         <p class="reveal mt-8 text-[15px] md:text-base leading-[2] text-neutral-600 max-w-lg" style="--d:300ms">
-          YouTubeのコスメ紹介動画<b class="font-medium text-ink">{formatCount(visible.length)}本</b>を読み解き、インフルエンサー<b class="font-medium text-ink">{formatCount(influencerCount)}人</b>が実際に紹介したコスメを、ひとつのデータベースにまとめました。
+          YouTubeのコスメ紹介動画<b class="font-medium text-ink">{formatCount(visible.length)}本</b>を読み解き、インフルエンサー<b class="font-medium text-ink">{formatCount(influencerCount)}人</b>が実際に紹介したコスメを、ひとつのデータベースにまとめました。ランキングには、PR・提供の紹介を数えていません。
         </p>
         <form action={withBase("/search-result")} method="get" role="search" data-suggest class="reveal mt-10 max-w-xl group" style="--d:400ms">
           <label for="hero-q" class="label-caps text-neutral-500">Search</label>
@@ -211,7 +211,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
 
   <!-- ===== 01 RANKING ===== -->
   <section class="panel mt-12 md:mt-16">
-    <SectionHead num="01" en="Ranking" title="いま、よく紹介されているコスメ" lead="紹介動画の数・紹介したインフルエンサーの数・再生回数から出した人気順です。商品数の多い3つのカテゴリを先に。" href={withBase("/ranking/")} cta="All categories" />
+    <SectionHead num="01" en="Ranking" title="いま、よく紹介されているコスメ" lead="紹介動画の数・紹介したインフルエンサーの数・再生回数から出した人気順です（PR・提供の紹介は数えていません）。商品数の多い3つのカテゴリを先に。" href={withBase("/ranking/")} cta="All categories" />
     <!-- スマホでは3つのカテゴリを横にめくる（縦に積むと画面2枚半になるため） -->
     <div class="-mx-4 px-4 md:-mx-10 md:px-10 lg:mx-0 lg:px-0 flex lg:grid lg:grid-cols-3 gap-5 md:gap-8 lg:gap-10 overflow-x-auto lg:overflow-visible snap-x snap-mandatory scroll-px-4 md:scroll-px-10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-swipe>
       {featuredFull.map((f, fi) => (
@@ -256,6 +256,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
       ))}
     </div>
     <div class="lg:hidden mt-6" data-swipe-dots aria-hidden="true"></div>
+    <p class="mt-6 text-sm"><a href={withBase("/ranking/repeat/")} class="link-u text-rose">同じ人が時期をあけて何度も使っている「リピートされているコスメ」 →</a></p>
   </section>
 
   <!-- ===== 02 TRENDING ===== -->
