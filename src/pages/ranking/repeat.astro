@@ -1,0 +1,147 @@
+---
+import HowWeCount from "../../components/HowWeCount.astro";
+import PageHead from "../../components/PageHead.astro";
+import Layout from "../../layouts/Layout.astro";
+import ShareButtons from "../../components/ShareButtons.astro";
+import RankingRow from "../../components/RankingRow.astro";
+import {
+  getRepeatRanking,
+  REPEAT_MIN_CHANNELS,
+  REPEAT_MIN_GAP_DAYS,
+  REPEAT_PER_GROUP,
+  getCosmeticListEntry,
+  productOffer,
+  cosmeticSlug,
+  categoryUrl,
+  hasRankingPage,
+  withBase,
+  breadcrumbLd,
+} from "../../lib/data";
+
+// リピートされているコスメ（273章）。集計は data.ts の getRepeatRanking
+const r = getRepeatRanking();
+const total = r.groups.reduce((n, g) => n + g.items.length, 0);
+
+// 表示用データ。価格・楽天とYahoo!のリンク・画像は cosmetics_list.json を正とする（特集・ランキングと同じ）
+const groups = r.groups.map((g) => ({
+  group: g.group,
+  rows: g.items.map((it, i) => {
+    const entry = getCosmeticListEntry(it.brand_id, it.name_id);
+    const offer = productOffer(entry);
+    const names = it.users.slice(0, 3).map((u) => u.channel_title).join("・");
+    return {
+      it,
+      rank: i + 1,
+      imageSrc: offer.imageSrc,
+      price: offer.price,
+      link: offer.rakutenLink,
+      fromYahoo: offer.source === "yahoo",
+      yahooLink: entry?.yahoo_text_link || undefined,
+      note: `リピート：${names}${it.users.length > 3 ? ` ほか${it.users.length - 3}人` : ""}`,
+    };
+  }),
+}));
+
+const title = "YouTuberがリピートしているコスメ（PR・提供を除く）";
+const first = groups[0]?.rows[0]?.it;
+const description =
+  `同じYouTuberが、日をあけた別々の動画で繰り返し使っているコスメを、カテゴリ別に集計。PR・提供の紹介や、新作紹介・ベスコスの動画は数えていません。` +
+  `${REPEAT_MIN_CHANNELS}人以上がリピートしているものだけを載せています。` +
+  (first ? `${first.tag}では${first.brand}「${first.name}」（${first.channelCount}人）などが上位です。` : "");
+const topImage = groups.flatMap((g) => g.rows).find((x) => x.imageSrc)?.imageSrc;
+const crumbs = [
+  { name: "ホーム", path: "/" },
+  { name: "ランキング", path: "/ranking/" },
+  { name: "リピートされているコスメ", path: "/ranking/repeat/" },
+];
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: title,
+    numberOfItems: total,
+    itemListElement: groups
+      .flatMap((g) => g.rows)
+      .slice(0, 10)
+      .map((x, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: `${x.it.brand} ${x.it.name}`,
+        url: new URL(withBase(`/cosmetics/${cosmeticSlug(x.it.brand_id, x.it.name_id)}`), Astro.site!).href,
+      })),
+  },
+  breadcrumbLd(crumbs, Astro.site!),
+];
+---
+
+<Layout title={title} description={description} image={topImage} jsonLd={jsonLd}>
+  <nav class="text-xs text-neutral-500 mb-8 flex flex-wrap gap-2" aria-label="パンくず">
+    <a href={withBase("/")} class="link-u">Home</a><span aria-hidden="true">/</span>
+    <a href={withBase("/ranking/")} class="link-u">ランキング</a><span aria-hidden="true">/</span>
+    <span>リピートされているコスメ</span>
+  </nav>
+
+  <PageHead en="Repeat" title="リピートされているコスメ" lead="一度紹介して終わりではなく、同じ人が時期をあけて何度も使っているコスメです。PR・提供の紹介は数えていないので、お金をもらわずに使い続けているものだけが並びます。">
+    <ShareButtons text="YouTuberがリピートしているコスメ（PR・提供を除く）" class="mt-5" />
+  </PageHead>
+
+  <HowWeCount>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>リピート：同じチャンネルの<b>2本以上</b>の動画で使われ、最初と最後の動画の投稿日が<b>{REPEAT_MIN_GAP_DAYS}日以上</b>あいていること</li>
+      <li>数えない紹介：PR・提供の紹介と、タイトルに「新作」「ベスコス」「購入品」「比較」「レビュー」などがある動画（紹介すること自体が目的で、使い続けているとは限らないため）</li>
+      <li>掲載条件：<b>{REPEAT_MIN_CHANNELS}人以上</b>がリピートしているコスメ（{r.itemCount}品）。各カテゴリ上位{REPEAT_PER_GROUP}品まで</li>
+      <li>並び順：リピートしている人数 → その人たちの動画の本数 → 合計再生回数。行の「動画N本｜N人」も、リピートしている人とその動画の数です</li>
+    </ul>
+  </HowWeCount>
+
+  {
+    groups.map((g) => (
+      <section class="panel mb-6 md:mb-8">
+        <h2 class="font-serif h-section font-semibold mb-4">{g.group}</h2>
+        <div class="@container">
+          <ol class="divide-y divide-ink/10">
+            {g.rows.map((x) => (
+              <RankingRow
+                rank={x.rank}
+                base={x.rank}
+                brand_id={x.it.brand_id}
+                brand={x.it.brand}
+                name_id={x.it.name_id}
+                name={x.it.name}
+                imageSrc={x.imageSrc}
+                videoCount={x.it.videoCount}
+                channelCount={x.it.channelCount}
+                price={x.price}
+                fromYahoo={x.fromYahoo}
+                link={x.link}
+                yahooLink={x.yahooLink}
+                subLabel={x.it.tag}
+                note={x.note}
+              />
+            ))}
+          </ol>
+        </div>
+        <p class="mt-2 text-xs text-neutral-500">
+          {g.rows
+            .map((x) => x.it.tag)
+            .filter((v, i, a) => a.indexOf(v) === i)
+            .map((t, i) => (
+              <>
+                {i > 0 && " / "}
+                {hasRankingPage(t) ? <a href={categoryUrl(t)} class="link-u text-ink">{t}のランキング</a> : t}
+              </>
+            ))}
+        </p>
+      </section>
+    ))
+  }
+
+  <p class="text-xs text-neutral-500 mb-8">価格は楽天市場で確認した時点の参考価格です。最新の価格・在庫は楽天市場でご確認ください。肌に合うかどうかには個人差があります。</p>
+
+  <ShareButtons text="YouTuberがリピートしているコスメ（PR・提供を除く）" label="このページをシェア" class="mb-10" />
+
+  <p class="text-sm">
+    <a href={withBase("/ranking/")} class="link-u text-ink">カテゴリ別ランキング →</a>{" "}
+    <a href={withBase("/concern/")} class="link-u text-ink">肌悩みから探す →</a>
+  </p>
+</Layout>

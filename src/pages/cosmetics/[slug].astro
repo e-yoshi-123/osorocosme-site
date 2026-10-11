@@ -34,6 +34,8 @@ import {
   getIngredientInfo,
   getIngredientsOfCosmetic,
   ingredientSourceLabel,
+  getRepeatUsers,
+  jstDate,
 } from "../../lib/data";
 
 export function getStaticPaths() {
@@ -65,6 +67,12 @@ const videosUsing = sortByPublishedDesc(getVideosUsingCosmetic(brand_id, name_id
 const noindex = videosUsing.length < COSMETIC_INDEX_MIN_VIDEOS;
 
 const facts = getCosmeticFacts(brand_id, name_id);
+// 同じ人が日をあけて繰り返し使っているか（PR・提供と新作紹介などの動画は除く。273章）
+const repeatUsers = getRepeatUsers(brand_id, name_id);
+const repeatSpan = (u: { first: string; last: string }) => {
+  const a = jstDate(u.first).y, b = jstDate(u.last).y;
+  return a === b ? `${a}年` : `${a}〜${b}年`;
+};
 // 画像の無い商品（＝楽天側に出品が無い・画像が消えている）は、購入できないリンクの可能性が高いので、価格・購入ボタンを出さない
 const buyable = !!extractImageSrc(entry?.rakuten_image_link);
 // 楽天の画像が無い商品で、Yahoo!ショッピングのリンクと画像があれば、Yahoo!の画像・価格を出す（115章）
@@ -245,6 +253,16 @@ const jsonLd = entry
               )}
             </dl>
             {facts.prCount > 0 && <p class="mt-3 text-xs leading-relaxed text-neutral-500">うち{facts.prCount}本はPR・提供の紹介のため、ランキングには数えていません。</p>}
+            {repeatUsers.length > 0 && (
+              <p class="mt-3 text-xs leading-relaxed text-neutral-600">
+                <span class="inline-flex items-center rounded-full border border-rose text-rose px-2 py-[3px] mr-1.5 leading-none font-semibold">{repeatUsers.length}人がリピート</span>
+                {repeatUsers.slice(0, 3).map((u, i) => (
+                  <>{i > 0 && "・"}<a href={withBase(`/influencer/${u.channel_id}`)} class="link-u">{u.channel_title}</a>（{u.videoCount}本・{repeatSpan(u)}）</>
+                ))}
+                {repeatUsers.length > 3 && `ほか${repeatUsers.length - 3}人`}
+                <a href={withBase("/ranking/repeat/")} class="link-u text-neutral-500 ml-1.5 whitespace-nowrap">リピートされているコスメ →</a>
+              </p>
+            )}
             {(() => {
               const seen = new Set<string>();
               const faces = facts.introductions.filter((i) => i.channel_icon && !seen.has(i.channel_id) && seen.add(i.channel_id)).slice(0, 8);

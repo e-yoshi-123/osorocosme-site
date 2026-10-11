@@ -1294,6 +1294,90 @@ export function concernCoverImages(slug: string, n = 3): { src: string; alt: str
   return out;
 }
 
+/** リピートされているコスメ（/ranking/repeat/、商品ページの「リピート」。273章）。
+ * 同じ投稿者が、日をあけた別々の動画で同じ商品を使っていれば「リピート」と数える。PR・提供の紹介は除く。
+ * 新作紹介・ベスコス・購入品・比較などの動画は、紹介する仕事として同じ商品が繰り返し出るだけで「使い続け」とは意味が違うので数えない。 */
+export const REPEAT_EXCLUDE_TITLE = /新作|ベスコス|ベストコスメ|購入品|爆買|比較|ランキング|レビュー|検証|発売|最新|新商品|福袋|開封|当選|\d+選/;
+/** 最初と最後の動画の投稿日がこの日数以上あいていること */
+export const REPEAT_MIN_GAP_DAYS = 30;
+/** ランキングに載せるのは、この人数以上がリピートしている商品 */
+export const REPEAT_MIN_CHANNELS = 3;
+export const REPEAT_PER_GROUP = 10;
+export interface RepeatUser {
+  channel_id: string;
+  channel_title: string;
+  /** その投稿者がこの商品を使った動画の本数（数える対象の動画だけ） */
+  videoCount: number;
+  first: string;
+  last: string;
+}
+let _repeatIndex: Map<string, RepeatUser[]> | null = null;
+function repeatIndex(): Map<string, RepeatUser[]> {
+  if (_repeatIndex) return _repeatIndex;
+  const uses = new Map<string, Map<string, { title: string; dates: string[] }>>();
+  for (const v of getVisibleVideos()) {
+    if (!v.published_at || REPEAT_EXCLUDE_TITLE.test(v.title || "")) continue;
+    const seen = new Set<string>();
+    for (const c of v.cosmetics || []) {
+      if (!c.brand_id || !c.name_id) continue;
+      if (isPrMention(v.key, c.brand_id, c.name_id)) continue;
+      const key = `${c.brand_id}_${c.name_id}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      let byCh = uses.get(key);
+      if (!byCh) uses.set(key, (byCh = new Map()));
+      const u = byCh.get(v.channel_id);
+      if (u) u.dates.push(v.published_at);
+      else byCh.set(v.channel_id, { title: v.channel_title, dates: [v.published_at] });
+    }
+  }
+  _repeatIndex = new Map();
+  for (const [key, byCh] of uses) {
+    const users: RepeatUser[] = [];
+    for (const [channel_id, u] of byCh) {
+      if (u.dates.length < 2) continue;
+      const ds = [...u.dates].sort();
+      if (new Date(ds[ds.length - 1]).getTime() - new Date(ds[0]).getTime() < REPEAT_MIN_GAP_DAYS * 86_400_000) continue;
+      users.push({ channel_id, channel_title: u.title, videoCount: ds.length, first: ds[0], last: ds[ds.length - 1] });
+    }
+    if (users.length > 0) {
+      users.sort((a, b) => b.videoCount - a.videoCount || a.first.localeCompare(b.first));
+      _repeatIndex.set(key, users);
+    }
+  }
+  return _repeatIndex;
+}
+/** 商品をリピートしている投稿者（使った本数の多い順）。いなければ空 */
+export function getRepeatUsers(brand_id: string, name_id: string): RepeatUser[] {
+  return repeatIndex().get(`${brand_id}_${name_id}`) ?? [];
+}
+export interface RepeatItem extends FeatureItem {
+  users: RepeatUser[];
+}
+let _repeatRanking: ReturnType<typeof buildRepeatRanking> | null = null;
+function buildRepeatRanking() {
+  const rankingByKey = new Map(getCosmeticRankings().map((r) => [`${r.brand_id}_${r.name_id}`, r]));
+  const items: (RepeatItem & { views: number })[] = [];
+  for (const [key, users] of repeatIndex()) {
+    if (users.length < REPEAT_MIN_CHANNELS) continue;
+    const r = rankingByKey.get(key);
+    const tag = r?.tags.find((t) => CATEGORY_TAG_TO_GROUP[t]);
+    if (!r || !tag) continue; // 大分類に属さないカテゴリ（その他）は載せない
+    // 行の「動画N本｜N人」は、リピートしている人と、その人たちがこの商品を使った動画の本数
+    items.push({ brand_id: r.brand_id, brand: r.brand, name_id: r.name_id, name: r.name, tag, videoCount: users.reduce((n, u) => n + u.videoCount, 0), channelCount: users.length, users, views: r.totalViews });
+  }
+  items.sort((a, b) => b.channelCount - a.channelCount || b.videoCount - a.videoCount || b.views - a.views || a.name.localeCompare(b.name, "ja"));
+  const groups = RANKING_CATEGORY_GROUPS.map((g) => ({
+    group: g.group,
+    items: items.filter((e) => CATEGORY_TAG_TO_GROUP[e.tag] === g.group).slice(0, REPEAT_PER_GROUP),
+  })).filter((g) => g.items.length > 0);
+  const channels = new Set(Array.from(repeatIndex().values()).flatMap((us) => us.map((u) => u.channel_id)));
+  return { itemCount: items.length, channelCount: channels.size, groups };
+}
+export function getRepeatRanking() {
+  return (_repeatRanking ??= buildRepeatRanking());
+}
+
 /** 成分から探す（/ingredient/<slug>/。242〜246章）。各ブランドの公式サイト（無ければ楽天市場のメーカー公式ショップ）に
  * 掲載された全成分に、その成分の表示名がある商品を載せる（言及の有無は条件にしない）。並びは、その成分に触れた言及がある商品を先にし、
  * 次に紹介したチャンネル数の順。全成分は backend/scripts/ingredients/ で原文と見比べて採用したもの、表示名の対応は ingredient_map.py。

@@ -25,7 +25,8 @@ function topImages(tag: string): { src: string; alt: string }[] {
   description="YouTubeのコスメ紹介動画での紹介数・再生数・紹介したインフルエンサー数から算出した、カテゴリ別の人気コスメランキング。化粧下地、ファンデーション、アイシャドウ、リップなど、カテゴリを選んで上位50位まで見られます。"
 >
   <PageHead en="Ranking" title="コスメランキング" lead="見たいカテゴリを選んでください。ファンデーションやアイライナーなどは、開くと「全般（まとめ）」と種類別のどれを見るか選べます。紹介動画の合計再生回数・紹介動画数・紹介したインフルエンサー数から出した人気順で、各カテゴリの上位50位まで見られます。">
-    <p class="mt-4 text-sm"><a href={withBase("/feature/")} class="link-u text-rose">特集：毎日メイク・プチプラ動画で人気のコスメ →</a></p>
+    <p class="mt-4 text-sm"><a href={withBase("/ranking/repeat/")} class="link-u text-rose">同じ人が何度も使っている「リピートされているコスメ」（PR・提供を除く） →</a></p>
+    <p class="mt-2 text-sm"><a href={withBase("/feature/")} class="link-u text-rose">特集：毎日メイク・プチプラ動画で人気のコスメ →</a></p>
   </PageHead>
 
   {

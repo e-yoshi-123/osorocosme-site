@@ -45,6 +45,7 @@ export const GET: APIRoute = ({ site }) => {
   const items: { path: string; lastmod?: string }[] = [
     { path: "/", lastmod: siteNewest },
     { path: "/ranking/", lastmod: siteNewest },
+    { path: "/ranking/repeat/", lastmod: siteNewest },
     ...Array.from(getRankingPages().keys()).map((t) => ({ path: `/ranking/${encodeURIComponent(t)}/`, lastmod: siteNewest })),
     { path: "/feature/", lastmod: siteNewest },
     ...getPublishedFeatures().map((f) => ({ path: `/feature/${f.slug}/`, lastmod: siteNewest })),
