@@ -54,3 +54,11 @@ window.addEventListener("error", function (ev) {
   s.className = "noimg"; s.textContent = "No image";
   (img.parentElement && img.parentElement.tagName === "A" && img.parentElement.children.length === 1 ? img.parentElement : img).replaceWith(s);
 }, true);
+
+// YouTubeのサムネイル（lib/data.ts の ytThumb）：sddefault はまれに無く、120×90 の灰色の画像が返るので、
+// その場合は srcset を外して hqdefault に戻す（213章）。以前は画像ごとに onload="…" を書いていた（容量を減らすためここにまとめた。280章）
+document.addEventListener("load", function (ev) {
+  var img = ev.target;
+  if (!img || img.tagName !== "IMG" || !img.srcset) return;
+  if (img.naturalWidth < 200 && /^https:\/\/i\.ytimg\.com\//.test(img.currentSrc || img.src)) img.removeAttribute("srcset");
+}, true);

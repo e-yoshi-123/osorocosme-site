@@ -216,13 +216,12 @@ export function isVisible(v: Video): boolean {
 
 /** YouTubeのサムネイル。データには320×180の mqdefault しか無く、大きく出すと粗いので、
  * 表示の幅に合わせて hqdefault（480×360）・sddefault（640×480）も選べるようにする（hq・sd は上下の黒帯を aspect-video の切り抜きで落とす）。
- * sddefault はまれに無い（120×90 の灰色の画像が返る）ので、その場合は srcset を外して hqdefault に戻す（THUMB_FALLBACK）。213章 */
+ * sddefault はまれに無い（120×90 の灰色の画像が返る）ので、その場合は srcset を外して hqdefault に戻す（public/js/img-error.js。213・280章） */
 export function ytThumb(url: string): { src: string; srcset?: string } {
   const m = url?.match(/^(https:\/\/i\.ytimg\.com\/vi\/[^/]+)\/(?:mq|hq|sd|maxres)?default\.jpg$/);
   if (!m) return { src: url };
   return { src: `${m[1]}/hqdefault.jpg`, srcset: `${m[1]}/mqdefault.jpg 320w, ${m[1]}/hqdefault.jpg 480w, ${m[1]}/sddefault.jpg 640w` };
 }
-export const THUMB_FALLBACK = "if(this.naturalWidth<200&&this.srcset)this.removeAttribute('srcset')";
 /** 共有用の画像（og:image）など、1枚だけ渡すときの大きめのサムネイル（必ずある hqdefault） */
 export function ytThumbLarge(url: string): string {
   return ytThumb(url).src;
