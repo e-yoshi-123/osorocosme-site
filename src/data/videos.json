@@ -610048,9 +610048,22 @@
         "mentions": [
           "アルマーニのグロスをリップに重ねる"
         ]
+      },
+      {
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00016",
+        "name": "アイラッシュカーラー",
+        "related_tags": [
+          "ビューラー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "資生堂のいつものビューラーの限定ゴールドバージョン"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "ZTQdZ2WMsN0": {
     "video_id": "ZTQdZ2WMsN0",
@@ -610206,9 +610219,22 @@
         "mentions": [
           "これしかない。何年も使っていてパンダになった実績がない。クリアブラックで落ちても目立たない。3〜4日持つ"
         ]
+      },
+      {
+        "brand_id": "brand-00008",
+        "brand": "SK-II",
+        "name_id": "name-00004",
+        "name": "ジェノプティクス CC プライマー",
+        "related_tags": [
+          "日焼け止め・UVケア(顔用)"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "アトモスフィアCCクリームの後継としてアップデートされたCC。SPF50+・PA++++。色味も似ていてすごくきれい"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "ZVZwAJClI_Y": {
     "video_id": "ZVZwAJClI_Y",
@@ -610809,9 +610835,48 @@
           "ツヤ感が欲しくてこまめに塗り直していた"
         ],
         "time_in_video": "37:06"
+      },
+      {
+        "brand_id": "brand-01027",
+        "brand": "VDL（ヴィ・ディー・エル）",
+        "name_id": "name-00004",
+        "name": "カラー コレクティング プライマー",
+        "related_tags": [
+          "化粧下地"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "肌を白く透明感を出したい日に。写真をたくさん撮られる日・映えたい日に首まで塗る"
+        ]
+      },
+      {
+        "brand_id": "brand-00446",
+        "brand": "LUNA",
+        "name_id": "name-00133",
+        "name": "ロングラスティングチップコンシーラー",
+        "related_tags": [
+          "コンシーラー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "肌荒れ気味な場所に平らに薄く伸ばす"
+        ]
+      },
+      {
+        "brand_id": "brand-00040",
+        "brand": "イヴ・サンローラン",
+        "name_id": "name-00005",
+        "name": "YSL メイクミーブラッシュ パウダー",
+        "related_tags": [
+          "パウダーチーク"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "かなり青みっぽい色だが塗るとナチュラルで赤ちゃんのようなほんのりした頬に"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "meF-LZErRFk": {
     "video_id": "meF-LZErRFk",
@@ -611896,9 +611961,35 @@
         "mentions": [
           "概要欄の使用アイテムに記載"
         ]
+      },
+      {
+        "brand_id": "brand-00043",
+        "brand": "ロージーローザ",
+        "name_id": "name-00018",
+        "name": "マルチユースブラシ＜シャドウ＞",
+        "related_tags": [
+          "メイクブラシ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "アイホールに"
+        ]
+      },
+      {
+        "brand_id": "brand-00550",
+        "brand": "サナ ニューボーン",
+        "name_id": "name-00002",
+        "name": "パーフェクトアイブロウ",
+        "related_tags": [
+          "アイブロウペンシル"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "涙袋の影ラインに"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "2tAFM9Trb4k": {
     "video_id": "2tAFM9Trb4k",
@@ -612580,9 +612671,20 @@
           "赤茶カラー。目頭の下に少し仕込む"
         ],
         "time_in_video": "42:23"
+      },
+      {
+        "brand_id": "brand-01497",
+        "brand": "cicica",
+        "name_id": "name-00001",
+        "name": "cicica 1day",
+        "related_tags": [],
+        "skin_concern": "",
+        "mentions": [
+          "本人プロデュースのカラコン。奥目でも立体感が出るように計算、ナチュラル"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "T-0rs2PZtu0": {
     "video_id": "T-0rs2PZtu0",
@@ -612670,9 +612772,35 @@
           "目頭・切開ラインと下に"
         ],
         "time_in_video": "14:46"
+      },
+      {
+        "brand_id": "brand-00001",
+        "brand": "セザンヌ",
+        "name_id": "name-00001",
+        "name": "超細芯アイブロウ",
+        "related_tags": [
+          "アイブロウペンシル"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "すっごい描きやすい、パウダーより楽ちん、おすすめ"
+        ]
+      },
+      {
+        "brand_id": "brand-01027",
+        "brand": "VDL（ヴィ・ディー・エル）",
+        "name_id": "name-00002",
+        "name": "ＶＤＬ　チークステイン　ブラッシャー",
+        "related_tags": [
+          "パウダーチーク"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "彩度低めのピンク。VDLのチークはめっちゃ可愛い、毛穴も綺麗に埋まる"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "WcPAKrqeYQo": {
     "video_id": "WcPAKrqeYQo",
@@ -612732,9 +612860,33 @@
           "オレンジみが強い。スポンジで広めに入れると血色感が上がる"
         ],
         "time_in_video": "16:29"
+      },
+      {
+        "brand_id": "brand-01027",
+        "brand": "VDL（ヴィ・ディー・エル）",
+        "name_id": "name-00002",
+        "name": "ＶＤＬ　チークステイン　ブラッシャー",
+        "related_tags": [
+          "パウダーチーク"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "土台として"
+        ]
+      },
+      {
+        "brand_id": "brand-00756",
+        "brand": "スウィート",
+        "name_id": "name-00007",
+        "name": "マジェット",
+        "related_tags": [],
+        "skin_concern": "",
+        "mentions": [
+          "春はこれ一択。多幸感が出る、盛れるけどナチュラル、唯一無二のカラコン"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "ZhBcMxFhpdg": {
     "video_id": "ZhBcMxFhpdg",
@@ -612894,9 +613046,48 @@
           "購入品。大好き、カバー力完璧"
         ],
         "time_in_video": "20:15"
+      },
+      {
+        "brand_id": "brand-00380",
+        "brand": "カントリー&ストリーム",
+        "name_id": "name-00035",
+        "name": "ナチュラルアイクリームHM",
+        "related_tags": [
+          "アイケア・アイクリーム"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "購入品。蜂蜜のアイクリーム、目のシワ対策に挑戦"
+        ]
+      },
+      {
+        "brand_id": "brand-00081",
+        "brand": "ロレアル パリ",
+        "name_id": "name-00109",
+        "name": "エクストラオーディナリー オイル チェリー ウッド",
+        "related_tags": [
+          "アウトバストリートメント"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "購入品。ウッドの香り、良さそう"
+        ]
+      },
+      {
+        "brand_id": "brand-00264",
+        "brand": "AESTURA",
+        "name_id": "name-00029",
+        "name": "アトバリア365 カプセルトナー",
+        "related_tags": [
+          "化粧水"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "購入品。めっちゃ欲しかった、このブランドのクリームと下地を持っているほど大好き"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "pyPc5MEWYAY": {
     "video_id": "pyPc5MEWYAY",
@@ -613188,9 +613379,35 @@
           "さらに乾燥しやすい時期に顔にすごく薄く塗る美容オイル。乾燥しやすいところに"
         ],
         "time_in_video": "6:24"
+      },
+      {
+        "brand_id": "brand-00061",
+        "brand": "シュウ ウエムラ",
+        "name_id": "name-00108",
+        "name": "ブライト クレンジング オイル",
+        "related_tags": [
+          "オイルクレンジング"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "メイク落としで肌が荒れやすいので使用。濃いメイクでも素早く落とせる。ワンプッシュで濃いアイシャドウもポンと乗せただけで落ち始める。コスプレメイクの濃いメイクもマスカラもすぐ落ちるので頼りきっている"
+        ]
+      },
+      {
+        "brand_id": "brand-00053",
+        "brand": "アルビオン",
+        "name_id": "name-00281",
+        "name": "フラルネ フルリファイン ミルク f EM",
+        "related_tags": [
+          "乳液"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "アルビオンの乳液。季節で変わり、冬向けのしっとりタイプ（乾燥を防ぐ）。夏は白い美白のほう。化粧水の前にコットンで2プッシュ塗る導入乳液のような使い方。油っぽくなるのが嫌な人はさっぱりタイプ"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "I4buk-Rg76Y": {
     "video_id": "I4buk-Rg76Y",
@@ -613709,9 +613926,35 @@
           "アイライナーだがリップライナーとして使用。色味がよく定着もいい。唇をボリュームアップ"
         ],
         "time_in_video": "40:03"
+      },
+      {
+        "brand_id": "brand-00011",
+        "brand": "ケイト",
+        "name_id": "name-00160",
+        "name": "スーパーシャープライナーEX4.0（ショート筆）",
+        "related_tags": [
+          "リキッドアイライナー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "令和メイクのアイライナー。ブラウンブラックで透け感のあるジェルライナー。控えめな色で軽く入れ、1cm程度外に出す"
+        ]
+      },
+      {
+        "brand_id": "brand-00423",
+        "brand": "Panasonic",
+        "name_id": "name-00012",
+        "name": "まつげくるん EH-SE11",
+        "related_tags": [
+          "ビューラー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "ホットビューラー。まつ毛が弱っているので使う"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "LUf9zcucidM": {
     "video_id": "LUf9zcucidM",
@@ -613811,9 +614054,35 @@
           "クリームに混ぜるとさらにしっとりする粉。コラーゲンは保湿して艶感を出す。意外とめっちゃ好き"
         ],
         "time_in_video": "22:10"
+      },
+      {
+        "brand_id": "brand-00226",
+        "brand": "MEDICUBE(メディキューブ)",
+        "name_id": "name-00010",
+        "name": "PDRNピンクセラムミスト",
+        "related_tags": [
+          "ミスト状化粧水"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "PDRN入り。クリーム・美容液なしでこれ1本でめっちゃ保湿される。ストックするほど大好き。夜はこれでペタペタに"
+        ]
+      },
+      {
+        "brand_id": "brand-01041",
+        "brand": "コフェル(KOPHER)",
+        "name_id": "name-00002",
+        "name": "キュリペア メルダーSOSスシステム",
+        "related_tags": [
+          "美容液"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "プツプツ・赤み・ニキビができた部分に多めに塗ると落ち着くのが早い。保湿もされ、コンパクトで旅行にもいい"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "Pf3sW2S9PcY": {
     "video_id": "Pf3sW2S9PcY",
@@ -614254,9 +614523,35 @@
         "mentions": [
           "フェイスパウダー部門。韓国のメイクアップアーティストのブランドでプロ視点の粉の作り"
         ]
+      },
+      {
+        "brand_id": "brand-00020",
+        "brand": "シャネル",
+        "name_id": "name-00002",
+        "name": "レ ベージュ パレット ルガール",
+        "related_tags": [
+          "パウダーアイシャドウ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "2026年上半期ベスコス アイシャドウ部門。ピンクで締め色に赤みが入り、下が黄みでおしゃれ。意味での外しがおしゃれ"
+        ]
+      },
+      {
+        "brand_id": "brand-00014",
+        "brand": "ディオール",
+        "name_id": "name-00571",
+        "name": "プレステージ ホワイト ル プロテクター UV ルミエール",
+        "related_tags": [
+          "日焼け止め・UVケア(顔用)"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "メイク下地部門。大人の肌のくすみがぶち消される、肌の中でLEDが光った感じ。つけすぎ注意。青みに寄らない。コンディションが悪い日に使いたい特別な下地"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "apzsW3bkl1Q": {
     "video_id": "apzsW3bkl1Q",
@@ -614315,9 +614610,83 @@
           "いつものペンシルで粘膜を埋める。新しく買った15 ピンクベージュを目尻の下ラインに。ピンクブラウンで使いやすく、密着して持続力がいい。優勝"
         ],
         "time_in_video": "15:16"
+      },
+      {
+        "brand_id": "brand-00920",
+        "brand": "pia",
+        "name_id": "name-00004",
+        "name": "MOLAK 1day",
+        "related_tags": [],
+        "skin_concern": "",
+        "mentions": [
+          "最近の動画はほぼこのモラクのブラウンのカラコン"
+        ]
+      },
+      {
+        "brand_id": "brand-01198",
+        "brand": "ABOUT TONE",
+        "name_id": "name-00014",
+        "name": "アバウトトーン フラッフィーエアーブラッシャー",
+        "related_tags": [
+          "ジェル・クリームチーク"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "ずっと完売でなかなか買えなかった。思ったより発色がよくポワっと柔らかく見せる。コーラル感のあるブラウン"
+        ]
+      },
+      {
+        "brand_id": "brand-01215",
+        "brand": "TWO SLASH FOUR",
+        "name_id": "name-00005",
+        "name": "オールオーバーフェイス ブラッシュ",
+        "related_tags": [
+          "パウダーチーク"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "柔らかめのベージュ。アバウトトーンの上に重ねると落ち着き、艶っとローズっぽさも出て抜け感が出る。買い"
+        ]
+      },
+      {
+        "brand_id": "brand-01198",
+        "brand": "ABOUT TONE",
+        "name_id": "name-00003",
+        "name": "ブラーパウダーパクト",
+        "related_tags": [
+          "プレストパウダー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "いつものパウダー。ほうれい線周りやおでこを押さえるとマット感が出る"
+        ]
+      },
+      {
+        "brand_id": "brand-00728",
+        "brand": "SO NATURAL",
+        "name_id": "name-00160",
+        "name": "オールデイタイトメイクアップセッティングフィクサー",
+        "related_tags": [],
+        "skin_concern": "",
+        "mentions": [
+          "いつも使っているフィクサー。最後に振って崩れ防止"
+        ]
+      },
+      {
+        "brand_id": "brand-00317",
+        "brand": "too cool for school",
+        "name_id": "name-00002",
+        "name": "アートクラス フロッタージュペンシル",
+        "related_tags": [
+          "ペンシルアイライナー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "いつものペンシルでノーズシャドウのベースを描いてブラシでぼかす"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "ifL9FZ37hWo": {
     "video_id": "ifL9FZ37hWo",
@@ -614658,9 +615027,35 @@
           "ハイライトとして上から重ねるように使用（字幕は「フェイスグローカラー」）"
         ],
         "time_in_video": "10:23"
+      },
+      {
+        "brand_id": "brand-00002",
+        "brand": "キャンメイク",
+        "name_id": "name-00005",
+        "name": "マシュマロフィニッシュパウダー",
+        "related_tags": [
+          "プレストパウダー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "毎日メイクで使用（字幕は「フィニッシングパウダー」）"
+        ]
+      },
+      {
+        "brand_id": "brand-00001",
+        "brand": "セザンヌ",
+        "name_id": "name-00086",
+        "name": "アイブロウマスカラ",
+        "related_tags": [
+          "眉マスカラ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "毎日メイクで使用"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "9zE-qIKeZLs": {
     "video_id": "9zE-qIKeZLs",
@@ -614906,9 +615301,22 @@
           "パープルリボンセットに入っている。睡眠不足でも3時間多く眠ったような肌へ導くナイトメンテナンスクリーム"
         ],
         "time_in_video": "5:52"
+      },
+      {
+        "brand_id": "brand-00003",
+        "brand": "コスメデコルテ",
+        "name_id": "name-00573",
+        "name": "マルセル ワンダース コレクション　コスメデコルテ　フェイスパウダー XVI",
+        "related_tags": [
+          "メイクアップキット・パレット"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "16作目。鍵のモチーフのコンパクト。しっとりしなやかに溶け込む透明感仕上がりで毛穴・くすみをカバー。花型チャームのハイライター（ラベンダーピンク）付属。28,600円、12/1発売"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "RsZdh3zGW88": {
     "video_id": "RsZdh3zGW88",
@@ -614966,9 +615374,46 @@
         "mentions": [
           "ビューラーは資生堂、すごくいい。カーブがなだらかで使いやすく綺麗に上がる。安いビューラーやダイソーは論外、お金をかけた方がいい"
         ]
+      },
+      {
+        "brand_id": "brand-00920",
+        "brand": "pia",
+        "name_id": "name-00004",
+        "name": "MOLAK 1day",
+        "related_tags": [],
+        "skin_concern": "",
+        "mentions": [
+          "最近付けるようになったカラコン。カラコンを付けた方が可愛いと気づいた"
+        ]
+      },
+      {
+        "brand_id": "brand-01027",
+        "brand": "VDL（ヴィ・ディー・エル）",
+        "name_id": "name-00004",
+        "name": "カラー コレクティング プライマー",
+        "related_tags": [
+          "化粧下地"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "赤み肌タイプなので緑の下地が良いのではと仮説を立てて検証中。少し肌が白くなる感じはある"
+        ]
+      },
+      {
+        "brand_id": "brand-00266",
+        "brand": "BANILA CO",
+        "name_id": "name-00013",
+        "name": "カバーリシャス パワーフィット ファンデーション",
+        "related_tags": [
+          "リキッドファンデーション"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "ファンデーション。使いすぎて出ない。厚塗り感を出したくないので適当に薄く"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "eDRDmb0zRqg": {
     "video_id": "eDRDmb0zRqg",
@@ -615463,9 +615908,22 @@
           "少し濃い色でぽっとした感じに。目の下横にも"
         ],
         "time_in_video": "27:48"
+      },
+      {
+        "brand_id": "brand-00128",
+        "brand": "CLIO",
+        "name_id": "name-00062",
+        "name": "デューイ シロップ ティント",
+        "related_tags": [
+          "口紅"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "内側と山の上だけに塗る（字幕のブランドは「イーザー&」と不明瞭）"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "6J6cKEw9Cuk": {
     "video_id": "6J6cKEw9Cuk",
@@ -615480,11 +615938,38 @@
     "subscriber_count": 387000,
     "view_count": "255808",
     "duration": "PT25M48S",
-    "check_status": false,
+    "check_status": true,
     "delete_flg": false,
     "processed": true,
-    "cosmetics": [],
-    "updated_at": "2026-10-12"
+    "cosmetics": [
+      {
+        "brand_id": "brand-00530",
+        "brand": "ケープ",
+        "name_id": "name-00005",
+        "name": "ケープ 3Dエクストラキープ 無香料",
+        "related_tags": [
+          "ヘアスプレー・ヘアミスト"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "前髪を巻いたあとケープで固める。使っているのは紫のケープ"
+        ]
+      },
+      {
+        "brand_id": "brand-00057",
+        "brand": "D-UP(ディーアップ)",
+        "name_id": "name-00005",
+        "name": "アイラッシュフィクサーEX552",
+        "related_tags": [
+          "つけまつげ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "前髪をつけまのりでおでこに貼り付けて固定する。雨の日も前髪が全然崩れなかった"
+        ]
+      }
+    ],
+    "updated_at": "2026-10-13"
   },
   "6kyfsQD9La0": {
     "video_id": "6kyfsQD9La0",
@@ -615750,9 +616235,35 @@
           "このシリーズはハンドクリームも使っている。めっちゃ好き"
         ],
         "time_in_video": "20:19"
+      },
+      {
+        "brand_id": "brand-00077",
+        "brand": "Anua",
+        "name_id": "name-00064",
+        "name": "ビタミン10ポアストリクスセラム",
+        "related_tags": [
+          "美容液"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "めっちゃいいなと思った。ビタミンが超入っている気がする。週3くらい夜だけ使う"
+        ]
+      },
+      {
+        "brand_id": "brand-00239",
+        "brand": "Cure",
+        "name_id": "name-00014",
+        "name": "アクアジェルミルク",
+        "related_tags": [
+          "乳液"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "ピュアバブルローションと一緒にもらったジェル乳液。これから使ってみる"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "DjPAefc_gg4": {
     "video_id": "DjPAefc_gg4",
@@ -616707,9 +617218,33 @@
           "今日のコンタクト。着色直径が13.3mmと小さめで、チョコっぽいブラウンがめちゃくちゃ可愛い。自分には大きさが物足りない"
         ],
         "time_in_video": "23:46"
+      },
+      {
+        "brand_id": "brand-01114",
+        "brand": "vim BEAUTY(ヴィム ビューティー)",
+        "name_id": "name-00019",
+        "name": "keep confidence mist",
+        "related_tags": [],
+        "skin_concern": "",
+        "mentions": [
+          "仕上げ用ミストだがフィッティングミストとしても使う。雫型スポンジに軽くかけて下地をなじませ、ベースの最後にも遠くからかける"
+        ]
+      },
+      {
+        "brand_id": "brand-01027",
+        "brand": "VDL（ヴィ・ディー・エル）",
+        "name_id": "name-00001",
+        "name": "ＶＤＬ　トーン　ステイン　カラー　コレクティング　プライマー",
+        "related_tags": [
+          "化粧下地"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "ブルーのトーンアップ下地。元々めちゃめちゃ肌が白いように演出。スパチュラで薄くミルフィーユのように重ね、顔の中心を多めに外へグラデーション"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "4VookuIUzFc": {
     "video_id": "4VookuIUzFc",
@@ -617148,9 +617683,61 @@
           "ハンドクリームはニベアで十分、鞄に入れておく"
         ],
         "time_in_video": "6:49"
+      },
+      {
+        "brand_id": "brand-00154",
+        "brand": "SKIN1004",
+        "name_id": "name-00012",
+        "name": "ヒアルーシカ ウォーターフィットサンセラム",
+        "related_tags": [
+          "日焼け止め・UVケア(顔用)"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "白パッケージの青っぽいやつ。コスパ良くおすすめ"
+        ]
+      },
+      {
+        "brand_id": "brand-00538",
+        "brand": "デオナチュレ",
+        "name_id": "name-00001",
+        "name": "薬用ソフトストーンＷ",
+        "related_tags": [
+          "デオドラント・制汗剤・汗ケア"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "デオドラントはベーシックでいい"
+        ]
+      },
+      {
+        "brand_id": "brand-00364",
+        "brand": "ナプラ",
+        "name_id": "name-00001",
+        "name": "N. ポリッシュオイル",
+        "related_tags": [
+          "フェイスオイル・バーム"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "ヘアオイル。概要欄の使用アイテムに記載"
+        ]
+      },
+      {
+        "brand_id": "brand-00364",
+        "brand": "ナプラ",
+        "name_id": "name-00085",
+        "name": "N. ナチュラルバーム",
+        "related_tags": [
+          "ヘアワックス・クリーム"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "バームならエヌドットのナチュラルバーム"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "AjQTgX0JZvY": {
     "video_id": "AjQTgX0JZvY",
@@ -617852,9 +618439,35 @@
           "中心だけでいい、可愛い"
         ],
         "time_in_video": "9:40"
+      },
+      {
+        "brand_id": "brand-01452",
+        "brand": "&nd by rom&nd",
+        "name_id": "name-00007",
+        "name": "グラッシーアイグリッター",
+        "related_tags": [
+          "ジェル・クリームアイシャドウ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "ローソンのロマンド。黒目の下に少しだけ"
+        ]
+      },
+      {
+        "brand_id": "brand-00300",
+        "brand": "キスミー ヘビーローテーション",
+        "name_id": "name-00001",
+        "name": "カラーリングアイブロウEX",
+        "related_tags": [
+          "眉マスカラ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "眉の印象を薄くできる"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "yUorYyhtyO0": {
     "video_id": "yUorYyhtyO0",
@@ -618745,9 +619358,22 @@
         "mentions": [
           "11月発売の新作として紹介、塗り比べ（概要欄の使用アイテムに記載）"
         ]
+      },
+      {
+        "brand_id": "brand-00017",
+        "brand": "ヴィセ",
+        "name_id": "name-00008",
+        "name": "キラー アイ トリオ",
+        "related_tags": [
+          "パウダーアイシャドウ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "11月発売の新作として紹介、塗り比べ（概要欄の使用アイテムに記載）"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "Kh9KQThee4o": {
     "video_id": "Kh9KQThee4o",
@@ -618892,9 +619518,22 @@
         "mentions": [
           "ヘアメイクKENJIのベスコス1位。ロングラスティングで薄づき、作り込みすぎずに完璧な肌が作れる"
         ]
+      },
+      {
+        "brand_id": "brand-00407",
+        "brand": "HERA",
+        "name_id": "name-00051",
+        "name": "センシュアル パウダーマットリキッド EX",
+        "related_tags": [
+          "口紅"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "上半期ベスコス1位。ピンクヘイズと混ぜて上半期の半分の日に塗っていた、2本目。中央にだけ塗って内側から赤みを出す。風が吹いても髪がひっつかない"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "T1yQCdzk3D4": {
     "video_id": "T1yQCdzk3D4",
@@ -618983,9 +619622,22 @@
           "とろっとした化粧水"
         ],
         "time_in_video": "4:06"
+      },
+      {
+        "brand_id": "brand-00160",
+        "brand": "COSRX(コスアールエックス)",
+        "name_id": "name-00012",
+        "name": "フルフィットプロポリスナリシングマグネットシートマスク",
+        "related_tags": [
+          "シートマスク・パック"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "首や鎖骨あたりにもしっかり塗るパック。めっちゃ好き"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "XJl1ez5N7ac": {
     "video_id": "XJl1ez5N7ac",
@@ -619562,9 +620214,22 @@
         "mentions": [
           "ハイライトとして使用。口コミが多い人気アイテム"
         ]
+      },
+      {
+        "brand_id": "brand-00043",
+        "brand": "ロージーローザ",
+        "name_id": "name-00018",
+        "name": "マルチユースブラシ＜シャドウ＞",
+        "related_tags": [
+          "メイクブラシ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "zvIhnagiVZA": {
     "video_id": "zvIhnagiVZA",
@@ -619864,9 +620529,35 @@
           "新色。赤み系で透明感が出る。くすまない血色感。しっとりした粉質でまぶたに吸い付く"
         ],
         "time_in_video": "20:57"
+      },
+      {
+        "brand_id": "brand-00010",
+        "brand": "エリクシール",
+        "name_id": "name-00002",
+        "name": "エリクシール デーケアレボリューション トーンアップ SP＋ aa",
+        "related_tags": [
+          "乳液"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "リピ。日焼け止めで結局手が伸びる大好きなもの。血色感が足され白くなりすぎない。時間が経っても潤い続ける"
+        ]
+      },
+      {
+        "brand_id": "brand-00310",
+        "brand": "&honey（アンドハニー）",
+        "name_id": "name-00094",
+        "name": "＆honey Melty マトメイク スティック スーパーホールド4.0",
+        "related_tags": [
+          "ヘアジェル"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "リピ。手元にある中で一番長持ち。バリバリ固まらずべちゃつかない。アホ毛をひと撫ででキープ"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "5tuXIETszF4": {
     "video_id": "5tuXIETszF4",
@@ -620199,9 +620890,20 @@
           "縦じわが目立たなくなり色味が可愛くて気に入っている。中心に縦に入れる"
         ],
         "time_in_video": "21:49"
+      },
+      {
+        "brand_id": "brand-00920",
+        "brand": "pia",
+        "name_id": "name-00001",
+        "name": "TOPARDS 1day",
+        "related_tags": [],
+        "skin_concern": "",
+        "mentions": [
+          "さしはらさんプロデュース。カサカサしないところが好き。夕方もゴロゴロしにくく使いやすい"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "Gl8I9JgjH8U": {
     "video_id": "Gl8I9JgjH8U",
@@ -620490,9 +621192,33 @@
           "目尻に細くすっと真横に伸ばす"
         ],
         "time_in_video": "21:23"
+      },
+      {
+        "brand_id": "brand-00159",
+        "brand": "pdc",
+        "name_id": "name-00001",
+        "name": "ピメル うそつきマスカラ",
+        "related_tags": [
+          "マスカラ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "あんまり黒々しくならないけど盛れる。理想、とっても良き"
+        ]
+      },
+      {
+        "brand_id": "brand-01201",
+        "brand": "TIMAGE",
+        "name_id": "name-00001",
+        "name": "ハイライト・シェーディングパレット",
+        "related_tags": [],
+        "skin_concern": "",
+        "mentions": [
+          "マットハイライトで鼻筋を通す"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "HFrMyeGLP0M": {
     "video_id": "HFrMyeGLP0M",
@@ -620507,12 +621233,26 @@
     "subscriber_count": 10800,
     "view_count": "3005",
     "duration": "PT8M20S",
-    "check_status": false,
+    "check_status": true,
     "delete_flg": false,
     "processed": true,
     "via": "channel",
-    "cosmetics": [],
-    "updated_at": "2026-10-12"
+    "cosmetics": [
+      {
+        "brand_id": "brand-00075",
+        "brand": "TIRTIR",
+        "name_id": "name-00002",
+        "name": "MASK FIT TONE UP ESSENCE",
+        "related_tags": [
+          "日焼け止め・UVケア(顔用)"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "オーソドックスなスキンベージュ。思いのほか白くなった。伸びが良く水っぽいテクスチャー。保湿力はそこまでなくインナードライには向かない。すごく好きなので使い続けたい"
+        ]
+      }
+    ],
+    "updated_at": "2026-10-13"
   },
   "L8JBECfZFe0": {
     "video_id": "L8JBECfZFe0",
@@ -620627,9 +621367,20 @@
           "台湾のメイクさんに教わった。細い先端で伸ばし、下まつ毛も塗りやすく優秀"
         ],
         "time_in_video": "7:21"
+      },
+      {
+        "brand_id": "brand-00756",
+        "brand": "スウィート",
+        "name_id": "name-00007",
+        "name": "マジェット",
+        "related_tags": [],
+        "skin_concern": "",
+        "mentions": [
+          "本人プロデュースのカラコン。これじゃないと盛れない、ストックをちまちま使っている。改良版を作っている"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "VPu10K9a3tA": {
     "video_id": "VPu10K9a3tA",
@@ -620701,9 +621452,22 @@
         "mentions": [
           "はまっている。本当に使いやすい。マットでふわっとさせるのが最近好き"
         ]
+      },
+      {
+        "brand_id": "brand-00004",
+        "brand": "マキアージュ",
+        "name_id": "name-00243",
+        "name": "エッセンスベース ＥＸ",
+        "related_tags": [
+          "化粧下地"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "ちょっとベージュっぽい下地をファンデの前に仕込む"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "XlehMPn6YvU": {
     "video_id": "XlehMPn6YvU",
@@ -620901,9 +621665,22 @@
           "ずっと好きで使っていた。仕事の時に下地の下地として入れ込むことを結構やってきた"
         ],
         "time_in_video": "24:42"
+      },
+      {
+        "brand_id": "brand-00040",
+        "brand": "イヴ・サンローラン",
+        "name_id": "name-00285",
+        "name": "YSL ラブヌード リップスティック",
+        "related_tags": [
+          "口紅"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載（着用リップ）"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "klpLoS413hM": {
     "video_id": "klpLoS413hM",
@@ -621243,9 +622020,48 @@
           "真ん中につける"
         ],
         "time_in_video": "14:34"
+      },
+      {
+        "brand_id": "brand-00454",
+        "brand": "Sulwhasoo",
+        "name_id": "name-00004",
+        "name": "滋陰生クリーム(旧)",
+        "related_tags": [
+          "フェイスクリーム"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "土の香りで大地のパワーを感じる。パール1粒分でも朝しつこくない"
+        ]
+      },
+      {
+        "brand_id": "brand-00020",
+        "brand": "シャネル",
+        "name_id": "name-00002",
+        "name": "レ ベージュ パレット ルガール",
+        "related_tags": [
+          "パウダーアイシャドウ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "テラコッタっぽいオレンジがかったカラーがいい。グラデは綺麗すぎない方がいい。ラメで抜け感"
+        ]
+      },
+      {
+        "brand_id": "brand-00014",
+        "brand": "ディオール",
+        "name_id": "name-00589",
+        "name": "ルージュ ディオール オン ステージ インク（ブラー マット）",
+        "related_tags": [
+          "リキッドルージュ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "コンシーラーブラシでつける。唇のムラが全部取れて若々しく見える。薄いのにすごくいい"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "yz57TFoz3Bg": {
     "video_id": "yz57TFoz3Bg",
@@ -621562,9 +622378,61 @@
           "夜用。しっかりしたテクスチャーで弾力、目元・口元のハリが蘇る。何個目かリピ"
         ],
         "time_in_video": "18:43"
+      },
+      {
+        "brand_id": "brand-00077",
+        "brand": "Anua",
+        "name_id": "name-00002",
+        "name": "PDRN ヒアルロン酸100 セラム",
+        "related_tags": [
+          "ブースター・導入液"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "最近めっちゃいい。塗ったそばから肌が発光する感じ、艶感が足りない朝に"
+        ]
+      },
+      {
+        "brand_id": "brand-00226",
+        "brand": "MEDICUBE(メディキューブ)",
+        "name_id": "name-00003",
+        "name": "AGE-Rブースタープロ",
+        "related_tags": [
+          "スキンケア美容家電"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載"
+        ]
+      },
+      {
+        "brand_id": "brand-01899",
+        "brand": "CosDeBAHA",
+        "name_id": "name-00008",
+        "name": "RS レチノール 2.5％ セラム",
+        "related_tags": [
+          "美容液"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "アゼライン酸とセットで使うと肌がつるつるに"
+        ]
+      },
+      {
+        "brand_id": "brand-00431",
+        "brand": "KISO",
+        "name_id": "name-00001",
+        "name": "キソ フェイシャルマスク 30枚セット",
+        "related_tags": [
+          "シートマスク・パック"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "長らく愛用。とにかく安くコスパが良い、密着度が高い。ビタミンC・レチノールが好き"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "SgXRZG_nh0A": {
     "video_id": "SgXRZG_nh0A",
@@ -621693,9 +622561,22 @@
           "めっちゃ聞かれるアイシャドウ。ピュア感と透明感、パールを重ねても濁らない。ブラウンで大人っぽさも"
         ],
         "time_in_video": "20:44"
+      },
+      {
+        "brand_id": "brand-00013",
+        "brand": "クレ・ド・ポー ボーテ",
+        "name_id": "name-00011",
+        "name": "ル・セラムII",
+        "related_tags": [
+          "美容液"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "1本使い切ってもう1本買おうと思っていた"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "Ug0LIjYVSJk": {
     "video_id": "Ug0LIjYVSJk",
@@ -621951,9 +622832,22 @@
         "mentions": [
           "前髪に内側から少量。艶が出る、手放せない（提供）"
         ]
+      },
+      {
+        "brand_id": "brand-00061",
+        "brand": "シュウ ウエムラ",
+        "name_id": "name-00115",
+        "name": "スカルプト クレヨン",
+        "related_tags": [
+          "ジェル・クリームチーク"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "ハイライトに使用"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "XXcpr-kXmdM": {
     "video_id": "XXcpr-kXmdM",
@@ -622155,9 +623049,22 @@
           "口紅に使用"
         ],
         "time_in_video": "25:44"
+      },
+      {
+        "brand_id": "brand-00037",
+        "brand": "ヒロインメイク",
+        "name_id": "name-00010",
+        "name": "影色シークレットアイライナー SPキープ",
+        "related_tags": [
+          "リキッドアイライナー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "目尻を少し下げ気味にアンダーに"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "nhBSi9Ow9PE": {
     "video_id": "nhBSi9Ow9PE",
@@ -622449,9 +623356,74 @@
         "mentions": [
           "急いで描いて下に落ちたが、目を囲むラインの役目になって問題なし"
         ]
+      },
+      {
+        "brand_id": "brand-00964",
+        "brand": "エルジューダ",
+        "name_id": "name-00015",
+        "name": "サンプロテクト セラム",
+        "related_tags": [
+          "アウトバストリートメント"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "濡れた髪に。残り少ない"
+        ]
+      },
+      {
+        "brand_id": "brand-00010",
+        "brand": "エリクシール",
+        "name_id": "name-00003",
+        "name": "ブライトニング ローション ＷＴ II",
+        "related_tags": [
+          "化粧水"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "急いでいるので化粧水は1回だけ（いつもは2〜5回）"
+        ]
+      },
+      {
+        "brand_id": "brand-00010",
+        "brand": "エリクシール",
+        "name_id": "name-00006",
+        "name": "ブライトニング エマルジョン ＷＴ II",
+        "related_tags": [
+          "乳液"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "肌が硬くなっていると思うので一応入れた"
+        ]
+      },
+      {
+        "brand_id": "brand-00550",
+        "brand": "サナ ニューボーン",
+        "name_id": "name-00002",
+        "name": "パーフェクトアイブロウ",
+        "related_tags": [
+          "アイブロウペンシル"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載"
+        ]
+      },
+      {
+        "brand_id": "brand-00100",
+        "brand": "msh(エム・エス・エイチ)",
+        "name_id": "name-00021",
+        "name": "ラブ・ライナー　クリームフィットペンシルＲ＜アイライナー＞",
+        "related_tags": [
+          "ペンシルアイライナー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "描いてるか描いてないかぐらいに見せてくれるのですごい好き"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "1Dlj_rE05yM": {
     "video_id": "1Dlj_rE05yM",
@@ -622591,12 +623563,26 @@
     "subscriber_count": 2170000,
     "view_count": "569376",
     "duration": "PT48M31S",
-    "check_status": false,
+    "check_status": true,
     "delete_flg": false,
     "processed": true,
     "via": "channel",
-    "cosmetics": [],
-    "updated_at": "2026-10-12"
+    "cosmetics": [
+      {
+        "brand_id": "brand-00941",
+        "brand": "エレクトロン",
+        "name_id": "name-00001",
+        "name": "デンキバリブラシ 2.0 +ボディ",
+        "related_tags": [
+          "スキンケア美容家電"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "電気バリブラシで頭皮をブラッシング。ピリピリする、頭皮の血の巡りをよくしてリフトアップ"
+        ]
+      }
+    ],
+    "updated_at": "2026-10-13"
   },
   "7E8CeP_5vCQ": {
     "video_id": "7E8CeP_5vCQ",
@@ -622936,9 +623922,33 @@
           "まつ毛美容液。2週間でまつ毛に弾力、カールの持ちも良くなった。おすすめ"
         ],
         "time_in_video": "49:19"
+      },
+      {
+        "brand_id": "brand-00920",
+        "brand": "pia",
+        "name_id": "name-00001",
+        "name": "TOPARDS 1day",
+        "related_tags": [],
+        "skin_concern": "",
+        "mentions": [
+          "自然なブラウンでメイクを邪魔しない。乾きが少なく、ほぼ毎回使っている"
+        ]
+      },
+      {
+        "brand_id": "brand-01934",
+        "brand": "WrinkFade",
+        "name_id": "name-00009",
+        "name": "薬用スポットカバーコンシーラー",
+        "related_tags": [
+          "コンシーラー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "軽いのにシミをカバーしつつ美白。艶感を残したまま馴染む"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "DPpfyK2BECI": {
     "video_id": "DPpfyK2BECI",
@@ -623163,9 +624173,22 @@
           "眉マスカラ。優しく少しずつつける"
         ],
         "time_in_video": "25:17"
+      },
+      {
+        "brand_id": "brand-00550",
+        "brand": "サナ ニューボーン",
+        "name_id": "name-00002",
+        "name": "パーフェクトアイブロウ",
+        "related_tags": [
+          "アイブロウペンシル"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "いつものでリップライン（口角の影）に。描きやすい"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "S3LQ5wnLuxc": {
     "video_id": "S3LQ5wnLuxc",
@@ -623591,9 +624614,35 @@
         "mentions": [
           "リピ3本目。パフやリキッドファンデにかけてから顔にもかける"
         ]
+      },
+      {
+        "brand_id": "brand-00002",
+        "brand": "キャンメイク",
+        "name_id": "name-00005",
+        "name": "マシュマロフィニッシュパウダー",
+        "related_tags": [
+          "プレストパウダー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "小さいパウダー01番。コンシーラーを持ち歩かなくても赤みが結構カバーされる、めっちゃ好き"
+        ]
+      },
+      {
+        "brand_id": "brand-00073",
+        "brand": "d'Alba(ダルバ)",
+        "name_id": "name-00005",
+        "name": "プランピング リップ グロウ ムード ボリューマイザー",
+        "related_tags": [
+          "リップグロス"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "プランパー効果もあって保湿もしてくれる"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "ACTm4ZgFCZY": {
     "video_id": "ACTm4ZgFCZY",
@@ -623797,9 +624846,48 @@
           "バッグに入れて気分転換に"
         ],
         "skin_concern": ""
+      },
+      {
+        "brand_id": "brand-00020",
+        "brand": "シャネル",
+        "name_id": "name-00528",
+        "name": "ボーイ ドゥ シャネル アイブロウ ペンシル",
+        "related_tags": [
+          "アイブロウペンシル"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "ペンシルとコームが一体型になっているところが好き"
+        ]
+      },
+      {
+        "brand_id": "brand-01027",
+        "brand": "VDL（ヴィ・ディー・エル）",
+        "name_id": "name-00014",
+        "name": "チークステイン ブラッシャー&ハイライター デュオ",
+        "related_tags": [
+          "パウダーチーク"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "ふわっと、鼻の上も通過させる"
+        ]
+      },
+      {
+        "brand_id": "brand-01027",
+        "brand": "VDL（ヴィ・ディー・エル）",
+        "name_id": "name-00002",
+        "name": "ＶＤＬ　チークステイン　ブラッシャー",
+        "related_tags": [
+          "パウダーチーク"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "けんちゃんが紹介していたのを買った、ピンク強めで可愛い"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "FQAYanmUlx8": {
     "video_id": "FQAYanmUlx8",
@@ -623926,9 +625014,22 @@
           "軽いのにカバー力がめちゃくちゃある、明日から使う"
         ],
         "time_in_video": "27:24"
+      },
+      {
+        "brand_id": "brand-00034",
+        "brand": "ビオレ",
+        "name_id": "name-00180",
+        "name": "おうちdeエステ 肌をなめらかにするマッサージ洗顔ジェル 炭",
+        "related_tags": [
+          "洗顔ジェル"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "普段から使っている泡立たないジェル洗顔。鼻の角栓・黒ずみが1回で消える、おすすめ"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "HW3AbyBsVRA": {
     "video_id": "HW3AbyBsVRA",
@@ -624099,9 +625200,22 @@
           "新しくなってハイライトも付いて1つでシェーディングとハイライトが完成"
         ],
         "time_in_video": "32:42"
+      },
+      {
+        "brand_id": "brand-00015",
+        "brand": "エクセル",
+        "name_id": "name-00009",
+        "name": "モチベートユアスキン",
+        "related_tags": [
+          "日焼け止め・UVケア(顔用)"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "プチプラで買いやすく使ってみてとてもいいと思った下地。スルスル伸びて初心者でも簡単、毛穴に入り込みにくい"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "HscwWI1GmBk": {
     "video_id": "HscwWI1GmBk",
@@ -624148,9 +625262,33 @@
           "最近使っているファンデ。美容液ファンデと思えないくらいカバー力があってこっくり、艶もいい感じ"
         ],
         "time_in_video": "4:25"
+      },
+      {
+        "brand_id": "brand-01198",
+        "brand": "ABOUT TONE",
+        "name_id": "name-00003",
+        "name": "ブラーパウダーパクト",
+        "related_tags": [
+          "プレストパウダー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "最近使うようになった。毛穴も全てなかったことにしてくれる、パウダーとパウダーファンデの間で重ねても粉っぽくならない、自分で買った"
+        ]
+      },
+      {
+        "brand_id": "brand-00198",
+        "brand": "fwee(フィー)",
+        "name_id": "name-00049",
+        "name": "フィー シェイキングミスト パウダーキープ",
+        "related_tags": [],
+        "skin_concern": "",
+        "mentions": [
+          "パウダーが入ったミストで革命。パウダー直しが少なくなる、全体にベールがかかった感じ。3本目"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "Ir71zxg3CHA": {
     "video_id": "Ir71zxg3CHA",
@@ -624375,9 +625513,35 @@
           "1位。薄い色で自然なアイライナー、クリーミーで下手な人でも簡単に引ける"
         ],
         "time_in_video": "5:47"
+      },
+      {
+        "brand_id": "brand-00043",
+        "brand": "ロージーローザ",
+        "name_id": "name-00019",
+        "name": "シフォンタッチスポンジN ダイヤ型",
+        "related_tags": [
+          "パフ・スポンジ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "めっちゃ好きだった。コンシーラーをニキビのところや目の下に馴染ませるとうまく馴染む"
+        ]
+      },
+      {
+        "brand_id": "brand-00043",
+        "brand": "ロージーローザ",
+        "name_id": "name-00017",
+        "name": "ジェリータッチスポンジ ハウス型6P",
+        "related_tags": [
+          "パフ・スポンジ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "角がいっぱいあるが使ってみて分からなかった。硬めで化粧品をあまり吸収しない"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "qLI9B7acgqU": {
     "video_id": "qLI9B7acgqU",
@@ -625287,9 +626451,48 @@
           "この色が大好き（似た色として紹介）"
         ],
         "time_in_video": "28:07"
+      },
+      {
+        "brand_id": "brand-00016",
+        "brand": "M・A・C",
+        "name_id": "name-00156",
+        "name": "スタジオ フィックス パウダー プラス ファンデーション",
+        "related_tags": [
+          "パウダーファンデーション"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "鼻回りだけ崩れ防止に仕込んでいる"
+        ]
+      },
+      {
+        "brand_id": "brand-00011",
+        "brand": "ケイト",
+        "name_id": "name-00011",
+        "name": "スーパーシャープライナーEX4.0",
+        "related_tags": [
+          "リキッドアイライナー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "眉に使用、前から変わらず"
+        ]
+      },
+      {
+        "brand_id": "brand-00015",
+        "brand": "エクセル",
+        "name_id": "name-00099",
+        "name": "スキニーリッチシャドウ　N",
+        "related_tags": [
+          "パウダーアイシャドウ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "リニューアル、すごく滑らかで馴染みがいい。昔から超好き"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "_5KAo4oChpw": {
     "video_id": "_5KAo4oChpw",
@@ -625443,9 +626646,74 @@
         "mentions": [
           "結構青みピンク、内側に重ねる"
         ]
+      },
+      {
+        "brand_id": "brand-01016",
+        "brand": "FilliMilli",
+        "name_id": "name-00079",
+        "name": "デュアルメイクアップスパチュラ",
+        "related_tags": [
+          "その他メイクグッズ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "スパチュラで伸ばすと乗り方がめっちゃ綺麗"
+        ]
+      },
+      {
+        "brand_id": "brand-01064",
+        "brand": "Perfect Diary",
+        "name_id": "name-00015",
+        "name": "PERFECT DIARYマスターメイクアップアイシャドウブラシ",
+        "related_tags": [
+          "メイクブラシ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "めっちゃ使いやすい"
+        ]
+      },
+      {
+        "brand_id": "brand-01144",
+        "brand": "colorgram",
+        "name_id": "name-00024",
+        "name": "ぷるんジェリービームスティック",
+        "related_tags": [
+          "ジェル・クリームアイシャドウ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "キラキラのハイライト"
+        ]
+      },
+      {
+        "brand_id": "brand-01654",
+        "brand": "Keep in Touch",
+        "name_id": "name-00004",
+        "name": "グロー リップシーラーペンシル",
+        "related_tags": [
+          "リップライナー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "オーバーリップを作る、お決まりの流れ"
+        ]
+      },
+      {
+        "brand_id": "brand-00050",
+        "brand": "rom&nd",
+        "name_id": "name-00025",
+        "name": "グラスティングウォーターティント",
+        "related_tags": [
+          "リップグロス"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "肌に近いピンク"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "evwn0jwflzc": {
     "video_id": "evwn0jwflzc",
@@ -625602,9 +626870,22 @@
           "ミニコスメが超役立つ。最近は13番ライクリーを使うことが多い"
         ],
         "time_in_video": "30:17"
+      },
+      {
+        "brand_id": "brand-00001",
+        "brand": "セザンヌ",
+        "name_id": "name-00004",
+        "name": "パールグロウハイライト",
+        "related_tags": [
+          "パウダーチーク"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "何個目かわからないくらい使っている。艶肌に見せる"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "iZfTVU1AEkw": {
     "video_id": "iZfTVU1AEkw",
@@ -625744,9 +627025,22 @@
           "出た時からずっと使っている。化粧直しに超優秀、大人肌に馴染む"
         ],
         "time_in_video": "18:04"
+      },
+      {
+        "brand_id": "brand-00001",
+        "brand": "セザンヌ",
+        "name_id": "name-00010",
+        "name": "影色リップメイカー",
+        "related_tags": [
+          "リップライナー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "名品。輪郭を描く"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "is_1FftNk7E": {
     "video_id": "is_1FftNk7E",
@@ -625844,9 +627138,22 @@
           "ぷるん系、程よい"
         ],
         "time_in_video": "35:04"
+      },
+      {
+        "brand_id": "brand-00012",
+        "brand": "NARS",
+        "name_id": "name-00004",
+        "name": "ブラッシュ　Ｎ",
+        "related_tags": [
+          "パウダーチーク"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "2個目のチーク、落ちないようにキープするための重ね"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "tLjPV5KsncI": {
     "video_id": "tLjPV5KsncI",
@@ -626004,9 +627311,35 @@
           "いつも使っている。まつ毛の主張がしやすい"
         ],
         "time_in_video": "19:59"
+      },
+      {
+        "brand_id": "brand-00075",
+        "brand": "TIRTIR",
+        "name_id": "name-00004",
+        "name": "MASK FIT CRYSTAL MESH CUSHION",
+        "related_tags": [
+          "リキッドファンデーション"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "ファンデーション"
+        ]
+      },
+      {
+        "brand_id": "brand-00020",
+        "brand": "シャネル",
+        "name_id": "name-00004",
+        "name": "ボーム エサンシエル",
+        "related_tags": [
+          "ジェル・クリームチーク"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "目頭と眉下に光を入れる"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "1XEyhS309cA": {
     "video_id": "1XEyhS309cA",
@@ -626284,9 +627617,22 @@
           "ビオレの新しい日焼け止め。絞り袋みたいで面白い"
         ],
         "time_in_video": "28:52"
+      },
+      {
+        "brand_id": "brand-00139",
+        "brand": "コーセーコスメニエンス",
+        "name_id": "name-00001",
+        "name": "メイク キープ ミスト EX ＋",
+        "related_tags": [
+          "ミスト状化粧水"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "フィックスに使用。ブラシやパフに含ませて。これだけでも違う"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "3UfJ3XrmpDo": {
     "video_id": "3UfJ3XrmpDo",
@@ -626414,9 +627760,33 @@
           "グロスも買った。ラメはそんなに強くない。大人女子が好きなピンク"
         ],
         "time_in_video": "20:29"
+      },
+      {
+        "brand_id": "brand-00020",
+        "brand": "シャネル",
+        "name_id": "name-00030",
+        "name": "ルージュ アリュール",
+        "related_tags": [
+          "口紅"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "今日発売のリップ。ちょっとマットっぽい。めっちゃ可愛い色、リピ確"
+        ]
+      },
+      {
+        "brand_id": "brand-00920",
+        "brand": "pia",
+        "name_id": "name-00004",
+        "name": "MOLAK 1day",
+        "related_tags": [],
+        "skin_concern": "",
+        "mentions": [
+          "コンタクトはずっと変わらずモラクのミラーグレー"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "5Y2xxtUi1dA": {
     "video_id": "5Y2xxtUi1dA",
@@ -627825,9 +629195,20 @@
           "すごく使っていて端っこしかない。白髪の光り方を分からなくしてくれて便利"
         ],
         "time_in_video": "42:45"
+      },
+      {
+        "brand_id": "brand-00920",
+        "brand": "pia",
+        "name_id": "name-00001",
+        "name": "TOPARDS 1day",
+        "related_tags": [],
+        "skin_concern": "",
+        "mentions": [
+          "目を丸く優しく見せたい。目に光が入って明るく見える若見えポイント"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "uHcxcTlryOc": {
     "video_id": "uHcxcTlryOc",
@@ -627996,9 +629377,20 @@
           "アホ毛に"
         ],
         "time_in_video": "25:46"
+      },
+      {
+        "brand_id": "brand-01497",
+        "brand": "cicica",
+        "name_id": "name-00001",
+        "name": "cicica 1day",
+        "related_tags": [],
+        "skin_concern": "",
+        "mentions": [
+          "8.6のベースカーブで上がらず合った。回っても違和感がない。リピでいっぱい買った"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "w5PYFoquz-o": {
     "video_id": "w5PYFoquz-o",
@@ -628128,9 +629520,35 @@
           "ずっと大好き。可愛すぎる"
         ],
         "time_in_video": "29:46"
+      },
+      {
+        "brand_id": "brand-00141",
+        "brand": "b idol",
+        "name_id": "name-00027",
+        "name": "ふわほっぺチーク",
+        "related_tags": [
+          "パウダーチーク"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "今まで使ってきたコーラルの中で一番可愛く使いやすい。ブルベ夏の私でも似合う。肌馴染みがよく感動"
+        ]
+      },
+      {
+        "brand_id": "brand-01654",
+        "brand": "Keep in Touch",
+        "name_id": "name-00004",
+        "name": "グロー リップシーラーペンシル",
+        "related_tags": [
+          "リップライナー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "大好きでいつも使っている。オーバーリップにできる"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "-nW-sPXuYjk": {
     "video_id": "-nW-sPXuYjk",
@@ -628403,9 +629821,48 @@
           "統一感を出すために使用"
         ],
         "time_in_video": "23:49"
+      },
+      {
+        "brand_id": "brand-01156",
+        "brand": "Beauty of Joseon",
+        "name_id": "name-00001",
+        "name": "ライスサンクリーム",
+        "related_tags": [
+          "日焼け止め・UVケア(顔用)"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "すごく軽いテクスチャーで匂いがないのが気に入っている。伸びがよくこれだけで過ごす時も"
+        ]
+      },
+      {
+        "brand_id": "brand-00139",
+        "brand": "コーセーコスメニエンス",
+        "name_id": "name-00001",
+        "name": "メイク キープ ミスト EX ＋",
+        "related_tags": [
+          "ミスト状化粧水"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "ファンデに混ぜて使用。崩れないし寄れなくしてくれる、最高"
+        ]
+      },
+      {
+        "brand_id": "brand-00550",
+        "brand": "サナ ニューボーン",
+        "name_id": "name-00005",
+        "name": "クリーミーアイペンシルEX",
+        "related_tags": [
+          "ペンシルアイライナー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "赤みがあるブラウン。涙袋の下側にも使用"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "2ZoJ0SSloo8": {
     "video_id": "2ZoJ0SSloo8",
@@ -629324,9 +630781,57 @@
           "概要欄の使用アイテム（スキンケア）に記載"
         ],
         "time_in_video": "37:56"
+      },
+      {
+        "brand_id": "brand-01114",
+        "brand": "vim BEAUTY(ヴィム ビューティー)",
+        "name_id": "name-00019",
+        "name": "keep confidence mist",
+        "related_tags": [],
+        "skin_concern": "",
+        "mentions": [
+          "概要欄の使用アイテム（スキンケア）に記載"
+        ]
+      },
+      {
+        "brand_id": "brand-00043",
+        "brand": "ロージーローザ",
+        "name_id": "name-00044",
+        "name": "熊野筆 アイシャドウ用",
+        "related_tags": [
+          "メイクブラシ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "アイシャドウの中間色に使用"
+        ]
+      },
+      {
+        "brand_id": "brand-00100",
+        "brand": "msh(エム・エス・エイチ)",
+        "name_id": "name-00021",
+        "name": "ラブ・ライナー　クリームフィットペンシルＲ＜アイライナー＞",
+        "related_tags": [
+          "ペンシルアイライナー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "概要欄の使用アイテムに記載"
+        ]
+      },
+      {
+        "brand_id": "brand-00920",
+        "brand": "pia",
+        "name_id": "name-00001",
+        "name": "TOPARDS 1day",
+        "related_tags": [],
+        "skin_concern": "",
+        "mentions": [
+          "指原莉乃さんプロデュースのコンタクトを使用"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "g9knDI1yzMo": {
     "video_id": "g9knDI1yzMo",
@@ -629373,9 +630878,22 @@
           "細かいパール入り。毛穴がソフトフォーカスされる。6時間後も毛穴落ちが抑えめで実力差が出た。ブラシ付きで持ち運びもいい"
         ],
         "time_in_video": "0:41"
+      },
+      {
+        "brand_id": "brand-00242",
+        "brand": "UR GLAM",
+        "name_id": "name-00010",
+        "name": "フェイスブラシ 04",
+        "related_tags": [
+          "メイクブラシ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "ダイソーの110円のブラシ。パウダーを塗るのに使用"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "nmvBa_5SYHc": {
     "video_id": "nmvBa_5SYHc",
@@ -629597,9 +631115,46 @@
         "mentions": [
           "ギフティング。乾燥しやすいところに。朝も夜も使える"
         ]
+      },
+      {
+        "brand_id": "brand-00008",
+        "brand": "SK-II",
+        "name_id": "name-00004",
+        "name": "ジェノプティクス CC プライマー",
+        "related_tags": [
+          "日焼け止め・UVケア(顔用)"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "日焼け止め。塗るだけで肌の粗が整う、補正効果があるのでアイテム数少なめの日に使う"
+        ]
+      },
+      {
+        "brand_id": "brand-00100",
+        "brand": "msh(エム・エス・エイチ)",
+        "name_id": "name-00021",
+        "name": "ラブ・ライナー　クリームフィットペンシルＲ＜アイライナー＞",
+        "related_tags": [
+          "ペンシルアイライナー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "最近よく使っている。落ち着いた赤み系で血色感が上がる色が気に入っている。力が入っても自然"
+        ]
+      },
+      {
+        "brand_id": "brand-01064",
+        "brand": "Perfect Diary",
+        "name_id": "name-00044",
+        "name": "スターダストダイヤモンドハイライトパウダー",
+        "related_tags": [],
+        "skin_concern": "",
+        "mentions": [
+          "ギフティングでいただいた。綺麗なパール感で涙袋や黒目の上に使える、大人もいける"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "o-nYNOHO-7c": {
     "video_id": "o-nYNOHO-7c",
@@ -629698,9 +631253,22 @@
           "大好き。涼しくメイク乗りが良くなり毛穴がキュッと。いろんな形にちぎれて使いやすい、考えた人天才。メントールなしで刺激もない"
         ],
         "time_in_video": "12:46"
+      },
+      {
+        "brand_id": "brand-01116",
+        "brand": "UIQ",
+        "name_id": "name-00008",
+        "name": "バイオームビタC TXAトーニングアンプル",
+        "related_tags": [
+          "美容液"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "セットで紹介"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "r06_Vad4t6c": {
     "video_id": "r06_Vad4t6c",
@@ -630139,11 +631707,25 @@
     "subscriber_count": 34800,
     "view_count": "146620",
     "duration": "PT22M33S",
-    "check_status": false,
+    "check_status": true,
     "delete_flg": false,
     "processed": true,
-    "cosmetics": [],
-    "updated_at": "2026-10-12"
+    "cosmetics": [
+      {
+        "brand_id": "brand-00109",
+        "brand": "プリマヴィスタ",
+        "name_id": "name-00001",
+        "name": "プリマヴィスタ スキンプロテクトベース<皮脂くずれ防止> 超オイリー肌用",
+        "related_tags": [
+          "化粧下地"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "下地に使用。夕方テカるところに塗るとマシになる"
+        ]
+      }
+    ],
+    "updated_at": "2026-10-13"
   },
   "_bnIYExPrRk": {
     "video_id": "_bnIYExPrRk",
@@ -630231,9 +631813,22 @@
           "定番。エステル系で崩れにくいメイクの日に"
         ],
         "time_in_video": "10:53"
+      },
+      {
+        "brand_id": "brand-00062",
+        "brand": "アテニア",
+        "name_id": "name-00004",
+        "name": "スキンクリア クレンズ オイル 無香タイプ",
+        "related_tags": [
+          "オイルクレンジング"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "エステル系のオイルとしていいと思う"
+        ]
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-13"
   },
   "csCWaucbWS4": {
     "video_id": "csCWaucbWS4",
