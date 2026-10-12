@@ -287,5 +287,11 @@ const jsonLd = video
       box.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
       mountPlayer(a.dataset.seek);
     });
+    // メイクレシピ（/recipe/）の「▶ 時刻」から来たとき（?t=秒）は、その時刻の埋め込みを用意して動画の位置へ送る
+    const t = new URLSearchParams(location.search).get("t");
+    if (t && /^\d+$/.test(t) && box) {
+      mountPlayer(t);
+      box.scrollIntoView({ block: "center" });
+    }
   </script>
 </Layout>

@@ -1,0 +1,255 @@
+---
+import HowWeCount from "../../components/HowWeCount.astro";
+import PageHead from "../../components/PageHead.astro";
+import PrBadge from "../../components/PrBadge.astro";
+import Layout from "../../layouts/Layout.astro";
+import {
+  getVisibleVideos,
+  getPrInfo,
+  isPrMention,
+  cosmeticCategory,
+  getCosmeticListEntry,
+  productImageSrc,
+  cosmeticSlug,
+  sortByPublishedDesc,
+  REPEAT_EXCLUDE_TITLE,
+  ytThumb,
+  formatDateDot,
+  withBase,
+} from "../../lib/data";
+
+// メイクレシピ（試作）。動画で使われた商品を、顔の部位ごとの手順に並べ直して「レシピ」にする。
+// 出典は字幕から抽出した紹介コスメと、字幕の一致で決めた場面の時刻（266章）だけで、画像の転載はしない。
+// 試作のあいだは noindex で、メニュー・サイトマップにも載せない。
+
+// 手順（顔の部位）。カテゴリ（補正後の related_tags の先頭）で振り分ける。ここに無いカテゴリ（スキンケア・ヘア・小物など）はレシピに入れない
+const STEPS: { key: string; label: string; en: string; tags: string[] }[] = [
+  {
+    key: "base", label: "ベース", en: "Base",
+    tags: ["化粧下地", "日焼け止め・UVケア(顔用)", "リキッドファンデーション", "クリーム・ジェルファンデーション", "パウダーファンデーション", "ファンデーション", "その他ファンデーション", "クッションファンデ", "BB・CCクリーム", "コンシーラー", "プレストパウダー", "ルースパウダー"],
+  },
+  { key: "brow", label: "眉", en: "Brow", tags: ["アイブロウペンシル", "パウダーアイブロウ", "眉マスカラ", "その他アイブロウ", "アイブロウ"] },
+  {
+    key: "eye", label: "アイ", en: "Eye",
+    tags: ["アイシャドウベース", "パウダーアイシャドウ", "ジェル・クリームアイシャドウ", "アイシャドウ", "アイシャドウパレット", "リキッドアイライナー", "ジェルアイライナー", "ペンシルアイライナー", "その他アイライナー", "マスカラ下地・トップコート", "マスカラ", "つけまつげ"],
+  },
+  { key: "cheek", label: "チーク・陰影", en: "Cheek", tags: ["パウダーチーク", "ジェル・クリームチーク", "ハイライト", "シェーディング"] },
+  { key: "lip", label: "リップ", en: "Lip", tags: ["リップライナー", "口紅", "リップグロス", "リップケア・リップクリーム"] },
+];
+const STEP_OF: Record<string, number> = Object.fromEntries(STEPS.flatMap((s, i) => s.tags.map((t) => [t, i])));
+
+// 動画タイトルに明記された語で付けるテイスト（特集と同じく、タイトルにある語だけを使う。68章）
+const TASTES: { key: string; label: string; re: RegExp }[] = [
+  { key: "daily", label: "毎日メイク", re: /毎日メイク|デイリー|いつものメイク|普段メイク|日常メイク/ },
+  { key: "petit", label: "プチプラ", re: /プチプラ|ドラコス|ドラッグストア|ドンキ|ダイソー|セザンヌ縛り/ },
+  { key: "depa", label: "デパコス", re: /デパコス/ },
+  { key: "korea", label: "韓国風", re: /韓国|オルチャン|K-?POP|ケーポップ/i },
+  { key: "akanuke", label: "垢抜け", re: /垢抜け|あか抜け/ },
+  { key: "tsuya", label: "ツヤ肌", re: /ツヤ|艶|ツヤ肌|水光/ },
+  { key: "clear", label: "透明感", re: /透明感/ },
+  { key: "natural", label: "ナチュラル", re: /ナチュラル|すっぴん風|ナチュ|薄メイク|薄づき/ },
+  { key: "otona", label: "大人メイク", re: /大人|30代|40代|50代|アラサー|アラフォー|アラフィフ/ },
+  { key: "date", label: "デート", re: /デート/ },
+  { key: "keep", label: "崩れない", re: /崩れない|崩れにくい|マスク|汗/ },
+  { key: "pink", label: "ピンク", re: /ピンク/ },
+  { key: "yb", label: "イエベ", re: /イエベ/ },
+  { key: "bb", label: "ブルベ", re: /ブルベ/ },
+  { key: "spring", label: "春", re: /(?<!イエベ|ブルベ)春(?!夏|秋|冬)|spring/i },
+  { key: "summer", label: "夏", re: /(?<!イエベ|ブルベ)夏|summer/i },
+  { key: "autumn", label: "秋", re: /(?<!イエベ|ブルベ)秋|autumn|fall/i },
+  { key: "winter", label: "冬", re: /(?<!イエベ|ブルベ)冬|winter/i },
+];
+
+// 「m:ss」「h:mm:ss」を秒に（動画ページと同じ）
+const sceneSeconds = (t?: string) => {
+  if (!t || !/^\d+(:\d{1,2}){1,2}$/.test(t)) return undefined;
+  return t.split(":").reduce((a, x) => a * 60 + Number(x), 0);
+};
+
+/** レシピにする条件：ベース・アイ・リップがそろい、場面の時刻が付いた商品が3品以上。
+ * 新作・購入品・比較などの紹介が目的の動画（リピートと同じ語）と、動画全体がPR・提供のものは除く */
+const MIN_TIMED = 3;
+// REPEAT_EXCLUDE_TITLE の「\d+選」は半角の数字だけなので、全角の「７選」もここで除く
+const EXCLUDE_EXTRA = /[０-９]+選|まとめ|紹介/;
+const recipes = sortByPublishedDesc(getVisibleVideos())
+  .filter((v) => !REPEAT_EXCLUDE_TITLE.test(v.title || "") && !EXCLUDE_EXTRA.test(v.title || "") && !getPrInfo(v.key)?.whole)
+  .map((v) => {
+    const seen = new Set<string>();
+    const steps = STEPS.map(() => [] as {
+      brand_id: string; brand: string; name_id: string; name: string; tag: string; time?: string; sec?: number; img: string; pr: boolean;
+    }[]);
+    for (const c of v.cosmetics || []) {
+      if (!c.brand_id || !c.name_id || !c.name) continue;
+      const tag = cosmeticCategory(c);
+      const si = tag !== undefined ? STEP_OF[tag] : undefined;
+      if (si === undefined) continue;
+      const key = cosmeticSlug(c.brand_id, c.name_id);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const sec = sceneSeconds(c.time_in_video);
+      steps[si].push({
+        brand_id: c.brand_id, brand: c.brand, name_id: c.name_id, name: c.name, tag: tag!,
+        time: sec !== undefined ? c.time_in_video : undefined, sec,
+        img: productImageSrc(getCosmeticListEntry(c.brand_id, c.name_id), c.rakuten_image_link),
+        pr: isPrMention(v.key, c.brand_id, c.name_id),
+      });
+    }
+    // 手順の中は、動画で使った順（時刻の無い品は後ろ）
+    for (const s of steps) s.sort((a, b) => (a.sec ?? Infinity) - (b.sec ?? Infinity));
+    const timed = steps.flat().filter((x) => x.sec !== undefined).length;
+    const tastes = TASTES.filter((t) => t.re.test(v.title || "")).map((t) => t.key);
+    return { v, steps, timed, tastes, itemCount: steps.flat().length };
+  })
+  .filter((r) => r.steps[0].length && r.steps[2].length && r.steps[4].length && r.timed >= MIN_TIMED);
+
+const tasteCounts = TASTES.map((t) => ({ ...t, count: recipes.filter((r) => r.tastes.includes(t.key)).length })).filter((t) => t.count >= 3);
+const channelCount = new Set(recipes.map((r) => r.v.channel_id)).size;
+const PAGE = 12;
+
+const title = "YouTuberのメイクレシピ（動画で実際に使ったコスメを手順順に）";
+const description = `YouTuberが動画で実際にしたメイクを、ベース・眉・アイ・チーク・リップの手順ごとに、使ったコスメと場面の時刻でまとめたメイクレシピ（${recipes.length}件）。`;
+---
+
+<Layout title={title} description={description} noindex>
+  <nav class="text-xs text-neutral-500 mb-8 flex flex-wrap gap-2" aria-label="パンくず">
+    <a href={withBase("/")} class="link-u">Home</a><span aria-hidden="true">/</span>
+    <span>メイクレシピ（試作）</span>
+  </nav>
+
+  <PageHead
+    en="Make Recipe"
+    title="動画から作ったメイクレシピ"
+    lead="YouTuberが動画で実際にしたメイクを、手順ごとのレシピにまとめました。どの順で何を使ったかが一目で分かり、押すとその場面から動画を見られます。"
+    stats={[{ n: recipes.length, label: "レシピ", unit: "件" }, { n: channelCount, label: "YouTuber", unit: "人" }]}
+  />
+
+  <HowWeCount>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>元にしたもの：動画の字幕から抽出した紹介コスメと、字幕の文字の一致で決めた「その商品を紹介した場面」の時刻です。レシピ画像の転載や、AIによる推測の手順はありません</li>
+      <li>載せる動画：ベース・アイ・リップがそろい、場面の時刻が分かる商品が{MIN_TIMED}品以上あるもの</li>
+      <li>載せない動画：新作紹介・購入品・比較・ベスコスなど、紹介することが目的の動画と、動画全体がPR・提供のもの。一部の商品だけが提供の場合は、その商品に「PR」を付けています</li>
+      <li>手順の中の並び：動画で使った順（時刻が分からない商品は後ろ）。テイストの絞り込みは、動画のタイトルにある語で付けています</li>
+    </ul>
+  </HowWeCount>
+
+  <div class="panel mb-6 md:mb-8 !py-5">
+    <div class="flex flex-wrap items-center gap-2" role="group" aria-label="テイストで絞り込む">
+      <span class="label-caps text-neutral-500 shrink-0 mr-1">Taste</span>
+      <button type="button" class="taste-btn chip is-active" data-taste="">すべて <span class="tab-n">{recipes.length}</span></button>
+      {tasteCounts.map((t) => (
+        <button type="button" class="taste-btn chip" data-taste={t.key}>{t.label} <span class="tab-n">{t.count}</span></button>
+      ))}
+    </div>
+  </div>
+
+  <div id="recipes" class="grid lg:grid-cols-2 gap-5 md:gap-6">
+    {recipes.map((r, i) => {
+      const th = ytThumb(r.v.thumbnail);
+      const href = withBase(`/video/${r.v.key}`);
+      return (
+        <article class="recipe panel min-w-0 !p-5 md:!p-7 flex flex-col" data-tastes={r.tastes.join(" ")} hidden={i >= PAGE}>
+          <header class="flex gap-4 items-start">
+            <a href={href} class="block w-32 sm:w-40 shrink-0 overflow-hidden rounded-xl aspect-video bg-blush">
+              <img src={th.src} srcset={th.srcset} sizes="160px" alt="" loading="lazy" class="w-full h-full object-cover" />
+            </a>
+            <div class="min-w-0">
+              <p class="text-xs text-neutral-500 truncate">
+                <a href={withBase(`/influencer/${r.v.channel_id}`)} class="link-u">{r.v.channel_title}</a>
+                <span class="ml-2">{formatDateDot(r.v.published_at)}</span>
+              </p>
+              <h2 class="mt-1 text-[15px] font-semibold leading-snug line-clamp-3"><a href={href} class="hover:text-rose transition-colors">{r.v.title}</a></h2>
+              <p class="mt-1.5 text-xs text-neutral-500">{r.itemCount}品・{STEPS.filter((_, si) => r.steps[si].length).length}ステップ</p>
+            </div>
+          </header>
+
+          <ol class="mt-5 space-y-4">
+            {STEPS.map((s, si) => r.steps[si].length > 0 && (
+              <li class="rc-step">
+                <div>
+                  <p class="label-caps rc-en">{String(si + 1).padStart(2, "0")} {s.en}</p>
+                  <p class="rc-lb">{s.label}</p>
+                </div>
+                <ul class="rc-items">
+                  {r.steps[si].map((x) => (
+                    <li class="rc-it">
+                      <a href={withBase(`/cosmetics/${cosmeticSlug(x.brand_id, x.name_id)}`)} class="product-well rc-well">
+                        {x.img ? <img src={x.img} alt="" loading="lazy" data-err="hide" /> : <span class="noimg">No image</span>}
+                      </a>
+                      <div class="rc-tx">
+                        <p class="rc-br">{x.brand}<span>{x.tag}</span></p>
+                        <p class="rc-nm">
+                          <a href={withBase(`/cosmetics/${cosmeticSlug(x.brand_id, x.name_id)}`)}>{x.name}</a>
+                          {x.pr && <PrBadge class="ml-1 align-middle" />}
+                        </p>
+                      </div>
+                      {x.sec !== undefined && (
+                        <a
+                          href={`${href}?t=${x.sec}`}
+                          class="rc-t" aria-label={`${x.time}の場面から再生`}>▶{x.time}</a>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ol>
+
+          <a href={href} class="mt-5 pt-4 border-t border-ink/10 text-sm link-u text-ink self-start">この動画で見る・ほかの紹介コスメ →</a>
+        </article>
+      );
+    })}
+  </div>
+
+  <p id="recipe-empty" class="text-sm text-neutral-500 mt-6" hidden>このテイストのレシピはまだありません。</p>
+  <div class="mt-8 text-center">
+    <button type="button" id="recipe-more" class="chip" hidden={recipes.length <= PAGE}>もっと見る</button>
+  </div>
+
+  <p class="text-xs text-neutral-500 mt-10">メイクの方法・仕上がりは動画の投稿者によるものです。肌に合うかどうかには個人差があります。</p>
+
+  <script define:vars={{ PAGE }}>
+    const cards = Array.from(document.querySelectorAll(".recipe"));
+    const btns = document.querySelectorAll(".taste-btn");
+    const more = document.getElementById("recipe-more");
+    const empty = document.getElementById("recipe-empty");
+    let taste = "";
+    let shown = PAGE;
+    const render = () => {
+      const hit = cards.filter((c) => !taste || c.dataset.tastes.split(" ").includes(taste));
+      cards.forEach((c) => (c.hidden = true));
+      hit.slice(0, shown).forEach((c) => (c.hidden = false));
+      more.hidden = hit.length <= shown;
+      empty.hidden = hit.length > 0;
+    };
+    btns.forEach((b) =>
+      b.addEventListener("click", () => {
+        taste = b.dataset.taste;
+        shown = PAGE;
+        btns.forEach((x) => x.classList.toggle("is-active", x === b));
+        render();
+      })
+    );
+    more.addEventListener("click", () => {
+      shown += PAGE;
+      render();
+    });
+  </script>
+  <style is:global>
+    .rc-step { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); gap: 0.75rem; border-top: 1px solid color-mix(in srgb, var(--color-ink) 10%, transparent); padding-top: 1rem; }
+    .rc-en { font-size: 10px; color: var(--color-neutral-400); }
+    .rc-lb { font-size: 0.875rem; font-weight: 600; }
+    .rc-items > * + * { margin-top: 0.625rem; }
+    .rc-it { display: flex; align-items: center; gap: 0.75rem; }
+    .rc-well { flex-shrink: 0; width: 2.75rem; height: 2.75rem; border-radius: 0.5rem; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .rc-well img { width: 100%; height: 100%; object-fit: contain; padding: 0.25rem; }
+    .rc-well .noimg { font-size: 9px; }
+    .rc-tx { min-width: 0; flex: 1; }
+    .rc-br { font-size: 11px; color: var(--color-neutral-500); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .rc-br span { margin-left: 0.375rem; color: var(--color-neutral-400); }
+    .rc-nm { font-size: 13px; line-height: 1.375; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .rc-nm a:hover { color: var(--color-rose); }
+    .rc-t { flex-shrink: 0; display: inline-flex; align-items: center; gap: 0.25rem; border-radius: 9999px; border: 1px solid color-mix(in srgb, var(--color-rose) 40%, transparent); padding: 0.25rem 0.625rem; font-size: 11px; color: var(--color-rose); transition: background-color .15s, color .15s; }
+    .rc-t:hover { background: var(--color-rose); color: var(--color-paper); }
+    @media (pointer: coarse) { .rc-t { min-height: 36px; } }
+  </style>
+</Layout>
