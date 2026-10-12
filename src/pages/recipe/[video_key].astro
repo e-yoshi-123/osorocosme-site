@@ -1,0 +1,345 @@
+---
+import FaceArt from "../../components/FaceArt.astro";
+import PrBadge from "../../components/PrBadge.astro";
+import RecipeCard from "../../components/RecipeCard.astro";
+import Layout from "../../layouts/Layout.astro";
+import { getRecipes, getRecipe, PARTS, TASTES, recipeNo, type PartKey } from "../../lib/recipe";
+import { amazonSearchUrl, formatCount, formatJaDate, withBase, ytThumb } from "../../lib/data";
+
+// メイクレシピ（1件、試作、283章）。顔の図（引き出し線）→ 動画の流れ（時刻の帯）→ 手順（押すとこのページの動画がその場面から再生）
+export function getStaticPaths() {
+  return getRecipes().map((r) => ({ params: { video_key: r.key } }));
+}
+const r = getRecipe(Astro.params.video_key!)!;
+const v = r.video;
+const parts = PARTS.map((p, i) => ({ ...p, items: r.steps[i], n: 0 })).filter((p) => p.items.length);
+parts.forEach((p, i) => (p.n = i + 1));
+const tasteLabels = r.tastes.map((k) => TASTES.find((t) => t.key === k)!.label);
+const fmt = (s: number) => (s >= 3600 ? `${Math.floor(s / 3600)}:${String(Math.floor((s % 3600) / 60)).padStart(2, "0")}` : `${Math.floor(s / 60)}`) + `:${String(s % 60).padStart(2, "0")}`;
+
+// 図（広い画面）：1000×560 の座標。顔は ox=300・oy=20。左に眉・アイ、右にベース・チーク・リップの札を置き、札の見出しの高さへ線を引く
+const BOX: Record<PartKey, { side: "l" | "r"; top: number }> = {
+  brow: { side: "l", top: 80 },
+  eye: { side: "l", top: 300 },
+  base: { side: "r", top: 30 },
+  cheek: { side: "r", top: 225 },
+  lip: { side: "r", top: 400 },
+};
+const BOX_MAX = 2;
+const lines = parts.map((p) => ({ part: p.key, x: BOX[p.key].side === "l" ? 286 : 714, y: BOX[p.key].top + 24 + 20 }));
+
+// 動画の流れ（時刻の帯）：動画の長さが分かり、時刻のある品があるときだけ
+const timeline = r.durationSec
+  ? parts.flatMap((p) => p.items.filter((x) => x.sec !== undefined && x.sec <= r.durationSec).map((x) => ({ x, p })))
+      .sort((a, b) => a.x.sec! - b.x.sec!)
+  : [];
+
+// ほかのレシピ：同じ人 → 同じテイスト（新しい順に3件まで）
+const others = getRecipes().filter((o) => o.key !== r.key);
+const more = [
+  ...others.filter((o) => o.video.channel_id === v.channel_id),
+  ...others.filter((o) => o.video.channel_id !== v.channel_id && r.tastes[0] && o.tastes.includes(r.tastes[0])),
+].slice(0, 3);
+
+const title = `${r.headline}レシピ｜${v.channel_title}が動画で使ったコスメ${r.itemCount}品`;
+const description = `${v.channel_title}の動画「${v.title}」のメイクを、ベース・眉・アイ・チーク・リップの手順ごとに、使ったコスメ${r.itemCount}品と場面の時刻でまとめたメイクレシピ。`;
+const th = ytThumb(v.thumbnail);
+---
+
+<Layout title={title} description={description} image={th.src} noindex>
+  <FaceArt sprite />
+  <nav class="text-xs text-neutral-500 mb-8 flex flex-wrap gap-2" aria-label="パンくず">
+    <a href={withBase("/")} class="link-u">Home</a><span aria-hidden="true">/</span>
+    <a href={withBase("/recipe/")} class="link-u">メイクレシピ</a><span aria-hidden="true">/</span>
+    <span class="truncate max-w-[16em]">{r.headline}</span>
+  </nav>
+
+  <header class="rs-head">
+    <p class="eyebrow">Make Recipe <span class="num-display">{recipeNo(r.no)}</span></p>
+    <h1 class="rs-h1">{r.headline}<span>レシピ</span></h1>
+    {tasteLabels.length > 0 && <p class="rs-tastes">{tasteLabels.map((t) => <span>{t}</span>)}</p>}
+    <p class="rs-src">
+      {v.channel_icon && <img src={v.channel_icon} alt="" width="28" height="28" loading="lazy" />}
+      <span>
+        <a href={withBase(`/influencer/${v.channel_id}`)} class="link-u">{v.channel_title}</a>
+        <span class="text-neutral-500">「{v.title}」より（{formatJaDate(v.published_at)}）</span>
+      </span>
+    </p>
+    <dl class="rs-stats">
+      <div><dt>コスメ</dt><dd><b class="num-display">{r.itemCount}</b>品</dd></div>
+      <div><dt>ステップ</dt><dd><b class="num-display">{r.stepCount}</b></dd></div>
+      {r.pricedCount > 0 && <div><dt>そろえると（参考）</dt><dd>約<b class="num-display">¥{formatCount(r.total)}</b>{r.pricedCount < r.itemCount && <small>{r.pricedCount}品分</small>}</dd></div>}
+    </dl>
+  </header>
+
+  {/* ===== 顔の図 ===== */}
+  <section class="rs-sheet" aria-label="部位ごとのコスメ">
+    <div class="rs-diagram">
+      <FaceArt width={1000} height={560} ox={300} oy={20} lines={lines} draw />
+      {parts.map((p) => {
+        const b = BOX[p.key];
+        return (
+          <div class:list={["rs-box", `is-${b.side}`]} style={`top:${(b.top / 560) * 100}%;--c:${p.color}`}>
+            <p class="rs-box-h"><span class="num-display">{String(p.n).padStart(2, "0")}</span>{p.label}<small>{p.en}</small></p>
+            <ul>
+              {p.items.slice(0, BOX_MAX).map((x) => (
+                <li>
+                  <a href={withBase(`/cosmetics/${x.slug}`)}>
+                    <span class="rs-box-img product-well">{x.img ? <img src={x.img} alt="" loading="lazy" data-err="hide" /> : null}</span>
+                    <span class="rs-box-t"><small>{x.brand}</small>{x.name}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            {p.items.length > BOX_MAX && <a href={`#step-${p.key}`} class="rs-box-more">ほか{p.items.length - BOX_MAX}品 →</a>}
+          </div>
+        );
+      })}
+    </div>
+    <div class="rs-compact">
+      <div class="rs-compact-face">
+        <FaceArt pins={parts.map((p) => ({ part: p.key, n: p.n }))} draw />
+      </div>
+      <ol class="rs-legend">
+        {parts.map((p) => (
+          <li style={`--c:${p.color}`}>
+            <a href={`#step-${p.key}`}><span class="num-display">{p.n}</span>{p.label}<small>{p.items.length}品</small></a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  {/* ===== 動画の流れ ===== */}
+  {timeline.length > 0 && (
+    <section class="rs-flow">
+      <div class="rs-flow-h">
+        <p class="label-caps">Timeline</p>
+        <h2>動画の流れ</h2>
+        <p class="rs-flow-note">点を押すと、その場面から再生します</p>
+      </div>
+      <div class="rs-bar">
+        <span class="rs-bar-line" aria-hidden="true"></span>
+        {timeline.map(({ x, p }) => (
+          <button type="button" class="rs-seek rs-dot" data-seek={x.sec} style={`left:${(x.sec! / r.durationSec) * 100}%;--c:${p.color}`} aria-label={`${x.time} ${p.label}：${x.brand} ${x.name}`}>
+            <span class="rs-tip"><b>{x.time}</b>{x.brand} {x.name}</span>
+          </button>
+        ))}
+        <span class="rs-bar-end num-display" aria-hidden="true">0:00</span>
+        <span class="rs-bar-end is-r num-display" aria-hidden="true">{fmt(r.durationSec)}</span>
+      </div>
+      <ul class="rs-flow-legend" aria-hidden="true">
+        {parts.map((p) => <li style={`--c:${p.color}`}>{p.label}</li>)}
+      </ul>
+    </section>
+  )}
+
+  {/* ===== 手順と動画 ===== */}
+  <div class="rs-main">
+    <div class="rs-player-wrap">
+      <div class="rs-player" id="video-box" data-video-id={v.video_id} data-title={v.title}>
+        <button type="button" class="rs-play" aria-label={`再生：${v.title}`}>
+          <img src={th.src} srcset={th.srcset} sizes="(min-width: 1024px) 40vw, 100vw" alt="" width="640" height="360" loading="lazy" />
+          <span class="rs-play-btn"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor" /></svg></span>
+        </button>
+      </div>
+      <p class="rs-player-note">手順の <span class="rs-chip-sample">▶ 時刻</span> を押すと、ここで再生します</p>
+      <a href={withBase(`/video/${r.key}`)} class="rs-to-video link-u">動画ページで、紹介されたコスメをすべて見る →</a>
+    </div>
+
+    <ol class="rs-steps">
+      {parts.map((p) => (
+        <li class="rs-step" id={`step-${p.key}`} style={`--c:${p.color}`}>
+          <div class="rs-step-h">
+            <span class="rs-step-n num-display">{String(p.n).padStart(2, "0")}</span>
+            <div>
+              <p class="label-caps">{p.en}</p>
+              <h2>{p.label}</h2>
+            </div>
+          </div>
+          <ul class="rs-items">
+            {p.items.map((x) => (
+              <li class="rs-item">
+                <a href={withBase(`/cosmetics/${x.slug}`)} class="rs-item-img product-well" tabindex="-1" aria-hidden="true">
+                  {x.img ? <img src={x.img} alt="" loading="lazy" data-err="noimg" /> : <span class="noimg">No image</span>}
+                </a>
+                <div class="rs-item-t">
+                  <p class="rs-item-b">{x.brand}<span>{x.tag}</span></p>
+                  <p class="rs-item-n"><a href={withBase(`/cosmetics/${x.slug}`)} class="phrase">{x.name}</a>{x.pr && <PrBadge class="ml-1.5 align-middle" />}</p>
+                  <div class="rs-item-act">
+                    {x.sec !== undefined ? (
+                      <a href={`https://www.youtube.com/watch?v=${v.video_id}&t=${x.sec}s`} target="_blank" rel="noopener" data-seek={x.sec} class="rs-seek rs-time">▶ {x.time}</a>
+                    ) : (
+                      <span class="rs-time is-none">場面の時刻なし</span>
+                    )}
+                    {x.price !== undefined && <span class="rs-price num-display" title={x.fromYahoo ? "Yahoo!ショッピングの参考価格" : "楽天市場の参考価格"}>¥{formatCount(x.price)}</span>}
+                    <span class="rs-shops">
+                      {x.img && x.rakutenLink && <a href={x.rakutenLink} target="_blank" rel="nofollow sponsored noopener" title="楽天市場で見る">楽天</a>}
+                      {x.yahooLink && <a href={x.yahooLink} target="_blank" rel="nofollow sponsored noopener" title="Yahoo!ショッピングで見る">Yahoo!</a>}
+                      <a href={amazonSearchUrl(x.brand, x.name)} target="_blank" rel="nofollow sponsored noopener" title="Amazonで探す（検索結果）">Amazon</a>
+                    </span>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </li>
+      ))}
+    </ol>
+  </div>
+
+  {more.length > 0 && (
+    <section class="rs-more">
+      <p class="eyebrow">More recipes</p>
+      <h2 class="font-serif h-section font-semibold mt-1 mb-6">ほかのメイクレシピ</h2>
+      <div class="rs-more-grid">{more.map((o) => <RecipeCard recipe={o} />)}</div>
+      <p class="mt-8 text-sm"><a href={withBase("/recipe/")} class="link-u text-ink">メイクレシピの一覧へ →</a></p>
+    </section>
+  )}
+
+  <p class="text-xs text-neutral-500 mt-10">部位は商品のカテゴリで振り分け、手順の中は動画で使った順に並べています。価格は楽天市場（無ければYahoo!ショッピング）で確認した時点の参考価格です。メイクの方法・仕上がりは動画の投稿者によるものです。</p>
+
+  <script>
+    // 「▶ 時刻」・時刻の帯の点を押すと、このページの動画をその時刻から再生する（JSが無ければYouTubeの該当時刻へ）
+    const box = document.getElementById("video-box");
+    const mount = (start?: string) => {
+      if (!box) return;
+      let player = box.querySelector("iframe");
+      const q = `?autoplay=1${start ? `&start=${start}` : ""}`;
+      if (!player) {
+        player = document.createElement("iframe");
+        player.title = box.dataset.title || "";
+        player.allow = "autoplay; encrypted-media; picture-in-picture";
+        player.allowFullscreen = true;
+        player.src = `https://www.youtube.com/embed/${box.dataset.videoId}${q}`;
+        box.replaceChildren(player);
+      } else {
+        player.src = `https://www.youtube.com/embed/${box.dataset.videoId}${q}`;
+      }
+    };
+    box?.querySelector(".rs-play")?.addEventListener("click", () => mount());
+    document.addEventListener("click", (e) => {
+      const a = (e.target as HTMLElement).closest?.(".rs-seek") as HTMLElement | null;
+      if (!a || !box) return;
+      e.preventDefault();
+      document.querySelectorAll(".rs-seek.is-on").forEach((x) => x.classList.remove("is-on"));
+      document.querySelectorAll(`.rs-seek[data-seek="${a.dataset.seek}"]`).forEach((x) => x.classList.add("is-on"));
+      const r = box.getBoundingClientRect();
+      if (r.top < 60 || r.bottom > innerHeight) box.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
+      mount(a.dataset.seek);
+    });
+  </script>
+</Layout>
+
+<style is:global>
+  /* 見出し */
+  .rs-head { max-width: 860px; margin-bottom: 36px; }
+  .rs-h1 { margin-top: 8px; font-size: 28px; font-weight: 700; line-height: 1.35; letter-spacing: -0.01em; word-break: auto-phrase; text-wrap: balance; }
+  .rs-h1 span { margin-left: .3em; font-size: .55em; color: var(--color-rose); letter-spacing: .08em; }
+  @media (min-width: 768px) { .rs-h1 { font-size: 40px; } }
+  .rs-tastes { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .rs-tastes span { font-size: 12px; padding: .1em .8em; border-radius: 999px; background: var(--c-accent); }
+  .rs-src { margin-top: 16px; display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.7; }
+  .rs-src img { width: 28px; height: 28px; border-radius: 999px; flex-shrink: 0; margin-top: 1px; }
+  .rs-stats { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 12px 0; }
+  .rs-stats div { padding: 0 22px; border-left: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent); }
+  .rs-stats div:first-child { padding-left: 0; border-left: 0; }
+  .rs-stats dt { font-size: 12px; color: var(--color-neutral-500); }
+  .rs-stats dd { font-size: 13px; }
+  .rs-stats b { font-size: 28px; line-height: 1.15; margin: 0 2px; }
+  .rs-stats small { margin-left: 6px; font-size: 11px; color: var(--color-neutral-500); }
+
+  /* 顔の図 */
+  .rs-sheet { position: relative; border-radius: 32px; background: radial-gradient(70% 90% at 50% 40%, #fff 0%, var(--c-well) 60%, var(--c-accent) 100%); box-shadow: var(--panel-shadow); padding: 24px 16px; margin-bottom: 40px; overflow: hidden; }
+  .rs-diagram { display: none; position: relative; aspect-ratio: 1000 / 560; }
+  .rs-box { position: absolute; width: 27%; padding: 14px 16px 12px; border-radius: 18px; background: rgb(255 255 255 / .92); box-shadow: 0 0 0 1px color-mix(in srgb, var(--c) 30%, transparent), 0 18px 30px -24px rgb(29 21 23 / .5); }
+  .rs-box.is-l { left: 1.4%; }
+  .rs-box.is-r { left: 71.6%; }
+  .rs-box-h { display: flex; align-items: baseline; gap: 8px; font-size: 14px; font-weight: 700; color: var(--color-ink); }
+  .rs-box-h span { font-size: 18px; color: var(--c); }
+  .rs-box-h small { margin-left: auto; font-family: var(--font-display); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--c); }
+  .rs-box ul { margin-top: 8px; display: grid; gap: 8px; }
+  .rs-box li a { display: flex; gap: 10px; align-items: center; }
+  .rs-box li a:hover .rs-box-t { color: var(--color-rose); }
+  .rs-box-img { flex-shrink: 0; width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .rs-box-img img { width: 100%; height: 100%; object-fit: contain; padding: 3px; }
+  .rs-box-t { min-width: 0; font-size: 12px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; transition: color .3s; }
+  .rs-box-t small { display: block; font-size: 10.5px; color: var(--color-neutral-500); }
+  .rs-box-more { display: inline-block; margin-top: 6px; font-size: 11px; color: var(--c); }
+  .rs-compact { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 12px; }
+  .rs-compact-face { width: min(300px, 80%); }
+  .rs-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .rs-legend a { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px 4px 4px; border-radius: 999px; background: #fff; font-size: 13px; box-shadow: 0 0 0 1px color-mix(in srgb, var(--c) 35%, transparent); min-height: 36px; }
+  .rs-legend span { width: 24px; height: 24px; border-radius: 999px; background: var(--c); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
+  .rs-legend small { font-size: 11px; color: var(--color-neutral-500); }
+  @media (min-width: 1024px) {
+    .rs-sheet { padding: 32px 40px; }
+    .rs-diagram { display: block; }
+    .rs-compact { display: none; }
+  }
+
+  /* 動画の流れ */
+  .rs-flow { margin-bottom: 48px; padding: 24px 20px 20px; border-radius: 28px; background: var(--c-panel); box-shadow: var(--panel-shadow); }
+  @media (min-width: 768px) { .rs-flow { padding: 28px 40px 24px; } }
+  .rs-flow-h { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+  .rs-flow-h .label-caps { color: var(--color-rose); }
+  .rs-flow-h h2 { font-size: 17px; font-weight: 700; }
+  .rs-flow-note { font-size: 12px; color: var(--color-neutral-500); }
+  .rs-bar { position: relative; height: 64px; margin: 18px 10px 0; }
+  .rs-bar-line { position: absolute; left: 0; right: 0; top: 26px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, #c99a82, #7a5446, #9b5579, #e47f9d, #e60076); opacity: .35; }
+  .rs-dot { position: absolute; top: 27px; width: 16px; height: 16px; transform: translate(-50%, -50%); border-radius: 999px; background: var(--c); box-shadow: 0 0 0 3px #fff, 0 4px 10px -4px rgb(29 21 23 / .5); transition: transform .3s var(--ease-out-expo); cursor: pointer; }
+  .rs-dot::before { content: ""; position: absolute; inset: -12px; }
+  .rs-dot:hover, .rs-dot:focus-visible, .rs-dot.is-on { transform: translate(-50%, -50%) scale(1.35); z-index: 2; }
+  .rs-tip { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); width: max-content; max-width: 220px; padding: 6px 10px; border-radius: 10px; background: var(--color-ink); color: #fff; font-size: 11px; line-height: 1.5; text-align: left; pointer-events: none; opacity: 0; transition: opacity .2s; }
+  .rs-tip b { display: block; font-family: var(--font-display); color: var(--c); filter: brightness(1.4); }
+  .rs-dot:hover .rs-tip, .rs-dot:focus-visible .rs-tip { opacity: 1; }
+  .rs-bar-end { position: absolute; top: 40px; left: 0; font-size: 11px; color: var(--color-neutral-500); }
+  .rs-bar-end.is-r { left: auto; right: 0; }
+  .rs-flow-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12px; color: var(--color-neutral-600); }
+  .rs-flow-legend li::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 999px; background: var(--c); margin-right: 6px; vertical-align: 1px; }
+
+  /* 手順と動画 */
+  .rs-main { display: grid; gap: 32px; }
+  @media (min-width: 1024px) { .rs-main { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 48px; align-items: start; } .rs-player-wrap { order: 2; position: sticky; top: calc(var(--hdr-h, 64px) + 20px); } }
+  .rs-player { position: relative; aspect-ratio: 16 / 9; border-radius: 22px; overflow: hidden; background: var(--color-ink); box-shadow: 0 30px 60px -36px rgb(29 21 23 / .6); }
+  .rs-player iframe, .rs-play, .rs-play img { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .rs-play { cursor: pointer; }
+  .rs-play img { object-fit: cover; opacity: .95; transition: transform .7s var(--ease-out-expo); }
+  .rs-play:hover img { transform: scale(1.03); }
+  .rs-play-btn { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 64px; height: 46px; border-radius: 14px; background: #f00; color: #fff; display: flex; align-items: center; justify-content: center; }
+  .rs-player-note { margin-top: 12px; font-size: 12px; color: var(--color-neutral-500); }
+  .rs-chip-sample { color: var(--color-rose); font-weight: 600; }
+  .rs-to-video { display: inline-block; margin-top: 6px; font-size: 13px; }
+  .rs-steps { position: relative; display: grid; gap: 22px; }
+  .rs-step { position: relative; padding: 22px 20px 12px; border-radius: 26px; background: var(--c-panel); box-shadow: var(--panel-shadow); scroll-margin-top: calc(var(--hdr-h, 64px) + 16px); }
+  @media (min-width: 768px) { .rs-step { padding: 28px 32px 16px; } }
+  .rs-step::before { content: ""; position: absolute; left: 0; top: 26px; bottom: 26px; width: 3px; border-radius: 0 3px 3px 0; background: var(--c); }
+  .rs-step-h { display: flex; align-items: center; gap: 14px; }
+  .rs-step-n { font-size: 44px; line-height: 1; color: var(--c); letter-spacing: -0.03em; }
+  .rs-step-h .label-caps { font-size: 10px; color: var(--c); }
+  .rs-step-h h2 { font-size: 19px; font-weight: 700; line-height: 1.3; }
+  .rs-items { margin-top: 10px; }
+  .rs-item { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 14px; padding: 14px 0; border-top: 1px solid color-mix(in srgb, var(--color-ink) 8%, transparent); }
+  .rs-item:first-child { border-top: 0; }
+  .rs-item-img { width: 64px; height: 64px; border-radius: 14px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .rs-item-img img { width: 100%; height: 100%; object-fit: contain; padding: 5px; }
+  .rs-item-img .noimg { font-size: 9px; }
+  .rs-item-b { font-size: 12px; color: var(--color-neutral-500); }
+  .rs-item-b span { margin-left: 8px; color: var(--color-neutral-400); }
+  .rs-item-n { font-size: 14px; line-height: 1.5; font-weight: 600; }
+  .rs-item-n a:hover { color: var(--color-rose); }
+  .rs-item-act { margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+  .rs-time { display: inline-flex; align-items: center; gap: 4px; padding: 3px 12px; border-radius: 999px; font-size: 12px; font-family: var(--font-display); font-weight: 600; color: var(--c); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 45%, transparent); transition: background-color .3s, color .3s; }
+  .rs-time:hover, .rs-time.is-on { background: var(--c); color: #fff; }
+  .rs-time.is-none { font-family: var(--font-sans); font-weight: 400; font-size: 11px; color: var(--color-neutral-400); box-shadow: none; padding-left: 0; }
+  .rs-price { font-size: 14px; }
+  .rs-shops { display: inline-flex; gap: 6px; margin-left: auto; }
+  .rs-shops a { font-size: 11px; padding: 2px 10px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent); transition: border-color .3s; }
+  .rs-shops a:hover { border-color: var(--color-ink); }
+  @media (pointer: coarse) { .rs-time, .rs-shops a { min-height: 36px; display: inline-flex; align-items: center; } }
+
+  .rs-more { margin-top: 72px; }
+  .rs-more-grid { display: grid; gap: 24px; grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 640px) { .rs-more-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1024px) { .rs-more-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; } }
+</style>

@@ -1,0 +1,75 @@
+---
+// メイクレシピのカード（283章）。顔の線画のまわりに、部位ごとの最初の品を引き出し線つきで留める。
+// 顔の線画は、ページに1回だけ置いた定義（<FaceArt sprite />）を参照する（draw のカードだけは自前で描く）。座標は FaceArt と同じ 520×520（顔は ox=60 で中央）。商品の丸はその座標の割合で置くので、カードの大きさが変わっても線とずれない
+import FaceArt from "./FaceArt.astro";
+import { PARTS, TASTES, recipeNo, type Recipe, type PartKey } from "../lib/recipe";
+import { formatCount, withBase } from "../lib/data";
+
+interface Props {
+  recipe: Recipe;
+  /** 一覧の絞り込み用に data-tastes を付け、最初は隠す */
+  hidden?: boolean;
+  /** 線を描く動きを付ける（ページの最初の1枚など） */
+  draw?: boolean;
+  class?: string;
+}
+const { recipe: r, hidden = false, draw = false, class: cls } = Astro.props;
+const SLOT: Record<PartKey, { x: number; y: number }> = {
+  brow: { x: 74, y: 126 },
+  eye: { x: 68, y: 318 },
+  base: { x: 446, y: 110 },
+  cheek: { x: 452, y: 300 },
+  lip: { x: 418, y: 452 },
+};
+const slots = PARTS.map((p, i) => ({ p, items: r.steps[i] })).filter((s) => s.items.length);
+const tasteLabels = r.tastes.map((k) => TASTES.find((t) => t.key === k)!.label).slice(0, 3);
+---
+
+<a href={withBase(`/recipe/${r.key}`)} class:list={["rcard group", cls]} data-tastes={r.tastes.join(" ")} hidden={hidden}>
+  <div class="rcard-fig">
+    <FaceArt width={520} height={520} ox={60} draw={draw} use={!draw} lines={slots.map((s) => ({ part: s.p.key, ...SLOT[s.p.key] }))} />
+    {slots.map((s) => {
+      const first = s.items[0];
+      const pos = SLOT[s.p.key];
+      return (
+        <span class="rcard-th" style={`left:${(pos.x / 520) * 100}%;top:${(pos.y / 520) * 100}%;--c:${s.p.color}`}>
+          {first.img ? <img src={first.img} alt="" loading="lazy" data-err="hide" /> : <b>{s.p.en}</b>}
+          {s.items.length > 1 && <i class="num-display">+{s.items.length - 1}</i>}
+        </span>
+      );
+    })}
+    <span class="rcard-no num-display">{recipeNo(r.no)}</span>
+  </div>
+  <div class="rcard-body">
+    {tasteLabels.length > 0 && <p class="rcard-tastes">{tasteLabels.map((t) => <span>{t}</span>)}</p>}
+    <h3 class="rcard-h phrase">{r.headline}<span>レシピ</span></h3>
+    <p class="rcard-v">{r.video.title}</p>
+    <p class="rcard-m">
+      <span><b class="num-display">{r.itemCount}</b>品</span>
+      <span><b class="num-display">{r.stepCount}</b>ステップ</span>
+      {r.pricedCount > 0 && <span>そろえて約<b class="num-display">¥{formatCount(r.total)}</b></span>}
+    </p>
+  </div>
+</a>
+
+<style is:global>
+  .rcard { display: flex; flex-direction: column; min-width: 0; border-radius: 28px; background: var(--c-panel); box-shadow: var(--panel-shadow); overflow: hidden; transition: transform .6s var(--ease-out-expo), box-shadow .6s var(--ease-out-expo); }
+  .rcard:hover { transform: translateY(-4px); box-shadow: 0 0 0 1px rgb(134 10 70 / .08), 0 30px 50px -36px rgb(134 10 70 / .45); }
+  .rcard[hidden] { display: none; }
+  .rcard-fig { position: relative; aspect-ratio: 1; background: radial-gradient(120% 90% at 50% 30%, #fff 0%, var(--c-well) 55%, var(--c-accent) 100%); }
+  .rcard-th { position: absolute; width: 19%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 999px; background: #fff; box-shadow: 0 0 0 2px var(--c), 0 10px 18px -12px rgb(29 21 23 / .45); display: flex; align-items: center; justify-content: center; transition: transform .6s var(--ease-out-expo); }
+  .rcard:hover .rcard-th { transform: translate(-50%, -50%) scale(1.06); }
+  .rcard-th img { width: 74%; height: 74%; object-fit: contain; }
+  .rcard-th b { font-family: var(--font-display); font-size: 10px; letter-spacing: .1em; color: var(--c); text-transform: uppercase; }
+  .rcard-th i { position: absolute; right: -10%; bottom: -6%; min-width: 1.9em; padding: 0 .35em; border-radius: 999px; background: var(--c); color: #fff; font-style: normal; font-size: 11px; line-height: 1.75; text-align: center; box-shadow: 0 0 0 2px #fff; }
+  .rcard-no { position: absolute; left: 18px; bottom: 14px; font-size: 12px; letter-spacing: .12em; color: color-mix(in srgb, var(--color-ink) 45%, transparent); }
+  .rcard-body { padding: 18px 22px 22px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .rcard-tastes { display: flex; flex-wrap: wrap; gap: 6px; }
+  .rcard-tastes span { font-size: 11px; line-height: 1.6; padding: 0 .6em; border-radius: 999px; background: var(--c-accent); color: color-mix(in srgb, var(--color-ink) 80%, transparent); }
+  .rcard-h { font-size: 17px; font-weight: 700; line-height: 1.45; transition: color .3s; }
+  .rcard-h span { margin-left: .25em; font-size: 12px; font-weight: 600; color: var(--color-rose); letter-spacing: .06em; }
+  .rcard:hover .rcard-h { color: var(--color-rose); }
+  .rcard-v { font-size: 12px; line-height: 1.6; color: var(--color-neutral-500); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .rcard-m { margin-top: auto; padding-top: 10px; display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--color-neutral-500); border-top: 1px solid color-mix(in srgb, var(--color-ink) 8%, transparent); }
+  .rcard-m b { font-size: 15px; color: var(--color-ink); margin-right: 1px; }
+</style>
