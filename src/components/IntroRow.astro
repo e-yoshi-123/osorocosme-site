@@ -44,7 +44,7 @@ const quotes = [...new Set(i.concerns.map((c) => c.quote).filter(Boolean))]; // 
           <a href={withBase("/influencer-list")} class="intro-3" title={`発信力 ${i.influence}/5（発信力スコア${i.influenceRank}位。登録者数・掲載動画数・紹介コスメ数から算出）`}>
             <span class="intro-11" role="img" aria-label={`発信力 5段階中${i.influence}`}>
               {[1, 2, 3, 4, 5].map((n) => (
-                <span class:list={["w-[7px] h-[7px] rounded-full", n <= i.influence ? "bg-rose" : "bg-ink/12"]} />
+                <span class={n <= i.influence ? "intro-d1" : "intro-d0"} />
               ))}
             </span>
             <span>発信力{i.influenceRank}位</span>

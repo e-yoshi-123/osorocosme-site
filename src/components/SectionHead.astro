@@ -10,7 +10,7 @@ const { num, en, title, lead, href, cta = "View all", id } = Astro.props;
       <h2 class="font-serif h-section u-25">{title}</h2>
     </div>
     {href && (
-      <a href={href} class="group font-bold shrink-0 inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase pb-2">
+      <a href={href} class="group shead-a">
         <span class="link-u hidden sm:inline">{cta}</span><span class="sr-only sm:hidden">{cta}</span>
         <span class="u-5" aria-hidden="true">→</span>
       </a>

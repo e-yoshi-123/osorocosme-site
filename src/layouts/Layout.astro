@@ -112,18 +112,18 @@ const inExplore = /^\/(concern|ingredient|feature)(\/|$)/.test(path.replace(impo
     <script is:inline src={withBase("/js/img-error.js")}></script>
   </head>
   <body class="lay-16">
-    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 bg-ink text-white px-3 py-2 text-sm">本文へ</a>
+    <a href="#main" class="lay-skip">本文へ</a>
     <header class="lay-12">
       <div class="lay-8">
         <a href={withBase("/")} class="lay-19" aria-label="OsoroCosme ホーム"><Logo /></a>
         <nav class="hidden lg:flex items-center gap-7 ml-6" aria-label="メイン">
-          <button type="button" data-menu-toggle aria-controls="mega-menu" aria-expanded="false" class:list={["group relative inline-flex items-center gap-1 text-sm tracking-[0.04em] py-2 cursor-pointer", inExplore ? "text-ink" : "text-neutral-600 hover:text-ink"]}>
+          <button type="button" data-menu-toggle aria-controls="mega-menu" aria-expanded="false" class:list={["group lay-xb", inExplore ? "text-ink" : "lay-n0"]}>
             探す
             <svg viewBox="0 0 24 24" class="lay-11" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
             <span class:list={["nav-line", inExplore ? "w-full" : "w-0 group-hover:w-full"]} />
           </button>
           {navLinks.map((l) => (
-            <a href={withBase(l.href)} class:list={["group nav-link", isCurrent(l.href) ? "text-ink" : "text-neutral-600 hover:text-ink"]} aria-current={isCurrent(l.href) ? "page" : undefined}>
+            <a href={withBase(l.href)} class:list={["group nav-link", isCurrent(l.href) ? "text-ink" : "lay-n0"]} aria-current={isCurrent(l.href) ? "page" : undefined}>
               {l.label}
               <span class:list={["nav-line", isCurrent(l.href) ? "w-full" : "w-0 group-hover:w-full"]} />
             </a>
@@ -135,7 +135,7 @@ const inExplore = /^\/(concern|ingredient|feature)(\/|$)/.test(path.replace(impo
           <input type="search" name="q" placeholder={SEARCH_PLACEHOLDER} data-examples={JSON.stringify(searchExamples)} aria-label="サイト内検索" class="lay-3" />
         </form>
         {/* マイコスメ（5-3・5-4）：人型の印（マイページの意味。259章でかばん→ハート→人型に変更。通知のように見えるので品数の数字は出さない） */}
-        <a href={withBase("/my-cosme/")} aria-label="マイコスメ" title="マイコスメ（マイページ）" aria-current={isCurrent("/my-cosme/") ? "page" : undefined} class:list={["relative shrink-0 w-10 h-10 -mx-1 flex items-center justify-center rounded-full transition-colors", isCurrent("/my-cosme/") ? "text-rose" : "text-neutral-600 hover:text-ink"]}>
+        <a href={withBase("/my-cosme/")} aria-label="マイコスメ" title="マイコスメ（マイページ）" aria-current={isCurrent("/my-cosme/") ? "page" : undefined} class:list={["lay-mc", isCurrent("/my-cosme/") ? "text-rose" : "lay-n0"]}>
           <svg viewBox="0 0 24 24" class="w-[22px] h-[22px]" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8" /><path d="M4.8 20c.9-3.6 3.7-5.6 7.2-5.6s6.3 2 7.2 5.6" /></svg>
         </a>
         <button type="button" data-menu-toggle aria-controls="mobile-menu" aria-expanded="false" aria-label="メニューを開く" class="group lay-7">

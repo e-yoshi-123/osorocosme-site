@@ -654,4 +654,18 @@ main .md\:sticky.bg-neutral-50\/95 {
   .nav-link { @apply relative text-sm tracking-[0.04em] py-2; }
   .tile-name { @apply text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors; }
   .mega-links a { @apply hover:text-rose; }
+  /* 280章で足した分（同じく、元のユーティリティそのまま） */
+  .intro-d1 { @apply w-[7px] h-[7px] rounded-full bg-rose; }
+  .intro-d0 { @apply w-[7px] h-[7px] rounded-full bg-ink/12; }
+  .tile-r1 { @apply absolute top-0 left-0 leading-none bg-badge rounded-br-2xl pl-3 pr-3.5 pt-1.5 pb-2 text-rose text-[22px]; }
+  .tile-r2 { @apply absolute top-0 left-0 leading-none bg-badge rounded-br-2xl pl-3 pr-3.5 pt-1.5 pb-2 text-ink/60 text-[20px]; }
+  .rrow-g { @apply py-5 grid grid-cols-[2.75rem_4.75rem_minmax(0,1fr)] @3xl:grid-cols-[3.5rem_6rem_minmax(0,1fr)_10rem_16rem] gap-x-3 @3xl:gap-x-5 gap-y-3 items-center; }
+  .shead-a { @apply font-bold shrink-0 inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase pb-2; }
+  .lay-xb { @apply relative inline-flex items-center gap-1 text-sm tracking-[0.04em] py-2 cursor-pointer; }
+  .lay-mc { @apply relative shrink-0 w-10 h-10 -mx-1 flex items-center justify-center rounded-full transition-colors; }
+  .lay-n0 { @apply text-neutral-600 hover:text-ink; }
+  .lay-skip { @apply sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 bg-ink text-white px-3 py-2 text-sm; }
+  .vid-q { @apply bg-white overflow-hidden block aspect-square rounded-xl ring-1 ring-ink/5 transition-transform duration-500 group-hover:-translate-y-0.5; }
+  .mega-7 { @apply border-l border-ink/10 pl-6; }
+  .item-mc { @apply rounded-full border text-rose inline-flex items-center gap-2 min-h-10 px-5 border-rose/50 text-sm hover:bg-rose hover:text-white aria-pressed:bg-rose aria-pressed:text-white transition-colors cursor-pointer; }
 }

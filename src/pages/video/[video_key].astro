@@ -178,7 +178,7 @@ const jsonLd = video
                   {quickCosmetics.map((x) => (
                     <li class="min-w-0">
                       <a href={withBase(`/cosmetics/${x.slug}/`)} class="group block">
-                        <span class="bg-white overflow-hidden block aspect-square rounded-xl ring-1 ring-ink/5 transition-transform duration-500 group-hover:-translate-y-0.5">
+                        <span class="vid-q">
                           <img src={x.img} alt={`${x.c.brand} ${x.c.name}`} class="u-19" loading="eager" />
                         </span>
                         <span class="vid-2">{x.c.name}</span>

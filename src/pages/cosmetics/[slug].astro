@@ -296,11 +296,11 @@ const jsonLd = entry
             })()}
             {/* マイコスメ（5-4）：使っているコスメ・気になるコスメとして、この端末のブラウザに登録する（同じ商品は片方にだけ入る。259章）。表示はスクリプトで切り替える（スクリプトなしでは出さない） */}
             <div data-mycosme hidden class="item-17" data-slug={cosmeticSlug(brand_id, name_id)} data-name={`${entry.brand} ${entry.name}`}>
-              <button type="button" data-mycosme-toggle="items" aria-pressed="false" class="group rounded-full border text-rose inline-flex items-center gap-2 min-h-10 px-5 border-rose/50 text-sm hover:bg-rose hover:text-white aria-pressed:bg-rose aria-pressed:text-white transition-colors cursor-pointer">
+              <button type="button" data-mycosme-toggle="items" aria-pressed="false" class="group rounded-full border item-mc">
                 <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path class="group-aria-pressed:hidden" d="M12 5v14M5 12h14" /><path class="hidden group-aria-pressed:block" d="m5 12.5 4.5 4.5L19 7" /></svg>
                 <span data-label>使っている</span>
               </button>
-              <button type="button" data-mycosme-toggle="wish" aria-pressed="false" class="group rounded-full border text-rose inline-flex items-center gap-2 min-h-10 px-5 border-rose/50 text-sm hover:bg-rose hover:text-white aria-pressed:bg-rose aria-pressed:text-white transition-colors cursor-pointer">
+              <button type="button" data-mycosme-toggle="wish" aria-pressed="false" class="group rounded-full border item-mc">
                 <svg viewBox="0 0 24 24" class="item-20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z" /></svg>
                 <span data-label>気になる</span>
               </button>
