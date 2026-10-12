@@ -149,7 +149,7 @@ function attach(form: HTMLFormElement) {
   const render = (q: string) => {
     let lastKind = "";
     const rows = items.map((it, n) => {
-      const head = it.kind !== lastKind ? `<p class="px-4 pt-2 pb-1 label-caps text-[10px] text-neutral-400" aria-hidden="true">${it.kind}</p>` : "";
+      const head = it.kind !== lastKind ? `<p class="px-4 pt-2 pb-1 label-caps text-[10px] text-neutral-500" aria-hidden="true">${it.kind}</p>` : "";
       lastKind = it.kind;
       const icon = it.icon
         ? `<img referrerpolicy="no-referrer" src="${esc(it.icon)}" alt="" width="24" height="24" class="w-6 h-6 rounded-full shrink-0" loading="lazy" />`

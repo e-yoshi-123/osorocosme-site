@@ -89,7 +89,8 @@ const inExplore = /^\/(concern|ingredient|feature)(\/|$)/.test(path.replace(impo
     {ogImage && <meta property="og:image" content={ogImage} />}
     <meta name="twitter:card" content={twitterCard} />
     {ogImage && <meta name="twitter:image" content={ogImage} />}
-    {jsonLd.map((ld) => <script type="application/ld+json" set:html={JSON.stringify(ld)} />)}
+    {/* 動画の題名などに「</script>」が入っても script を抜けないよう、< は < に置き換える（JSONとしては同じ値） */}
+    {jsonLd.map((ld) => <script type="application/ld+json" set:html={JSON.stringify(ld).replace(/</g, "\\u003c")} />)}
     {/* Googleアナリティクス4。開発中の閲覧を数えないよう、本番ビルドのときだけ出す。外部リンク（楽天など）のクリックは拡張計測機能で自動記録される */}
     {import.meta.env.PROD && GA_MEASUREMENT_ID && (
       <>

@@ -1,5 +1,5 @@
 ---
-import { cosmeticSlug, withBase, extractImageSrc, getCosmeticListEntry } from "../lib/data";
+import { cosmeticSlug, withBase, parseRakutenImage, getCosmeticListEntry } from "../lib/data";
 import PrBadge from "./PrBadge.astro";
 
 interface Props {
@@ -23,21 +23,25 @@ const { brand_id, brand, name_id, name, rakutenImageHtml, showBrand = true, capt
 // 楽天の画像はあっても読み込めない場合に備え、Yahoo!の画像を data-* に持たせる（Layout の共通の処理が差し替える。135章）
 const entry = getCosmeticListEntry(brand_id, name_id);
 const yahooEntry = entry?.yahoo_text_link && entry.yahoo_image_url ? entry : undefined;
-const yahooImage = extractImageSrc(rakutenImageHtml) ? undefined : yahooEntry;
+// 楽天のHTMLはそのまま差し込まず、リンク先・画像・altだけ取り出して自前のタグで出す（276章）
+const rakuten = parseRakutenImage(rakutenImageHtml);
+const yahooImage = rakuten ? undefined : yahooEntry;
 ---
 
 <div class="group card-5">
   <div
     class="cosmetic-image-box product-well overflow-hidden card-7"
-    data-yahoo-image={rakutenImageHtml ? yahooEntry?.yahoo_image_url : undefined}
-    data-yahoo-link={rakutenImageHtml ? yahooEntry?.yahoo_text_link : undefined}
+    data-yahoo-image={rakuten ? yahooEntry?.yahoo_image_url : undefined}
+    data-yahoo-link={rakuten ? yahooEntry?.yahoo_text_link : undefined}
   >
     {
-      rakutenImageHtml ? (
-        <Fragment set:html={rakutenImageHtml} />
+      rakuten ? (
+        <a href={rakuten.href} target="_blank" rel="nofollow sponsored noopener">
+          <img src={rakuten.src} alt={rakuten.alt || `${brand} ${name}`} width="240" height="240" loading="lazy" />
+        </a>
       ) : yahooImage ? (
         <a href={yahooImage.yahoo_text_link} target="_blank" rel="nofollow sponsored noopener">
-          <img src={yahooImage.yahoo_image_url} alt={`${brand} ${name}`} loading="lazy" />
+          <img src={yahooImage.yahoo_image_url} alt={`${brand} ${name}`} width="240" height="240" loading="lazy" />
         </a>
       ) : (
         <span class="noimg">No image</span>

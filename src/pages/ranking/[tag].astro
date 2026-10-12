@@ -119,19 +119,19 @@ const jsonLd = [
           {
             nav.map((g) => (
               <div>
-                <div class="label-caps text-neutral-400 mb-2">{g.group}</div>
+                <div class="label-caps text-neutral-500 mb-2">{g.group}</div>
                 <ul class="space-y-0.5">
                   {g.items.map((it) =>
                     it.kind === "parent" ? (
                       <li>
                         <a href={categoryUrl(it.name)} class:list={["side-link flex items-baseline gap-2 py-1 font-medium", { "is-current": it.name === tag }]} aria-current={it.name === tag ? "page" : undefined}>
-                          <span class="phrase flex-1 min-w-0">{it.name}</span><span class="shrink-0 tabular-nums text-xs text-neutral-400 font-normal">{it.count}</span>
+                          <span class="phrase flex-1 min-w-0">{it.name}</span><span class="shrink-0 tabular-nums text-xs text-neutral-500 font-normal">{it.count}</span>
                         </a>
                         <ul class="ml-1 pl-3 border-l border-ink/10">
                           {it.children.map((c) => (
                             <li>
                               <a href={categoryUrl(c.name)} class:list={["side-link flex items-baseline gap-2 py-0.5 text-xs text-neutral-600", { "is-current": c.name === tag }]} aria-current={c.name === tag ? "page" : undefined}>
-                                <span class="phrase flex-1 min-w-0">{c.name}</span><span class="shrink-0 tabular-nums text-neutral-400">{c.count}</span>
+                                <span class="phrase flex-1 min-w-0">{c.name}</span><span class="shrink-0 tabular-nums text-neutral-500">{c.count}</span>
                               </a>
                             </li>
                           ))}
@@ -140,7 +140,7 @@ const jsonLd = [
                     ) : (
                       <li>
                         <a href={categoryUrl(it.name)} class:list={["side-link flex items-baseline gap-2 py-1", { "is-current": it.name === tag }]} aria-current={it.name === tag ? "page" : undefined}>
-                          <span class="phrase flex-1 min-w-0">{it.name}</span><span class="shrink-0 tabular-nums text-xs text-neutral-400">{it.count}</span>
+                          <span class="phrase flex-1 min-w-0">{it.name}</span><span class="shrink-0 tabular-nums text-xs text-neutral-500">{it.count}</span>
                         </a>
                       </li>
                     )
@@ -214,7 +214,7 @@ const jsonLd = [
             <p>再生数が多く、複数の動画・複数のインフルエンサーに紹介されている商品ほど上位になります。同じ人が何本も紹介しているだけの商品より、多くの人に紹介されている商品が上位になりやすいよう、チャンネル数を重めにしています。</p>
             <p>PR・提供の紹介（概要欄の記載や、YouTubeの有料プロモーションの表示があるもの）は、提供元のブランドの商品（提供元が書かれていない動画と店舗の提供は、その動画のすべての商品）を数えていません。商品ページの紹介の一覧には「PR」の印を付けて残しています。</p>
             <p class="text-neutral-500">紹介動画が1〜2本の商品は、動画が1本増えるだけで順位が大きく変わります。順位の差が小さい範囲は、目安としてご覧ください。</p>
-            <p class="text-neutral-400">（計算式：log₁₀(合計再生数＋1) ＋ log₁₀(紹介動画数＋1)×2 ＋ log₁₀(紹介チャンネル数＋1)×1.5）</p>
+            <p class="text-neutral-500">（計算式：log₁₀(合計再生数＋1) ＋ log₁₀(紹介動画数＋1)×2 ＋ log₁₀(紹介チャンネル数＋1)×1.5）</p>
           </div>
         </details>
       </header>
@@ -270,8 +270,8 @@ const jsonLd = [
 
         <div class="mt-4 text-center">
           <button id="more-btn" type="button" class="hidden mt-4 px-8 py-3 rounded-full border border-ink/25 text-sm tracking-[0.06em] hover:bg-ink hover:text-paper transition-colors duration-500"></button>
-          <p id="recent-note" class="hidden mt-2 text-xs text-neutral-400">直近{RECENT_DAYS}日に投稿された動画で紹介された商品だけを、紹介したチャンネル数→動画数の順に並べています。</p>
-          <p id="limit-note" class="hidden mt-2 text-xs text-neutral-400">
+          <p id="recent-note" class="hidden mt-2 text-xs text-neutral-500">直近{RECENT_DAYS}日に投稿された動画で紹介された商品だけを、紹介したチャンネル数→動画数の順に並べています。</p>
+          <p id="limit-note" class="hidden mt-2 text-xs text-neutral-500">
             {MAX}位までを表示しています。{MAX + 1}位以降は、紹介動画が少なく順位の差が小さいため掲載していません。
           </p>
         </div>

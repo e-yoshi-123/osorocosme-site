@@ -23,7 +23,7 @@ const cols = [
       <div class="mega-6">
         {m.categories.map((g) => (
           <div>
-            <p class="text-neutral-400 u-24">{g.group}</p>
+            <p class="text-neutral-500 u-24">{g.group}</p>
             <ul class="space-y-1 mega-links">
               {g.items.map((it) => <li><a href={withBase(it.path)}>{it.label}</a></li>)}
             </ul>

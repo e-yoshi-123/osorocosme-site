@@ -24,6 +24,7 @@ import {
   getCosmeticFacts,
   formatJaDate,
   extractImageSrc,
+  parseRakutenImage,
   breadcrumbLd,
   productCategoryPath,
   amazonSearchUrl,
@@ -80,6 +81,7 @@ const buyable = !!extractImageSrc(entry?.rakuten_image_link);
 const yahooFallback = !buyable && !!entry?.yahoo_text_link && !!entry?.yahoo_image_url;
 // 楽天の画像はあるが実際には読み込めなかったとき、下のスクリプトがYahoo!の画像に差し替えるための値
 const yahooSwap = buyable && entry?.yahoo_text_link && entry?.yahoo_image_url ? entry : undefined;
+const rakutenImage = parseRakutenImage(entry?.rakuten_image_link, 500);
 // ページ下部の「次に見たくなる」3要素：一緒に紹介されているコスメ／同じカテゴリの人気ランキング／同じブランドの人気商品
 const coMentioned = getCoMentionedCosmetics(brand_id, name_id, 6);
 const categoryTop = facts.mainTag ? getCategoryTop(facts.mainTag, 6) : [];
@@ -155,7 +157,7 @@ const jsonLd = entry
 <Layout title={entry ? (titleOverride?.title ?? `${entry.brand} ${entry.name}の紹介動画・使っている人`) : "商品詳細"} description={description} image={imageSrc} jsonLd={jsonLd} noindex={noindex}>
   {
     !entry ? (
-      <p class="text-neutral-400">商品情報が見つかりませんでした。</p>
+      <p class="text-neutral-500">商品情報が見つかりませんでした。</p>
     ) : (
       <>
         {/* ===== 商品の表紙：左に額装した画像、右に名前・価格・購入ボタン ===== */}
@@ -167,14 +169,18 @@ const jsonLd = entry
         <div class="panel item-16">
           <div class="md:col-span-5 relative">
             <div class="product-well overflow-hidden item-23">
-              {entry.rakuten_image_link ? (
+              {rakutenImage ? (
                 <div
                   data-item-image
                   data-yahoo-link={yahooSwap?.yahoo_text_link}
                   data-yahoo-image={yahooSwap?.yahoo_image_url}
                   class="item-7"
-                  set:html={entry.rakuten_image_link.replace(/(_ex=)\d+x\d+/g, "$1500x500")}
-                />
+                >
+                  {/* 楽天のHTMLはそのまま差し込まず、リンク先・画像・altだけを自前のタグで出す（276章）。ページの主役の画像なので先に読む */}
+                  <a href={rakutenImage.href} target="_blank" rel="nofollow sponsored noopener">
+                    <img src={rakutenImage.src} alt={rakutenImage.alt || `${entry.brand} ${entry.name}`} width="500" height="500" loading="eager" fetchpriority="high" decoding="async" />
+                  </a>
+                </div>
               ) : yahooFallback ? (
                 <a href={entry.yahoo_text_link} target="_blank" rel="nofollow sponsored noopener" class="w-[82%] h-[82%] flex items-center justify-center">
                   <img src={entry.yahoo_image_url} alt={`${entry.brand} ${entry.name}`} width="240" height="240" class="max-w-full max-h-full w-auto h-auto rounded-md object-contain" />
@@ -234,7 +240,7 @@ const jsonLd = entry
                   </a>
                 )}
               </div>
-              <p class="mt-3 text-xs text-neutral-400">PR：リンク先での購入により、当サイトに報酬が支払われることがあります。</p>
+              <p class="mt-3 text-xs text-neutral-500">PR：リンク先での購入により、当サイトに報酬が支払われることがあります。</p>
             </div>
 
             {/* 紹介の実績：動画数・インフルエンサー数・ランキング。文章版は検索エンジン・読み上げ用に残す（sr-only） */}
@@ -251,7 +257,7 @@ const jsonLd = entry
               {facts.rank && (
                 <a href={categoryUrl(facts.mainTag!)} class="group py-5 px-3 md:px-5">
                   <dt class="item-18">{facts.mainTag}</dt>
-                  <dd class="num-display item-12"><span class="text-rose">{facts.rank}</span><span class="item-10">位<span class="text-neutral-400"> / {facts.rankTotal}品</span></span></dd>
+                  <dd class="num-display item-12"><span class="text-rose">{facts.rank}</span><span class="item-10">位<span class="text-neutral-500"> / {facts.rankTotal}品</span></span></dd>
                 </a>
               )}
             </dl>

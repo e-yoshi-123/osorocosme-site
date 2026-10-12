@@ -2095,6 +2095,21 @@ export function extractImageSrc(html?: string): string | undefined {
 }
 
 /**
+ * 楽天APIの画像リンクHTML（<a href><img src alt></a>）を分解する。
+ * 外から来たHTMLをそのまま差し込まず、リンク先・画像・altだけを取り出して自前のタグで出すため。
+ * `size` を渡すと画像URLの `_ex=WxH` をその大きさに差し替える。
+ */
+export function parseRakutenImage(html: string | undefined, size?: number): { href: string; src: string; alt: string } | undefined {
+  if (!html) return undefined;
+  const href = html.match(/<a[^>]+href=["']([^"']+)["']/i)?.[1];
+  let src = html.match(/<img[^>]+src=["']([^"']+)["']/i)?.[1];
+  if (!href || !src) return undefined;
+  if (size) src = src.replace(/(_ex=)\d+x\d+/g, `$1${size}x${size}`);
+  const alt = (html.match(/<img[^>]+alt=["']([^"']*)["']/i)?.[1] || "").replace(/&quot;/g, '"').replace(/&amp;/g, "&");
+  return { href, src, alt };
+}
+
+/**
  * 商品の画像と、それに合わせた価格・購入リンク。楽天の画像があれば楽天を使い、
  * 楽天の画像が無く、Yahoo!ショッピングのリンクと画像があればYahoo!の画像・価格を使う（115章）。
  * 画像の無い商品は購入できないリンクの可能性が高いので、価格は出さない（従来どおり）。

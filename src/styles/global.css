@@ -272,7 +272,7 @@
     font-family: var(--font-display);
     font-weight: 600;
     font-size: 13px;
-    color: var(--color-neutral-400);
+    color: var(--color-neutral-500);
   }
   .noimg::before {
     content: "";
@@ -432,8 +432,30 @@ main button.rounded-full.border[aria-pressed="true"] {
   color: #fff;
   border-color: var(--color-rose);
 }
-main button.rounded-full.border.bg-pink-100 .text-neutral-400 {
+main button.rounded-full.border.bg-pink-100 .text-neutral-400,
+main button.rounded-full.border.bg-pink-100 .text-neutral-500 {
   color: rgb(250 246 242 / 0.6);
+}
+/*
+  指で押す端末では、小さなチップ（カテゴリ・肌悩み・成分などの丸い枠のリンク）と行の購入ボタンの高さを36px以上にする（276章）。
+  もとは高さ約31pxで、トップで45か所・スマホのメニューで91か所が目安（44px）を下回っていた。マウスの端末では今までどおり詰めて出す。
+*/
+@media (pointer: coarse) {
+  .chip-s,
+  .item-4,
+  .mmenu-1 {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+  }
+  .rrow-1,
+  .rrow-3,
+  .rrow-4 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+  }
 }
 main .md\:sticky.bg-neutral-50\/95 {
   background: color-mix(in srgb, var(--c-page) 90%, transparent);
@@ -478,6 +500,8 @@ main .md\:sticky.bg-neutral-50\/95 {
 */
 @layer utilities {
   .mmenu-1 { @apply text-xs border border-ink/15 rounded-full px-2.5 py-1; }
+  /* トップの「探す」のチップ（.mmenu-1 と同じ形。指の端末では上の @media で高さを足す） */
+  .chip-s { @apply text-xs border border-ink/15 rounded-full px-2.5 py-1; }
   .tile-1 { @apply w-full h-full object-contain p-[11%] transition-transform duration-[1.2s] ease-out-expo group-hover:scale-[1.06]; }
   .lay-1 { @apply text-paper/80 hover:text-paper; }
   .card-2 { @apply text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors; }
@@ -621,7 +645,8 @@ main .md\:sticky.bg-neutral-50\/95 {
   .item-23 { @apply aspect-square rounded-[28px] flex items-center justify-center; }
   .lay-28 { @apply text-xl md:text-2xl leading-relaxed; }
   .vid-8 { @apply aspect-video rounded-[24px] bg-ink shadow-[0_40px_80px_-40px_rgba(29,21,23,0.55)]; }
-  .vid-9 { @apply mt-3 font-semibold text-[20px] md:text-[22px] leading-[1.5] tracking-[-0.02em]; }
+  /* YouTubeの題名は絵文字入りで長いものが多く、スマホで1画面の半分を占めていたので一段小さく（276章） */
+  .vid-9 { @apply mt-3 font-semibold text-[17px] md:text-[20px] leading-[1.45] tracking-[-0.02em]; }
   .vid-10 { @apply shrink-0 inline-flex items-center gap-1 text-[13px] font-semibold py-1.5; }
   /* 式で組み立てる class:list の決まった部分と、メガメニューのリンク（中のaに付けず、ulから指定する） */
   .share-btn { @apply inline-flex items-center justify-center min-h-8 px-3.5 border-ink/20 text-xs tracking-[0.06em] whitespace-nowrap text-ink transition-colors duration-300 hover:bg-ink hover:text-paper hover:border-ink; }

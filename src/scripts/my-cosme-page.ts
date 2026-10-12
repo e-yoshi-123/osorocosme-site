@@ -393,7 +393,7 @@ function renderSearch(p: Prepared, d: MyCosmeData) {
           return `<li><button type="button" ${on ? "disabled" : `data-add="${esc(c[0])}" data-kind="${tab}"`} class="w-full flex items-center gap-3 px-3 py-2 text-left rounded-xl ${on ? "opacity-60" : "hover:bg-pink-100 cursor-pointer"}">
             <span class="w-10 h-10 shrink-0 rounded-lg product-well flex items-center justify-center overflow-hidden">${src ? `<img src="${esc(src)}" alt="" loading="lazy" class="w-full h-full object-contain p-0.5" onerror="this.remove()" />` : ""}</span>
             <span class="flex-1 min-w-0"><span class="block text-xs text-neutral-500 truncate">${esc(c[1])}${c[5] ? `・${esc(c[5])}` : ""}</span><span class="block text-sm truncate">${esc(c[3])}</span></span>
-            <span class="shrink-0 text-xs ${on ? "text-neutral-400" : "text-rose"}">${label}</span>
+            <span class="shrink-0 text-xs ${on ? "text-neutral-500" : "text-rose"}">${label}</span>
           </button></li>`;
         })
         .join("")

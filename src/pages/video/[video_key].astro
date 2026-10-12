@@ -21,6 +21,7 @@ import {
   formatDateDot,
   getPrInfo,
   isPrMention,
+  ytThumb,
   ytThumbLarge,
   cosmeticCategory,
   getBrandName,
@@ -130,22 +131,37 @@ const jsonLd = video
 <Layout title={pageTitle} description={description} image={video ? ytThumbLarge(video.thumbnail) : undefined} ogType="video.other" jsonLd={jsonLd} noindex={noindex}>
   {
     !video ? (
-      <p class="text-neutral-400">動画が見つかりませんでした。</p>
+      <p class="text-neutral-500">動画が見つかりませんでした。</p>
     ) : (
       <>
         {/* ===== 動画：左に埋め込み、右に題・投稿者・数字・YouTubeへの導線 ===== */}
         <div class="panel">
         <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           <div class="lg:col-span-8">
-            <div class="overflow-hidden vid-8">
-              <iframe
-                id="video-player"
-                class="w-full h-full"
-                src={`https://www.youtube.com/embed/${video.video_id}`}
-                title={video.title}
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowfullscreen
-              />
+            {/* 埋め込みは押されてから読む（276章）。YouTubeのiframeは1MB近いスクリプトを読むので、最初はサムネイルと再生ボタンだけを出す */}
+            <div class="overflow-hidden vid-8 relative" id="video-box" data-video-id={video.video_id} data-title={video.title}>
+              <button type="button" class="vid-play group absolute inset-0 w-full h-full cursor-pointer" aria-label={`再生：${video.title}`}>
+                <img
+                  src={ytThumb(video.thumbnail).src}
+                  srcset={ytThumb(video.thumbnail).srcset}
+                  sizes="(min-width: 1024px) 60vw, 100vw"
+                  alt=""
+                  width="640"
+                  height="360"
+                  class="w-full h-full object-cover opacity-95 transition-transform duration-700 ease-out-expo group-hover:scale-[1.03]"
+                  loading="eager"
+                  fetchpriority="high"
+                  decoding="async"
+                />
+                <span class="absolute inset-0 flex items-center justify-center">
+                  <span class="flex items-center justify-center w-[68px] h-[48px] rounded-[14px] bg-[#FF0000] text-white shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6)] transition-transform duration-500 group-hover:scale-110">
+                    <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor" /></svg>
+                  </span>
+                </span>
+              </button>
+              <noscript>
+                <a href={video.url} target="_blank" rel="noopener" class="absolute bottom-3 left-3 bg-paper text-ink text-sm px-4 py-2 rounded-full">YouTubeで見る</a>
+              </noscript>
             </div>
           </div>
           <div class="lg:col-span-4 lg:pt-2">
@@ -242,16 +258,34 @@ const jsonLd = video
       </>
     )
   }
-  {/* 「◯:◯◯の場面から再生」：ページ上の埋め込みをその時刻から再生し、動画の位置まで戻す（JSが無ければYouTubeの該当時刻へ） */}
+  {/* 再生ボタンが押されたときに埋め込み（iframe）を作る。「◯:◯◯の場面から再生」も同じ仕組みで、その時刻から再生して動画の位置まで戻す（JSが無ければYouTubeの該当時刻へ） */}
   <script>
+    const box = document.getElementById("video-box");
+    const mountPlayer = (start?: string) => {
+      if (!box) return null;
+      let player = document.getElementById("video-player") as HTMLIFrameElement | null;
+      const id = box.dataset.videoId;
+      if (!player) {
+        player = document.createElement("iframe");
+        player.id = "video-player";
+        player.className = "absolute inset-0 w-full h-full";
+        player.title = box.dataset.title || "";
+        player.allow = "autoplay; encrypted-media; picture-in-picture";
+        player.allowFullscreen = true;
+        player.src = `https://www.youtube.com/embed/${id}?autoplay=1${start ? `&start=${start}` : ""}`;
+        box.replaceChildren(player);
+      } else if (start) {
+        player.src = `${player.src.split("?")[0]}?start=${start}&autoplay=1`;
+      }
+      return player;
+    };
+    box?.querySelector(".vid-play")?.addEventListener("click", () => mountPlayer());
     document.addEventListener("click", (e) => {
-      const a = e.target.closest && e.target.closest("a.scene-seek");
-      const player = document.getElementById("video-player");
-      if (!a || !player) return;
+      const a = (e.target as HTMLElement).closest?.("a.scene-seek") as HTMLAnchorElement | null;
+      if (!a || !box) return;
       e.preventDefault();
-      player.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
-      const base = player.src.split("?")[0];
-      player.src = `${base}?start=${a.dataset.seek}&autoplay=1`;
+      box.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
+      mountPlayer(a.dataset.seek);
     });
   </script>
 </Layout>

@@ -22,7 +22,7 @@ const href = withBase(`/influencer/${inf.channel_id}`);
 <div class="min-w-0 rounded-[24px] border border-ink/10 bg-panel p-5 mb-6 grid grid-cols-1 grid-rows-subgrid row-span-4 gap-y-5 transition-shadow duration-500 hover:shadow-[0_24px_48px_-28px_rgba(29,21,23,0.35)]">
   {/* 見出し：順位・アイコン・名前・実績 */}
   <div class="flex items-start gap-3">
-    <span class:list={["shrink-0 num-display leading-none w-7", large ? "text-[30px]" : "text-[22px]", rank <= 3 ? "text-rose" : "text-neutral-400"]}>{rank}</span>
+    <span class:list={["shrink-0 num-display leading-none w-7", large ? "text-[30px]" : "text-[22px]", rank <= 3 ? "text-rose" : "text-neutral-500"]}>{rank}</span>
     {inf.channel_icon && <img referrerpolicy="no-referrer" src={inf.channel_icon} alt={inf.channel_title} data-name={inf.channel_title} width={large ? 56 : 44} height={large ? 56 : 44} class:list={["rounded-full shrink-0 ring-1 ring-ink/5", large ? "w-14 h-14" : "w-11 h-11"]} loading="lazy" />}
     <div class="min-w-0 flex-1">
       <a href={href} class:list={["font-semibold leading-snug line-clamp-2 mb-0.5 hover:text-rose transition-colors", large ? "text-lg" : "text-base"]}>{inf.channel_title}</a>
@@ -57,7 +57,7 @@ const href = withBase(`/influencer/${inf.channel_id}`);
               <a href={withBase(`/video/${v.key}`)} class="group ifcard-1">
                 <img src={v.thumbnail} alt={v.title} class="w-full aspect-video object-cover rounded-lg" loading="lazy" />
                 <p class="mt-1 text-xs leading-snug line-clamp-2 group-hover:text-rose">{v.title}</p>
-                <p class="mt-0.5 num-display font-normal text-xs text-neutral-400 whitespace-nowrap">{formatDateDot(v.published_at)}</p>
+                <p class="mt-0.5 num-display font-normal text-xs text-neutral-500 whitespace-nowrap">{formatDateDot(v.published_at)}</p>
               </a>
             ))}
           </div>
@@ -67,7 +67,7 @@ const href = withBase(`/influencer/${inf.channel_id}`);
               <img src={v.thumbnail} alt={v.title} class="w-24 aspect-video object-cover rounded-lg shrink-0" loading="lazy" />
               <span class="min-w-0">
                 <span class="text-xs leading-snug line-clamp-3 group-hover:text-rose">{v.title}</span>
-                <span class="block mt-0.5 num-display font-normal text-xs text-neutral-400 whitespace-nowrap">{formatDateDot(v.published_at)}</span>
+                <span class="block mt-0.5 num-display font-normal text-xs text-neutral-500 whitespace-nowrap">{formatDateDot(v.published_at)}</span>
               </span>
             </a>
           ))
@@ -96,7 +96,7 @@ const href = withBase(`/influencer/${inf.channel_id}`);
                 />
               </div>
               <p class="mt-1 text-xs leading-snug line-clamp-2 group-hover:text-rose">{c.name}</p>
-              {c.videoCount > 1 && <p class="text-xs text-neutral-400">{c.videoCount}本で紹介</p>}
+              {c.videoCount > 1 && <p class="text-xs text-neutral-500">{c.videoCount}本で紹介</p>}
             </a>
           ))}
         </div>

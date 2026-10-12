@@ -10,14 +10,15 @@ import { withBase } from "../lib/data";
     <p id="search-count" class="mt-3 text-sm text-neutral-500"></p>
     {/* 言い方を変えて検索し直せるように、今の検索語を入れた入力欄を置く（スマホではヘッダーの検索が隠れているため） */}
     <form method="get" role="search" data-suggest class="mt-6 max-w-xl flex items-center gap-3 border-b-2 border-ink focus-within:border-rose transition-colors">
-      <input id="search-input" type="search" name="q" aria-label="検索し直す" placeholder="コスメ名・ブランド・インフルエンサー" class="flex-1 min-w-0 bg-transparent py-2.5 text-base md:text-lg placeholder:text-neutral-400 focus:outline-none" />
+      <input id="search-input" type="search" name="q" aria-label="検索し直す" placeholder="コスメ名・ブランド・インフルエンサー" class="flex-1 min-w-0 bg-transparent py-2.5 text-base md:text-lg placeholder:text-neutral-500 focus:outline-none" />
       <button type="submit" class="shrink-0 w-10 h-10 rounded-full bg-ink text-paper flex items-center justify-center transition-colors duration-500 hover:bg-rose" aria-label="検索">
         <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6" /></svg>
       </button>
     </form>
   </header>
   {/* 種類の切り替え（すべて／ブランド／インフルエンサー／コスメ／動画）。件数0の種類は出さない */}
-  <nav id="search-tabs" class="hidden flex flex-wrap gap-2 mb-10 text-sm" aria-label="検索結果の種類"></nav>
+  {/* 選択中のタブは aria-selected（aria-pressed にすると global.css の切り替えボタンの指定でローズ色に塗られ、ほかのページの黒い塗りと揃わない） */}
+  <nav id="search-tabs" role="tablist" class="hidden flex flex-wrap gap-2 mb-10 text-sm" aria-label="検索結果の種類"></nav>
   <div id="search-results" class="space-y-6 md:space-y-8" aria-busy="true">
     {/* 検索用のデータを読み込むあいだの仮の表示 */}
     <div class="panel" data-skeleton aria-label="読み込み中">
@@ -187,7 +188,7 @@ import { withBase } from "../lib/data";
       tabsEl.innerHTML = [["all", "すべて", total] as const, ...kinds.map((k) => [k, LABELS[k], results[k].length] as const)]
         .map(
           ([key, label, n]) =>
-            `<button type="button" data-tab="${key}" aria-pressed="${key === tab}" class="px-4 py-2 rounded-full border ${key === tab ? "bg-pink-100" : ""}">${label}<span class="ml-1.5 text-xs text-neutral-400">${n.toLocaleString("ja-JP")}</span></button>`
+            `<button type="button" role="tab" data-tab="${key}" aria-selected="${key === tab}" class="px-4 py-2 rounded-full border ${key === tab ? "bg-pink-100" : ""}">${label}<span class="ml-1.5 text-xs text-neutral-500">${n.toLocaleString("ja-JP")}</span></button>`
         )
         .join("");
       listEl.innerHTML = "";
@@ -202,7 +203,7 @@ import { withBase } from "../lib/data";
       const sec = document.createElement("section");
       sec.className = "panel";
       sec.innerHTML = `
-        <h2 class="font-serif h-section font-semibold mb-6 flex items-baseline gap-3">${LABELS[k]}<span class="num-display text-sm text-neutral-400">${items.length.toLocaleString("ja-JP")}</span></h2>
+        <h2 class="font-serif h-section font-semibold mb-6 flex items-baseline gap-3">${LABELS[k]}<span class="num-display text-sm text-neutral-500">${items.length.toLocaleString("ja-JP")}</span></h2>
         <div class="${GRID[k]}"></div>`;
       const grid = sec.querySelector("div")!;
       let shown = 0;

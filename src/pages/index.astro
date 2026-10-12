@@ -113,7 +113,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
         <form action={withBase("/search-result")} method="get" role="search" data-suggest class="reveal mt-10 max-w-xl group" style="--d:400ms">
           <label for="hero-q" class="label-caps text-neutral-500">Search</label>
           <div class="mt-2 flex items-center gap-3 border-b-2 border-ink focus-within:border-rose transition-colors">
-            <input id="hero-q" type="search" name="q" placeholder="コスメ名・ブランド・インフルエンサー" class="flex-1 min-w-0 bg-transparent py-3 text-lg md:text-xl font-serif placeholder:text-neutral-400 placeholder:text-[15px] min-[400px]:placeholder:text-lg md:placeholder:text-xl focus:outline-none" />
+            <input id="hero-q" type="search" name="q" placeholder="コスメ名・ブランド・インフルエンサー" class="flex-1 min-w-0 bg-transparent py-3 text-lg md:text-xl font-serif placeholder:text-neutral-500 placeholder:text-[15px] min-[400px]:placeholder:text-lg md:placeholder:text-xl focus:outline-none" />
             <button type="submit" class="shrink-0 w-12 h-12 rounded-full bg-ink text-paper flex items-center justify-center transition-all duration-500 ease-out-expo hover:bg-rose hover:scale-105" aria-label="検索">
               <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6" /></svg>
             </button>
@@ -164,7 +164,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
             <a href={withBase(b.all)} class="u-9">一覧 →</a>
           </p>
           <p class="u-6">
-            {b.items.map((it) => <a href={withBase(it.path)} class="text-xs border border-ink/15 rounded-full px-2.5 py-1 hover:border-rose hover:text-rose transition-colors">{it.label}</a>)}
+            {b.items.map((it) => <a href={withBase(it.path)} class="chip-s hover:border-rose hover:text-rose transition-colors">{it.label}</a>)}
           </p>
         </div>
       ))}
@@ -332,7 +332,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
       {categoryGroups.map((g, i) => (
         <li class="reveal border-b border-ink/15" style={`--d:${(i % 2) * 80}ms`}>
           <a href={withBase(`/ranking/#group-${g.group}`)} class="group relative flex items-baseline gap-5 py-5 md:py-6 overflow-hidden">
-            <span class="num-display text-neutral-400 text-lg w-7 shrink-0">{String(i + 1).padStart(2, "0")}</span>
+            <span class="num-display text-neutral-500 text-lg w-7 shrink-0">{String(i + 1).padStart(2, "0")}</span>
             <span class="font-serif text-[20px] md:text-[22px] font-semibold transition-transform duration-700 ease-out-expo group-hover:translate-x-2 group-hover:text-rose">{g.group}</span>
             <span class="ml-auto text-xs text-neutral-500 shrink-0"><span class="num-display text-base text-ink">{g.tags.length}</span> カテゴリ</span>
             <span class="shrink-0 -mr-6 opacity-0 transition-all duration-500 ease-out-expo group-hover:mr-0 group-hover:opacity-100 text-rose" aria-hidden="true">→</span>

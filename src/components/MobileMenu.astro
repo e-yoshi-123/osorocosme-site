@@ -27,12 +27,12 @@ const sections = [
     </ul>
     <details class="group mmenu-7" open>
       <summary class="mmenu-2">
-        <span class="font-medium">カテゴリから探す</span><span class="text-neutral-400 mmenu-12" aria-hidden="true">⌄</span>
+        <span class="font-medium">カテゴリから探す</span><span class="text-neutral-500 mmenu-12" aria-hidden="true">⌄</span>
       </summary>
       <div class="pb-4 space-y-3">
         {m.categories.map((g) => (
           <div>
-            <p class="text-neutral-400 u-24">{g.group}</p>
+            <p class="text-neutral-500 u-24">{g.group}</p>
             <p class="u-6">
               {g.items.map((it) => <a href={withBase(it.path)} class="mmenu-1">{it.label}</a>)}
             </p>
@@ -44,7 +44,7 @@ const sections = [
     {sections.map((s) => (
       <details class="group mmenu-7" open>
         <summary class="mmenu-2">
-          <span class="font-medium">{s.title}</span><span class="text-neutral-400 mmenu-12" aria-hidden="true">⌄</span>
+          <span class="font-medium">{s.title}</span><span class="text-neutral-500 mmenu-12" aria-hidden="true">⌄</span>
         </summary>
         <div class="pb-4">
           <p class="u-6">

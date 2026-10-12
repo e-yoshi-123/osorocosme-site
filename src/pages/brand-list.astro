@@ -57,7 +57,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
   <PageNav items={navItems} label="ブランド一覧の目次" class="mb-6 md:mb-8" />
 
   <section id="group-map" class="panel mb-6 md:mb-8">
-    <h2 class="font-serif h-section font-semibold mb-2 flex items-baseline gap-3"><span class="num-display text-sm text-neutral-400">01</span>系列マップ</h2>
+    <h2 class="font-serif h-section font-semibold mb-2 flex items-baseline gap-3"><span class="num-display text-sm text-neutral-500">01</span>系列マップ</h2>
     <p class="text-xs text-neutral-500 mb-4">
       同じ親会社・系列のブランドを、紹介動画数に応じた面積の長方形で示しています。系列の中は「メイク系／両方／スキンケア系」に分け、
       名前が収まるブロックには名前を表示し、小さいものは「ほかNブランド」にまとめました（押すと一覧が開きます）。ブロックを押すとブランドのページへ移動します。
@@ -72,7 +72,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
           })}>
             <div class="sm:w-40 shrink-0 sm:text-right sm:pt-1 flex items-baseline gap-2 sm:block">
               <div class="text-sm font-semibold truncate">{g.group}</div>
-              <div class="text-xs text-neutral-400">{g.brands.length}ブランド ／ {g.videoCount}本</div>
+              <div class="text-xs text-neutral-500">{g.brands.length}ブランド ／ {g.videoCount}本</div>
             </div>
             <div class="flex-1 min-w-0">
               <div class="gmap-canvas relative hidden"></div>
@@ -80,7 +80,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
               <div class="gmap-legend flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-neutral-600">
                 {g.brands.map((b) => (
                   <a href={withBase(`/brand/${b.brand_id}`)} class="hover:text-rose">
-                    {b.name}<span class="text-neutral-400">{b.videoCount}</span>
+                    {b.name}<span class="text-neutral-500">{b.videoCount}</span>
                   </a>
                 ))}
               </div>
@@ -93,7 +93,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
   </section>
 
   <section class="panel">
-  <h2 class="font-serif h-section font-semibold mb-4 flex items-baseline gap-3"><span class="num-display text-sm text-neutral-400">02</span>五十音順</h2>
+  <h2 class="font-serif h-section font-semibold mb-4 flex items-baseline gap-3"><span class="num-display text-sm text-neutral-500">02</span>五十音順</h2>
   <div class="flex flex-wrap items-center gap-2 mb-8 text-sm">
     <span class="label-caps text-neutral-500 mr-1">Country</span>
     {
@@ -103,7 +103,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
         </button>
       ))
     }
-    {regionCounts.get("UNKNOWN") ? <span class="text-xs text-neutral-400 ml-1">※国不明 {regionCounts.get("UNKNOWN")}件は「すべて」のみに表示</span> : null}
+    {regionCounts.get("UNKNOWN") ? <span class="text-xs text-neutral-500 ml-1">※国不明 {regionCounts.get("UNKNOWN")}件は「すべて」のみに表示</span> : null}
   </div>
 
   {
@@ -117,7 +117,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
               <a href={withBase(`/brand/${b.brand_id}`)} class="brand-item text-sm hover:text-rose transition-colors min-w-0" data-region={getCountryRegion(b.brand_id)}>
                 <span class="block truncate">{b.name}</span>
                 {(meta.country || meta.group) && (
-                  <span class="block text-xs text-neutral-400 truncate">
+                  <span class="block text-xs text-neutral-500 truncate">
                     {[meta.country ? COUNTRY_NAMES[meta.country] ?? meta.country : null, meta.group].filter(Boolean).join("・")}
                   </span>
                 )}
@@ -318,7 +318,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
           a.innerHTML = "";
           a.textContent = m.b.name;
           const n = document.createElement("span");
-          n.className = "text-neutral-400 ml-0.5";
+          n.className = "text-neutral-500 ml-0.5";
           n.textContent = String(m.b.v);
           a.append(n);
           row.append(a);
