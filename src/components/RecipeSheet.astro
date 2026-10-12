@@ -1,0 +1,228 @@
+---
+// 動画ページの「この動画のメイクレシピ」（283章）。動画で使われた商品を、顔の部位ごとの手順に並べ直して見せる。
+// 顔の図（広い画面は左右の札と引き出し線、狭い画面は番号の印）→ 動画の流れ（時刻の帯）→ 部位ごとの手順。
+// 時刻の帯の点と手順の「▶ 時刻」は a.scene-seek なので、動画ページの埋め込みがその場面から再生する（JSが無ければYouTubeの該当時刻へ）
+import FaceArt from "./FaceArt.astro";
+import PrBadge from "./PrBadge.astro";
+import { PARTS, type PartKey, type Recipe } from "../lib/recipe";
+import { amazonSearchUrl, formatCount, withBase } from "../lib/data";
+
+interface Props {
+  recipe: Recipe;
+}
+const { recipe: r } = Astro.props;
+const v = r.video;
+const parts = PARTS.map((p, i) => ({ ...p, items: r.steps[i], n: 0 })).filter((p) => p.items.length);
+parts.forEach((p, i) => (p.n = i + 1));
+const fmt = (s: number) => (s >= 3600 ? `${Math.floor(s / 3600)}:${String(Math.floor((s % 3600) / 60)).padStart(2, "0")}` : `${Math.floor(s / 60)}`) + `:${String(s % 60).padStart(2, "0")}`;
+
+// 図（広い画面）：1000×DH の座標。顔は ox=300・oy=60。左に眉・アイ・ベース、右にチーク・リップの札を置き、札の見出しの高さへ線を引く
+const BOX: Record<PartKey, { side: "l" | "r"; top: number }> = {
+  brow: { side: "l", top: 10 },
+  eye: { side: "l", top: 232 },
+  base: { side: "l", top: 454 },
+  cheek: { side: "r", top: 120 },
+  lip: { side: "r", top: 372 },
+};
+const DH = 680;
+const BOX_MAX = 2;
+const lines = parts.map((p) => ({ part: p.key, x: BOX[p.key].side === "l" ? 286 : 714, y: BOX[p.key].top + 24 + 20 }));
+
+// 動画の流れ（時刻の帯）：動画の長さが分かり、時刻のある品があるときだけ
+const timeline = r.durationSec
+  ? parts.flatMap((p) => p.items.filter((x) => x.sec !== undefined && x.sec <= r.durationSec).map((x) => ({ x, p })))
+      .sort((a, b) => a.x.sec! - b.x.sec!)
+  : [];
+---
+
+<div class="rs-wrap">
+  {/* ===== 顔の図 ===== */}
+  <div class="rs-sheet" role="group" aria-label="部位ごとのコスメ">
+    <div class="rs-diagram">
+      <FaceArt width={1000} height={DH} ox={300} oy={60} lines={lines} draw />
+      {parts.map((p) => {
+        const b = BOX[p.key];
+        return (
+          <div class:list={["rs-box", `is-${b.side}`]} style={`top:${(b.top / DH) * 100}%;--c:${p.color}`}>
+            <p class="rs-box-h"><span class="num-display">{String(p.n).padStart(2, "0")}</span>{p.label}<small>{p.en}</small></p>
+            <ul>
+              {p.items.slice(0, BOX_MAX).map((x) => (
+                <li>
+                  <a href={withBase(`/cosmetics/${x.slug}`)}>
+                    <span class="rs-box-img product-well">{x.img ? <img src={x.img} alt="" loading="lazy" data-err="hide" /> : null}</span>
+                    <span class="rs-box-t"><small>{x.brand}</small>{x.name}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            {p.items.length > BOX_MAX && <a href={`#step-${p.key}`} class="rs-box-more">ほか{p.items.length - BOX_MAX}品 →</a>}
+          </div>
+        );
+      })}
+    </div>
+    <div class="rs-compact">
+      <div class="rs-compact-face">
+        <FaceArt pins={parts.map((p) => ({ part: p.key, n: p.n }))} draw />
+      </div>
+      <ol class="rs-legend">
+        {parts.map((p) => (
+          <li style={`--c:${p.color}`}>
+            <a href={`#step-${p.key}`}><span class="num-display">{p.n}</span>{p.label}<small>{p.items.length}品</small></a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+
+  {/* ===== 動画の流れ ===== */}
+  {timeline.length > 0 && (
+    <div class="rs-flow">
+      <div class="rs-flow-h">
+        <p class="label-caps">Timeline</p>
+        <h3>動画の流れ</h3>
+        <p class="rs-flow-note">点を押すと、その場面から再生します</p>
+      </div>
+      <div class="rs-bar">
+        <span class="rs-bar-line" aria-hidden="true"></span>
+        {timeline.map(({ x, p }) => (
+          <a href={`https://www.youtube.com/watch?v=${v.video_id}&t=${x.sec}s`} target="_blank" rel="noopener" class="scene-seek rs-seek rs-dot" data-seek={x.sec} style={`left:${(x.sec! / r.durationSec) * 100}%;--c:${p.color}`} aria-label={`${x.time} ${p.label}：${x.brand} ${x.name}`}>
+            <span class="rs-tip"><b>{x.time}</b>{x.brand} {x.name}</span>
+          </a>
+        ))}
+        <span class="rs-bar-end num-display" aria-hidden="true">0:00</span>
+        <span class="rs-bar-end is-r num-display" aria-hidden="true">{fmt(r.durationSec)}</span>
+      </div>
+      <ul class="rs-flow-legend" aria-hidden="true">
+        {parts.map((p) => <li style={`--c:${p.color}`}>{p.label}</li>)}
+      </ul>
+    </div>
+  )}
+
+  <ol class="rs-steps">
+    {parts.map((p) => (
+      <li class="rs-step" id={`step-${p.key}`} style={`--c:${p.color}`}>
+        <div class="rs-step-h">
+          <span class="rs-step-n num-display">{String(p.n).padStart(2, "0")}</span>
+          <div>
+            <p class="label-caps">{p.en}</p>
+            <h3>{p.label}</h3>
+          </div>
+        </div>
+        <ul class="rs-items">
+          {p.items.map((x) => (
+            <li class="rs-item">
+              <a href={withBase(`/cosmetics/${x.slug}`)} class="rs-item-img product-well" tabindex="-1" aria-hidden="true">
+                {x.img ? <img src={x.img} alt="" loading="lazy" data-err="noimg" /> : <span class="noimg">No image</span>}
+              </a>
+              <div class="rs-item-t">
+                <p class="rs-item-b">{x.brand}<span>{x.tag}</span></p>
+                <p class="rs-item-n"><a href={withBase(`/cosmetics/${x.slug}`)} class="phrase">{x.name}</a>{x.pr && <PrBadge class="ml-1.5 align-middle" />}</p>
+                <div class="rs-item-act">
+                  {x.sec !== undefined ? (
+                    <a href={`https://www.youtube.com/watch?v=${v.video_id}&t=${x.sec}s`} target="_blank" rel="noopener" data-seek={x.sec} class="scene-seek rs-seek rs-time">▶ {x.time}</a>
+                  ) : (
+                    <span class="rs-time is-none">場面の時刻なし</span>
+                  )}
+                  {x.price !== undefined && <span class="rs-price num-display" title={x.fromYahoo ? "Yahoo!ショッピングの参考価格" : "楽天市場の参考価格"}>¥{formatCount(x.price)}</span>}
+                  <span class="rs-shops">
+                    {x.img && x.rakutenLink && <a href={x.rakutenLink} target="_blank" rel="nofollow sponsored noopener" title="楽天市場で見る">楽天</a>}
+                    {x.yahooLink && <a href={x.yahooLink} target="_blank" rel="nofollow sponsored noopener" title="Yahoo!ショッピングで見る">Yahoo!</a>}
+                    <a href={amazonSearchUrl(x.brand, x.name)} target="_blank" rel="nofollow sponsored noopener" title="Amazonで探す（検索結果）">Amazon</a>
+                  </span>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </li>
+    ))}
+  </ol>
+</div>
+
+<style is:global>
+  .rs-stats { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 12px 0; }
+  .rs-stats div { padding: 0 22px; border-left: 1px solid color-mix(in srgb, var(--color-ink) 14%, transparent); }
+  .rs-stats div:first-child { padding-left: 0; border-left: 0; }
+  .rs-stats dt { font-size: 12px; color: var(--color-neutral-500); }
+  .rs-stats dd { font-size: 13px; }
+  .rs-stats b { font-size: 28px; line-height: 1.15; margin: 0 2px; }
+  .rs-stats small { margin-left: 6px; font-size: 11px; color: var(--color-neutral-500); }
+
+  /* 顔の図 */
+  .rs-sheet { position: relative; border-radius: 28px; background: radial-gradient(70% 90% at 50% 40%, #fff 0%, var(--c-well) 60%, var(--c-accent) 100%); box-shadow: var(--panel-shadow); padding: 24px 16px; margin-bottom: 32px; overflow: hidden; }
+  .rs-diagram { display: none; position: relative; aspect-ratio: 1000 / 680; }
+  .rs-box { position: absolute; width: 27%; padding: 14px 16px 12px; border-radius: 18px; background: rgb(255 255 255 / .92); box-shadow: 0 0 0 1px color-mix(in srgb, var(--c) 30%, transparent), 0 18px 30px -24px rgb(29 21 23 / .5); }
+  .rs-box.is-l { left: 1.4%; }
+  .rs-box.is-r { left: 71.6%; }
+  .rs-box-h { display: flex; align-items: baseline; gap: 8px; font-size: 14px; font-weight: 700; color: var(--color-ink); }
+  .rs-box-h span { font-size: 18px; color: var(--c); }
+  .rs-box-h small { margin-left: auto; font-family: var(--font-display); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--c); }
+  .rs-box ul { margin-top: 8px; display: grid; gap: 8px; }
+  .rs-box li a { display: flex; gap: 10px; align-items: center; }
+  .rs-box li a:hover .rs-box-t { color: var(--color-rose); }
+  .rs-box-img { flex-shrink: 0; width: 64px; height: 64px; border-radius: 14px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .rs-box-img img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+  .rs-box-t { min-width: 0; font-size: 13px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; transition: color .3s; }
+  .rs-box-t small { display: block; font-size: 10.5px; color: var(--color-neutral-500); }
+  .rs-box-more { display: inline-block; margin-top: 6px; font-size: 11px; color: var(--c); }
+  .rs-compact { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 12px; }
+  .rs-compact-face { width: min(300px, 80%); }
+  .rs-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .rs-legend a { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px 4px 4px; border-radius: 999px; background: #fff; font-size: 13px; box-shadow: 0 0 0 1px color-mix(in srgb, var(--c) 35%, transparent); min-height: 36px; }
+  .rs-legend span { width: 24px; height: 24px; border-radius: 999px; background: var(--c); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
+  .rs-legend small { font-size: 11px; color: var(--color-neutral-500); }
+  @media (min-width: 1024px) {
+    .rs-sheet { padding: 32px 40px; }
+    .rs-diagram { display: block; }
+    .rs-compact { display: none; }
+  }
+
+  /* 動画の流れ */
+  .rs-flow { margin-bottom: 32px; padding: 4px 0 0; }
+  .rs-flow-h { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+  .rs-flow-h .label-caps { color: var(--color-rose); }
+  .rs-flow-h h3 { font-size: 17px; font-weight: 700; }
+  .rs-flow-note { font-size: 12px; color: var(--color-neutral-500); }
+  .rs-bar { position: relative; height: 64px; margin: 18px 10px 0; }
+  .rs-bar-line { position: absolute; left: 0; right: 0; top: 26px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, #c99a82, #7a5446, #9b5579, #e47f9d, #e60076); opacity: .35; }
+  .rs-dot { position: absolute; top: 27px; width: 16px; height: 16px; transform: translate(-50%, -50%); border-radius: 999px; background: var(--c); box-shadow: 0 0 0 3px #fff, 0 4px 10px -4px rgb(29 21 23 / .5); transition: transform .3s var(--ease-out-expo); cursor: pointer; }
+  .rs-dot::before { content: ""; position: absolute; inset: -12px; }
+  .rs-dot:hover, .rs-dot:focus-visible, .rs-dot.is-on { transform: translate(-50%, -50%) scale(1.35); z-index: 2; }
+  .rs-tip { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); width: max-content; max-width: 220px; padding: 6px 10px; border-radius: 10px; background: var(--color-ink); color: #fff; font-size: 11px; line-height: 1.5; text-align: left; pointer-events: none; opacity: 0; transition: opacity .2s; }
+  .rs-tip b { display: block; font-family: var(--font-display); color: var(--c); filter: brightness(1.4); }
+  .rs-dot:hover .rs-tip, .rs-dot:focus-visible .rs-tip { opacity: 1; }
+  .rs-bar-end { position: absolute; top: 40px; left: 0; font-size: 11px; color: var(--color-neutral-500); }
+  .rs-bar-end.is-r { left: auto; right: 0; }
+  .rs-flow-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12px; color: var(--color-neutral-600); }
+  .rs-flow-legend li::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 999px; background: var(--c); margin-right: 6px; vertical-align: 1px; }
+
+  .rs-steps { position: relative; display: grid; gap: 16px; }
+  @media (min-width: 1024px) { .rs-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; } }
+  .rs-step { position: relative; padding: 20px 18px 8px 22px; border-radius: 22px; background: var(--c-well); scroll-margin-top: calc(var(--hdr-h, 64px) + 16px); }
+  @media (min-width: 768px) { .rs-step { padding: 24px 26px 10px 30px; } }
+  .rs-step::before { content: ""; position: absolute; left: 0; top: 26px; bottom: 26px; width: 3px; border-radius: 0 3px 3px 0; background: var(--c); }
+  .rs-step-h { display: flex; align-items: center; gap: 14px; }
+  .rs-step-n { font-size: 44px; line-height: 1; color: var(--c); letter-spacing: -0.03em; }
+  .rs-step-h .label-caps { font-size: 10px; color: var(--c); }
+  .rs-step-h h3 { font-size: 19px; font-weight: 700; line-height: 1.3; }
+  .rs-items { margin-top: 10px; }
+  .rs-item { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 14px; padding: 14px 0; border-top: 1px solid color-mix(in srgb, var(--color-ink) 8%, transparent); }
+  .rs-item:first-child { border-top: 0; }
+  .rs-item-img { width: 88px; height: 88px; border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .rs-item-img img { width: 100%; height: 100%; object-fit: contain; padding: 5px; }
+  .rs-item-img .noimg { font-size: 9px; }
+  .rs-item-b { font-size: 12px; color: var(--color-neutral-500); }
+  .rs-item-b span { margin-left: 8px; color: var(--color-neutral-400); }
+  .rs-item-n { font-size: 14px; line-height: 1.5; font-weight: 600; }
+  .rs-item-n a:hover { color: var(--color-rose); }
+  .rs-item-act { margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+  .rs-time { display: inline-flex; align-items: center; gap: 4px; padding: 3px 12px; border-radius: 999px; font-size: 12px; font-family: var(--font-display); font-weight: 600; color: var(--c); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 45%, transparent); transition: background-color .3s, color .3s; }
+  .rs-time:hover, .rs-time.is-on { background: var(--c); color: #fff; }
+  .rs-time.is-none { font-family: var(--font-sans); font-weight: 400; font-size: 11px; color: var(--color-neutral-400); box-shadow: none; padding-left: 0; }
+  .rs-price { font-size: 14px; }
+  .rs-shops { display: inline-flex; gap: 6px; margin-left: auto; }
+  .rs-shops a { font-size: 11px; padding: 2px 10px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent); transition: border-color .3s; }
+  .rs-shops a:hover { border-color: var(--color-ink); }
+  @media (pointer: coarse) { .rs-time, .rs-shops a { min-height: 36px; display: inline-flex; align-items: center; } }
+
+</style>

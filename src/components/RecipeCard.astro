@@ -28,7 +28,7 @@ const slots = PARTS.map((p, i) => ({ p, items: r.steps[i] })).filter((s) => s.it
 const tasteLabels = r.tastes.map((k) => TASTES.find((t) => t.key === k)!.label).slice(0, 3);
 ---
 
-<a href={withBase(`/recipe/${r.key}`)} class:list={["rcard group", cls]} data-tastes={r.tastes.join(" ")} hidden={hidden}>
+<a href={`${withBase(`/video/${r.key}`)}#recipe`} class:list={["rcard group", cls]} data-tastes={r.tastes.join(" ")} hidden={hidden}>
   <div class="rcard-fig">
     <FaceArt width={BOX} height={BOX} ox={120} oy={50} draw={draw} lines={slots.map((s) => ({ part: s.p.key, ...SLOT[s.p.key] }))} />
     {slots.map((s) => {

@@ -5,6 +5,8 @@ import CosmeticCard from "../../components/CosmeticCard.astro";
 import SectionHead from "../../components/SectionHead.astro";
 import VideoCard from "../../components/VideoCard.astro";
 import PrBadge from "../../components/PrBadge.astro";
+import RecipeSheet from "../../components/RecipeSheet.astro";
+import { getRecipe, TASTES } from "../../lib/recipe";
 import {
   getAllVideoEntries,
   getVideoByKey,
@@ -65,6 +67,12 @@ const overview = video
     (validCosmetics.length > 0 ? `この動画では${validCosmetics.length}品のコスメが紹介されています。` : "") +
     (ranked ? `そのうち「${ranked.c.brand} ${ranked.c.name}」は、「${ranked.f.mainTag}」カテゴリの人気ランキングで${ranked.f.rankTotal}品中${ranked.f.rank}位です。` : "")
   : "";
+
+// この動画のメイクレシピ（283章）。ベース・アイ・リップがそろい、場面の時刻がある品が3品以上の動画だけ（lib/recipe.ts）
+const recipe = video ? getRecipe(video.key) : undefined;
+const recipeTastes = recipe ? recipe.tastes.map((k) => TASTES.find((t) => t.key === k)!.label) : [];
+// 見出しの番号（レシピがある動画は、レシピが01で、以下が1つずつずれる）
+const secNum = (n: number) => String(n + (recipe ? 1 : 0)).padStart(2, "0");
 
 // 最初の画面に出す紹介コスメの入口（233章）。検索から来た人がすぐ離れていたので、題の下に画像つきで数品を並べる
 const QUICK = 4;
@@ -172,7 +180,10 @@ const jsonLd = video
               <div class="mt-5 rounded-2xl bg-blush/60 p-3 md:p-4">
                 <div class="flex items-center justify-between gap-3">
                   <p class="text-[13px] font-semibold">この動画の紹介コスメ<span class="num-display text-rose text-[18px] mx-1">{validCosmetics.length}</span>品</p>
-                  <a href="#cosmetics" class="text-rose vid-10">すべて見る<span aria-hidden="true">↓</span></a>
+                  <span class="flex items-center gap-3">
+                    {recipe && <a href="#recipe" class="text-rose vid-10">メイクレシピ<span aria-hidden="true">↓</span></a>}
+                    <a href="#cosmetics" class="text-rose vid-10">すべて見る<span aria-hidden="true">↓</span></a>
+                  </span>
                 </div>
                 <ul class="mt-2.5 grid grid-cols-4 gap-2">
                   {quickCosmetics.map((x) => (
@@ -213,9 +224,25 @@ const jsonLd = video
         {/* 旧AI要約(video.summary)は、生成元・品質が不確かなため非表示にしている。
             データ自体は保持しており、Claudeでの作り直し後に復活させる想定 */}
 
+        {recipe && (
+          <section id="recipe" class="panel mt-8 md:mt-10 scroll-mt-24">
+            <SectionHead num={secNum(0)} en="Make recipe" title="この動画のメイクレシピ" lead="動画で使われたコスメを、顔の部位ごとに使った順で並べました。時刻を押すと、その場面から再生します。" href={withBase("/recipe/")} cta="Recipes" />
+            <div class="vr-meta">
+              {recipeTastes.length > 0 && <p class="vr-tastes">{recipeTastes.map((t) => <span>{t}</span>)}</p>}
+              <dl class="rs-stats">
+                <div><dt>コスメ</dt><dd><b class="num-display">{recipe.itemCount}</b>品</dd></div>
+                <div><dt>ステップ</dt><dd><b class="num-display">{recipe.stepCount}</b></dd></div>
+                {recipe.pricedCount > 0 && <div><dt>そろえると（参考）</dt><dd>約<b class="num-display">¥{formatCount(recipe.total)}</b>{recipe.pricedCount < recipe.itemCount && <small>{recipe.pricedCount}品分</small>}</dd></div>}
+              </dl>
+            </div>
+            <RecipeSheet recipe={recipe} />
+            <p class="mt-6 text-xs text-neutral-500">部位は商品のカテゴリで振り分け、手順の中は動画で使った順（時刻が分からない品は後ろ）。価格は楽天市場（無ければYahoo!ショッピング）で確認した時点の参考価格です。<a href={withBase("/recipe/")} class="link-u text-ink ml-1">ほかのメイクレシピを見る →</a></p>
+          </section>
+        )}
+
         {validCosmetics.length > 0 && (
           <section id="cosmetics" class="panel mt-8 md:mt-10 scroll-mt-24">
-            <SectionHead num="01" en="In this video" title="紹介されたコスメ" lead={`この動画で紹介された${validCosmetics.length}品です。`} />
+            <SectionHead num={secNum(1)} en="In this video" title="紹介されたコスメ" lead={`この動画で紹介された${validCosmetics.length}品です。`} />
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-8">
               {validCosmetics.map((c) => {
                 const sec = sceneSeconds(c.time_in_video);
@@ -240,7 +267,7 @@ const jsonLd = video
 
         {sameChannel.length > 0 && (
           <section class="panel u-14">
-            <SectionHead num="02" en="More from the channel" title={`${video.channel_title}の他の動画`} href={withBase(`/influencer/${video.channel_id}`)} cta="Profile" />
+            <SectionHead num={secNum(2)} en="More from the channel" title={`${video.channel_title}の他の動画`} href={withBase(`/influencer/${video.channel_id}`)} cta="Profile" />
             <div class="u-20">
               {sameChannel.map((v) => <div class="min-w-0"><VideoCard video={v} /></div>)}
             </div>
@@ -249,7 +276,7 @@ const jsonLd = video
 
         {sameCosmetics.length > 0 && (
           <section class="panel u-14">
-            <SectionHead num="03" en="Related videos" title="同じコスメを紹介している他の動画" lead="この動画で紹介されているコスメが登場する、他のインフルエンサーの動画です。" />
+            <SectionHead num={secNum(3)} en="Related videos" title="同じコスメを紹介している他の動画" lead="この動画で紹介されているコスメが登場する、他のインフルエンサーの動画です。" />
             <div class="u-20">
               {sameCosmetics.map((v) => <div class="min-w-0"><VideoCard video={v} /></div>)}
             </div>
@@ -288,4 +315,10 @@ const jsonLd = video
       mountPlayer(a.dataset.seek);
     });
   </script>
+  <style is:global>
+    .vr-meta { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; margin: -4px 0 24px; }
+    .vr-meta .rs-stats { margin-top: 0; }
+    .vr-tastes { display: flex; flex-wrap: wrap; gap: 6px; }
+    .vr-tastes span { font-size: 12px; padding: .1em .8em; border-radius: 999px; background: var(--c-accent); }
+  </style>
 </Layout>
