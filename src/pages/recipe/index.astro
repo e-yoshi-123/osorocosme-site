@@ -1,6 +1,5 @@
 ---
 import HowWeCount from "../../components/HowWeCount.astro";
-import FaceArt from "../../components/FaceArt.astro";
 import RecipeCard from "../../components/RecipeCard.astro";
 import Layout from "../../layouts/Layout.astro";
 import { getRecipes, getRecipeTastes, RECIPE_MIN_TIMED } from "../../lib/recipe";
@@ -19,7 +18,6 @@ const description = `YouTuberが動画で実際にしたメイクを、ベース
 ---
 
 <Layout title={title} description={description} noindex>
-  <FaceArt sprite />
   <nav class="text-xs text-neutral-500 mb-8 flex flex-wrap gap-2" aria-label="パンくず">
     <a href={withBase("/")} class="link-u">Home</a><span aria-hidden="true">/</span>
     <span>メイクレシピ（試作）</span>

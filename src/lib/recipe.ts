@@ -31,14 +31,17 @@ export const PARTS: { key: PartKey; label: string; en: string; color: string; ta
 ];
 const PART_OF: Record<string, number> = Object.fromEntries(PARTS.flatMap((s, i) => s.tags.map((t) => [t, i])));
 
-/** 顔のイラスト（FaceArt、viewBox 400×520）の上で、各部位を指す点 */
+/** 顔のイラスト（FaceArt）の顔の枠（400×520）の上で、各部位を指す点。画像（750×750）の座標から FACE_IMAGE の位置を引いたもの。
+ * 前髪のある髪型ではおでこが隠れるので、ベースは左の頬を指す（右の頬はチーク） */
 export const FACE_ANCHORS: Record<PartKey, { x: number; y: number }> = {
-  base: { x: 226, y: 169 },
-  brow: { x: 162, y: 205 },
-  eye: { x: 146, y: 243 },
-  cheek: { x: 258, y: 296 },
-  lip: { x: 213, y: 348 },
+  base: { x: 140, y: 282 },
+  brow: { x: 143, y: 190 },
+  eye: { x: 137, y: 229 },
+  cheek: { x: 267, y: 262 },
+  lip: { x: 219, y: 315 },
 };
+/** 顔の画像の置き方（顔の枠の原点からの位置と大きさ）と、髪型の数 */
+export const FACE_IMAGE = { x: -175, y: -60, w: 750, h: 750, count: 6 };
 
 /** 動画タイトルに明記された語で付けるテイスト（特集と同じく、タイトルにある語だけを使う。68章）。phrase はレシピの名前に使う */
 export const TASTES: { key: string; label: string; phrase: string; re: RegExp }[] = [

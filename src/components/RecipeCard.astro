@@ -1,6 +1,6 @@
 ---
 // メイクレシピのカード（283章）。顔の線画のまわりに、部位ごとの最初の品を引き出し線つきで留める。
-// 顔の線画は、ページに1回だけ置いた定義（<FaceArt sprite />）を参照する（draw のカードだけは自前で描く）。座標は FaceArt と同じ 520×520（顔は ox=60 で中央）。商品の丸はその座標の割合で置くので、カードの大きさが変わっても線とずれない
+// 顔はレシピの番号で6つの髪型を順に使う。座標は FaceArt と同じ 520×520（顔は ox=60 で中央）。商品の丸はその座標の割合で置くので、カードの大きさが変わっても線とずれない
 import FaceArt from "./FaceArt.astro";
 import { PARTS, TASTES, recipeNo, type Recipe, type PartKey } from "../lib/recipe";
 import { formatCount, withBase } from "../lib/data";
@@ -14,12 +14,13 @@ interface Props {
   class?: string;
 }
 const { recipe: r, hidden = false, draw = false, class: cls } = Astro.props;
+// 左に眉・アイ・ベース、右にチーク・リップ（線が顔の上を横切らないように、部位の点と同じ側に置く）
 const SLOT: Record<PartKey, { x: number; y: number }> = {
-  brow: { x: 74, y: 126 },
-  eye: { x: 68, y: 318 },
-  base: { x: 446, y: 110 },
-  cheek: { x: 452, y: 300 },
-  lip: { x: 418, y: 452 },
+  brow: { x: 74, y: 112 },
+  eye: { x: 64, y: 282 },
+  base: { x: 80, y: 446 },
+  cheek: { x: 448, y: 150 },
+  lip: { x: 452, y: 372 },
 };
 const slots = PARTS.map((p, i) => ({ p, items: r.steps[i] })).filter((s) => s.items.length);
 const tasteLabels = r.tastes.map((k) => TASTES.find((t) => t.key === k)!.label).slice(0, 3);
@@ -27,7 +28,7 @@ const tasteLabels = r.tastes.map((k) => TASTES.find((t) => t.key === k)!.label).
 
 <a href={withBase(`/recipe/${r.key}`)} class:list={["rcard group", cls]} data-tastes={r.tastes.join(" ")} hidden={hidden}>
   <div class="rcard-fig">
-    <FaceArt width={520} height={520} ox={60} draw={draw} use={!draw} lines={slots.map((s) => ({ part: s.p.key, ...SLOT[s.p.key] }))} />
+    <FaceArt width={520} height={520} ox={60} draw={draw} variant={r.no} lines={slots.map((s) => ({ part: s.p.key, ...SLOT[s.p.key] }))} />
     {slots.map((s) => {
       const first = s.items[0];
       const pos = SLOT[s.p.key];
@@ -62,7 +63,7 @@ const tasteLabels = r.tastes.map((k) => TASTES.find((t) => t.key === k)!.label).
   .rcard-th img { width: 74%; height: 74%; object-fit: contain; }
   .rcard-th b { font-family: var(--font-display); font-size: 10px; letter-spacing: .1em; color: var(--c); text-transform: uppercase; }
   .rcard-th i { position: absolute; right: -10%; bottom: -6%; min-width: 1.9em; padding: 0 .35em; border-radius: 999px; background: var(--c); color: #fff; font-style: normal; font-size: 11px; line-height: 1.75; text-align: center; box-shadow: 0 0 0 2px #fff; }
-  .rcard-no { position: absolute; left: 18px; bottom: 14px; font-size: 12px; letter-spacing: .12em; color: color-mix(in srgb, var(--color-ink) 45%, transparent); }
+  .rcard-no { position: absolute; right: 18px; bottom: 14px; font-size: 12px; letter-spacing: .12em; color: color-mix(in srgb, var(--color-ink) 45%, transparent); }
   .rcard-body { padding: 18px 22px 22px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
   .rcard-tastes { display: flex; flex-wrap: wrap; gap: 6px; }
   .rcard-tastes span { font-size: 11px; line-height: 1.6; padding: 0 .6em; border-radius: 999px; background: var(--c-accent); color: color-mix(in srgb, var(--color-ink) 80%, transparent); }

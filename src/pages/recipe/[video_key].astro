@@ -17,13 +17,13 @@ parts.forEach((p, i) => (p.n = i + 1));
 const tasteLabels = r.tastes.map((k) => TASTES.find((t) => t.key === k)!.label);
 const fmt = (s: number) => (s >= 3600 ? `${Math.floor(s / 3600)}:${String(Math.floor((s % 3600) / 60)).padStart(2, "0")}` : `${Math.floor(s / 60)}`) + `:${String(s % 60).padStart(2, "0")}`;
 
-// 図（広い画面）：1000×560 の座標。顔は ox=300・oy=20。左に眉・アイ、右にベース・チーク・リップの札を置き、札の見出しの高さへ線を引く
+// 図（広い画面）：1000×560 の座標。顔は ox=300・oy=20。左に眉・アイ・ベース、右にチーク・リップの札を置き、札の見出しの高さへ線を引く
 const BOX: Record<PartKey, { side: "l" | "r"; top: number }> = {
-  brow: { side: "l", top: 80 },
-  eye: { side: "l", top: 300 },
-  base: { side: "r", top: 30 },
-  cheek: { side: "r", top: 225 },
-  lip: { side: "r", top: 400 },
+  brow: { side: "l", top: 6 },
+  eye: { side: "l", top: 182 },
+  base: { side: "l", top: 358 },
+  cheek: { side: "r", top: 90 },
+  lip: { side: "r", top: 300 },
 };
 const BOX_MAX = 2;
 const lines = parts.map((p) => ({ part: p.key, x: BOX[p.key].side === "l" ? 286 : 714, y: BOX[p.key].top + 24 + 20 }));
@@ -47,7 +47,6 @@ const th = ytThumb(v.thumbnail);
 ---
 
 <Layout title={title} description={description} image={th.src} noindex>
-  <FaceArt sprite />
   <nav class="text-xs text-neutral-500 mb-8 flex flex-wrap gap-2" aria-label="パンくず">
     <a href={withBase("/")} class="link-u">Home</a><span aria-hidden="true">/</span>
     <a href={withBase("/recipe/")} class="link-u">メイクレシピ</a><span aria-hidden="true">/</span>
@@ -75,7 +74,7 @@ const th = ytThumb(v.thumbnail);
   {/* ===== 顔の図 ===== */}
   <section class="rs-sheet" aria-label="部位ごとのコスメ">
     <div class="rs-diagram">
-      <FaceArt width={1000} height={560} ox={300} oy={20} lines={lines} draw />
+      <FaceArt width={1000} height={560} ox={300} oy={20} lines={lines} variant={r.no} draw />
       {parts.map((p) => {
         const b = BOX[p.key];
         return (
@@ -98,7 +97,7 @@ const th = ytThumb(v.thumbnail);
     </div>
     <div class="rs-compact">
       <div class="rs-compact-face">
-        <FaceArt pins={parts.map((p) => ({ part: p.key, n: p.n }))} draw />
+        <FaceArt pins={parts.map((p) => ({ part: p.key, n: p.n }))} variant={r.no} draw />
       </div>
       <ol class="rs-legend">
         {parts.map((p) => (
