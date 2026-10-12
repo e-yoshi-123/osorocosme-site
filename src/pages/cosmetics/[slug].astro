@@ -320,7 +320,7 @@ const jsonLd = entry
         <section id="who" class="panel mt-6 md:mt-8">
           <SectionHead
             num="01"
-            en="Who used it"
+            en="Featured by"
             title="いつ・誰が紹介したか"
             lead={`${facts.introductions.length}件の紹介${concernIntroCount > 0 ? `（うち肌悩みに触れた紹介${concernIntroCount}件）` : ""}。●の数は投稿者の発信力（登録者数・掲載動画数・紹介コスメ数から算出したスコアの順位。上位5％・20％・40％・70％で5段階）です。`}
           />
@@ -375,7 +375,7 @@ const jsonLd = entry
 
         {coMentioned.length > 0 && (
           <section id="paired" class="panel u-14">
-            <SectionHead num="02" en="Paired with" title="一緒に紹介されているコスメ" lead={`${entry.name}を紹介した動画で、あわせて紹介されているコスメです。`} />
+            <SectionHead num="02" en="Featured together" title="一緒に紹介されているコスメ" lead={`${entry.name}を紹介した動画で、あわせて紹介されているコスメです。`} />
             <div class="item-6">
               {coMentioned.map((t) => <CosmeticTile tile={t} caption={`${t.together}本の動画で一緒に紹介`} />)}
             </div>

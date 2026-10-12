@@ -117,17 +117,17 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
 
           {/* 何も登録していないとき：人気のコスメから選ぶ */}
           <section data-popular hidden class="panel">
-            <SectionHead en="Start here" title="人気のコスメから選ぶ" lead="紹介している動画が多いコスメです。使っているものを追加すると、おすすめが出ます。" />
+            <SectionHead en="Popular picks" title="人気のコスメから選ぶ" lead="紹介している動画が多いコスメです。使っているものを追加すると、おすすめが出ます。" />
             <div data-popular-list class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-8"></div>
           </section>
 
           <div data-rec hidden class="space-y-6 md:space-y-8">
             <section class="panel">
-              <SectionHead en="Swap" title="同じカテゴリの乗り換え候補" lead="登録したコスメと同じカテゴリで、同じコスメを使っているインフルエンサーが紹介しているものです。" />
+              <SectionHead en="Alternatives" title="同じカテゴリの乗り換え候補" lead="登録したコスメと同じカテゴリで、同じコスメを使っているインフルエンサーが紹介しているものです。" />
               <div data-rec-swap class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-8"></div>
             </section>
             <section class="panel">
-              <SectionHead en="Discover" title="まだ持っていないカテゴリから" lead="登録したコスメに無いカテゴリで、同じコスメを使っているインフルエンサーが紹介しているものです。" />
+              <SectionHead en="New categories" title="まだ持っていないカテゴリから" lead="登録したコスメに無いカテゴリで、同じコスメを使っているインフルエンサーが紹介しているものです。" />
               <div data-rec-new class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-8"></div>
             </section>
             <section data-rec-ing hidden class="panel">
@@ -144,7 +144,7 @@ const btn = "inline-flex items-center justify-center min-h-9 px-4 rounded-full b
 
       {/* 保存と引き継ぎ */}
       <section id="save" class="panel mt-6 md:mt-8 scroll-mt-[calc(var(--hdr-h,72px)+1rem)]">
-        <SectionHead en="Save & move" title="保存と引き継ぎ" lead="一覧（使っている・気になる・肌悩み）はこの端末のブラウザに自動で保存されます。ブラウザのデータを消すと一覧も消えるので、ほかの端末へ移すときや控えを取るときは、ファイルに書き出してください。" />
+        <SectionHead en="Backup & transfer" title="保存と引き継ぎ" lead="一覧（使っている・気になる・肌悩み）はこの端末のブラウザに自動で保存されます。ブラウザのデータを消すと一覧も消えるので、ほかの端末へ移すときや控えを取るときは、ファイルに書き出してください。" />
         <div class="flex flex-wrap gap-2">
           <button type="button" data-action="export" class={btn}>ファイルに書き出す</button>
           <button type="button" data-action="import" class={btn}>ファイルから読み込む</button>

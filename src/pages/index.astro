@@ -327,7 +327,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
 
   {/* ===== 05 CATEGORIES：文字だけの索引 ===== */}
   <section class="panel u-14">
-    <SectionHead num="05" en="Index" title="カテゴリから探す" href={withBase("/ranking/")} cta="Rankings" />
+    <SectionHead num="05" en="Categories" title="カテゴリから探す" href={withBase("/ranking/")} cta="Rankings" />
     <ul class="grid md:grid-cols-2 md:gap-x-12 [&>li:last-child]:border-b-0 md:[&>li:nth-last-child(2):nth-child(odd)]:border-b-0">
       {categoryGroups.map((g, i) => (
         <li class="reveal border-b border-ink/15" style={`--d:${(i % 2) * 80}ms`}>
