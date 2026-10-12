@@ -1,16 +1,11 @@
 ---
 // スマホ・タブレット（lg未満）のメニュー。右上の☰で、ヘッダーの下に画面いっぱいで出す（248章）。
 // 上に主な一覧（ランキング・インフルエンサー・ブランド・動画）、下に探し方（カテゴリ・肌悩み・成分・特集）を折りたたみで並べる。
-import { getMenuData, withBase } from "../lib/data";
-
+// 探し方のリンクはパソコンの「探す」の領域（MegaMenu）と同じなので、HTMLには1回だけ入れ（MegaMenu側）、
+// こちらは初めて開くときにMegaMenuのリンクから組み立てる。全ページに2回ずつ入っていて、サイト全体で約75MBあった（280章）
 interface Props { links: { href: string; label: string; en: string }[] }
 const { links } = Astro.props;
-const m = getMenuData();
-const sections = [
-  { title: "肌悩みから探す", all: "/concern/", items: m.concerns },
-  { title: "成分から探す", all: "/ingredient/", items: m.ingredients },
-  { title: "特集", all: "/feature/", items: m.features },
-].filter((s) => s.items.length > 0);
+import { withBase } from "../lib/data";
 ---
 
 <div id="mobile-menu" data-menu data-lock hidden class="mmenu-6">
@@ -25,34 +20,68 @@ const sections = [
         </li>
       ))}
     </ul>
-    <details class="group mmenu-7" open>
-      <summary class="mmenu-2">
-        <span class="font-medium">カテゴリから探す</span><span class="text-neutral-500 mmenu-12" aria-hidden="true">⌄</span>
-      </summary>
-      <div class="pb-4 space-y-3">
-        {m.categories.map((g) => (
-          <div>
-            <p class="text-neutral-500 u-24">{g.group}</p>
-            <p class="u-6">
-              {g.items.map((it) => <a href={withBase(it.path)} class="mmenu-1">{it.label}</a>)}
-            </p>
-          </div>
-        ))}
-        <a href={withBase("/ranking/")} class="inline-block text-xs text-rose">すべてのカテゴリ →</a>
-      </div>
-    </details>
-    {sections.map((s) => (
-      <details class="group mmenu-7" open>
-        <summary class="mmenu-2">
-          <span class="font-medium">{s.title}</span><span class="text-neutral-500 mmenu-12" aria-hidden="true">⌄</span>
-        </summary>
-        <div class="pb-4">
-          <p class="u-6">
-            {s.items.map((it) => <a href={withBase(it.path)} class="mmenu-1">{it.label}</a>)}
-          </p>
-          <a href={withBase(s.all)} class="text-rose mmenu-14">一覧 →</a>
-        </div>
-      </details>
-    ))}
+    <div data-mmenu-sections></div>
   </nav>
 </div>
+
+<script>
+  // MegaMenu（#mega-menu）のリンクから、折りたたみの節を組み立てる（280章）
+  const box = document.querySelector<HTMLElement>("#mobile-menu [data-mmenu-sections]");
+  const mega = document.getElementById("mega-menu");
+  const el = <K extends keyof HTMLElementTagNameMap>(tag: K, cls = "", text = "") => {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text) e.textContent = text;
+    return e;
+  };
+  const link = (a: HTMLAnchorElement, cls: string, text = a.textContent || "") => {
+    const x = el("a", cls, text);
+    x.href = a.getAttribute("href")!;
+    return x;
+  };
+  const section = (title: string) => {
+    const d = el("details", "group mmenu-7");
+    d.open = true;
+    const s = el("summary", "mmenu-2");
+    s.append(el("span", "font-medium", title));
+    const mark = el("span", "text-neutral-500 mmenu-12", "⌄");
+    mark.setAttribute("aria-hidden", "true");
+    s.append(mark);
+    d.append(s);
+    return d;
+  };
+  const build = () => {
+    if (!box || !mega || box.childElementCount > 0) return;
+    // カテゴリ：グループごとに見出しとリンク
+    const cat = mega.querySelector<HTMLElement>("section[aria-labelledby]");
+    if (cat) {
+      const d = section(cat.querySelector(".label-caps")?.textContent || "カテゴリから探す");
+      const body = el("div", "pb-4 space-y-3");
+      cat.querySelectorAll<HTMLElement>(".mega-6 > div").forEach((g) => {
+        const wrap = el("div");
+        wrap.append(el("p", "text-neutral-500 u-24", g.querySelector("p")?.textContent || ""));
+        const p = el("p", "u-6");
+        g.querySelectorAll<HTMLAnchorElement>("ul a").forEach((a) => p.append(link(a, "mmenu-1")));
+        wrap.append(p);
+        body.append(wrap);
+      });
+      const all = cat.querySelector<HTMLAnchorElement>(".mega-4");
+      if (all) body.append(link(all, "inline-block text-xs text-rose"));
+      d.append(body);
+      box.append(d);
+    }
+    // 肌悩み・成分・特集
+    mega.querySelectorAll<HTMLElement>("section:not([aria-labelledby])").forEach((sec) => {
+      const d = section(sec.querySelector(".label-caps")?.textContent || "");
+      const body = el("div", "pb-4");
+      const p = el("p", "u-6");
+      sec.querySelectorAll<HTMLAnchorElement>("ul a").forEach((a) => p.append(link(a, "mmenu-1")));
+      body.append(p);
+      const all = sec.querySelector<HTMLAnchorElement>(".u-9");
+      if (all) body.append(link(all, "text-rose mmenu-14"));
+      d.append(body);
+      box.append(d);
+    });
+  };
+  document.querySelector('[data-menu-toggle][aria-controls="mobile-menu"]')?.addEventListener("click", build);
+</script>

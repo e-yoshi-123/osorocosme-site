@@ -1,7 +1,7 @@
 ---
 // ヘッダーの「探す」を押すと上から降りてくる領域（パソコン、lg以上。248章）。
 // カテゴリ（ランキング）・肌悩み・成分・特集を一望できるようにする。開け閉めは Layout.astro のスクリプト（data-menu-toggle）。
-// HTMLに入れておくので、閉じていても検索エンジンはリンクをたどれる。
+// HTMLに入れておくので、閉じていても検索エンジンはリンクをたどれる。スマホのメニュー（MobileMenu）も、このリンクから組み立てる（280章）。
 import { getMenuData, withBase } from "../lib/data";
 
 const m = getMenuData();
