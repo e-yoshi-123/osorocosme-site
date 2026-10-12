@@ -1,6 +1,6 @@
 ---
 // メイクレシピのカード（283章）。顔の線画のまわりに、部位ごとの最初の品を引き出し線つきで留める。
-// 顔はレシピの番号で6つの髪型を順に使う。座標は FaceArt と同じ 520×520（顔は ox=60 で中央）。商品の丸はその座標の割合で置くので、カードの大きさが変わっても線とずれない
+// 座標は FaceArt と同じ 520×520（顔は ox=60 で中央）。商品の丸はその座標の割合で置くので、カードの大きさが変わっても線とずれない
 import FaceArt from "./FaceArt.astro";
 import { PARTS, TASTES, recipeNo, type Recipe, type PartKey } from "../lib/recipe";
 import { formatCount, withBase } from "../lib/data";
@@ -28,7 +28,7 @@ const tasteLabels = r.tastes.map((k) => TASTES.find((t) => t.key === k)!.label).
 
 <a href={withBase(`/recipe/${r.key}`)} class:list={["rcard group", cls]} data-tastes={r.tastes.join(" ")} hidden={hidden}>
   <div class="rcard-fig">
-    <FaceArt width={520} height={520} ox={60} draw={draw} variant={r.no} lines={slots.map((s) => ({ part: s.p.key, ...SLOT[s.p.key] }))} />
+    <FaceArt width={520} height={520} ox={60} draw={draw} lines={slots.map((s) => ({ part: s.p.key, ...SLOT[s.p.key] }))} />
     {slots.map((s) => {
       const first = s.items[0];
       const pos = SLOT[s.p.key];

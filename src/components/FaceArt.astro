@@ -1,9 +1,11 @@
 ---
-// メイクレシピの顔のイラスト（283章）。イラストACの「女性の正面イラスト」（さかな014さん）の髪型違い6点を使う（public/recipe/faces/face-1〜6.png）。
-// 6点は同じ顔の型に髪型だけを替えた絵なので、部位の点（FACE_ANCHORS）は共通。画像は 750×750 で、顔の枠（400×520）の原点に対して FACE_IMAGE の位置に置く。
+// メイクレシピの顔のイラスト（283章）。イラストACの「女性のアイコン正面イラスト（ボブヘア）」（id=27825527、作者：さかな014）を、
+// 髪と服の色だけ替えて使う（public/recipe/faces/face-<版>.webp。元の画像と色替えのスクリプトは非公開リポジトリの tools/recipe_face/）。
+// 画像は顔の枠（400×520）の原点に対して FACE_IMAGE の位置に置き、部位の点（FACE_ANCHORS）も同じ枠の座標。
 // 顔は ox・oy だけずらして置く（左右に商品を並べる余白を作るため）。lines：部位の点から指定の座標への引き出し線。pins：部位の点に番号の丸（狭い画面用）。
-// 画像の白い地は multiply で背景になじませる。draw：絵がふわっと出て、引き出し線が伸びる動き（prefers-reduced-motion のときは動かさない）
-import { FACE_ANCHORS, FACE_IMAGE, partOf, type PartKey } from "../lib/recipe";
+// draw：絵がふわっと出て、引き出し線が伸びる動き（prefers-reduced-motion のときは動かさない）。
+// data-face-src：試作の切り替え（FaceSwitcher）が、版を替えるときに使う
+import { FACE_ANCHORS, FACE_IMAGE, FACE_DEFAULT, partOf, type PartKey } from "../lib/recipe";
 import { withBase } from "../lib/data";
 
 interface Props {
@@ -15,16 +17,14 @@ interface Props {
   pins?: { part: PartKey; n: number }[];
   draw?: boolean;
   class?: string;
-  /** 髪型（0〜5） */
-  variant?: number;
 }
-const { width = 400, height = 520, ox = 0, oy = 0, lines = [], pins = [], draw = false, class: cls, variant = 0 } = Astro.props;
+const { width = 400, height = 520, ox = 0, oy = 0, lines = [], pins = [], draw = false, class: cls } = Astro.props;
 const at = (p: PartKey) => ({ x: FACE_ANCHORS[p].x + ox, y: FACE_ANCHORS[p].y + oy });
-const href = withBase(`/recipe/faces/face-${(variant % FACE_IMAGE.count) + 1}.png`);
+const href = withBase(`/recipe/faces/face-${FACE_DEFAULT}.webp`);
 ---
 
 <svg viewBox={`0 0 ${width} ${height}`} class:list={["face-art", { "face-draw": draw }, cls]} aria-hidden="true" focusable="false">
-  <image href={href} x={ox + FACE_IMAGE.x} y={oy + FACE_IMAGE.y} width={FACE_IMAGE.w} height={FACE_IMAGE.h} class="fa-face" />
+  <image href={href} x={ox + FACE_IMAGE.x} y={oy + FACE_IMAGE.y} width={FACE_IMAGE.w} height={FACE_IMAGE.h} class="fa-face" data-face-src />
   {lines.map((l) => {
     const a = at(l.part);
     const d = `M${a.x} ${a.y}C${(a.x + l.x) / 2} ${a.y} ${(a.x + l.x) / 2} ${l.y} ${l.x} ${l.y}`;
@@ -51,7 +51,6 @@ const href = withBase(`/recipe/faces/face-${(variant % FACE_IMAGE.count) + 1}.pn
 
 <style is:global>
   .face-art { display: block; width: 100%; height: auto; overflow: hidden; }
-  .face-art .fa-face { mix-blend-mode: multiply; }
   .face-art .fa-pin text { font-family: var(--font-display); }
   @media (prefers-reduced-motion: no-preference) {
     .face-draw .fa-face { opacity: 0; animation: fa-rise 1.4s var(--ease-out-expo) forwards; }
