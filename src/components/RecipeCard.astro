@@ -1,6 +1,6 @@
 ---
 // メイクレシピのカード（283章）。顔の線画のまわりに、部位ごとの最初の品を引き出し線つきで留める。
-// 座標は FaceArt と同じ 520×520（顔は ox=60 で中央）。商品の丸はその座標の割合で置くので、カードの大きさが変わっても線とずれない
+// 座標は下の BOX（顔は FaceArt の枠を ox・oy だけずらして中央）。商品の丸はその座標の割合で置くので、カードの大きさが変わっても線とずれない
 import FaceArt from "./FaceArt.astro";
 import { PARTS, TASTES, recipeNo, type Recipe, type PartKey } from "../lib/recipe";
 import { formatCount, withBase } from "../lib/data";
@@ -15,12 +15,14 @@ interface Props {
 }
 const { recipe: r, hidden = false, draw = false, class: cls } = Astro.props;
 // 左に眉・アイ・ベース、右にチーク・リップ（線が顔の上を横切らないように、部位の点と同じ側に置く）
+// 枠は 640×640。顔は ox=120・oy=50 で中央に小さめに置き、まわりの商品の枠を大きくとる（商品が小さくて見えなかったため）
+const BOX = 640;
 const SLOT: Record<PartKey, { x: number; y: number }> = {
-  brow: { x: 74, y: 112 },
-  eye: { x: 64, y: 282 },
-  base: { x: 80, y: 446 },
-  cheek: { x: 448, y: 150 },
-  lip: { x: 452, y: 372 },
+  brow: { x: 100, y: 112 },
+  eye: { x: 92, y: 322 },
+  base: { x: 104, y: 532 },
+  cheek: { x: 540, y: 168 },
+  lip: { x: 544, y: 418 },
 };
 const slots = PARTS.map((p, i) => ({ p, items: r.steps[i] })).filter((s) => s.items.length);
 const tasteLabels = r.tastes.map((k) => TASTES.find((t) => t.key === k)!.label).slice(0, 3);
@@ -28,13 +30,14 @@ const tasteLabels = r.tastes.map((k) => TASTES.find((t) => t.key === k)!.label).
 
 <a href={withBase(`/recipe/${r.key}`)} class:list={["rcard group", cls]} data-tastes={r.tastes.join(" ")} hidden={hidden}>
   <div class="rcard-fig">
-    <FaceArt width={520} height={520} ox={60} draw={draw} lines={slots.map((s) => ({ part: s.p.key, ...SLOT[s.p.key] }))} />
+    <FaceArt width={BOX} height={BOX} ox={120} oy={50} draw={draw} lines={slots.map((s) => ({ part: s.p.key, ...SLOT[s.p.key] }))} />
     {slots.map((s) => {
-      const first = s.items[0];
+      // 部位の中で画像のある最初の品を出す（無ければ部位の名前）
+      const first = s.items.find((x) => x.img) ?? s.items[0];
       const pos = SLOT[s.p.key];
       return (
-        <span class="rcard-th" style={`left:${(pos.x / 520) * 100}%;top:${(pos.y / 520) * 100}%;--c:${s.p.color}`}>
-          {first.img ? <img src={first.img} alt="" loading="lazy" data-err="hide" /> : <b>{s.p.en}</b>}
+        <span class="rcard-th" style={`left:${(pos.x / BOX) * 100}%;top:${(pos.y / BOX) * 100}%;--c:${s.p.color}`}>
+          {first.img ? <img src={first.img} alt="" loading="lazy" data-err="hide" /> : <b class="is-empty">{s.p.label}<small>{s.p.en}</small></b>}
           {s.items.length > 1 && <i class="num-display">+{s.items.length - 1}</i>}
         </span>
       );
@@ -58,11 +61,13 @@ const tasteLabels = r.tastes.map((k) => TASTES.find((t) => t.key === k)!.label).
   .rcard:hover { transform: translateY(-4px); box-shadow: 0 0 0 1px rgb(134 10 70 / .08), 0 30px 50px -36px rgb(134 10 70 / .45); }
   .rcard[hidden] { display: none; }
   .rcard-fig { position: relative; aspect-ratio: 1; background: radial-gradient(120% 90% at 50% 30%, #fff 0%, var(--c-well) 55%, var(--c-accent) 100%); }
-  .rcard-th { position: absolute; width: 19%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 999px; background: #fff; box-shadow: 0 0 0 2px var(--c), 0 10px 18px -12px rgb(29 21 23 / .45); display: flex; align-items: center; justify-content: center; transition: transform .6s var(--ease-out-expo); }
+  .rcard-th { position: absolute; width: 27%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 22%; background: #fff; box-shadow: 0 0 0 2px var(--c), 0 10px 18px -12px rgb(29 21 23 / .45); display: flex; align-items: center; justify-content: center; transition: transform .6s var(--ease-out-expo); }
   .rcard:hover .rcard-th { transform: translate(-50%, -50%) scale(1.06); }
-  .rcard-th img { width: 74%; height: 74%; object-fit: contain; }
-  .rcard-th b { font-family: var(--font-display); font-size: 10px; letter-spacing: .1em; color: var(--c); text-transform: uppercase; }
-  .rcard-th i { position: absolute; right: -10%; bottom: -6%; min-width: 1.9em; padding: 0 .35em; border-radius: 999px; background: var(--c); color: #fff; font-style: normal; font-size: 11px; line-height: 1.75; text-align: center; box-shadow: 0 0 0 2px #fff; }
+  .rcard-th img { width: 88%; height: 88%; object-fit: contain; }
+  .rcard-th:has(.is-empty) { background: color-mix(in srgb, var(--c) 12%, #fff); }
+  .rcard-th b { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 13px; font-weight: 700; color: var(--c); }
+  .rcard-th b small { font-family: var(--font-display); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; opacity: .8; }
+  .rcard-th i { position: absolute; right: -8%; bottom: -8%; min-width: 1.9em; padding: 0 .35em; border-radius: 999px; background: var(--c); color: #fff; font-style: normal; font-size: 11px; line-height: 1.75; text-align: center; box-shadow: 0 0 0 2px #fff; }
   .rcard-no { position: absolute; right: 18px; bottom: 14px; font-size: 12px; letter-spacing: .12em; color: color-mix(in srgb, var(--color-ink) 45%, transparent); }
   .rcard-body { padding: 18px 22px 22px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
   .rcard-tastes { display: flex; flex-wrap: wrap; gap: 6px; }

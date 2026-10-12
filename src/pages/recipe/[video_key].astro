@@ -18,14 +18,15 @@ parts.forEach((p, i) => (p.n = i + 1));
 const tasteLabels = r.tastes.map((k) => TASTES.find((t) => t.key === k)!.label);
 const fmt = (s: number) => (s >= 3600 ? `${Math.floor(s / 3600)}:${String(Math.floor((s % 3600) / 60)).padStart(2, "0")}` : `${Math.floor(s / 60)}`) + `:${String(s % 60).padStart(2, "0")}`;
 
-// 図（広い画面）：1000×560 の座標。顔は ox=300・oy=20。左に眉・アイ・ベース、右にチーク・リップの札を置き、札の見出しの高さへ線を引く
+// 図（広い画面）：1000×DH の座標。顔は ox=300・oy=60。左に眉・アイ・ベース、右にチーク・リップの札を置き、札の見出しの高さへ線を引く
 const BOX: Record<PartKey, { side: "l" | "r"; top: number }> = {
-  brow: { side: "l", top: 6 },
-  eye: { side: "l", top: 182 },
-  base: { side: "l", top: 358 },
-  cheek: { side: "r", top: 90 },
-  lip: { side: "r", top: 300 },
+  brow: { side: "l", top: 10 },
+  eye: { side: "l", top: 232 },
+  base: { side: "l", top: 454 },
+  cheek: { side: "r", top: 120 },
+  lip: { side: "r", top: 372 },
 };
+const DH = 680;
 const BOX_MAX = 2;
 const lines = parts.map((p) => ({ part: p.key, x: BOX[p.key].side === "l" ? 286 : 714, y: BOX[p.key].top + 24 + 20 }));
 
@@ -75,11 +76,11 @@ const th = ytThumb(v.thumbnail);
   {/* ===== 顔の図 ===== */}
   <section class="rs-sheet" aria-label="部位ごとのコスメ">
     <div class="rs-diagram">
-      <FaceArt width={1000} height={560} ox={300} oy={20} lines={lines} draw />
+      <FaceArt width={1000} height={DH} ox={300} oy={60} lines={lines} draw />
       {parts.map((p) => {
         const b = BOX[p.key];
         return (
-          <div class:list={["rs-box", `is-${b.side}`]} style={`top:${(b.top / 560) * 100}%;--c:${p.color}`}>
+          <div class:list={["rs-box", `is-${b.side}`]} style={`top:${(b.top / DH) * 100}%;--c:${p.color}`}>
             <p class="rs-box-h"><span class="num-display">{String(p.n).padStart(2, "0")}</span>{p.label}<small>{p.en}</small></p>
             <ul>
               {p.items.slice(0, BOX_MAX).map((x) => (
@@ -252,7 +253,7 @@ const th = ytThumb(v.thumbnail);
 
   /* 顔の図 */
   .rs-sheet { position: relative; border-radius: 32px; background: radial-gradient(70% 90% at 50% 40%, #fff 0%, var(--c-well) 60%, var(--c-accent) 100%); box-shadow: var(--panel-shadow); padding: 24px 16px; margin-bottom: 40px; overflow: hidden; }
-  .rs-diagram { display: none; position: relative; aspect-ratio: 1000 / 560; }
+  .rs-diagram { display: none; position: relative; aspect-ratio: 1000 / 680; }
   .rs-box { position: absolute; width: 27%; padding: 14px 16px 12px; border-radius: 18px; background: rgb(255 255 255 / .92); box-shadow: 0 0 0 1px color-mix(in srgb, var(--c) 30%, transparent), 0 18px 30px -24px rgb(29 21 23 / .5); }
   .rs-box.is-l { left: 1.4%; }
   .rs-box.is-r { left: 71.6%; }
@@ -262,9 +263,9 @@ const th = ytThumb(v.thumbnail);
   .rs-box ul { margin-top: 8px; display: grid; gap: 8px; }
   .rs-box li a { display: flex; gap: 10px; align-items: center; }
   .rs-box li a:hover .rs-box-t { color: var(--color-rose); }
-  .rs-box-img { flex-shrink: 0; width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-  .rs-box-img img { width: 100%; height: 100%; object-fit: contain; padding: 3px; }
-  .rs-box-t { min-width: 0; font-size: 12px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; transition: color .3s; }
+  .rs-box-img { flex-shrink: 0; width: 64px; height: 64px; border-radius: 14px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .rs-box-img img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+  .rs-box-t { min-width: 0; font-size: 13px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; transition: color .3s; }
   .rs-box-t small { display: block; font-size: 10.5px; color: var(--color-neutral-500); }
   .rs-box-more { display: inline-block; margin-top: 6px; font-size: 11px; color: var(--c); }
   .rs-compact { display: grid; grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 12px; }
@@ -320,9 +321,9 @@ const th = ytThumb(v.thumbnail);
   .rs-step-h .label-caps { font-size: 10px; color: var(--c); }
   .rs-step-h h2 { font-size: 19px; font-weight: 700; line-height: 1.3; }
   .rs-items { margin-top: 10px; }
-  .rs-item { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 14px; padding: 14px 0; border-top: 1px solid color-mix(in srgb, var(--color-ink) 8%, transparent); }
+  .rs-item { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 14px; padding: 14px 0; border-top: 1px solid color-mix(in srgb, var(--color-ink) 8%, transparent); }
   .rs-item:first-child { border-top: 0; }
-  .rs-item-img { width: 64px; height: 64px; border-radius: 14px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .rs-item-img { width: 88px; height: 88px; border-radius: 16px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
   .rs-item-img img { width: 100%; height: 100%; object-fit: contain; padding: 5px; }
   .rs-item-img .noimg { font-size: 9px; }
   .rs-item-b { font-size: 12px; color: var(--color-neutral-500); }

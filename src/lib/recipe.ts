@@ -52,7 +52,7 @@ export const FACE_VARIANTS: { key: string; label: string; hair: string }[] = [
   { key: "brown", label: "ブラウン", hair: "#8c6458" },
   { key: "line", label: "線画", hair: "#f4ece9" },
 ];
-export const FACE_DEFAULT = "rose";
+export const FACE_DEFAULT = "milktea";
 
 /** 動画タイトルに明記された語で付けるテイスト（特集と同じく、タイトルにある語だけを使う。68章）。phrase はレシピの名前に使う */
 export const TASTES: { key: string; label: string; phrase: string; re: RegExp }[] = [
