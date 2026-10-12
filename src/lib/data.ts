@@ -398,6 +398,14 @@ export function getUsedCosmeticKeys(): { brand_id: string; name_id: string }[] {
 // 紹介動画がこの本数に満たない商品ページは noindex にし、サイトマップにも載せない。
 // 「検出 - インデックス未登録」が4千件余りあり、クロールを紹介の多いページ・人・ランキングに集めるため（履歴171章）
 export const COSMETIC_INDEX_MIN_VIDEOS = 2;
+// 商品ページ「いつ・誰が紹介したか」：紹介がINTRO_SPLIT_OVER件を超える商品は、先頭INTRO_IN_PAGE件だけをページに入れ、
+// 残りは /cosmetics/<slug>/intros/ に分けて、押したときに読む（ページのHTMLが700KB台になっていた。279章）
+export const INTRO_IN_PAGE = 20;
+export const INTRO_SPLIT_OVER = 30;
+// インフルエンサー一覧：上位INFLUENCER_LIST_HEAD人はカードで出し、「そのほか」は先頭INFLUENCER_LIST_IN_PAGE人だけをページに入れ、
+// 残りは /influencer-list/rest/ に分けて「もっと見る」で読む（一覧のHTMLが580KBあった。279章）
+export const INFLUENCER_LIST_HEAD = 12;
+export const INFLUENCER_LIST_IN_PAGE = 20;
 
 export function getVideosUsingCosmetic(brand_id: string, name_id: string): VideoEntry[] {
   return (videoIndexes().byCosmetic.get(`${brand_id}_${name_id}`) || []).slice();

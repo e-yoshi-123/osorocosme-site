@@ -2,15 +2,19 @@
 import Layout from "../layouts/Layout.astro";
 import PageHead from "../components/PageHead.astro";
 import InfluencerFeatureCard from "../components/InfluencerFeatureCard.astro";
-import { getInfluencerRanking, formatCount, withBase } from "../lib/data";
+import InfluencerListRow from "../components/InfluencerListRow.astro";
+import { getInfluencerRanking, formatCount, withBase, INFLUENCER_LIST_HEAD, INFLUENCER_LIST_IN_PAGE } from "../lib/data";
 
 const influencers = getInfluencerRanking();
 // 上位ほど情報を厚く見せる：TOP3は大きなカード、4〜12位は中サイズ、それ以降はコンパクトな一覧
 const LARGE = 3;
-const MEDIUM_UNTIL = 12;
+const MEDIUM_UNTIL = INFLUENCER_LIST_HEAD;
 const large = influencers.slice(0, LARGE);
 const medium = influencers.slice(LARGE, MEDIUM_UNTIL);
 const rest = influencers.slice(MEDIUM_UNTIL);
+// 「そのほか」は先頭だけをページに入れ、残りは「もっと見る」で /influencer-list/rest/ から読む（279章）
+const restInPage = rest.slice(0, INFLUENCER_LIST_IN_PAGE);
+const restLater = rest.length - restInPage.length;
 ---
 
 <Layout
@@ -36,22 +40,32 @@ const rest = influencers.slice(MEDIUM_UNTIL);
   <section class="panel">
     <h2 class="font-serif h-section font-semibold mb-6">そのほかのインフルエンサー <span class="num-display text-neutral-500 ml-1">{rest.length}</span></h2>
     {/* 名簿のように、細い罫線で区切った行で並べる */}
-    <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10">
-      {
-        rest.map((inf, i) => (
-          <li class="min-w-0 border-b border-ink/10">
-            <a href={withBase(`/influencer/${inf.channel_id}`)} class="group flex items-center gap-3 py-3">
-              <span class="w-8 shrink-0 text-xs text-neutral-500 tabular-nums">{LARGE + medium.length + i + 1}</span>
-              {inf.channel_icon ? <img referrerpolicy="no-referrer" src={inf.channel_icon} alt={inf.channel_title} data-name={inf.channel_title} width="40" height="40" class="w-10 h-10 rounded-full shrink-0 ring-1 ring-ink/5" loading="lazy" /> : <span class="w-10 h-10 rounded-full bg-blush shrink-0" />}
-              <span class="min-w-0 flex-1">
-                <span class="block text-sm font-medium truncate group-hover:text-rose transition-colors">{inf.channel_title}</span>
-                <span class="block text-xs text-neutral-500 truncate">登録者 {formatCount(inf.subscriber_count)}人・動画 {inf.videoCount}本・コスメ {inf.cosmeticCount}品</span>
-              </span>
-              <span class="text-rose opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" aria-hidden="true">→</span>
-            </a>
-          </li>
-        ))
-      }
+    <ul id="inf-rest" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10">
+      {restInPage.map((inf, i) => <InfluencerListRow inf={inf} rank={LARGE + medium.length + i + 1} />)}
     </ul>
+    {restLater > 0 && (
+      <button type="button" id="inf-more" data-src={withBase("/influencer-list/rest/")} class="w-full flex items-center justify-center gap-3 py-5 text-xs tracking-[0.1em] cursor-pointer select-none hover:text-rose">
+        <span>残り{restLater}人を表示</span><span class="w-7 h-7 rounded-full border border-ink/20 flex items-center justify-center" aria-hidden="true">↓</span>
+      </button>
+    )}
   </section>
 </Layout>
+
+<script>
+  // 「そのほかのインフルエンサー」の残りを読んで差し込む（279章）
+  const more = document.getElementById("inf-more");
+  const list = document.getElementById("inf-rest");
+  more?.addEventListener("click", async () => {
+    if (!list || more.getAttribute("aria-busy")) return;
+    more.setAttribute("aria-busy", "true");
+    try {
+      const r = await fetch(more.dataset.src!);
+      if (!r.ok) throw new Error(String(r.status));
+      const doc = new DOMParser().parseFromString(await r.text(), "text/html");
+      doc.querySelectorAll("ul > li").forEach((li) => list.appendChild(document.importNode(li, true)));
+      more.remove();
+    } catch {
+      more.removeAttribute("aria-busy");
+    }
+  });
+</script>

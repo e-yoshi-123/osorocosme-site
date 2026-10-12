@@ -1,0 +1,12 @@
+---
+// インフルエンサー一覧「そのほかのインフルエンサー」の21件目以降の行だけを出すページ（279章）。
+// 一覧のHTMLが580KBあったので、先頭の行だけを一覧に入れ、残りは「もっと見る」を押したときに一覧のスクリプトがここを読んで差し込む。検索には出さない
+import InfluencerListRow from "../../components/InfluencerListRow.astro";
+import { getInfluencerRanking, INFLUENCER_LIST_HEAD, INFLUENCER_LIST_IN_PAGE } from "../../lib/data";
+
+const rest = getInfluencerRanking().slice(INFLUENCER_LIST_HEAD + INFLUENCER_LIST_IN_PAGE);
+---
+<meta name="robots" content="noindex" />
+<ul>
+  {rest.map((inf, i) => <InfluencerListRow inf={inf} rank={INFLUENCER_LIST_HEAD + INFLUENCER_LIST_IN_PAGE + i + 1} />)}
+</ul>

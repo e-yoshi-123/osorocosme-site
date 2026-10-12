@@ -37,6 +37,8 @@ import {
   ingredientSourceLabel,
   getRepeatUsers,
   jstDate,
+  INTRO_IN_PAGE,
+  INTRO_SPLIT_OVER,
 } from "../../lib/data";
 import titleOverrides from "../../data/title-overrides.json";
 
@@ -87,7 +89,10 @@ const coMentioned = getCoMentionedCosmetics(brand_id, name_id, 6);
 const categoryTop = facts.mainTag ? getCategoryTop(facts.mainTag, 6) : [];
 const brandTop = getBrandTopCosmetics(brand_id, name_id, 6);
 
-const INTRO_SHOWN = 10;
+const INTRO_SHOWN = INTRO_IN_PAGE;
+// 紹介の多い商品は、ページに入れる行を先頭だけにし、残りは別のファイルから読む（279章）
+const introSplit = facts.introductions.length > INTRO_SPLIT_OVER;
+const introRows = introSplit ? facts.introductions.slice(0, INTRO_IN_PAGE) : facts.introductions;
 // 全成分（公式サイト、無ければ楽天市場のメーカー公式ショップの表示。246章）と、その全成分に当たる成分のページ
 const ingredientInfo = getIngredientInfo(brand_id, name_id);
 const ingredientPages = ingredientInfo ? getIngredientsOfCosmetic(brand_id, name_id) : [];
@@ -325,7 +330,7 @@ const jsonLd = entry
             title="いつ・誰が紹介したか"
             lead={`${facts.introductions.length}件の紹介${concernIntroCount > 0 ? `（うち肌悩みに触れた紹介${concernIntroCount}件）` : ""}。●の数は投稿者の発信力（登録者数・掲載動画数・紹介コスメ数から算出したスコアの順位。上位5％・20％・40％・70％で5段階）です。`}
           />
-          {/* 並び替え（スクリプトで行う。スクリプトなしでは新しい順の先頭10件だけ） */}
+          {/* 並び替え（スクリプトで行う。スクリプトなしでは新しい順の先頭20件だけ） */}
           {facts.introductions.length > 1 && (
             <div class="flex flex-wrap items-center gap-2 text-xs mb-2" role="group" aria-label="並び替え">
               <span class="label-caps text-neutral-500 mr-1">Sort</span>
@@ -334,10 +339,10 @@ const jsonLd = entry
               <button type="button" class="intro-sort chip" data-sort="subs">発信力順</button>
             </div>
           )}
-          {/* 日付・チャンネル・動画タイトルを固定の列にする。件数が多い商品は、先頭10件だけ表示して残りは「残りを表示」で出す */}
+          {/* 日付・チャンネル・動画タイトルを固定の列にする。件数が多い商品は、先頭20件だけ表示して残りは「残りを表示」で出す */}
           <div class="text-sm">
-            <ul id="intro-list" data-initial={INTRO_SHOWN}>
-              {facts.introductions.map((i, k) => <IntroRow i={i} pos={k} concernPages={concernPages} extra={k >= INTRO_SHOWN} />)}
+            <ul id="intro-list" data-initial={INTRO_SHOWN} data-rest={introSplit ? withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}/intros/`) : undefined}>
+              {introRows.map((i, k) => <IntroRow i={i} pos={k} concernPages={concernPages} extra={k >= INTRO_SHOWN} />)}
             </ul>
             {facts.introductions.length > INTRO_SHOWN && (
               <button type="button" id="intro-more" class="w-full flex items-center justify-center gap-3 py-5 text-xs tracking-[0.1em] cursor-pointer select-none hover:text-rose">
@@ -439,14 +444,27 @@ const jsonLd = entry
     myBox.hidden = false;
   }
 
-  // 「いつ・誰が紹介したか」の並び替え（新しい順・再生数順・発信力順）と「残りを表示」（228章）
+  // 「いつ・誰が紹介したか」の並び替え（新しい順・再生数順・発信力順）と「残りを表示」（228章）。
+  // 紹介の多い商品は、ページには先頭の行だけがあり、残りは data-rest のファイルにある。押したときに一度だけ読んで差し込む（279章）
   const introList = document.getElementById("intro-list");
   if (introList) {
     const rows = Array.from(introList.querySelectorAll<HTMLLIElement>(".intro-row"));
     const INITIAL = Number(introList.dataset.initial);
+    const restUrl = introList.dataset.rest;
     const more = document.getElementById("intro-more");
     let all = false;
     let key = "date";
+    let loading: Promise<void> | undefined;
+    const loadRest = () =>
+      (loading ??= restUrl
+        ? fetch(restUrl)
+            .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
+            .then((html) => {
+              const doc = new DOMParser().parseFromString(html, "text/html");
+              doc.querySelectorAll<HTMLLIElement>(".intro-row").forEach((li) => rows.push(document.importNode(li, true)));
+            })
+            .catch(() => { loading = undefined; })
+        : Promise.resolve());
     const n = (li: HTMLLIElement, k: string) => Number(li.dataset[k]);
     const cmp: Record<string, (a: HTMLLIElement, b: HTMLLIElement) => number> = {
       date: (a, b) => n(a, "pos") - n(b, "pos"),
@@ -462,12 +480,17 @@ const jsonLd = entry
       more?.classList.toggle("hidden", all);
     };
     document.querySelectorAll<HTMLButtonElement>(".intro-sort").forEach((b) =>
-      b.addEventListener("click", () => {
+      b.addEventListener("click", async () => {
         key = b.dataset.sort || "date";
+        // 再生数順・発信力順は全件で並べる必要があるので、残りを読んでから並べる
+        if (key !== "date") await loadRest();
         render();
       })
     );
-    more?.addEventListener("click", () => {
+    more?.addEventListener("click", async () => {
+      more.setAttribute("aria-busy", "true");
+      await loadRest();
+      more.removeAttribute("aria-busy");
       all = true;
       render();
     });
