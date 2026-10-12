@@ -31,13 +31,13 @@ export const PARTS: { key: PartKey; label: string; en: string; color: string; ta
 ];
 const PART_OF: Record<string, number> = Object.fromEntries(PARTS.flatMap((s, i) => s.tags.map((t) => [t, i])));
 
-/** 顔の線画（FaceArt、viewBox 400×520）の上で、各部位を指す点 */
+/** 顔のイラスト（FaceArt、viewBox 400×520）の上で、各部位を指す点 */
 export const FACE_ANCHORS: Record<PartKey, { x: number; y: number }> = {
-  base: { x: 240, y: 166 },
-  brow: { x: 152, y: 211 },
-  eye: { x: 150, y: 245 },
-  cheek: { x: 254, y: 300 },
-  lip: { x: 214, y: 349 },
+  base: { x: 226, y: 169 },
+  brow: { x: 162, y: 205 },
+  eye: { x: 146, y: 243 },
+  cheek: { x: 258, y: 296 },
+  lip: { x: 213, y: 348 },
 };
 
 /** 動画タイトルに明記された語で付けるテイスト（特集と同じく、タイトルにある語だけを使う。68章）。phrase はレシピの名前に使う */

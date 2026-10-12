@@ -1,8 +1,9 @@
 ---
-// メイクレシピの顔の線画（283章）。顔は 400×520 の座標で描き、ox・oy だけずらして置く（左右に商品を並べる余白を作るため）。
+// メイクレシピの顔のイラスト（283章）。顔は 400×520 の座標で描き、ox・oy だけずらして置く（左右に商品を並べる余白を作るため）。
 // lines：部位の点（FACE_ANCHORS）から指定の座標への引き出し線。pins：部位の点に番号の丸を置く（狭い画面用）。
-// 色・線の太さは属性で直接持つ（<use> で参照した線画には、ページのCSSのクラス指定が届かず、黒く塗られたため）。
-// draw：線を描く動き（prefers-reduced-motion のときは動かさない）。線の太さは表示の大きさによらず一定（non-scaling-stroke）
+// 色はすべて属性で直接持つ（<use> で参照した絵には、ページのCSSのクラス指定が届かず、黒く塗られたため）。
+// sprite：絵をページに1回だけ定義する／use：その定義を参照して描く（一覧にカードが多いとき、絵のパスを毎回持たないため）。
+// draw：絵がふわっと出て（g の transform 属性で位置を決めているので、CSSの transform は使わない）、引き出し線が伸びる動き（prefers-reduced-motion のときは動かさない）
 import { FACE_ANCHORS, partOf, type PartKey } from "../lib/recipe";
 
 interface Props {
@@ -14,128 +15,126 @@ interface Props {
   pins?: { part: PartKey; n: number }[];
   draw?: boolean;
   class?: string;
-  /** 部位の点に小さな色の点を打つ */
-  dots?: PartKey[];
-  /** 線画をページに1回だけ定義する（sprite）／その定義を参照して描く（use）。一覧にカードが多いとき、顔のパスを毎回持たないため */
   sprite?: boolean;
   use?: boolean;
 }
-const { width = 400, height = 520, ox = 0, oy = 0, lines = [], pins = [], draw = false, class: cls, dots = [], sprite = false, use = false } = Astro.props;
+const { width = 400, height = 520, ox = 0, oy = 0, lines = [], pins = [], draw = false, class: cls, sprite = false, use = false } = Astro.props;
 const at = (p: PartKey) => ({ x: FACE_ANCHORS[p].x + ox, y: FACE_ANCHORS[p].y + oy });
-// 線画のパス（順に描かれる）
-const strokes = [
-  // 髪の外形と、顔まわりの内側
-  "M200 46C112 46 66 116 70 214C73 290 62 352 58 400C96 412 128 404 146 386C120 340 98 290 96 230C96 150 140 104 200 102C260 104 304 150 304 230C302 290 280 340 254 386C272 404 304 412 342 400C338 352 327 290 330 214C334 116 288 46 200 46Z",
-  // 前髪の流れ
-  "M200 102C186 140 152 176 108 204",
-  "M200 102C228 128 262 150 296 196",
-  "M186 112C176 140 160 160 140 176",
-  // 輪郭
-  "M104 214C104 300 140 384 200 412C260 384 296 300 296 214",
-  // 首・肩
-  "M172 404C174 430 172 450 166 468C130 478 98 492 80 520",
-  "M228 404C226 430 228 450 234 468C270 478 302 492 320 520",
-  // 眉
-  "M136 218C148 207 170 205 186 212",
-  "M214 212C230 205 252 207 264 218",
-  // 目（上まぶたの線・下まぶた・目尻のはね）
-  "M138 246C150 234 172 234 184 246",
-  "M142 250C154 257 170 257 180 251",
-  "M138 246L131 241",
-  "M216 246C228 234 250 234 262 246",
-  "M220 251C230 257 246 257 258 250",
-  "M262 246L269 241",
-  // 鼻
-  "M203 262C204 284 210 296 206 303C202 307 196 306 192 303",
-  // 唇
-  "M176 346C186 338 194 336 200 341C206 336 214 338 224 346",
-  "M176 346C190 350 210 350 224 346",
-  "M178 347C186 362 214 362 222 347",
-];
+
+// 色の定義（グラデーション・目の切り抜き）。id はページ内で同じ内容なので、重なっても同じ絵になる
+const DEFS = `
+<linearGradient id="fa-hair" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b3b30"/><stop offset=".55" stop-color="#432a23"/><stop offset="1" stop-color="#2e1c18"/></linearGradient>
+<linearGradient id="fa-hair-hi" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a5e4c" stop-opacity=".0"/><stop offset=".5" stop-color="#a7765f" stop-opacity=".55"/><stop offset="1" stop-color="#8a5e4c" stop-opacity="0"/></linearGradient>
+<radialGradient id="fa-skin" cx=".5" cy=".42" r=".62"><stop offset="0" stop-color="#fbeee8"/><stop offset=".7" stop-color="#f5e0d6"/><stop offset="1" stop-color="#ebcbbd"/></radialGradient>
+<linearGradient id="fa-body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#edd0c3"/><stop offset=".35" stop-color="#f6e3da"/><stop offset="1" stop-color="#f3dcd1"/></linearGradient>
+<linearGradient id="fa-knit" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ecc3cd"/><stop offset="1" stop-color="#dfa3b4"/></linearGradient>
+<linearGradient id="fa-lip" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9496f"/><stop offset=".6" stop-color="#e2667f"/><stop offset="1" stop-color="#c93a62"/></linearGradient>
+<radialGradient id="fa-iris" cx=".5" cy=".42" r=".55"><stop offset="0" stop-color="#8a5a43"/><stop offset=".7" stop-color="#4f3024"/><stop offset="1" stop-color="#2a1812"/></radialGradient>
+<radialGradient id="fa-cheek"><stop offset="0" stop-color="#ef8aa4" stop-opacity=".42"/><stop offset="1" stop-color="#ef8aa4" stop-opacity="0"/></radialGradient>
+<radialGradient id="fa-lid"><stop offset="0" stop-color="#c98c8a" stop-opacity=".45"/><stop offset="1" stop-color="#c98c8a" stop-opacity="0"/></radialGradient>
+<clipPath id="fa-eyeclip"><path d="M134 245C142 232 170 229 185 243C172 253 146 255 134 245Z"/></clipPath>`;
+
+// 片目（左目）と眉。右は左右反転して同じものを置く
+const EYE = `
+<ellipse cx="160" cy="232" rx="30" ry="13" fill="url(#fa-lid)"/>
+<path d="M134 245C142 232 170 229 185 243C172 253 146 255 134 245Z" fill="#fffaf8"/>
+<g clip-path="url(#fa-eyeclip)"><circle cx="160" cy="242" r="9.5" fill="url(#fa-iris)"/><circle cx="160" cy="242" r="4.2" fill="#1d1210"/><circle cx="163.5" cy="238.5" r="2.4" fill="#fff"/><circle cx="156" cy="246" r="1.1" fill="#fff" fill-opacity=".7"/></g>
+<path d="M132 246C140 231 171 227 187 241L193 237.5C191 242 188 245 185 245.5C171 234 145 236 134 248Z" fill="#2a1814"/>
+<path d="M139 231C151 222 172 221 184 231" fill="none" stroke="#a87c6f" stroke-width="1.1" stroke-linecap="round"/>
+<path d="M139 249C151 256 168 256 181 249" fill="none" stroke="#a88478" stroke-width=".9" stroke-linecap="round"/>
+<path d="M142 236L139.5 231.5M148 233.5L146.5 228.5M178 234L180.5 229.5M183.5 237.5L188 233.5" stroke="#2a1814" stroke-width=".9" stroke-linecap="round"/>
+<path d="M132 215C145 203 166 199 187 204C188.5 205.5 187.5 207.5 185 207.5C166 204.5 148 207 134 217Z" fill="#6d4a3d"/>`;
+
+const FACE = `
+<path d="M200 58C128 58 90 112 88 186C86 250 92 300 84 360C76 420 60 470 50 520H350C340 470 324 420 316 360C308 300 314 250 312 186C310 112 272 58 200 58Z" fill="url(#fa-hair)"/>
+<path d="M166 368C168 402 166 434 156 458C126 470 92 484 66 520H334C308 484 274 470 244 458C234 434 232 402 234 368Z" fill="url(#fa-body)"/>
+<path d="M168 384C186 410 214 410 232 384C230 404 230 418 232 430C212 442 188 442 168 430C170 418 170 404 168 384Z" fill="#dcb3a4" fill-opacity=".55"/>
+<path d="M130 486C148 478 170 480 186 488M214 488C230 480 252 478 270 486" fill="none" stroke="#d2ab9c" stroke-width="1.2" stroke-linecap="round"/>
+<path d="M58 520C86 500 126 494 158 503C182 510 218 510 242 503C274 494 314 500 342 520Z" fill="url(#fa-knit)"/>
+<path d="M92 512C120 500 150 500 170 508M230 508C250 500 280 500 308 512" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1.2"/>
+<path d="M200 100C248 100 284 132 284 196C284 236 288 270 278 304C268 344 238 382 200 394C162 382 132 344 122 304C112 270 116 236 116 196C116 132 152 100 200 100Z" fill="url(#fa-skin)"/>
+<path d="M122 304C132 344 162 382 200 394C238 382 268 344 278 304" fill="none" stroke="#d9b2a3" stroke-width="1.2"/>
+<ellipse cx="144" cy="296" rx="34" ry="22" fill="url(#fa-cheek)"/>
+<ellipse cx="256" cy="296" rx="34" ry="22" fill="url(#fa-cheek)"/>
+<path d="M226 152Q229 166 243 169Q229 172 226 186Q223 172 209 169Q223 166 226 152Z" fill="#fff" fill-opacity=".9"/>
+<path d="M268 196Q270 203 277 205Q270 207 268 214Q266 207 259 205Q266 203 268 196Z" fill="#fff" fill-opacity=".75"/>
+${EYE}
+<g transform="translate(400 0) scale(-1 1)">${EYE}</g>
+<path d="M194 264C192 280 190 292 187 301" fill="none" stroke="#e0bcae" stroke-width="1.1" stroke-linecap="round"/>
+<path d="M187 308C193 315 207 315 213 308" fill="none" stroke="#b78b7b" stroke-width="1.3" stroke-linecap="round"/>
+<path d="M186 303C183 308 186 312 191 311M214 303C217 308 214 312 209 311" fill="none" stroke="#c49a8b" stroke-width="1.1" stroke-linecap="round"/>
+<ellipse cx="200" cy="300" rx="3" ry="5" fill="#fff" fill-opacity=".5"/>
+<g transform="translate(0 -6)">
+<path d="M177 346C186 337 194 335 200 340C206 335 214 337 223 346C212 349 188 349 177 346Z" fill="url(#fa-lip)"/>
+<path d="M177 346C188 349 212 349 223 346C218 360 208 365 200 365C192 365 182 360 177 346Z" fill="url(#fa-lip)"/>
+<path d="M179 346C190 349 210 349 221 346" fill="none" stroke="#97284a" stroke-width="1.1" stroke-linecap="round"/>
+<ellipse cx="206" cy="355" rx="7" ry="2.2" fill="#fff" fill-opacity=".5"/>
+<ellipse cx="190" cy="340" rx="4" ry="1.4" fill="#fff" fill-opacity=".35"/>
+</g>
+<path d="M200 60C140 62 108 102 104 158C100 210 108 250 102 300C98 336 90 368 80 404C102 386 116 352 122 316C127 284 120 246 126 210C132 160 154 120 196 96Z" fill="url(#fa-hair)"/>
+<path d="M200 60C260 62 292 102 296 158C300 210 292 250 298 300C302 336 310 368 320 404C298 386 284 352 278 316C273 284 280 246 274 210C268 160 246 120 204 96Z" fill="url(#fa-hair)"/>
+<path d="M198 66C176 96 150 126 140 170C136 188 134 204 134 220C126 196 124 174 130 150C142 104 168 76 198 66Z" fill="url(#fa-hair)"/>
+<path d="M202 66C224 96 250 126 260 170C264 188 266 204 266 220C274 196 276 174 270 150C258 104 232 76 202 66Z" fill="url(#fa-hair)"/>
+<path d="M178 80C154 104 140 140 136 190M222 80C246 104 260 140 264 190M112 170C108 230 112 290 92 380M288 170C292 230 288 290 308 380M150 78C126 100 112 140 112 190" fill="none" stroke="url(#fa-hair-hi)" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M96 260C94 320 86 380 70 450M304 260C306 320 314 380 330 450" fill="none" stroke="#7a5244" stroke-opacity=".45" stroke-width="1.2" stroke-linecap="round"/>
+<circle cx="125" cy="334" r="3.8" fill="#fbf6f2" stroke="#d9c7bf" stroke-width=".8"/><circle cx="123.8" cy="332.8" r="1.2" fill="#fff"/>
+<circle cx="275" cy="334" r="3.8" fill="#fbf6f2" stroke="#d9c7bf" stroke-width=".8"/><circle cx="273.8" cy="332.8" r="1.2" fill="#fff"/>
+<path d="M199 76C172 96 141 128 129 176C127 188 127 200 129 210C139 180 160 151 186 133C192 128 196 120 199 110Z" fill="url(#fa-hair)"/>
+<path d="M201 76C228 96 259 128 271 176C273 188 273 200 271 210C261 180 240 151 214 133C208 128 204 120 201 110Z" fill="url(#fa-hair)"/>
+<path d="M190 88C170 108 150 136 138 176M210 88C230 108 250 136 262 176" fill="none" stroke="url(#fa-hair-hi)" stroke-width="2" stroke-linecap="round"/>`;
 ---
 
 {sprite ? (
-<svg class="face-art fa-sprite" aria-hidden="true" focusable="false">
-  <defs>
-    <radialGradient id="fa-cheek">
-      <stop offset="0" stop-color="#e47f9d" stop-opacity=".38" />
-      <stop offset="1" stop-color="#e47f9d" stop-opacity="0" />
-    </radialGradient>
-    <symbol id="fa-face" viewBox="0 0 400 520" overflow="visible">
-    <path class="fa-hair" d={strokes[0]} fill="#1d1517" fill-opacity=".05" />
-    <ellipse cx="146" cy="298" rx="34" ry="22" fill="url(#fa-cheek)" class="fa-tint" />
-    <ellipse cx="254" cy="298" rx="34" ry="22" fill="url(#fa-cheek)" class="fa-tint" />
-    <path class="fa-lip fa-tint" fill="#e60076" fill-opacity=".3" d="M176 346C186 338 194 336 200 341C206 336 214 338 224 346C216 362 184 362 176 346Z" />
-    <circle cx="161" cy="244" r="6.5" class="fa-iris fa-tint" fill="#1d1517" />
-    <circle cx="239" cy="244" r="6.5" class="fa-iris fa-tint" fill="#1d1517" />
-    <path class="fa-spark fa-tint" fill="#c99a82" fill-opacity=".7" d="M240 152Q242 164 254 166Q242 168 240 180Q238 168 226 166Q238 164 240 152Z" />
-    {strokes.map((d, i) => <path d={d} class="fa-line" pathLength="1" style={`--i:${i}`} fill="none" stroke="#1d1517" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />)}
-    </symbol>
-  </defs>
-</svg>
-) : (
-<svg viewBox={`0 0 ${width} ${height}`} class:list={["face-art", { "face-draw": draw }, cls]} aria-hidden="true" focusable="false">
-  {!use && (
+  <svg class="face-art fa-sprite" aria-hidden="true" focusable="false">
     <defs>
-      <radialGradient id="fa-cheek">
-        <stop offset="0" stop-color="#e47f9d" stop-opacity=".38" />
-        <stop offset="1" stop-color="#e47f9d" stop-opacity="0" />
-      </radialGradient>
+      <Fragment set:html={DEFS} />
+      <symbol id="fa-face" viewBox="0 0 400 520" overflow="visible"><Fragment set:html={FACE} /></symbol>
     </defs>
-  )}
-  {use ? <use href="#fa-face" x={ox} y={oy} width="400" height="520" /> : (
-  <g transform={`translate(${ox} ${oy})`}>
-    <path class="fa-hair" d={strokes[0]} fill="#1d1517" fill-opacity=".05" />
-    <ellipse cx="146" cy="298" rx="34" ry="22" fill="url(#fa-cheek)" class="fa-tint" />
-    <ellipse cx="254" cy="298" rx="34" ry="22" fill="url(#fa-cheek)" class="fa-tint" />
-    <path class="fa-lip fa-tint" fill="#e60076" fill-opacity=".3" d="M176 346C186 338 194 336 200 341C206 336 214 338 224 346C216 362 184 362 176 346Z" />
-    <circle cx="161" cy="244" r="6.5" class="fa-iris fa-tint" fill="#1d1517" />
-    <circle cx="239" cy="244" r="6.5" class="fa-iris fa-tint" fill="#1d1517" />
-    <path class="fa-spark fa-tint" fill="#c99a82" fill-opacity=".7" d="M240 152Q242 164 254 166Q242 168 240 180Q238 168 226 166Q238 164 240 152Z" />
-    {strokes.map((d, i) => <path d={d} class="fa-line" pathLength="1" style={`--i:${i}`} fill="none" stroke="#1d1517" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" />)}
-  </g>
-  )}
-  {lines.map((l) => {
-    const a = at(l.part);
-    return (
-      <g class="fa-lead" style={`--c:${partOf(l.part).color}`}>
-        <path d={`M${a.x} ${a.y}C${(a.x + l.x) / 2} ${a.y} ${(a.x + l.x) / 2} ${l.y} ${l.x} ${l.y}`} pathLength="1" />
-        <circle cx={a.x} cy={a.y} r="5" />
-        <circle cx={l.x} cy={l.y} r="3" />
-      </g>
-    );
-  })}
-  {dots.map((p) => {
-    const a = at(p);
-    return <circle cx={a.x} cy={a.y} r="7" fill={partOf(p).color} class="fa-dot" />;
-  })}
-  {pins.map((p) => {
-    const a = at(p.part);
-    return (
-      <g class="fa-pin">
-        <circle cx={a.x} cy={a.y} r="15" fill={partOf(p.part).color} />
-        <text x={a.x} y={a.y} dy=".36em" text-anchor="middle">{p.n}</text>
-      </g>
-    );
-  })}
-</svg>
+  </svg>
+) : (
+  <svg viewBox={`0 0 ${width} ${height}`} class:list={["face-art", { "face-draw": draw }, cls]} aria-hidden="true" focusable="false">
+    {use ? (
+      <use href="#fa-face" x={ox} y={oy} width="400" height="520" class="fa-face" />
+    ) : (
+      <>
+        <defs><Fragment set:html={DEFS} /></defs>
+        <g transform={`translate(${ox} ${oy})`} class="fa-face"><Fragment set:html={FACE} /></g>
+      </>
+    )}
+    {lines.map((l) => {
+      const a = at(l.part);
+      const d = `M${a.x} ${a.y}C${(a.x + l.x) / 2} ${a.y} ${(a.x + l.x) / 2} ${l.y} ${l.x} ${l.y}`;
+      return (
+        <g class="fa-lead">
+          <path d={d} fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="3.6" vector-effect="non-scaling-stroke" pathLength="1" />
+          <path d={d} fill="none" stroke={partOf(l.part).color} stroke-width="1.3" vector-effect="non-scaling-stroke" pathLength="1" />
+          <circle cx={a.x} cy={a.y} r="5.5" fill="#fff" stroke={partOf(l.part).color} stroke-width="2" vector-effect="non-scaling-stroke" />
+          <circle cx={l.x} cy={l.y} r="3" fill={partOf(l.part).color} />
+        </g>
+      );
+    })}
+    {pins.map((p) => {
+      const a = at(p.part);
+      return (
+        <g class="fa-pin">
+          <circle cx={a.x} cy={a.y} r="15" fill={partOf(p.part).color} stroke="#fff" stroke-width="2" vector-effect="non-scaling-stroke" />
+          <text x={a.x} y={a.y} dy=".36em" text-anchor="middle" fill="#fff" font-size="15" font-weight="700">{p.n}</text>
+        </g>
+      );
+    })}
+  </svg>
 )}
 
 <style is:global>
   .fa-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
   .face-art { display: block; width: 100%; height: auto; overflow: visible; }
-  .face-art .fa-lead path { fill: none; stroke: var(--c); stroke-width: 1.2px; vector-effect: non-scaling-stroke; }
-  .face-art .fa-lead circle { fill: var(--c); }
-  .face-art .fa-lead circle:first-of-type { fill: #fff; stroke: var(--c); stroke-width: 2px; vector-effect: non-scaling-stroke; }
-  .face-art .fa-dot { stroke: #fff; stroke-width: 2px; vector-effect: non-scaling-stroke; }
-  .face-art .fa-pin circle { stroke: #fff; stroke-width: 2px; vector-effect: non-scaling-stroke; }
-  .face-art .fa-pin text { fill: #fff; font-family: var(--font-display); font-weight: 700; font-size: 15px; }
+  .face-art .fa-pin text { font-family: var(--font-display); }
   @media (prefers-reduced-motion: no-preference) {
-    .face-draw .fa-line { stroke-dasharray: 1; stroke-dashoffset: 1; animation: fa-draw 1.6s var(--ease-out-expo) forwards; animation-delay: calc(var(--i) * 70ms); }
-    .face-draw .fa-tint, .face-draw .fa-hair { opacity: 0; animation: fa-fade 1.2s ease-out 1.1s forwards; }
-    .face-draw .fa-lead path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: fa-draw 1.2s var(--ease-out-expo) 1.5s forwards; }
-    .face-draw .fa-lead circle, .face-draw .fa-pin, .face-draw .fa-dot { opacity: 0; animation: fa-fade .6s ease-out 1.5s forwards; }
+    .face-draw .fa-face { opacity: 0; animation: fa-rise 1.4s var(--ease-out-expo) forwards; }
+    .face-draw .fa-lead path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: fa-draw 1.2s var(--ease-out-expo) .7s forwards; }
+    .face-draw .fa-lead circle, .face-draw .fa-pin { opacity: 0; animation: fa-fade .6s ease-out 1s forwards; }
   }
+  @keyframes fa-rise { to { opacity: 1; } }
   @keyframes fa-draw { to { stroke-dashoffset: 0; } }
   @keyframes fa-fade { to { opacity: 1; } }
 </style>
