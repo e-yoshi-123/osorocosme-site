@@ -7,7 +7,7 @@ import { norm, splitTerms } from "../lib/search-norm";
 
 type BrandRow = [string, string, string, number];
 type InfRow = [string, string, string, number];
-type CosRow = [string, string, number, string, number, string];
+type CosRow = [string, string, number, string, number, string, string?];
 type ExploreRow = [string, string, string, string, number];
 interface SuggestIndex { b: BrandRow[]; i: InfRow[]; c: CosRow[]; x?: ExploreRow[] }
 interface Prepared {
@@ -19,7 +19,11 @@ interface Prepared {
   cosHay: string[];
   exNames: string[][];
 }
-interface Item { kind: string; href: string; label: string; sub: string; icon?: string }
+interface Item { kind: string; href: string; label: string; sub: string; icon?: string; thumb?: string }
+
+/** コスメの画像（「~」で始まるものは楽天の画像の頭と尾を省いたもの。276章） */
+const IMG_HEAD = "https://thumbnail.image.rakuten.co.jp/@0_mall/";
+const cosImg = (s?: string) => (!s ? "" : s.startsWith("~") ? `${IMG_HEAD}${s.slice(1)}?_ex=128x128` : s);
 
 const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL.slice(0, -1) : import.meta.env.BASE_URL;
 const MIN_CHARS = 2;
@@ -91,7 +95,7 @@ function suggest(p: Prepared, terms: string[]): Item[] {
     { s: (ex[0]?.s ?? 0) >= 2 ? 4 : ex[0]?.s ?? 0, items: exItems },
     { s: brands[0]?.s ?? 0, items: brands.map(({ r: b }) => ({ kind: "ブランド", href: `${base}/brand/${b[0]}/`, label: b[1], sub: `動画 ${b[3]}本` })) },
     { s: infs[0]?.s ?? 0, items: infs.map(({ r: i }) => ({ kind: "インフルエンサー", href: `${base}/influencer/${i[0]}/`, label: i[1], sub: `動画 ${i[3]}本`, icon: i[2] })) },
-    { s: cos[0]?.s ?? 0, items: cos.map(({ r: c }) => ({ kind: "コスメ", href: `${base}/cosmetics/${c[0]}/`, label: c[3], sub: c[1] })) },
+    { s: cos[0]?.s ?? 0, items: cos.map(({ r: c }) => ({ kind: "コスメ", href: `${base}/cosmetics/${c[0]}/`, label: c[3], sub: c[1], thumb: cosImg(c[6]) })) },
   ];
   // 名前で強く当たった種類を先に（検索結果のページと同じ）
   return groups.sort((x, y) => y.s - x.s).flatMap((g) => g.items);
@@ -151,9 +155,12 @@ function attach(form: HTMLFormElement) {
     const rows = items.map((it, n) => {
       const head = it.kind !== lastKind ? `<p class="px-4 pt-2 pb-1 label-caps text-[10px] text-neutral-500" aria-hidden="true">${it.kind}</p>` : "";
       lastKind = it.kind;
-      const icon = it.icon
-        ? `<img referrerpolicy="no-referrer" src="${esc(it.icon)}" alt="" width="24" height="24" class="w-6 h-6 rounded-full shrink-0" loading="lazy" />`
-        : "";
+      // コスメは商品画像を台紙に載せて出す（マイコスメの一覧と同じ見せ方。画像が無ければ空の台紙。276章）
+      const icon = it.kind === "コスメ"
+        ? `<span class="w-10 h-10 shrink-0 rounded-lg product-well flex items-center justify-center overflow-hidden">${it.thumb ? `<img src="${esc(it.thumb)}" alt="" width="40" height="40" class="w-full h-full object-contain p-0.5" loading="lazy" data-err="remove" />` : ""}</span>`
+        : it.icon
+          ? `<img referrerpolicy="no-referrer" src="${esc(it.icon)}" alt="" width="24" height="24" class="w-6 h-6 rounded-full shrink-0" loading="lazy" />`
+          : "";
       return `${head}<a id="${id}-${n}" role="option" aria-selected="false" href="${it.href}" class="flex items-center gap-2.5 px-4 py-2 min-w-0 hover:bg-pink-100 transition-colors">${icon}<span class="min-w-0 flex-1"><span class="block text-sm truncate">${esc(it.label)}</span><span class="block text-xs text-neutral-500 truncate">${esc(it.sub)}</span></span></a>`;
     });
     const all = `<a href="${base}/search-result?q=${encodeURIComponent(q)}" class="flex items-center gap-2 mt-1 px-4 pt-3 pb-2 border-t border-ink/10 text-sm text-rose hover:underline">「${esc(q)}」の検索結果をすべて見る<span aria-hidden="true">→</span></a>`;
