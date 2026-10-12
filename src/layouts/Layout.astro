@@ -46,6 +46,7 @@ const footerLinks = [
   { href: "/concern/", label: "肌悩みから探す" },
   { href: "/ingredient/", label: "成分から探す" },
   { href: "/feature/", label: "特集" },
+  { href: "/recipe/", label: "メイクレシピ" },
   { href: "/my-cosme/", label: "マイコスメ（おすすめを探す）" },
   { href: "/brand-list", label: "ブランド" },
   { href: "/influencer-list", label: "インフルエンサー" },
@@ -57,7 +58,7 @@ const SEARCH_PLACEHOLDER = "フリーワードで探す";
 // 案内文に数秒ごとに出す例（成分・人の名前・肌悩み×カテゴリ・ブランド。249章）。切り替えは scripts/search-suggest.ts
 const searchExamples = getSearchExamples();
 // 「探す」の中のページ（肌悩み・成分・特集）にいるときは「探す」に下線を引く
-const inExplore = /^\/(concern|ingredient|feature)(\/|$)/.test(path.replace(import.meta.env.BASE_URL.replace(/\/$/, ""), ""));
+const inExplore = /^\/(concern|ingredient|feature|recipe)(\/|$)/.test(path.replace(import.meta.env.BASE_URL.replace(/\/$/, ""), ""));
 ---
 
 <html lang="ja">

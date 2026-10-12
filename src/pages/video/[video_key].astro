@@ -71,8 +71,6 @@ const overview = video
 // この動画のメイクレシピ（283章）。ベース・アイ・リップがそろい、場面の時刻がある品が3品以上の動画だけ（lib/recipe.ts）
 const recipe = video ? getRecipe(video.key) : undefined;
 const recipeTastes = recipe ? recipe.tastes.map((k) => TASTES.find((t) => t.key === k)!.label) : [];
-// 見出しの番号（レシピがある動画は、レシピが01で、以下が1つずつずれる）
-const secNum = (n: number) => String(n + (recipe ? 1 : 0)).padStart(2, "0");
 
 // 最初の画面に出す紹介コスメの入口（233章）。検索から来た人がすぐ離れていたので、題の下に画像つきで数品を並べる
 const QUICK = 4;
@@ -107,6 +105,15 @@ const sceneSeconds = (t?: string) => {
   if (!t || !/^\d+(:\d{1,2}){1,2}$/.test(t)) return undefined;
   return t.split(":").reduce((a, x) => a * 60 + Number(x), 0);
 };
+
+// レシピがある動画は、レシピの商品を「紹介されたコスメ」に重ねて出さず、レシピに入らなかった品だけを「そのほかの紹介コスメ」にする
+const recipeSlugs = new Set(recipe ? recipe.steps.flat().map((x) => x.slug) : []);
+const gridCosmetics = validCosmetics.filter((c) => !recipeSlugs.has(cosmeticSlug(c.brand_id, c.name_id)));
+// 見出しの番号は、出る節だけで01から振る
+const nums: Record<string, string> = {};
+[["recipe", !!recipe], ["grid", gridCosmetics.length > 0], ["same", sameChannel.length > 0], ["related", sameCosmetics.length > 0]]
+  .filter(([, on]) => on)
+  .forEach(([k], i) => (nums[k as string] = String(i + 1).padStart(2, "0")));
 
 const viewCountNum = video?.view_count !== undefined ? Number(video.view_count) : NaN;
 const jsonLd = video
@@ -180,10 +187,11 @@ const jsonLd = video
               <div class="mt-5 rounded-2xl bg-blush/60 p-3 md:p-4">
                 <div class="flex items-center justify-between gap-3">
                   <p class="text-[13px] font-semibold">この動画の紹介コスメ<span class="num-display text-rose text-[18px] mx-1">{validCosmetics.length}</span>品</p>
-                  <span class="flex items-center gap-3">
-                    {recipe && <a href="#recipe" class="text-rose vid-10">メイクレシピ<span aria-hidden="true">↓</span></a>}
+                  {recipe ? (
+                    <a href="#recipe" class="text-rose vid-10">メイクレシピで見る<span aria-hidden="true">↓</span></a>
+                  ) : (
                     <a href="#cosmetics" class="text-rose vid-10">すべて見る<span aria-hidden="true">↓</span></a>
-                  </span>
+                  )}
                 </div>
                 <ul class="mt-2.5 grid grid-cols-4 gap-2">
                   {quickCosmetics.map((x) => (
@@ -226,7 +234,7 @@ const jsonLd = video
 
         {recipe && (
           <section id="recipe" class="panel mt-8 md:mt-10 scroll-mt-24">
-            <SectionHead num={secNum(0)} en="Make recipe" title="この動画のメイクレシピ" lead="動画で使われたコスメを、顔の部位ごとに使った順で並べました。時刻を押すと、その場面から再生します。" href={withBase("/recipe/")} cta="Recipes" />
+            <SectionHead num={nums.recipe} en="Make recipe" title="この動画のメイクレシピ" lead="動画で使われたコスメを、顔の部位ごとに使った順で並べました。時刻を押すと、その場面から再生します。" href={withBase("/recipe/")} cta="Recipes" />
             <div class="vr-meta">
               {recipeTastes.length > 0 && <p class="vr-tastes">{recipeTastes.map((t) => <span>{t}</span>)}</p>}
               <dl class="rs-stats">
@@ -240,11 +248,11 @@ const jsonLd = video
           </section>
         )}
 
-        {validCosmetics.length > 0 && (
+        {gridCosmetics.length > 0 && (
           <section id="cosmetics" class="panel mt-8 md:mt-10 scroll-mt-24">
-            <SectionHead num={secNum(1)} en="In this video" title="紹介されたコスメ" lead={`この動画で紹介された${validCosmetics.length}品です。`} />
+            <SectionHead num={nums.grid} en="In this video" title={recipe ? "そのほかの紹介コスメ" : "紹介されたコスメ"} lead={recipe ? `メイクレシピに入らなかった${gridCosmetics.length}品（スキンケア・ヘア・道具など）です。` : `この動画で紹介された${validCosmetics.length}品です。`} />
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-8">
-              {validCosmetics.map((c) => {
+              {gridCosmetics.map((c) => {
                 const sec = sceneSeconds(c.time_in_video);
                 return (
                   <div class="u-16">
@@ -267,7 +275,7 @@ const jsonLd = video
 
         {sameChannel.length > 0 && (
           <section class="panel u-14">
-            <SectionHead num={secNum(2)} en="More from the channel" title={`${video.channel_title}の他の動画`} href={withBase(`/influencer/${video.channel_id}`)} cta="Profile" />
+            <SectionHead num={nums.same} en="More from the channel" title={`${video.channel_title}の他の動画`} href={withBase(`/influencer/${video.channel_id}`)} cta="Profile" />
             <div class="u-20">
               {sameChannel.map((v) => <div class="min-w-0"><VideoCard video={v} /></div>)}
             </div>
@@ -276,7 +284,7 @@ const jsonLd = video
 
         {sameCosmetics.length > 0 && (
           <section class="panel u-14">
-            <SectionHead num={secNum(3)} en="Related videos" title="同じコスメを紹介している他の動画" lead="この動画で紹介されているコスメが登場する、他のインフルエンサーの動画です。" />
+            <SectionHead num={nums.related} en="Related videos" title="同じコスメを紹介している他の動画" lead="この動画で紹介されているコスメが登場する、他のインフルエンサーの動画です。" />
             <div class="u-20">
               {sameCosmetics.map((v) => <div class="min-w-0"><VideoCard video={v} /></div>)}
             </div>

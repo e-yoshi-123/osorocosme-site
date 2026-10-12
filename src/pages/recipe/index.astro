@@ -5,7 +5,7 @@ import Layout from "../../layouts/Layout.astro";
 import { getRecipes, getRecipeTastes, RECIPE_MIN_TIMED } from "../../lib/recipe";
 import { withBase } from "../../lib/data";
 
-// メイクレシピの一覧（試作、283章）。試作のあいだは noindex で、メニュー・サイトマップにも載せない
+// メイクレシピの一覧（283章）。カードは動画ページの「この動画のメイクレシピ」（#recipe）へ。ヘッダーの「探す」・フッター・サイトマップから
 const recipes = getRecipes();
 const tastes = getRecipeTastes();
 const channelCount = new Set(recipes.map((r) => r.video.channel_id)).size;
@@ -17,10 +17,10 @@ const title = "YouTuberのメイクレシピ（動画で実際に使ったコス
 const description = `YouTuberが動画で実際にしたメイクを、ベース・眉・アイ・チーク・リップの手順ごとに、使ったコスメと場面の時刻でまとめたメイクレシピ（${recipes.length}件）。`;
 ---
 
-<Layout title={title} description={description} noindex>
+<Layout title={title} description={description}>
   <nav class="text-xs text-neutral-500 mb-8 flex flex-wrap gap-2" aria-label="パンくず">
     <a href={withBase("/")} class="link-u">Home</a><span aria-hidden="true">/</span>
-    <span>メイクレシピ（試作）</span>
+    <span>メイクレシピ</span>
   </nav>
 
   <section class="rx-hero">
