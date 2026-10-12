@@ -164,7 +164,8 @@ const jsonLd = video
               </noscript>
             </div>
           </div>
-          <div class="lg:col-span-4 lg:pt-2">
+          {/* PCでは右の列を2段ぶんにし、説明文を動画のすぐ下（左の列）に置く。以前は右の列のほうが長く、動画の下が空いていた（279章） */}
+          <div class="lg:col-span-4 lg:row-span-2 lg:pt-2">
             <p class="eyebrow">Video</p>
             <h1 class="font-serif vid-9">{video.title}</h1>
             {quickCosmetics.length > 0 && (
@@ -205,9 +206,8 @@ const jsonLd = video
             </div>
             <ShareButtons text={`${video.channel_title}「${video.title}」で紹介されたコスメ`} class="mt-6" />
           </div>
+          <p class="lg:col-span-8 lg:-mt-4 max-w-3xl text-sm leading-[1.9] text-neutral-600">{overview}</p>
         </div>
-
-        <p class="mt-8 max-w-3xl text-sm leading-[1.9] text-neutral-600">{overview}</p>
         </div>
 
         {/* 旧AI要約(video.summary)は、生成元・品質が不確かなため非表示にしている。

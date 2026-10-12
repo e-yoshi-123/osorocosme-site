@@ -167,7 +167,8 @@ const jsonLd = entry
           <span aria-hidden="true">/</span><span class="truncate text-ink">{entry.name}</span>
         </nav>
         <div class="panel item-16">
-          <div class="md:col-span-5 relative">
+          {/* 右の列（値段・購入・数字・紹介者）のほうがずっと長いので、PCでは画像を画面に追従させて左の下が空いて見えないようにする（279章） */}
+          <div class="md:col-span-5 relative md:sticky md:top-24">
             <div class="product-well overflow-hidden item-23">
               {rakutenImage ? (
                 <div
