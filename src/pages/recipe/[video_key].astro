@@ -2,7 +2,6 @@
 import FaceArt from "../../components/FaceArt.astro";
 import PrBadge from "../../components/PrBadge.astro";
 import RecipeCard from "../../components/RecipeCard.astro";
-import FaceSwitcher from "../../components/FaceSwitcher.astro";
 import Layout from "../../layouts/Layout.astro";
 import { getRecipes, getRecipe, PARTS, TASTES, recipeNo, type PartKey } from "../../lib/recipe";
 import { amazonSearchUrl, formatCount, formatJaDate, withBase, ytThumb } from "../../lib/data";
@@ -198,7 +197,6 @@ const th = ytThumb(v.thumbnail);
     </section>
   )}
 
-  <FaceSwitcher />
   <p class="text-xs text-neutral-500 mt-10">部位は商品のカテゴリで振り分け、手順の中は動画で使った順に並べています。価格は楽天市場（無ければYahoo!ショッピング）で確認した時点の参考価格です。メイクの方法・仕上がりは動画の投稿者によるものです。</p>
 
   <script>

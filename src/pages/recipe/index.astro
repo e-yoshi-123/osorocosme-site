@@ -1,7 +1,6 @@
 ---
 import HowWeCount from "../../components/HowWeCount.astro";
 import RecipeCard from "../../components/RecipeCard.astro";
-import FaceSwitcher from "../../components/FaceSwitcher.astro";
 import Layout from "../../layouts/Layout.astro";
 import { getRecipes, getRecipeTastes, RECIPE_MIN_TIMED } from "../../lib/recipe";
 import { withBase } from "../../lib/data";
@@ -79,7 +78,6 @@ const description = `YouTuberが動画で実際にしたメイクを、ベース
       </ul>
     </HowWeCount>
   </div>
-  <FaceSwitcher />
   <p class="text-xs text-neutral-500 mt-2">メイクの方法・仕上がりは動画の投稿者によるものです。肌に合うかどうかには個人差があります。</p>
 
   <script define:vars={{ PAGE }}>

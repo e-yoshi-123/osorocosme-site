@@ -42,16 +42,8 @@ export const FACE_ANCHORS: Record<PartKey, { x: number; y: number }> = {
 };
 /** 顔の画像の置き方（顔の枠の原点からの位置と大きさ）。画像は正方形で、元の 750×750 の座標に合わせて置く */
 export const FACE_IMAGE = { x: -175, y: -60, w: 750, h: 750 };
-/** 顔の色の版（public/recipe/faces/face-<key>.webp。非公開リポジトリの tools/recipe_face/make_faces.py で作る）。
- * 試作のあいだは、レシピのページの切り替えで見比べる。FACE_DEFAULT が最初に出る版 */
-export const FACE_VARIANTS: { key: string; label: string; hair: string }[] = [
-  { key: "original", label: "元の色", hair: "#f9c3bc" },
-  { key: "rose", label: "ローズ", hair: "#eea8be" },
-  { key: "mauve", label: "モーヴ", hair: "#c096a6" },
-  { key: "milktea", label: "ミルクティー", hair: "#dec0a6" },
-  { key: "brown", label: "ブラウン", hair: "#8c6458" },
-  { key: "line", label: "線画", hair: "#f4ece9" },
-];
+/** 顔の色の版（public/recipe/faces/face-<版>.webp。非公開リポジトリの tools/recipe_face/make_faces.py で作る）。
+ * 6つの版（元の色・ローズ・モーヴ・ミルクティー・ブラウン・線画）を見比べて、ミルクティーに決めた（ユーザー判断、283章） */
 export const FACE_DEFAULT = "milktea";
 
 /** 動画タイトルに明記された語で付けるテイスト（特集と同じく、タイトルにある語だけを使う。68章）。phrase はレシピの名前に使う */
