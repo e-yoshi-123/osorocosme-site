@@ -161,7 +161,10 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
   ] as const;
   const HEADER = 16;
   const MIN_SECTION_W = 96;
-  const PAD = 10;
+  // 左右の余白（px-1.5で12px）＋css()で幅から引く1px＋丸めの余裕。以前は10pxで、収まる判定の名前が「The Ordin…」と切れていた（279章）
+  const PAD = 15;
+  // 括弧の読みがなは長方形の中では出さない（「CNP Laboratory(シーエヌピーラボラトリー)」→「CNP Laboratory」）。title・「ほか」の一覧は元の名前
+  const shortName = (n: string) => n.replace(/\s*[（(][^（）()]*[）)]\s*$/, "") || n;
 
   const ctx = document.createElement("canvas").getContext("2d")!;
   // 実際の表示（text-xs＝13px）と同じ大きさで測る。以前は11pxで測っていて、収まる判定の名前が「クリニ…」と切れていた（195章）
@@ -203,7 +206,34 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
     return out;
   }
 
-  const fits = (name: string, r: R) => textW(name) + PAD <= r.w && r.h >= 18;
+  // 1行に収まるか（「ほか」のボタン用）
+  const fits1 = (label: string, r: R) => textW(label) + PAD <= r.w && r.h >= 18;
+  // ブランド名は、高さがあれば語の切れ目（空白）で3行まで折り返す。狭い列（スマホ）では「メイベリン ニューヨーク」のような長い名前が
+  // 1行に入らず、全部「ほか」にまとめられて大きな灰色の面になっていた（279章）。実際と同じ指定の要素に入れて測る
+  const meas = document.createElement("div");
+  meas.style.cssText = `position:absolute;visibility:hidden;left:-9999px;top:0;box-sizing:border-box;padding:0 6px;font:${FONT};line-height:1.25;white-space:normal;word-break:keep-all;overflow-wrap:normal;line-break:strict`;
+  const measIn = document.createElement("span");
+  measIn.style.display = "inline-block";
+  meas.append(measIn);
+  document.body.append(meas);
+  const LINE = 13 * 1.25;
+  // 0：収まらない 1：1行・空白で折り返して収まる 2：文字の途中でも折り返せば収まる（「イヴ・サンロー／ラン」。空白の無いカタカナの長い名前）。
+  // 2は6文字以上の名前を2行までに限る（短い名前を「エテュ／セ」と折ると読みにくい）
+  const fitMode = (name: string, r: R): 0 | 1 | 2 => {
+    if (r.h < 18) return 0;
+    if (fits1(shortName(name), r)) return 1;
+    meas.style.width = `${Math.max(r.w - 2, 0)}px`; // 実際は r.w - 1。1pxの余裕
+    measIn.textContent = shortName(name);
+    for (const mode of [1, 2] as const) {
+      meas.style.wordBreak = mode === 1 ? "keep-all" : "normal";
+      // 右の余白はscrollWidthに入らないので、中の文字の幅で比べる（折り返すと入れ物の幅いっぱい、はみ出すといちばん長い語の幅になる）
+      const h = measIn.offsetHeight;
+      const maxLines = mode === 1 ? 3 : shortName(name).replace(/\s/g, "").length >= 6 ? 2 : 0;
+      if (measIn.offsetWidth <= meas.clientWidth - 12 && h <= LINE * maxLines + 1 && h + 4 <= r.h - 1) return mode;
+    }
+    return 0;
+  };
+  const fits = (name: string, r: R) => fitMode(name, r) > 0;
 
   function css(el: HTMLElement, r: R) {
     el.style.left = `${r.x}px`;
@@ -248,22 +278,26 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
       head.textContent = [`${sec.label}・${sec.total}本`, `${sec.short}・${sec.total}本`, `${sec.short} ${sec.total}`, sec.short].find((t) => boldW(t) + 4 <= w) ?? sec.short;
       canvas.append(head);
 
-      // 名前が収まらない長方形を、2つ以上あれば1つの「ほか」にまとめる（最大3回やり直す）
+      // 名前が収まらない長方形を1つの「ほか」にまとめ、全部が収まるまでやり直す。
+      // 以前は収まらないのが1つだけのときと、3回で打ち切ったときに、名前が切れたまま残っていた（279章）。
+      // 一度に全部まとめると、並べ直しの途中で一時的に細長くなった大きいブランド（メイベリン ニューヨーク）まで「ほか」に入るので、
+      // 収まらないもののうち紹介動画数の最も少ないものを1つずつまとめる
       let items = sec.brands.map((b, i) => ({ b, i }));
       let merged: { b: Brand; i: number }[] = [];
       let rects: R[] = [];
       let order: { b?: Brand; i?: number; more?: boolean; v: number }[] = [];
-      for (let iter = 0; iter < 4; iter++) {
+      const MAX_ITER = sec.brands.length + 1;
+      for (let iter = 0; iter < MAX_ITER; iter++) {
         order = [...items.map((it) => ({ b: it.b, i: it.i, v: it.b.v }))];
         if (merged.length > 0) order.push({ more: true, v: merged.reduce((n, m) => n + m.b.v, 0) });
         // 「ほか」は合計が個々のブランドより大きくても常に最後に置く（並びは個別ブランドの多い順）
         order.sort((a, b) => (a.more ? 1 : 0) - (b.more ? 1 : 0) || b.v - a.v);
         rects = squarify(order.map((o) => o.v), area);
-        if (iter === 3) break;
+        if (iter === MAX_ITER - 1) break;
         const nonfit = order.map((o, k) => ({ o, r: rects[k] })).filter(({ o, r }) => !o.more && !fits(o.b!.name, r));
-        if (nonfit.length + (merged.length > 0 ? 1 : 0) < 2 && merged.length === 0) break;
         if (nonfit.length === 0) break;
-        const ids = new Set(nonfit.map(({ o }) => o.i));
+        const smallest = nonfit.reduce((a, b) => (b.o.v < a.o.v ? b : a));
+        const ids = new Set([smallest.o.i]);
         merged = [...merged, ...items.filter((it) => ids.has(it.i))];
         items = items.filter((it) => !ids.has(it.i));
         if (items.length === 0) { order = [{ more: true, v: merged.reduce((n, m) => n + m.b.v, 0) }]; rects = [area]; break; }
@@ -275,11 +309,11 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
           anyMore = true;
           const btn = document.createElement("button");
           btn.type = "button";
-          btn.className = "absolute overflow-hidden whitespace-nowrap text-xs px-1.5 text-left text-neutral-600 hover:brightness-95";
+          btn.className = "absolute overflow-hidden whitespace-nowrap text-xs leading-tight px-1.5 text-left text-neutral-600 hover:brightness-95";
           btn.style.background = "hsl(0 0% 88%)";
           css(btn, r);
           const n = merged.length;
-          const label = [`ほか${n}ブランド ▾`, `+${n}`].find((t) => fits(t, r)) ?? "";
+          const label = [`ほか${n}ブランド ▾`, `+${n}`].find((t) => fits1(t, r)) ?? "";
           btn.textContent = label;
           btn.title = `ほか${n}ブランド（クリックで一覧）`;
           btn.addEventListener("click", () => {
@@ -292,13 +326,16 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
           const a = document.createElement("a");
           a.href = o.b!.href;
           a.title = `${o.b!.name}（紹介動画${o.b!.v}本）`;
-          a.className = "absolute overflow-hidden whitespace-nowrap text-xs px-1.5 flex items-center hover:brightness-95";
+          a.className = "absolute overflow-hidden text-xs px-1.5 flex items-center hover:brightness-95";
           a.style.background = `hsl(${sec.hue} 32% ${91 - (o.i! % 3) * 5}%)`;
           a.style.color = `hsl(${sec.hue} 30% 24%)`;
           css(a, r);
           const span = document.createElement("span");
-          span.className = "truncate";
-          span.textContent = o.b!.name;
+          const mode = fitMode(o.b!.name, r);
+          span.className = "leading-tight [line-break:strict]";
+          span.style.wordBreak = mode === 2 ? "normal" : "keep-all";
+          // それでも収まらないもの（やり直しの打ち切り）は、切れた名前を出さず色の面だけにする
+          span.textContent = mode > 0 ? shortName(o.b!.name) : "";
           a.append(span);
           canvas.append(a);
         }
