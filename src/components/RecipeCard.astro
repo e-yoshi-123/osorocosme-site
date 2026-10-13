@@ -1,52 +1,76 @@
 ---
-// メイクレシピのカード（283章）。顔の線画のまわりに、部位ごとの最初の品を引き出し線つきで留める。
-// 座標は下の BOX（顔は FaceArt の枠を ox・oy だけずらして中央）。商品の丸はその座標の割合で置くので、カードの大きさが変わっても線とずれない
-import FaceArt from "./FaceArt.astro";
-import { PARTS, TASTES, recipeNo, type Recipe, type PartKey } from "../lib/recipe";
+// メイクレシピのカード（284章で作り直し。283章の顔のイラストと引き出し線はやめた）。
+// 動画のサムネイルの顔（lib/recipe-faces.json、Vision で探した位置）を真ん中に切り出し、まわりに使ったコスメの画像をぎっしり大きく並べる。
+// 並びは部位の順（ベース→眉→アイ→チーク・陰影→リップ）に、左の下から時計回り（左＝ベース、上＝眉・アイ、右＝チーク、下＝リップのあたりに来る）
+import { TASTES, recipeNo, PARTS, type Recipe } from "../lib/recipe";
 import { formatCount, withBase } from "../lib/data";
+import FACES from "../lib/recipe-faces.json";
 
 interface Props {
   recipe: Recipe;
   /** 一覧の絞り込み用に data-tastes を付け、最初は隠す */
   hidden?: boolean;
-  /** 線を描く動きを付ける（ページの最初の1枚など） */
-  draw?: boolean;
+  /** 大きく出す1枚（品名の札を付ける） */
+  large?: boolean;
   class?: string;
 }
-const { recipe: r, hidden = false, draw = false, class: cls } = Astro.props;
-// 左に眉・アイ・ベース、右にチーク・リップ（線が顔の上を横切らないように、部位の点と同じ側に置く）
-// 枠は 640×640。顔は ox=120・oy=50 で中央に小さめに置き、まわりの商品の枠を大きくとる（商品が小さくて見えなかったため）
-const BOX = 640;
-const SLOT: Record<PartKey, { x: number; y: number }> = {
-  brow: { x: 100, y: 112 },
-  eye: { x: 92, y: 322 },
-  base: { x: 104, y: 532 },
-  cheek: { x: 540, y: 168 },
-  lip: { x: 544, y: 418 },
-};
-const slots = PARTS.map((p, i) => ({ p, items: r.steps[i] })).filter((s) => s.items.length);
+const { recipe: r, hidden = false, large = false, class: cls } = Astro.props;
 const tasteLabels = r.tastes.map((k) => TASTES.find((t) => t.key === k)!.label).slice(0, 3);
+
+// 顔：サムネイル（16:9）から、顔が枠の約45%になる正方形を切り出す（画像は i.ytimg.com のものをそのまま読み、CSSで位置を合わせる）
+const MAX_ITEMS = 16;
+const items = r.steps.flatMap((s, i) => s.map((x) => ({ x, color: PARTS[i].color }))).filter((it) => it.x.img).slice(0, MAX_ITEMS);
+const more = r.itemCount - items.length;
+const N = items.length;
+const F = N <= 6 ? 60 : N <= 10 ? 56 : 54; // 顔の枠の一辺（カードの%）
+const B = (100 - F) / 2; // まわりの帯の幅
+const face = (FACES as Record<string, [number, number, number, number, number, string]>)[r.video.video_id];
+let faceImg = `https://i.ytimg.com/vi/${r.video.video_id}/hqdefault.jpg`;
+let faceStyle = "inset:0;width:100%;height:100%;object-fit:cover";
+if (face) {
+  const [cx, cy, , fh, a, q] = face;
+  faceImg = `https://i.ytimg.com/vi/${r.video.video_id}/${q === "maxres" ? "maxresdefault" : "mqdefault"}.jpg`;
+  const S = Math.min(1, Math.max(0.32, fh / 0.5)); // 切り出す正方形の一辺（画像の高さを1とする）
+  const x0 = Math.min(Math.max(cx * a - S / 2, 0), a - S);
+  const y0 = Math.min(Math.max(cy - S * 0.46, 0), 1 - S); // 顔を少し上に（あごの下まで入れる）
+  faceStyle = `height:${(100 / S).toFixed(2)}%;width:${((a * 100) / S).toFixed(2)}%;left:${(-(x0 / S) * 100).toFixed(2)}%;top:${(-(y0 / S) * 100).toFixed(2)}%`;
+}
+
+// まわりの帯の中心線（一辺 L の正方形）を、左の下の角から時計回りに N 等分して置く
+const L = 100 - B;
+const P = 4 * L;
+const at = (t: number) => {
+  const d = t * P;
+  if (d < L) return { x: B / 2, y: 100 - B / 2 - d }; // 左（下→上）
+  if (d < 2 * L) return { x: B / 2 + (d - L), y: B / 2 }; // 上（左→右）
+  if (d < 3 * L) return { x: 100 - B / 2, y: B / 2 + (d - 2 * L) }; // 右（上→下）
+  return { x: 100 - B / 2 - (d - 3 * L), y: 100 - B / 2 }; // 下（右→左）
+};
+// 商品の枠は帯の幅いっぱいまで（顔に大きくかからないように）。品数が多いときは隣と少し重なる
+const size = Math.min(B * 0.9, (P / Math.max(N, 1)) * 1.08);
+const placed = items.map((it, i) => {
+  const { x, y } = at((i + 0.5) / N);
+  const rot = ((i * 37) % 7) - 3; // -3〜3度、決まった値（ビルドごとに変わらない）
+  const s = size * (i % 3 === 0 ? 1.04 : i % 3 === 1 ? 0.94 : 1);
+  return { ...it, style: `left:${x.toFixed(2)}%;top:${y.toFixed(2)}%;width:${s.toFixed(2)}%;--r:${rot}deg;z-index:${(i % 2) + 1}` };
+});
 ---
 
-<a href={`${withBase(`/video/${r.key}`)}#recipe`} class:list={["rcard group", cls]} data-tastes={r.tastes.join(" ")} hidden={hidden}>
+<a href={`${withBase(`/video/${r.key}`)}#cosmetics`} class:list={["rcard group", large && "is-large", cls]} data-tastes={r.tastes.join(" ")} hidden={hidden}>
   <div class="rcard-fig">
-    <FaceArt width={BOX} height={BOX} ox={120} oy={50} draw={draw} lines={slots.map((s) => ({ part: s.p.key, ...SLOT[s.p.key] }))} />
-    {slots.map((s) => {
-      // 部位の中で画像のある最初の品を出す（無ければ部位の名前）
-      const first = s.items.find((x) => x.img) ?? s.items[0];
-      const pos = SLOT[s.p.key];
-      return (
-        <span class="rcard-th" style={`left:${(pos.x / BOX) * 100}%;top:${(pos.y / BOX) * 100}%;--c:${s.p.color}`}>
-          {first.img ? <img src={first.img} alt="" loading="lazy" data-err="hide" /> : <b class="is-empty">{s.p.label}<small>{s.p.en}</small></b>}
-          {s.items.length > 1 && <i class="num-display">+{s.items.length - 1}</i>}
-        </span>
-      );
-    })}
-    <span class="rcard-no num-display">{recipeNo(r.no)}</span>
+    <span class="rcard-face" style={`width:${F}%;left:${B}%;top:${B}%`}>
+      <img src={faceImg} alt="" loading="lazy" referrerpolicy="no-referrer" style={faceStyle} data-err="hide" />
+    </span>
+    {placed.map((p) => (
+      <span class="rcard-th" style={`${p.style};--c:${p.color}`} title={`${p.x.brand} ${p.x.name}`}>
+        <img src={p.x.img} alt="" loading="lazy" data-err="hide" />
+      </span>
+    ))}
+    {more > 0 && <span class="rcard-more num-display">+{more}</span>}
   </div>
   <div class="rcard-body">
     {tasteLabels.length > 0 && <p class="rcard-tastes">{tasteLabels.map((t) => <span>{t}</span>)}</p>}
-    <h3 class="rcard-h phrase">{r.headline}<span>レシピ</span></h3>
+    <h3 class="rcard-h phrase">{r.headline}<span>レシピ</span><small class="rcard-no num-display">{recipeNo(r.no)}</small></h3>
     <p class="rcard-v">{r.video.title}</p>
     <p class="rcard-m">
       <span><b class="num-display">{r.itemCount}</b>品</span>
@@ -60,15 +84,14 @@ const tasteLabels = r.tastes.map((k) => TASTES.find((t) => t.key === k)!.label).
   .rcard { display: flex; flex-direction: column; min-width: 0; border-radius: 28px; background: var(--c-panel); box-shadow: var(--panel-shadow); overflow: hidden; transition: transform .6s var(--ease-out-expo), box-shadow .6s var(--ease-out-expo); }
   .rcard:hover { transform: translateY(-4px); box-shadow: 0 0 0 1px rgb(134 10 70 / .08), 0 30px 50px -36px rgb(134 10 70 / .45); }
   .rcard[hidden] { display: none; }
-  .rcard-fig { position: relative; aspect-ratio: 1; background: radial-gradient(120% 90% at 50% 30%, #fff 0%, var(--c-well) 55%, var(--c-accent) 100%); }
-  .rcard-th { position: absolute; width: 27%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 22%; background: #fff; box-shadow: 0 0 0 2px var(--c), 0 10px 18px -12px rgb(29 21 23 / .45); display: flex; align-items: center; justify-content: center; transition: transform .6s var(--ease-out-expo); }
-  .rcard:hover .rcard-th { transform: translate(-50%, -50%) scale(1.06); }
-  .rcard-th img { width: 88%; height: 88%; object-fit: contain; }
-  .rcard-th:has(.is-empty) { background: color-mix(in srgb, var(--c) 12%, #fff); }
-  .rcard-th b { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 13px; font-weight: 700; color: var(--c); }
-  .rcard-th b small { font-family: var(--font-display); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; opacity: .8; }
-  .rcard-th i { position: absolute; right: -8%; bottom: -8%; min-width: 1.9em; padding: 0 .35em; border-radius: 999px; background: var(--c); color: #fff; font-style: normal; font-size: 11px; line-height: 1.75; text-align: center; box-shadow: 0 0 0 2px #fff; }
-  .rcard-no { position: absolute; right: 18px; bottom: 14px; font-size: 12px; letter-spacing: .12em; color: color-mix(in srgb, var(--color-ink) 45%, transparent); }
+  .rcard-fig { position: relative; aspect-ratio: 1; overflow: hidden; background: radial-gradient(90% 90% at 50% 50%, #fff 0%, var(--c-well) 62%, var(--c-accent) 100%); }
+  .rcard-face { position: absolute; aspect-ratio: 1; border-radius: 26%; overflow: hidden; background: var(--c-well); box-shadow: 0 0 0 4px #fff, 0 18px 36px -20px rgb(29 21 23 / .5); }
+  .rcard-face img { position: absolute; max-width: none; }
+  .rcard-th { position: absolute; aspect-ratio: 1; transform: translate(-50%, -50%) rotate(var(--r)); border-radius: 16%; background: #fff; box-shadow: 0 0 0 1px rgb(29 21 23 / .06), 0 8px 16px -10px rgb(29 21 23 / .4); display: flex; align-items: center; justify-content: center; transition: transform .6s var(--ease-out-expo); }
+  .rcard:hover .rcard-th { transform: translate(-50%, -50%) rotate(0deg) scale(1.04); }
+  .rcard-th img { width: 86%; height: 86%; object-fit: contain; }
+  .rcard-fig .rcard-more { position: absolute; right: 12px; top: 12px; z-index: 3; padding: 0 .6em; border-radius: 999px; background: var(--color-ink); color: #fff; font-size: 12px; line-height: 1.8; }
+  .rcard-no { margin-left: .6em; font-size: 11px; font-weight: 400; letter-spacing: .1em; color: var(--color-neutral-400); }
   .rcard-body { padding: 18px 22px 22px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
   .rcard-tastes { display: flex; flex-wrap: wrap; gap: 6px; }
   .rcard-tastes span { font-size: 11px; line-height: 1.6; padding: 0 .6em; border-radius: 999px; background: var(--c-accent); color: color-mix(in srgb, var(--color-ink) 80%, transparent); }

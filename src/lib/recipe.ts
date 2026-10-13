@@ -33,20 +33,6 @@ export const PARTS: { key: PartKey; label: string; en: string; color: string; ta
 ];
 const PART_OF: Record<string, number> = Object.fromEntries(PARTS.flatMap((s, i) => s.tags.map((t) => [t, i])));
 
-/** 顔のイラスト（FaceArt）の顔の枠（400×520）の上で、各部位を指す点。画像（750×750）の座標から FACE_IMAGE の位置を引いたもの。
- * 前髪のある髪型ではおでこが隠れるので、ベースは左の頬を指す（右の頬はチーク） */
-export const FACE_ANCHORS: Record<PartKey, { x: number; y: number }> = {
-  base: { x: 140, y: 282 },
-  brow: { x: 143, y: 190 },
-  eye: { x: 137, y: 229 },
-  cheek: { x: 267, y: 262 },
-  lip: { x: 219, y: 315 },
-};
-/** 顔の画像の置き方（顔の枠の原点からの位置と大きさ）。画像は正方形で、元の 750×750 の座標に合わせて置く */
-export const FACE_IMAGE = { x: -175, y: -60, w: 750, h: 750 };
-/** 顔の色の版（public/recipe/faces/face-<版>.webp。非公開リポジトリの tools/recipe_face/make_faces.py で作る）。
- * 6つの版（元の色・ローズ・モーヴ・ミルクティー・ブラウン・線画）を見比べて、ミルクティーに決めた（ユーザー判断、283章） */
-export const FACE_DEFAULT = "milktea";
 
 /** 動画タイトルに明記された語で付けるテイスト（特集と同じく、タイトルにある語だけを使う。68章）。phrase はレシピの名前に使う */
 export const TASTES: { key: string; label: string; phrase: string; re: RegExp }[] = [

@@ -5,7 +5,7 @@ import Layout from "../../layouts/Layout.astro";
 import { getRecipes, getRecipeTastes, RECIPE_MIN_TIMED } from "../../lib/recipe";
 import { withBase } from "../../lib/data";
 
-// メイクレシピの一覧（283章）。カードは動画ページの「この動画のメイクレシピ」（#recipe）へ。ヘッダーの「探す」・フッター・サイトマップから
+// メイクレシピの一覧（283章、284章でカードを作り直し）。カードは動画ページの「紹介されたコスメ」（#cosmetics）へ。ヘッダーの「探す」・フッター・サイトマップから
 const recipes = getRecipes();
 const tastes = getRecipeTastes();
 const channelCount = new Set(recipes.map((r) => r.video.channel_id)).size;
@@ -27,9 +27,9 @@ const description = `YouTuberが動画で実際にしたメイクを、ベース
     <div class="rx-hero-text">
       <p class="eyebrow">Make Recipe</p>
       <h1 class="rx-h1">動画で見たあのメイクを、<br />レシピにしました。</h1>
-      <p class="rx-lead">YouTuberが動画で実際にしたメイクを、顔のどこに・どの順で・何を使ったかの1枚にまとめました。手順の時刻を押せば、その場面から動画で確かめられます。</p>
+      <p class="rx-lead">YouTuberが動画で実際にしたメイクを、使ったコスメといっしょに1枚にまとめました。動画のページでは、部位ごとに使った順で並べ、時刻を押せばその場面から確かめられます。</p>
       <ol class="rx-how">
-        <li><span class="num-display">01</span><b>顔の図で、全体をつかむ</b>ベース・眉・アイ・チーク・リップの5か所に、使ったコスメを留めています</li>
+        <li><span class="num-display">01</span><b>1枚で、全体をつかむ</b>仕上がりの顔のまわりに、使ったコスメを並べています</li>
         <li><span class="num-display">02</span><b>手順を、動画の場面で見る</b>使った順に並べ、押すとその場面から再生します</li>
         <li><span class="num-display">03</span><b>そのままそろえる</b>そろえたときの参考の合計額と、各ショップへのリンク付き</li>
       </ol>
@@ -42,7 +42,7 @@ const description = `YouTuberが動画で実際にしたメイクを、ベース
     {featured && (
       <div class="rx-hero-card">
         <p class="label-caps rx-new">Latest recipe</p>
-        <RecipeCard recipe={featured} draw />
+        <RecipeCard recipe={featured} large />
       </div>
     )}
   </section>
@@ -71,6 +71,7 @@ const description = `YouTuberが動画で実際にしたメイクを、ベース
     <HowWeCount>
       <ul class="list-disc pl-5 space-y-1">
         <li>元にしたもの：動画の字幕から抽出した紹介コスメと、字幕の文字の一致で決めた「その商品を紹介した場面」の時刻です。レシピ画像の転載や、AIが推測した手順はありません</li>
+        <li>カードの真ん中の写真は、その動画のYouTubeのサムネイルです（顔の写っている所を自動で探して表示しています）。まわりのコスメの画像は、楽天市場・Yahoo!ショッピングの商品画像です</li>
         <li>載せる動画：ベース・アイ・リップがそろい、場面の時刻が分かる商品が{RECIPE_MIN_TIMED}品以上あるもの</li>
         <li>載せない動画：新作紹介・購入品・比較・ベスコスなど、紹介することが目的の動画と、動画全体がPR・提供のもの。一部の商品だけが提供の場合は、その商品に「PR」を付けています</li>
         <li>部位の振り分けは商品のカテゴリによります。手順の中の並びは動画で使った順（時刻が分からない商品は後ろ）。テイストは動画のタイトルにある語で付けています</li>
@@ -130,6 +131,8 @@ const description = `YouTuberが動画で実際にしたメイクを、ベース
   .rx-stats dd { font-size: 30px; line-height: 1.1; }
   .rx-hero-card { position: relative; max-width: 440px; width: 100%; justify-self: center; }
   .rx-hero-card::before { content: ""; position: absolute; inset: -26px -26px 34% -26px; border-radius: 999px 999px 40px 40px; background: var(--c-accent); z-index: -1; }
+  /* スマホでは後ろの飾りを画面の内側に収める（左右に26px出て、横スクロールが出ていた。284章） */
+  @media (max-width: 639px) { .rx-hero-card::before { left: -12px; right: -12px; } }
   .rx-new { position: relative; margin-bottom: 10px; text-align: center; color: var(--color-rose); }
   .rx-filter { position: sticky; top: calc(var(--hdr-h, 64px) + 8px); z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 28px; padding: 12px 16px; border-radius: 22px; background: color-mix(in srgb, var(--c-panel) 88%, transparent); backdrop-filter: blur(10px); box-shadow: var(--panel-shadow); }
   .rx-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; min-width: 0; flex: 1; }
