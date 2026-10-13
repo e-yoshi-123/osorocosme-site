@@ -10,6 +10,8 @@ import {
   cosmeticSlug,
   sortByPublishedDesc,
   REPEAT_EXCLUDE_TITLE,
+  RANKING_CATEGORY_GROUPS,
+  type VideoEntry,
 } from "./data";
 
 export type PartKey = "base" | "brow" | "eye" | "cheek" | "lip";
@@ -118,6 +120,62 @@ const isoSeconds = (d?: string) => {
 export const RECIPE_MIN_TIMED = 3;
 const EXCLUDE_EXTRA = /[０-９]+選|まとめ|紹介/;
 
+/** 動画の1品を、レシピ・動画ページの1行にする */
+function toItem(v: VideoEntry, c: NonNullable<VideoEntry["cosmetics"]>[number], tag: string | undefined, part: string): RecipeItem {
+  const slug = cosmeticSlug(c.brand_id, c.name_id);
+  const entry = getCosmeticListEntry(c.brand_id, c.name_id);
+  const offer = productOffer(entry, c.rakuten_image_link);
+  const sec = sceneSeconds(c.time_in_video);
+  return {
+    brand_id: c.brand_id, brand: c.brand, name_id: c.name_id, name: c.name, slug, tag: tag || "", part: part as PartKey,
+    time: sec !== undefined ? c.time_in_video : undefined, sec,
+    img: offer.imageSrc, price: offer.imageSrc ? offer.price : undefined, fromYahoo: offer.source === "yahoo",
+    rakutenLink: offer.rakutenLink, yahooLink: entry?.yahoo_text_link || undefined,
+    pr: isPrMention(v.key, c.brand_id, c.name_id),
+  };
+}
+
+/** 動画ページの「紹介されたコスメ」のまとまり（284章）。メイクはレシピと同じ部位（PARTS）、ほかはランキングの大分類で分ける。
+ * 並びは使う順（スキンケア→ベース→眉→アイ→チーク・陰影→リップ→ヘア→ボディ→道具→その他） */
+export const VIDEO_GROUPS: { key: string; label: string; en: string; color: string }[] = [
+  { key: "skin", label: "スキンケア", en: "Skincare", color: "#7f9e8c" },
+  ...PARTS.map(({ key, label, en, color }) => ({ key, label, en, color })),
+  { key: "hair", label: "ヘアケア", en: "Hair", color: "#a3845c" },
+  { key: "body", label: "ボディケア", en: "Body", color: "#8d86b5" },
+  { key: "tool", label: "メイク道具・小物", en: "Tools", color: "#8a96a3" },
+  { key: "other", label: "その他", en: "Others", color: "#a39a94" },
+];
+const RANK_GROUP_TO_VIDEO: Record<string, string> = {
+  "ベースメイク": "base", "アイブロウ": "brow", "アイメイク": "eye", "チーク・陰影": "cheek", "リップ": "lip",
+  "メイク小物・その他": "tool", "スキンケア": "skin", "ヘアケア": "hair", "ボディケア": "body",
+};
+const TAG_TO_VIDEO: Record<string, string> = Object.fromEntries(
+  RANKING_CATEGORY_GROUPS.flatMap((g) => g.tags.map((t) => [t, RANK_GROUP_TO_VIDEO[g.group] || "other"])),
+);
+
+export interface VideoCosmeticGroups {
+  groups: { key: string; label: string; en: string; color: string; items: RecipeItem[] }[];
+  durationSec: number;
+}
+/** 動画の紹介コスメを VIDEO_GROUPS に振り分ける。まとまりの中は動画で使った順（時刻の無い品は後ろ、元の並び） */
+export function getVideoCosmeticGroups(v: VideoEntry): VideoCosmeticGroups {
+  const buckets = new Map<string, RecipeItem[]>(VIDEO_GROUPS.map((g) => [g.key, []]));
+  const seen = new Set<string>();
+  for (const c of v.cosmetics || []) {
+    if (!c.brand_id || !c.name_id || !c.name || !c.brand) continue;
+    const slug = cosmeticSlug(c.brand_id, c.name_id);
+    if (seen.has(slug)) continue;
+    seen.add(slug);
+    const tag = cosmeticCategory(c);
+    const pi = tag !== undefined ? PART_OF[tag] : undefined;
+    const key = pi !== undefined ? PARTS[pi].key : (tag && TAG_TO_VIDEO[tag]) || "other";
+    buckets.get(key)!.push(toItem(v, c, tag, key));
+  }
+  const groups = VIDEO_GROUPS.map((g) => ({ ...g, items: buckets.get(g.key)! })).filter((g) => g.items.length);
+  for (const g of groups) g.items.sort((a, b) => (a.sec ?? Infinity) - (b.sec ?? Infinity));
+  return { groups, durationSec: isoSeconds(v.duration) };
+}
+
 let _recipes: Recipe[] | null = null;
 export function getRecipes(): Recipe[] {
   if (_recipes) return _recipes;
@@ -135,16 +193,7 @@ export function getRecipes(): Recipe[] {
       const slug = cosmeticSlug(c.brand_id, c.name_id);
       if (seen.has(slug)) continue;
       seen.add(slug);
-      const entry = getCosmeticListEntry(c.brand_id, c.name_id);
-      const offer = productOffer(entry, c.rakuten_image_link);
-      const sec = sceneSeconds(c.time_in_video);
-      steps[pi].push({
-        brand_id: c.brand_id, brand: c.brand, name_id: c.name_id, name: c.name, slug, tag: tag!, part: PARTS[pi].key,
-        time: sec !== undefined ? c.time_in_video : undefined, sec,
-        img: offer.imageSrc, price: offer.imageSrc ? offer.price : undefined, fromYahoo: offer.source === "yahoo",
-        rakutenLink: offer.rakutenLink, yahooLink: entry?.yahoo_text_link || undefined,
-        pr: isPrMention(v.key, c.brand_id, c.name_id),
-      });
+      steps[pi].push(toItem(v, c, tag, PARTS[pi].key));
     }
     for (const s of steps) s.sort((a, b) => (a.sec ?? Infinity) - (b.sec ?? Infinity));
     const flat = steps.flat();
