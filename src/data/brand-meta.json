@@ -1131,14 +1131,16 @@
     "country": "JP"
   },
   "brand-01063": {
-    "group": "コーセー"
+    "group": "コーセー",
+    "country": "JP"
   },
   "brand-00623": {
     "group": "資生堂",
     "country": "JP"
   },
   "brand-01045": {
-    "group": "資生堂"
+    "group": "資生堂",
+    "country": "JP"
   },
   "brand-01171": {
     "group": "資生堂"
@@ -1166,10 +1168,12 @@
     "country": "IT"
   },
   "brand-01155": {
-    "group": "LVMH"
+    "group": "LVMH",
+    "country": "US"
   },
   "brand-00963": {
-    "group": "ポーラ・オルビス"
+    "group": "ポーラ・オルビス",
+    "country": "JP"
   },
   "brand-01154": {
     "group": "アモーレパシフィック",
@@ -1184,17 +1188,20 @@
     "country": "KR"
   },
   "brand-00286": {
-    "group": "BCL"
+    "group": "BCL",
+    "country": "JP"
   },
   "brand-00550": {
     "group": "常盤薬品工業（サナ）",
     "country": "JP"
   },
   "brand-00602": {
-    "group": "牛乳石鹸"
+    "group": "牛乳石鹸",
+    "country": "JP"
   },
   "brand-00529": {
-    "group": "ダイソー"
+    "group": "ダイソー",
+    "country": "JP"
   },
   "brand-01096": {
     "group": "マリークヮント",
@@ -1374,7 +1381,8 @@
     "group": "ユニリーバ"
   },
   "brand-00638": {
-    "group": "シャンティ"
+    "group": "シャンティ",
+    "country": "JP"
   },
   "brand-01379": {
     "country": "JP",
@@ -1409,10 +1417,12 @@
     "group": "花王"
   },
   "brand-01087": {
-    "group": "ステラシード"
+    "group": "ステラシード",
+    "country": "JP"
   },
   "brand-00643": {
-    "group": "メディプラス"
+    "group": "メディプラス",
+    "country": "JP"
   },
   "brand-01205": {
     "country": "KR",
@@ -1659,13 +1669,15 @@
     "group": "ハレオン"
   },
   "brand-01635": {
-    "group": "ウエラ"
+    "group": "ウエラ",
+    "country": "DE"
   },
   "brand-00892": {
     "group": "ウエラ"
   },
   "brand-01582": {
-    "group": "花王"
+    "group": "花王",
+    "country": "JP"
   },
   "brand-01858": {
     "group": "花王"
@@ -1713,13 +1725,16 @@
     "group": "大塚製薬"
   },
   "brand-01569": {
-    "group": "アモーレパシフィック"
+    "group": "アモーレパシフィック",
+    "country": "KR"
   },
   "brand-01546": {
-    "group": "常盤薬品工業（サナ）"
+    "group": "常盤薬品工業（サナ）",
+    "country": "JP"
   },
   "brand-01602": {
-    "group": "ホーユー"
+    "group": "ホーユー",
+    "country": "JP"
   },
   "brand-00516": {
     "group": "マンダム"
@@ -2086,5 +2101,497 @@
   },
   "brand-01299": {
     "country": "JP"
+  },
+  "brand-01052": {
+    "country": "IL"
+  },
+  "brand-00178": {
+    "country": "JP"
+  },
+  "brand-00954": {
+    "country": "JP"
+  },
+  "brand-01495": {
+    "country": "JP"
+  },
+  "brand-00422": {
+    "country": "JP"
+  },
+  "brand-01480": {
+    "country": "KR"
+  },
+  "brand-01899": {
+    "country": "KR"
+  },
+  "brand-01538": {
+    "country": "KR"
+  },
+  "brand-01568": {
+    "country": "JP"
+  },
+  "brand-01505": {
+    "country": "JP"
+  },
+  "brand-01544": {
+    "country": "KR"
+  },
+  "brand-01401": {
+    "country": "KR"
+  },
+  "brand-00996": {
+    "country": "JP"
+  },
+  "brand-00937": {
+    "country": "JP"
+  },
+  "brand-01136": {
+    "country": "KR"
+  },
+  "brand-01046": {
+    "country": "KR"
+  },
+  "brand-01462": {
+    "country": "GB"
+  },
+  "brand-01235": {
+    "country": "KR"
+  },
+  "brand-01478": {
+    "country": "US"
+  },
+  "brand-01071": {
+    "country": "JP"
+  },
+  "brand-01861": {
+    "country": "JP"
+  },
+  "brand-01520": {
+    "country": "GB"
+  },
+  "brand-01574": {
+    "country": "KR"
+  },
+  "brand-01577": {
+    "country": "NL"
+  },
+  "brand-01498": {
+    "country": "US"
+  },
+  "brand-01579": {
+    "country": "KR"
+  },
+  "brand-00941": {
+    "country": "JP"
+  },
+  "brand-00248": {
+    "country": "JP"
+  },
+  "brand-00859": {
+    "country": "JP"
+  },
+  "brand-01100": {
+    "country": "JP"
+  },
+  "brand-00538": {
+    "country": "JP"
+  },
+  "brand-01073": {
+    "country": "JP"
+  },
+  "brand-01500": {
+    "country": "KR"
+  },
+  "brand-01598": {
+    "country": "CN"
+  },
+  "brand-01654": {
+    "country": "KR"
+  },
+  "brand-01504": {
+    "country": "JP"
+  },
+  "brand-01632": {
+    "country": "KR"
+  },
+  "brand-01507": {
+    "country": "KR"
+  },
+  "brand-01599": {
+    "country": "KR"
+  },
+  "brand-01509": {
+    "country": "KR"
+  },
+  "brand-01558": {
+    "country": "JP"
+  },
+  "brand-00089": {
+    "country": "JP"
+  },
+  "brand-00980": {
+    "country": "JP"
+  },
+  "brand-01057": {
+    "country": "JP"
+  },
+  "brand-00816": {
+    "country": "CH"
+  },
+  "brand-00184": {
+    "country": "JP"
+  },
+  "brand-01807": {
+    "country": "KR"
+  },
+  "brand-01690": {
+    "country": "TH"
+  },
+  "brand-01554": {
+    "country": "IT"
+  },
+  "brand-01679": {
+    "country": "KR"
+  },
+  "brand-01539": {
+    "country": "KR"
+  },
+  "brand-01618": {
+    "country": "KR"
+  },
+  "brand-01531": {
+    "country": "KR"
+  },
+  "brand-01590": {
+    "country": "KR"
+  },
+  "brand-01491": {
+    "country": "CN"
+  },
+  "brand-00685": {
+    "country": "JP"
+  },
+  "brand-01094": {
+    "country": "KR"
+  },
+  "brand-00431": {
+    "country": "JP"
+  },
+  "brand-01042": {
+    "country": "JP"
+  },
+  "brand-00241": {
+    "country": "DE"
+  },
+  "brand-01604": {
+    "country": "JP"
+  },
+  "brand-01017": {
+    "country": "KR"
+  },
+  "brand-01035": {
+    "country": "KR"
+  },
+  "brand-00889": {
+    "country": "US"
+  },
+  "brand-00473": {
+    "country": "KR"
+  },
+  "brand-01609": {
+    "country": "JP"
+  },
+  "brand-01395": {
+    "country": "US"
+  },
+  "brand-01572": {
+    "country": "TW"
+  },
+  "brand-01605": {
+    "country": "KR"
+  },
+  "brand-01526": {
+    "country": "KR"
+  },
+  "brand-01897": {
+    "country": "KR"
+  },
+  "brand-01619": {
+    "country": "KR"
+  },
+  "brand-01549": {
+    "country": "JP"
+  },
+  "brand-00601": {
+    "country": "JP"
+  },
+  "brand-00965": {
+    "country": "KR"
+  },
+  "brand-01629": {
+    "country": "US"
+  },
+  "brand-00797": {
+    "country": "KR"
+  },
+  "brand-01592": {
+    "country": "KR"
+  },
+  "brand-00222": {
+    "country": "JP"
+  },
+  "brand-01704": {
+    "country": "JP"
+  },
+  "brand-00796": {
+    "country": "JP"
+  },
+  "brand-00561": {
+    "country": "JP"
+  },
+  "brand-00678": {
+    "country": "US"
+  },
+  "brand-00939": {
+    "country": "JP"
+  },
+  "brand-01583": {
+    "country": "JP"
+  },
+  "brand-00693": {
+    "country": "JP"
+  },
+  "brand-01101": {
+    "country": "KR"
+  },
+  "brand-01068": {
+    "country": "KR"
+  },
+  "brand-01230": {
+    "country": "KR"
+  },
+  "brand-01638": {
+    "country": "KR"
+  },
+  "brand-01528": {
+    "country": "KR"
+  },
+  "brand-01710": {
+    "country": "KR"
+  },
+  "brand-01594": {
+    "country": "JP"
+  },
+  "brand-01621": {
+    "country": "KR"
+  },
+  "brand-01233": {
+    "country": "JP"
+  },
+  "brand-01130": {
+    "country": "JP"
+  },
+  "brand-01486": {
+    "country": "JP"
+  },
+  "brand-01497": {
+    "country": "JP"
+  },
+  "brand-01503": {
+    "country": "JP"
+  },
+  "brand-01620": {
+    "country": "JP"
+  },
+  "brand-01215": {
+    "country": "KR"
+  },
+  "brand-01112": {
+    "country": "CN"
+  },
+  "brand-01600": {
+    "country": "JP"
+  },
+  "brand-01612": {
+    "country": "JP"
+  },
+  "brand-01565": {
+    "country": "JP"
+  },
+  "brand-01501": {
+    "country": "KR"
+  },
+  "brand-01552": {
+    "country": "KR"
+  },
+  "brand-01524": {
+    "country": "JP"
+  },
+  "brand-01502": {
+    "country": "JP"
+  },
+  "brand-01697": {
+    "country": "KR"
+  },
+  "brand-01667": {
+    "country": "KR"
+  },
+  "brand-01608": {
+    "country": "JP"
+  },
+  "brand-01472": {
+    "country": "KR"
+  },
+  "brand-01337": {
+    "country": "JP"
+  },
+  "brand-01523": {
+    "country": "JP"
+  },
+  "brand-00719": {
+    "country": "FR"
+  },
+  "brand-00534": {
+    "country": "US"
+  },
+  "brand-00562": {
+    "country": "US"
+  },
+  "brand-01584": {
+    "country": "JP"
+  },
+  "brand-01576": {
+    "country": "KR"
+  },
+  "brand-01541": {
+    "country": "JP"
+  },
+  "brand-01603": {
+    "country": "JP"
+  },
+  "brand-01518": {
+    "country": "KR"
+  },
+  "brand-01508": {
+    "country": "JP"
+  },
+  "brand-01496": {
+    "country": "JP"
+  },
+  "brand-00795": {
+    "country": "JP"
+  },
+  "brand-01138": {
+    "country": "JP"
+  },
+  "brand-01214": {
+    "country": "JP"
+  },
+  "brand-01321": {
+    "country": "JP"
+  },
+  "brand-01578": {
+    "country": "KR"
+  },
+  "brand-01511": {
+    "country": "JP"
+  },
+  "brand-01705": {
+    "country": "JP"
+  },
+  "brand-01553": {
+    "country": "KR"
+  },
+  "brand-01252": {
+    "country": "KR"
+  },
+  "brand-01347": {
+    "country": "JP"
+  },
+  "brand-01276": {
+    "country": "JP"
+  },
+  "brand-01236": {
+    "country": "KR"
+  },
+  "brand-01633": {
+    "country": "JP"
+  },
+  "brand-01254": {
+    "country": "KR"
+  },
+  "brand-01527": {
+    "country": "JP"
+  },
+  "brand-01485": {
+    "country": "KR"
+  },
+  "brand-01556": {
+    "country": "JP"
+  },
+  "brand-01537": {
+    "country": "JP"
+  },
+  "brand-01586": {
+    "country": "JP"
+  },
+  "brand-01534": {
+    "country": "JP"
+  },
+  "brand-01532": {
+    "country": "KR"
+  },
+  "brand-01536": {
+    "country": "KR"
+  },
+  "brand-01580": {
+    "country": "KR"
+  },
+  "brand-01756": {
+    "country": "KR"
+  },
+  "brand-01718": {
+    "country": "JP"
+  },
+  "brand-00745": {
+    "country": "JP"
+  },
+  "brand-01616": {
+    "country": "JP"
+  },
+  "brand-01622": {
+    "country": "JP"
+  },
+  "brand-01611": {
+    "country": "JP"
+  },
+  "brand-01571": {
+    "country": "JP"
+  },
+  "brand-01223": {
+    "country": "JP"
+  },
+  "brand-00784": {
+    "country": "JP"
+  },
+  "brand-01593": {
+    "country": "JP"
+  },
+  "brand-01242": {
+    "country": "JP"
+  },
+  "brand-01533": {
+    "country": "KR"
+  },
+  "brand-01663": {
+    "country": "KR"
+  },
+  "brand-01345": {
+    "country": "JP"
+  },
+  "brand-01706": {
+    "country": "KR"
+  },
+  "brand-01587": {
+    "country": "KR"
   }
 }
