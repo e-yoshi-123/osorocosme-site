@@ -23,18 +23,21 @@ const flowParts = parts.filter((p) => timeline.some((t) => t.p.key === p.key));
 ---
 
 <div class="rs-wrap">
-  {/* ===== 動画の流れ ===== */}
+  {/* ===== 動画の流れ（スマホは縦の帯にして左に置き、右にまとまりを並べる。296章） ===== */}
+  {timeline.length > 0 && (
+    <div class="rs-flow-h">
+      <p class="label-caps">Timeline</p>
+      <h3>動画の流れ</h3>
+      <p class="rs-flow-note">点を押すと、その場面から再生します</p>
+    </div>
+  )}
+  <div class:list={["rs-body", timeline.length > 0 && "has-flow"]}>
   {timeline.length > 0 && (
     <div class="rs-flow">
-      <div class="rs-flow-h">
-        <p class="label-caps">Timeline</p>
-        <h3>動画の流れ</h3>
-        <p class="rs-flow-note">点を押すと、その場面から再生します</p>
-      </div>
       <div class="rs-bar">
         <span class="rs-bar-line" aria-hidden="true"></span>
         {timeline.map(({ x, p }) => (
-          <a href={`https://www.youtube.com/watch?v=${v.video_id}&t=${x.sec}s`} target="_blank" rel="noopener" class:list={["scene-seek rs-seek rs-dot", x.sec! / durationSec < 0.25 && "is-l", x.sec! / durationSec > 0.75 && "is-r"]} data-seek={x.sec} style={`left:${(x.sec! / durationSec) * 100}%;--c:${p.color}`} aria-label={`${x.time} ${p.label}：${x.brand} ${x.name}`}>
+          <a href={`https://www.youtube.com/watch?v=${v.video_id}&t=${x.sec}s`} target="_blank" rel="noopener" class:list={["scene-seek rs-seek rs-dot", x.sec! / durationSec < 0.25 && "is-l", x.sec! / durationSec > 0.75 && "is-r"]} data-seek={x.sec} style={`--t:${(x.sec! / durationSec) * 100}%;--tn:${x.sec! / durationSec};--c:${p.color}`} aria-label={`${x.time} ${p.label}：${x.brand} ${x.name}`}>
             <span class="rs-tip"><b>{x.time}</b>{x.brand} {x.name}</span>
           </a>
         ))}
@@ -86,18 +89,19 @@ const flowParts = parts.filter((p) => timeline.some((t) => t.p.key === p.key));
       </li>
     ))}
   </ol>
+  </div>
 </div>
 
 <style is:global>
   /* 動画の流れ */
-  .rs-flow { margin-bottom: 32px; padding: 4px 0 0; }
-  .rs-flow-h { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+  .rs-flow { margin-bottom: 32px; }
+  .rs-flow-h { padding-top: 4px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
   .rs-flow-h .label-caps { color: var(--color-rose); }
   .rs-flow-h h3 { font-size: 17px; font-weight: 700; }
   .rs-flow-note { font-size: 12px; color: var(--color-neutral-500); }
   .rs-bar { position: relative; height: 64px; margin: 18px 10px 0; }
   .rs-bar-line { position: absolute; left: 0; right: 0; top: 26px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, #c99a82, #7a5446, #9b5579, #e47f9d, #e60076); opacity: .35; }
-  .rs-dot { position: absolute; top: 27px; width: 16px; height: 16px; transform: translate(-50%, -50%); border-radius: 999px; background: var(--c); box-shadow: 0 0 0 3px #fff, 0 4px 10px -4px rgb(29 21 23 / .5); transition: transform .3s var(--ease-out-expo); cursor: pointer; }
+  .rs-dot { position: absolute; top: 27px; left: var(--t); width: 16px; height: 16px; transform: translate(-50%, -50%); border-radius: 999px; background: var(--c); box-shadow: 0 0 0 3px #fff, 0 4px 10px -4px rgb(29 21 23 / .5); transition: transform .3s var(--ease-out-expo); cursor: pointer; }
   .rs-dot::before { content: ""; position: absolute; inset: -12px; }
   .rs-dot:hover, .rs-dot:focus-visible, .rs-dot.is-on { transform: translate(-50%, -50%) scale(1.35); z-index: 2; }
   .rs-tip { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); width: max-content; max-width: 220px; padding: 6px 10px; border-radius: 10px; background: var(--color-ink); color: #fff; font-size: 11px; line-height: 1.5; text-align: left; pointer-events: none; display: none; }
@@ -110,6 +114,25 @@ const flowParts = parts.filter((p) => timeline.some((t) => t.p.key === p.key));
   .rs-bar-end { position: absolute; top: 40px; left: 0; font-size: 11px; color: var(--color-neutral-500); }
   .rs-bar-end.is-r { left: auto; right: 0; }
   .rs-flow-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12px; color: var(--color-neutral-600); }
+  /* スマホ：帯を縦にして左に置く（上が 0:00、下が終わり。点の位置は動画の中の時刻の割合）。吹き出しは点の右に出す */
+  @media (max-width: 767px) {
+    .rs-body.has-flow { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; margin-top: 12px; }
+    .rs-body.has-flow .rs-flow { margin: 0; position: relative; }
+    .rs-body.has-flow .rs-bar { position: sticky; top: calc(var(--hdr-h, 64px) + 12px); height: min(calc(100vh - var(--hdr-h, 64px) - 40px), 100%); min-height: 240px; margin: 0; }
+    .rs-body.has-flow .rs-flow { height: 100%; }
+    .rs-body.has-flow .rs-bar-line { left: 16px; right: auto; top: 22px; bottom: 22px; width: 2px; height: auto; background: linear-gradient(180deg, #c99a82, #7a5446, #9b5579, #e47f9d, #e60076); }
+    .rs-body.has-flow .rs-dot { left: 17px; top: calc(22px + (100% - 44px) * var(--tn)); width: 12px; height: 12px; box-shadow: 0 0 0 2px #fff, 0 3px 8px -4px rgb(29 21 23 / .5); }
+    .rs-body.has-flow .rs-shops { gap: 4px; }
+    .rs-body.has-flow .rs-shops a { padding: 2px 8px; }
+    .rs-body.has-flow .rs-tip, .rs-body.has-flow .rs-dot.is-l .rs-tip, .rs-body.has-flow .rs-dot.is-r .rs-tip { left: calc(100% + 10px); right: auto; top: 50%; bottom: auto; transform: translateY(-50%); max-width: 200px; }
+    .rs-body.has-flow .rs-bar-end { top: 0; left: 0; width: 34px; text-align: center; font-size: 10px; }
+    .rs-body.has-flow .rs-bar-end.is-r { top: auto; bottom: 0; }
+    .rs-body.has-flow .rs-flow-legend { display: none; }
+    .rs-body.has-flow .rs-step { padding: 16px 14px 6px 16px; }
+    .rs-body.has-flow .rs-step-n { font-size: 34px; }
+    .rs-body.has-flow .rs-item { grid-template-columns: 64px minmax(0, 1fr); gap: 10px; }
+    .rs-body.has-flow .rs-item-img { width: 64px; height: 64px; border-radius: 12px; }
+  }
   .rs-flow-legend li::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 999px; background: var(--c); margin-right: 6px; vertical-align: 1px; }
 
   .rs-steps { position: relative; display: grid; gap: 16px; }
@@ -138,7 +161,7 @@ const flowParts = parts.filter((p) => timeline.some((t) => t.p.key === p.key));
   .rs-time.is-none { font-family: var(--font-sans); font-weight: 400; font-size: 11px; color: var(--color-neutral-400); box-shadow: none; padding-left: 0; }
   .rs-price { font-size: 14px; }
   .rs-shops { display: inline-flex; gap: 6px; margin-left: auto; }
-  .rs-shops a { font-size: 11px; padding: 2px 10px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent); transition: border-color .3s; }
+  .rs-shops a { white-space: nowrap; font-size: 11px; padding: 2px 10px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent); transition: border-color .3s; }
   .rs-shops a:hover { border-color: var(--color-ink); }
   @media (pointer: coarse) { .rs-time, .rs-shops a { min-height: 36px; display: inline-flex; align-items: center; } }
 
