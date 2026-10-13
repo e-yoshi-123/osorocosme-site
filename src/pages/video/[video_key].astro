@@ -10,7 +10,6 @@ import {
   getVideoByKey,
   getVideosByChannel,
   getVideosUsingCosmetic,
-  getCosmeticFacts,
   isVisible,
   sortByPublishedDesc,
   categoryUrl,
@@ -45,8 +44,6 @@ const pageTitle = video ? (validCosmetics.length ? `【紹介コスメ${validCos
 // 非掲載（check_status未確認・削除済み）の動画はsitemapに載せておらず、内容も未確認なので検索に出さない
 const noindex = !!video && !isVisible(video);
 
-// 概要（AI要約が無い動画でも、ページに固有の文章が残るように、掲載データから作る）
-const cosmeticFacts = validCosmetics.map((c) => ({ c, f: getCosmeticFacts(c.brand_id, c.name_id) }));
 // PR・提供の動画（197章）。提供を受けた商品はランキング等の数に入れていないので、その旨を添える
 const pr = video ? getPrInfo(video.key) : undefined;
 const isPr = (c: { brand_id: string; name_id: string }) => !!video && isPrMention(video.key, c.brand_id, c.name_id);
@@ -58,13 +55,6 @@ const prNote = pr
       ? pr.whole ? "この動画で紹介された商品は、ランキング・最近話題の数に入れていません。" : "提供を受けた商品は、ランキング・最近話題の数に入れていません。"
       : "")
   : "";
-const ranked = cosmeticFacts.filter((x) => x.f.rank && !isPr(x.c)).sort((a, b) => a.f.rank! - b.f.rank!)[0];
-const overview = video
-  ? `${video.channel_title}が${formatJaDate(video.published_at)}に投稿したコスメ紹介動画です。` +
-    (validCosmetics.length > 0 ? `この動画では${validCosmetics.length}品のコスメが紹介されています。` : "") +
-    (ranked ? `そのうち「${ranked.c.brand} ${ranked.c.name}」は、「${ranked.f.mainTag}」カテゴリの人気ランキングで${ranked.f.rankTotal}品中${ranked.f.rank}位です。` : "")
-  : "";
-
 // 最初の画面に出す紹介コスメの入口（233章）。検索から来た人がすぐ離れていたので、題の下に画像つきで数品を並べる
 const QUICK = 4;
 const quickSeen = new Set<string>();
@@ -206,7 +196,6 @@ const jsonLd = video
             </div>
             <ShareButtons text={`${video.channel_title}「${video.title}」で紹介されたコスメ`} class="mt-6" />
           </div>
-          <p class="lg:col-span-8 lg:-mt-4 max-w-3xl text-sm leading-[1.9] text-neutral-600">{overview}</p>
         </div>
         </div>
 
