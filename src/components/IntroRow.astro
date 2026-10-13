@@ -14,8 +14,10 @@ interface Props {
 
 const { i, pos, concernPages, extra = false } = Astro.props;
 const views = i.views >= 10_000 ? `${(i.views / 10_000).toFixed(1).replace(/\.0$/, "")}万回` : `${i.views.toLocaleString("ja-JP")}回`;
+// 発言（言及）は、効能を言い切るものを除いた先頭2つ（301章）。肌悩みの節は、その発言に含まれていれば重ねて出さない
+const quotes = i.quotes;
 // 同じ節が複数の悩みに当たることがある（「赤み・クマをカバー」など）ので、発言は重ねて出さない
-const quotes = [...new Set(i.concerns.map((c) => c.quote).filter(Boolean))]; // 効能を言い切る発言は空（253章）
+const concernQuotes = [...new Set(i.concerns.map((c) => c.quote).filter(Boolean))].filter((q) => !quotes.some((m) => m.includes(q))); // 効能を言い切る発言は空（253章）
 ---
 
 {/*
@@ -61,20 +63,26 @@ const quotes = [...new Set(i.concerns.map((c) => c.quote).filter(Boolean))]; // 
         {i.views > 0 && <span class="intro-9">再生 {views}</span>}
       </span>
     </a>
+    {/* 発言（字幕からの言及の要約）と、肌悩みに触れた紹介ならそのチップ。発言は「商品名 使ってみた」のような検索に当たる本文でもある（301章） */}
     {
-      i.concerns.length > 0 && (
+      (quotes.length > 0 || i.concerns.length > 0) && (
         <div class="intro-13">
-          <span class="intro-14">
-            <span class="u-11">肌悩み</span>
-            {i.concerns.map((c) =>
-              concernPages.has(c.slug) ? (
-                <a href={withBase(`/concern/${c.slug}/`)} class="text-rose text-xs border border-rose/40 rounded-full px-2 py-0.5 hover:bg-rose hover:text-white transition-colors">{c.name}</a>
-              ) : (
-                <span class="text-xs text-neutral-600 border border-ink/15 rounded-full px-2 py-0.5">{c.name}</span>
-              )
-            )}
-          </span>
-          <span class="align-middle">{quotes.map((q) => `「${q}」`).join("")}</span>
+          {quotes.map((q) => <span class="block">「{q}」</span>)}
+          {i.concerns.length > 0 && (
+            <span class:list={["block", quotes.length > 0 && "mt-1"]}>
+              <span class="intro-14">
+                <span class="u-11">肌悩み</span>
+                {i.concerns.map((c) =>
+                  concernPages.has(c.slug) ? (
+                    <a href={withBase(`/concern/${c.slug}/`)} class="text-rose text-xs border border-rose/40 rounded-full px-2 py-0.5 hover:bg-rose hover:text-white transition-colors">{c.name}</a>
+                  ) : (
+                    <span class="text-xs text-neutral-600 border border-ink/15 rounded-full px-2 py-0.5">{c.name}</span>
+                  )
+                )}
+              </span>
+              <span class="align-middle">{concernQuotes.map((q) => `「${q}」`).join("")}</span>
+            </span>
+          )}
         </div>
       )
     }

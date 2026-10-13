@@ -13,7 +13,7 @@ import {
   canonicalBrandId,
   getCosmeticListEntry,
   getVideosUsingCosmetic,
-  COSMETIC_INDEX_MIN_VIDEOS,
+  isCosmeticIndexed,
   getCoMentionedCosmetics,
   getCategoryTop,
   getBrandTopCosmetics,
@@ -69,7 +69,7 @@ if (redirectTo) return Astro.redirect(withBase(`/cosmetics/${redirectTo}`), 301)
 // 不安定な実装だったため、単一の正規ソースに統一）
 const entry = getCosmeticListEntry(brand_id, name_id);
 const videosUsing = sortByPublishedDesc(getVideosUsingCosmetic(brand_id, name_id));
-const noindex = videosUsing.length < COSMETIC_INDEX_MIN_VIDEOS;
+const noindex = !isCosmeticIndexed(videosUsing); // 2本以上、または直近90日の動画で紹介（301章）
 
 const facts = getCosmeticFacts(brand_id, name_id);
 // 同じ人が日をあけて繰り返し使っているか（PR・提供と新作紹介などの動画は除く。273章）

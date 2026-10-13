@@ -6,11 +6,17 @@ import CosmeticCard from "../../components/CosmeticCard.astro";
 import InfluencerLinks from "../../components/InfluencerLinks.astro";
 import SectionHead from "../../components/SectionHead.astro";
 import PrBadge from "../../components/PrBadge.astro";
+import BrandFlag from "../../components/BrandFlag.astro";
 import {
   getAllInfluencers,
   getInfluencerByChannelId,
   getVideosByChannel,
   getSimilarInfluencers,
+  getInfluencerHighlights,
+  getCosmeticListEntry,
+  productOffer,
+  amazonSearchUrl,
+  cosmeticSlug,
   sortByPublishedDesc,
   groupTagsByCategory,
   withBase,
@@ -65,8 +71,23 @@ for (const g of groups) {
 }
 // タイトルの品数は、同じコスメを何度紹介しても1品と数える（271章）
 const uniqueItems = new Set(timeline.flatMap((b) => b.items.map((c) => `${c.brand_id}_${c.name_id}`))).size;
+// よく紹介しているコスメ（301章）：2本以上の動画で紹介した商品を、本数の多い順に10品まで（PR・提供の紹介は数えない。画像のあるものだけ）。
+// 検索の「〇〇 愛用コスメ」に対して、遍歴（動画ごと）より先に答えになる節で、価格と購入ボタンもここに置く。3品に届かない人には出さない
+const TOP_MIN_VIDEOS = 2;
+const TOP_LIMIT = 10;
+const topCosmetics = getInfluencerHighlights(channel_id!, 0, TOP_LIMIT)
+  .topCosmetics.filter((c) => c.videoCount >= TOP_MIN_VIDEOS)
+  .map((c) => {
+    const entry = getCosmeticListEntry(c.brand_id, c.name_id);
+    const offer = productOffer(entry);
+    return { ...c, slug: cosmeticSlug(c.brand_id, c.name_id), price: offer.price, fromYahoo: offer.source === "yahoo", rakutenLink: offer.rakutenLink, yahooLink: entry?.yahoo_text_link || undefined };
+  });
+const showTop = topCosmetics.length >= 3;
+const repeatCount = topCosmetics.filter((c) => c.repeat).length;
 const description = influencer
-  ? `${influencer.channel_title}のコスメ紹介動画${videos.length}本から、使用コスメ${totalItems}品をカテゴリ別・投稿日順にまとめています。いつどのコスメを紹介していたか、使用コスメの変遷を確認できます。`
+  ? `${influencer.channel_title}のコスメ紹介動画${videos.length}本から、使用コスメ${totalItems}品をカテゴリ別・投稿日順にまとめています。` +
+    (showTop ? `よく紹介しているのは${topCosmetics.slice(0, 3).map((c) => `${c.brand}「${c.name}」`).join("、")}。` : "") +
+    "いつどのコスメを紹介していたか、使用コスメの変遷を確認できます。"
   : undefined;
 const jsonLd = influencer
   ? [
@@ -125,9 +146,46 @@ const jsonLd = influencer
           </div>
         </section>
 
+        {showTop && (
+          <section class="panel u-14">
+            <SectionHead
+              num="01"
+              en="Most featured"
+              title="よく紹介しているコスメ"
+              lead={`${TOP_MIN_VIDEOS}本以上の動画で紹介したコスメを、本数の多い順に${topCosmetics.length}品。PR・提供の紹介は数えていません。${repeatCount > 0 ? "「リピート」は、日をあけた別の動画でも使っていたコスメです。" : ""}価格は楽天市場（無ければYahoo!ショッピング）で確認した時点の参考価格です。`}
+            />
+            <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-8">
+              {topCosmetics.map((c) => (
+                <li class="min-w-0 group">
+                  <a href={withBase(`/cosmetics/${c.slug}`)} class="product-well overflow-hidden tile-4" tabindex="-1" aria-hidden="true">
+                    <img src={c.imageSrc} alt="" class="tile-1" loading="lazy" data-err="noimg" />
+                  </a>
+                  <a href={withBase(`/cosmetics/${c.slug}`)} class="block">
+                    <p class="tile-3"><BrandFlag brand_id={c.brand_id} />{c.brand}</p>
+                    <p class="phrase tile-name mt-1">{c.name}</p>
+                  </a>
+                  <p class="u-2 flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <span>{c.videoCount}本で紹介</span>
+                    {c.repeat && <span class="inline-flex items-center rounded-full border border-rose text-rose px-1.5 py-[2px] leading-none font-semibold">リピート</span>}
+                  </p>
+                  <p class="tc-act">
+                    {c.price !== undefined && <span class="num-display tc-price" title={c.fromYahoo ? "Yahoo!ショッピングの参考価格" : "楽天市場の参考価格"}>¥{formatCount(c.price)}</span>}
+                    <span class="tc-shops">
+                      {c.rakutenLink && <a href={c.rakutenLink} target="_blank" rel="nofollow sponsored noopener" title="楽天市場で見る">楽天</a>}
+                      {c.yahooLink && <a href={c.yahooLink} target="_blank" rel="nofollow sponsored noopener" title="Yahoo!ショッピングで見る">Yahoo!</a>}
+                      <a href={amazonSearchUrl(c.brand, c.name)} target="_blank" rel="nofollow sponsored noopener" title="Amazonで探す（検索結果）">Amazon</a>
+                    </span>
+                  </p>
+                </li>
+              ))}
+            </ul>
+            <p class="mt-5 text-xs text-neutral-500">PR：リンク先での購入により、当サイトに報酬が支払われることがあります。</p>
+          </section>
+        )}
+
         {timeline.length > 0 && (
           <section class="panel u-14">
-            <SectionHead num="01" en="Cosme history" title="使用コスメ遍歴" lead={`動画ごとに、紹介したコスメを新しい順に並べています。カテゴリで絞り込めます。${prCount > 0 ? "「PR」の印は、PR・提供として紹介されたコスメです（ランキングには数えていません）。" : ""}`} />
+            <SectionHead num={showTop ? "02" : "01"} en="Cosme history" title="使用コスメ遍歴" lead={`動画ごとに、紹介したコスメを新しい順に並べています。カテゴリで絞り込めます。${prCount > 0 ? "「PR」の印は、PR・提供として紹介されたコスメです（ランキングには数えていません）。" : ""}`} />
 
             <div class="filter-sentinel" aria-hidden="true"></div>
             <div class="filter-bar sticky top-[var(--hdr-h,97px)] z-20 bg-panel/90 backdrop-blur-md py-3 mb-10 border-b border-ink/10 text-sm -mx-4 px-4 md:mx-0 md:px-0">
@@ -189,7 +247,7 @@ const jsonLd = influencer
         )}
 
         <section class="panel u-14">
-          <SectionHead num="02" en="Videos" title="紹介動画" lead={`${videos.length}本の動画を、新しい順に並べています。`} />
+          <SectionHead num={showTop ? "03" : "02"} en="Videos" title="紹介動画" lead={`${videos.length}本の動画を、新しい順に並べています。`} />
           <div class="u-20" data-more="12">
             {videos.map((v, i) => (
               <div class:list={["min-w-0", i >= 8 && "hidden"]}><VideoCard video={v} /></div>
@@ -320,4 +378,11 @@ const jsonLd = influencer
   @media (max-width: 639px) {
     .filter-bar.is-folded .chip-row { display: none !important; }
   }
+  /* よく紹介しているコスメ：価格と店のボタン（動画ページの rs-shops と同じ見た目。301章） */
+  .tc-act { margin-top: 6px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+  .tc-price { font-size: 14px; }
+  .tc-shops { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+  .tc-shops a { white-space: nowrap; font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent); transition: border-color .3s; }
+  .tc-shops a:hover { border-color: var(--color-ink); }
+  @media (pointer: coarse) { .tc-shops a { min-height: 36px; display: inline-flex; align-items: center; } }
 </style>

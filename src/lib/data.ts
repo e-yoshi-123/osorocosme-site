@@ -397,6 +397,15 @@ export function getUsedCosmeticKeys(): { brand_id: string; name_id: string }[] {
 // 紹介動画がこの本数に満たない商品ページは noindex にし、サイトマップにも載せない。
 // 「検出 - インデックス未登録」が4千件余りあり、クロールを紹介の多いページ・人・ランキングに集めるため（履歴171章）
 export const COSMETIC_INDEX_MIN_VIDEOS = 2;
+// ただし、直近この日数の動画で紹介された商品は1本でも索引に入れる。新作・コフレは最初の1本が出てから2本目までの間に検索の需要が来るため
+// （デコルテのコフレの商品ページが28日で表示174・クリック11。301章）。日数を過ぎて2本目が無ければ、次のビルドで自動的にnoindexに戻る
+export const COSMETIC_INDEX_RECENT_DAYS = 90;
+/** 商品ページを検索に出す（索引に入れ、sitemapに載せる）か。商品ページとsitemapの両方がこれで判定する */
+export function isCosmeticIndexed(videosUsing: { published_at: string }[]): boolean {
+  if (videosUsing.length >= COSMETIC_INDEX_MIN_VIDEOS) return true;
+  const cut = Date.now() - COSMETIC_INDEX_RECENT_DAYS * 86_400_000;
+  return videosUsing.some((v) => v.published_at && new Date(v.published_at).getTime() >= cut);
+}
 // 商品ページ「いつ・誰が紹介したか」：紹介がINTRO_SPLIT_OVER件を超える商品は、先頭INTRO_IN_PAGE件だけをページに入れ、
 // 残りは /cosmetics/<slug>/intros/ に分けて、押したときに読む（ページのHTMLが700KB台になっていた。279章）
 export const INTRO_IN_PAGE = 20;
@@ -616,6 +625,8 @@ export interface InfluencerTopCosmetic {
   imageSrc: string;
   /** そのインフルエンサーが、この商品を紹介した動画の本数 */
   videoCount: number;
+  /** その人が日をあけた別の動画で使い続けている（リピート。273章の条件） */
+  repeat: boolean;
 }
 
 export interface InfluencerHighlights {
@@ -650,13 +661,15 @@ export function getInfluencerHighlights(channel_id: string, videoLimit = 3, cosm
         cur.videoCount += 1;
         if (!cur.imageSrc && imageSrc) cur.imageSrc = imageSrc;
       } else {
-        byCosmetic.set(key, { brand_id: c.brand_id, brand: c.brand, name_id: c.name_id, name: c.name, imageSrc: imageSrc || "", videoCount: 1 });
+        byCosmetic.set(key, { brand_id: c.brand_id, brand: c.brand, name_id: c.name_id, name: c.name, imageSrc: imageSrc || "", videoCount: 1, repeat: false });
       }
     }
   }
   const topCosmetics = Array.from(byCosmetic.values())
     .filter((c) => c.imageSrc)
-    .sort((a, b) => b.videoCount - a.videoCount)
+    .map((c) => ({ ...c, repeat: getRepeatUsers(c.brand_id, c.name_id).some((u) => u.channel_id === channel_id) }))
+    // 本数が同じなら、リピートしているもの → 全体で紹介の多いものを先に
+    .sort((a, b) => b.videoCount - a.videoCount || Number(b.repeat) - Number(a.repeat) || (getCosmeticVideoCounts().get(`${b.brand_id}_${b.name_id}`) ?? 0) - (getCosmeticVideoCounts().get(`${a.brand_id}_${a.name_id}`) ?? 0))
     .slice(0, cosmeticLimit);
   // 紹介が多いカテゴリ：全体の平均より多く紹介しているもの（倍率が高い順）。
   // 件数が少ないカテゴリが偶然高い倍率になるのを避けるため、一定の件数・割合があるものだけを対象にする。
@@ -1218,6 +1231,12 @@ export const EFFICACY_RE = /効[くかきけい]|効果|改善|治[らりるれ�
 /** 引用に出してよい節（効能を言い切らないもの）。無ければ undefined */
 function quotableClause(mentions: string[] | undefined, pattern: RegExp): string | undefined {
   return concernClauses(mentions, pattern).find((t) => !EFFICACY_RE.test(t));
+}
+/** 発言ではない言及（「概要欄の使用アイテムに記載」のような、出どころの注記。約4%） */
+const MENTION_NOTE_RE = /概要欄|欄に記載|字幕なし/;
+/** 商品ページに出す発言（言及）。効能を言い切るもの（EFFICACY_RE。全体の約4%）と出どころの注記は出さず、先頭の limit 個まで（301章） */
+export function quotableMentions(mentions: string[] | undefined, limit = 2): string[] {
+  return (mentions || []).map((m) => m.trim()).filter((m) => m && !EFFICACY_RE.test(m) && !MENTION_NOTE_RE.test(m)).slice(0, limit);
 }
 export const CONCERN_PER_GROUP = 10;
 export interface ConcernItem extends FeatureItem {
@@ -1914,6 +1933,8 @@ export interface CosmeticIntro {
   influence: number;
   /** この動画で、この商品を肌悩みに触れて紹介した節（228章） */
   concerns: { slug: string; name: string; quote: string }[];
+  /** この動画での発言（言及）。効能を言い切るもの（EFFICACY_RE）は出さない。先頭の2つまで（301章） */
+  quotes: string[];
 }
 
 /** 発信力の5段階の区切り（インフルエンサー一覧での順位の上位◯％。上位5％が5、20％までが4、40％までが3、70％までが2） */
@@ -1959,6 +1980,7 @@ export function getCosmeticFacts(brand_id: string, name_id: string): CosmeticFac
         if (!concernClause(c?.mentions, d.pattern)) return [];
         return [{ slug: d.slug, name: d.name, quote: quotableClause(c?.mentions, d.pattern) || "" }];
       }),
+      quotes: quotableMentions(c?.mentions),
     };
   });
   if (!_rankingByKey) _rankingByKey = new Map(getCosmeticRankings().map((x) => [`${x.brand_id}_${x.name_id}`, x]));

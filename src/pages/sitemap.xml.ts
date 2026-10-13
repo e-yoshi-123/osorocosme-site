@@ -11,7 +11,7 @@ import {
   getPublishedIngredients,
   getPublishedConcernIngredients,
   getVideosUsingCosmetic,
-  COSMETIC_INDEX_MIN_VIDEOS,
+  isCosmeticIndexed,
   getVideosByChannel,
   cosmeticSlug,
   withBase,
@@ -61,7 +61,7 @@ export const GET: APIRoute = ({ site }) => {
     ...getBrandsWithVideos().map((b) => ({ path: `/brand/${b.brand_id}`, lastmod: brandNewest.get(b.brand_id) })),
     ...getUsedCosmeticKeys().flatMap((k) => {
       const using = getVideosUsingCosmetic(k.brand_id, k.name_id);
-      if (using.length < COSMETIC_INDEX_MIN_VIDEOS) return []; // noindex のページは載せない
+      if (!isCosmeticIndexed(using)) return []; // noindex のページは載せない
       return [{ path: `/cosmetics/${cosmeticSlug(k.brand_id, k.name_id)}`, lastmod: newest(using) }];
     }),
     ...getInfluencerRanking().map((i) => ({ path: `/influencer/${i.channel_id}`, lastmod: newest(getVideosByChannel(i.channel_id)) })),
