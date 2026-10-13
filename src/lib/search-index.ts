@@ -3,6 +3,8 @@ import {
   getVisibleVideos,
   getBrandsWithVideos,
   getBrandReading,
+  getBrandCountry,
+  COUNTRY_NAMES,
   getInfluencerRanking,
   getCosmeticListEntry,
   canonicalBrandId,
@@ -147,5 +149,8 @@ export function buildRecommendIndex() {
       .filter((x): x is readonly [number, number] => x[0] !== undefined);
     return [d.slug, d.name, rows.map((x) => x[0]), rows.map((x) => x[1])];
   });
-  return { b: idx.b.map((x) => [x[1], x[2]]), c, ch, r, g: g.map((d) => [d.slug, d.name]), gi, k };
+  // ブランドの国（290章）：b の3つ目に国コード、cn に国コード → 国名。ブランド名の前の国旗に使う
+  const bc = idx.b.map((x) => getBrandCountry(String(x[0])) || "");
+  const cn = Object.fromEntries([...new Set(bc.filter(Boolean))].map((code) => [code, COUNTRY_NAMES[code] ?? code]));
+  return { b: idx.b.map((x, n) => [x[1], x[2], bc[n]]), c, ch, r, g: g.map((d) => [d.slug, d.name]), gi, k, cn };
 }

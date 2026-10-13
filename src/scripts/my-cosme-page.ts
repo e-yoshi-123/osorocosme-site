@@ -16,7 +16,8 @@ import { sync, pushIfConnected, disconnect, isConnected } from "./my-cosme-drive
 
 type CosRow = [string, string, number, string, string, string, number];
 interface RecIndex {
-  b: [string, string][];
+  /** ブランド：[名前, 読み・別名, 国コード（不明は空）] */
+  b: [string, string, string][];
   c: CosRow[];
   ch: [string, string, string, number[]][];
   r: Record<string, string>;
@@ -26,6 +27,8 @@ interface RecIndex {
   gi: Record<string, number[]>;
   /** 肌悩み：[slug, 名前, 商品の番号（紹介した人の多い順）, 同じ並びの紹介した人数] */
   k: [string, string, number[], number[]][];
+  /** 国コード → 国名 */
+  cn: Record<string, string>;
 }
 
 const base = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL.slice(0, -1) : import.meta.env.BASE_URL;
@@ -39,6 +42,14 @@ const LIST_LABEL = { items: "使っている", wish: "気になる" } as const;
 
 const esc = (s: string) => s.replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[ch]!);
 const img = (s: string, size = 300) => (s.startsWith("~") ? `${IMG_HEAD}${s.slice(1)}?_ex=${size}x${size}` : s);
+/** ブランド名の前の小さな国旗（BrandFlag.astro と同じ見た目。国が不明なら空） */
+const flag = (p: Prepared, n: number) => {
+  const b = p.idx.c[n][2];
+  const code = b >= 0 ? p.idx.b[b][2] : "";
+  if (!code) return "";
+  const name = p.idx.cn[code] ?? code;
+  return `<img src="${base}/flags/${esc(code.toLowerCase())}.svg" alt="${esc(name)}" title="${esc(name)}のブランド" width="14" height="10" loading="lazy" decoding="async" class="brand-flag" />`;
+};
 const track = (action: string) => {
   // 使われ方だけを数える（どの商品かは送らない。決定事項）
   const g = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
@@ -96,7 +107,7 @@ function tile(p: Prepared, n: number, caption: string, d: MyCosmeData): string {
   return `<div class="min-w-0">
     <a href="${base}/cosmetics/${esc(c[0])}/" class="block group">
       <div class="product-well relative aspect-square rounded-2xl flex items-center justify-center overflow-hidden">${pic}</div>
-      <p class="mt-3 text-xs tracking-[0.14em] text-neutral-500 truncate">${esc(c[1])}</p>
+      <p class="mt-3 text-xs tracking-[0.14em] text-neutral-500 truncate">${flag(p, n)}${esc(c[1])}</p>
       <p class="mt-1 phrase text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors">${esc(c[3])}</p>
     </a>
     <p class="mt-1.5 text-xs leading-relaxed text-neutral-500">${caption}</p>
@@ -135,7 +146,7 @@ function renderList(p: Prepared, d: MyCosmeData) {
       return `<li class="flex items-center gap-3 py-3 border-b border-ink/10">
         <a href="${base}/cosmetics/${esc(c[0])}/" class="w-12 h-12 shrink-0 rounded-xl product-well flex items-center justify-center overflow-hidden">${src ? `<img src="${esc(src)}" alt="" loading="lazy" class="w-full h-full object-contain p-1" onerror="this.remove()" />` : ""}</a>
         <a href="${base}/cosmetics/${esc(c[0])}/" class="flex-1 min-w-0 group">
-          <span class="block text-xs text-neutral-500 truncate">${esc(c[1])}${c[5] ? `・${esc(c[5])}` : ""}</span>
+          <span class="block text-xs text-neutral-500 truncate">${flag(p, n)}${esc(c[1])}${c[5] ? `・${esc(c[5])}` : ""}</span>
           <span class="block text-sm truncate group-hover:text-rose transition-colors">${esc(c[3])}</span>
         </a>
         ${moveBtn(slug)}${rmBtn(slug, c[3])}
@@ -392,7 +403,7 @@ function renderSearch(p: Prepared, d: MyCosmeData) {
           const label = on ? "登録済み" : inOther.has(n) ? `＋ ${LIST_LABEL[tab]}へ移す` : "＋ 追加";
           return `<li><button type="button" ${on ? "disabled" : `data-add="${esc(c[0])}" data-kind="${tab}"`} class="w-full flex items-center gap-3 px-3 py-2 text-left rounded-xl ${on ? "opacity-60" : "hover:bg-pink-100 cursor-pointer"}">
             <span class="w-10 h-10 shrink-0 rounded-lg product-well flex items-center justify-center overflow-hidden">${src ? `<img src="${esc(src)}" alt="" loading="lazy" class="w-full h-full object-contain p-0.5" onerror="this.remove()" />` : ""}</span>
-            <span class="flex-1 min-w-0"><span class="block text-xs text-neutral-500 truncate">${esc(c[1])}${c[5] ? `・${esc(c[5])}` : ""}</span><span class="block text-sm truncate">${esc(c[3])}</span></span>
+            <span class="flex-1 min-w-0"><span class="block text-xs text-neutral-500 truncate">${flag(p, n)}${esc(c[1])}${c[5] ? `・${esc(c[5])}` : ""}</span><span class="block text-sm truncate">${esc(c[3])}</span></span>
             <span class="shrink-0 text-xs ${on ? "text-neutral-500" : "text-rose"}">${label}</span>
           </button></li>`;
         })
