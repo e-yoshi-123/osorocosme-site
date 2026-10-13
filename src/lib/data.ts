@@ -1228,15 +1228,28 @@ function concernClause(mentions: string[] | undefined, pattern: RegExp): string 
  * （薬機法：一般化粧品が言える効能は56項目だけ。体験談でも効能の保証に見える使い方は不可。ユーザー判断、253章）。
  * 数える・数えないの判定には使わない（引用として出すかどうかだけ） */
 export const EFFICACY_RE = /効[くかきけい]|効果|改善|治[らりるれろっしす]|治療|消え|消す|消し|なく(?:な|し)|無く(?:な|し)|薄く(?:な|し)|減[らりるれっ]|小さくな|引き締|リフトアップ|若返|再生|即効|根本|完治/;
+/** 効能の言い切り（EFFICACY_RE）とは別に、化粧品の広告では言えない領域に触れる言い方（302章）。
+ * 病名・炎症、発毛・まつ毛の育毛、シワ・たるみ・ハリの変化、「美白」（承認を受けた医薬部外品の言い方か確かめられないため。「美白有効成分」の成分の説明は残す）、
+ * 痩せ（「痩せて見える」は残す）、鎮静・殺菌・血行・代謝・デトックス・ホルモン。引用に出すかどうかだけに使う */
+const MEDICAL_CLAIM_RE = /アトピー|皮膚炎|湿疹|炎症|アレルギー|治ま|発毛|育毛|[髪毛]が増え|生えてき|(?:シワ|しわ|たるみ|ハリ|はり)[がもはをの]?[^、。]{0,4}(?:浅く|目立たなく|出た|出る|出て|戻|変わ|伸び|取れ|ピン|なくな)|美白(?!有効成分|成分)|痩せ(?!て見|見え|た?ように見)|鎮静|殺菌|血行|代謝|デトックス|ホルモン/;
+/** まつ毛が伸びる・増える（まつ毛美容液の育毛の言い方）。マスカラの「繊維で伸びる・盛れる」は除く */
+const LASH_GROWTH_RE = /まつ[毛げ]が(?:伸び|長くな|増え|濃くな)/;
+const LASH_MAKEUP_RE = /繊維|盛|束|マスカラ|ロング|カール|2本使い|限定色/;
+/** 引用に出してよい言い方か（効能の言い切り・化粧品で言えない領域に触れないもの。253・302章） */
+export function isQuotable(t: string): boolean {
+  if (EFFICACY_RE.test(t) || MEDICAL_CLAIM_RE.test(t)) return false;
+  if (LASH_GROWTH_RE.test(t) && !LASH_MAKEUP_RE.test(t)) return false;
+  return true;
+}
 /** 引用に出してよい節（効能を言い切らないもの）。無ければ undefined */
 function quotableClause(mentions: string[] | undefined, pattern: RegExp): string | undefined {
-  return concernClauses(mentions, pattern).find((t) => !EFFICACY_RE.test(t));
+  return concernClauses(mentions, pattern).find(isQuotable);
 }
 /** 発言ではない言及（「概要欄の使用アイテムに記載」のような、出どころの注記。約4%） */
 const MENTION_NOTE_RE = /概要欄|欄に記載|字幕なし/;
-/** 商品ページに出す発言（言及）。効能を言い切るもの（EFFICACY_RE。全体の約4%）と出どころの注記は出さず、先頭の limit 個まで（301章） */
+/** 商品ページに出す発言（言及）。引用に出せない言い方（isQuotable。全体の約5%）と出どころの注記は出さず、先頭の limit 個まで（301・302章） */
 export function quotableMentions(mentions: string[] | undefined, limit = 2): string[] {
-  return (mentions || []).map((m) => m.trim()).filter((m) => m && !EFFICACY_RE.test(m) && !MENTION_NOTE_RE.test(m)).slice(0, limit);
+  return (mentions || []).map((m) => m.trim()).filter((m) => m && isQuotable(m) && !MENTION_NOTE_RE.test(m)).slice(0, limit);
 }
 export const CONCERN_PER_GROUP = 10;
 export interface ConcernItem extends FeatureItem {
@@ -1585,7 +1598,7 @@ function concernIngredientIndex(): Map<string, CIPair> {
           if (pairMention) p.mentions.add(`${v.key}|${key}`);
           if (!hasLabels) continue;
           // 引用は効能を言い切らないものだけ。一緒に語られた発言（全体）→悩みに触れた節の順に探す
-          const safePair = c.mentions.find((m) => ing.pattern.test(m) && concernClause([m], cd.pattern) && !EFFICACY_RE.test(m));
+          const safePair = c.mentions.find((m) => ing.pattern.test(m) && concernClause([m], cd.pattern) && isQuotable(m));
           const quote = safePair?.trim() || quotableClause(c.mentions, cd.pattern);
           const qPair = !!safePair;
           const e = p.prods.get(key);
@@ -1933,7 +1946,7 @@ export interface CosmeticIntro {
   influence: number;
   /** この動画で、この商品を肌悩みに触れて紹介した節（228章） */
   concerns: { slug: string; name: string; quote: string }[];
-  /** この動画での発言（言及）。効能を言い切るもの（EFFICACY_RE）は出さない。先頭の2つまで（301章） */
+  /** この動画での発言（言及）。引用に出せない言い方（isQuotable）は出さない。先頭の2つまで（301・302章） */
   quotes: string[];
 }
 
