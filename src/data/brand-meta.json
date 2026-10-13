@@ -111,10 +111,12 @@
     "group": "アモーレパシフィック"
   },
   "brand-00058": {
-    "country": "US"
+    "country": "US",
+    "group": "オルヴェオン"
   },
   "brand-00446": {
-    "country": "KR"
+    "country": "KR",
+    "group": "愛敬産業"
   },
   "brand-00113": {
     "country": "US"
@@ -123,7 +125,8 @@
     "country": "JP"
   },
   "brand-00229": {
-    "country": "KR"
+    "country": "KR",
+    "group": "LG生活健康"
   },
   "brand-00054": {
     "country": "US",
@@ -348,7 +351,8 @@
     "country": "KR"
   },
   "brand-00119": {
-    "country": "US"
+    "country": "US",
+    "group": "オルヴェオン"
   },
   "brand-00221": {
     "country": "JP"
@@ -1795,7 +1799,8 @@
     "country": "JP"
   },
   "brand-01142": {
-    "country": "CN"
+    "country": "CN",
+    "group": "上海橘宜化粧品"
   },
   "brand-01114": {
     "country": "JP"
@@ -1813,7 +1818,8 @@
     "country": "KR"
   },
   "brand-01064": {
-    "country": "CN"
+    "country": "CN",
+    "group": "逸仙"
   },
   "brand-00265": {
     "country": "KR"
@@ -3596,5 +3602,17 @@
   },
   "brand-00460": {
     "country": "US"
+  },
+  "brand-00156": {
+    "country": "FR",
+    "group": "ロクシタン"
+  },
+  "brand-00525": {
+    "country": "JP",
+    "group": "マンダム"
+  },
+  "brand-01924": {
+    "group": "アモーレパシフィック",
+    "country": "KR"
   }
 }
