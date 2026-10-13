@@ -1,4 +1,5 @@
 ---
+import BrandFlag from "../../components/BrandFlag.astro";
 import Layout from "../../layouts/Layout.astro";
 import {
   getRankingPages,
@@ -99,7 +100,7 @@ const tagOf = (r: CosmeticRanking) => r.tags.find((t) => pages.get(t)?.kind === 
           </div>
           <div class="min-w-0">
             {tagOf(top10[0]) && <p class="text-[11px] text-rose">{tagOf(top10[0])}</p>}
-            <p class="mt-1 text-xs tracking-[0.12em] text-neutral-500 truncate">{top10[0].brand}</p>
+            <p class="mt-1 text-xs tracking-[0.12em] text-neutral-500 truncate"><BrandFlag brand_id={top10[0].brand_id} />{top10[0].brand}</p>
             <p class="mt-0.5 font-serif text-base md:text-xl leading-snug line-clamp-2 group-hover:text-rose transition-colors tighten">{top10[0].name}</p>
             <p class="mt-2 text-xs text-neutral-500"><span class="num-display text-sm text-ink">{top10[0].videoCount}</span>本の動画・<span class="num-display text-sm text-ink">{top10[0].channelCount}</span>人が紹介</p>
           </div>
@@ -114,7 +115,7 @@ const tagOf = (r: CosmeticRanking) => r.tags.find((t) => pages.get(t)?.kind === 
                   {img(r) ? <img src={img(r)} alt={`${r.brand} ${r.name}`} class="w-[84%] h-[84%] object-contain" loading="lazy" data-err="hide" /> : null}
                 </span>
                 <span class="min-w-0 flex-1">
-                  <span class="block text-[11px] text-neutral-500 truncate">{r.brand}<span class="text-ink/30 mx-1">/</span>{tagOf(r)}</span>
+                  <span class="block text-[11px] text-neutral-500 truncate"><BrandFlag brand_id={r.brand_id} />{r.brand}<span class="text-ink/30 mx-1">/</span>{tagOf(r)}</span>
                   <span class="block text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors">{r.name}</span>
                 </span>
                 <span class="text-xs text-neutral-500 shrink-0 whitespace-nowrap"><span class="num-display text-sm text-ink">{r.videoCount}</span>本</span>
@@ -185,8 +186,8 @@ const tagOf = (r: CosmeticRanking) => r.tags.find((t) => pages.get(t)?.kind === 
                         {img(r) ? <img src={img(r)} alt={`${r.brand} ${r.name}`} class="w-[84%] h-[84%] object-contain" loading="lazy" data-err="hide" /> : null}
                       </span>
                       <span class="min-w-0 flex-1">
-                        <span class:list={["text-[11px] text-neutral-500 truncate", k === 0 ? "block" : "hidden sm:block"]}>{r.brand}</span>
-                        <span class:list={["block text-[13px] leading-snug group-hover:text-rose transition-colors", k === 0 ? "line-clamp-2" : "truncate sm:whitespace-normal sm:line-clamp-2"]}>{k > 0 && <span class="sm:hidden text-neutral-500">{r.brand} </span>}{r.name}</span>
+                        <span class:list={["text-[11px] text-neutral-500 truncate", k === 0 ? "block" : "hidden sm:block"]}><BrandFlag brand_id={r.brand_id} />{r.brand}</span>
+                        <span class:list={["block text-[13px] leading-snug group-hover:text-rose transition-colors", k === 0 ? "line-clamp-2" : "truncate sm:whitespace-normal sm:line-clamp-2"]}>{k > 0 && <span class="sm:hidden text-neutral-500"><BrandFlag brand_id={r.brand_id} />{r.brand} </span>}{r.name}</span>
                       </span>
                     </a>
                   </li>

@@ -2187,8 +2187,13 @@ const brandMeta = brandMetaData as unknown as Record<string, BrandMeta>;
 export const COUNTRY_NAMES: Record<string, string> = {
   JP: "日本", KR: "韓国", FR: "フランス", US: "アメリカ", GB: "イギリス", IT: "イタリア",
   CA: "カナダ", DE: "ドイツ", AU: "オーストラリア", NZ: "ニュージーランド", CH: "スイス",
-  IL: "イスラエル", ZA: "南アフリカ",
+  IL: "イスラエル", ZA: "南アフリカ", CN: "中国", SE: "スウェーデン",
 };
+
+/** ブランドの国コード（別名のIDなら本家のIDでも引く）。不明は undefined。 */
+export function getBrandCountry(brand_id: string): string | undefined {
+  return brandMeta[brand_id]?.country ?? brandMeta[canonicalBrandId(brand_id)]?.country;
+}
 
 export function getBrandMeta(brand_id: string): BrandMeta {
   return brandMeta[brand_id] || {};

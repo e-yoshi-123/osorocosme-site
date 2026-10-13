@@ -2,6 +2,7 @@
 // 動画ページの「紹介されたコスメ」（284章。283章のメイクレシピの見せ方を全動画に広げた）。
 // 動画の流れ（時刻の帯）→ 部位・カテゴリごとのまとまり（メイクはレシピと同じ部位、ほかはランキングの大分類。lib/recipe.ts の VIDEO_GROUPS）。
 // 時刻の帯の点と「▶ 時刻」は a.scene-seek なので、動画ページの埋め込みがその場面から再生する（JSが無ければYouTubeの該当時刻へ）
+import BrandFlag from "./BrandFlag.astro";
 import PrBadge from "./PrBadge.astro";
 import { getVideoCosmeticGroups } from "../lib/recipe";
 import { amazonSearchUrl, formatCount, withBase, type VideoEntry } from "../lib/data";
@@ -63,7 +64,7 @@ const flowParts = parts.filter((p) => timeline.some((t) => t.p.key === p.key));
                 {x.img ? <img src={x.img} alt="" loading="lazy" data-err="noimg" /> : <span class="noimg">No image</span>}
               </a>
               <div class="rs-item-t">
-                <p class="rs-item-b">{x.brand}{x.tag && <span>{x.tag}</span>}</p>
+                <p class="rs-item-b"><BrandFlag brand_id={x.brand_id} />{x.brand}{x.tag && <span>{x.tag}</span>}</p>
                 <p class="rs-item-n"><a href={withBase(`/cosmetics/${x.slug}`)} class="phrase">{x.name}</a>{x.pr && <PrBadge class="ml-1.5 align-middle" />}</p>
                 <div class="rs-item-act">
                   {x.sec !== undefined ? (

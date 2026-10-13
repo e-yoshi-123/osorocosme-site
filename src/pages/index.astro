@@ -1,4 +1,5 @@
 ---
+import BrandFlag from "../components/BrandFlag.astro";
 import Layout from "../layouts/Layout.astro";
 import VideoCard from "../components/VideoCard.astro";
 import CosmeticTile from "../components/CosmeticTile.astro";
@@ -142,7 +143,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
               <span class="w-12 h-12 rounded-full overflow-hidden bg-white shrink-0 ring-1 ring-ink/5"><img src={heroItems[0].img} alt={`${heroItems[0].r.brand} ${heroItems[0].r.name}`} class="u-19" /></span>
               <span class="min-w-0 flex-1">
                 <span class="block label-caps text-rose">Now trending No.1</span>
-                <span class="block text-sm leading-snug truncate group-hover:text-rose transition-colors">{heroItems[0].r.brand} {heroItems[0].r.name}</span>
+                <span class="block text-sm leading-snug truncate group-hover:text-rose transition-colors"><BrandFlag brand_id={heroItems[0].r.brand_id} />{heroItems[0].r.brand} {heroItems[0].r.name}</span>
                 <span class="block text-xs text-neutral-500">直近{RECENT_DAYS}日で{heroItems[0].c?.channels ?? heroItems[0].r.channelCount}人が紹介</span>
               </span>
               <span class="shrink-0 text-rose transition-transform duration-500 group-hover:translate-x-1" aria-hidden="true">→</span>
@@ -229,7 +230,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
                   <span class="label-caps text-rose text-[11px]">st</span>
                 </span>
               </div>
-              <p class="mt-4 text-xs tracking-[0.14em] text-neutral-500">{f.top[0].tile.brand}</p>
+              <p class="mt-4 text-xs tracking-[0.14em] text-neutral-500"><BrandFlag brand_id={f.top[0].tile.brand_id} />{f.top[0].tile.brand}</p>
               <p class="mt-1 font-serif text-lg leading-snug line-clamp-2 min-h-[2lh] group-hover:text-rose transition-colors tighten">{f.top[0].tile.name}</p>
               <p class="mt-1 text-xs text-neutral-500">{f.top[0].tile.videoCount}本の動画で紹介</p>
             </a>
@@ -244,7 +245,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
                     {tile.imageSrc && <img src={tile.imageSrc} alt={`${tile.brand} ${tile.name}`} class="u-19" loading="lazy" />}
                   </span>
                   <span class="min-w-0 flex-1">
-                    <span class="block text-xs tracking-[0.12em] text-neutral-500 truncate">{tile.brand}</span>
+                    <span class="block text-xs tracking-[0.12em] text-neutral-500 truncate"><BrandFlag brand_id={tile.brand_id} />{tile.brand}</span>
                     <span class="phrase text-sm leading-snug line-clamp-2 min-h-[2lh] group-hover:text-rose transition-colors">{tile.name}</span>
                   </span>
                   <span class="text-xs text-neutral-500 shrink-0">{tile.videoCount}<span class="font-sans text-xs ml-0.5">本</span></span>

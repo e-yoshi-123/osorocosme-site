@@ -1,4 +1,5 @@
 ---
+import BrandFlag from "../components/BrandFlag.astro";
 import PageHead from "../components/PageHead.astro";
 import PageNav from "../components/PageNav.astro";
 import Layout from "../layouts/Layout.astro";
@@ -115,7 +116,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
             const meta = getBrandMeta(b.brand_id);
             return (
               <a href={withBase(`/brand/${b.brand_id}`)} class="brand-item text-sm hover:text-rose transition-colors min-w-0" data-region={getCountryRegion(b.brand_id)}>
-                <span class="block truncate">{b.name}</span>
+                <span class="block truncate"><BrandFlag brand_id={b.brand_id} />{b.name}</span>
                 {(meta.country || meta.group) && (
                   <span class="block text-xs text-neutral-500 truncate">
                     {[meta.country ? COUNTRY_NAMES[meta.country] ?? meta.country : null, meta.group].filter(Boolean).join("・")}

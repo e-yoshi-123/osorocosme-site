@@ -507,6 +507,8 @@ main .md\:sticky.bg-neutral-50\/95 {
   .card-2 { @apply text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors; }
   .card-3 { @apply inline-block rounded-full bg-blush px-2 py-0.5 text-[11px] leading-snug text-ink/80; }
   .mmenu-2 { @apply flex items-center justify-between py-4 cursor-pointer list-none [&::-webkit-details-marker]:hidden; }
+  /* ブランド名の前の小さな国旗（BrandFlag.astro） */
+  .brand-flag { display: inline-block; width: 14px; height: 10.5px; margin-right: 5px; vertical-align: -1px; border-radius: 1.5px; box-shadow: 0 0 0 0.5px rgb(0 0 0 / 0.18); object-fit: cover; }
   .tile-3 { @apply mt-3 text-xs tracking-[0.14em] text-neutral-500 truncate; }
   .intro-1 { @apply py-4 grid grid-cols-1 gap-y-2 lg:grid-cols-[7rem_15rem_minmax(0,1fr)] lg:gap-x-6 lg:items-center border-b border-ink/10; }
   .u-2 { @apply mt-1.5 text-xs text-neutral-500; }

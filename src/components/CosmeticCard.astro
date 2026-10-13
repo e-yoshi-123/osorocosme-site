@@ -1,4 +1,5 @@
 ---
+import BrandFlag from "./BrandFlag.astro";
 import { cosmeticSlug, withBase, parseRakutenImage, getCosmeticListEntry } from "../lib/data";
 import PrBadge from "./PrBadge.astro";
 
@@ -51,7 +52,7 @@ const yahooImage = rakuten ? undefined : yahooEntry;
   </div>
   <a href={withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`)} class="card-6">
     {category && <div class="mb-1.5"><span class="card-3">{category}</span></div>}
-    {showBrand && <div class="card-4">{brand}</div>}
+    {showBrand && <div class="card-4"><BrandFlag brand_id={brand_id} />{brand}</div>}
     <div class="phrase card-2">{name}</div>
     {caption && <div class="u-2">{caption}</div>}
   </a>

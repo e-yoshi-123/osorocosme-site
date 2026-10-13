@@ -1,4 +1,5 @@
 ---
+import BrandFlag from "./BrandFlag.astro";
 import { amazonSearchUrl, cosmeticSlug, formatCount, withBase } from "../lib/data";
 
 interface Props {
@@ -74,7 +75,7 @@ const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
     }
   </a>
   <a href={href} class="min-w-0 group">
-    <span class="rrow-11">{brand}</span>
+    <span class="rrow-11"><BrandFlag brand_id={brand_id} />{brand}</span>
     <span class="phrase rrow-8">{name}</span>
     {subLabel && <span class="rrow-15">{subLabel}</span>}
     {quote && <span class="block mt-1.5 text-[13px] leading-relaxed text-neutral-600 line-clamp-2">「{quote}」{quoteBy && <span class="text-neutral-500">（{quoteBy}）</span>}</span>}
