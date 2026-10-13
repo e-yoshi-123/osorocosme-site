@@ -10,7 +10,6 @@ import {
   getBrandReading,
   getCountryRegion,
   groupByKana,
-  COUNTRY_NAMES,
   withBase,
 } from "../lib/data";
 
@@ -117,11 +116,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
             return (
               <a href={withBase(`/brand/${b.brand_id}`)} class="brand-item text-sm hover:text-rose transition-colors min-w-0" data-region={getCountryRegion(b.brand_id)}>
                 <span class="block truncate"><BrandFlag brand_id={b.brand_id} />{b.name}</span>
-                {(meta.country || meta.group) && (
-                  <span class="block text-xs text-neutral-500 truncate">
-                    {[meta.country ? COUNTRY_NAMES[meta.country] ?? meta.country : null, meta.group].filter(Boolean).join("・")}
-                  </span>
-                )}
+                {meta.group && <span class="block text-xs text-neutral-500 truncate">{meta.group}</span>}
               </a>
             );
           })}
