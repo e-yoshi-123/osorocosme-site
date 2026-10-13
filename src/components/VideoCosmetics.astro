@@ -16,7 +16,7 @@ const parts = groups.map((g, i) => ({ ...g, n: i + 1 }));
 const fmt = (s: number) => (s >= 3600 ? `${Math.floor(s / 3600)}:${String(Math.floor((s % 3600) / 60)).padStart(2, "0")}` : `${Math.floor(s / 60)}`) + `:${String(s % 60).padStart(2, "0")}`;
 // 動画の流れ（時刻の帯）：動画の長さが分かり、時刻のある品があるときだけ
 const timeline = durationSec
-  ? parts.flatMap((p) => p.items.filter((x) => x.sec !== undefined && x.sec <= durationSec).map((x) => ({ x, p })))
+  ? parts.flatMap((p) => p.items.map((x, j) => ({ x, p, j })).filter(({ x }) => x.sec !== undefined && x.sec <= durationSec))
       .sort((a, b) => a.x.sec! - b.x.sec!)
   : [];
 const flowParts = parts.filter((p) => timeline.some((t) => t.p.key === p.key));
@@ -36,11 +36,12 @@ const flowParts = parts.filter((p) => timeline.some((t) => t.p.key === p.key));
     <div class="rs-flow">
       <div class="rs-bar">
         <span class="rs-bar-line" aria-hidden="true"></span>
-        {timeline.map(({ x, p }) => (
-          <a href={`https://www.youtube.com/watch?v=${v.video_id}&t=${x.sec}s`} target="_blank" rel="noopener" class:list={["scene-seek rs-seek rs-dot", x.sec! / durationSec < 0.25 && "is-l", x.sec! / durationSec > 0.75 && "is-r"]} data-seek={x.sec} style={`--t:${(x.sec! / durationSec) * 100}%;--tn:${x.sec! / durationSec};--c:${p.color}`} aria-label={`${x.time} ${p.label}：${x.brand} ${x.name}`}>
+        {timeline.map(({ x, p, j }) => (
+          <a href={`https://www.youtube.com/watch?v=${v.video_id}&t=${x.sec}s`} target="_blank" rel="noopener" class:list={["scene-seek rs-seek rs-dot", x.sec! / durationSec < 0.25 && "is-l", x.sec! / durationSec > 0.75 && "is-r"]} data-seek={x.sec} data-item={`rs-it-${p.key}-${j}`} data-time={x.time} data-name={`${x.brand} ${x.name}`} style={`--t:${(x.sec! / durationSec) * 100}%;--tn:${x.sec! / durationSec};--c:${p.color}`} aria-label={`${x.time} ${p.label}：${x.brand} ${x.name}`}>
             <span class="rs-tip"><b>{x.time}</b>{x.brand} {x.name}</span>
           </a>
         ))}
+        <div class="rs-pop" hidden><b class="rs-pop-t num-display"></b><span class="rs-pop-n"></span><a class="scene-seek rs-pop-play" href="#">▶ この場面から再生</a></div>
         <span class="rs-bar-end num-display" aria-hidden="true">0:00</span>
         <span class="rs-bar-end is-r num-display" aria-hidden="true">{fmt(durationSec)}</span>
       </div>
@@ -61,8 +62,8 @@ const flowParts = parts.filter((p) => timeline.some((t) => t.p.key === p.key));
           </div>
         </div>
         <ul class="rs-items">
-          {p.items.map((x) => (
-            <li class="rs-item">
+          {p.items.map((x, j) => (
+            <li class="rs-item" id={`rs-it-${p.key}-${j}`}>
               <a href={withBase(`/cosmetics/${x.slug}`)} class="rs-item-img product-well" tabindex="-1" aria-hidden="true">
                 {x.img ? <img src={x.img} alt="" loading="lazy" data-err="noimg" /> : <span class="noimg">No image</span>}
               </a>
@@ -92,6 +93,47 @@ const flowParts = parts.filter((p) => timeline.some((t) => t.p.key === p.key));
   </div>
 </div>
 
+<script>
+  // スマホ（縦の帯）：点を押すと、右の一覧のその商品へ移って光らせ、点の右に名前と「▶ 再生」の吹き出しを出す。
+  // 再生は吹き出しの「▶ 再生」（a.scene-seek なので動画ページの埋め込みがその場面から再生する）。PCは今までどおり押すと再生（296章）
+  const mq = matchMedia("(max-width: 767px)");
+  document.querySelectorAll<HTMLElement>(".rs-body.has-flow").forEach((body) => {
+    const bar = body.querySelector<HTMLElement>(".rs-bar");
+    const pop = body.querySelector<HTMLElement>(".rs-pop");
+    if (!bar || !pop) return;
+    const play = pop.querySelector<HTMLAnchorElement>(".rs-pop-play")!;
+    const close = () => { pop.hidden = true; bar.querySelectorAll(".rs-dot.is-on").forEach((d) => d.classList.remove("is-on")); };
+    bar.addEventListener("click", (e) => {
+      if (!mq.matches) return;
+      const dot = (e.target as HTMLElement).closest<HTMLAnchorElement>("a.rs-dot");
+      if (!dot) return;
+      e.preventDefault(); e.stopPropagation();
+      close(); dot.classList.add("is-on");
+      pop.style.top = `${dot.offsetTop}px`;
+      pop.style.setProperty("--c", dot.style.getPropertyValue("--c"));
+      pop.querySelector(".rs-pop-t")!.textContent = dot.dataset.time || "";
+      pop.querySelector(".rs-pop-n")!.textContent = dot.dataset.name || "";
+      play.href = dot.href; play.dataset.seek = dot.dataset.seek;
+      pop.hidden = false;
+      const it = document.getElementById(dot.dataset.item || "");
+      if (it) {
+        it.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+        it.classList.remove("is-hl"); void it.offsetWidth; it.classList.add("is-hl");
+      }
+    });
+    play.addEventListener("click", () => setTimeout(close, 0));
+    document.addEventListener("click", (e) => { if (!pop.hidden && !(e.target as HTMLElement).closest(".rs-pop, .rs-dot")) close(); });
+    // スクロール中は、画面の真ん中あたりに見えている商品の点を大きくする
+    const dots = new Map<string, HTMLElement>();
+    bar.querySelectorAll<HTMLElement>(".rs-dot").forEach((d) => dots.set(d.dataset.item || "", d));
+    const io = new IntersectionObserver((es) => {
+      if (!mq.matches) return;
+      es.forEach((x) => dots.get(x.target.id)?.classList.toggle("is-cur", x.isIntersecting));
+    }, { rootMargin: "-40% 0px -45% 0px" });
+    body.querySelectorAll(".rs-item[id]").forEach((it) => io.observe(it));
+  });
+</script>
+
 <style is:global>
   /* 動画の流れ */
   .rs-flow { margin-bottom: 32px; }
@@ -117,7 +159,7 @@ const flowParts = parts.filter((p) => timeline.some((t) => t.p.key === p.key));
   /* スマホ：帯を縦にして左に置く（上が 0:00、下が終わり。点の位置は動画の中の時刻の割合）。吹き出しは点の右に出す */
   @media (max-width: 767px) {
     .rs-body.has-flow { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; margin-top: 12px; }
-    .rs-body.has-flow .rs-flow { margin: 0; position: relative; }
+    .rs-body.has-flow .rs-flow { margin: 0; position: relative; z-index: 3; }
     .rs-body.has-flow .rs-bar { position: sticky; top: calc(var(--hdr-h, 64px) + 12px); height: min(calc(100vh - var(--hdr-h, 64px) - 40px), 100%); min-height: 240px; margin: 0; }
     .rs-body.has-flow .rs-flow { height: 100%; }
     .rs-body.has-flow .rs-bar-line { left: 16px; right: auto; top: 22px; bottom: 22px; width: 2px; height: auto; background: linear-gradient(180deg, #c99a82, #7a5446, #9b5579, #e47f9d, #e60076); }
@@ -128,6 +170,17 @@ const flowParts = parts.filter((p) => timeline.some((t) => t.p.key === p.key));
     .rs-body.has-flow .rs-bar-end { top: 0; left: 0; width: 34px; text-align: center; font-size: 10px; }
     .rs-body.has-flow .rs-bar-end.is-r { top: auto; bottom: 0; }
     .rs-body.has-flow .rs-flow-legend { display: none; }
+    /* 点を押したとき：吹き出し（名前と「▶ 再生」）を点の右に出し、右の一覧のその商品へ移って光らせる。スクロール中は見えている商品の点を大きくする */
+    .rs-body.has-flow .rs-dot .rs-tip { display: none !important; }
+    .rs-body.has-flow .rs-dot.is-cur { transform: translate(-50%, -50%) scale(1.5); z-index: 2; }
+    .rs-pop { position: absolute; left: 30px; z-index: 5; width: min(240px, calc(100vw - 80px)); transform: translateY(-50%); padding: 8px 12px 10px; border-radius: 12px; background: var(--color-ink); color: #fff; font-size: 12px; line-height: 1.5; box-shadow: 0 10px 24px -10px rgb(29 21 23 / .6); }
+    .rs-pop::before { content: ""; position: absolute; left: -6px; top: 50%; margin-top: -6px; border: 6px solid transparent; border-left: 0; border-right-color: var(--color-ink); }
+    .rs-pop-t { display: block; color: var(--c, #e47f9d); filter: brightness(1.4); }
+    .rs-pop-n { display: block; margin-bottom: 6px; }
+    .rs-pop-play { display: inline-flex; align-items: center; min-height: 32px; padding: 0 12px; border-radius: 999px; background: #fff; color: var(--color-ink); font-weight: 600; }
+    .rs-item.is-hl { animation: rs-hl 1.6s var(--ease-out-expo, ease-out); }
+    @keyframes rs-hl { 0%, 40% { background: color-mix(in srgb, var(--c) 18%, transparent); box-shadow: 0 0 0 2px var(--c); } 100% { background: transparent; box-shadow: 0 0 0 2px transparent; } }
+    .rs-item { border-radius: 14px; scroll-margin-top: calc(var(--hdr-h, 64px) + 80px); }
     .rs-body.has-flow .rs-step { padding: 16px 14px 6px 16px; }
     .rs-body.has-flow .rs-step-n { font-size: 34px; }
     .rs-body.has-flow .rs-item { grid-template-columns: 64px minmax(0, 1fr); gap: 10px; }
