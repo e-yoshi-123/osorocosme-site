@@ -149,9 +149,13 @@ const jsonLd = [
             <div class="grid lg:grid-cols-5 gap-4 md:gap-5 lg:grid-flow-dense">
               {g.secs.map((sec) => (
                 <div class:list={["rounded-2xl border border-ink/10 bg-paper/60 p-4 md:p-5", SPAN[Math.min(5, sec.items.length)]]}>
-                  <h3 class:list={["mb-4 flex gap-3", sec.items.length === 1 ? "items-baseline justify-between lg:flex-col lg:items-start lg:gap-1" : "items-baseline justify-between"]}>
-                    <span class:list={["font-serif font-semibold leading-snug", sec.items.length === 1 ? "text-base lg:text-[15px]" : "text-base md:text-[17px]"]}>{sec.tag}<span class="ml-1.5 text-xs font-normal text-neutral-500">{sec.items.length}品</span></span>
-                    {rankingPages.has(sec.tag) && <a href={categoryUrl(sec.tag)} class="shrink-0 text-[11px] text-neutral-500 hover:text-rose transition-colors">ランキング →</a>}
+                  {/* 見出しはどの枠も2行の同じ高さ（1行目にカテゴリ名、長ければ…で切る。2行目に品数とランキング）。横に並んだ枠の画像の段がそろうように（322章） */}
+                  <h3 class="mb-4 min-w-0">
+                    <span class="block truncate font-serif font-semibold leading-snug text-base md:text-[17px]" title={sec.tag}>{sec.tag}</span>
+                    <span class="mt-0.5 flex items-baseline gap-3 text-xs font-normal text-neutral-500">
+                      <span>{sec.items.length}品</span>
+                      {rankingPages.has(sec.tag) && <a href={categoryUrl(sec.tag)} class="text-[11px] hover:text-rose transition-colors">ランキング →</a>}
+                    </span>
                   </h3>
                   <div class:list={["grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8", COLS[Math.min(5, sec.items.length)]]}>
                     {sec.items.map((c) => (

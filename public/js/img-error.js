@@ -43,11 +43,12 @@ window.addEventListener("error", function (ev) {
   var box = img.closest("[data-yahoo-image]");
   if (box && !box.hasAttribute("data-swapped")) {
     box.setAttribute("data-swapped", "");
-    var a = document.createElement("a");
-    a.href = box.getAttribute("data-yahoo-link"); a.target = "_blank"; a.rel = "nofollow sponsored noopener";
-    var y = document.createElement("img");
-    y.src = box.getAttribute("data-yahoo-image"); y.alt = img.alt; y.loading = "lazy";
-    a.appendChild(y); box.replaceChildren(a);
+    // 画像だけをYahoo!の画像に替える（枠の中の順位の札などは残す）。リンク先は、data-yahoo-link があるとき（購入の注意書きのある商品ページ）だけYahoo!へ。
+    // 一覧のカード（CosmeticCard）は商品ページへのリンクのまま（322章）
+    var link = box.getAttribute("data-yahoo-link");
+    var pa = img.parentElement && img.parentElement.tagName === "A" ? img.parentElement : null;
+    if (link && pa) { pa.href = link; pa.target = "_blank"; pa.rel = "nofollow sponsored noopener"; }
+    img.src = box.getAttribute("data-yahoo-image");
     return;
   }
   var s = document.createElement("span");

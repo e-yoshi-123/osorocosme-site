@@ -34,21 +34,22 @@ const yahooEntry = entry?.yahoo_text_link && entry.yahoo_image_url ? entry : und
 // 楽天のHTMLはそのまま差し込まず、リンク先・画像・altだけ取り出して自前のタグで出す（276章）
 const rakuten = parseRakutenImage(rakutenImageHtml);
 const yahooImage = rakuten ? undefined : yahooEntry;
+const productHref = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
 ---
 
 <div class="group card-5">
   <div
     class="cosmetic-image-box product-well overflow-hidden card-7"
     data-yahoo-image={rakuten ? yahooEntry?.yahoo_image_url : undefined}
-    data-yahoo-link={rakuten ? yahooEntry?.yahoo_text_link : undefined}
   >
+    {/* 画像は商品ページへ（一覧には購入の注意書きが無いので、楽天・Yahoo!へは飛ばさない。購入のボタンは商品ページにある。ユーザー指摘、322章） */}
     {
       rakuten ? (
-        <a href={rakuten.href} target="_blank" rel="nofollow sponsored noopener">
+        <a href={productHref} tabindex="-1" aria-hidden="true">
           <img src={rakuten.src} alt={rakuten.alt || `${brand} ${name}`} width="240" height="240" loading="lazy" />
         </a>
       ) : yahooImage ? (
-        <a href={yahooImage.yahoo_text_link} target="_blank" rel="nofollow sponsored noopener">
+        <a href={productHref} tabindex="-1" aria-hidden="true">
           <img src={yahooImage.yahoo_image_url} alt={`${brand} ${name}`} width="240" height="240" loading="lazy" />
         </a>
       ) : (
@@ -62,7 +63,7 @@ const yahooImage = rakuten ? undefined : yahooEntry;
     )}
     {pr && <PrBadge tone="solid" own={own} class="absolute top-2 left-2 pointer-events-none" />}
   </div>
-  <a href={withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`)} class="card-6">
+  <a href={productHref} class="card-6">
     {category && <div class="mb-1.5"><span class="card-3">{category}</span></div>}
     {showBrand && <div class="card-4"><BrandFlag brand_id={brand_id} />{brand}</div>}
     <div class="phrase card-2">{name}</div>
