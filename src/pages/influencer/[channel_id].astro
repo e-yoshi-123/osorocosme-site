@@ -34,6 +34,8 @@ import {
   getOwnProducts,
   getBrandName,
   cosmeticCategory,
+  getInfluencerCategorySections,
+  type InfluencerCategoryPick,
 } from "../../lib/data";
 
 export function getStaticPaths() {
@@ -102,11 +104,23 @@ const ownProducts = influencer
       return { ...c, slug: cosmeticSlug(c.brand_id, c.name_id), price: offer.price, fromYahoo: offer.source === "yahoo", rakutenLink: offer.rakutenLink, yahooLink: entry?.yahoo_text_link || undefined };
     })
   : [];
+// カテゴリ別の愛用コスメ（「人名＋カテゴリ」の検索への答え。大分類ごとに本数の多い順に6品まで。2品以上ある大分類だけ）
+function withOffer(c: InfluencerCategoryPick) {
+  const entry = getCosmeticListEntry(c.brand_id, c.name_id);
+  const offer = productOffer(entry);
+  return { ...c, slug: cosmeticSlug(c.brand_id, c.name_id), price: offer.price, fromYahoo: offer.source === "yahoo", rakutenLink: offer.rakutenLink, yahooLink: entry?.yahoo_text_link || undefined };
+}
+const categorySections = getInfluencerCategorySections(channel_id!).map((sec) => ({
+  ...sec,
+  items: sec.items.map(withOffer),
+  subs: sec.subs?.map((sub) => ({ ...sub, items: sub.items.map(withOffer) })),
+}));
+const showCategories = categorySections.length > 0;
 // 節の番号（プロデュースしたコスメ・よく紹介しているコスメは、ある人だけ）
 const secNums = (() => {
   let n = 0;
   const next = () => String(++n).padStart(2, "0");
-  return { own: ownProducts.length > 0 ? next() : "", top: showTop ? next() : "", history: next(), videos: next() };
+  return { own: ownProducts.length > 0 ? next() : "", top: showTop ? next() : "", cat: showCategories ? next() : "", history: next(), videos: next() };
 })();
 const repeatCount = topCosmetics.filter((c) => c.repeat).length;
 const description = influencer
@@ -244,6 +258,100 @@ const jsonLd = influencer
               ))}
             </ul>
             <p class="mt-5 text-xs text-neutral-500">PR：リンク先での購入により、当サイトに報酬が支払われることがあります。</p>
+          </section>
+        )}
+
+        {showCategories && influencer && (
+          <section class="panel u-14">
+            <SectionHead
+              num={secNums.cat}
+              en="By category"
+              title="カテゴリ別の愛用コスメ"
+              lead={`${influencer.channel_title}が紹介したコスメを、カテゴリごとに紹介した動画の本数の多い順に並べています。品数の多いカテゴリは、細かいカテゴリに分けています（PR・提供の紹介は数えていません）。`}
+            />
+            {categorySections.length > 1 && (
+              <p class="mb-8 flex flex-wrap gap-1.5 text-xs">
+                {categorySections.map((sec) => <a href={`#cat-${encodeURIComponent(sec.group)}`} class="item-4">{sec.group}<span class="ml-1 opacity-60">{sec.total}</span></a>)}
+              </p>
+            )}
+            <div class="space-y-12">
+              {categorySections.map((sec) => (
+                <div id={`cat-${encodeURIComponent(sec.group)}`} class="scroll-mt-28">
+                  <h3 class="mb-5">
+                    {sec.en && <span class="block label-caps text-rose text-[10px] mb-1">{sec.en}</span>}
+                    <span class="text-[17px] font-bold">{influencer.channel_title}の{sec.group}</span>
+                    <span class="ml-2 text-xs text-neutral-500 whitespace-nowrap">{sec.total}品{!sec.subs && sec.total > sec.items.length ? `（上位${sec.items.length}品）` : ""}</span>
+                  </h3>
+                  {sec.subs ? (
+                    <div class="space-y-8">
+                      {sec.subs.map((sub) => (
+                        <div>
+                          <h4 class="mb-4 text-sm font-semibold">{influencer.channel_title}の{sub.tag}<span class="ml-2 text-xs font-normal text-neutral-500 whitespace-nowrap">{sub.total}品{sub.total > sub.items.length ? `（上位${sub.items.length}品）` : ""}</span></h4>
+                          <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-4">
+                            {sub.items.map((c) => (
+                              <li class="min-w-0 group flex gap-3 items-start">
+                        <a href={withBase(`/cosmetics/${c.slug}`)} class="product-well overflow-hidden tile-4 !w-20 !h-20 shrink-0" tabindex="-1" aria-hidden="true">
+                          {c.imageSrc ? <img src={c.imageSrc} alt="" class="tile-1" loading="lazy" data-err="noimg" /> : <span class="noimg">No image</span>}
+                        </a>
+                        <div class="min-w-0 flex-1">
+                        <a href={withBase(`/cosmetics/${c.slug}`)} class="block">
+                          <p class="tile-3"><BrandFlag brand_id={c.brand_id} />{c.brand}</p>
+                          <p class="phrase tile-name mt-1">{c.name}</p>
+                        </a>
+                        <p class="u-2 flex flex-wrap items-center gap-x-2 gap-y-1">
+                          <span class="text-neutral-500">{c.tag}</span>
+                          <span>{c.videoCount}本で紹介</span>
+                          {c.repeat && <span class="inline-flex items-center rounded-full border border-rose text-rose px-1.5 py-[2px] leading-none font-semibold">リピート</span>}
+                        </p>
+                        <p class="tc-act">
+                          {c.price !== undefined && <span class="num-display tc-price" title={c.fromYahoo ? "Yahoo!ショッピングの参考価格" : "楽天市場の参考価格"}>¥{formatCount(c.price)}</span>}
+                          <span class="tc-shops">
+                            {c.rakutenLink && <a href={c.rakutenLink} target="_blank" rel="nofollow sponsored noopener" title="楽天市場で見る">楽天</a>}
+                            {c.yahooLink && <a href={c.yahooLink} target="_blank" rel="nofollow sponsored noopener" title="Yahoo!ショッピングで見る">Yahoo!</a>}
+                            <a href={amazonSearchUrl(c.brand, c.name)} target="_blank" rel="nofollow sponsored noopener" title="Amazonで探す（検索結果）">Amazon</a>
+                          </span>
+                        </p>
+                        </div>
+                      </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <ul class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-4 sm:gap-y-8">
+                      {sec.items.map((c) => (
+                        <li class="min-w-0 group flex gap-3 items-start sm:block">
+                        <a href={withBase(`/cosmetics/${c.slug}`)} class="product-well overflow-hidden tile-4 !w-20 !h-20 shrink-0 sm:!w-full sm:!h-auto" tabindex="-1" aria-hidden="true">
+                          {c.imageSrc ? <img src={c.imageSrc} alt="" class="tile-1" loading="lazy" data-err="noimg" /> : <span class="noimg">No image</span>}
+                        </a>
+                        <div class="min-w-0 flex-1">
+                        <a href={withBase(`/cosmetics/${c.slug}`)} class="block">
+                          <p class="tile-3"><BrandFlag brand_id={c.brand_id} />{c.brand}</p>
+                          <p class="phrase tile-name mt-1">{c.name}</p>
+                        </a>
+                        <p class="u-2 flex flex-wrap items-center gap-x-2 gap-y-1">
+                          <span class="text-neutral-500">{c.tag}</span>
+                          <span>{c.videoCount}本で紹介</span>
+                          {c.repeat && <span class="inline-flex items-center rounded-full border border-rose text-rose px-1.5 py-[2px] leading-none font-semibold">リピート</span>}
+                        </p>
+                        <p class="tc-act">
+                          {c.price !== undefined && <span class="num-display tc-price" title={c.fromYahoo ? "Yahoo!ショッピングの参考価格" : "楽天市場の参考価格"}>¥{formatCount(c.price)}</span>}
+                          <span class="tc-shops">
+                            {c.rakutenLink && <a href={c.rakutenLink} target="_blank" rel="nofollow sponsored noopener" title="楽天市場で見る">楽天</a>}
+                            {c.yahooLink && <a href={c.yahooLink} target="_blank" rel="nofollow sponsored noopener" title="Yahoo!ショッピングで見る">Yahoo!</a>}
+                            <a href={amazonSearchUrl(c.brand, c.name)} target="_blank" rel="nofollow sponsored noopener" title="Amazonで探す（検索結果）">Amazon</a>
+                          </span>
+                        </p>
+                        </div>
+                      </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </div>
+            <p class="mt-8 text-xs text-neutral-500">PR：リンク先での購入により、当サイトに報酬が支払われることがあります。</p>
           </section>
         )}
 

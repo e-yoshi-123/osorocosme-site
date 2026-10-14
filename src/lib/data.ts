@@ -778,6 +778,54 @@ export function getInfluencerHighlights(channel_id: string, videoLimit = 3, cosm
   return { latestVideos: videos.slice(0, videoLimit), topCosmetics, topTags };
 }
 
+/** 人のページの「カテゴリ別の愛用コスメ」（7の検索の需要：「人名＋カテゴリ」の検索に、人のページの中の見出しと一覧で答える）。
+ * 大分類（ランキングと同じ）ごとに、その人が紹介した商品を本数の多い順に。PR・提供の紹介は数えない。2品以上ある大分類だけ */
+export interface InfluencerCategoryPick extends InfluencerTopCosmetic { tag: string }
+export interface InfluencerCategorySub { tag: string; total: number; items: InfluencerCategoryPick[] }
+/** 品数の多い大分類（splitOver品を超える）は、細かいカテゴリごとの小見出し（subs）に分ける（「かずのすけ 化粧水」のような検索に合わせる） */
+export interface InfluencerCategorySection { group: string; en: string; total: number; items: InfluencerCategoryPick[]; subs?: InfluencerCategorySub[] }
+export function getInfluencerCategorySections(channel_id: string, perGroup = 6, minItems = 2, splitOver = 12, perSub = 4, maxSubs = 6): InfluencerCategorySection[] {
+  const groupOf = new Map<string, string>(RANKING_CATEGORY_GROUPS.flatMap((g) => g.tags.map((t) => [t, g.group] as [string, string])));
+  const byKey = new Map<string, InfluencerCategoryPick & { group: string }>();
+  for (const v of getVideosByChannel(channel_id)) {
+    const seen = new Set<string>();
+    for (const c of v.cosmetics || []) {
+      if (!c.brand_id || !c.name_id || !c.brand || !c.name) continue;
+      if (isPrMention(v.key, c.brand_id, c.name_id)) continue;
+      const key = `${c.brand_id}_${c.name_id}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const cur = byKey.get(key);
+      if (cur) { cur.videoCount += 1; continue; }
+      const tag = cosmeticCategory(c);
+      const group = tag ? groupOf.get(tag) : undefined;
+      if (!tag || !group) continue;
+      const entry = getCosmeticListEntry(c.brand_id, c.name_id);
+      byKey.set(key, { brand_id: c.brand_id, brand: c.brand, name_id: c.name_id, name: c.name, imageSrc: productImageSrc(entry, c.rakuten_image_link) || "", videoCount: 1, repeat: false, tag, group });
+    }
+  }
+  const all = getCosmeticVideoCounts();
+  const pick = (list: (InfluencerCategoryPick & { group: string })[], n: number) =>
+    list
+      .sort((a, b) => b.videoCount - a.videoCount || Number(!!b.imageSrc) - Number(!!a.imageSrc) || (all.get(`${b.brand_id}_${b.name_id}`) ?? 0) - (all.get(`${a.brand_id}_${a.name_id}`) ?? 0))
+      .slice(0, n)
+      .map(({ group: _g, ...x }) => ({ ...x, repeat: getRepeatUsers(x.brand_id, x.name_id).some((u) => u.channel_id === channel_id) }));
+  return RANKING_CATEGORY_GROUPS.map((g) => {
+    const list = [...byKey.values()].filter((x) => x.group === g.group);
+    if (list.length > splitOver) {
+      // 細かいカテゴリ（2品以上）を品数の多い順に。並びはランキングの大分類の中の順ではなく品数の順
+      const subs = g.tags
+        .map((tag) => ({ tag, list: list.filter((x) => x.tag === tag) }))
+        .filter((x) => x.list.length >= minItems)
+        .sort((a, b) => b.list.length - a.list.length)
+        .slice(0, maxSubs)
+        .map((x) => ({ tag: x.tag, total: x.list.length, items: pick(x.list, perSub) }));
+      if (subs.length >= 2) return { group: g.group, en: GROUP_EN[g.group] || "", total: list.length, items: [], subs };
+    }
+    return { group: g.group, en: GROUP_EN[g.group] || "", total: list.length, items: pick(list, perGroup) };
+  }).filter((s) => s.total >= minItems);
+}
+
 /** ブランドの読み仮名（英字・漢字の名前のブランド用。カナ始まりの名前には無い）。 */
 export function getBrandReading(brand_id: string): string | undefined {
   return (brandReadings as Record<string, string>)[brand_id];
