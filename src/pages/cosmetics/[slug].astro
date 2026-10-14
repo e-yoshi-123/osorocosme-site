@@ -412,15 +412,19 @@ const jsonLd = entry
             <SectionHead en="Colors" title="色のバリエーション" lead={`${official.colors.length}色（メーカー公式サイトの掲載${official.colors.length > COLORS_SHOWN && colorMentioned > 0 ? "。動画で紹介された色を先に並べています" : ""}）。${colorMentioned > 0 ? "「動画で紹介」は、紹介の中でその色の名前・番号に触れた動画の本数で、押すとその動画が開きます。" : ""}限定色や販売を終えた色が含まれることがあります。`} />
             <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 grid-flow-dense gap-x-6 items-start text-sm">
               {colorsShown.map((c, k) => (
-                <li id={`color-${c.idx}`} class:list={["border-b border-ink/10 scroll-mt-28 has-[details[open]]:col-span-full", k >= COLORS_SHOWN && "hidden"]} data-color-extra={k >= COLORS_SHOWN ? "" : undefined}>
+                <li id={`color-${c.idx}`} class:list={["border-b border-ink/10 scroll-mt-28 has-[details[open]]:col-span-full has-[details[open]]:my-3 has-[details[open]]:border-b-0", k >= COLORS_SHOWN && "hidden"]} data-color-extra={k >= COLORS_SHOWN ? "" : undefined}>
                   {c.videos.length > 0 ? (
                     /* 動画で紹介された色は、押すとその色を紹介した動画の一覧が開く */
-                    <details class="group">
-                      <summary class="flex items-baseline justify-between gap-3 py-2 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-                        <span class="text-neutral-800 [overflow-wrap:anywhere]">{c.label}</span>
-                        <span class="shrink-0 inline-flex items-center gap-1 text-xs text-rose"><span class="w-1.5 h-1.5 rounded-full bg-rose" aria-hidden="true" />動画で紹介 {c.videoCount}本<span class="transition-transform group-open:rotate-180" aria-hidden="true">▾</span></span>
+                    /* 閉じているとき：行に枠線のボタン。開いているとき：薄い色の面と左の線でひとかたまりにし、見出しの行とボタンを塗る */
+                    <details class="group rounded-2xl open:bg-[color-mix(in_srgb,var(--color-rose)_6%,white)] open:shadow-[inset_3px_0_0_var(--color-rose)] open:px-4 md:open:px-5">
+                      <summary class="flex items-center justify-between gap-3 py-2 group-open:py-3 cursor-pointer list-none [&::-webkit-details-marker]:hidden group-open:border-b group-open:border-rose/15">
+                        <span class="text-neutral-800 [overflow-wrap:anywhere] group-open:font-semibold group-open:text-rose">{c.label}</span>
+                        <span class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-rose/50 px-2.5 py-0.5 text-xs text-rose transition-colors hover:bg-rose/10 group-open:bg-rose group-open:border-rose group-open:text-white">
+                          動画で紹介 {c.videoCount}本
+                          <svg viewBox="0 0 10 6" class="w-2.5 h-1.5 transition-transform group-open:rotate-180" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                        </span>
                       </summary>
-                      <ul class="pb-4 pt-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
+                      <ul class="pb-5 pt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
                         {c.videos.map((v) => (
                           <li>
                             <a href={withBase(`/video/${v.key}`)} class="group/v flex gap-3 items-start">
