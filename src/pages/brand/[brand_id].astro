@@ -4,7 +4,7 @@ import PageHead from "../../components/PageHead.astro";
 import Layout from "../../layouts/Layout.astro";
 import ShareButtons from "../../components/ShareButtons.astro";
 import CosmeticCard from "../../components/CosmeticCard.astro";
-import { GROUP_EN, categoryUrl, getBrandProducers, getBrandsWithVideos, getAliasRedirects, getBrandName, getCosmeticsForBrand, breadcrumbLd, getBrandMeta, getBrandGroups, getBrandCosmeticsByCategory, getBrandTopCosmetics, getCosmeticVideoCounts, COUNTRY_NAMES, withBase, cosmeticSlug, formatCount } from "../../lib/data";
+import { GROUP_EN, categoryUrl, getRankingPages, getBrandProducers, getBrandsWithVideos, getAliasRedirects, getBrandName, getCosmeticsForBrand, breadcrumbLd, getBrandMeta, getBrandGroups, getBrandCosmeticsByCategory, getBrandTopCosmetics, getCosmeticVideoCounts, COUNTRY_NAMES, withBase, cosmeticSlug, formatCount } from "../../lib/data";
 
 export function getStaticPaths() {
   return [
@@ -35,6 +35,14 @@ const brandGroups = Array.from(new Set(sections.map((s) => s.group))).map((group
   };
 });
 const n2 = (n: number) => String(n).padStart(2, "0");
+// 細かいカテゴリのランキングでの順位（ランキングのページと同じ表。PR・提供だけの商品は載らないので順位なし。ユーザー依頼、322章）
+const rankingPages = getRankingPages();
+const RANK_SHOWN = 50; // ranking/[tag].astro の MAX と同じ
+const rankIn = (tag: string, c: { brand_id: string; name_id: string }) => {
+  const list = rankingPages.get(tag)?.list;
+  const r = list ? list.findIndex((x) => x.brand_id === c.brand_id && x.name_id === c.name_id) + 1 : 0;
+  return r <= RANK_SHOWN ? r : 0; // ランキングのページに載る範囲（上位50位）だけ。押した先で見つからない順位は出さない
+};
 // 区切りの幅（PCの5列の格子で何列ぶんか）と、中の商品の列数。Tailwindが拾えるよう、クラス名をそのまま書く
 const SPAN: Record<number, string> = { 1: "lg:col-span-1", 2: "lg:col-span-2", 3: "lg:col-span-3", 4: "lg:col-span-4", 5: "lg:col-span-5" };
 const COLS: Record<number, string> = { 1: "lg:grid-cols-1", 2: "lg:grid-cols-2", 3: "lg:grid-cols-3", 4: "lg:grid-cols-4", 5: "lg:grid-cols-5" };
@@ -145,7 +153,7 @@ const jsonLd = [
                 <div class:list={["rounded-2xl border border-ink/10 bg-paper/60 p-4 md:p-5", SPAN[Math.min(5, sec.items.length)]]}>
                   <h3 class:list={["mb-4 flex gap-3", sec.items.length === 1 ? "items-baseline justify-between lg:flex-col lg:items-start lg:gap-1" : "items-baseline justify-between"]}>
                     <span class:list={["font-serif font-semibold leading-snug", sec.items.length === 1 ? "text-base lg:text-[15px]" : "text-base md:text-[17px]"]}>{sec.tag}<span class="ml-1.5 text-xs font-normal text-neutral-500">{sec.items.length}品</span></span>
-                    {sec.tag !== "その他" && <a href={categoryUrl(sec.tag)} class="shrink-0 text-[11px] text-neutral-500 hover:text-rose transition-colors">ランキング →</a>}
+                    {rankingPages.has(sec.tag) && <a href={categoryUrl(sec.tag)} class="shrink-0 text-[11px] text-neutral-500 hover:text-rose transition-colors">ランキング →</a>}
                   </h3>
                   <div class:list={["grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8", COLS[Math.min(5, sec.items.length)]]}>
                     {sec.items.map((c) => (
@@ -156,6 +164,8 @@ const jsonLd = [
                         name={c.name}
                         rakutenImageHtml={c.rakuten_image_link}
                         showBrand={false}
+                        rank={rankIn(sec.tag, c)}
+                        rankLabel={`${sec.tag}ランキング`}
                         caption={`${countOf(c)}本の動画で紹介`}
                       />
                     ))}
