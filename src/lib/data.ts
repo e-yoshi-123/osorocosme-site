@@ -1571,7 +1571,8 @@ export function getIngredientsOfCosmetic(brand_id: string, name_id: string): { d
 /** メーカー公式の定価・色・発売日・限定・製造終了（backend/scripts/product_facts/export_site.py が書く。出し方は決定事項 2026-10-14） */
 interface OfficialColorRaw { label: string; code?: string; words?: string[] }
 interface OfficialFactsRaw { price?: number; colors?: OfficialColorRaw[]; release?: string; limited?: boolean; eom?: boolean; url?: string }
-export interface OfficialColor { label: string; videoCount: number }
+export interface OfficialColorVideo { key: string; title: string; channel_title: string; thumbnail: string; published_at: string; quote?: string }
+export interface OfficialColor { label: string; videoCount: number; videos: OfficialColorVideo[] }
 export interface OfficialFacts { price?: number; colors: OfficialColor[]; release?: string; limited: boolean; eom: boolean; url?: string }
 const officialFacts = officialFactsData as Record<string, OfficialFactsRaw>;
 const escRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -1595,25 +1596,27 @@ export function getOfficialFacts(brand_id: string, name_id: string): OfficialFac
   const raw = officialFacts[`${brand_id}_${name_id}`];
   if (!raw) return undefined;
   const colors = raw.colors || [];
-  const counts = colors.map(() => 0);
+  const found: OfficialColorVideo[][] = colors.map(() => []);
   if (colors.length) {
     const matchers = colors.map(colorMatcher);
-    for (const v of getVideosUsingCosmetic(brand_id, name_id)) {
-      const text = (v.cosmetics || [])
-        .filter((c) => c.brand_id === brand_id && c.name_id === name_id)
-        .flatMap((c) => c.mentions || [])
-        .join(" ")
-        .normalize("NFKC")
-        .replace(/\s+/g, "");
+    for (const v of sortByPublishedDesc(getVideosUsingCosmetic(brand_id, name_id))) {
+      const mentions = (v.cosmetics || []).filter((c) => c.brand_id === brand_id && c.name_id === name_id).flatMap((c) => c.mentions || []);
+      const flat = (m: string) => m.normalize("NFKC").replace(/\s+/g, "");
+      const text = mentions.map(flat).join(" ");
       if (!text) continue;
       let hit = colors.map((_, i) => !!matchers[i]?.(text));
       hit = hit.map((h, i) => h && !colors.some((o, j) => j !== i && hit[j] && (o.words?.[0] || "").length > (colors[i].words?.[0] || "").length && (o.words?.[0] || "").includes(colors[i].words?.[0] || "\0")));
-      hit.forEach((h, i) => h && counts[i]++);
+      hit.forEach((h, i) => {
+        if (!h) return;
+        // その色に触れた発言（無ければ出さない）
+        const quote = mentions.find((m) => matchers[i]!(flat(m)))?.trim();
+        found[i].push({ key: v.key, title: v.title, channel_title: v.channel_title, thumbnail: v.thumbnail, published_at: v.published_at, quote });
+      });
     }
   }
   return {
     price: raw.price,
-    colors: colors.map((c, i) => ({ label: c.label, videoCount: counts[i] })),
+    colors: colors.map((c, i) => ({ label: c.label, videoCount: found[i].length, videos: found[i] })),
     release: raw.release,
     limited: !!raw.limited,
     eom: !!raw.eom,

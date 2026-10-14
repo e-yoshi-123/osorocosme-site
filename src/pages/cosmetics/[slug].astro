@@ -409,12 +409,35 @@ const jsonLd = entry
 
         {official && official.colors.length > 0 && (
           <section id="colors" class="panel u-14">
-            <SectionHead en="Colors" title="色のバリエーション" lead={`${official.colors.length}色（メーカー公式サイトの掲載${official.colors.length > COLORS_SHOWN && colorMentioned > 0 ? "。動画で紹介された色を先に並べています" : ""}）。${colorMentioned > 0 ? "「動画で紹介」は、紹介の中でその色の名前・番号に触れた動画の本数です。" : ""}限定色や販売を終えた色が含まれることがあります。`} />
-            <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 text-sm">
+            <SectionHead en="Colors" title="色のバリエーション" lead={`${official.colors.length}色（メーカー公式サイトの掲載${official.colors.length > COLORS_SHOWN && colorMentioned > 0 ? "。動画で紹介された色を先に並べています" : ""}）。${colorMentioned > 0 ? "「動画で紹介」は、紹介の中でその色の名前・番号に触れた動画の本数で、押すとその動画が開きます。" : ""}限定色や販売を終えた色が含まれることがあります。`} />
+            <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 items-start text-sm">
               {colorsShown.map((c, k) => (
-                <li class:list={["flex items-baseline justify-between gap-3 py-2 border-b border-ink/10", k >= COLORS_SHOWN && "hidden"]} data-color-extra={k >= COLORS_SHOWN ? "" : undefined}>
-                  <span class="text-neutral-800 [overflow-wrap:anywhere]">{c.label}</span>
-                  {c.videoCount > 0 && <span class="shrink-0 inline-flex items-center gap-1 text-xs text-rose"><span class="w-1.5 h-1.5 rounded-full bg-rose" aria-hidden="true" />動画で紹介 {c.videoCount}本</span>}
+                <li class:list={["border-b border-ink/10", k >= COLORS_SHOWN && "hidden"]} data-color-extra={k >= COLORS_SHOWN ? "" : undefined}>
+                  {c.videos.length > 0 ? (
+                    /* 動画で紹介された色は、押すとその色を紹介した動画の一覧が開く */
+                    <details class="group">
+                      <summary class="flex items-baseline justify-between gap-3 py-2 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                        <span class="text-neutral-800 [overflow-wrap:anywhere]">{c.label}</span>
+                        <span class="shrink-0 inline-flex items-center gap-1 text-xs text-rose"><span class="w-1.5 h-1.5 rounded-full bg-rose" aria-hidden="true" />動画で紹介 {c.videoCount}本<span class="transition-transform group-open:rotate-180" aria-hidden="true">▾</span></span>
+                      </summary>
+                      <ul class="pb-3 space-y-3">
+                        {c.videos.map((v) => (
+                          <li>
+                            <a href={withBase(`/video/${v.key}`)} class="group/v flex gap-3 items-start">
+                              {v.thumbnail && <img src={v.thumbnail} alt="" width="96" height="54" class="w-24 aspect-video shrink-0 rounded object-cover" loading="lazy" />}
+                              <span class="min-w-0 text-xs leading-relaxed">
+                                <span class="block text-neutral-800 line-clamp-2 group-hover/v:text-rose">{v.title}</span>
+                                <span class="block text-neutral-500">{v.channel_title}・{formatJaDate(v.published_at)}</span>
+                              </span>
+                            </a>
+                            {v.quote && <p class="mt-1 text-xs text-neutral-600 [overflow-wrap:anywhere]">「{v.quote}」</p>}
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  ) : (
+                    <div class="py-2 text-neutral-800 [overflow-wrap:anywhere]">{c.label}</div>
+                  )}
                 </li>
               ))}
             </ul>
