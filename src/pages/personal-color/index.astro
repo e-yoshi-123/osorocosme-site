@@ -12,6 +12,7 @@ const list = getPublishedPersonalColors().map((d) => getPersonalColor(d.slug)!);
   description="イエベ春・ブルベ夏・ブルベ冬など、パーソナルカラーを本人が話しているYouTuber・インフルエンサーと、その人たちが紹介したリップ・アイシャドウ・チークなどを、パーソナルカラーごとにまとめています。"
 >
   <PageHead en="Personal color" title="パーソナルカラーから探す" lead="自分と同じパーソナルカラーのインフルエンサーと、その人たちが実際に使っているメイクのコスメを集めました。パーソナルカラーは、本人が動画・概要欄・タイトルで話しているものだけを使っています。" />
+  <a href={withBase("/personal-color/check/")} class="mb-8 inline-flex items-center gap-2 rounded-full border border-rose/40 bg-white px-4 py-2 text-sm text-rose hover:bg-rose hover:text-white transition-colors">自分のパーソナルカラーが分からない人は、パーソナルカラー自己診断へ →</a>
   <ul class="panel !py-2 md:!py-4 [&>li:last-child>a]:border-b-0">
     {
       list.map((c) => (

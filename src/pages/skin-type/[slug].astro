@@ -98,6 +98,7 @@ const jsonLd = [
   <nav class="mb-8 flex flex-wrap gap-2 text-sm" aria-label="このページの中">
     <a href="#people" class="chip">インフルエンサー（{c.people.length}人）</a>
     <a href="#cosme" class="chip">スキンケア・ベースメイク（{total}品）</a>
+    <a href={withBase("/skin-type/check/")} class="chip border-rose/40 text-rose">自分が分からない人は肌質自己診断 →</a>
   </nav>
 
   <section id="people" class="panel mb-8 md:mb-10 scroll-mt-24" aria-labelledby="pc-people">

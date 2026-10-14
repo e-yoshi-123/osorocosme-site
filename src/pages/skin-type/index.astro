@@ -12,6 +12,7 @@ const list = getPublishedSkinTypes().map((d) => getSkinType(d.slug)!);
   description="乾燥肌・敏感肌・インナードライ・混合肌など、肌質を本人が話しているYouTuber・インフルエンサーと、その人たちが紹介したスキンケアとベースメイクを、肌質ごとにまとめています。"
 >
   <PageHead en="Skin type" title="肌質から探す" lead="自分と同じ肌質のインフルエンサーと、その人たちが実際に使っているスキンケアとベースメイクを集めました。肌質は、本人が動画・概要欄・タイトルで話しているものだけを使っています。" />
+  <a href={withBase("/skin-type/check/")} class="mb-8 inline-flex items-center gap-2 rounded-full border border-rose/40 bg-white px-4 py-2 text-sm text-rose hover:bg-rose hover:text-white transition-colors">自分の肌質が分からない人は、肌質自己診断へ →</a>
   <ul class="panel !py-2 md:!py-4 [&>li:last-child>a]:border-b-0">
     {
       list.map((c) => (

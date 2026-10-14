@@ -1952,9 +1952,12 @@ export function getExploreEntries(): ExploreEntry[] {
     const long = d.base === "イエベ" ? "イエローベース" : "ブルーベース";
     out.push({ kind: "パーソナルカラー", label: d.name, path: `/personal-color/${encodeURIComponent(d.slug)}/`, words: [d.name, long + (d.season ?? ""), "パーソナルカラー"], count: c.itemCount });
   }
+  // 自己診断（314章）：パーソナルカラー・肌質の項目の最後に並ぶ
+  if (getPublishedPersonalColors().length) out.push({ kind: "パーソナルカラー", label: "自己診断", path: "/personal-color/check/", words: ["パーソナルカラー診断", "イエベブルベ診断", "イエベ診断", "ブルベ診断", "診断"], count: 0 });
   for (const d of getPublishedSkinTypes()) {
     out.push({ kind: "肌質", label: d.name, path: `/skin-type/${encodeURIComponent(d.slug)}/`, words: [d.name, "肌質"], count: getSkinType(d.slug)!.itemCount });
   }
+  if (getPublishedSkinTypes().length) out.push({ kind: "肌質", label: "自己診断", path: "/skin-type/check/", words: ["肌質診断", "乾燥肌診断", "インナードライ診断", "診断"], count: 0 });
   for (const [tag, page] of getRankingPages()) {
     out.push({ kind: "ランキング", label: tag, path: `/ranking/${encodeURIComponent(tag)}/`, words: [tag, ...tag.split(/[・()（）]/)].filter((w) => w.length >= 2), count: page.list.length });
   }

@@ -54,6 +54,8 @@ export const GET: APIRoute = ({ site }) => {
     ...getPublishedFeatures().map((f) => ({ path: `/feature/${f.slug}/`, lastmod: siteNewest })),
     { path: "/personal-color/", lastmod: siteNewest },
     ...getPublishedPersonalColors().map((d) => ({ path: `/personal-color/${encodeURIComponent(d.slug)}/`, lastmod: siteNewest })),
+    { path: "/personal-color/check/", lastmod: siteNewest },
+    { path: "/skin-type/check/", lastmod: siteNewest },
     { path: "/skin-type/", lastmod: siteNewest },
     ...getPublishedSkinTypes().map((d) => ({ path: `/skin-type/${encodeURIComponent(d.slug)}/`, lastmod: siteNewest })),
     { path: "/concern/", lastmod: siteNewest },

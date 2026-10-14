@@ -1,0 +1,184 @@
+---
+// パーソナルカラーの自己診断（314章）。1問ずつ答えて、①イエベかブルベか ②季節 を出す。回答はブラウザの中だけで、どこにも送らない。
+// 結果から、同じパーソナルカラーのインフルエンサーと愛用コスメのページ（/personal-color/<色>/）と、マイコスメへの設定につなぐ。
+// 質問は一般的な見分け方（血管の色・アクセサリー・日焼け・白い紙・似合う口紅、瞳・質感・色・印象）をもとにした自前の文。あくまで目安
+import Layout from "../../layouts/Layout.astro";
+import PageHead from "../../components/PageHead.astro";
+import { getPublishedPersonalColors, getPersonalColor, personalColorSwatch, withBase, breadcrumbLd } from "../../lib/data";
+
+type Opt = { label: string; v?: "Y" | "B" | "S" | "A" | "U" | "W" };
+const BASE_Q: { q: string; opts: Opt[] }[] = [
+  { q: "手首の内側の血管は、何色に見えますか？", opts: [{ label: "緑っぽい", v: "Y" }, { label: "青・紫っぽい", v: "B" }, { label: "わからない" }] },
+  { q: "似合うと言われるのは、どちらのアクセサリー？", opts: [{ label: "ゴールド", v: "Y" }, { label: "シルバー", v: "B" }, { label: "どちらとも言えない" }] },
+  { q: "日焼けをすると、肌はどうなりやすい？", opts: [{ label: "小麦色になりやすい", v: "Y" }, { label: "赤くなって、すぐ白に戻る", v: "B" }, { label: "わからない" }] },
+  { q: "白い紙を顔の横に当てると、肌の色は？", opts: [{ label: "黄み・オレンジみがある", v: "Y" }, { label: "ピンクみ・青白さがある", v: "B" }, { label: "わからない" }] },
+  { q: "顔色がよく見えるのは、どちらの口紅？", opts: [{ label: "コーラル・オレンジ系", v: "Y" }, { label: "ローズ・青みピンク系", v: "B" }, { label: "どちらとも言えない" }] },
+];
+const SEASON_Q: Record<"Y" | "B", { q: string; opts: Opt[] }[]> = {
+  Y: [
+    { q: "瞳の色は？", opts: [{ label: "明るい茶色で、つやっと透明感がある", v: "S" }, { label: "深いこげ茶で、落ち着いている", v: "A" }, { label: "わからない" }] },
+    { q: "似合うと言われる質感は？", opts: [{ label: "ツヤ・みずみずしさ", v: "S" }, { label: "マット・深み", v: "A" }, { label: "どちらとも言えない" }] },
+    { q: "身につけて顔色がよく見えるのは？", opts: [{ label: "明るく鮮やかな色（コーラル・アイボリー）", v: "S" }, { label: "くすみのある深い色（テラコッタ・カーキ）", v: "A" }, { label: "どちらとも言えない" }] },
+  ],
+  B: [
+    { q: "瞳の色は？", opts: [{ label: "やわらかい茶色・グレーっぽい", v: "U" }, { label: "黒く、白目とのコントラストがはっきり", v: "W" }, { label: "わからない" }] },
+    { q: "身につけて顔色がよく見えるのは？", opts: [{ label: "やわらかいパステル・スモーキーな色", v: "U" }, { label: "鮮やかな色・真っ黒と真っ白", v: "W" }, { label: "どちらとも言えない" }] },
+    { q: "初めて会う人から言われやすい印象は？", opts: [{ label: "やさしい・上品", v: "U" }, { label: "クール・はっきりしている", v: "W" }, { label: "どちらとも言えない" }] },
+  ],
+};
+const TYPES = [
+  { key: "イエベ春", base: "イエベ", text: "黄みのある、明るく澄んだ色が得意とされるタイプ。コーラル・ピーチ・明るいベージュなど。" },
+  { key: "イエベ秋", base: "イエベ", text: "黄みのある、深くくすみのある色が得意とされるタイプ。テラコッタ・ブラウン・カーキなど。" },
+  { key: "ブルベ夏", base: "ブルベ", text: "青みのある、やわらかく明るい色が得意とされるタイプ。ローズ・ラベンダー・スモーキーなパステルなど。" },
+  { key: "ブルベ冬", base: "ブルベ", text: "青みのある、鮮やかでコントラストの強い色が得意とされるタイプ。ボルドー・マゼンタ・黒と白など。" },
+  { key: "イエベ", base: "イエベ", text: "黄みのある色が得意とされるタイプ（季節までは分かれませんでした）。" },
+  { key: "ブルベ", base: "ブルベ", text: "青みのある色が得意とされるタイプ（季節までは分かれませんでした）。" },
+];
+const pub = getPublishedPersonalColors();
+// 結果ごとの行き先：その色のページがあればそれ、無ければイエベ・ブルベのページ
+const results = TYPES.map((t) => {
+  const page = pub.find((d) => d.slug === t.key) ?? pub.find((d) => d.slug === t.base);
+  return { ...t, swatch: personalColorSwatch(t.key), href: page ? withBase(`/personal-color/${encodeURIComponent(page.slug)}/`) : withBase("/personal-color/"), pageName: page?.name ?? "パーソナルカラー", people: page ? getPersonalColor(page.slug)!.people.length : 0, mySlug: page?.slug ?? "" };
+});
+const title = "パーソナルカラー自己診断（イエベ・ブルベ・4シーズン）";
+const description = "8問に答えて、イエベかブルベか、春・夏・秋・冬のどれに近いかを自己診断。結果から、同じパーソナルカラーだと本人が話しているYouTuber・インフルエンサーと、その人たちの愛用コスメを見られます。";
+const crumbs = [
+  { name: "ホーム", path: "/" },
+  { name: "パーソナルカラーから探す", path: "/personal-color/" },
+  { name: "パーソナルカラー自己診断", path: "/personal-color/check/" },
+];
+const swatchBg = (c: string[]) => (c.length > 1 ? `conic-gradient(${c.map((x, i) => `${x} ${(i * 360) / c.length}deg ${((i + 1) * 360) / c.length}deg`).join(", ")})` : c[0] || "#eee");
+---
+
+<Layout title={title} description={description} jsonLd={[breadcrumbLd(crumbs, Astro.site!)]}>
+  <nav class="text-xs text-neutral-500 mb-8 flex flex-wrap gap-2" aria-label="パンくず">
+    <a href={withBase("/")} class="link-u">Home</a><span aria-hidden="true">/</span>
+    <a href={withBase("/personal-color/")} class="link-u">パーソナルカラーから探す</a><span aria-hidden="true">/</span>
+    <span>自己診断</span>
+  </nav>
+  <PageHead en="Self check" title="パーソナルカラー自己診断" lead="質問に答えると、イエベかブルベか、春・夏・秋・冬のどれに近いかが分かります。結果から、同じパーソナルカラーのインフルエンサーが使っているコスメを見られます。" />
+
+  <div id="pc-check" class="panel max-w-2xl mx-auto" data-base-q={JSON.stringify(BASE_Q)} data-season-q={JSON.stringify(SEASON_Q)} data-results={JSON.stringify(results)}>
+    <noscript><p class="text-sm text-neutral-600">診断にはJavaScriptが必要です。下の「見分け方」を参考にしてください。</p></noscript>
+    <div data-stage class="min-h-[18rem]"></div>
+  </div>
+
+  <section class="max-w-2xl mx-auto mt-10 text-sm leading-[1.9] text-neutral-700">
+    <h2 class="font-serif h-section font-semibold mb-3">見分け方の目安</h2>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>イエベ（イエローベース）は肌に黄みがあり、ゴールドや黄みのある色がなじみやすいとされます。ブルベ（ブルーベース）は肌に青み・ピンクみがあり、シルバーや青みのある色がなじみやすいとされます。</li>
+      <li>4シーズンは、イエベを明るく澄んだ「春」と深みのある「秋」、ブルベをやわらかい「夏」と鮮やかな「冬」に分けたものです。</li>
+      <li>自然光の下、すっぴんに近い状態で確かめると分かりやすくなります。</li>
+    </ul>
+    <p class="mt-4 text-xs text-neutral-500">この診断は目安です。照明や日焼け、髪色で見え方は変わります。はっきり知りたいときは、プロのパーソナルカラー診断がおすすめです。回答はこの端末の中だけで使い、どこにも送りません。</p>
+    <p class="mt-4"><a href={withBase("/skin-type/check/")} class="link-u text-ink">肌質の自己診断はこちら →</a></p>
+  </section>
+</Layout>
+
+<script>
+  import { add, load, remove } from "../../scripts/my-cosme-store";
+  type Opt = { label: string; v?: string };
+  type Q = { q: string; opts: Opt[] };
+  type R = { key: string; base: string; text: string; swatch: string[]; href: string; pageName: string; people: number; mySlug: string };
+  const root = document.getElementById("pc-check")!;
+  const stage = root.querySelector<HTMLElement>("[data-stage]")!;
+  const BASE_Q = JSON.parse(root.dataset.baseQ!) as Q[];
+  const SEASON_Q = JSON.parse(root.dataset.seasonQ!) as Record<"Y" | "B", Q[]>;
+  const RESULTS = JSON.parse(root.dataset.results!) as R[];
+  const BASE = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL.slice(0, -1) : import.meta.env.BASE_URL;
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
+  const swatch = (c: string[]) => (c.length > 1 ? `conic-gradient(${c.map((x, i) => `${x} ${(i * 360) / c.length}deg ${((i + 1) * 360) / c.length}deg`).join(", ")})` : c[0] || "#eee");
+  const track = (action: string) => {
+    const g = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
+    if (typeof g === "function") g("event", "self_check", { kind: "personal_color", action }); // どの結果かは送らない
+  };
+  let answers: (string | undefined)[] = [];
+  let questions: Q[] = [...BASE_Q];
+  let base: "Y" | "B" | "" = "";
+
+  const count = (from: number, a: string, b: string) => {
+    let x = 0, y = 0;
+    answers.slice(from).forEach((v) => { if (v === a) x++; if (v === b) y++; });
+    return [x, y];
+  };
+  function start() {
+    answers = [];
+    questions = [...BASE_Q];
+    base = "";
+    show();
+  }
+  function show() {
+    const i = answers.length;
+    if (i === BASE_Q.length && !base) {
+      const [y, b] = count(0, "Y", "B");
+      if (y === b) return result(""); // 決められない
+      base = y > b ? "Y" : "B";
+      questions = [...BASE_Q, ...SEASON_Q[base]];
+    }
+    if (i >= questions.length) {
+      const [p, q] = base === "Y" ? count(BASE_Q.length, "S", "A") : count(BASE_Q.length, "U", "W");
+      const key = p === q ? (base === "Y" ? "イエベ" : "ブルベ") : base === "Y" ? (p > q ? "イエベ春" : "イエベ秋") : p > q ? "ブルベ夏" : "ブルベ冬";
+      return result(key);
+    }
+    const q = questions[i];
+    const total = base ? questions.length : BASE_Q.length + 3;
+    stage.innerHTML = `
+      <p class="text-xs text-neutral-500 flex items-center justify-between"><span>${i < BASE_Q.length ? "STEP 1　イエベ？ブルベ？" : `STEP 2　${base === "Y" ? "イエベ" : "ブルベ"}の中のタイプ`}</span><span>${i + 1} / ${total}</span></p>
+      <div class="mt-2 h-1 rounded-full bg-ink/10 overflow-hidden"><div class="h-full bg-rose transition-all" style="width:${(i / total) * 100}%"></div></div>
+      <h2 class="mt-8 font-serif text-xl md:text-2xl font-semibold leading-snug">${esc(q.q)}</h2>
+      <div class="mt-6 grid gap-3">${q.opts.map((o, k) => `<button type="button" data-opt="${k}" class="text-left w-full rounded-2xl border border-ink/15 bg-white px-5 py-4 text-sm hover:border-rose hover:text-rose transition-colors cursor-pointer">${esc(o.label)}</button>`).join("")}</div>
+      ${i > 0 ? `<button type="button" data-back class="mt-6 text-xs text-neutral-500 hover:text-ink cursor-pointer">← 1つ前に戻る</button>` : ""}`;
+  }
+  function result(key: string) {
+    track("done");
+    const r = RESULTS.find((x) => x.key === key);
+    if (!r) {
+      stage.innerHTML = `
+        <p class="eyebrow">Result</p>
+        <h2 class="mt-2 font-serif text-2xl font-semibold">イエベ・ブルベが決めきれませんでした</h2>
+        <p class="mt-4 text-sm leading-relaxed text-neutral-600">答えがちょうど半分に分かれました。両方の特徴を持つ人もいます。自然光の下でもう一度試すか、両方のページを見比べてみてください。</p>
+        <div class="mt-6 flex flex-wrap gap-2">${RESULTS.filter((x) => x.key === "イエベ" || x.key === "ブルベ").map((x) => `<a href="${x.href}" class="chip">${esc(x.pageName)}のページ →</a>`).join("")}</div>
+        <button type="button" data-restart class="mt-8 text-xs text-neutral-500 hover:text-ink cursor-pointer">もう一度診断する</button>`;
+      return;
+    }
+    const set = r.mySlug ? !!load().pc[r.mySlug] : false;
+    stage.innerHTML = `
+      <p class="eyebrow">Result</p>
+      <div class="mt-3 flex items-center gap-5">
+        <span class="shrink-0 rounded-full ring-4 ring-white" style="width:4rem;height:4rem;box-shadow:0 10px 24px -10px rgba(0,0,0,.4);background:${swatch(r.swatch)}" aria-hidden="true"></span>
+        <div><p class="text-xs text-neutral-500">あなたは</p><h2 class="font-serif font-semibold" style="font-size:1.875rem;line-height:1.2">${esc(r.key)}<span class="text-base font-normal text-neutral-500 ml-1">タイプに近いかも</span></h2></div>
+      </div>
+      <p class="mt-5 text-sm leading-relaxed text-neutral-700">${esc(r.text)}</p>
+      <div class="mt-7 grid sm:grid-cols-2 gap-3">
+        <a href="${r.href}" class="block rounded-2xl bg-ink text-paper px-5 py-4 text-sm hover:bg-rose transition-colors">${esc(r.pageName)}のインフルエンサーと愛用コスメを見る →${r.people ? `<span class="block text-xs opacity-70 mt-1">${r.people}人のインフルエンサー</span>` : ""}</a>
+        ${r.mySlug ? `<button type="button" data-set="${esc(r.mySlug)}" class="rounded-2xl border border-ink/20 px-5 py-4 text-sm text-left hover:border-rose hover:text-rose transition-colors cursor-pointer">${set ? "✓ マイコスメに設定済み" : `マイコスメのパーソナルカラーを「${esc(r.pageName)}」にする`}<span class="block text-xs text-neutral-500 mt-1">おすすめに反映されます（この端末に保存）</span></button>` : ""}
+      </div>
+      <p class="mt-6 text-xs text-neutral-500">自己診断の目安です。照明や日焼け、髪色で見え方は変わります。</p>
+      <button type="button" data-restart class="mt-6 text-xs text-neutral-500 hover:text-ink cursor-pointer">もう一度診断する</button>`;
+  }
+  root.addEventListener("click", (e) => {
+    const t = e.target as HTMLElement;
+    const opt = t.closest<HTMLElement>("[data-opt]");
+    if (opt) {
+      const q = questions[answers.length];
+      answers.push(q.opts[Number(opt.dataset.opt)].v);
+      if (answers.length === 1) track("start");
+      return show();
+    }
+    if (t.closest("[data-back]")) {
+      answers.pop();
+      if (answers.length < BASE_Q.length) { base = ""; questions = [...BASE_Q]; }
+      return show();
+    }
+    if (t.closest("[data-restart]")) return start();
+    const s = t.closest<HTMLElement>("[data-set]");
+    if (s) {
+      const slug = s.dataset.set!;
+      for (const x of Object.keys(load().pc)) if (x !== slug) remove(x, "pc");
+      add(slug, undefined, "pc");
+      track("set_my_cosme");
+      s.innerHTML = `✓ マイコスメに設定しました<span class="block text-xs text-neutral-500 mt-1"><a href="${BASE}/my-cosme/" class="link-u">マイコスメでおすすめを見る →</a></span>`;
+    }
+  });
+  start();
+</script>
