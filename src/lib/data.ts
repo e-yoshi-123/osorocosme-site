@@ -691,27 +691,6 @@ function buildInfluencerRanking(): InfluencerRanking[] {
   return result.sort((a, b) => b.score - a.score);
 }
 
-let _globalTagShare: Map<string, number> | null = null;
-/** 掲載中の全動画で、紹介コスメ（動画ごとに重複を除く）のうち各カテゴリが占める割合。 */
-function getGlobalTagShare(): Map<string, number> {
-  if (_globalTagShare) return _globalTagShare;
-  const counts = new Map<string, number>();
-  let total = 0;
-  for (const v of getVisibleVideos()) {
-    const seen = new Set<string>();
-    for (const c of v.cosmetics || []) {
-      if (!c.brand_id || !c.name_id) continue;
-      const key = `${c.brand_id}_${c.name_id}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      total++;
-      for (const t of c.related_tags || []) counts.set(t, (counts.get(t) || 0) + 1);
-    }
-  }
-  _globalTagShare = new Map(Array.from(counts.entries()).map(([t, n]) => [t, n / Math.max(total, 1)]));
-  return _globalTagShare;
-}
-
 export interface InfluencerTopCosmetic {
   brand_id: string;
   brand: string;
@@ -729,16 +708,12 @@ export interface InfluencerHighlights {
   latestVideos: VideoEntry[];
   /** よく紹介するコスメ（紹介した動画数の多い順。画像のあるものだけ。PR・提供の紹介は数えない） */
   topCosmetics: InfluencerTopCosmetic[];
-  /** 紹介が多いカテゴリ。全体の平均より、そのインフルエンサーが多く紹介しているものを優先（特徴が出る）。 */
-  topTags: string[];
 }
 
-/** インフルエンサー一覧の上位カード用に、最新動画・よく紹介するコスメ・得意カテゴリを集計する。 */
-export function getInfluencerHighlights(channel_id: string, videoLimit = 3, cosmeticLimit = 6, tagLimit = 3): InfluencerHighlights {
+/** インフルエンサー一覧の上位カード用に、最新動画・よく紹介するコスメを集計する。 */
+export function getInfluencerHighlights(channel_id: string, videoLimit = 3, cosmeticLimit = 6): InfluencerHighlights {
   const videos = sortByPublishedDesc(getVideosByChannel(channel_id));
   const byCosmetic = new Map<string, InfluencerTopCosmetic>();
-  const tagCounts = new Map<string, number>();
-  let mentions = 0; // 紹介コスメの延べ数（動画内の重複は1つと数える）
   for (const v of videos) {
     const seen = new Set<string>();
     for (const c of v.cosmetics || []) {
@@ -747,8 +722,6 @@ export function getInfluencerHighlights(channel_id: string, videoLimit = 3, cosm
       const key = `${c.brand_id}_${c.name_id}`;
       if (seen.has(key)) continue; // 同じ動画内の重複は1本と数える
       seen.add(key);
-      mentions++;
-      for (const t of c.related_tags || []) tagCounts.set(t, (tagCounts.get(t) || 0) + 1);
       const entry = getCosmeticListEntry(c.brand_id, c.name_id);
       const imageSrc = productImageSrc(entry, c.rakuten_image_link);
       const cur = byCosmetic.get(key);
@@ -766,16 +739,7 @@ export function getInfluencerHighlights(channel_id: string, videoLimit = 3, cosm
     // 本数が同じなら、リピートしているもの → 全体で紹介の多いものを先に
     .sort((a, b) => b.videoCount - a.videoCount || Number(b.repeat) - Number(a.repeat) || (getCosmeticVideoCounts().get(`${b.brand_id}_${b.name_id}`) ?? 0) - (getCosmeticVideoCounts().get(`${a.brand_id}_${a.name_id}`) ?? 0))
     .slice(0, cosmeticLimit);
-  // 紹介が多いカテゴリ：全体の平均より多く紹介しているもの（倍率が高い順）。
-  // 件数が少ないカテゴリが偶然高い倍率になるのを避けるため、一定の件数・割合があるものだけを対象にする。
-  // 足りなければ、単純に紹介数の多いカテゴリで補う。
-  const global = getGlobalTagShare();
-  const ranked = Array.from(tagCounts.entries())
-    .map(([tag, n]) => ({ tag, n, share: n / Math.max(mentions, 1), lift: n / Math.max(mentions, 1) / Math.max(global.get(tag) || 0.001, 0.001) }))
-    .sort((a, b) => b.n - a.n);
-  const distinctive = ranked.filter((r) => r.n >= 3 && r.share >= 0.06 && r.lift >= 1.3).sort((a, b) => b.lift - a.lift);
-  const topTags = [...distinctive, ...ranked.filter((r) => !distinctive.includes(r))].slice(0, tagLimit).map((r) => r.tag);
-  return { latestVideos: videos.slice(0, videoLimit), topCosmetics, topTags };
+  return { latestVideos: videos.slice(0, videoLimit), topCosmetics };
 }
 
 /** 人のページの「カテゴリ別の愛用コスメ」（7の検索の需要：「人名＋カテゴリ」の検索に、人のページの中の見出しと一覧で答える）。
