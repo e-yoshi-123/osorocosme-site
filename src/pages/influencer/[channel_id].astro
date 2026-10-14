@@ -31,6 +31,7 @@ import {
   isOwnBrandMention,
   getInfluencerProfile,
   getOwnBrandIds,
+  getOwnProducts,
   getBrandName,
   cosmeticCategory,
 } from "../../lib/data";
@@ -92,6 +93,21 @@ const topCosmetics = getInfluencerHighlights(channel_id!, 0, TOP_LIMIT)
     return { ...c, slug: cosmeticSlug(c.brand_id, c.name_id), price: offer.price, fromYahoo: offer.source === "yahoo", rakutenLink: offer.rakutenLink, yahooLink: entry?.yahoo_text_link || undefined };
   });
 const showTop = topCosmetics.length >= 3;
+// 本人がプロデュースしたコスメ（ユーザー依頼、321章）。紹介の多い順に、画像・価格・購入先つきで並べる
+const OWN_LIMIT = 10;
+const ownProducts = influencer
+  ? getOwnProducts(influencer.channel_id).slice(0, OWN_LIMIT).map((c) => {
+      const entry = getCosmeticListEntry(c.brand_id, c.name_id);
+      const offer = productOffer(entry);
+      return { ...c, slug: cosmeticSlug(c.brand_id, c.name_id), price: offer.price, fromYahoo: offer.source === "yahoo", rakutenLink: offer.rakutenLink, yahooLink: entry?.yahoo_text_link || undefined };
+    })
+  : [];
+// 節の番号（プロデュースしたコスメ・よく紹介しているコスメは、ある人だけ）
+const secNums = (() => {
+  let n = 0;
+  const next = () => String(++n).padStart(2, "0");
+  return { own: ownProducts.length > 0 ? next() : "", top: showTop ? next() : "", history: next(), videos: next() };
+})();
 const repeatCount = topCosmetics.filter((c) => c.repeat).length;
 const description = influencer
   ? `${influencer.channel_title}のコスメ紹介動画${videos.length}本から、使用コスメ${totalItems}品をカテゴリ別・投稿日順にまとめています。` +
@@ -157,10 +173,47 @@ const jsonLd = influencer
           </div>
         </section>
 
+        {ownProducts.length > 0 && (
+          <section class="panel u-14">
+            <SectionHead
+              num={secNums.own}
+              en="Produce"
+              title="プロデュースしたコスメ"
+              lead={`${influencer.channel_title}がプロデュースしたブランド（${ownBrands.map((b) => b.name).join("・") || "ライン"}）のコスメのうち、動画で紹介されたもの${ownProducts.length}品を、紹介の多い順に並べています（本人による紹介は、ランキングには数えていません）。価格は楽天市場（無ければYahoo!ショッピング）で確認した時点の参考価格です。`}
+            />
+            <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-8">
+              {ownProducts.map((c) => (
+                <li class="min-w-0 group">
+                  <a href={withBase(`/cosmetics/${c.slug}`)} class="product-well overflow-hidden tile-4" tabindex="-1" aria-hidden="true">
+                    {c.imageSrc ? <img src={c.imageSrc} alt="" class="tile-1" loading="lazy" data-err="noimg" /> : <span class="noimg">No image</span>}
+                  </a>
+                  <a href={withBase(`/cosmetics/${c.slug}`)} class="block">
+                    <p class="tile-3"><BrandFlag brand_id={c.brand_id} />{c.brand}</p>
+                    <p class="phrase tile-name mt-1">{c.name}</p>
+                  </a>
+                  <p class="u-2">{c.videoCount}本で紹介</p>
+                  <p class="tc-act">
+                    {c.price !== undefined && <span class="num-display tc-price" title={c.fromYahoo ? "Yahoo!ショッピングの参考価格" : "楽天市場の参考価格"}>¥{formatCount(c.price)}</span>}
+                    <span class="tc-shops">
+                      {c.rakutenLink && <a href={c.rakutenLink} target="_blank" rel="nofollow sponsored noopener" title="楽天市場で見る">楽天</a>}
+                      {c.yahooLink && <a href={c.yahooLink} target="_blank" rel="nofollow sponsored noopener" title="Yahoo!ショッピングで見る">Yahoo!</a>}
+                      <a href={amazonSearchUrl(c.brand, c.name)} target="_blank" rel="nofollow sponsored noopener" title="Amazonで探す（検索結果）">Amazon</a>
+                    </span>
+                  </p>
+                </li>
+              ))}
+            </ul>
+            {ownBrands.length > 0 && (
+              <p class="mt-6 text-sm">{ownBrands.map((b, i) => <>{i > 0 && "・"}<a href={withBase(`/brand/${b.id}`)} class="link-u text-ink">{b.name}のコスメをすべて見る</a></>)}</p>
+            )}
+            <p class="mt-5 text-xs text-neutral-500">PR：リンク先での購入により、当サイトに報酬が支払われることがあります。</p>
+          </section>
+        )}
+
         {showTop && (
           <section class="panel u-14">
             <SectionHead
-              num="01"
+              num={secNums.top}
               en="Most featured"
               title="よく紹介しているコスメ"
               lead={`${TOP_MIN_VIDEOS}本以上の動画で紹介したコスメを、本数の多い順に${topCosmetics.length}品。PR・提供の紹介は数えていません。${repeatCount > 0 ? "「リピート」は、日をあけた別の動画でも使っていたコスメです。" : ""}価格は楽天市場（無ければYahoo!ショッピング）で確認した時点の参考価格です。`}
@@ -196,7 +249,7 @@ const jsonLd = influencer
 
         {timeline.length > 0 && (
           <section class="panel u-14">
-            <SectionHead num={showTop ? "02" : "01"} en="Cosme history" title="使用コスメ遍歴" lead={`動画ごとに、紹介したコスメを新しい順に並べています。カテゴリで絞り込めます。${prCount > ownCount ? "「PR」の印は、PR・提供として紹介されたコスメです（ランキングには数えていません）。" : ""}${ownCount > 0 ? "「本人のブランド」の印は、本人がプロデュースしたブランドのコスメです（ランキングには数えていません）。" : ""}`} />
+            <SectionHead num={secNums.history} en="Cosme history" title="使用コスメ遍歴" lead={`動画ごとに、紹介したコスメを新しい順に並べています。カテゴリで絞り込めます。${prCount > ownCount ? "「PR」の印は、PR・提供として紹介されたコスメです（ランキングには数えていません）。" : ""}${ownCount > 0 ? "「本人のブランド」の印は、本人がプロデュースしたブランドのコスメです（ランキングには数えていません）。" : ""}`} />
 
             <div class="filter-sentinel" aria-hidden="true"></div>
             <div class="filter-bar sticky top-[var(--hdr-h,97px)] z-20 bg-panel/90 backdrop-blur-md py-3 mb-10 border-b border-ink/10 text-sm -mx-4 px-4 md:mx-0 md:px-0">
@@ -258,7 +311,7 @@ const jsonLd = influencer
         )}
 
         <section class="panel u-14">
-          <SectionHead num={showTop ? "03" : "02"} en="Videos" title="紹介動画" lead={`${videos.length}本の動画を、新しい順に並べています。`} />
+          <SectionHead num={secNums.videos} en="Videos" title="紹介動画" lead={`${videos.length}本の動画を、新しい順に並べています。`} />
           <div class="u-20" data-more="12">
             {videos.map((v, i) => (
               <div class:list={["min-w-0", i >= 8 && "hidden"]}><VideoCard video={v} /></div>

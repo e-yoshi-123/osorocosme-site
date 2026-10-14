@@ -7,6 +7,7 @@ import IntroRow from "../../components/IntroRow.astro";
 import SectionHead from "../../components/SectionHead.astro";
 import PageNav from "../../components/PageNav.astro";
 import {
+  getProducersOf,
   getUsedCosmeticKeys,
   getAliasRedirects,
   getProductRedirects,
@@ -73,6 +74,7 @@ const videosUsing = sortByPublishedDesc(getVideosUsingCosmetic(brand_id, name_id
 const noindex = !isCosmeticIndexed(videosUsing); // 2本以上、または直近90日の動画で紹介（301章）
 
 const facts = getCosmeticFacts(brand_id, name_id);
+const producers = getProducersOf(brand_id, name_id);
 // 同じ人が日をあけて繰り返し使っているか（PR・提供と新作紹介などの動画は除く。273章）
 const repeatUsers = getRepeatUsers(brand_id, name_id);
 const repeatSpan = (u: { first: string; last: string }) => {
@@ -210,6 +212,22 @@ const jsonLd = entry
           <div class="md:col-span-7 md:pt-4">
             <a href={withBase(`/brand/${canonicalBrandId(entry.brand_id)}`)} class="link-u text-xs font-bold tracking-[0.14em] text-rose"><BrandFlag brand_id={entry.brand_id} />{entry.brand}</a>
             <h1 class="font-serif phrase item-22">{entry.name}</h1>
+            {/* プロデュースしたインフルエンサー（本人のブランド。ユーザー依頼、321章） */}
+            {producers.length > 0 && (
+              <div class="mt-4 flex flex-wrap items-center gap-2">
+                <span class="text-[10px] tracking-[0.14em] uppercase text-rose mr-1">Produced by</span>
+                {producers.map((p) => (
+                  <a href={withBase(`/influencer/${p.channel_id}`)} class="group inline-flex items-center gap-2 rounded-full border border-ink/15 bg-white/80 pl-1 pr-3.5 py-1 hover:border-rose transition-colors" title={`${p.channel_title}がプロデュースしたブランド`}>
+                    {p.channel_icon ? (
+                      <img src={p.channel_icon} alt="" width="32" height="32" class="w-8 h-8 rounded-full object-cover ring-2 ring-white" loading="lazy" referrerpolicy="no-referrer" />
+                    ) : (
+                      <span class="w-8 h-8 rounded-full bg-blush flex items-center justify-center text-xs text-rose font-semibold" aria-hidden="true">{p.channel_title.slice(0, 1)}</span>
+                    )}
+                    <span class="text-sm text-ink group-hover:text-rose transition-colors">{p.channel_title}<span class="text-xs text-neutral-500 ml-1.5">プロデュース</span></span>
+                  </a>
+                ))}
+              </div>
+            )}
             {findLinks.length > 0 ? (
               <p class="mt-4 flex flex-wrap gap-1.5">
                 {findLinks.map((l) => <a href={withBase(l.path)} class="item-4">{l.label}</a>)}

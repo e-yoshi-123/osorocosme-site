@@ -261,6 +261,45 @@ export function isOwnBrandMention(videoKey: string, brand_id: string, name_id: s
 export function getOwnBrandIds(channel_id: string): string[] {
   return OWN_BRANDS[channel_id]?.brands ?? [];
 }
+let _usedVideoCount: Map<string, number> | undefined;
+/** 商品ごとの紹介動画の本数（PR・本人のブランドも含む。プロデュースしたコスメの並びに使う） */
+function usedVideoCount(key: string): number {
+  if (!_usedVideoCount) {
+    _usedVideoCount = new Map();
+    for (const v of getVisibleVideos()) {
+      for (const k of new Set((v.cosmetics || []).filter((c) => c.brand_id && c.name_id).map((c) => `${c.brand_id}_${c.name_id}`))) {
+        _usedVideoCount.set(k, (_usedVideoCount.get(k) ?? 0) + 1);
+      }
+    }
+  }
+  return _usedVideoCount.get(key) ?? 0;
+}
+/** 本人がプロデュースしたコスメ（ブランド全体のもの・ライン単位のもの）のうち、サイトに商品ページがあるもの。紹介の多い順、画像のあるものを先に（321章） */
+export function getOwnProducts(channel_id: string): CosmeticTileData[] {
+  const o = OWN_BRANDS[channel_id];
+  if (!o) return [];
+  const brandSet = new Set(o.brands.map(canonicalBrandId));
+  const items = getUsedCosmeticKeys()
+    .filter((c) => brandSet.has(canonicalBrandId(c.brand_id)) || o.products.includes(`${c.brand_id}_${c.name_id}`))
+    .map((c) => {
+      const e = getCosmeticListEntry(c.brand_id, c.name_id);
+      return {
+        brand_id: c.brand_id, brand: e?.brand ?? getBrandName(c.brand_id) ?? "", name_id: c.name_id, name: e?.name ?? "",
+        imageSrc: cosmeticImageSrc(c.brand_id, c.name_id), videoCount: usedVideoCount(`${c.brand_id}_${c.name_id}`),
+      };
+    })
+    .filter((t) => t.name)
+    .sort((a, b) => b.videoCount - a.videoCount || a.name.localeCompare(b.name, "ja"));
+  return imagesFirst(items);
+}
+/** この商品をプロデュースした人（本人のブランド。サイトに人のページがある人だけ。321章） */
+export function getProducersOf(brand_id: string, name_id: string): Influencer[] {
+  const b = canonicalBrandId(brand_id);
+  return Object.entries(OWN_BRANDS)
+    .filter(([, o]) => o.brands.some((x) => canonicalBrandId(x) === b) || o.products.includes(`${brand_id}_${name_id}`))
+    .map(([cid]) => getInfluencerByChannelId(cid))
+    .filter((i): i is Influencer => !!i);
+}
 /** 本人が動画・概要欄で言ったパーソナルカラー・肌質・顔タイプ（backend/scripts/influencer_facts/export_profile.py。AIの推定ではない。307章）。
  * sources は発言のある動画のキー、from_description は概要欄のプロフィールに書いてあるもの */
 export interface InfluencerProfile {
