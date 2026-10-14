@@ -1739,15 +1739,9 @@ export interface PersonalColorItem extends FeatureItem {
   users: string[];
 }
 const _pcCache = new Map<string, ReturnType<typeof buildPersonalColor>>();
-function buildPersonalColor(def: PersonalColorDef) {
-  const titles = new Map(getVisibleVideos().map((v) => [v.channel_id, v.channel_title]));
-  const people = Object.entries(INFLUENCER_PROFILE)
-    .filter(([cid, p]) => {
-      const pc = parsePersonalColor(p.personal_color);
-      return titles.has(cid) && pc.base === def.base && (!def.season || pc.season === def.season);
-    })
-    .map(([cid, p]) => ({ channel_id: cid, channel_title: titles.get(cid)!, personal_color: p.personal_color! }));
-  const ids = new Set(people.map((p) => p.channel_id));
+/** 指定した人たち（チャンネル）が紹介したコスメを、そのうち何人が使ったかで並べる（パーソナルカラー・肌質のページで共通。309・310章）。
+ * PR・提供と本人のブランドの紹介は数えない。groups の大分類だけ、minChannels 人以上、各大分類 perGroup 品まで */
+function collectByPeople(ids: Set<string>, groups: string[], minChannels: number, perGroup: number) {
   const map = new Map<string, PersonalColorItem & { vs: Set<string>; cs: Set<string>; views: number }>();
   const videoKeys = new Set<string>();
   for (const v of getVisibleVideos()) {
@@ -1755,7 +1749,7 @@ function buildPersonalColor(def: PersonalColorDef) {
     for (const c of v.cosmetics || []) {
       if (!c.brand_id || !c.name_id || !c.related_tags?.length) continue;
       if (isPrMention(v.key, c.brand_id, c.name_id)) continue;
-      const tag = c.related_tags.map(rankingTag).find((t) => PC_GROUPS.includes(CATEGORY_TAG_TO_GROUP[t]));
+      const tag = c.related_tags.map(rankingTag).find((t) => groups.includes(CATEGORY_TAG_TO_GROUP[t]));
       if (!tag) continue;
       const key = `${c.brand_id}_${c.name_id}`;
       let e = map.get(key);
@@ -1773,13 +1767,28 @@ function buildPersonalColor(def: PersonalColorDef) {
   }
   const items = Array.from(map.values())
     .map((e) => ({ ...e, videoCount: e.vs.size, channelCount: e.cs.size }))
-    .filter((e) => e.channelCount >= PC_MIN_CHANNELS)
+    .filter((e) => e.channelCount >= minChannels)
     .sort((a, b) => b.channelCount - a.channelCount || b.videoCount - a.videoCount || b.views - a.views || a.name.localeCompare(b.name, "ja"));
-  const groups = PC_GROUPS.map((group) => ({
-    group,
-    items: items.filter((e) => CATEGORY_TAG_TO_GROUP[e.tag] === group).slice(0, PC_PER_GROUP),
-  })).filter((g) => g.items.length > 0);
-  return { def, people, videoCount: videoKeys.size, itemCount: items.length, groups };
+  const grouped = groups
+    .map((group) => ({ group, items: items.filter((e) => CATEGORY_TAG_TO_GROUP[e.tag] === group).slice(0, perGroup) }))
+    .filter((g) => g.items.length > 0);
+  return { videoCount: videoKeys.size, itemCount: items.length, groups: grouped };
+}
+function profilePeople(match: (p: InfluencerProfile) => boolean, label: (p: InfluencerProfile) => string) {
+  const titles = new Map(getVisibleVideos().map((v) => [v.channel_id, v.channel_title]));
+  return Object.entries(INFLUENCER_PROFILE)
+    .filter(([cid, p]) => titles.has(cid) && match(p))
+    .map(([cid, p]) => ({ channel_id: cid, channel_title: titles.get(cid)!, label: label(p) }));
+}
+function buildPersonalColor(def: PersonalColorDef) {
+  const people = profilePeople(
+    (p) => {
+      const pc = parsePersonalColor(p.personal_color);
+      return pc.base === def.base && (!def.season || pc.season === def.season);
+    },
+    (p) => p.personal_color!,
+  );
+  return { def, people, ...collectByPeople(new Set(people.map((p) => p.channel_id)), PC_GROUPS, PC_MIN_CHANNELS, PC_PER_GROUP) };
 }
 export function getPersonalColor(slug: string) {
   const def = PERSONAL_COLORS.find((d) => d.slug === slug);
@@ -1795,10 +1804,51 @@ export function getPublishedPersonalColors(): PersonalColorDef[] {
   });
 }
 
+/** 肌質から探す（/skin-type/<名前>/。310章）。本人が言った肌質（influencer-profile.json の skin。AIの推定ではない）の人たちが紹介した
+ * スキンケアとベースメイクを、同じ肌質の何人が使ったかで並べる。「敏感肌・乾燥肌」のように2つ言っている人は両方に入る。
+ * 「乾燥肌寄りの混合肌」は混合肌（寄り〜は数えない）。肌悩みのページ（/concern/。発言に悩みの語がある紹介）とは別の軸 */
+export interface SkinTypeDef {
+  slug: string;
+  name: string;
+  en: string;
+  pattern: RegExp;
+}
+export const SKIN_TYPES: SkinTypeDef[] = [
+  { slug: "乾燥肌", name: "乾燥肌", en: "Dry skin", pattern: /乾燥肌(?!寄り)|乾燥敏感/ },
+  { slug: "敏感肌", name: "敏感肌", en: "Sensitive skin", pattern: /敏感/ },
+  { slug: "インナードライ", name: "インナードライ", en: "Inner dry", pattern: /インナードライ/ },
+  { slug: "混合肌", name: "混合肌", en: "Combination skin", pattern: /混合肌(?!寄り)/ },
+  { slug: "脂性肌", name: "脂性肌", en: "Oily skin", pattern: /脂性|オイリー/ },
+  { slug: "普通肌", name: "普通肌", en: "Normal skin", pattern: /普通肌/ },
+];
+export const SKIN_GROUPS = ["スキンケア", "ベースメイク"];
+const _skinCache = new Map<string, ReturnType<typeof buildSkinType>>();
+function buildSkinType(def: SkinTypeDef) {
+  const people = profilePeople((p) => def.pattern.test(p.skin || ""), (p) => p.skin!);
+  return { def, people, ...collectByPeople(new Set(people.map((p) => p.channel_id)), SKIN_GROUPS, PC_MIN_CHANNELS, PC_PER_GROUP) };
+}
+export function getSkinType(slug: string) {
+  const def = SKIN_TYPES.find((d) => d.slug === slug);
+  if (!def) return undefined;
+  if (!_skinCache.has(slug)) _skinCache.set(slug, buildSkinType(def));
+  return _skinCache.get(slug)!;
+}
+/** 公開する肌質のページ（パーソナルカラーと同じ条件：PC_MIN_PEOPLE 人以上・FEATURE_MIN_ITEMS 品以上） */
+export function getPublishedSkinTypes(): SkinTypeDef[] {
+  return SKIN_TYPES.filter((d) => {
+    const c = getSkinType(d.slug)!;
+    return c.people.length >= PC_MIN_PEOPLE && c.groups.reduce((n, g) => n + g.items.length, 0) >= FEATURE_MIN_ITEMS;
+  });
+}
+/** 人のページの肌質の値から、その肌質のページへ（最初に当たる公開中のもの） */
+export function skinTypePagesOf(skin: string | undefined): SkinTypeDef[] {
+  return getPublishedSkinTypes().filter((d) => d.pattern.test(skin || ""));
+}
+
 /** 検索欄から入る「探し方」のページ（肌悩み・成分・特集・カテゴリのランキング。247章）。
  * 上のメニューは4項目に絞り、これらは検索欄の入口（何も入力せずに触れたときのパネル）と、入力したときの候補から入る */
 export interface ExploreEntry {
-  kind: "肌悩み" | "成分" | "特集" | "ランキング" | "パーソナルカラー";
+  kind: "肌悩み" | "成分" | "特集" | "ランキング" | "パーソナルカラー" | "肌質";
   label: string;
   path: string;
   /** 候補で引ける語（名前と、言及の語の別名） */
@@ -1835,6 +1885,9 @@ export function getExploreEntries(): ExploreEntry[] {
     const long = d.base === "イエベ" ? "イエローベース" : "ブルーベース";
     out.push({ kind: "パーソナルカラー", label: d.name, path: `/personal-color/${encodeURIComponent(d.slug)}/`, words: [d.name, long + (d.season ?? ""), "パーソナルカラー"], count: c.itemCount });
   }
+  for (const d of getPublishedSkinTypes()) {
+    out.push({ kind: "肌質", label: d.name, path: `/skin-type/${encodeURIComponent(d.slug)}/`, words: [d.name, "肌質"], count: getSkinType(d.slug)!.itemCount });
+  }
   for (const [tag, page] of getRankingPages()) {
     out.push({ kind: "ランキング", label: tag, path: `/ranking/${encodeURIComponent(tag)}/`, words: [tag, ...tag.split(/[・()（）]/)].filter((w) => w.length >= 2), count: page.list.length });
   }
@@ -1849,7 +1902,7 @@ export function getExploreEntries(): ExploreEntry[] {
 export const MENU_CATEGORY_GROUPS = ["ベースメイク", "アイブロウ", "アイメイク", "チーク・陰影", "リップ", "スキンケア", "ヘアケア"];
 const MENU_CATEGORY_PER_GROUP = 4;
 export interface MenuLink { label: string; path: string }
-let _menuCache: { categories: { group: string; items: MenuLink[] }[]; concerns: MenuLink[]; ingredients: MenuLink[]; features: MenuLink[]; personalColors: MenuLink[] } | undefined;
+let _menuCache: { categories: { group: string; items: MenuLink[] }[]; concerns: MenuLink[]; ingredients: MenuLink[]; features: MenuLink[]; personalColors: MenuLink[]; skinTypes: MenuLink[] } | undefined;
 export function getMenuData() {
   if (_menuCache) return _menuCache;
   const nav = getRankingNav();
@@ -1863,7 +1916,7 @@ export function getMenuData() {
   }).filter((g) => g.items.length > 0);
   const ex = getExploreEntries();
   const pick = (kind: ExploreEntry["kind"]) => ex.filter((e) => e.kind === kind).map((e) => ({ label: e.label, path: e.path }));
-  _menuCache = { categories, concerns: pick("肌悩み"), ingredients: pick("成分"), features: pick("特集"), personalColors: pick("パーソナルカラー") };
+  _menuCache = { categories, concerns: pick("肌悩み"), ingredients: pick("成分"), features: pick("特集"), personalColors: pick("パーソナルカラー"), skinTypes: pick("肌質") };
   return _menuCache;
 }
 

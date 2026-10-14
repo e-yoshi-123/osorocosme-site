@@ -1,0 +1,31 @@
+---
+// 肌質から探す（310章）
+import PageHead from "../../components/PageHead.astro";
+import Layout from "../../layouts/Layout.astro";
+import { getPublishedSkinTypes, getSkinType, withBase } from "../../lib/data";
+
+const list = getPublishedSkinTypes().map((d) => getSkinType(d.slug)!);
+---
+
+<Layout
+  title="肌質から探す（乾燥肌・敏感肌のインフルエンサーが使うスキンケア）"
+  description="乾燥肌・敏感肌・インナードライ・混合肌など、肌質を本人が話しているYouTubeのインフルエンサーが紹介したスキンケアとベースメイクを、同じ肌質の何人が使ったかで集計しています。"
+>
+  <PageHead en="Skin type" title="肌質から探す" lead="自分と同じ肌質のインフルエンサーが、実際に使っているスキンケアとベースメイクを集めました。肌質は、本人が動画・概要欄・タイトルで話しているものだけを使っています。" />
+  <ul class="panel !py-2 md:!py-4 [&>li:last-child>a]:border-b-0">
+    {
+      list.map((c) => (
+        <li>
+          <a href={withBase(`/skin-type/${encodeURIComponent(c.def.slug)}/`)} class="group flex items-start gap-6 py-7 border-b border-ink/10">
+            <span class="flex-1 min-w-0">
+              <span class="block font-serif text-lg md:text-xl font-semibold group-hover:text-rose transition-colors">{c.def.name}</span>
+              <span class="block text-xs text-neutral-500 mt-1.5">{c.people.length}人のインフルエンサー・{c.itemCount}品から集計</span>
+              <span class="block text-sm leading-relaxed text-neutral-600 mt-3 max-w-3xl">{c.people.slice(0, 6).map((p) => p.channel_title).join("・")}{c.people.length > 6 ? " ほか" : ""}</span>
+            </span>
+            <span class="hidden sm:flex shrink-0 mt-1 w-10 h-10 rounded-full border border-ink/15 items-center justify-center transition-all duration-500 group-hover:bg-ink group-hover:text-paper group-hover:border-ink" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Layout>
