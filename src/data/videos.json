@@ -148524,18 +148524,18 @@
         "time_in_video": "10:55"
       },
       {
-        "brand_id": "brand-00019",
-        "brand": "資生堂",
-        "name_id": "name-00321",
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00020",
         "name": "パーフェクト サン プロテクター スティック",
         "related_tags": [
           "日焼け止め・UVケア(顔用)"
         ],
-        "skin_concern": "",
         "mentions": [
           "SPF50のスティック状日焼け止め、ベタつかない"
         ],
-        "time_in_video": "18:12"
+        "time_in_video": "18:12",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00024",
@@ -176208,16 +176208,16 @@
       {
         "brand_id": "brand-00056",
         "brand": "エテュセ",
-        "name_id": "name-00038",
-        "name": "エテュセ　マスカラベース",
+        "name_id": "name-00001",
+        "name": "アイエディション　（マスカラベース）",
         "related_tags": [
           "マスカラ下地・トップコート"
         ],
-        "skin_concern": "",
         "mentions": [
           "カールキープと書いてあったので選んだ"
         ],
-        "time_in_video": "8:36"
+        "time_in_video": "8:36",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00002",
@@ -176270,7 +176270,7 @@
     "video_id": "1vgWFLlToyQ",
     "view_count": "1432086",
     "duration": "PT13M13S",
-    "updated_at": "2026-10-10"
+    "updated_at": "2026-10-14"
   },
   "-OZPOQy-91mdOsn4nHR9": {
     "channel_icon": "https://yt3.ggpht.com/1HnUJN8orPC7EBj3x1sfq_vbP_M077Qgw7nHtRDIQfHg_0Dm8gECeBTZVV9H1ljITOEvUWUX=s88-c-k-c0x00ffffff-no-rj",
@@ -211465,16 +211465,16 @@
       {
         "brand_id": "brand-00137",
         "brand": "HAKU",
-        "name_id": "name-00015",
-        "name": "薬用 美白美容液（医薬部外品）メラノフォーカスIV",
+        "name_id": "name-00002",
+        "name": "メラノフォーカスＩＶ",
         "related_tags": [
           "美容液"
         ],
-        "skin_concern": "",
         "mentions": [
           "新しいシミを作らせない美容液。乳液代わりにも"
         ],
-        "time_in_video": "19:38"
+        "time_in_video": "19:38",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00010",
@@ -211601,7 +211601,7 @@
         "time_in_video": "28:25"
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "KVmVaB9tiT0": {
     "video_id": "KVmVaB9tiT0",
@@ -342430,15 +342430,15 @@
       {
         "brand_id": "brand-01891",
         "brand": "加美乃素本舗",
-        "name_id": "name-00005",
-        "name": "ヘアアクセルレーターEX フローラルアップルの香り",
+        "name_id": "name-00002",
+        "name": "ヘアアクセルレーターEX",
         "related_tags": [
           "頭皮ケア"
         ],
-        "skin_concern": "",
         "mentions": [
           "髪を乾かす前に頭に振りかける、ロングにしたくて使っている"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00245",
@@ -342455,7 +342455,7 @@
         "time_in_video": "21:57"
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-14"
   },
   "q7m6ts3APUo": {
     "video_id": "q7m6ts3APUo",
@@ -406918,15 +406918,15 @@
       {
         "brand_id": "brand-01891",
         "brand": "加美乃素本舗",
-        "name_id": "name-00005",
-        "name": "ヘアアクセルレーターEX フローラルアップルの香り",
+        "name_id": "name-00002",
+        "name": "ヘアアクセルレーターEX",
         "related_tags": [
           "頭皮ケア"
         ],
-        "skin_concern": "",
         "mentions": [
           "亜鉛配合の水のようなタイプ、頭皮が健やかになり根元が立ち上がりやすい、やっぱり好き"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-01965",
@@ -406970,7 +406970,7 @@
         ]
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "IZBo8c78mFo": {
     "video_id": "IZBo8c78mFo",
@@ -419097,18 +419097,18 @@
       {
         "brand_id": "brand-00056",
         "brand": "エテュセ",
-        "name_id": "name-00038",
-        "name": "エテュセ　マスカラベース",
+        "name_id": "name-00001",
+        "name": "アイエディション　（マスカラベース）",
         "related_tags": [
           "マスカラ下地・トップコート"
         ],
-        "skin_concern": "",
         "mentions": [
           "概要欄の使用アイテムに記載"
-        ]
+        ],
+        "skin_concern": ""
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "8Ok6bsgcNGc": {
     "video_id": "8Ok6bsgcNGc",
@@ -494103,19 +494103,19 @@
       {
         "brand_id": "brand-00137",
         "brand": "HAKU",
-        "name_id": "name-00015",
-        "name": "薬用 美白美容液（医薬部外品）メラノフォーカスIV",
+        "name_id": "name-00002",
+        "name": "メラノフォーカスＩＶ",
         "related_tags": [
           "美容液"
         ],
-        "skin_concern": "",
         "mentions": [
           "何十本も使ってきた（3桁かも）美白美容液。10代目。みずみずしく狙い打ちもでき浸透が早い、これなしではいられない"
         ],
-        "time_in_video": "3:57"
+        "time_in_video": "3:57",
+        "skin_concern": ""
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "b6LTW47S0sQ": {
     "video_id": "b6LTW47S0sQ",
@@ -578561,16 +578561,16 @@
       {
         "brand_id": "brand-00056",
         "brand": "エテュセ",
-        "name_id": "name-00038",
-        "name": "エテュセ　マスカラベース",
+        "name_id": "name-00001",
+        "name": "アイエディション　（マスカラベース）",
         "related_tags": [
           "マスカラ下地・トップコート"
         ],
-        "skin_concern": "",
         "mentions": [
           "まつ毛をぎゅっと固定する"
         ],
-        "time_in_video": "24:10"
+        "time_in_video": "24:10",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00112",
@@ -578656,7 +578656,7 @@
         "time_in_video": "34:20"
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "bU1e02D1Ekg": {
     "video_id": "bU1e02D1Ekg",
