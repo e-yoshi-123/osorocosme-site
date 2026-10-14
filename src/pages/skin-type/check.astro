@@ -1,187 +1,380 @@
 ---
-// 肌質の自己診断（314章）。洗顔後の肌の様子から分かれていくフローチャート。回答はブラウザの中だけで、どこにも送らない。
-// 結果から、同じ肌質のインフルエンサーと愛用スキンケアのページ（/skin-type/<肌質>/）と、マイコスメへの設定につなぐ。
-// 一般的な見分け方（洗顔後に何もつけずに待つ）をもとにした自前の文。効果・効能は書かない（薬機法）
+// 肌質の自己診断（314章、315章で作り直し）。洗顔後の肌の様子から分かれていくフローチャート。回答はブラウザの中だけで、どこにも送らない。
+// 最初の質問は顔のイラストで選ぶ（つっぱる所はひびの線、テカる所は光の印）。結果は、同じ肌質だと本人が話しているインフルエンサーと、その人たちに人気のスキンケア。
+// 下のフローチャートは図で載せ、診断が終わると、たどった道を色で示す。一般的な見分け方をもとにした自前の文で、効果・効能は書かない（薬機法）。
+// 見た目はこのページの中のCSS（sk-。パーソナルカラーの診断の ck- と共通の考え方）
 import Layout from "../../layouts/Layout.astro";
-import PageHead from "../../components/PageHead.astro";
-import { getPublishedSkinTypes, getSkinType, withBase, breadcrumbLd } from "../../lib/data";
+import { getPublishedSkinTypes, selfCheckExtras, withBase, breadcrumbLd } from "../../lib/data";
 
-type Opt = { label: string; next?: string; set?: string };
-const NODES: Record<string, { q: string; opts: Opt[] }> = {
+type Opt = { label: string; next?: string; set?: string; face?: "dry" | "mix" | "oily" | "calm" | "inner" | "red" | "ok" };
+const NODES: Record<string, { q: string; hint: string; opts: Opt[] }> = {
   start: {
-    q: "洗顔のあと、何もつけずに15分ほど待ちます。肌はどうなりましたか？",
+    q: "洗顔のあと、何もつけずに15分。肌はどうなりましたか？",
+    hint: "いちばん近いものを選んでください",
     opts: [
-      { label: "顔全体がつっぱる・カサつく", set: "乾燥肌", next: "sens" },
-      { label: "おでこや鼻（Tゾーン）はテカるのに、頬はつっぱる", set: "混合肌", next: "sens" },
-      { label: "顔全体がテカる・ベタつく", next: "oily" },
-      { label: "特に気にならない", set: "普通肌", next: "sens" },
+      { label: "顔全体がつっぱる・カサつく", set: "乾燥肌", next: "sens", face: "dry" },
+      { label: "Tゾーンはテカるのに、頬はつっぱる", set: "混合肌", next: "sens", face: "mix" },
+      { label: "顔全体がテカる・ベタつく", next: "oily", face: "oily" },
+      { label: "特に気にならない", set: "普通肌", next: "sens", face: "calm" },
     ],
   },
   oily: {
     q: "テカるのに、肌の内側はつっぱる・ごわつく感じがありますか？",
+    hint: "夕方や、エアコンの効いた部屋で",
     opts: [
-      { label: "ある（表面は皮脂、内側は乾いている感じ）", set: "インナードライ", next: "sens" },
-      { label: "ない", set: "脂性肌", next: "sens" },
+      { label: "ある（表面は皮脂、内側は乾いている感じ）", set: "インナードライ", next: "sens", face: "inner" },
+      { label: "ない", set: "脂性肌", next: "sens", face: "oily" },
     ],
   },
   sens: {
-    q: "新しい化粧品を使ったときに、赤み・ピリピリ・かゆみが出やすいですか？",
+    q: "新しい化粧品を使ったとき、赤み・ピリピリ・かゆみが出やすいですか？",
+    hint: "季節の変わり目なども思い出して",
     opts: [
-      { label: "出やすい", set: "+敏感肌" },
-      { label: "あまり出ない" },
+      { label: "出やすい", set: "+敏感肌", face: "red" },
+      { label: "あまり出ない", face: "ok" },
     ],
   },
 };
-const TEXT: Record<string, string> = {
-  乾燥肌: "皮脂も水分も少なめで、つっぱりやカサつきを感じやすい肌です。",
-  混合肌: "Tゾーンは皮脂が出やすく、頬などは乾きやすい、部分によって違う肌です。",
-  インナードライ: "表面は皮脂でテカるのに、内側は乾いている肌です。",
-  脂性肌: "皮脂が出やすく、テカりやベタつきを感じやすい肌です。",
-  普通肌: "皮脂と水分のバランスがとれていて、トラブルを感じにくい肌です。",
-  敏感肌: "化粧品や季節の変わり目などで、赤み・ピリピリを感じやすい肌です。",
+const TYPES: Record<string, { en: string; text: string; tone: string }> = {
+  乾燥肌: { en: "Dry", text: "皮脂も水分も少なめで、つっぱりやカサつきを感じやすい肌です。", tone: "#F3D9C8" },
+  混合肌: { en: "Combination", text: "Tゾーンは皮脂が出やすく、頬などは乾きやすい、部分によって違う肌です。", tone: "#E6DDF2" },
+  インナードライ: { en: "Inner dry", text: "表面は皮脂でテカるのに、内側は乾いている肌です。", tone: "#D8ECEF" },
+  脂性肌: { en: "Oily", text: "皮脂が出やすく、テカりやベタつきを感じやすい肌です。", tone: "#F6EBC4" },
+  普通肌: { en: "Normal", text: "皮脂と水分のバランスがとれていて、トラブルを感じにくい肌です。", tone: "#E3EFDF" },
+  敏感肌: { en: "Sensitive", text: "化粧品や季節の変わり目などで、赤み・ピリピリを感じやすい肌です。", tone: "#F8D9DF" },
 };
 const pub = getPublishedSkinTypes();
 const pages = Object.fromEntries(
-  Object.keys(TEXT).map((k) => {
+  Object.keys(TYPES).map((k) => {
     const d = pub.find((x) => x.slug === k);
-    return [k, d ? { href: withBase(`/skin-type/${encodeURIComponent(d.slug)}/`), people: getSkinType(d.slug)!.people.length, slug: d.slug } : null];
+    return [k, d ? { href: withBase(`/skin-type/${encodeURIComponent(d.slug)}/`), slug: d.slug, ...selfCheckExtras("skin", d.slug, 6) } : null];
   }),
 );
 const title = "肌質自己診断（乾燥肌・脂性肌・混合肌・インナードライ・敏感肌）";
-const description = "洗顔後の肌の様子から、乾燥肌・混合肌・脂性肌・インナードライ・普通肌と、敏感肌かどうかを自己診断できるフローチャート。結果から、同じ肌質だと本人が話しているYouTuber・インフルエンサーと、その人たちの愛用スキンケアを見られます。";
+const description = "洗顔後の肌の様子から、乾燥肌・混合肌・脂性肌・インナードライ・普通肌と、敏感肌かどうかを見分ける自己診断のフローチャート。結果では、同じ肌質だと本人が話しているYouTuber・インフルエンサーと、その人たちに人気のスキンケアが見られます。";
 const crumbs = [
   { name: "ホーム", path: "/" },
   { name: "肌質から探す", path: "/skin-type/" },
   { name: "肌質自己診断", path: "/skin-type/check/" },
 ];
+const pageUrl = new URL(withBase("/skin-type/check/"), Astro.site!).href;
 ---
 
 <Layout title={title} description={description} jsonLd={[breadcrumbLd(crumbs, Astro.site!)]}>
-  <nav class="text-xs text-neutral-500 mb-8 flex flex-wrap gap-2" aria-label="パンくず">
+  <nav class="text-xs text-neutral-500 mb-6 flex flex-wrap gap-2" aria-label="パンくず">
     <a href={withBase("/")} class="link-u">Home</a><span aria-hidden="true">/</span>
     <a href={withBase("/skin-type/")} class="link-u">肌質から探す</a><span aria-hidden="true">/</span>
     <span>自己診断</span>
   </nav>
-  <PageHead en="Self check" title="肌質自己診断" lead="洗顔後の肌の様子から、あなたの肌質を見分けます。結果から、同じ肌質のインフルエンサーが使っているスキンケア・ベースメイクを見られます。" />
 
-  <div id="skin-check" class="panel max-w-2xl mx-auto" data-nodes={JSON.stringify(NODES)} data-text={JSON.stringify(TEXT)} data-pages={JSON.stringify(pages)}>
-    <noscript><p class="text-sm text-neutral-600">診断にはJavaScriptが必要です。下のフローチャートを参考にしてください。</p></noscript>
-    <div data-stage class="min-h-[16rem]"></div>
-  </div>
+  <section class="sk-hero" aria-labelledby="sk-title">
+    <div class="sk-blobs" aria-hidden="true">
+      <span style="--c:#BFE3EA;--x:6%;--y:12%;--d:0s"></span>
+      <span style="--c:#F8D3DC;--x:70%;--y:6%;--d:-5s"></span>
+      <span style="--c:#E6DDF2;--x:22%;--y:66%;--d:-9s"></span>
+      <span style="--c:#F6EBC4;--x:78%;--y:62%;--d:-13s"></span>
+    </div>
+    <svg class="sk-drops" viewBox="0 0 400 400" aria-hidden="true">
+      <path d="M90 60 C90 60 60 100 60 122 a30 30 0 0 0 60 0 C120 100 90 60 90 60Z" />
+      <path d="M320 260 C320 260 300 286 300 300 a20 20 0 0 0 40 0 C340 286 320 260 320 260Z" />
+      <path d="M250 70 C250 70 238 86 238 94 a12 12 0 0 0 24 0 C262 86 250 70 250 70Z" />
+    </svg>
+    <div class="sk-hero-in">
+      <p class="sk-eyebrow">Skin type self check</p>
+      <h1 id="sk-title" class="sk-h1">あなたの肌は、<br />どのタイプ？</h1>
+      <p class="sk-lead">洗顔後の肌の様子から、乾燥肌・混合肌・脂性肌・インナードライ・普通肌と、敏感肌かどうかを見分けます。結果では、同じ肌質のインフルエンサーと、その人たちに人気のスキンケアも。</p>
+      <p class="sk-meta"><span>3 steps</span><span>約30秒</span><span>回答は送信されません</span></p>
+    </div>
+    <div id="skin-check" class="sk-card" data-nodes={JSON.stringify(NODES)} data-types={JSON.stringify(TYPES)} data-pages={JSON.stringify(pages)} data-page-url={pageUrl}>
+      <noscript><p class="sk-note">診断にはJavaScriptが必要です。下のフローチャートを参考にしてください。</p></noscript>
+      <div data-stage class="sk-stage"></div>
+    </div>
+  </section>
 
-  {/* 同じ分かれ道を図でも載せる（スクリプトなしでも読める） */}
-  <section class="max-w-2xl mx-auto mt-10" aria-labelledby="skin-flow">
-    <h2 id="skin-flow" class="font-serif h-section font-semibold mb-4">肌質のフローチャート</h2>
-    <ol class="space-y-3 text-sm">
-      <li class="rounded-2xl border border-ink/10 bg-white p-4">
-        <p class="font-medium">① {NODES.start.q}</p>
-        <ul class="mt-3 grid sm:grid-cols-2 gap-2">
-          {NODES.start.opts.map((o) => (
-            <li class="rounded-xl bg-paper px-3 py-2"><span class="text-neutral-700">{o.label}</span><span class="block mt-1 text-rose font-medium">→ {o.set ?? "②へ"}</span></li>
-          ))}
-        </ul>
-      </li>
-      <li class="rounded-2xl border border-ink/10 bg-white p-4">
-        <p class="font-medium">② {NODES.oily.q}</p>
-        <ul class="mt-3 grid sm:grid-cols-2 gap-2">
-          {NODES.oily.opts.map((o) => (<li class="rounded-xl bg-paper px-3 py-2"><span class="text-neutral-700">{o.label}</span><span class="block mt-1 text-rose font-medium">→ {o.set}</span></li>))}
-        </ul>
-      </li>
-      <li class="rounded-2xl border border-ink/10 bg-white p-4">
-        <p class="font-medium">③ どの肌質でも：{NODES.sens.q}</p>
-        <p class="mt-2 text-neutral-700">出やすいなら<span class="text-rose font-medium">敏感肌</span>も当てはまります（例：乾燥肌・敏感肌）。</p>
-      </li>
-    </ol>
-    <p class="mt-4 text-xs text-neutral-500">この診断は目安です。肌の状態は季節や体調で変わります。肌トラブルが続くときは皮膚科に相談してください。回答はこの端末の中だけで使い、どこにも送りません。</p>
-    <p class="mt-4 text-sm"><a href={withBase("/personal-color/check/")} class="link-u text-ink">パーソナルカラーの自己診断はこちら →</a></p>
+  {/* フローチャート（スクリプトなしでも読める。診断が終わると、たどった道に色が付く） */}
+  <section class="sk-flow-wrap" aria-labelledby="sk-flow">
+    <p class="sk-eyebrow">Flowchart</p>
+    <h2 id="sk-flow" class="sk-h2">肌質のフローチャート</h2>
+    <div class="sk-flow" data-flow>
+      <div class="sk-node q" data-node="start"><span class="sk-num">1</span>洗顔後、何もつけずに15分。肌は？</div>
+      <div class="sk-branch">
+        <div class="sk-col"><div class="sk-edge" data-edge="start-乾燥肌">全体がつっぱる</div><div class="sk-node r" data-res="乾燥肌">乾燥肌</div></div>
+        <div class="sk-col"><div class="sk-edge" data-edge="start-混合肌">Tゾーンだけテカる</div><div class="sk-node r" data-res="混合肌">混合肌</div></div>
+        <div class="sk-col"><div class="sk-edge" data-edge="start-oily">全体がテカる</div>
+          <div class="sk-node q" data-node="oily"><span class="sk-num">2</span>内側はつっぱる？</div>
+          <div class="sk-branch sub">
+            <div class="sk-col"><div class="sk-edge" data-edge="oily-インナードライ">つっぱる</div><div class="sk-node r" data-res="インナードライ">インナードライ</div></div>
+            <div class="sk-col"><div class="sk-edge" data-edge="oily-脂性肌">つっぱらない</div><div class="sk-node r" data-res="脂性肌">脂性肌</div></div>
+          </div>
+        </div>
+        <div class="sk-col"><div class="sk-edge" data-edge="start-普通肌">気にならない</div><div class="sk-node r" data-res="普通肌">普通肌</div></div>
+      </div>
+      <div class="sk-join" aria-hidden="true"></div>
+      <div class="sk-node q" data-node="sens"><span class="sk-num">3</span>どの肌質でも：新しい化粧品で赤み・ピリピリが出やすい？</div>
+      <div class="sk-branch two">
+        <div class="sk-col"><div class="sk-edge" data-edge="sens-敏感肌">出やすい</div><div class="sk-node r" data-res="敏感肌">＋ 敏感肌</div></div>
+        <div class="sk-col"><div class="sk-edge" data-edge="sens-none">あまり出ない</div><div class="sk-node r muted" data-res="none">そのまま</div></div>
+      </div>
+    </div>
+    <p class="sk-note mt">この診断は目安です。肌の状態は季節や体調で変わります。肌トラブルが続くときは皮膚科に相談してください。回答はこの端末の中だけで使い、どこにも送りません。</p>
+    <p class="sk-cross"><a href={withBase("/personal-color/check/")}>パーソナルカラーの自己診断もする →</a></p>
   </section>
 </Layout>
 
+<style is:global>
+  .sk-hero { position: relative; overflow: hidden; border-radius: 2rem; padding: clamp(1.5rem, 4vw, 3.5rem); background: linear-gradient(150deg, #f2fafb 0%, #fdf3f6 55%, #f7f3fb 100%); display: grid; gap: clamp(1.5rem, 4vw, 3rem); }
+  @media (min-width: 1024px) { .sk-hero { grid-template-columns: 5fr 7fr; align-items: start; } .sk-hero-in { padding-top: 2.5rem; } }
+  .sk-blobs { position: absolute; inset: 0; filter: blur(48px); opacity: .6; pointer-events: none; }
+  .sk-blobs span { position: absolute; left: var(--x); top: var(--y); width: 32vmax; height: 32vmax; max-width: 400px; max-height: 400px; border-radius: 50%; background: var(--c); animation: sk-float 24s ease-in-out infinite; animation-delay: var(--d); }
+  @keyframes sk-float { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(5%, -7%) scale(1.07); } }
+  .sk-drops { position: absolute; right: 2%; top: 4%; width: min(46vw, 420px); fill: rgba(255,255,255,.55); pointer-events: none; }
+  @media (prefers-reduced-motion: reduce) { .sk-blobs span { animation: none; } }
+  .sk-hero-in, .sk-card { position: relative; }
+  .sk-eyebrow { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--color-rose); font-weight: 600; }
+  .sk-h1 { margin-top: .75rem; font-family: var(--font-serif, serif); font-weight: 600; font-size: clamp(2.1rem, 5.4vw, 3.6rem); line-height: 1.12; letter-spacing: -.02em; color: var(--color-ink); }
+  .sk-lead { margin-top: 1.25rem; font-size: .9rem; line-height: 1.95; color: #4b4547; max-width: 30rem; }
+  .sk-meta { margin-top: 1.25rem; display: flex; flex-wrap: wrap; gap: .5rem; }
+  .sk-meta span { font-size: 11px; padding: .3rem .75rem; border-radius: 999px; background: rgba(255,255,255,.7); border: 1px solid rgba(0,0,0,.06); color: #555; }
+  .sk-card { border-radius: 1.75rem; background: rgba(255,255,255,.8); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border: 1px solid rgba(255,255,255,.9); box-shadow: 0 30px 60px -30px rgba(40, 70, 90, .35); padding: clamp(1.25rem, 3.5vw, 2.25rem); }
+  .sk-stage { min-height: 24rem; }
+  .sk-in { animation: sk-in .45s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes sk-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .sk-in { animation: none; } }
+  .sk-steps { display: flex; align-items: center; gap: .5rem; font-size: 11px; color: #8a8285; }
+  .sk-steps i { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-weight: 600; background: rgba(0,0,0,.06); color: #8a8285; }
+  .sk-steps i.on { background: var(--color-rose); color: #fff; }
+  .sk-steps b { flex: 0 0 22px; height: 2px; background: rgba(0,0,0,.1); }
+  .sk-q { margin-top: 1.5rem; font-family: var(--font-serif, serif); font-weight: 600; font-size: clamp(1.25rem, 2.6vw, 1.6rem); line-height: 1.45; color: var(--color-ink); }
+  .sk-hint { margin-top: .4rem; font-size: 12px; color: #8a8285; }
+  .sk-opts { margin-top: 1.5rem; display: grid; gap: .75rem; }
+  .sk-opts.faces { grid-template-columns: 1fr 1fr; }
+  .sk-opt { display: flex; align-items: center; gap: 1rem; width: 100%; text-align: left; padding: 1rem 1.1rem; border-radius: 1.1rem; border: 1px solid rgba(0,0,0,.09); background: #fff; font-size: .9rem; color: var(--color-ink); cursor: pointer; transition: transform .2s, border-color .2s, box-shadow .2s; }
+  .sk-opts.faces .sk-opt { flex-direction: column; text-align: center; gap: .6rem; padding: 1rem .75rem; font-size: .82rem; line-height: 1.5; }
+  .sk-opt:hover, .sk-opt:focus-visible { transform: translateY(-2px); border-color: var(--color-rose); box-shadow: 0 12px 24px -16px rgba(200, 60, 110, .55); outline: none; }
+  .sk-face { width: 64px; height: 76px; flex-shrink: 0; }
+  .sk-opts.faces .sk-face { width: 96px; height: 114px; }
+  .sk-back { margin-top: 1.5rem; font-size: 12px; color: #8a8285; cursor: pointer; background: none; border: 0; }
+  .sk-back:hover { color: var(--color-ink); }
+  /* 結果 */
+  .sk-res-en { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--color-rose); font-weight: 600; }
+  .sk-res-name { margin-top: .3rem; font-family: var(--font-serif, serif); font-weight: 600; font-size: clamp(2rem, 5.2vw, 3rem); line-height: 1.1; color: var(--color-ink); }
+  .sk-res-name small { font-size: .95rem; font-weight: 400; color: #8a8285; margin-left: .4rem; }
+  @media (max-width: 520px) { .sk-res-name small { display: block; margin: .3rem 0 0; } }
+  .sk-types { margin-top: 1.25rem; display: grid; gap: .75rem; }
+  .sk-type { border-radius: 1.25rem; padding: 1.1rem 1.2rem; background: linear-gradient(140deg, var(--t) 0%, #fff 75%); border: 1px solid rgba(0,0,0,.05); display: flex; gap: 1rem; align-items: flex-start; animation: sk-in .5s both; }
+  .sk-type svg { flex-shrink: 0; width: 44px; height: 44px; }
+  .sk-type h3 { font-family: var(--font-serif, serif); font-weight: 600; font-size: 1.35rem; color: var(--color-ink); }
+  .sk-type h3 span { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #8a8285; margin-left: .5rem; font-family: inherit; font-weight: 500; }
+  .sk-type p { margin-top: .35rem; font-size: .85rem; line-height: 1.8; color: #4b4547; }
+  .sk-block { margin-top: 1.5rem; }
+  .sk-block h4 { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: #8a8285; font-weight: 600; margin-bottom: .7rem; }
+  .sk-people { display: flex; flex-wrap: wrap; gap: .25rem; align-items: center; }
+  .sk-people a img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 6px 14px -8px rgba(0,0,0,.5); transition: transform .2s; }
+  .sk-people a:hover img { transform: translateY(-3px); }
+  .sk-people span { font-size: 12px; color: #6b6366; margin-left: .5rem; }
+  .sk-items { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; }
+  .sk-item { display: block; border-radius: 1rem; background: #fff; border: 1px solid rgba(0,0,0,.06); padding: .6rem; transition: transform .2s, box-shadow .2s; }
+  .sk-item:hover { transform: translateY(-3px); box-shadow: 0 14px 26px -18px rgba(0,0,0,.5); }
+  .sk-item img { width: 100%; aspect-ratio: 1; object-fit: contain; border-radius: .7rem; background: #f6f8f8; }
+  .sk-item b { display: block; margin-top: .45rem; font-size: 10px; color: var(--color-rose); font-weight: 600; }
+  .sk-item span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 11px; line-height: 1.4; color: var(--color-ink); }
+  .sk-item em { display: block; margin-top: .2rem; font-style: normal; font-size: 10px; color: #8a8285; }
+  .sk-link { display: inline-block; margin-top: .9rem; font-size: 12px; color: var(--color-ink); text-decoration: underline; text-underline-offset: 4px; }
+  .sk-none { margin-top: .7rem; font-size: 12px; color: #8a8285; }
+  .sk-cta { margin-top: 1.5rem; display: grid; gap: .6rem; }
+  .sk-btn { display: block; text-align: left; border-radius: 1.1rem; padding: 1rem 1.15rem; font-size: .88rem; cursor: pointer; transition: background .2s, color .2s, border-color .2s; background: #fff; border: 1px solid rgba(0,0,0,.14); color: var(--color-ink); }
+  .sk-btn:hover { border-color: var(--color-rose); color: var(--color-rose); }
+  .sk-btn small { display: block; margin-top: .2rem; font-size: 11px; opacity: .7; }
+  .sk-share { margin-top: 1.25rem; display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-size: 12px; color: #8a8285; }
+  .sk-share a, .sk-share button { font-size: 12px; padding: .35rem .85rem; border-radius: 999px; border: 1px solid rgba(0,0,0,.12); background: #fff; color: var(--color-ink); cursor: pointer; }
+  .sk-share a:hover, .sk-share button:hover { border-color: var(--color-rose); color: var(--color-rose); }
+  .sk-note { font-size: 11px; line-height: 1.8; color: #8a8285; }
+  .sk-note.mt { margin-top: 1.5rem; }
+  /* フローチャート */
+  .sk-flow-wrap { margin-top: clamp(3rem, 7vw, 5rem); }
+  .sk-h2 { margin-top: .5rem; font-family: var(--font-serif, serif); font-weight: 600; font-size: clamp(1.5rem, 3vw, 2rem); }
+  .sk-flow { margin-top: 1.5rem; padding: clamp(1rem, 3vw, 2rem); border-radius: 1.75rem; background: #fff; border: 1px solid rgba(0,0,0,.06); display: flex; flex-direction: column; align-items: center; gap: 0; overflow-x: auto; }
+  .sk-node { position: relative; border-radius: 1rem; padding: .7rem 1rem; font-size: .82rem; line-height: 1.5; text-align: center; transition: background .4s, color .4s, box-shadow .4s, border-color .4s; }
+  .sk-node.q { background: #faf7f6; border: 1px solid rgba(0,0,0,.08); max-width: 26rem; display: flex; gap: .6rem; align-items: center; text-align: left; }
+  .sk-num { flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: var(--color-ink); color: #fff; font-size: 11px; font-weight: 600; }
+  .sk-node.r { background: #fff; border: 1.5px solid rgba(0,0,0,.12); font-family: var(--font-serif, serif); font-weight: 600; font-size: .95rem; min-width: 6.5rem; }
+  .sk-node.r.muted { font-family: inherit; font-weight: 400; font-size: .8rem; color: #8a8285; border-style: dashed; }
+  .sk-branch { display: grid; grid-template-columns: repeat(4, minmax(7.5rem, 1fr)); gap: .75rem; width: 100%; max-width: 54rem; position: relative; padding-top: 1.5rem; margin-top: .25rem; }
+  .sk-branch::before { content: ""; position: absolute; top: .55rem; left: 12.5%; right: 12.5%; height: 2px; background: rgba(0,0,0,.12); }
+  .sk-branch::after { content: ""; position: absolute; top: -.25rem; left: 50%; width: 2px; height: .8rem; background: rgba(0,0,0,.12); }
+  .sk-branch.sub { grid-template-columns: 1fr 1fr; max-width: none; }
+  .sk-branch.sub::before { left: 25%; right: 25%; }
+  .sk-branch.two { grid-template-columns: 1fr 1fr; max-width: 26rem; }
+  .sk-branch.two::before { left: 25%; right: 25%; }
+  .sk-col { display: flex; flex-direction: column; align-items: center; gap: .4rem; position: relative; }
+  .sk-col::before { content: ""; position: absolute; top: -.95rem; left: 50%; width: 2px; height: .95rem; background: rgba(0,0,0,.12); }
+  .sk-edge { font-size: 11px; color: #6b6366; padding: .2rem .6rem; border-radius: 999px; background: #f6f2f1; transition: background .4s, color .4s; }
+  .sk-join { width: 2px; height: 1.5rem; background: rgba(0,0,0,.12); margin: .5rem 0; }
+  .sk-flow.done .sk-node, .sk-flow.done .sk-edge { opacity: .45; }
+  .sk-flow .on { opacity: 1 !important; }
+  .sk-node.r.on { background: var(--color-rose); border-color: var(--color-rose); color: #fff; box-shadow: 0 12px 24px -12px rgba(230, 0, 118, .6); }
+  .sk-node.q.on { border-color: var(--color-rose); box-shadow: 0 0 0 3px rgba(230, 0, 118, .12); }
+  .sk-edge.on { background: var(--color-rose); color: #fff; }
+  @media (max-width: 720px) { .sk-branch { grid-template-columns: 1fr 1fr; } .sk-branch::before, .sk-branch::after, .sk-col::before { display: none; } .sk-branch { padding-top: .75rem; } }
+  .sk-cross { margin-top: 1rem; font-size: .9rem; }
+  .sk-cross a { color: var(--color-ink); text-decoration: underline; text-underline-offset: 4px; }
+</style>
+
 <script>
   import { add, load } from "../../scripts/my-cosme-store";
-  type Opt = { label: string; next?: string; set?: string };
-  type Node = { q: string; opts: Opt[] };
-  type Page = { href: string; people: number; slug: string } | null;
+  type Opt = { label: string; next?: string; set?: string; face?: string };
+  type Node = { q: string; hint: string; opts: Opt[] };
+  type Page = { href: string; slug: string; people: { href: string; icon: string; name: string }[]; items: { href: string; img: string; brand: string; name: string; cat: string; users: number }[]; total: number } | null;
   const root = document.getElementById("skin-check")!;
   const stage = root.querySelector<HTMLElement>("[data-stage]")!;
+  const flow = document.querySelector<HTMLElement>("[data-flow]");
   const NODES = JSON.parse(root.dataset.nodes!) as Record<string, Node>;
-  const TEXT = JSON.parse(root.dataset.text!) as Record<string, string>;
+  const TYPES = JSON.parse(root.dataset.types!) as Record<string, { en: string; text: string; tone: string }>;
   const PAGES = JSON.parse(root.dataset.pages!) as Record<string, Page>;
+  const PAGE_URL = root.dataset.pageUrl!;
   const BASE = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL.slice(0, -1) : import.meta.env.BASE_URL;
   const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
   const track = (action: string) => {
     const g = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
     if (typeof g === "function") g("event", "self_check", { kind: "skin_type", action }); // どの結果かは送らない
   };
-  let path: string[] = [];
-  let picks: string[] = [];
-  const drop = "<svg viewBox='0 0 24 24' style='width:22px;height:22px' aria-hidden='true'><path d='M12 2.5S5.5 9.6 5.5 14a6.5 6.5 0 0 0 13 0C18.5 9.6 12 2.5 12 2.5Z' fill='currentColor' opacity='.8'/></svg>";
+  const ORDER = ["start", "oily", "sens"];
+  let path: string[] = ["start"];
+  let chosen: { node: string; opt: Opt }[] = [];
 
+  /** 顔のイラスト：dry=頬と額にひびの線、mix=Tゾーンに光＋頬にひび、oily=全体に光、inner=光＋内側の点線、red=頬に赤み、calm/ok=おだやか */
+  function face(kind?: string): string {
+    if (!kind) return "";
+    const skin = "#F6E3D6";
+    const shine = (x: number, y: number, r = 5) => `<g fill="#fff" stroke="#E8B53A" stroke-width=".9" stroke-linejoin="round"><path d="M${x} ${y - r}L${x + r * .35} ${y - r * .35}L${x + r} ${y}L${x + r * .35} ${y + r * .35}L${x} ${y + r}L${x - r * .35} ${y + r * .35}L${x - r} ${y}L${x - r * .35} ${y - r * .35}Z"/></g>`;
+    const crack = (x: number, y: number) => `<path d="M${x} ${y} l4 3 l-3 3 l5 2" stroke="#C99B83" stroke-width="1.3" fill="none" stroke-linecap="round"/>`;
+    const tzone = `<path d="M30 22 h40 v10 h-14 v30 h-12 v-30 h-14Z" fill="#FFE38A" opacity=".75"/>`;
+    let extra = "";
+    if (kind === "dry") extra = crack(26, 58) + crack(64, 58) + crack(44, 24) + crack(36, 76);
+    if (kind === "mix") extra = tzone + shine(50, 30) + shine(50, 50, 4) + crack(24, 60) + crack(66, 60);
+    if (kind === "oily") extra = `<ellipse cx="50" cy="55" rx="32" ry="38" fill="#FFF3C7" opacity=".55"/>` + shine(36, 30) + shine(62, 34, 4) + shine(50, 52) + shine(30, 62, 4) + shine(70, 62, 4);
+    if (kind === "inner") extra = `<ellipse cx="50" cy="55" rx="32" ry="38" fill="#FFF3C7" opacity=".45"/>` + shine(38, 30, 4) + shine(62, 30, 4) + `<ellipse cx="50" cy="58" rx="18" ry="20" fill="none" stroke="#7FB8C4" stroke-width="1.4" stroke-dasharray="3 3"/>`;
+    if (kind === "red") extra = `<ellipse cx="30" cy="62" rx="9" ry="6" fill="#F08A9C" opacity=".55"/><ellipse cx="70" cy="62" rx="9" ry="6" fill="#F08A9C" opacity=".55"/>`;
+    const mouth = kind === "calm" || kind === "ok" ? `<path d="M42 78 q8 6 16 0" stroke="#B9786A" stroke-width="1.8" fill="none" stroke-linecap="round"/>` : `<path d="M43 79 h14" stroke="#B9786A" stroke-width="1.8" stroke-linecap="round"/>`;
+    return `<svg class="sk-face" viewBox="0 0 100 118" aria-hidden="true">
+      <path d="M50 4 C24 4 14 26 14 52 C14 86 32 110 50 110 C68 110 86 86 86 52 C86 26 76 4 50 4Z" fill="${skin}" stroke="#E2C6B5" stroke-width="1.2"/>
+      ${extra}
+      <path d="M33 47 q5 -4 10 0 M57 47 q5 -4 10 0" stroke="#7A5A4C" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      ${mouth}
+    </svg>`;
+  }
+  const drop = (c: string) => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5S5.5 9.6 5.5 14a6.5 6.5 0 0 0 13 0C18.5 9.6 12 2.5 12 2.5Z" fill="${c}"/><path d="M9.2 14.6a2.9 2.9 0 0 0 2.6 2.7" stroke="#fff" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>`;
+
+  function stepsBar(cur: string) {
+    const idx = ORDER.indexOf(cur);
+    return `<div class="sk-steps" aria-hidden="true">${ORDER.map((n, k) => {
+      const done = chosen.some((c) => c.node === n) || n === cur;
+      const skip = n === "oily" && !chosen.some((c) => c.node === "oily") && idx > 1;
+      return `${k ? "<b></b>" : ""}<i class="${done && !skip ? "on" : ""}">${k + 1}</i>`;
+    }).join("")}<span style="margin-left:.5rem">STEP ${ORDER.indexOf(cur) + 1}</span></div>`;
+  }
   function show() {
     const id = path[path.length - 1];
     if (!id) return result();
     const n = NODES[id];
-    const step = path.length;
-    stage.innerHTML = `
-      <p class="text-xs text-neutral-500">STEP ${step}</p>
-      <h2 class="mt-3 font-serif text-xl md:text-2xl font-semibold leading-snug">${esc(n.q)}</h2>
-      <div class="mt-6 grid gap-3">${n.opts.map((o, k) => `<button type="button" data-opt="${k}" class="text-left w-full rounded-2xl border border-ink/15 bg-white px-5 py-4 text-sm hover:border-rose hover:text-rose transition-colors cursor-pointer">${esc(o.label)}</button>`).join("")}</div>
-      ${step > 1 ? `<button type="button" data-back class="mt-6 text-xs text-neutral-500 hover:text-ink cursor-pointer">← 1つ前に戻る</button>` : ""}`;
+    const faces = id === "start";
+    stage.innerHTML = `<div class="sk-in">
+      ${stepsBar(id)}
+      <h2 class="sk-q">${esc(n.q)}</h2>
+      <p class="sk-hint">${esc(n.hint)}</p>
+      <div class="sk-opts ${faces ? "faces" : ""}">${n.opts.map((o, k) => `<button type="button" class="sk-opt" data-opt="${k}">${face(o.face)}<span>${esc(o.label)}</span></button>`).join("")}</div>
+      ${path.length > 1 ? `<button type="button" data-back class="sk-back">← 1つ前に戻る</button>` : ""}
+    </div>`;
+    paintFlow(false);
+  }
+  function setsOf(): string[] {
+    return chosen.map((c) => c.opt.set).filter((s): s is string => !!s).map((s) => s.replace(/^\+/, ""));
+  }
+  /** フローチャートに、たどった道を付ける */
+  function paintFlow(done: boolean) {
+    if (!flow) return;
+    flow.classList.toggle("done", done);
+    flow.querySelectorAll(".on").forEach((e) => e.classList.remove("on"));
+    for (const c of chosen) {
+      flow.querySelector(`[data-node="${c.node}"]`)?.classList.add("on");
+      const target = c.opt.set ? c.opt.set.replace(/^\+/, "") : c.opt.next === "oily" ? "oily" : "none";
+      flow.querySelector(`[data-edge="${c.node}-${target}"]`)?.classList.add("on");
+      if (c.opt.set) flow.querySelector(`[data-res="${target}"]`)?.classList.add("on");
+      if (c.node === "sens" && !c.opt.set) flow.querySelector(`[data-res="none"]`)?.classList.add("on");
+    }
   }
   function result() {
     track("done");
-    const sets = picks.map((s) => s.replace(/^\+/, ""));
+    const sets = setsOf();
     const mine = load().skin;
-    const card = (k: string) => {
+    const settable = sets.filter((k) => PAGES[k]);
+    const isSet = settable.length > 0 && settable.every((k) => mine[PAGES[k]!.slug]);
+    const card = (k: string, i: number) => {
+      const t = TYPES[k];
       const pg = PAGES[k];
-      return `<div class="rounded-2xl border border-ink/10 bg-white p-5">
-        <div class="flex items-center gap-3"><span class="rounded-full bg-blush text-rose flex items-center justify-center" style="width:44px;height:44px">${drop}</span>
-          <h3 class="font-serif font-semibold" style="font-size:1.5rem">${esc(k)}</h3></div>
-        <p class="mt-3 text-sm leading-relaxed text-neutral-700">${esc(TEXT[k] || "")}</p>
-        ${pg ? `<a href="${pg.href}" class="mt-4 block rounded-xl bg-ink text-paper px-4 py-3 text-sm hover:bg-rose transition-colors">${esc(k)}のインフルエンサーと愛用スキンケアを見る →<span class="block text-xs opacity-70 mt-0.5">${pg.people}人のインフルエンサー</span></a>`
-          : `<p class="mt-4 text-xs text-neutral-500">${esc(k)}だと話しているインフルエンサーはまだ少なく、ページはありません。<a href="${BASE}/skin-type/" class="link-u">ほかの肌質を見る →</a></p>`}
+      return `<div class="sk-type" style="--t:${t.tone};animation-delay:${i * 0.12}s">${drop(k === "敏感肌" ? "#E9879B" : "#7FB8C4")}
+        <div style="min-width:0;flex:1">
+          <h3>${esc(k)}<span>${esc(t.en)}</span></h3>
+          <p>${esc(t.text)}</p>
+          ${pg ? `${pg.people.length ? `<div class="sk-block"><h4>同じ${esc(k)}のインフルエンサー</h4><div class="sk-people">${pg.people.map((p) => `<a href="${p.href}" title="${esc(p.name)}"><img src="${esc(p.icon)}" alt="${esc(p.name)}" width="42" height="42" loading="lazy" referrerpolicy="no-referrer"></a>`).join("")}<span>${pg.total}人</span></div></div>` : ""}
+            ${pg.items.length ? `<div class="sk-block"><h4>${esc(k)}の人に人気のスキンケア</h4><div class="sk-items">${pg.items.map((it) => `<a class="sk-item" href="${it.href}"><img src="${esc(it.img)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"><b>${esc(it.cat)}</b><span>${esc(it.brand)} ${esc(it.name)}</span><em>同じ${esc(k)}の${it.users}人が使用</em></a>`).join("")}</div></div>` : ""}
+            <a class="sk-link" href="${pg.href}">${esc(k)}のインフルエンサーと愛用スキンケアを見る →</a>`
+          : `<p class="sk-none">${esc(k)}だと話しているインフルエンサーはまだ少なく、ページはありません。<a href="${BASE}/skin-type/" style="text-decoration:underline">ほかの肌質を見る →</a></p>`}
+        </div>
       </div>`;
     };
-    const settable = sets.filter((k) => PAGES[k]);
-    const done = settable.length > 0 && settable.every((k) => mine[PAGES[k]!.slug]);
-    stage.innerHTML = `
-      <p class="eyebrow">Result</p>
-      <h2 class="mt-2 font-serif font-semibold" style="font-size:1.75rem;line-height:1.3">${sets.map(esc).join("・")}<span class="text-base font-normal text-neutral-500 ml-1">に近いかも</span></h2>
-      <div class="mt-6 grid gap-3">${sets.map(card).join("")}</div>
-      ${settable.length ? `<button type="button" data-set class="mt-4 w-full rounded-2xl border border-ink/20 px-5 py-4 text-sm text-left hover:border-rose hover:text-rose transition-colors cursor-pointer">${done ? "✓ マイコスメに設定済み" : `マイコスメの肌質に「${settable.map(esc).join("・")}」を入れる`}<span class="block text-xs text-neutral-500 mt-1">おすすめに反映されます（この端末に保存）</span></button>` : ""}
-      <p class="mt-6 text-xs text-neutral-500">自己診断の目安です。肌の状態は季節や体調で変わります。</p>
-      <button type="button" data-restart class="mt-6 text-xs text-neutral-500 hover:text-ink cursor-pointer">もう一度診断する</button>`;
-    stage.querySelector("[data-set]")?.addEventListener("click", (e) => {
-      for (const k of settable) add(PAGES[k]!.slug, undefined, "skin");
-      track("set_my_cosme");
-      (e.currentTarget as HTMLElement).innerHTML = `✓ マイコスメに設定しました<span class="block text-xs text-neutral-500 mt-1"><a href="${BASE}/my-cosme/" class="link-u">マイコスメでおすすめを見る →</a></span>`;
-    });
+    const share = `肌質の自己診断の結果は「${sets.join("・")}」でした。同じ肌質のインフルエンサーの愛用スキンケアもチェック #OsoroCosme`;
+    stage.innerHTML = `<div class="sk-in">
+      <p class="sk-res-en">Your skin type</p>
+      <h2 class="sk-res-name">${sets.map(esc).join("・")}<small>に近いかも</small></h2>
+      <div class="sk-types">${sets.map(card).join("")}</div>
+      <div class="sk-cta">
+        ${settable.length ? `<button type="button" data-set class="sk-btn">${isSet ? "✓ マイコスメに設定済み" : `マイコスメの肌質に「${settable.map(esc).join("・")}」を入れる`}<small>おすすめに反映されます（この端末に保存）</small></button>` : ""}
+      </div>
+      <div class="sk-share">結果をシェア
+        <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(share)}&url=${encodeURIComponent(PAGE_URL)}" target="_blank" rel="noopener">X</a>
+        <a href="https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(PAGE_URL)}" target="_blank" rel="noopener">LINE</a>
+        <button type="button" data-copy>リンクをコピー</button>
+      </div>
+      <p class="sk-note mt">自己診断の目安です。肌の状態は季節や体調で変わります。下のフローチャートに、たどった道を示しています。</p>
+      <button type="button" data-restart class="sk-back">もう一度診断する</button>
+    </div>`;
+    paintFlow(true);
   }
-  root.addEventListener("click", (e) => {
+  root.addEventListener("click", async (e) => {
     const t = e.target as HTMLElement;
-    const opt = t.closest<HTMLElement>("[data-opt]");
-    if (opt) {
-      const o = NODES[path[path.length - 1]].opts[Number(opt.dataset.opt)];
-      if (path.length === 1) track("start");
-      if (o.set) picks.push(o.set);
+    const optEl = t.closest<HTMLElement>("[data-opt]");
+    if (optEl) {
+      const id = path[path.length - 1];
+      const o = NODES[id].opts[Number(optEl.dataset.opt)];
+      if (id === "start") track("start");
+      chosen.push({ node: id, opt: o });
       path.push(o.next ?? "");
-      if (!o.next) { path.pop(); path.push(""); }
       return show();
     }
     if (t.closest("[data-back]")) {
       path.pop();
-      // 戻った質問で付けた肌質を外す（その質問の選択肢の set のどれか）
-      const n = NODES[path[path.length - 1]];
-      const last = picks[picks.length - 1];
-      if (last && n.opts.some((o) => o.set === last)) picks.pop();
+      chosen.pop();
       return show();
     }
     if (t.closest("[data-restart]")) {
       path = ["start"];
-      picks = [];
-      return show();
+      chosen = [];
+      show();
+      root.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    const cp = t.closest<HTMLElement>("[data-copy]");
+    if (cp) {
+      try { await navigator.clipboard.writeText(PAGE_URL); cp.textContent = "コピーしました"; } catch { cp.textContent = PAGE_URL; }
+      return;
+    }
+    const s = t.closest<HTMLElement>("[data-set]");
+    if (s) {
+      for (const k of setsOf()) if (PAGES[k]) add(PAGES[k]!.slug, undefined, "skin");
+      track("set_my_cosme");
+      s.innerHTML = `✓ マイコスメに設定しました<small><a href="${BASE}/my-cosme/" style="text-decoration:underline">マイコスメでおすすめを見る →</a></small>`;
     }
   });
-  path = ["start"];
   show();
 </script>

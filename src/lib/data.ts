@@ -1871,6 +1871,26 @@ export function introProfileSummary(channelIds: Iterable<string>): (ProfilePage 
   );
 }
 
+/** 自己診断の結果の画面に出す、同じパーソナルカラー・肌質の人（アイコンのある人を紹介動画の多い順に）と、その人たちに人気の商品（画像のあるもの。大分類ごとに1品）。315章 */
+export function selfCheckExtras(kind: "pc" | "skin", slug: string, people = 8) {
+  const c = kind === "pc" ? getPersonalColor(slug) : getSkinType(slug);
+  if (!c) return { people: [], items: [], total: 0 };
+  const groups = kind === "pc" ? ["リップ", "アイメイク", "チーク・陰影"] : ["スキンケア", "スキンケア", "ベースメイク"];
+  const used = new Set<string>();
+  const items: { href: string; img: string; brand: string; name: string; cat: string; users: number }[] = [];
+  for (const g of groups) {
+    const it = c.items.find((e) => CATEGORY_TAG_TO_GROUP[e.tag] === g && !used.has(`${e.brand_id}_${e.name_id}`) && productOffer(getCosmeticListEntry(e.brand_id, e.name_id)).imageSrc);
+    if (!it) continue;
+    used.add(`${it.brand_id}_${it.name_id}`);
+    items.push({ href: withBase(`/cosmetics/${cosmeticSlug(it.brand_id, it.name_id)}`), img: productOffer(getCosmeticListEntry(it.brand_id, it.name_id)).imageSrc, brand: it.brand, name: it.name, cat: it.tag, users: it.channelCount });
+  }
+  return {
+    people: c.people.filter((p) => p.channel_icon).slice(0, people).map((p) => ({ href: withBase(`/influencer/${p.channel_id}`), icon: p.channel_icon!, name: p.channel_title })),
+    items,
+    total: c.people.length,
+  };
+}
+
 /** 肌質から探す（/skin-type/<名前>/。310章）。本人が言った肌質（influencer-profile.json の skin。AIの推定ではない）の人たちが紹介した
  * スキンケアとベースメイクを、同じ肌質の何人が使ったかで並べる。「敏感肌・乾燥肌」のように2つ言っている人は両方に入る。
  * 「乾燥肌寄りの混合肌」は混合肌（寄り〜は数えない）。肌悩みのページ（/concern/。発言に悩みの語がある紹介）とは別の軸 */
