@@ -5,6 +5,7 @@ import PageHead from "../../components/PageHead.astro";
 import Layout from "../../layouts/Layout.astro";
 import ShareButtons from "../../components/ShareButtons.astro";
 import RankingRow from "../../components/RankingRow.astro";
+import PeopleGrid from "../../components/PeopleGrid.astro";
 import {
   getPublishedPersonalColors,
   getPersonalColor,
@@ -52,9 +53,9 @@ const groups = c.groups.map((g) => ({
 const firstOf = (g: string) => groups.find((x) => x.group === g)?.rows[0]?.it;
 const lip = firstOf("リップ");
 const eye = firstOf("アイメイク");
-const title = `${name}のインフルエンサーが使っているコスメ（リップ・アイシャドウ・チーク）`;
+const title = `${name}のYouTuber・インフルエンサーと愛用コスメ（リップ・アイシャドウ・チーク）`;
 const description =
-  `パーソナルカラーが${name}だと本人が話しているインフルエンサー${c.people.length}人が、YouTubeで紹介したメイクのコスメを、同じ${name}の何人が使ったかで集計。` +
+  `パーソナルカラーが${name}だと本人が話しているYouTuber・インフルエンサー${c.people.length}人と、その人たちが紹介したメイクのコスメ（同じ${name}の何人が使ったかで集計）。` +
   (lip ? `リップでは${lip.brand}「${lip.name}」、` : "") +
   (eye ? `アイメイクでは${eye.brand}「${eye.name}」などが上位です。` : "");
 const topImage = groups.flatMap((g) => g.rows).find((r) => r.imageSrc)?.imageSrc;
@@ -90,10 +91,22 @@ const jsonLd = [
     <span>{name}</span>
   </nav>
 
-  <PageHead en={c.def.en} title={`${name}の人が使っているコスメ`} lead={`パーソナルカラーが${name}だと本人が話している${c.people.length}人のインフルエンサーが、YouTubeで紹介したメイクのコスメです。同じ${name}の人が何人使っているかの順に並べました。`}>
+  <PageHead en={c.def.en} title={`${name}のインフルエンサーと愛用コスメ`} lead={`パーソナルカラーが${name}だと本人が話している${c.people.length}人のYouTuber・インフルエンサーと、その人たちが紹介したメイクのコスメです。人からも、コスメからも探せます。`}>
     <ShareButtons text={`${name}のインフルエンサーが使っているコスメ`} class="mt-5" />
   </PageHead>
 
+  <nav class="mb-8 flex flex-wrap gap-2 text-sm" aria-label="このページの中">
+    <a href="#people" class="chip">インフルエンサー（{c.people.length}人）</a>
+    <a href="#cosme" class="chip">コスメ（{total}品）</a>
+  </nav>
+
+  <section id="people" class="panel mb-8 md:mb-10 scroll-mt-24" aria-labelledby="pc-people">
+    <h2 id="pc-people" class="font-serif h-section font-semibold mb-1">{name}のインフルエンサー</h2>
+    <p class="text-xs text-neutral-500 mb-4">パーソナルカラーが{name}だと、本人が動画・概要欄・タイトルで言っている人です（紹介動画の多い順）。</p>
+    <PeopleGrid people={c.people} />
+  </section>
+
+  <h2 id="cosme" class="font-serif h-section font-semibold mb-4 scroll-mt-24">{name}の人が使っているコスメ</h2>
   <HowWeCount>
     <ul class="list-disc pl-5 space-y-1">
       <li>対象：パーソナルカラーが{name}だと、本人が動画・概要欄・タイトルで言っているインフルエンサー<b>{c.people.length}人</b>の、紹介動画<b>{c.videoCount}本</b>{c.def.season ? `（セカンドではなく、1stが${name}の人）` : `（${name}の季節が分からない人も含む）`}</li>
@@ -145,18 +158,6 @@ const jsonLd = [
     ))
   }
 
-  <section class="panel mb-8" aria-labelledby="pc-people">
-    <h2 id="pc-people" class="font-serif h-section font-semibold mb-4">集計した{name}のインフルエンサー</h2>
-    <ul class="flex flex-wrap gap-2">
-      {c.people.map((p) => (
-        <li>
-          <a href={withBase(`/influencer/${p.channel_id}`)} class="inline-block rounded-full border border-ink/15 bg-white/70 px-4 py-2 text-sm text-ink hover:border-ink/40">
-            {p.channel_title}<span class="ml-2 text-xs text-neutral-500">{p.label}</span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  </section>
 
   <p class="text-xs text-neutral-500 mb-8">価格は楽天市場で確認した時点の参考価格です。最新の価格・在庫は楽天市場でご確認ください。色の見え方・似合い方には個人差があります。</p>
 

@@ -334,18 +334,20 @@ const jsonLd = entry
             title="いつ・誰が紹介したか"
             lead={`${facts.introductions.length}件の紹介${concernIntroCount > 0 ? `（うち肌悩みに触れた紹介${concernIntroCount}件）` : ""}。●の数は投稿者の発信力（登録者数・掲載動画数・紹介コスメ数から算出したスコアの順位。上位5％・20％・40％・70％で5段階）です。`}
           />
-          {/* 紹介した人のパーソナルカラー・肌質の内訳（本人が言ったもの。311章） */}
+          {/* 紹介した人のパーソナルカラー・肌質で、下の一覧を絞り込む（本人が言ったもの。311・312章）。スクリプトなしでは各ページへのリンク */}
           {profileSummary.length > 0 && (
-            <div class="mb-4 flex flex-wrap items-center gap-2 text-xs">
-              <span class="label-caps text-neutral-500 mr-1">Who uses</span>
-              {profileSummary.map((x) => (
-                <a href={withBase(x.href)} class="inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-white/80 px-2.5 py-1 text-neutral-700 hover:border-rose hover:text-rose transition-colors">
-                  {x.kind === "pc" && x.swatch && <span class="inline-block w-3 h-3 rounded-full ring-1 ring-ink/10" style={`background:conic-gradient(${x.swatch.map((c, i) => `${c} ${(i * 360) / x.swatch!.length}deg ${((i + 1) * 360) / x.swatch!.length}deg`).join(", ")})`} aria-hidden="true" />}
-                  {x.kind === "skin" && <svg viewBox="0 0 12 12" class="w-3 h-3 text-rose" aria-hidden="true"><path d="M6 1.2C6 1.2 2.6 5 2.6 7.3A3.4 3.4 0 0 0 9.4 7.3C9.4 5 6 1.2 6 1.2Z" fill="currentColor" opacity=".75" /></svg>}
-                  {x.name}<span class="text-neutral-500">{x.count}人</span>
-                </a>
-              ))}
-              <span class="text-neutral-500">（本人がパーソナルカラー・肌質を話している人の内訳）</span>
+            <div class="mb-4" data-prof-filter>
+              <p class="flex flex-wrap items-center gap-2 text-xs" role="group" aria-label="パーソナルカラー・肌質で絞り込む">
+                <span class="label-caps text-neutral-500 mr-1">Who uses</span>
+                {profileSummary.map((x) => (
+                  <a href={withBase(x.href)} data-prof-key={x.key} data-prof-name={x.name} data-prof-href={withBase(x.href)} aria-pressed="false" class="prof-chip inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-white/80 px-2.5 py-1 text-neutral-700 hover:border-rose hover:text-rose transition-colors aria-pressed:bg-ink aria-pressed:text-paper aria-pressed:border-ink">
+                    {x.kind === "pc" && x.swatch && <span class="inline-block w-3 h-3 rounded-full ring-1 ring-white/60" style={`background:conic-gradient(${x.swatch.map((c, i) => `${c} ${(i * 360) / x.swatch!.length}deg ${((i + 1) * 360) / x.swatch!.length}deg`).join(", ")})`} aria-hidden="true" />}
+                    {x.kind === "skin" && <svg viewBox="0 0 12 12" class="w-3 h-3 text-rose" aria-hidden="true"><path d="M6 1.2C6 1.2 2.6 5 2.6 7.3A3.4 3.4 0 0 0 9.4 7.3C9.4 5 6 1.2 6 1.2Z" fill="currentColor" opacity=".75" /></svg>}
+                    {x.name}<span class="opacity-70">{x.count}人</span>
+                  </a>
+                ))}
+              </p>
+              <p class="mt-2 text-xs text-neutral-500" data-prof-status>押すと、その人たちの紹介だけに絞り込めます（本人がパーソナルカラー・肌質を話している人）。</p>
             </div>
           )}
           {/* 並び替え（スクリプトで行う。スクリプトなしでは新しい順の先頭20件だけ） */}
@@ -489,14 +491,41 @@ const jsonLd = entry
       views: (a, b) => n(b, "views") - n(a, "views") || n(a, "pos") - n(b, "pos"),
       subs: (a, b) => n(b, "score") - n(a, "score") || n(b, "views") - n(a, "views") || n(a, "pos") - n(b, "pos"),
     };
+    // パーソナルカラー・肌質の絞り込み（312章）。絞り込み中は、当てはまる行を全部出す（残りも読んでから）
+    let prof = "";
+    const status = document.querySelector<HTMLElement>("[data-prof-status]");
+    const statusDefault = status?.textContent || "";
     const render = () => {
-      rows.sort(cmp[key]).forEach((li, i) => {
+      let shown = 0;
+      rows.sort(cmp[key]).forEach((li) => {
         introList.appendChild(li);
-        li.hidden = !all && i >= INITIAL;
+        const match = !prof || (li.dataset.prof || "").split(" ").includes(prof);
+        li.hidden = !match || (!prof && !all && shown >= INITIAL);
+        if (match) shown++;
       });
       document.querySelectorAll<HTMLButtonElement>(".intro-sort").forEach((b) => b.classList.toggle("is-active", b.dataset.sort === key));
-      more?.classList.toggle("hidden", all);
+      more?.classList.toggle("hidden", all || !!prof);
+      document.querySelectorAll<HTMLElement>("[data-prof-key]").forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.profKey === prof)));
+      if (status) {
+        const chip = document.querySelector<HTMLElement>(`[data-prof-key="${prof}"]`);
+        if (prof && chip) {
+          status.replaceChildren(`${chip.dataset.profName}の人の紹介 ${shown}件。もう一度押すと元に戻ります。`);
+          const a = document.createElement("a");
+          a.href = chip.dataset.profHref || "#";
+          a.className = "link-u text-ink ml-2";
+          a.textContent = `${chip.dataset.profName}のページを見る →`;
+          status.append(a);
+        } else status.textContent = statusDefault;
+      }
     };
+    document.querySelectorAll<HTMLAnchorElement>("[data-prof-key]").forEach((c) =>
+      c.addEventListener("click", async (e) => {
+        e.preventDefault();
+        prof = prof === c.dataset.profKey ? "" : c.dataset.profKey || "";
+        if (prof) await loadRest();
+        render();
+      })
+    );
     document.querySelectorAll<HTMLButtonElement>(".intro-sort").forEach((b) =>
       b.addEventListener("click", async () => {
         key = b.dataset.sort || "date";

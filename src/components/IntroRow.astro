@@ -1,5 +1,5 @@
 ---
-import { formatDateDot, withBase, type CosmeticIntro } from "../lib/data";
+import { formatDateDot, withBase, profilePagesOf, type CosmeticIntro } from "../lib/data";
 import PrBadge from "./PrBadge.astro";
 import ProfileChips from "./ProfileChips.astro";
 
@@ -33,6 +33,7 @@ const concernQuotes = [...new Set(i.concerns.map((c) => c.quote).filter(Boolean)
   data-pos={pos}
   data-views={i.views}
   data-score={i.influenceScore}
+  data-prof={profilePagesOf(i.channel_id).map((p) => p.key).join(" ")}
   hidden={extra}
 >
   <div class="intro-7">

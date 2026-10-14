@@ -1773,11 +1773,18 @@ function collectByPeople(ids: Set<string>, groups: string[], minChannels: number
     .filter((g) => g.items.length > 0);
   return { videoCount: videoKeys.size, itemCount: items.length, groups: grouped };
 }
+/** 本人が言ったパーソナルカラー・肌質が当てはまる人（ページの人のカードに使う。アイコン・掲載動画の本数の多い順。312章） */
 function profilePeople(match: (p: InfluencerProfile) => boolean, label: (p: InfluencerProfile) => string) {
-  const titles = new Map(getVisibleVideos().map((v) => [v.channel_id, v.channel_title]));
+  const ch = new Map<string, { title: string; icon?: string; videos: number }>();
+  for (const v of getVisibleVideos()) {
+    const e = ch.get(v.channel_id);
+    if (e) e.videos++;
+    else ch.set(v.channel_id, { title: v.channel_title, icon: v.channel_icon, videos: 1 });
+  }
   return Object.entries(INFLUENCER_PROFILE)
-    .filter(([cid, p]) => titles.has(cid) && match(p))
-    .map(([cid, p]) => ({ channel_id: cid, channel_title: titles.get(cid)!, label: label(p) }));
+    .filter(([cid, p]) => ch.has(cid) && match(p))
+    .map(([cid, p]) => ({ channel_id: cid, channel_title: ch.get(cid)!.title, channel_icon: ch.get(cid)!.icon, videoCount: ch.get(cid)!.videos, label: label(p) }))
+    .sort((a, b) => b.videoCount - a.videoCount || a.channel_title.localeCompare(b.channel_title, "ja"));
 }
 function buildPersonalColor(def: PersonalColorDef) {
   const people = profilePeople(
@@ -1834,23 +1841,28 @@ export function profileBadges(channel_id: string): { kind: "pc" | "skin" | "face
   return out;
 }
 
-/** 商品を紹介した人のうち、パーソナルカラー・肌質が分かる人の内訳（商品ページの「いつ・誰が紹介したか」の上に出す。311章）。
- * 公開中のパーソナルカラー・肌質のページ単位で数え、人数の多い順（パーソナルカラーは イエベ→イエベ春… の並び） */
-export function introProfileSummary(channelIds: Iterable<string>): { kind: "pc" | "skin"; name: string; href: string; count: number; swatch?: string[] }[] {
-  const counts = new Map<string, { kind: "pc" | "skin"; name: string; href: string; count: number; swatch?: string[] }>();
+/** 人が当てはまる、公開中のパーソナルカラー・肌質のページ（「イエベ」「ブルベ」のページは季節の分かる人も含めた全員なので、季節のページと両方。311・312章）。
+ * key は商品ページの絞り込みに使う（"pc:イエベ春" "skin:乾燥肌"） */
+export interface ProfilePage { key: string; kind: "pc" | "skin"; name: string; href: string; swatch?: string[] }
+export function profilePagesOf(channel_id: string): ProfilePage[] {
+  const p = INFLUENCER_PROFILE[channel_id];
+  if (!p) return [];
+  const { base, season } = parsePersonalColor(p.personal_color);
+  const out: ProfilePage[] = [];
+  for (const d of getPublishedPersonalColors().filter((d) => base && d.base === base && (!d.season || d.season === season)))
+    out.push({ key: `pc:${d.slug}`, kind: "pc", name: d.name, href: `/personal-color/${encodeURIComponent(d.slug)}/`, swatch: personalColorSwatch(d.name) });
+  for (const d of skinTypePagesOf(p.skin)) out.push({ key: `skin:${d.slug}`, kind: "skin", name: d.name, href: `/skin-type/${encodeURIComponent(d.slug)}/` });
+  return out;
+}
+/** 商品を紹介した人のうち、パーソナルカラー・肌質が分かる人の内訳（商品ページの「いつ・誰が紹介したか」の上の絞り込み。311・312章）。
+ * パーソナルカラーは イエベ→イエベ春… の並び、肌質は人数の多い順 */
+export function introProfileSummary(channelIds: Iterable<string>): (ProfilePage & { count: number })[] {
+  const counts = new Map<string, ProfilePage & { count: number }>();
   for (const cid of new Set(channelIds)) {
-    const p = INFLUENCER_PROFILE[cid];
-    if (!p) continue;
-    // 「イエベ」「ブルベ」のページは季節の分かる人も含めた全員なので、季節のページと両方に数える（ページの数え方とそろえる）
-    const { base, season } = parsePersonalColor(p.personal_color);
-    const pcs = getPublishedPersonalColors().filter((d) => d.base === base && (!d.season || d.season === season));
-    const hits: { kind: "pc" | "skin"; name: string; href: string; swatch?: string[] }[] = [];
-    for (const pc of pcs) hits.push({ kind: "pc", name: pc.name, href: `/personal-color/${encodeURIComponent(pc.slug)}/`, swatch: personalColorSwatch(pc.name) });
-    for (const d of skinTypePagesOf(p.skin)) hits.push({ kind: "skin", name: d.name, href: `/skin-type/${encodeURIComponent(d.slug)}/` });
-    for (const h of hits) {
-      const e = counts.get(h.href);
+    for (const h of profilePagesOf(cid)) {
+      const e = counts.get(h.key);
       if (e) e.count++;
-      else counts.set(h.href, { ...h, count: 1 });
+      else counts.set(h.key, { ...h, count: 1 });
     }
   }
   const pcOrder = PERSONAL_COLORS.map((d) => d.name);
