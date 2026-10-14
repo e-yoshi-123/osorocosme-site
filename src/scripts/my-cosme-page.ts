@@ -706,6 +706,15 @@ async function main() {
   renderAll(load());
   renderDrive();
   onChange(renderAll);
+  // 自己診断の結果から登録して来たとき（?registered=pc|skin。316章）：知らせて、おすすめの欄を見せる
+  const reg = new URLSearchParams(location.search).get("registered");
+  if (reg === "pc" || reg === "skin") {
+    const d = load();
+    const names = (reg === "pc" ? p.idx.pc : p.idx.sk).filter((r) => d[reg][r[0]]).map((r) => r[1]);
+    if (names.length) setStatus(`診断の結果（${names.join("・")}）をマイコスメに登録しました。おすすめに反映しています。`);
+    history.replaceState(null, "", location.pathname + "#foryou");
+    document.getElementById("foryou")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
   root.addEventListener("click", (e) => {
     const t = e.target as HTMLElement;

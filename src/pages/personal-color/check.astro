@@ -317,7 +317,7 @@ const pageUrl = new URL(withBase("/personal-color/check/"), Astro.site!).href;
       </div>` : ""}
       <div class="ck-cta">
         <a href="${r.href}" class="ck-btn dark">${esc(r.pageName)}のインフルエンサーと愛用コスメを見る →<small>${r.total ? `${r.total}人のインフルエンサー` : ""}</small></a>
-        ${r.mySlug ? `<button type="button" data-set="${esc(r.mySlug)}" class="ck-btn line">${set ? "✓ マイコスメに設定済み" : `マイコスメのパーソナルカラーを「${esc(r.pageName)}」にする`}<small>おすすめに反映されます（この端末に保存）</small></button>` : ""}
+        ${r.mySlug ? `<button type="button" data-set="${esc(r.mySlug)}" class="ck-btn line">${set ? "✓ 登録済み・マイコスメでおすすめを見る →" : `「${esc(r.pageName)}」をマイコスメに登録して、おすすめを見る →`}<small>この端末のマイコスメに保存し、そのままマイコスメを開きます</small></button>` : ""}
       </div>
       <div class="ck-share">結果をシェア
         <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(share)}&url=${encodeURIComponent(PAGE_URL)}" target="_blank" rel="noopener">X</a>
@@ -354,7 +354,8 @@ const pageUrl = new URL(withBase("/personal-color/check/"), Astro.site!).href;
       for (const x of Object.keys(load().pc)) if (x !== slug) remove(x, "pc");
       add(slug, undefined, "pc");
       track("set_my_cosme");
-      s.innerHTML = `✓ マイコスメに設定しました<small><a href="${BASE}/my-cosme/" style="text-decoration:underline">マイコスメでおすすめを見る →</a></small>`;
+      // 登録したらマイコスメを開き、おすすめの欄を見せる（マイコスメ側で「登録しました」と出す。316章）
+      location.href = `${BASE}/my-cosme/?registered=pc#foryou`;
     }
   });
   start();

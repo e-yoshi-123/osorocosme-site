@@ -98,25 +98,25 @@ const pageUrl = new URL(withBase("/skin-type/check/"), Astro.site!).href;
     <div class="sk-flow" data-flow>
       <div class="sk-node q" data-node="start"><span class="sk-num">1</span>洗顔後、何もつけずに15分。肌は？</div>
       <div class="sk-branch">
-        <div class="sk-col"><div class="sk-edge" data-edge="start-乾燥肌">全体がつっぱる</div><div class="sk-node r" data-res="乾燥肌">乾燥肌</div></div>
-        <div class="sk-col"><div class="sk-edge" data-edge="start-混合肌">Tゾーンだけテカる</div><div class="sk-node r" data-res="混合肌">混合肌</div></div>
+        <div class="sk-col"><div class="sk-edge" data-edge="start-乾燥肌">全体がつっぱる</div><div class="sk-node r" data-res="乾燥肌"><img src={withBase("/images/skin-check/dry.webp")} alt="" width="345" height="360" class="sk-node-face" />乾燥肌</div></div>
+        <div class="sk-col"><div class="sk-edge" data-edge="start-混合肌">Tゾーンだけテカる</div><div class="sk-node r" data-res="混合肌"><img src={withBase("/images/skin-check/mix.webp")} alt="" width="345" height="360" class="sk-node-face" />混合肌</div></div>
         <div class="sk-col"><div class="sk-edge" data-edge="start-oily">全体がテカる</div>
           <div class="sk-node q" data-node="oily"><span class="sk-num">2</span>内側はつっぱる？</div>
           <div class="sk-branch sub">
-            <div class="sk-col"><div class="sk-edge" data-edge="oily-インナードライ">つっぱる</div><div class="sk-node r" data-res="インナードライ">インナードライ</div></div>
-            <div class="sk-col"><div class="sk-edge" data-edge="oily-脂性肌">つっぱらない</div><div class="sk-node r" data-res="脂性肌">脂性肌</div></div>
+            <div class="sk-col"><div class="sk-edge" data-edge="oily-インナードライ">つっぱる</div><div class="sk-node r" data-res="インナードライ"><img src={withBase("/images/skin-check/inner.webp")} alt="" width="345" height="360" class="sk-node-face" />インナードライ</div></div>
+            <div class="sk-col"><div class="sk-edge" data-edge="oily-脂性肌">つっぱらない</div><div class="sk-node r" data-res="脂性肌"><img src={withBase("/images/skin-check/oily.webp")} alt="" width="345" height="360" class="sk-node-face" />脂性肌</div></div>
           </div>
         </div>
-        <div class="sk-col"><div class="sk-edge" data-edge="start-普通肌">気にならない</div><div class="sk-node r" data-res="普通肌">普通肌</div></div>
+        <div class="sk-col"><div class="sk-edge" data-edge="start-普通肌">気にならない</div><div class="sk-node r" data-res="普通肌"><img src={withBase("/images/skin-check/normal.webp")} alt="" width="345" height="360" class="sk-node-face" />普通肌</div></div>
       </div>
       <div class="sk-join" aria-hidden="true"></div>
       <div class="sk-node q" data-node="sens"><span class="sk-num">3</span>どの肌質でも：新しい化粧品で赤み・ピリピリが出やすい？</div>
       <div class="sk-branch two">
-        <div class="sk-col"><div class="sk-edge" data-edge="sens-敏感肌">出やすい</div><div class="sk-node r" data-res="敏感肌">＋ 敏感肌</div></div>
+        <div class="sk-col"><div class="sk-edge" data-edge="sens-敏感肌">出やすい</div><div class="sk-node r" data-res="敏感肌"><img src={withBase("/images/skin-check/sensitive.webp")} alt="" width="345" height="360" class="sk-node-face" />＋ 敏感肌</div></div>
         <div class="sk-col"><div class="sk-edge" data-edge="sens-none">あまり出ない</div><div class="sk-node r muted" data-res="none">そのまま</div></div>
       </div>
     </div>
-    <p class="sk-note mt">この診断は目安です。肌の状態は季節や体調で変わります。肌トラブルが続くときは皮膚科に相談してください。回答はこの端末の中だけで使い、どこにも送りません。</p>
+    <p class="sk-note mt">この診断は目安です。肌の状態は季節や体調で変わります。肌トラブルが続くときは皮膚科に相談してください。回答はこの端末の中だけで使い、どこにも送りません。顔のイラストは、イラストACの素材（作者：身爪さん）をもとにしています。</p>
     <p class="sk-cross"><a href={withBase("/personal-color/check/")}>パーソナルカラーの自己診断もする →</a></p>
   </section>
 </Layout>
@@ -151,8 +151,8 @@ const pageUrl = new URL(withBase("/skin-type/check/"), Astro.site!).href;
   .sk-opt { display: flex; align-items: center; gap: 1rem; width: 100%; text-align: left; padding: 1rem 1.1rem; border-radius: 1.1rem; border: 1px solid rgba(0,0,0,.09); background: #fff; font-size: .9rem; color: var(--color-ink); cursor: pointer; transition: transform .2s, border-color .2s, box-shadow .2s; }
   .sk-opts.faces .sk-opt { flex-direction: column; text-align: center; gap: .6rem; padding: 1rem .75rem; font-size: .82rem; line-height: 1.5; }
   .sk-opt:hover, .sk-opt:focus-visible { transform: translateY(-2px); border-color: var(--color-rose); box-shadow: 0 12px 24px -16px rgba(200, 60, 110, .55); outline: none; }
-  .sk-face { width: 64px; height: 76px; flex-shrink: 0; }
-  .sk-opts.faces .sk-face { width: 96px; height: 114px; }
+  .sk-face { width: 64px; height: auto; aspect-ratio: 345 / 360; flex-shrink: 0; object-fit: contain; }
+  .sk-opts.faces .sk-face { width: 104px; }
   .sk-back { margin-top: 1.5rem; font-size: 12px; color: #8a8285; cursor: pointer; background: none; border: 0; }
   .sk-back:hover { color: var(--color-ink); }
   /* 結果 */
@@ -162,7 +162,7 @@ const pageUrl = new URL(withBase("/skin-type/check/"), Astro.site!).href;
   @media (max-width: 520px) { .sk-res-name small { display: block; margin: .3rem 0 0; } }
   .sk-types { margin-top: 1.25rem; display: grid; gap: .75rem; }
   .sk-type { border-radius: 1.25rem; padding: 1.1rem 1.2rem; background: linear-gradient(140deg, var(--t) 0%, #fff 75%); border: 1px solid rgba(0,0,0,.05); display: flex; gap: 1rem; align-items: flex-start; animation: sk-in .5s both; }
-  .sk-type svg { flex-shrink: 0; width: 44px; height: 44px; }
+  .sk-type-face { flex-shrink: 0; width: 64px; height: auto; aspect-ratio: 345 / 360; border-radius: 1rem; background: rgba(255,255,255,.75); padding: 4px; }
   .sk-type h3 { font-family: var(--font-serif, serif); font-weight: 600; font-size: 1.35rem; color: var(--color-ink); }
   .sk-type h3 span { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: #8a8285; margin-left: .5rem; font-family: inherit; font-weight: 500; }
   .sk-type p { margin-top: .35rem; font-size: .85rem; line-height: 1.8; color: #4b4547; }
@@ -184,6 +184,8 @@ const pageUrl = new URL(withBase("/skin-type/check/"), Astro.site!).href;
   .sk-cta { margin-top: 1.5rem; display: grid; gap: .6rem; }
   .sk-btn { display: block; text-align: left; border-radius: 1.1rem; padding: 1rem 1.15rem; font-size: .88rem; cursor: pointer; transition: background .2s, color .2s, border-color .2s; background: #fff; border: 1px solid rgba(0,0,0,.14); color: var(--color-ink); }
   .sk-btn:hover { border-color: var(--color-rose); color: var(--color-rose); }
+  .sk-btn-main { background: var(--color-ink); color: #fff; border-color: var(--color-ink); }
+  .sk-btn-main:hover { background: var(--color-rose); border-color: var(--color-rose); color: #fff; }
   .sk-btn small { display: block; margin-top: .2rem; font-size: 11px; opacity: .7; }
   .sk-share { margin-top: 1.25rem; display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-size: 12px; color: #8a8285; }
   .sk-share a, .sk-share button { font-size: 12px; padding: .35rem .85rem; border-radius: 999px; border: 1px solid rgba(0,0,0,.12); background: #fff; color: var(--color-ink); cursor: pointer; }
@@ -198,6 +200,7 @@ const pageUrl = new URL(withBase("/skin-type/check/"), Astro.site!).href;
   .sk-node.q { background: #faf7f6; border: 1px solid rgba(0,0,0,.08); max-width: 26rem; display: flex; gap: .6rem; align-items: center; text-align: left; }
   .sk-num { flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: var(--color-ink); color: #fff; font-size: 11px; font-weight: 600; }
   .sk-node.r { background: #fff; border: 1.5px solid rgba(0,0,0,.12); font-family: var(--font-serif, serif); font-weight: 600; font-size: .95rem; min-width: 6.5rem; }
+  .sk-node-face { display: block; width: 44px; height: auto; margin: 0 auto .3rem; background: #fff; border-radius: .6rem; }
   .sk-node.r.muted { font-family: inherit; font-weight: 400; font-size: .8rem; color: #8a8285; border-style: dashed; }
   .sk-branch { display: grid; grid-template-columns: repeat(4, minmax(7.5rem, 1fr)); gap: .75rem; width: 100%; max-width: 54rem; position: relative; padding-top: 1.5rem; margin-top: .25rem; }
   .sk-branch::before { content: ""; position: absolute; top: .55rem; left: 12.5%; right: 12.5%; height: 2px; background: rgba(0,0,0,.12); }
@@ -242,28 +245,13 @@ const pageUrl = new URL(withBase("/skin-type/check/"), Astro.site!).href;
   let path: string[] = ["start"];
   let chosen: { node: string; opt: Opt }[] = [];
 
-  /** 顔のイラスト：dry=頬と額にひびの線、mix=Tゾーンに光＋頬にひび、oily=全体に光、inner=光＋内側の点線、red=頬に赤み、calm/ok=おだやか */
+  /** 顔のイラスト（イラストACの「肌タイプ4種」〈作者：身爪さん〉から切り出して加工したもの。316章） */
+  const FACE_IMG: Record<string, string> = { dry: "dry", mix: "mix", oily: "oily", calm: "normal", inner: "inner", red: "sensitive", ok: "normal" };
   function face(kind?: string): string {
-    if (!kind) return "";
-    const skin = "#F6E3D6";
-    const shine = (x: number, y: number, r = 5) => `<g fill="#fff" stroke="#E8B53A" stroke-width=".9" stroke-linejoin="round"><path d="M${x} ${y - r}L${x + r * .35} ${y - r * .35}L${x + r} ${y}L${x + r * .35} ${y + r * .35}L${x} ${y + r}L${x - r * .35} ${y + r * .35}L${x - r} ${y}L${x - r * .35} ${y - r * .35}Z"/></g>`;
-    const crack = (x: number, y: number) => `<path d="M${x} ${y} l4 3 l-3 3 l5 2" stroke="#C99B83" stroke-width="1.3" fill="none" stroke-linecap="round"/>`;
-    const tzone = `<path d="M30 22 h40 v10 h-14 v30 h-12 v-30 h-14Z" fill="#FFE38A" opacity=".75"/>`;
-    let extra = "";
-    if (kind === "dry") extra = crack(26, 58) + crack(64, 58) + crack(44, 24) + crack(36, 76);
-    if (kind === "mix") extra = tzone + shine(50, 30) + shine(50, 50, 4) + crack(24, 60) + crack(66, 60);
-    if (kind === "oily") extra = `<ellipse cx="50" cy="55" rx="32" ry="38" fill="#FFF3C7" opacity=".55"/>` + shine(36, 30) + shine(62, 34, 4) + shine(50, 52) + shine(30, 62, 4) + shine(70, 62, 4);
-    if (kind === "inner") extra = `<ellipse cx="50" cy="55" rx="32" ry="38" fill="#FFF3C7" opacity=".45"/>` + shine(38, 30, 4) + shine(62, 30, 4) + `<ellipse cx="50" cy="58" rx="18" ry="20" fill="none" stroke="#7FB8C4" stroke-width="1.4" stroke-dasharray="3 3"/>`;
-    if (kind === "red") extra = `<ellipse cx="30" cy="62" rx="9" ry="6" fill="#F08A9C" opacity=".55"/><ellipse cx="70" cy="62" rx="9" ry="6" fill="#F08A9C" opacity=".55"/>`;
-    const mouth = kind === "calm" || kind === "ok" ? `<path d="M42 78 q8 6 16 0" stroke="#B9786A" stroke-width="1.8" fill="none" stroke-linecap="round"/>` : `<path d="M43 79 h14" stroke="#B9786A" stroke-width="1.8" stroke-linecap="round"/>`;
-    return `<svg class="sk-face" viewBox="0 0 100 118" aria-hidden="true">
-      <path d="M50 4 C24 4 14 26 14 52 C14 86 32 110 50 110 C68 110 86 86 86 52 C86 26 76 4 50 4Z" fill="${skin}" stroke="#E2C6B5" stroke-width="1.2"/>
-      ${extra}
-      <path d="M33 47 q5 -4 10 0 M57 47 q5 -4 10 0" stroke="#7A5A4C" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-      ${mouth}
-    </svg>`;
+    if (!kind || !FACE_IMG[kind]) return "";
+    return `<img class="sk-face" src="${BASE}/images/skin-check/${FACE_IMG[kind]}.webp" alt="" width="345" height="360" decoding="async">`;
   }
-  const drop = (c: string) => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5S5.5 9.6 5.5 14a6.5 6.5 0 0 0 13 0C18.5 9.6 12 2.5 12 2.5Z" fill="${c}"/><path d="M9.2 14.6a2.9 2.9 0 0 0 2.6 2.7" stroke="#fff" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>`;
+  const TYPE_IMG: Record<string, string> = { 乾燥肌: "dry", 混合肌: "mix", インナードライ: "inner", 脂性肌: "oily", 普通肌: "normal", 敏感肌: "sensitive" };
 
   function stepsBar(cur: string) {
     const idx = ORDER.indexOf(cur);
@@ -312,7 +300,7 @@ const pageUrl = new URL(withBase("/skin-type/check/"), Astro.site!).href;
     const card = (k: string, i: number) => {
       const t = TYPES[k];
       const pg = PAGES[k];
-      return `<div class="sk-type" style="--t:${t.tone};animation-delay:${i * 0.12}s">${drop(k === "敏感肌" ? "#E9879B" : "#7FB8C4")}
+      return `<div class="sk-type" style="--t:${t.tone};animation-delay:${i * 0.12}s"><img class="sk-type-face" src="${BASE}/images/skin-check/${TYPE_IMG[k]}.webp" alt="" width="345" height="360">
         <div style="min-width:0;flex:1">
           <h3>${esc(k)}<span>${esc(t.en)}</span></h3>
           <p>${esc(t.text)}</p>
@@ -329,7 +317,7 @@ const pageUrl = new URL(withBase("/skin-type/check/"), Astro.site!).href;
       <h2 class="sk-res-name">${sets.map(esc).join("・")}<small>に近いかも</small></h2>
       <div class="sk-types">${sets.map(card).join("")}</div>
       <div class="sk-cta">
-        ${settable.length ? `<button type="button" data-set class="sk-btn">${isSet ? "✓ マイコスメに設定済み" : `マイコスメの肌質に「${settable.map(esc).join("・")}」を入れる`}<small>おすすめに反映されます（この端末に保存）</small></button>` : ""}
+        ${settable.length ? `<button type="button" data-set class="sk-btn sk-btn-main">${isSet ? "✓ 登録済み・マイコスメでおすすめを見る →" : `「${settable.map(esc).join("・")}」をマイコスメに登録して、おすすめを見る →`}<small>この端末のマイコスメに保存し、そのままマイコスメを開きます</small></button>` : ""}
       </div>
       <div class="sk-share">結果をシェア
         <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(share)}&url=${encodeURIComponent(PAGE_URL)}" target="_blank" rel="noopener">X</a>
@@ -373,7 +361,8 @@ const pageUrl = new URL(withBase("/skin-type/check/"), Astro.site!).href;
     if (s) {
       for (const k of setsOf()) if (PAGES[k]) add(PAGES[k]!.slug, undefined, "skin");
       track("set_my_cosme");
-      s.innerHTML = `✓ マイコスメに設定しました<small><a href="${BASE}/my-cosme/" style="text-decoration:underline">マイコスメでおすすめを見る →</a></small>`;
+      // 登録したらマイコスメを開き、おすすめの欄を見せる（マイコスメ側で「登録しました」と出す。316章）
+      location.href = `${BASE}/my-cosme/?registered=skin#foryou`;
     }
   });
   show();
