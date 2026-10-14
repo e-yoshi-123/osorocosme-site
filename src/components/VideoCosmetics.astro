@@ -5,7 +5,7 @@
 import BrandFlag from "./BrandFlag.astro";
 import PrBadge from "./PrBadge.astro";
 import { getVideoCosmeticGroups } from "../lib/recipe";
-import { amazonSearchUrl, formatCount, withBase, type VideoEntry } from "../lib/data";
+import { amazonSearchUrl, formatCount, getVideoColors, withBase, type VideoEntry } from "../lib/data";
 
 interface Props {
   video: VideoEntry;
@@ -70,6 +70,13 @@ const flowParts = parts.filter((p) => timeline.some((t) => t.p.key === p.key));
               <div class="rs-item-t">
                 <p class="rs-item-b"><BrandFlag brand_id={x.brand_id} />{x.brand}{x.tag && <span>{x.tag}</span>}</p>
                 <p class="rs-item-n"><a href={withBase(`/cosmetics/${x.slug}`)} class="phrase">{x.name}</a>{x.pr && <PrBadge own={x.own} class="ml-1.5 align-middle" />}</p>
+                {/* 紹介の中で触れていた色（メーカー公式の色の一覧と照合。押すと商品ページのその色の動画の一覧へ） */}
+                {(() => {
+                  const cs = getVideoColors(v.key, x.brand_id, x.name_id);
+                  return cs.length > 0 && (
+                    <p class="rs-item-c"><span>使った色</span>{cs.map((c) => <a href={withBase(`/cosmetics/${x.slug}/#color-${c.idx}`)}>{c.label}</a>)}</p>
+                  );
+                })()}
                 <div class="rs-item-act">
                   {x.sec !== undefined ? (
                     <a href={`https://www.youtube.com/watch?v=${v.video_id}&t=${x.sec}s`} target="_blank" rel="noopener" data-seek={x.sec} class="scene-seek rs-seek rs-time">▶ {x.time}</a>
@@ -208,6 +215,10 @@ const flowParts = parts.filter((p) => timeline.some((t) => t.p.key === p.key));
   .rs-item-b span { margin-left: 8px; color: var(--color-neutral-400); }
   .rs-item-n { font-size: 14px; line-height: 1.5; font-weight: 600; }
   .rs-item-n a:hover { color: var(--color-rose); }
+  .rs-item-c { margin-top: 4px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; font-size: 12px; }
+  .rs-item-c span { color: var(--color-neutral-500); }
+  .rs-item-c a { padding: 1px 8px; border-radius: 999px; color: var(--c); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 45%, transparent); }
+  .rs-item-c a:hover { background: var(--c); color: #fff; }
   .rs-item-act { margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
   .rs-time { display: inline-flex; align-items: center; gap: 4px; padding: 3px 12px; border-radius: 999px; font-size: 12px; font-family: var(--font-display); font-weight: 600; color: var(--c); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 45%, transparent); transition: background-color .3s, color .3s; }
   .rs-time:hover, .rs-time.is-on { background: var(--c); color: #fff; }

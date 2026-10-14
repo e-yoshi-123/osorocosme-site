@@ -1572,7 +1572,7 @@ export function getIngredientsOfCosmetic(brand_id: string, name_id: string): { d
 interface OfficialColorRaw { label: string; code?: string; words?: string[] }
 interface OfficialFactsRaw { price?: number; colors?: OfficialColorRaw[]; release?: string; limited?: boolean; eom?: boolean; url?: string }
 export interface OfficialColorVideo { key: string; title: string; channel_title: string; thumbnail: string; published_at: string; quote?: string }
-export interface OfficialColor { label: string; videoCount: number; videos: OfficialColorVideo[] }
+export interface OfficialColor { label: string; /** 公式の並びでの番号（商品ページの #color-<idx> に使う） */ idx: number; videoCount: number; videos: OfficialColorVideo[] }
 export interface OfficialFacts { price?: number; colors: OfficialColor[]; release?: string; limited: boolean; eom: boolean; url?: string }
 const officialFacts = officialFactsData as Record<string, OfficialFactsRaw>;
 const escRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -1592,7 +1592,17 @@ function colorMatcher(c: OfficialColorRaw): ((text: string) => boolean) | undefi
   return res.length ? (t) => res.some((r) => r.test(t)) : undefined;
 }
 /** 商品の公式情報。色ごとに、紹介文でその色に触れた動画の本数（公開中の動画）を数える。色名が別の色名を含むとき（ブラウン／ナチュラルブラウン）は長いほうだけに数える */
+const _officialCache = new Map<string, OfficialFacts | undefined>();
 export function getOfficialFacts(brand_id: string, name_id: string): OfficialFacts | undefined {
+  const k = `${brand_id}_${name_id}`;
+  if (!_officialCache.has(k)) _officialCache.set(k, buildOfficialFacts(brand_id, name_id));
+  return _officialCache.get(k);
+}
+/** 動画ページ用：その動画の紹介文で触れている色（商品ページの色の一覧と同じ判定） */
+export function getVideoColors(videoKey: string, brand_id: string, name_id: string): OfficialColor[] {
+  return (getOfficialFacts(brand_id, name_id)?.colors || []).filter((c) => c.videos.some((v) => v.key === videoKey));
+}
+function buildOfficialFacts(brand_id: string, name_id: string): OfficialFacts | undefined {
   const raw = officialFacts[`${brand_id}_${name_id}`];
   if (!raw) return undefined;
   const colors = raw.colors || [];
@@ -1616,7 +1626,7 @@ export function getOfficialFacts(brand_id: string, name_id: string): OfficialFac
   }
   return {
     price: raw.price,
-    colors: colors.map((c, i) => ({ label: c.label, videoCount: found[i].length, videos: found[i] })),
+    colors: colors.map((c, i) => ({ label: c.label, idx: i, videoCount: found[i].length, videos: found[i] })),
     release: raw.release,
     limited: !!raw.limited,
     eom: !!raw.eom,

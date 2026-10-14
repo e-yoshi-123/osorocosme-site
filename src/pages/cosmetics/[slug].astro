@@ -410,9 +410,9 @@ const jsonLd = entry
         {official && official.colors.length > 0 && (
           <section id="colors" class="panel u-14">
             <SectionHead en="Colors" title="色のバリエーション" lead={`${official.colors.length}色（メーカー公式サイトの掲載${official.colors.length > COLORS_SHOWN && colorMentioned > 0 ? "。動画で紹介された色を先に並べています" : ""}）。${colorMentioned > 0 ? "「動画で紹介」は、紹介の中でその色の名前・番号に触れた動画の本数で、押すとその動画が開きます。" : ""}限定色や販売を終えた色が含まれることがあります。`} />
-            <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 items-start text-sm">
+            <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 grid-flow-dense gap-x-6 items-start text-sm">
               {colorsShown.map((c, k) => (
-                <li class:list={["border-b border-ink/10", k >= COLORS_SHOWN && "hidden"]} data-color-extra={k >= COLORS_SHOWN ? "" : undefined}>
+                <li id={`color-${c.idx}`} class:list={["border-b border-ink/10 scroll-mt-28 has-[details[open]]:col-span-full", k >= COLORS_SHOWN && "hidden"]} data-color-extra={k >= COLORS_SHOWN ? "" : undefined}>
                   {c.videos.length > 0 ? (
                     /* 動画で紹介された色は、押すとその色を紹介した動画の一覧が開く */
                     <details class="group">
@@ -420,7 +420,7 @@ const jsonLd = entry
                         <span class="text-neutral-800 [overflow-wrap:anywhere]">{c.label}</span>
                         <span class="shrink-0 inline-flex items-center gap-1 text-xs text-rose"><span class="w-1.5 h-1.5 rounded-full bg-rose" aria-hidden="true" />動画で紹介 {c.videoCount}本<span class="transition-transform group-open:rotate-180" aria-hidden="true">▾</span></span>
                       </summary>
-                      <ul class="pb-3 space-y-3">
+                      <ul class="pb-4 pt-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
                         {c.videos.map((v) => (
                           <li>
                             <a href={withBase(`/video/${v.key}`)} class="group/v flex gap-3 items-start">
@@ -659,5 +659,15 @@ const jsonLd = entry
       document.querySelectorAll("[data-color-extra]").forEach(function (e) { e.classList.remove("hidden"); });
       btn.remove();
     });
+  })();
+  // 動画ページの「使った色」から #color-<番号> で来たら、その色の動画の一覧を開く（隠れている色なら残りも出す）
+  (function () {
+    var m = location.hash.match(/^#color-\d+$/);
+    var li = m && document.getElementById(location.hash.slice(1));
+    if (!li) return;
+    if (li.hasAttribute("data-color-extra")) document.getElementById("colors-more")?.click();
+    var d = li.querySelector("details");
+    if (d) d.open = true;
+    li.scrollIntoView({ block: "start" });
   })();
 </script>
