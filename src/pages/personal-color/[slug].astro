@@ -1,0 +1,169 @@
+---
+// パーソナルカラーから探す（309章）。本人が言ったパーソナルカラーの人たちが紹介したメイクのコスメを、同じ色の人数で並べる
+import HowWeCount from "../../components/HowWeCount.astro";
+import PageHead from "../../components/PageHead.astro";
+import Layout from "../../layouts/Layout.astro";
+import ShareButtons from "../../components/ShareButtons.astro";
+import RankingRow from "../../components/RankingRow.astro";
+import {
+  getPublishedPersonalColors,
+  getPersonalColor,
+  PC_MIN_CHANNELS,
+  PC_PER_GROUP,
+  getCosmeticListEntry,
+  productOffer,
+  cosmeticSlug,
+  categoryUrl,
+  hasRankingPage,
+  withBase,
+  breadcrumbLd,
+} from "../../lib/data";
+
+export function getStaticPaths() {
+  return getPublishedPersonalColors().map((d) => ({ params: { slug: d.slug }, props: { slug: d.slug } }));
+}
+
+const { slug } = Astro.props;
+const c = getPersonalColor(slug)!;
+const name = c.def.name;
+const others = getPublishedPersonalColors().filter((x) => x.slug !== slug);
+const total = c.groups.reduce((n, g) => n + g.items.length, 0);
+const pcHref = (s: string) => withBase(`/personal-color/${encodeURIComponent(s)}/`);
+
+// 表示用データ。価格・楽天とYahoo!のリンク・画像は cosmetics_list.json を正とする（特集・ランキングと同じ）
+const groups = c.groups.map((g) => ({
+  group: g.group,
+  rows: g.items.map((it, i) => {
+    const entry = getCosmeticListEntry(it.brand_id, it.name_id);
+    const offer = productOffer(entry);
+    return {
+      it,
+      rank: i + 1,
+      imageSrc: offer.imageSrc,
+      price: offer.price,
+      link: offer.rakutenLink,
+      fromYahoo: offer.source === "yahoo",
+      yahooLink: entry?.yahoo_text_link || undefined,
+      note: `使っている${name}の人：${it.users.join("・")}`,
+    };
+  }),
+}));
+
+const firstOf = (g: string) => groups.find((x) => x.group === g)?.rows[0]?.it;
+const lip = firstOf("リップ");
+const eye = firstOf("アイメイク");
+const title = `${name}のインフルエンサーが使っているコスメ（リップ・アイシャドウ・チーク）`;
+const description =
+  `パーソナルカラーが${name}だと本人が話しているインフルエンサー${c.people.length}人が、YouTubeで紹介したメイクのコスメを、同じ${name}の何人が使ったかで集計。` +
+  (lip ? `リップでは${lip.brand}「${lip.name}」、` : "") +
+  (eye ? `アイメイクでは${eye.brand}「${eye.name}」などが上位です。` : "");
+const topImage = groups.flatMap((g) => g.rows).find((r) => r.imageSrc)?.imageSrc;
+const crumbs = [
+  { name: "ホーム", path: "/" },
+  { name: "パーソナルカラーから探す", path: "/personal-color/" },
+  { name, path: `/personal-color/${encodeURIComponent(slug)}/` },
+];
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: title,
+    numberOfItems: total,
+    itemListElement: groups
+      .flatMap((g) => g.rows)
+      .slice(0, 10)
+      .map((r, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: `${r.it.brand} ${r.it.name}`,
+        url: new URL(withBase(`/cosmetics/${cosmeticSlug(r.it.brand_id, r.it.name_id)}`), Astro.site!).href,
+      })),
+  },
+  breadcrumbLd(crumbs, Astro.site!),
+];
+---
+
+<Layout title={title} description={description} image={topImage} jsonLd={jsonLd}>
+  <nav class="text-xs text-neutral-500 mb-8 flex flex-wrap gap-2" aria-label="パンくず">
+    <a href={withBase("/")} class="link-u">Home</a><span aria-hidden="true">/</span>
+    <a href={withBase("/personal-color/")} class="link-u">パーソナルカラーから探す</a><span aria-hidden="true">/</span>
+    <span>{name}</span>
+  </nav>
+
+  <PageHead en={c.def.en} title={`${name}の人が使っているコスメ`} lead={`パーソナルカラーが${name}だと本人が話している${c.people.length}人のインフルエンサーが、YouTubeで紹介したメイクのコスメです。同じ${name}の人が何人使っているかの順に並べました。`}>
+    <ShareButtons text={`${name}のインフルエンサーが使っているコスメ`} class="mt-5" />
+  </PageHead>
+
+  <HowWeCount>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>対象：パーソナルカラーが{name}だと、本人が動画・概要欄・タイトルで言っているインフルエンサー<b>{c.people.length}人</b>の、紹介動画<b>{c.videoCount}本</b>{c.def.season ? `（セカンドではなく、1stが${name}の人）` : `（${name}の季節が分からない人も含む）`}</li>
+      <li>掲載条件：同じ{name}の<b>{PC_MIN_CHANNELS}人以上</b>が紹介したコスメのみ。PR・提供と、本人がプロデュースしたブランドの紹介は数えていません</li>
+      <li>並び順：紹介した{name}の人数 → 紹介動画数 → 合計再生回数。各カテゴリ上位{PC_PER_GROUP}品まで</li>
+      <li>パーソナルカラーは本人の診断・自己申告によるもので、色が似合うかどうかを保証するものではありません</li>
+    </ul>
+  </HowWeCount>
+
+  {
+    groups.map((g) => (
+      <section class="panel mb-6 md:mb-8">
+        <h2 class="font-serif h-section font-semibold mb-4">{name}の人の{g.group}</h2>
+        <div class="@container">
+          <ol class="divide-y divide-ink/10">
+            {g.rows.map((r) => (
+              <RankingRow
+                rank={r.rank}
+                base={r.rank}
+                brand_id={r.it.brand_id}
+                brand={r.it.brand}
+                name_id={r.it.name_id}
+                name={r.it.name}
+                imageSrc={r.imageSrc}
+                videoCount={r.it.videoCount}
+                channelCount={r.it.channelCount}
+                price={r.price}
+                fromYahoo={r.fromYahoo}
+                link={r.link}
+                yahooLink={r.yahooLink}
+                subLabel={r.it.tag}
+                note={r.note}
+              />
+            ))}
+          </ol>
+        </div>
+        <p class="mt-2 text-xs text-neutral-500">
+          {g.rows
+            .map((r) => r.it.tag)
+            .filter((v, i, a) => a.indexOf(v) === i)
+            .map((t, i) => (
+              <>
+                {i > 0 && " / "}
+                {hasRankingPage(t) ? <a href={categoryUrl(t)} class="link-u text-ink">{t}のランキング</a> : t}
+              </>
+            ))}
+        </p>
+      </section>
+    ))
+  }
+
+  <section class="panel mb-8" aria-labelledby="pc-people">
+    <h2 id="pc-people" class="font-serif h-section font-semibold mb-4">集計した{name}のインフルエンサー</h2>
+    <ul class="flex flex-wrap gap-2">
+      {c.people.map((p) => (
+        <li>
+          <a href={withBase(`/influencer/${p.channel_id}`)} class="inline-block rounded-full border border-ink/15 bg-white/70 px-4 py-2 text-sm text-ink hover:border-ink/40">
+            {p.channel_title}<span class="ml-2 text-xs text-neutral-500">{p.personal_color}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <p class="text-xs text-neutral-500 mb-8">価格は楽天市場で確認した時点の参考価格です。最新の価格・在庫は楽天市場でご確認ください。色の見え方・似合い方には個人差があります。</p>
+
+  <ShareButtons text={`${name}のインフルエンサーが使っているコスメ`} label="このページをシェア" class="mb-10" />
+
+  <p class="text-sm">
+    {others.map((o) => (<><a href={pcHref(o.slug)} class="link-u text-ink">{o.name} →</a>{" "}</>))}
+    <a href={withBase("/ranking/")} class="link-u text-ink">カテゴリ別ランキング →</a>
+  </p>
+</Layout>

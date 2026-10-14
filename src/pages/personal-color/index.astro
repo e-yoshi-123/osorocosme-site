@@ -1,0 +1,31 @@
+---
+// パーソナルカラーから探す（309章）
+import PageHead from "../../components/PageHead.astro";
+import Layout from "../../layouts/Layout.astro";
+import { getPublishedPersonalColors, getPersonalColor, withBase } from "../../lib/data";
+
+const list = getPublishedPersonalColors().map((d) => getPersonalColor(d.slug)!);
+---
+
+<Layout
+  title="パーソナルカラーから探す（イエベ・ブルベのインフルエンサーが使うコスメ）"
+  description="イエベ春・ブルベ夏・ブルベ冬など、パーソナルカラーを本人が話しているYouTubeのインフルエンサーが紹介したリップ・アイシャドウ・チークなどを、同じパーソナルカラーの何人が使ったかで集計しています。"
+>
+  <PageHead en="Personal color" title="パーソナルカラーから探す" lead="自分と同じパーソナルカラーのインフルエンサーが、実際に使っているメイクのコスメを集めました。パーソナルカラーは、本人が動画・概要欄・タイトルで話しているものだけを使っています。" />
+  <ul class="panel !py-2 md:!py-4 [&>li:last-child>a]:border-b-0">
+    {
+      list.map((c) => (
+        <li>
+          <a href={withBase(`/personal-color/${encodeURIComponent(c.def.slug)}/`)} class="group flex items-start gap-6 py-7 border-b border-ink/10">
+            <span class="flex-1 min-w-0">
+              <span class="block font-serif text-lg md:text-xl font-semibold group-hover:text-rose transition-colors">{c.def.name}</span>
+              <span class="block text-xs text-neutral-500 mt-1.5">{c.people.length}人のインフルエンサー・{c.itemCount}品から集計</span>
+              <span class="block text-sm leading-relaxed text-neutral-600 mt-3 max-w-3xl">{c.people.slice(0, 6).map((p) => p.channel_title).join("・")}{c.people.length > 6 ? " ほか" : ""}</span>
+            </span>
+            <span class="hidden sm:flex shrink-0 mt-1 w-10 h-10 rounded-full border border-ink/15 items-center justify-center transition-all duration-500 group-hover:bg-ink group-hover:text-paper group-hover:border-ink" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Layout>

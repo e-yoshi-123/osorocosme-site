@@ -70,14 +70,15 @@ import { withBase } from "../lib/data";
       d.append(body);
       box.append(d);
     }
-    // 肌悩み・成分・特集
-    mega.querySelectorAll<HTMLElement>("section:not([aria-labelledby])").forEach((sec) => {
-      const d = section(sec.querySelector(".label-caps")?.textContent || "");
+    // 肌悩み・パーソナルカラー・成分・特集：見出し（.mega-1）ごとに節を作る（肌悩みの列の下にパーソナルカラーが続くため。309章）
+    mega.querySelectorAll<HTMLElement>("section:not([aria-labelledby]) .mega-1").forEach((head) => {
+      const d = section(head.querySelector(".label-caps")?.textContent || "");
       const body = el("div", "pb-4");
       const p = el("p", "u-6");
-      sec.querySelectorAll<HTMLAnchorElement>("ul a").forEach((a) => p.append(link(a, "mmenu-1")));
+      const ul = head.nextElementSibling;
+      ul?.querySelectorAll<HTMLAnchorElement>("a").forEach((a) => p.append(link(a, "mmenu-1")));
       body.append(p);
-      const all = sec.querySelector<HTMLAnchorElement>(".u-9");
+      const all = head.querySelector<HTMLAnchorElement>(".u-9");
       if (all) body.append(link(all, "text-rose mmenu-14"));
       d.append(body);
       box.append(d);

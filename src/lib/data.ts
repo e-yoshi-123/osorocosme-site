@@ -1698,10 +1698,107 @@ export function ingredientSourceLabel(info: IngredientInfo): string {
   return info.source === "official" ? "公式サイト" : `楽天市場 ${info.shop || "メーカー公式ショップ"}`;
 }
 
+/** パーソナルカラーから探す（/personal-color/<名前>/。309章）。
+ * 本人が動画・概要欄・タイトルで言ったパーソナルカラー（influencer-profile.json。AIの推定ではない。307・308章）の人ごとに、
+ * その人たちが紹介したメイクのコスメを、同じパーソナルカラーの何人が使ったかで並べる。PR・提供と本人のブランドの紹介は数えない。
+ * 「イエベ」「ブルベ」はそれぞれ全員（季節が分からない人を含む）、季節のページは1stの季節がそれの人だけ。 */
+export interface PersonalColorDef {
+  slug: string;
+  name: string;
+  en: string;
+  base: "イエベ" | "ブルベ";
+  season?: "春" | "夏" | "秋" | "冬";
+}
+export const PERSONAL_COLORS: PersonalColorDef[] = [
+  { slug: "イエベ", name: "イエベ", en: "Yellow base", base: "イエベ" },
+  { slug: "イエベ春", name: "イエベ春", en: "Spring", base: "イエベ", season: "春" },
+  { slug: "イエベ秋", name: "イエベ秋", en: "Autumn", base: "イエベ", season: "秋" },
+  { slug: "ブルベ", name: "ブルベ", en: "Blue base", base: "ブルベ" },
+  { slug: "ブルベ夏", name: "ブルベ夏", en: "Summer", base: "ブルベ", season: "夏" },
+  { slug: "ブルベ冬", name: "ブルベ冬", en: "Winter", base: "ブルベ", season: "冬" },
+];
+/** 色が関わるメイクの大分類だけ（スキンケア等はパーソナルカラーと関係が薄いので載せない） */
+export const PC_GROUPS = ["リップ", "アイメイク", "チーク・陰影", "ベースメイク", "アイブロウ"];
+/** 同じパーソナルカラーのこの人数以上が紹介したコスメだけ載せる */
+export const PC_MIN_CHANNELS = 2;
+/** ページを出す条件：この人数以上の人と、FEATURE_MIN_ITEMS 品以上（薄いページを出さない。179章） */
+export const PC_MIN_PEOPLE = 5;
+export const PC_PER_GROUP = 10;
+/** 「イエベ春（セカンドはブルベ夏）」→ { base: "イエベ", season: "春" }（1stだけを見る） */
+export function parsePersonalColor(pc: string | undefined): { base?: "イエベ" | "ブルベ"; season?: string } {
+  const m = (pc || "").match(/(イエベ|ブルベ)(春|夏|秋|冬)?/);
+  return m ? { base: m[1] as "イエベ" | "ブルベ", season: m[2] } : {};
+}
+export function personalColorPageOf(pc: string | undefined): PersonalColorDef | undefined {
+  const { base, season } = parsePersonalColor(pc);
+  if (!base) return undefined;
+  const pub = getPublishedPersonalColors();
+  return pub.find((d) => d.base === base && d.season === season) ?? pub.find((d) => d.base === base && !d.season);
+}
+export interface PersonalColorItem extends FeatureItem {
+  users: string[];
+}
+const _pcCache = new Map<string, ReturnType<typeof buildPersonalColor>>();
+function buildPersonalColor(def: PersonalColorDef) {
+  const titles = new Map(getVisibleVideos().map((v) => [v.channel_id, v.channel_title]));
+  const people = Object.entries(INFLUENCER_PROFILE)
+    .filter(([cid, p]) => {
+      const pc = parsePersonalColor(p.personal_color);
+      return titles.has(cid) && pc.base === def.base && (!def.season || pc.season === def.season);
+    })
+    .map(([cid, p]) => ({ channel_id: cid, channel_title: titles.get(cid)!, personal_color: p.personal_color! }));
+  const ids = new Set(people.map((p) => p.channel_id));
+  const map = new Map<string, PersonalColorItem & { vs: Set<string>; cs: Set<string>; views: number }>();
+  const videoKeys = new Set<string>();
+  for (const v of getVisibleVideos()) {
+    if (!ids.has(v.channel_id)) continue;
+    for (const c of v.cosmetics || []) {
+      if (!c.brand_id || !c.name_id || !c.related_tags?.length) continue;
+      if (isPrMention(v.key, c.brand_id, c.name_id)) continue;
+      const tag = c.related_tags.map(rankingTag).find((t) => PC_GROUPS.includes(CATEGORY_TAG_TO_GROUP[t]));
+      if (!tag) continue;
+      const key = `${c.brand_id}_${c.name_id}`;
+      let e = map.get(key);
+      if (!e) {
+        e = { brand_id: c.brand_id, brand: c.brand, name_id: c.name_id, name: c.name, tag, videoCount: 0, channelCount: 0, users: [], vs: new Set(), cs: new Set(), views: 0 };
+        map.set(key, e);
+      }
+      if (e.vs.has(v.key)) continue;
+      e.vs.add(v.key);
+      if (!e.cs.has(v.channel_id)) e.users.push(v.channel_title);
+      e.cs.add(v.channel_id);
+      e.views += toNumber(v.view_count);
+      videoKeys.add(v.key);
+    }
+  }
+  const items = Array.from(map.values())
+    .map((e) => ({ ...e, videoCount: e.vs.size, channelCount: e.cs.size }))
+    .filter((e) => e.channelCount >= PC_MIN_CHANNELS)
+    .sort((a, b) => b.channelCount - a.channelCount || b.videoCount - a.videoCount || b.views - a.views || a.name.localeCompare(b.name, "ja"));
+  const groups = PC_GROUPS.map((group) => ({
+    group,
+    items: items.filter((e) => CATEGORY_TAG_TO_GROUP[e.tag] === group).slice(0, PC_PER_GROUP),
+  })).filter((g) => g.items.length > 0);
+  return { def, people, videoCount: videoKeys.size, itemCount: items.length, groups };
+}
+export function getPersonalColor(slug: string) {
+  const def = PERSONAL_COLORS.find((d) => d.slug === slug);
+  if (!def) return undefined;
+  if (!_pcCache.has(slug)) _pcCache.set(slug, buildPersonalColor(def));
+  return _pcCache.get(slug)!;
+}
+/** 公開するパーソナルカラーのページ（PC_MIN_PEOPLE 人以上・FEATURE_MIN_ITEMS 品以上）。ページ・入口・サイトマップはすべてこれを使う */
+export function getPublishedPersonalColors(): PersonalColorDef[] {
+  return PERSONAL_COLORS.filter((d) => {
+    const c = getPersonalColor(d.slug)!;
+    return c.people.length >= PC_MIN_PEOPLE && c.groups.reduce((n, g) => n + g.items.length, 0) >= FEATURE_MIN_ITEMS;
+  });
+}
+
 /** 検索欄から入る「探し方」のページ（肌悩み・成分・特集・カテゴリのランキング。247章）。
  * 上のメニューは4項目に絞り、これらは検索欄の入口（何も入力せずに触れたときのパネル）と、入力したときの候補から入る */
 export interface ExploreEntry {
-  kind: "肌悩み" | "成分" | "特集" | "ランキング";
+  kind: "肌悩み" | "成分" | "特集" | "ランキング" | "パーソナルカラー";
   label: string;
   path: string;
   /** 候補で引ける語（名前と、言及の語の別名） */
@@ -1733,6 +1830,11 @@ export function getExploreEntries(): ExploreEntry[] {
     const f = getFeature(d.slug)!;
     out.push({ kind: "特集", label: d.name, path: `/feature/${d.slug}/`, words: [d.name, ...d.keywords], count: f.groups.reduce((n, g) => n + g.items.length, 0) });
   }
+  for (const d of getPublishedPersonalColors()) {
+    const c = getPersonalColor(d.slug)!;
+    const long = d.base === "イエベ" ? "イエローベース" : "ブルーベース";
+    out.push({ kind: "パーソナルカラー", label: d.name, path: `/personal-color/${encodeURIComponent(d.slug)}/`, words: [d.name, long + (d.season ?? ""), "パーソナルカラー"], count: c.itemCount });
+  }
   for (const [tag, page] of getRankingPages()) {
     out.push({ kind: "ランキング", label: tag, path: `/ranking/${encodeURIComponent(tag)}/`, words: [tag, ...tag.split(/[・()（）]/)].filter((w) => w.length >= 2), count: page.list.length });
   }
@@ -1747,7 +1849,7 @@ export function getExploreEntries(): ExploreEntry[] {
 export const MENU_CATEGORY_GROUPS = ["ベースメイク", "アイブロウ", "アイメイク", "チーク・陰影", "リップ", "スキンケア", "ヘアケア"];
 const MENU_CATEGORY_PER_GROUP = 4;
 export interface MenuLink { label: string; path: string }
-let _menuCache: { categories: { group: string; items: MenuLink[] }[]; concerns: MenuLink[]; ingredients: MenuLink[]; features: MenuLink[] } | undefined;
+let _menuCache: { categories: { group: string; items: MenuLink[] }[]; concerns: MenuLink[]; ingredients: MenuLink[]; features: MenuLink[]; personalColors: MenuLink[] } | undefined;
 export function getMenuData() {
   if (_menuCache) return _menuCache;
   const nav = getRankingNav();
@@ -1761,7 +1863,7 @@ export function getMenuData() {
   }).filter((g) => g.items.length > 0);
   const ex = getExploreEntries();
   const pick = (kind: ExploreEntry["kind"]) => ex.filter((e) => e.kind === kind).map((e) => ({ label: e.label, path: e.path }));
-  _menuCache = { categories, concerns: pick("肌悩み"), ingredients: pick("成分"), features: pick("特集") };
+  _menuCache = { categories, concerns: pick("肌悩み"), ingredients: pick("成分"), features: pick("特集"), personalColors: pick("パーソナルカラー") };
   return _menuCache;
 }
 

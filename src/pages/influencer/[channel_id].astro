@@ -29,6 +29,7 @@ import {
   isPrMention,
   isOwnBrandMention,
   getInfluencerProfile,
+  personalColorPageOf,
   getOwnBrandIds,
   getBrandName,
   cosmeticCategory,
@@ -56,6 +57,8 @@ const formatDate = formatJaDate;
 const prCount = timeline.reduce((n, b) => n + b.items.filter((c) => isPrMention(b.video.key, c.brand_id, c.name_id)).length, 0);
 // 本人が言ったパーソナルカラー・肌質と、本人のブランド（ユーザー判断、307章）
 const selfProfile = influencer ? getInfluencerProfile(influencer.channel_id) : undefined;
+// パーソナルカラーのページ（同じ色の人が使っているコスメ。309章）があれば、値からリンクする
+const pcPage = personalColorPageOf(selfProfile?.personal_color);
 const ownBrands = influencer ? getOwnBrandIds(influencer.channel_id).map((id) => ({ id, name: getBrandName(id) })).filter((b) => b.name) : [];
 const ownCount = timeline.reduce((n, b) => n + b.items.filter((c) => isOwnBrandMention(b.video.key, c.brand_id, c.name_id)).length, 0);
 
@@ -145,7 +148,7 @@ const jsonLd = influencer
             {(selfProfile || ownBrands.length > 0) && (
               <div class="mt-6 max-w-xl">
                 <dl class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-                  {selfProfile?.personal_color && <div><dt class="inline text-xs text-neutral-500">パーソナルカラー</dt><dd class="inline ml-2 text-ink">{selfProfile.personal_color}</dd></div>}
+                  {selfProfile?.personal_color && <div><dt class="inline text-xs text-neutral-500">パーソナルカラー</dt><dd class="inline ml-2 text-ink">{pcPage ? <a href={withBase(`/personal-color/${encodeURIComponent(pcPage.slug)}/`)} class="link-u">{selfProfile.personal_color}</a> : selfProfile.personal_color}</dd></div>}
                   {selfProfile?.skin && <div><dt class="inline text-xs text-neutral-500">肌質</dt><dd class="inline ml-2 text-ink">{selfProfile.skin}</dd></div>}
                   {selfProfile?.face_type && <div><dt class="inline text-xs text-neutral-500">顔タイプ</dt><dd class="inline ml-2 text-ink">{selfProfile.face_type}</dd></div>}
                   {selfProfile?.body_type && <div><dt class="inline text-xs text-neutral-500">骨格</dt><dd class="inline ml-2 text-ink">{selfProfile.body_type.replace(/^骨格/, "")}</dd></div>}
