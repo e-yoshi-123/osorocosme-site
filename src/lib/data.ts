@@ -267,7 +267,10 @@ export interface InfluencerProfile {
   personal_color?: string;
   skin?: string;
   face_type?: string;
+  body_type?: string;
   sources: string[];
+  /** サイトに載っていない動画（YouTubeの動画ID） */
+  yt_sources?: string[];
   from_description?: boolean;
 }
 const INFLUENCER_PROFILE = influencerProfileData as Record<string, InfluencerProfile>;

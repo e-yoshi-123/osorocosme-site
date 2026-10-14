@@ -148,11 +148,12 @@ const jsonLd = influencer
                   {selfProfile?.personal_color && <div><dt class="inline text-xs text-neutral-500">パーソナルカラー</dt><dd class="inline ml-2 text-ink">{selfProfile.personal_color}</dd></div>}
                   {selfProfile?.skin && <div><dt class="inline text-xs text-neutral-500">肌質</dt><dd class="inline ml-2 text-ink">{selfProfile.skin}</dd></div>}
                   {selfProfile?.face_type && <div><dt class="inline text-xs text-neutral-500">顔タイプ</dt><dd class="inline ml-2 text-ink">{selfProfile.face_type}</dd></div>}
+                  {selfProfile?.body_type && <div><dt class="inline text-xs text-neutral-500">骨格</dt><dd class="inline ml-2 text-ink">{selfProfile.body_type.replace(/^骨格/, "")}</dd></div>}
                   {ownBrands.length > 0 && <div><dt class="inline text-xs text-neutral-500">プロデュース</dt><dd class="inline ml-2">{ownBrands.map((b, i) => <>{i > 0 && "・"}<a href={withBase(`/brand/${b.id}`)} class="link-u text-ink">{b.name}</a></>)}</dd></div>}
                 </dl>
                 {selfProfile && (
                   <p class="mt-2 text-xs leading-relaxed text-neutral-500">
-                    パーソナルカラー・肌質は、本人が{selfProfile.from_description ? "概要欄のプロフィールに書いている" : "動画で話している"}内容です{selfProfile.sources.length > 0 && <>（{selfProfile.sources.map((k, i) => <>{i > 0 && "・"}<a href={withBase(`/video/${k}`)} class="link-u">動画{i + 1}</a></>)}）</>}。
+                    パーソナルカラー・肌質などは、本人が動画・概要欄・タイトルで言っている内容です{selfProfile.sources.length + (selfProfile.yt_sources?.length ?? 0) > 0 && <>（{[...selfProfile.sources.map((k) => withBase(`/video/${k}`)), ...(selfProfile.yt_sources ?? []).map((id) => `https://www.youtube.com/watch?v=${id}`)].map((href, i) => <>{i > 0 && "・"}<a href={href} class="link-u" {...(href.startsWith("https://") ? { target: "_blank", rel: "noopener" } : {})}>動画{i + 1}</a></>)}）</>}。
                   </p>
                 )}
               </div>
