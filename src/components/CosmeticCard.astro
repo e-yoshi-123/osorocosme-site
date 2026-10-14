@@ -56,7 +56,7 @@ const yahooImage = rakuten ? undefined : yahooEntry;
       )
     }
     {rank !== undefined && rank > 0 && (
-      <a href={rankHref} class:list={["num-display z-10 hover:opacity-80 transition-opacity", rank <= 3 ? "tile-r1" : "tile-r2", !rankHref && "pointer-events-none"]} title={`${rankLabel ?? "ランキング"} ${rank}位`} aria-label={`${rankLabel ?? "ランキング"} ${rank}位`}>
+      <a href={rankHref} class:list={["rank-tag num-display z-10 hover:opacity-80 transition-opacity", rank <= 3 ? "tile-r1" : "tile-r2", !rankHref && "pointer-events-none"]} title={`${rankLabel ?? "ランキング"} ${rank}位`} aria-label={`${rankLabel ?? "ランキング"} ${rank}位`}>
         {rank}<span class="ml-0.5 font-sans text-[10px] font-normal">位</span>
       </a>
     )}
@@ -71,7 +71,8 @@ const yahooImage = rakuten ? undefined : yahooEntry;
 </div>
 
 <style>
-  .cosmetic-image-box :global(a) {
+  /* 画像のリンクだけを枠いっぱいに（順位の札〈rank-tag〉は左上の小さな札のまま。322章） */
+  .cosmetic-image-box :global(a:not(.rank-tag)) {
     display: flex;
     align-items: center;
     justify-content: center;
