@@ -279,14 +279,14 @@ const jsonLd = influencer
                 <div id={`cat-${encodeURIComponent(sec.group)}`} class="scroll-mt-28">
                   <h3 class="mb-5">
                     {sec.en && <span class="block label-caps text-rose text-[10px] mb-1">{sec.en}</span>}
-                    <span class="text-[17px] font-bold">{influencer.channel_title}の{sec.group}</span>
+                    <span class="text-[17px] font-bold">{influencer.channel_title}愛用の{sec.group}</span>
                     <span class="ml-2 text-xs text-neutral-500 whitespace-nowrap">{sec.total}品{!sec.subs && sec.total > sec.items.length ? `（上位${sec.items.length}品）` : ""}</span>
                   </h3>
                   {sec.subs ? (
                     <div class="space-y-8">
                       {sec.subs.map((sub) => (
                         <div>
-                          <h4 class="mb-4 text-sm font-semibold">{influencer.channel_title}の{sub.tag}<span class="ml-2 text-xs font-normal text-neutral-500 whitespace-nowrap">{sub.total}品{sub.total > sub.items.length ? `（上位${sub.items.length}品）` : ""}</span></h4>
+                          <h4 class="mb-4 text-sm font-semibold">{influencer.channel_title}愛用の{sub.tag}<span class="ml-2 text-xs font-normal text-neutral-500 whitespace-nowrap">{sub.total}品{sub.total > sub.items.length ? `（上位${sub.items.length}品）` : ""}</span></h4>
                           <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-4">
                             {sub.items.map((c) => (
                               <li class="min-w-0 group flex gap-3 items-start">
