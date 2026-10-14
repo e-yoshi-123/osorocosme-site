@@ -300,6 +300,19 @@ export function getProducersOf(brand_id: string, name_id: string): Influencer[] 
     .map(([cid]) => getInfluencerByChannelId(cid))
     .filter((i): i is Influencer => !!i);
 }
+/** このブランドをプロデュースした人（ブランド全体。part はライン単位〈一部の商品〉だけの人）。ブランドのページに使う（321章） */
+export function getBrandProducers(brand_id: string): { inf: Influencer; part: boolean }[] {
+  const b = canonicalBrandId(brand_id);
+  return Object.entries(OWN_BRANDS)
+    .map(([cid, o]) => ({
+      cid,
+      whole: o.brands.some((x) => canonicalBrandId(x) === b),
+      part: o.products.some((k) => canonicalBrandId(k.replace(/_name-.*$/, "")) === b),
+    }))
+    .filter((x) => x.whole || x.part)
+    .map((x) => ({ inf: getInfluencerByChannelId(x.cid), part: !x.whole }))
+    .filter((x): x is { inf: Influencer; part: boolean } => !!x.inf);
+}
 /** 本人が動画・概要欄で言ったパーソナルカラー・肌質・顔タイプ（backend/scripts/influencer_facts/export_profile.py。AIの推定ではない。307章）。
  * sources は発言のある動画のキー、from_description は概要欄のプロフィールに書いてあるもの */
 export interface InfluencerProfile {

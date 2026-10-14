@@ -4,7 +4,7 @@ import PageHead from "../../components/PageHead.astro";
 import Layout from "../../layouts/Layout.astro";
 import ShareButtons from "../../components/ShareButtons.astro";
 import CosmeticCard from "../../components/CosmeticCard.astro";
-import { getBrandsWithVideos, getAliasRedirects, getBrandName, getCosmeticsForBrand, breadcrumbLd, getBrandMeta, getBrandGroups, getBrandCosmeticsByCategory, getBrandTopCosmetics, getCosmeticVideoCounts, COUNTRY_NAMES, withBase, cosmeticSlug, formatCount } from "../../lib/data";
+import { getBrandProducers, getBrandsWithVideos, getAliasRedirects, getBrandName, getCosmeticsForBrand, breadcrumbLd, getBrandMeta, getBrandGroups, getBrandCosmeticsByCategory, getBrandTopCosmetics, getCosmeticVideoCounts, COUNTRY_NAMES, withBase, cosmeticSlug, formatCount } from "../../lib/data";
 
 export function getStaticPaths() {
   return [
@@ -30,6 +30,8 @@ const brandGroups = Array.from(new Set(sections.map((s) => s.group))).map((group
 }));
 const stats = getBrandsWithVideos().find((b) => b.brand_id === brand_id);
 const meta = getBrandMeta(brand_id!);
+// プロデュースしたインフルエンサー（本人のブランド。ユーザー依頼、321章）
+const producers = getBrandProducers(brand_id!);
 const countryName = meta.country ? COUNTRY_NAMES[meta.country] ?? meta.country : undefined;
 const sisters = meta.group
   ? (getBrandGroups().find((g) => g.group === meta.group)?.brands ?? []).filter((b) => b.brand_id !== brand_id)
@@ -68,6 +70,21 @@ const COLS: Record<number, string> = { 1: "lg:grid-cols-1", 2: "lg:grid-cols-2",
 <Layout title={`${brandName}のおすすめ人気コスメ（YouTuberの紹介数順）`} description={description} image={ogImage} jsonLd={jsonLd}>
   <PageHead en="Brand" title={brandName} lead={description} stats={[{ n: formatCount(stats?.videoCount ?? 0), label: "紹介動画", unit: "本" }, { n: formatCount(cosmetics.length), label: "コスメ", unit: "品" }]}>
     {countryName && <p class="mt-4 text-sm text-neutral-600"><BrandFlag brand_id={brand_id!} />{countryName}のブランド</p>}
+    {producers.length > 0 && (
+      <div class="mt-4 flex flex-wrap items-center gap-2">
+        <span class="text-[10px] tracking-[0.14em] uppercase text-rose mr-1">Produced by</span>
+        {producers.map(({ inf: p, part }) => (
+          <a href={withBase(`/influencer/${p.channel_id}`)} class="group inline-flex items-center gap-2 rounded-full border border-ink/15 bg-white/80 pl-1 pr-3.5 py-1 hover:border-rose transition-colors" title={`${p.channel_title}が${part ? "一部の商品を" : ""}プロデュース`}>
+            {p.channel_icon ? (
+              <img src={p.channel_icon} alt="" width="32" height="32" class="w-8 h-8 rounded-full object-cover ring-2 ring-white" loading="lazy" referrerpolicy="no-referrer" />
+            ) : (
+              <span class="w-8 h-8 rounded-full bg-blush flex items-center justify-center text-xs text-rose font-semibold" aria-hidden="true">{p.channel_title.slice(0, 1)}</span>
+            )}
+            <span class="text-sm text-ink group-hover:text-rose transition-colors">{p.channel_title}<span class="text-xs text-neutral-500 ml-1.5">{part ? "一部の商品をプロデュース" : "プロデュース"}</span></span>
+          </a>
+        ))}
+      </div>
+    )}
     <ShareButtons text={`${brandName}の人気コスメ・YouTubeの紹介動画`} class="mt-5" />
     {
       sisters.length > 0 && (
