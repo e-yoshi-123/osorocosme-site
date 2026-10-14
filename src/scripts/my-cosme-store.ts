@@ -3,7 +3,8 @@
  * 端末を移すときは、ファイルへの書き出し・読み込みか、利用者本人のGoogleドライブ（scripts/my-cosme-drive.ts）を使う。
  * 2か所の一覧を合わせる（読み込み・同期）とき、消した商品が戻らないよう、消した時刻も持つ（removed）。
  * 「気になる」（wish・wishRemoved）は259章で足した。「使っている」とは別の一覧で、同じ商品は片方にだけ入る（入れたほうに移る）。
- * 肌悩み（concerns・concernsRemoved。キーは /concern/<slug>/ の slug）も259章で足した。合わせ方は商品と同じ。 */
+ * 肌悩み（concerns・concernsRemoved。キーは /concern/<slug>/ の slug）も259章で足した。合わせ方は商品と同じ。
+ * パーソナルカラー（pc・pcRemoved。キーは「イエベ春」など。1つだけ選ぶのはページ側で守る）と肌質（skin・skinRemoved。複数可）は313章で足した。 */
 
 export interface MyCosmeData {
   v: 1;
@@ -19,14 +20,20 @@ export interface MyCosmeData {
   concerns: Record<string, Item>;
   /** 選ぶのをやめた肌悩み */
   concernsRemoved: Record<string, number>;
+  /** 選んだパーソナルカラー（/personal-color/ の slug） */
+  pc: Record<string, Item>;
+  pcRemoved: Record<string, number>;
+  /** 選んだ肌質（/skin-type/ の slug） */
+  skin: Record<string, Item>;
+  skinRemoved: Record<string, number>;
 }
 export type Item = { t: number; n?: string };
 /** どちらの一覧か：items＝使っている、wish＝気になる */
 export type ListKind = "items" | "wish";
 /** 保存する一覧の種類（商品の2つと、肌悩み） */
-export type Kind = ListKind | "concerns";
-const KINDS = ["items", "wish", "concerns"] as const;
-const REMOVED_OF = { items: "removed", wish: "wishRemoved", concerns: "concernsRemoved" } as const;
+export type Kind = ListKind | "concerns" | "pc" | "skin";
+const KINDS = ["items", "wish", "concerns", "pc", "skin"] as const;
+const REMOVED_OF = { items: "removed", wish: "wishRemoved", concerns: "concernsRemoved", pc: "pcRemoved", skin: "skinRemoved" } as const;
 const OTHER: Partial<Record<Kind, ListKind>> = { items: "wish", wish: "items" };
 
 const KEY = "osorocosme.mycosme";
@@ -34,9 +41,9 @@ const EVENT = "mycosme:change";
 /** 消した記録は新しいものからこの件数まで持つ（一覧を合わせるときに、古い端末から戻らないようにするため） */
 const REMOVED_KEEP = 500;
 
-const empty = (): MyCosmeData => ({ v: 1, items: {}, removed: {}, wish: {}, wishRemoved: {}, concerns: {}, concernsRemoved: {} });
+const empty = (): MyCosmeData => ({ v: 1, items: {}, removed: {}, wish: {}, wishRemoved: {}, concerns: {}, concernsRemoved: {}, pc: {}, pcRemoved: {}, skin: {}, skinRemoved: {} });
 const PRODUCT_SLUG = /^brand-\d+-name-\d+$/;
-const KEY_OK: Record<Kind, RegExp> = { items: PRODUCT_SLUG, wish: PRODUCT_SLUG, concerns: /^[a-z][a-z-]{0,39}$/ };
+const KEY_OK: Record<Kind, RegExp> = { items: PRODUCT_SLUG, wish: PRODUCT_SLUG, concerns: /^[a-z][a-z-]{0,39}$/, pc: /^(イエベ|ブルベ)(春|夏|秋|冬)?$/, skin: /^(乾燥肌|敏感肌|インナードライ|混合肌|脂性肌|普通肌)$/ };
 
 /** 形の崩れたデータ（手で書き換えたファイル等）は、読める項目だけを拾う */
 export function sanitize(raw: unknown): MyCosmeData | null {

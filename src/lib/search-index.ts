@@ -18,6 +18,10 @@ import {
   getConcern,
   productImageSrc,
   toNumber,
+  getPublishedPersonalColors,
+  getPersonalColor,
+  getPublishedSkinTypes,
+  getSkinType,
 } from "./data";
 
 /** カテゴリ名に含まれない呼び方（「クレド リップ」で口紅が引けるように） */
@@ -149,8 +153,22 @@ export function buildRecommendIndex() {
       .filter((x): x is readonly [number, number] => x[0] !== undefined);
     return [d.slug, d.name, rows.map((x) => x[0]), rows.map((x) => x[1])];
   });
+  // パーソナルカラー・肌質（/personal-color/・/skin-type/ と同じ集計。309・310章）：[slug, 名前, 商品の番号の並び（同じ色・肌質の使った人の多い順）, 同じ並びの人数]。
+  // マイコスメで選んだときに使う（313章）
+  const rows = (items: { brand_id: string; name_id: string; channelCount: number }[]) =>
+    items
+      .map((it) => [cosIdx.get(cosmeticSlug(it.brand_id, it.name_id)), it.channelCount] as const)
+      .filter((x): x is readonly [number, number] => x[0] !== undefined);
+  const pc = getPublishedPersonalColors().map((d) => {
+    const r = rows(getPersonalColor(d.slug)!.items);
+    return [d.slug, d.name, r.map((x) => x[0]), r.map((x) => x[1])];
+  });
+  const sk = getPublishedSkinTypes().map((d) => {
+    const r = rows(getSkinType(d.slug)!.items);
+    return [d.slug, d.name, r.map((x) => x[0]), r.map((x) => x[1])];
+  });
   // ブランドの国（290章）：b の3つ目に国コード、cn に国コード → 国名。ブランド名の前の国旗に使う
   const bc = idx.b.map((x) => getBrandCountry(String(x[0])) || "");
   const cn = Object.fromEntries([...new Set(bc.filter(Boolean))].map((code) => [code, COUNTRY_NAMES[code] ?? code]));
-  return { b: idx.b.map((x, n) => [x[1], x[2], bc[n]]), c, ch, r, g: g.map((d) => [d.slug, d.name]), gi, k, cn };
+  return { b: idx.b.map((x, n) => [x[1], x[2], bc[n]]), c, ch, r, g: g.map((d) => [d.slug, d.name]), gi, k, pc, sk, cn };
 }

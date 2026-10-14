@@ -27,6 +27,9 @@ interface RecIndex {
   gi: Record<string, number[]>;
   /** 肌悩み：[slug, 名前, 商品の番号（紹介した人の多い順）, 同じ並びの紹介した人数] */
   k: [string, string, number[], number[]][];
+  /** パーソナルカラー・肌質（313章）：[slug, 名前, 商品の番号（同じ色・肌質の使った人の多い順）, 同じ並びの人数] */
+  pc: [string, string, number[], number[]][];
+  sk: [string, string, number[], number[]][];
   /** 国コード → 国名 */
   cn: Record<string, string>;
 }
@@ -197,6 +200,60 @@ function renderConcernRec(p: Prepared, d: MyCosmeData) {
     .join("");
 }
 
+// ---- パーソナルカラー・肌質（313章）----
+// /personal-color/・/skin-type/ と同じ集計（本人が言ったパーソナルカラー・肌質の人が使った人数）。パーソナルカラーは1つだけ、肌質は複数選べる
+type ProfRow = [string, string, number[], number[]];
+const PROF = { pc: { path: "personal-color", label: "パーソナルカラー" }, skin: { path: "skin-type", label: "肌質" } } as const;
+function profRows(p: Prepared, kind: "pc" | "skin"): ProfRow[] {
+  return kind === "pc" ? p.idx.pc : p.idx.sk;
+}
+/** 選んだパーソナルカラー・肌質（パーソナルカラー→肌質、それぞれ選んだ順） */
+function myProfiles(p: Prepared, d: MyCosmeData): (ProfRow & { kind?: never })[] {
+  const pick = (kind: "pc" | "skin") => profRows(p, kind).filter((r) => d[kind][r[0]]).sort((a, b) => d[kind][a[0]].t - d[kind][b[0]].t);
+  return [...pick("pc"), ...pick("skin")];
+}
+function profKind(p: Prepared, slug: string): "pc" | "skin" {
+  return p.idx.pc.some((r) => r[0] === slug) ? "pc" : "skin";
+}
+function renderProfileChips(p: Prepared, d: MyCosmeData) {
+  for (const kind of ["pc", "skin"] as const) {
+    $(`[data-prof-chips="${kind}"]`).innerHTML = profRows(p, kind)
+      .map(([slug, name]) => {
+        const on = !!d[kind][slug];
+        return `<button type="button" data-prof="${kind}" data-slug="${esc(slug)}" aria-pressed="${on}" class="min-h-9 px-4 rounded-full text-xs border transition-colors cursor-pointer ${on ? "bg-rose border-rose text-white" : "border-ink/20 text-neutral-700 hover:border-ink"}">${on ? "✓ " : ""}${esc(name)}</button>`;
+      })
+      .join("");
+  }
+}
+function renderProfileRec(p: Prepared, d: MyCosmeData) {
+  const box = $("[data-rec-profile]");
+  const sel = myProfiles(p, d);
+  box.hidden = sel.length === 0;
+  if (!sel.length) return;
+  const mine = new Set(Object.keys(d.items).map((s) => resolve(p, s)));
+  $("[data-rec-profile-list]").innerHTML = sel
+    .map(([slug, name, ns, cnt]) => {
+      const kind = profKind(p, slug);
+      const per = new Map<string, number>();
+      const list: [number, number][] = [];
+      ns.forEach((n, i) => {
+        if (list.length >= CONCERN_LIMIT || mine.has(n)) return;
+        const cat = p.idx.c[n][5];
+        if ((per.get(cat) || 0) >= CONCERN_PER_CAT) return;
+        per.set(cat, (per.get(cat) || 0) + 1);
+        list.push([n, cnt[i]]);
+      });
+      if (!list.length) return "";
+      const cap = (n: number, c: number) => `${p.idx.c[n][5] ? `<span class="block truncate">${esc(p.idx.c[n][5])}</span>` : ""}<span class="block">同じ${esc(name)}の${c}人が使用</span>`;
+      return `<div class="min-w-0">
+        <h3 class="text-sm font-medium">${esc(name)}の人が使っている${kind === "pc" ? "コスメ" : "スキンケア・ベースメイク"}</h3>
+        <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-8">${list.map(([n, c]) => tile(p, n, cap(n, c), d)).join("")}</div>
+        <a href="${base}/${PROF[kind].path}/${encodeURIComponent(slug)}/" class="mt-4 inline-block text-xs text-rose hover:underline">${esc(name)}のインフルエンサーと愛用コスメをもっと見る →</a>
+      </div>`;
+    })
+    .join("");
+}
+
 // ---- あなたへのおすすめ（264章）：3つの理由をまとめて、その人だけの数品にする ----
 // 理由ごとに0〜1にそろえて足す：①同じコスメを使う人（下のおすすめと同じ点数÷候補の最大）②選んだ肌悩みに触れて紹介した人数
 // （その悩みで一番多い品を1）③登録したコスメと同じ成分（成分の近さ）。理由が重なる品ほど上に出し、カテゴリは1品ずつ。
@@ -236,7 +293,8 @@ function renderForYou(p: Prepared, d: MyCosmeData) {
     if (n !== undefined) mine.add(n);
   }
   const concerns = myConcerns(p, d);
-  box.hidden = mine.size === 0 && concerns.length === 0;
+  const profiles = myProfiles(p, d);
+  box.hidden = mine.size === 0 && concerns.length === 0 && profiles.length === 0;
   if (box.hidden) return;
 
   // ①同じコスメを使う人
@@ -268,6 +326,16 @@ function renderForYou(p: Prepared, d: MyCosmeData) {
       else cur.also.push(name);
     });
   }
+  // ④パーソナルカラー・肌質（313章）：同じ色・肌質の人の使った人数（その色・肌質で一番多い品を1）。品ごとに一番当てはまるもの
+  const prof = new Map<number, { v: number; name: string; cnt: number }>();
+  for (const [, name, ns, cnt] of profiles) {
+    const top = cnt[0] || 1;
+    ns.forEach((n, i) => {
+      if (mine.has(n)) return;
+      const v = cnt[i] / top, cur = prof.get(n);
+      if (!cur || v > cur.v) prof.set(n, { v, name, cnt: cnt[i] });
+    });
+  }
   // ③成分：登録したコスメに入っている成分を、候補がどれだけ覆うか
   const ings = (n: number) => p.idx.gi[n] || [];
   const profile = new Map<number, number>();
@@ -282,12 +350,12 @@ function renderForYou(p: Prepared, d: MyCosmeData) {
       if (v > 0) ing.set(n, v);
     }
 
-  const cands = new Set<number>([...co.keys(), ...con.keys(), ...ing.keys()]);
+  const cands = new Set<number>([...co.keys(), ...con.keys(), ...ing.keys(), ...prof.keys()]);
   const ranked = [...cands]
     .map((n) => {
-      const a = coMax ? (co.get(n) || 0) / coMax : 0, b = con.get(n)?.v || 0, c = ing.get(n) || 0;
-      const hits = (a > 0 ? 1 : 0) + (b > 0 ? 1 : 0) + (c > 0 ? 1 : 0);
-      return { n, s: a + b + c + FORYOU_MULTI * (hits - 1) };
+      const a = coMax ? (co.get(n) || 0) / coMax : 0, b = con.get(n)?.v || 0, c = ing.get(n) || 0, e = prof.get(n)?.v || 0;
+      const hits = (a > 0 ? 1 : 0) + (b > 0 ? 1 : 0) + (c > 0 ? 1 : 0) + (e > 0 ? 1 : 0);
+      return { n, s: a + b + c + e + FORYOU_MULTI * (hits - 1) };
     })
     .sort((x, y) => y.s - x.s || p.idx.c[y.n][6] - p.idx.c[x.n][6]);
   // カテゴリのボタン：候補が CAT_MIN 品以上あるカテゴリ。関係の深い（上位の候補を多く持つ）CAT_SHOW 個を先に、ランキングと同じ順で出す
@@ -338,6 +406,8 @@ function renderForYou(p: Prepared, d: MyCosmeData) {
   const usedIng = new Map<number, number>();
   const reasons = (n: number) => {
     const out: string[] = [];
+    const pf = prof.get(n);
+    if (pf) out.push(`同じ${esc(pf.name)}の${pf.cnt}人が使用`);
     const k = con.get(n);
     if (k) out.push(`「${esc([k.name, ...k.also].join("」「"))}」に触れて${k.cnt}人が紹介`);
     if (co.has(n)) {
@@ -360,12 +430,13 @@ function renderForYou(p: Prepared, d: MyCosmeData) {
     `${p.idx.c[n][5] ? `<span class="block truncate">${esc(p.idx.c[n][5])}</span>` : ""}` +
     reasons(n).map((r) => `<span class="mt-0.5 flex gap-1"><span class="text-rose shrink-0" aria-hidden="true">✓</span><span class="min-w-0">${r}</span></span>`).join("");
 
+  const me = profiles.length ? `${profiles.map((k) => k[1]).join("・")}の` : "";
   const who = concerns.length ? `${concerns.map((k) => k[1]).join("・")}が気になる` : "";
   const has = mine.size ? `${mine.size}品を使っている` : "";
-  $("[data-foryou-title]").textContent = `${[who, has].filter(Boolean).join("、")}あなたへ`;
+  $("[data-foryou-title]").textContent = `${[who, has].filter(Boolean).join("、")}${me}あなたへ`;
   $("[data-foryou-list]").innerHTML = picks.length
     ? picks.map((n) => tile(p, n, cap(n), d)).join("")
-    : `<p class="col-span-full text-sm text-neutral-500">まだ候補がありません。使っているコスメや肌悩みを足すと出てきます。</p>`;
+    : `<p class="col-span-full text-sm text-neutral-500">まだ候補がありません。使っているコスメや肌悩み・パーソナルカラー・肌質を足すと出てきます。</p>`;
 }
 
 // ---- 商品を探して追加 ----
@@ -625,7 +696,9 @@ async function main() {
   const renderAll = (d: MyCosmeData) => {
     renderList(p, d);
     renderConcernChips(p, d);
+    renderProfileChips(p, d);
     renderForYou(p, d);
+    renderProfileRec(p, d);
     renderConcernRec(p, d);
     renderRecommend(p, d);
     renderSearch(p, d);
@@ -667,6 +740,21 @@ async function main() {
       afterLocalChange();
       return;
     }
+    // パーソナルカラーは1つだけ（選ぶと、ほかに選んでいたものは外す）、肌質は複数（313章）
+    const pBtn = t.closest<HTMLElement>("[data-prof]");
+    if (pBtn) {
+      const kind = pBtn.dataset.prof as "pc" | "skin";
+      const slug = pBtn.dataset.slug!;
+      const on = load()[kind][slug];
+      if (on) remove(slug, kind);
+      else {
+        if (kind === "pc") for (const s of Object.keys(load().pc)) remove(s, "pc");
+        add(slug, undefined, kind);
+      }
+      track(`${kind}_${on ? "remove" : "add"}`);
+      afterLocalChange();
+      return;
+    }
     const tabBtn = t.closest<HTMLElement>("[data-tab]");
     if (tabBtn) {
       tab = tabBtn.dataset.tab as ListKind;
@@ -705,7 +793,7 @@ async function main() {
     else if (act === "import") $<HTMLInputElement>("[data-import-file]").click();
     else if (act === "clear") {
       const cur = load();
-      if (!Object.keys(cur.items).length && !Object.keys(cur.wish).length && !Object.keys(cur.concerns).length) return;
+      if (!Object.keys(cur.items).length && !Object.keys(cur.wish).length && !Object.keys(cur.concerns).length && !Object.keys(cur.pc).length && !Object.keys(cur.skin).length) return;
       // 押し間違いで消えないよう、2回押したときだけ消す（確認のダイアログは出さない）
       const btn = t.closest<HTMLElement>("[data-action]")!;
       if (!btn.dataset.armed) {
@@ -720,11 +808,15 @@ async function main() {
       for (const s of Object.keys(d.items)) d.removed[s] = now;
       for (const s of Object.keys(d.wish)) d.wishRemoved[s] = now;
       for (const s of Object.keys(d.concerns)) d.concernsRemoved[s] = now;
+      for (const s of Object.keys(d.pc)) d.pcRemoved[s] = now;
+      for (const s of Object.keys(d.skin)) d.skinRemoved[s] = now;
       d.items = {};
       d.wish = {};
       d.concerns = {};
+      d.pc = {};
+      d.skin = {};
       save(d);
-      setStatus("一覧（使っている・気になる・肌悩み）を空にしました。");
+      setStatus("一覧（使っている・気になる・肌悩み・パーソナルカラー・肌質）を空にしました。");
       afterLocalChange();
     } else if (act === "drive-sync" || act === "drive-start") {
       // まだつないでいない端末でも、押したらすぐGoogleの画面を開く（ボタンを押した処理の中から呼ぶ：ポップアップが止められないように）。

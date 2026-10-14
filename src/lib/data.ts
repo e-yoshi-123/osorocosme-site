@@ -1771,7 +1771,7 @@ function collectByPeople(ids: Set<string>, groups: string[], minChannels: number
   const grouped = groups
     .map((group) => ({ group, items: items.filter((e) => CATEGORY_TAG_TO_GROUP[e.tag] === group).slice(0, perGroup) }))
     .filter((g) => g.items.length > 0);
-  return { videoCount: videoKeys.size, itemCount: items.length, groups: grouped };
+  return { videoCount: videoKeys.size, itemCount: items.length, groups: grouped, items };
 }
 /** 本人が言ったパーソナルカラー・肌質が当てはまる人（ページの人のカードに使う。アイコン・掲載動画の本数の多い順。312章） */
 function profilePeople(match: (p: InfluencerProfile) => boolean, label: (p: InfluencerProfile) => string) {
