@@ -313,6 +313,17 @@ export function getBrandProducers(brand_id: string): { inf: Influencer; part: bo
     .map((x) => ({ inf: getInfluencerByChannelId(x.cid), part: !x.whole }))
     .filter((x): x is { inf: Influencer; part: boolean } => !!x.inf);
 }
+/** インフルエンサーがプロデュースしたブランドの一覧（ブランド一覧のページ。紹介動画の多い順。画像は本人のブランドの商品のうち紹介の多いもの。323章） */
+export function getProducedBrands(): (BrandWithStats & { producers: { inf: Influencer; part: boolean }[]; imageSrc: string })[] {
+  return getBrandsWithVideos()
+    .map((b) => ({ b, producers: getBrandProducers(b.brand_id) }))
+    .filter((x) => x.producers.length > 0)
+    .map(({ b, producers }) => {
+      const own = producers.flatMap((p) => getOwnProducts(p.inf.channel_id)).filter((t) => canonicalBrandId(t.brand_id) === canonicalBrandId(b.brand_id));
+      return { ...b, producers, imageSrc: own.find((t) => t.imageSrc)?.imageSrc ?? "" };
+    })
+    .sort((a, b) => b.videoCount - a.videoCount);
+}
 /** 本人が動画・概要欄で言ったパーソナルカラー・肌質・顔タイプ（backend/scripts/influencer_facts/export_profile.py。AIの推定ではない。307章）。
  * sources は発言のある動画のキー、from_description は概要欄のプロフィールに書いてあるもの */
 export interface InfluencerProfile {

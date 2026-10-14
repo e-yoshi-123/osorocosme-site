@@ -5,6 +5,7 @@ import PageNav from "../components/PageNav.astro";
 import Layout from "../layouts/Layout.astro";
 import {
   getBrandsWithVideos,
+  getProducedBrands,
   getBrandGroups,
   getBrandMeta,
   getBrandReading,
@@ -16,6 +17,9 @@ import {
 const brands = getBrandsWithVideos().sort((a, b) =>
   (getBrandReading(a.brand_id) ?? a.name).localeCompare(getBrandReading(b.brand_id) ?? b.name, "ja"),
 );
+// インフルエンサーがプロデュースしたブランド（ユーザー依頼、323章）
+const produced = getProducedBrands();
+
 const grouped = groupByKana(brands);
 // 五十音の見出し（ア・イ・ウ…）を行（ア行・カ行…）にまとめ、目次の帯から行の頭へ飛べるようにする
 const KANA_ROWS: [string, string][] = [
@@ -28,6 +32,7 @@ const firstOfRow = new Set<string>();
 for (const kana of grouped.keys()) if (![...firstOfRow].some((k) => rowOf(k) === rowOf(kana))) firstOfRow.add(kana);
 const navItems = [
   { label: "系列マップ", target: "#group-map" },
+  ...(produced.length > 0 ? [{ label: "インフルエンサーのブランド", target: "#produced" }] : []),
   ...[...KANA_ROWS.map(([r]) => r), "他"].filter((r) => usedRows.has(r)).map((r) => ({ label: r === "他" ? "英数・他" : r, target: `[data-row="${r}"]`, href: `#row-${r}` })),
 ];
 
@@ -52,7 +57,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
   title="ブランド一覧"
   description="YouTubeのコスメ紹介動画で紹介されたブランドの一覧。国（日本・韓国・その他）や親会社の系列ごとに探せ、系列ごとの紹介動画数も比べられます。"
 >
-  <PageHead en="Brands" title="ブランド一覧" lead="動画で紹介されたブランドを、親会社の系列ごとのマップと、五十音順の一覧で探せます。" stats={[{ n: brands.length, label: "掲載ブランド" }]} />
+  <PageHead en="Brands" title="ブランド一覧" lead="動画で紹介されたブランドを、親会社の系列ごとのマップ、インフルエンサーのブランド、五十音順の一覧で探せます。" stats={[{ n: brands.length, label: "掲載ブランド" }]} />
 
   <PageNav items={navItems} label="ブランド一覧の目次" class="mb-6 md:mb-8" />
 
@@ -92,8 +97,40 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
     </div>
   </section>
 
+  {produced.length > 0 && (
+    <section id="produced" class="panel mb-6 md:mb-8 scroll-mt-32">
+      <h2 class="font-serif h-section font-semibold mb-2 flex items-baseline gap-3"><span class="num-display text-sm text-neutral-500">02</span>インフルエンサーのブランド</h2>
+      <p class="text-sm text-neutral-600 mb-6 max-w-2xl">YouTuber・インフルエンサー本人がプロデュースしているブランドです（{produced.length}ブランド）。本人の動画での紹介は、ランキングには数えていません。</p>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {produced.map((b) => (
+          <li class="rounded-2xl border border-ink/10 bg-paper/60 p-4 flex gap-4 items-start">
+            <a href={withBase(`/brand/${b.brand_id}`)} class="product-well w-20 h-20 shrink-0 rounded-xl overflow-hidden flex items-center justify-center" tabindex="-1" aria-hidden="true">
+              {b.imageSrc ? <img src={b.imageSrc} alt="" class="w-[84%] h-[84%] object-contain" loading="lazy" data-err="hide" /> : <span class="text-[10px] text-neutral-400">No image</span>}
+            </a>
+            <div class="min-w-0 flex-1">
+              <a href={withBase(`/brand/${b.brand_id}`)} class="block font-serif font-semibold text-[17px] leading-snug hover:text-rose transition-colors truncate"><BrandFlag brand_id={b.brand_id} />{b.name}</a>
+              <p class="mt-0.5 text-xs text-neutral-500">紹介動画 {b.videoCount}本・{b.cosmeticCount}品</p>
+              <div class="mt-2.5 flex flex-wrap gap-1.5">
+                {b.producers.map(({ inf: p, part }) => (
+                  <a href={withBase(`/influencer/${p.channel_id}`)} class="group inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-white/80 pl-0.5 pr-2.5 py-0.5 hover:border-rose transition-colors max-w-full" title={`${p.channel_title}が${part ? "一部の商品を" : ""}プロデュース`}>
+                    {p.channel_icon ? (
+                      <img src={p.channel_icon} alt="" width="24" height="24" class="w-6 h-6 rounded-full object-cover shrink-0" loading="lazy" referrerpolicy="no-referrer" />
+                    ) : (
+                      <span class="w-6 h-6 rounded-full bg-blush text-[10px] text-rose flex items-center justify-center shrink-0" aria-hidden="true">{p.channel_title.slice(0, 1)}</span>
+                    )}
+                    <span class="text-xs text-ink group-hover:text-rose transition-colors truncate">{p.channel_title}{part && <span class="text-neutral-500 ml-1">（一部の商品）</span>}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
   <section class="panel">
-  <h2 class="font-serif h-section font-semibold mb-4 flex items-baseline gap-3"><span class="num-display text-sm text-neutral-500">02</span>五十音順</h2>
+  <h2 class="font-serif h-section font-semibold mb-4 flex items-baseline gap-3"><span class="num-display text-sm text-neutral-500">{produced.length > 0 ? "03" : "02"}</span>五十音順</h2>
   <div class="flex flex-wrap items-center gap-2 mb-8 text-sm">
     <span class="label-caps text-neutral-500 mr-1">Country</span>
     {
