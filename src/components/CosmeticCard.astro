@@ -22,9 +22,11 @@ interface Props {
   /** カテゴリのランキングでの順位（ブランドのページ。322章）。画像の左上に札を重ねる。rankLabel は札の説明（例: 「化粧下地ランキング」） */
   rank?: number;
   rankLabel?: string;
+  /** 札を押したときの行き先（ランキングのページのその商品の行） */
+  rankHref?: string;
 }
 
-const { brand_id, brand, name_id, name, rakutenImageHtml, showBrand = true, caption, pr = false, own = false, category, rank, rankLabel } = Astro.props;
+const { brand_id, brand, name_id, name, rakutenImageHtml, showBrand = true, caption, pr = false, own = false, category, rank, rankLabel, rankHref } = Astro.props;
 // 楽天の画像が無い商品は、Yahoo!ショッピングの画像があればそれを出す（115章）。
 // 楽天の画像はあっても読み込めない場合に備え、Yahoo!の画像を data-* に持たせる（Layout の共通の処理が差し替える。135章）
 const entry = getCosmeticListEntry(brand_id, name_id);
@@ -54,9 +56,9 @@ const yahooImage = rakuten ? undefined : yahooEntry;
       )
     }
     {rank !== undefined && rank > 0 && (
-      <span class:list={["num-display pointer-events-none", rank <= 3 ? "tile-r1" : "tile-r2"]} title={`${rankLabel ?? "ランキング"} ${rank}位`} aria-label={`${rankLabel ?? "ランキング"} ${rank}位`}>
+      <a href={rankHref} class:list={["num-display z-10 hover:opacity-80 transition-opacity", rank <= 3 ? "tile-r1" : "tile-r2", !rankHref && "pointer-events-none"]} title={`${rankLabel ?? "ランキング"} ${rank}位`} aria-label={`${rankLabel ?? "ランキング"} ${rank}位`}>
         {rank}<span class="ml-0.5 font-sans text-[10px] font-normal">位</span>
-      </span>
+      </a>
     )}
     {pr && <PrBadge tone="solid" own={own} class="absolute top-2 left-2 pointer-events-none" />}
   </div>

@@ -50,7 +50,8 @@ const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
   data-* と rank-badge は、カテゴリページの並び替え・「もっと見る」のスクリプトが使う。
 */}
 <li
-  class:list={["ranking-row group/row rrow-g", { "is-top": top }]}
+  id={`item-${brand_id}-${name_id}`}
+  class:list={["ranking-row group/row rrow-g scroll-mt-32", { "is-top": top }]}
   data-base={base}
   data-videos={videoCount}
   data-channels={channelCount}

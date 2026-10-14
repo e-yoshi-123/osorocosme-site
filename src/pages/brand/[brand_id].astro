@@ -37,11 +37,9 @@ const brandGroups = Array.from(new Set(sections.map((s) => s.group))).map((group
 const n2 = (n: number) => String(n).padStart(2, "0");
 // 細かいカテゴリのランキングでの順位（ランキングのページと同じ表。PR・提供だけの商品は載らないので順位なし。ユーザー依頼、322章）
 const rankingPages = getRankingPages();
-const RANK_SHOWN = 50; // ranking/[tag].astro の MAX と同じ
 const rankIn = (tag: string, c: { brand_id: string; name_id: string }) => {
   const list = rankingPages.get(tag)?.list;
-  const r = list ? list.findIndex((x) => x.brand_id === c.brand_id && x.name_id === c.name_id) + 1 : 0;
-  return r <= RANK_SHOWN ? r : 0; // ランキングのページに載る範囲（上位50位）だけ。押した先で見つからない順位は出さない
+  return list ? list.findIndex((x) => x.brand_id === c.brand_id && x.name_id === c.name_id) + 1 : 0;
 };
 // 区切りの幅（PCの5列の格子で何列ぶんか）と、中の商品の列数。Tailwindが拾えるよう、クラス名をそのまま書く
 const SPAN: Record<number, string> = { 1: "lg:col-span-1", 2: "lg:col-span-2", 3: "lg:col-span-3", 4: "lg:col-span-4", 5: "lg:col-span-5" };
@@ -166,6 +164,7 @@ const jsonLd = [
                         showBrand={false}
                         rank={rankIn(sec.tag, c)}
                         rankLabel={`${sec.tag}ランキング`}
+                        rankHref={`${categoryUrl(sec.tag)}#item-${c.brand_id}-${c.name_id}`}
                         caption={`${countOf(c)}本の動画で紹介`}
                       />
                     ))}
