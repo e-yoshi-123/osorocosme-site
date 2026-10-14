@@ -2633,6 +2633,21 @@ export function getBrandGroups(): BrandGroupStats[] {
     .sort((a, b) => b.videoCount - a.videoCount);
 }
 
+/** 大分類の英語名（ランキングの一覧・ブランドのページの見出し。322章でランキングの一覧から移した） */
+export const GROUP_EN: Record<string, string> = {
+  ベースメイク: "Base",
+  アイブロウ: "Brow",
+  アイメイク: "Eye",
+  "チーク・陰影": "Cheek & Contour",
+  リップ: "Lip",
+  "メイク小物・その他": "Tools",
+  スキンケア: "Skincare",
+  ヘアケア: "Hair",
+  ボディケア: "Body",
+  ネイル: "Nail",
+  フレグランス: "Fragrance",
+};
+
 export interface BrandCategorySection {
   group: string;
   tag: string;

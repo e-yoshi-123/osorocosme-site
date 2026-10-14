@@ -4,7 +4,7 @@ import PageHead from "../../components/PageHead.astro";
 import Layout from "../../layouts/Layout.astro";
 import ShareButtons from "../../components/ShareButtons.astro";
 import CosmeticCard from "../../components/CosmeticCard.astro";
-import { getBrandProducers, getBrandsWithVideos, getAliasRedirects, getBrandName, getCosmeticsForBrand, breadcrumbLd, getBrandMeta, getBrandGroups, getBrandCosmeticsByCategory, getBrandTopCosmetics, getCosmeticVideoCounts, COUNTRY_NAMES, withBase, cosmeticSlug, formatCount } from "../../lib/data";
+import { GROUP_EN, categoryUrl, getBrandProducers, getBrandsWithVideos, getAliasRedirects, getBrandName, getCosmeticsForBrand, breadcrumbLd, getBrandMeta, getBrandGroups, getBrandCosmeticsByCategory, getBrandTopCosmetics, getCosmeticVideoCounts, COUNTRY_NAMES, withBase, cosmeticSlug, formatCount } from "../../lib/data";
 
 export function getStaticPaths() {
   return [
@@ -23,11 +23,17 @@ const cosmetics = getCosmeticsForBrand(brand_id!);
 const videoCounts = getCosmeticVideoCounts();
 const countOf = (c: { brand_id: string; name_id: string }) => videoCounts.get(`${c.brand_id}_${c.name_id}`) ?? 0;
 const sections = getBrandCosmeticsByCategory(brand_id!).map((s) => ({ ...s, items: [...s.items].sort((a, b) => countOf(b) - countOf(a)) }));
-const brandGroups = Array.from(new Set(sections.map((s) => s.group))).map((group) => ({
-  group,
-  tags: sections.filter((s) => s.group === group).map((s) => s.tag),
-  count: sections.filter((s) => s.group === group).reduce((n, s) => n + s.items.length, 0),
-}));
+// ランキングと同じ大分類（ベースメイク・アイメイク…）ごとにまとめ、中は紹介動画の多い順（ユーザー依頼、322章）
+const brandGroups = Array.from(new Set(sections.map((s) => s.group))).map((group) => {
+  const secs = sections.filter((s) => s.group === group);
+  return {
+    group,
+    en: GROUP_EN[group] || "Others",
+    tags: secs.map((s) => ({ tag: s.tag, count: s.items.length })),
+    items: secs.flatMap((s) => s.items.map((c) => ({ c, tag: s.tag }))).sort((a, b) => countOf(b.c) - countOf(a.c)),
+  };
+});
+const n2 = (n: number) => String(n).padStart(2, "0");
 const stats = getBrandsWithVideos().find((b) => b.brand_id === brand_id);
 const meta = getBrandMeta(brand_id!);
 // プロデュースしたインフルエンサー（本人のブランド。ユーザー依頼、321章）
@@ -37,6 +43,7 @@ const sisters = meta.group
   ? (getBrandGroups().find((g) => g.group === meta.group)?.brands ?? []).filter((b) => b.brand_id !== brand_id)
   : [];
 const profile = [countryName ? `${countryName}のブランド` : null, meta.group ? `${meta.group}系列` : null].filter(Boolean).join("・");
+// 検索結果の説明（meta description）。画面には出さない（国・数字は見出しのまわりに出ているため。322章）
 const description = `${brandName}${profile ? `（${profile}）` : ""}は、YouTubeのコスメ紹介動画${stats?.videoCount ?? 0}本で${cosmetics.length}品が紹介されています。紹介された商品とその紹介動画を一覧できます。`;
 // OGP画像：このブランドで紹介動画が最も多い商品（画像があるもの）
 const ogImage = getBrandTopCosmetics(brand_id!, "", 1)[0]?.imageSrc || undefined;
@@ -62,13 +69,10 @@ const jsonLd = [
     : []),
   breadcrumbLd([{ name: "ホーム", path: "/" }, { name: "ブランド一覧", path: "/brand-list" }, { name: brandName, path: `/brand/${brand_id}` }], Astro.site!),
 ];
-// カテゴリのカードの幅（PCの5列の格子で何列ぶんか）と、中の商品の列数。Tailwindが拾えるよう、クラス名をそのまま書く
-const SPAN: Record<number, string> = { 1: "lg:col-span-1", 2: "lg:col-span-2", 3: "lg:col-span-3", 4: "lg:col-span-4", 5: "lg:col-span-5" };
-const COLS: Record<number, string> = { 1: "lg:grid-cols-1", 2: "lg:grid-cols-2", 3: "lg:grid-cols-3", 4: "lg:grid-cols-4", 5: "lg:grid-cols-5" };
 ---
 
 <Layout title={`${brandName}のおすすめ人気コスメ（YouTuberの紹介数順）`} description={description} image={ogImage} jsonLd={jsonLd}>
-  <PageHead en="Brand" title={brandName} lead={description} stats={[{ n: formatCount(stats?.videoCount ?? 0), label: "紹介動画", unit: "本" }, { n: formatCount(cosmetics.length), label: "コスメ", unit: "品" }]}>
+  <PageHead en="Brand" title={brandName} stats={[{ n: formatCount(stats?.videoCount ?? 0), label: "紹介動画", unit: "本" }, { n: formatCount(cosmetics.length), label: "コスメ", unit: "品" }]}>
     {countryName && <p class="mt-4 text-sm text-neutral-600"><BrandFlag brand_id={brand_id!} />{countryName}のブランド</p>}
     {producers.length > 0 && (
       <div class="mt-4 flex flex-wrap items-center gap-2">
@@ -106,39 +110,42 @@ const COLS: Record<number, string> = { 1: "lg:grid-cols-1", 2: "lg:grid-cols-2",
       <p class="text-neutral-500">このブランドの商品紹介動画はまだありません。</p>
     ) : (
       <>
-        {sections.length > 1 && (
-          <div class="filter-sentinel" aria-hidden="true"></div>
-          <div class="filter-bar sticky top-[var(--hdr-h,97px)] z-20 bg-paper/90 backdrop-blur-md py-3 mb-10 border-b border-ink/10 text-sm -mx-4 px-4 sm:mx-0 sm:px-0">
-            <div class="flex flex-nowrap sm:flex-wrap gap-1.5 overflow-x-auto sm:overflow-visible -mx-4 px-4 sm:mx-0 sm:px-0 pb-1">
-              <button class="group-tab tab shrink-0 whitespace-nowrap" data-group="__all__">
-                すべて <span class="tab-n">{cosmetics.length}</span>
-              </button>
-              {brandGroups.map((g) => (
-                <button class="group-tab tab shrink-0 whitespace-nowrap" data-group={g.group}>
-                  {g.group} <span class="tab-n">{g.count}</span>
-                </button>
+        {brandGroups.length > 1 && (
+          <nav aria-label="カテゴリ" class="sticky top-[57px] md:top-[73px] z-30 -mx-4 md:-mx-8 px-4 md:px-8 py-2.5 mb-4 md:mb-6 bg-paper/90 backdrop-blur-md">
+            <ol class="flex gap-1.5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {brandGroups.map((g, gi) => (
+                <li class="shrink-0">
+                  <a href={`#group-${g.group}`} class="flex items-baseline gap-1.5 rounded-full bg-panel px-3.5 py-1.5 text-sm shadow-[0_0_0_1px_rgb(29_21_23/0.1)] hover:text-rose hover:shadow-[0_0_0_1px_var(--color-rose)] transition-shadow duration-300 whitespace-nowrap">
+                    <span class="num-display text-[10px] text-neutral-400">{n2(gi + 1)}</span>{g.group}<span class="text-xs text-neutral-500">{g.items.length}</span>
+                  </a>
+                </li>
               ))}
-            </div>
-            {brandGroups.map((g) => (
-              <div class="chip-row brand-1" data-group={g.group} style="display:none">
-                {sections.filter((sec) => sec.group === g.group).map((sec) => (
-                  <button class="chip cat-chip u-17" data-tag={sec.tag}>
-                    {sec.tag} <span class="tab-n">{sec.items.length}</span>
-                  </button>
-                ))}
-              </div>
-            ))}
-          </div>
+            </ol>
+          </nav>
         )}
-        {/* PCでは、品数の少ないカテゴリのカードを横に並べる（全幅のカードに1〜2品だと右が空くため）。5列の格子で、カードの幅を品数に合わせる */}
-        <div class="grid lg:grid-cols-5 gap-6 md:gap-8 lg:grid-flow-dense">
-        {sections.map((sec) => (
-          <section class:list={["cat-section panel", SPAN[Math.min(5, sec.items.length)], sec.items.length <= 2 && "lg:!px-6"]} data-group={sec.group} data-tag={sec.tag}>
-            <h2 class:list={["font-serif font-semibold mb-5", sec.items.length === 1 ? "text-lg lg:text-[15px] lg:leading-snug" : "text-lg"]}>
-              {sec.tag} <span class:list={["text-xs font-normal text-neutral-500", sec.items.length === 1 ? "ml-1 lg:ml-0 lg:block lg:mt-1" : "ml-1"]}>{sec.group !== sec.tag && sec.group !== "その他" ? `${sec.group}・` : ""}{sec.items.length}品</span>
-            </h2>
-            <div class:list={["grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8", COLS[Math.min(5, sec.items.length)]]}>
-              {sec.items.map((c) => (
+        {brandGroups.map((g, gi) => (
+          <section id={`group-${g.group}`} class="panel mb-6 md:mb-8 scroll-mt-32 md:scroll-mt-40">
+            <header class="flex items-end justify-between gap-4 mb-4 md:mb-5">
+              <div class="flex items-end gap-3 md:gap-5 min-w-0">
+                <span class="num-display leading-[0.8] text-[44px] md:text-[64px] text-rose/25" aria-hidden="true">{n2(gi + 1)}</span>
+                <div class="min-w-0">
+                  <p class="eyebrow text-rose text-xs">{g.en}</p>
+                  <h2 class="mt-0.5 font-serif h-section font-semibold">{g.group}</h2>
+                </div>
+              </div>
+              <p class="shrink-0 pb-1 text-xs text-neutral-500"><span class="num-display text-sm text-ink">{g.items.length}</span> 品</p>
+            </header>
+            {g.tags.length > 1 && (
+              <p class="mb-6 flex flex-wrap gap-1.5">
+                {g.tags.map((t) => (
+                  <a href={categoryUrl(t.tag)} class="rounded-full border border-ink/15 px-3 py-1 text-xs text-neutral-600 hover:border-rose hover:text-rose transition-colors" title={`${t.tag}のランキングを見る`}>
+                    {t.tag}<span class="ml-1 text-neutral-400">{t.count}</span>
+                  </a>
+                ))}
+              </p>
+            )}
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-8">
+              {g.items.map(({ c, tag }) => (
                 <CosmeticCard
                   brand_id={c.brand_id}
                   brand={c.brand}
@@ -146,113 +153,18 @@ const COLS: Record<number, string> = { 1: "lg:grid-cols-1", 2: "lg:grid-cols-2",
                   name={c.name}
                   rakutenImageHtml={c.rakuten_image_link}
                   showBrand={false}
+                  category={g.tags.length > 1 && tag !== "その他" ? tag : undefined}
                   caption={`${countOf(c)}本の動画で紹介`}
                 />
               ))}
             </div>
           </section>
         ))}
-        </div>
       </>
     )
   }
 </Layout>
 
-<script>
-  const groupTabs = document.querySelectorAll<HTMLButtonElement>(".group-tab");
-  const chipRows = document.querySelectorAll<HTMLElement>(".chip-row");
-  const chips = document.querySelectorAll<HTMLButtonElement>(".cat-chip");
-  let activeGroup = "__all__";
-  let activeTag: string | null = null;
-
-  function render() {
-    groupTabs.forEach((t) => t.classList.toggle("is-active", t.dataset.group === activeGroup));
-    chipRows.forEach((r) => (r.style.display = r.dataset.group === activeGroup ? "flex" : "none"));
-    chips.forEach((c) => c.classList.toggle("is-active", c.dataset.tag === activeTag));
-    document.querySelectorAll<HTMLElement>(".cat-section").forEach((sec) => {
-      const show =
-        activeGroup === "__all__" ||
-        (sec.dataset.group === activeGroup && (activeTag === null || sec.dataset.tag === activeTag));
-      sec.style.display = show ? "" : "none";
-    });
-  }
-
-  groupTabs.forEach((t) =>
-    t.addEventListener("click", () => {
-      activeGroup = t.dataset.group!;
-      activeTag = null;
-      render();
-    })
-  );
-  // 選択中のカテゴリをもう一度押すと大分類全体に戻る
-  chips.forEach((c) =>
-    c.addEventListener("click", () => {
-      activeTag = activeTag === c.dataset.tag ? null : c.dataset.tag!;
-      render();
-    })
-  );
-  if (groupTabs.length > 0) render();
-
-  // 帯が上に貼り付いて下へスクロールしている間は、スマホではカテゴリのチップの段をたたむ（画面の上が帯で埋まらないように）。上へ戻すと開く
-  const bar = document.querySelector<HTMLElement>(".filter-bar");
-  const sentinel = document.querySelector<HTMLElement>(".filter-sentinel");
-  const isStuck = () => !!sentinel && sentinel.getBoundingClientRect().top < (bar?.getBoundingClientRect().top ?? 0) - 1;
-  let lastY = window.scrollY;
-  let holdUntil = 0; // 絞り込みの直後は、一覧の長さが変わってスクロール位置が動くので、たたまない
-  function fold() {
-    const y = window.scrollY;
-    if (Date.now() < holdUntil) { lastY = y; return; }
-    if (Math.abs(y - lastY) < 6) return;
-    setFolded(isStuck() && y > lastY);
-    lastY = y;
-  }
-  // たたんだ分の高さは下の余白で埋め、一覧が跳ねないようにする（mb-10＝2.5rem）
-  function setFolded(on: boolean) {
-    if (!bar || bar.classList.contains("is-folded") === on) return;
-    const h = bar.offsetHeight;
-    bar.classList.toggle("is-folded", on);
-    const d = h - bar.offsetHeight;
-    bar.style.marginBottom = on && d > 0 ? `calc(2.5rem + ${d}px)` : "";
-  }
-  // 絞り込みを変えたとき、下までスクロールしていたら一覧の頭へ戻す
-  function toListTop() {
-    if (isStuck()) sentinel!.scrollIntoView({ block: "start" });
-    lastY = window.scrollY;
-    holdUntil = Date.now() + 500;
-    setFolded(false);
-  }
-  groupTabs.forEach((t) => t.addEventListener("click", toListTop));
-  chips.forEach((c) => c.addEventListener("click", toListTop));
-
-  // 現在地：いま画面に出ているカテゴリの大分類タブ（「すべて」のとき）・カテゴリのチップ（大分類を選んでいるとき）を色で示す
-  const sections = Array.from(document.querySelectorAll<HTMLElement>(".cat-section"));
-  let here: HTMLElement | null = null;
-  function spy() {
-    fold();
-    const line = (bar?.getBoundingClientRect().bottom ?? 0) + 24;
-    const sec = sections.filter((el) => el.offsetParent !== null && el.getBoundingClientRect().top <= line).pop();
-    let el: HTMLElement | null = null;
-    if (sec && isStuck()) {
-      el = activeGroup === "__all__"
-        ? Array.from(groupTabs).find((t) => t.dataset.group === sec.dataset.group) ?? null
-        : activeTag === null ? Array.from(chips).find((c) => c.dataset.tag === sec.dataset.tag && c.offsetParent !== null) ?? null : null;
-    }
-    if (el === here) return;
-    here?.classList.remove("is-here");
-    here = el;
-    if (el) {
-      el.classList.add("is-here");
-      const row = el.parentElement!;
-      row.scrollTo({ left: el.offsetLeft - row.offsetLeft - (row.clientWidth - el.offsetWidth) / 2, behavior: "smooth" });
-    }
-  }
-  let ticking = false;
-  window.addEventListener("scroll", () => {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => { ticking = false; spy(); });
-  }, { passive: true });
-</script>
 
 <style>
   @media (max-width: 639px) {

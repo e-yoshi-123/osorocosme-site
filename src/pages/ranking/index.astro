@@ -2,6 +2,7 @@
 import BrandFlag from "../../components/BrandFlag.astro";
 import Layout from "../../layouts/Layout.astro";
 import {
+  GROUP_EN,
   getRankingPages,
   getRankingNav,
   getCosmeticRankings,
@@ -22,19 +23,6 @@ const productHref = (r: CosmeticRanking) => withBase(`/cosmetics/${cosmeticSlug(
 const n2 = (n: number) => String(n).padStart(2, "0");
 
 // 大分類の英字の小見出し
-const GROUP_EN: Record<string, string> = {
-  ベースメイク: "Base",
-  アイブロウ: "Brow",
-  アイメイク: "Eye",
-  "チーク・陰影": "Cheek & Contour",
-  リップ: "Lip",
-  "メイク小物・その他": "Tools",
-  スキンケア: "Skincare",
-  ヘアケア: "Hair",
-  ボディケア: "Body",
-  ネイル: "Nail",
-  フレグランス: "Fragrance",
-};
 
 const groups = nav.map((g) => {
   const seen = new Set<string>();
