@@ -10,6 +10,7 @@ import ownBrandsData from "../data/own-brands.json";
 import influencerProfileData from "../data/influencer-profile.json";
 import shortsData from "../data/shorts.json";
 import ingredientsData from "../data/ingredients.json";
+import officialFactsData from "../data/official-facts.json";
 import productRedirectsData from "../data/product-redirects.json";
 import matsukiyoBrandsData from "../data/matsukiyo-brands.json";
 
@@ -1566,6 +1567,58 @@ export function getIngredientsOfCosmetic(brand_id: string, name_id: string): { d
   const hit = ingredientLabels[`${brand_id}_${name_id}`] || {};
   const published = new Set(getPublishedIngredients().map((d) => d.slug));
   return INGREDIENTS.filter((d) => hit[d.slug] && published.has(d.slug)).map((d) => ({ def: d, labels: hit[d.slug] }));
+}
+/** メーカー公式の定価・色・発売日・限定・製造終了（backend/scripts/product_facts/export_site.py が書く。出し方は決定事項 2026-10-14） */
+interface OfficialColorRaw { label: string; code?: string; words?: string[] }
+interface OfficialFactsRaw { price?: number; colors?: OfficialColorRaw[]; release?: string; limited?: boolean; eom?: boolean; url?: string }
+export interface OfficialColor { label: string; videoCount: number }
+export interface OfficialFacts { price?: number; colors: OfficialColor[]; release?: string; limited: boolean; eom: boolean; url?: string }
+const officialFacts = officialFactsData as Record<string, OfficialFactsRaw>;
+const escRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+/** 紹介文でその色に触れているかの判定。英字付きの色番（PK-1・BR300）はそのまま、数字だけの色番は「04番」「#04」の形だけ（「30代」等と取り違えない）。
+ * 色名は空白を除いて4文字以上のもの。照合は空白を除いた紹介文で、大文字・小文字は区別しない */
+function colorMatcher(c: OfficialColorRaw): ((text: string) => boolean) | undefined {
+  const res: RegExp[] = [];
+  if (c.code) {
+    if (/^\d+$/.test(c.code)) {
+      const n = `0*${Number(c.code)}`;
+      res.push(new RegExp(`(?:#|No\\.?|ナンバー)${n}(?!\\d)|(?<!\\d)${n}(?:番|号)`, "i"));
+    } else {
+      res.push(new RegExp(`(?<![A-Za-z0-9])${escRe(c.code).replace("-", "-?")}(?!\\d)`, "i"));
+    }
+  }
+  for (const w of c.words || []) res.push(new RegExp(escRe(w), "i"));
+  return res.length ? (t) => res.some((r) => r.test(t)) : undefined;
+}
+/** 商品の公式情報。色ごとに、紹介文でその色に触れた動画の本数（公開中の動画）を数える。色名が別の色名を含むとき（ブラウン／ナチュラルブラウン）は長いほうだけに数える */
+export function getOfficialFacts(brand_id: string, name_id: string): OfficialFacts | undefined {
+  const raw = officialFacts[`${brand_id}_${name_id}`];
+  if (!raw) return undefined;
+  const colors = raw.colors || [];
+  const counts = colors.map(() => 0);
+  if (colors.length) {
+    const matchers = colors.map(colorMatcher);
+    for (const v of getVideosUsingCosmetic(brand_id, name_id)) {
+      const text = (v.cosmetics || [])
+        .filter((c) => c.brand_id === brand_id && c.name_id === name_id)
+        .flatMap((c) => c.mentions || [])
+        .join(" ")
+        .normalize("NFKC")
+        .replace(/\s+/g, "");
+      if (!text) continue;
+      let hit = colors.map((_, i) => !!matchers[i]?.(text));
+      hit = hit.map((h, i) => h && !colors.some((o, j) => j !== i && hit[j] && (o.words?.[0] || "").length > (colors[i].words?.[0] || "").length && (o.words?.[0] || "").includes(colors[i].words?.[0] || "\0")));
+      hit.forEach((h, i) => h && counts[i]++);
+    }
+  }
+  return {
+    price: raw.price,
+    colors: colors.map((c, i) => ({ label: c.label, videoCount: counts[i] })),
+    release: raw.release,
+    limited: !!raw.limited,
+    eom: !!raw.eom,
+    url: raw.url,
+  };
 }
 export interface IngredientItem extends FeatureItem {
   /** その成分に触れた発言（再生回数の多い動画のもの）。無ければ空 */

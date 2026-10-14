@@ -35,6 +35,7 @@ import {
   hasRankingPage,
   CONCERNS,
   getIngredientInfo,
+  getOfficialFacts,
   getIngredientsOfCosmetic,
   ingredientSourceLabel,
   getRepeatUsers,
@@ -99,6 +100,13 @@ const introSplit = facts.introductions.length > INTRO_SPLIT_OVER;
 const introRows = introSplit ? facts.introductions.slice(0, INTRO_IN_PAGE) : facts.introductions;
 // 全成分（公式サイト、無ければ楽天市場のメーカー公式ショップの表示。246章）と、その全成分に当たる成分のページ
 const ingredientInfo = getIngredientInfo(brand_id, name_id);
+// メーカー公式の定価・色・発売日・限定・製造終了（決定事項 2026-10-14）
+const official = getOfficialFacts(brand_id, name_id);
+const officialTags = official ? [...(official.release ? [`${official.release}発売`] : []), ...(official.limited ? ["限定品"] : []), ...(official.eom ? ["製造終了"] : [])] : [];
+const colorMentioned = official ? official.colors.filter((c) => c.videoCount > 0).length : 0;
+const COLORS_SHOWN = 24;
+// 色の多い商品は、動画で紹介された色を先に（本数の多い順）並べ、先頭だけを出す
+const colorsShown = official ? (official.colors.length > COLORS_SHOWN ? [...official.colors].sort((x, y) => y.videoCount - x.videoCount) : official.colors) : [];
 const ingredientPages = ingredientInfo ? getIngredientsOfCosmetic(brand_id, name_id) : [];
 const otherItems = ingredientInfo ? ingredientInfo.items.filter((x) => !ingredientInfo.active.includes(x)) : [];
 const concernPages = new Set(getPublishedConcerns().map((c) => c.slug));
@@ -212,6 +220,11 @@ const jsonLd = entry
           <div class="md:col-span-7 md:pt-4">
             <a href={withBase(`/brand/${canonicalBrandId(entry.brand_id)}`)} class="link-u text-xs font-bold tracking-[0.14em] text-rose"><BrandFlag brand_id={entry.brand_id} />{entry.brand}</a>
             <h1 class="font-serif phrase item-22">{entry.name}</h1>
+            {officialTags.length > 0 && (
+              <p class="mt-3 flex flex-wrap gap-1.5 text-xs">
+                {officialTags.map((t) => <span class:list={["inline-flex items-center rounded-full border px-2.5 py-0.5", t === "製造終了" ? "border-neutral-400 text-neutral-500" : t === "限定品" ? "border-rose text-rose" : "border-ink/15 text-neutral-600"]}>{t}</span>)}
+              </p>
+            )}
             {/* プロデュースしたインフルエンサー（本人のブランド。ユーザー依頼、321章） */}
             {producers.length > 0 && (
               <div class="mt-4 flex flex-wrap items-center gap-2">
@@ -245,6 +258,9 @@ const jsonLd = entry
               )}
               {yahooSwap?.yahoo_price !== undefined && (
                 <p data-yahoo-price hidden class="item-21"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[24px] leading-none">¥{formatCount(yahooSwap.yahoo_price)}</span><span class="u-11"><span class="inline-block">Yahoo!ショッピングの参考価格</span>{yahooSwap.yahoo_price_updated && <span class="inline-block">・{formatJaDate(yahooSwap.yahoo_price_updated)}時点</span>}</span></p>
+              )}
+              {official?.price !== undefined && (
+                <p class="mt-1 text-xs text-neutral-500">定価 <span class="num-display text-sm text-neutral-700">¥{formatCount(official.price)}</span>（税込・{official.url ? <a href={official.url} target="_blank" rel="nofollow noopener" class="link-u">メーカー公式</a> : "メーカー公式"}）</p>
               )}
               {/* 楽天・Yahoo!ショッピング・Amazonのボタン（data-buy の扱いは従来どおり）。Amazonは検索結果へのリンクで、全商品に出す。3つとも同じ白い枠（206章） */}
               <div class="u-21">
@@ -337,6 +353,7 @@ const jsonLd = entry
           class="mt-6 md:mt-8"
           items={[
             { label: `紹介した人 ${facts.introductions.length}`, target: "#who" },
+            ...(official && official.colors.length > 0 ? [{ label: `色 ${official.colors.length}`, target: "#colors" }] : []),
             ...(ingredientInfo ? [{ label: "全成分", target: "#ingredients" }] : []),
             ...(coMentioned.length > 0 ? [{ label: "一緒に紹介", target: "#paired" }] : []),
             ...(facts.mainTag && categoryTop.length > 0 ? [{ label: "ランキング", target: "#ranking" }] : []),
@@ -389,6 +406,28 @@ const jsonLd = entry
             )}
           </div>
         </section>
+
+        {official && official.colors.length > 0 && (
+          <section id="colors" class="panel u-14">
+            <SectionHead en="Colors" title="色のバリエーション" lead={`${official.colors.length}色（メーカー公式サイトの掲載${official.colors.length > COLORS_SHOWN && colorMentioned > 0 ? "。動画で紹介された色を先に並べています" : ""}）。${colorMentioned > 0 ? "「動画で紹介」は、紹介の中でその色の名前・番号に触れた動画の本数です。" : ""}限定色や販売を終えた色が含まれることがあります。`} />
+            <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 text-sm">
+              {colorsShown.map((c, k) => (
+                <li class:list={["flex items-baseline justify-between gap-3 py-2 border-b border-ink/10", k >= COLORS_SHOWN && "hidden"]} data-color-extra={k >= COLORS_SHOWN ? "" : undefined}>
+                  <span class="text-neutral-800 [overflow-wrap:anywhere]">{c.label}</span>
+                  {c.videoCount > 0 && <span class="shrink-0 inline-flex items-center gap-1 text-xs text-rose"><span class="w-1.5 h-1.5 rounded-full bg-rose" aria-hidden="true" />動画で紹介 {c.videoCount}本</span>}
+                </li>
+              ))}
+            </ul>
+            {official.colors.length > COLORS_SHOWN && (
+              <button type="button" id="colors-more" class="w-full flex items-center justify-center gap-3 py-4 text-xs tracking-[0.1em] cursor-pointer select-none hover:text-rose">
+                <span>残り{official.colors.length - COLORS_SHOWN}色を表示</span><span class="w-7 h-7 rounded-full border border-ink/20 flex items-center justify-center" aria-hidden="true">↓</span>
+              </button>
+            )}
+            {official.url && (
+              <p class="u-11 mt-3">出典：<a href={official.url} target="_blank" rel="nofollow noopener" class="link-u">メーカー公式サイト</a></p>
+            )}
+          </section>
+        )}
 
         {ingredientInfo && (
           <section id="ingredients" class="panel u-14">
@@ -585,5 +624,17 @@ const jsonLd = entry
     }
     if (img.complete && img.naturalWidth === 0) drop();
     else img.addEventListener("error", drop);
+  })();
+</script>
+
+<script>
+  // 色の多い商品は先頭だけ出し、残りは「残り◯色を表示」で出す
+  (function () {
+    var btn = document.getElementById("colors-more");
+    if (!btn) return;
+    btn.addEventListener("click", function () {
+      document.querySelectorAll("[data-color-extra]").forEach(function (e) { e.classList.remove("hidden"); });
+      btn.remove();
+    });
   })();
 </script>
