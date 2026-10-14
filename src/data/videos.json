@@ -3630,16 +3630,16 @@
       {
         "brand_id": "brand-00426",
         "brand": "peripera",
-        "name_id": "name-00001",
-        "name": "ブラッシュド サンシャイン チーク",
+        "name_id": "name-00062",
+        "name": "ピュア ブラッシュド サンシャイン チーク",
         "related_tags": [
           "パウダーチーク"
         ],
-        "skin_concern": "",
         "mentions": [
           "04テゼオレンジ。他ブランドのピーチコーラルと混ぜて使用"
         ],
-        "time_in_video": "19:39"
+        "time_in_video": "19:39",
+        "skin_concern": ""
       },
       {
         "brand": "NARS",
@@ -3755,7 +3755,7 @@
     "video_id": "I4DxDXmik2M",
     "view_count": "967084",
     "duration": "PT30M",
-    "updated_at": "2026-10-10"
+    "updated_at": "2026-10-14"
   },
   "-O45WzAIN-kigk6w4hll": {
     "channel_icon": "https://yt3.ggpht.com/WzlWUGkO7rYcFbc4mvhUr9JakFQi8-m0cmAUHbdYRc0HyuQiDxECaE675p37XdCF2WgedaI1RcY=s88-c-k-c0x00ffffff-no-rj",
@@ -14112,17 +14112,17 @@
         ]
       },
       {
-        "brand_id": "brand-00019",
-        "brand": "資生堂",
-        "name_id": "name-00291",
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00002",
         "name": "エッセンス スキングロウ ファンデーション",
         "related_tags": [
           "リキッドファンデーション"
         ],
-        "skin_concern": "",
         "mentions": [
           "薄付きでもカバーしたい所はカバーする美容液ファンデ"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-01171",
@@ -14180,7 +14180,7 @@
       }
     ],
     "duration": "PT10M16S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-O4NqE6gUoDxdT2can1j": {
     "channel_icon": "https://yt3.ggpht.com/0L2X74GiwHFOrNmN5GgtqUh0iWf8wPxKpBzR4DrOE_35dmBkuPU-khDSKRHIIcqGG4Ia_W0kJWE=s88-c-k-c0x00ffffff-no-rj",
@@ -19849,19 +19849,6 @@
         ]
       },
       {
-        "brand_id": "brand-01165",
-        "brand": "アンプルール(AMPLEUR)",
-        "name_id": "name-00003",
-        "name": "フェイスパウダー",
-        "related_tags": [
-          "プレストパウダー"
-        ],
-        "skin_concern": "",
-        "mentions": [
-          "パウダーでさらに崩れにくくUV効果を高める。カバー力もアップ"
-        ]
-      },
-      {
         "brand_id": "brand-00125",
         "brand": "THREE",
         "name_id": "name-00019",
@@ -19949,7 +19936,8 @@
         ],
         "skin_concern": "",
         "mentions": [
-          "概要欄の使用アイテムに記載"
+          "概要欄の使用アイテムに記載",
+          "パウダーでさらに崩れにくくUV効果を高める。カバー力もアップ"
         ]
       },
       {
@@ -19983,7 +19971,8 @@
     "url": "https://www.youtube.com/watch?v=2suEvbOEOeY",
     "video_id": "2suEvbOEOeY",
     "view_count": "95647",
-    "duration": "PT4M3S"
+    "duration": "PT4M3S",
+    "updated_at": "2026-10-14"
   },
   "-O4d2mlK7v7NONO_PKOk": {
     "channel_icon": "https://yt3.ggpht.com/06K0FVGoXhBj6ilFEla_C95PrNFoBj030HYiTiVHypGpgcNkMbHsRlUS04zfUSIlE9KOhDCQiw=s88-c-k-c0x00ffffff-no-rj",
@@ -21222,13 +21211,14 @@
         "skin_concern": ""
       },
       {
-        "brand": "peripera",
         "brand_id": "brand-00426",
-        "name": "ブラッシュド サンシャイン チーク",
-        "name_id": "name-00001",
+        "brand": "peripera",
+        "name_id": "name-00062",
+        "name": "ピュア ブラッシュド サンシャイン チーク",
         "related_tags": [
           "パウダーチーク"
         ],
+        "mentions": [],
         "skin_concern": ""
       },
       {
@@ -21264,7 +21254,8 @@
     "title": "【ASMR】毎日メイク紹介【音フェチ】小声",
     "url": "https://www.youtube.com/watch?v=ezv4By40OHA",
     "video_id": "ezv4By40OHA",
-    "view_count": "6134"
+    "view_count": "6134",
+    "updated_at": "2026-10-14"
   },
   "-O4jh24l5I3uqQojNg6m": {
     "channel_icon": "https://yt3.ggpht.com/2VhrO_7Rme7G9igvDMsp62ossBSwD1ux6QbsC4eHAc3Zlq5kOtKNjFGsav9XWXB6NKlHLemQ=s88-c-k-c0x00ffffff-no-rj",
@@ -22826,17 +22817,17 @@
         "time_in_video": "17:42"
       },
       {
-        "brand_id": "brand-00019",
-        "brand": "資生堂",
-        "name_id": "name-00291",
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00002",
         "name": "エッセンス スキングロウ ファンデーション",
         "related_tags": [
           "リキッドファンデーション"
         ],
-        "skin_concern": "",
         "mentions": [
           "水々しい美容液のような使用感"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00124",
@@ -22927,7 +22918,7 @@
     "video_id": "Yg6kBX_fdBk",
     "view_count": "448399",
     "duration": "PT21M53S",
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-14"
   },
   "-O4yJ35IRoW2AVcFoyuP": {
     "channel_icon": "https://yt3.ggpht.com/VVU1WqpGx4fM9YEUSzfDEBkc-DwVok7dMSDMEPA8K4hN_k9yJ__FVZdUWlQvrMdGuQjei3ATiA=s88-c-k-c0x00ffffff-no-rj",
@@ -25538,16 +25529,16 @@
       {
         "brand_id": "brand-00426",
         "brand": "peripera",
-        "name_id": "name-00001",
-        "name": "ブラッシュド サンシャイン チーク",
+        "name_id": "name-00062",
+        "name": "ピュア ブラッシュド サンシャイン チーク",
         "related_tags": [
           "パウダーチーク"
         ],
-        "skin_concern": "",
         "mentions": [
           "ダイソーの筆でつけるチーク"
         ],
-        "time_in_video": "9:07"
+        "time_in_video": "9:07",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00128",
@@ -25654,7 +25645,7 @@
     "video_id": "fcnpKoROM6c",
     "view_count": "1056062",
     "duration": "PT16M30S",
-    "updated_at": "2026-10-10"
+    "updated_at": "2026-10-14"
   },
   "-O5gMcXs5SZDJm01MSu0": {
     "channel_icon": "https://yt3.ggpht.com/oSPsw4JYmYtHZ8-N9lldJOj3oWpMvUgS9lWeo80PDNHd8CRgJEr28ZGxF4nLuDEP8wJR_Uy42A=s88-c-k-c0x00ffffff-no-rj",
@@ -32829,18 +32820,18 @@
     "check_status": true,
     "cosmetics": [
       {
-        "brand_id": "brand-00019",
-        "brand": "資生堂",
-        "name_id": "name-00291",
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00002",
         "name": "エッセンス スキングロウ ファンデーション",
         "related_tags": [
           "リキッドファンデーション"
         ],
-        "skin_concern": "",
         "mentions": [
           "美容液のような使い心地で乾燥しない",
           "代わりがいない"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00014",
@@ -32942,7 +32933,7 @@
     "video_id": "-bReMqSApCE",
     "view_count": "313700",
     "duration": "PT35M52S",
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-14"
   },
   "-O6G6sr-Ws7oYxRpxiM-": {
     "channel_icon": "https://yt3.ggpht.com/ytc/AIdro_m7jXfCbmcrvB-JbNA1rHnhczz2nB20MFA5YUOGD4u4a7E=s88-c-k-c0x00ffffff-no-rj",
@@ -40069,15 +40060,16 @@
         "time_in_video": "1:32"
       },
       {
-        "brand": "peripera",
         "brand_id": "brand-00426",
-        "name": "ブラッシュド サンシャイン チーク",
-        "name_id": "name-00001",
+        "brand": "peripera",
+        "name_id": "name-00062",
+        "name": "ピュア ブラッシュド サンシャイン チーク",
         "related_tags": [
           "パウダーチーク"
         ],
-        "skin_concern": "",
-        "time_in_video": "5:06"
+        "mentions": [],
+        "time_in_video": "5:06",
+        "skin_concern": ""
       },
       {
         "brand": "BANILA CO",
@@ -40136,7 +40128,7 @@
     "video_id": "ostCwGV8CSw",
     "view_count": "703855",
     "duration": "PT16M6S",
-    "updated_at": "2026-10-10"
+    "updated_at": "2026-10-14"
   },
   "-O6G72FUMAT4wv6SFb0E": {
     "channel_icon": "https://yt3.ggpht.com/ytc/AIdro_mw1EHqhaCwxEniGbphByfhr7TMP1Ls3QT3vvgxiPIF6gI=s88-c-k-c0x00ffffff-no-rj",
@@ -42292,17 +42284,17 @@
       {
         "brand_id": "brand-00077",
         "brand": "Anua",
-        "name_id": "name-00005",
-        "name": "アヌアレチノール0.3 ナイアシンリニューイングセラム",
+        "name_id": "name-00066",
+        "name": "レチノール0.3 ナイアシンリニューイングセラム",
         "related_tags": [
           "美容液"
         ],
-        "skin_concern": "",
         "mentions": [
           "ナノカプセル化でレチノール特有の刺激が起きにくい",
           "ナイアシンアミド5%配合でA反応を和らげる"
         ],
-        "time_in_video": "24:14"
+        "time_in_video": "24:14",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00394",
@@ -42437,7 +42429,7 @@
     "video_id": "RNGmp2H6azQ",
     "view_count": "207660",
     "duration": "PT30M21S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-O6GKAlMRvLaKxMa2Q9-": {
     "channel_icon": "https://yt3.ggpht.com/SEZUxvw0xsbYfKge2nYHO2OLWrNA0LwyOl2sMqRPAI9wYdrcdS6TahvKLc6QU8KD-G1r7sfS=s88-c-k-c0x00ffffff-no-rj",
@@ -55384,18 +55376,18 @@
         "time_in_video": "0:15"
       },
       {
-        "brand_id": "brand-00019",
-        "brand": "資生堂",
-        "name_id": "name-00291",
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00002",
         "name": "エッセンス スキングロウ ファンデーション",
         "related_tags": [
           "リキッドファンデーション"
         ],
-        "skin_concern": "",
         "mentions": [
           "薄膜で水々しい艶",
           "スキンケアしたような質感"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00030",
@@ -55514,7 +55506,7 @@
     "video_id": "eUrq79PP-oQ",
     "view_count": "273834",
     "duration": "PT17M16S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-O8QCr1s7KQnC12WPPGV": {
     "channel_icon": "https://yt3.ggpht.com/2Uhyo8HpK--7Kocl1uinkH5Y847c-KTbmEhOBkZGbO8HXeUiWPN4zxMA6ercCoMjeUKywhp5xw=s88-c-k-c0x00ffffff-no-rj",
@@ -60854,18 +60846,18 @@
     "check_status": true,
     "cosmetics": [
       {
-        "brand_id": "brand-00019",
-        "brand": "資生堂",
-        "name_id": "name-00291",
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00002",
         "name": "エッセンス スキングロウ ファンデーション",
         "related_tags": [
           "リキッドファンデーション"
         ],
-        "skin_concern": "",
         "mentions": [
           "期待外れだったという口コミ",
           "肌の表面がペトペトして崩れる"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00014",
@@ -60927,7 +60919,7 @@
     "video_id": "2NqRMsAEYDA",
     "view_count": "321832",
     "duration": "PT15M21S",
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-14"
   },
   "-O8QCwQdDPdlQA0Kkp-0": {
     "channel_icon": "https://yt3.ggpht.com/NUll06eFGBwnJ6Xh48YQRA9CODM5wtjjfIzypGkqTV-cdh-H3OzJyr8xEHj0W9Yw8PJ0oh0FVw=s88-c-k-c0x00ffffff-no-rj",
@@ -67724,18 +67716,18 @@
     "check_status": true,
     "cosmetics": [
       {
-        "brand_id": "brand-01163",
-        "brand": "ポール ＆ ジョー",
-        "name_id": "name-00002",
+        "brand_id": "brand-00112",
+        "brand": "ポール ＆ ジョー ボーテ",
+        "name_id": "name-00001",
         "name": "モイスチュアライジング プライマー",
         "related_tags": [
           "化粧下地"
         ],
-        "skin_concern": "",
         "mentions": [
           "新色の00番。長年愛されているだけあって保湿と崩れ防止のバランスが良く肌に合う。透明感とつや、ベタつかない"
         ],
-        "time_in_video": "1:02"
+        "time_in_video": "1:02",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00119",
@@ -67971,7 +67963,7 @@
     "video_id": "DOD4pwISQ64",
     "view_count": "67706",
     "duration": "PT25M36S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-O9ZP1a9uXO7zxoKOsM4": {
     "channel_icon": "https://yt3.ggpht.com/3We-GeoTEY9SYEXxNkLI33JE4jE2xZYr9C0Is3hS3KF7CSsdFMFo0tjV8gBKNtWruEVODbK0=s88-c-k-c0x00ffffff-no-rj",
@@ -79416,17 +79408,17 @@
     "check_status": true,
     "cosmetics": [
       {
-        "brand_id": "brand-01158",
-        "brand": "カネボウ",
-        "name_id": "name-00006",
-        "name": "メディア　リップライナーAA",
+        "brand_id": "brand-00203",
+        "brand": "メディア",
+        "name_id": "name-00007",
+        "name": "メディア　リップライナーＡＡ",
         "related_tags": [
           "リップライナー"
         ],
-        "skin_concern": "",
         "mentions": [
           "ずっと使っていて何回もリピートしている日焼け止め兼日中用クリーム"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00067",
@@ -79559,7 +79551,7 @@
     "video_id": "-1XIOWjggTI",
     "view_count": "48083",
     "duration": "PT13M18S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-OCLN5XtGDBpQs4MCMqw": {
     "channel_icon": "https://yt3.ggpht.com/wVIAIn4v5JPnrIoU-rNnFAdgfOhsuQXo2KzfXyWfCqJNTsmSqgPQLq6tUyKAXsFcjv8W4Nd5fRo=s88-c-k-c0x00ffffff-no-rj",
@@ -107726,15 +107718,16 @@
         "time_in_video": "37:18"
       },
       {
-        "brand": "エリクシール",
         "brand_id": "brand-00010",
-        "name": "エリクシール デーケアレボリューション ba",
-        "name_id": "name-00045",
+        "brand": "エリクシール",
+        "name_id": "name-00015",
+        "name": "エリクシール デーケアレボリューション ＋ ba",
         "related_tags": [
           "乳液"
         ],
-        "skin_concern": "",
-        "time_in_video": "0:45"
+        "mentions": [],
+        "time_in_video": "0:45",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00004",
@@ -107797,7 +107790,7 @@
     "video_id": "mPvU84Ujvbc",
     "view_count": "470116",
     "duration": "PT40M21S",
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-14"
   },
   "-OIsbF62GZTj36U1Q7d-": {
     "channel_icon": "https://yt3.ggpht.com/ytc/AIdro_mUbeVn2F3RXkTYi7aE6Rzt5m1rMLh17g9iRkbbyJhjwfA=s88-c-k-c0x00ffffff-no-rj",
@@ -129673,18 +129666,18 @@
         "time_in_video": "8:52"
       },
       {
-        "brand_id": "brand-01170",
-        "brand": "PERIPERA(韓国)",
-        "name_id": "name-00004",
-        "name": "ピュアブラッシュドサンシャインチーク",
+        "brand_id": "brand-00426",
+        "brand": "peripera",
+        "name_id": "name-00062",
+        "name": "ピュア ブラッシュド サンシャイン チーク",
         "related_tags": [
           "パウダーチーク"
         ],
-        "skin_concern": "",
         "mentions": [
           "イチゴが描いてあって可愛い"
         ],
-        "time_in_video": "9:21"
+        "time_in_video": "9:21",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00146",
@@ -129747,7 +129740,7 @@
     "video_id": "wA0CbE160Uc",
     "view_count": "79789",
     "duration": "PT12M35S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-OL6eLtMSvUnlOgwsg-S": {
     "channel_icon": "https://yt3.ggpht.com/ejezncOhYFyTo2xfA1bKH648R2gscsKslVDS3yWcXdz-4QkktV6LhUzwcmG6QvyN0pkiNnbPjA=s88-c-k-c0x00ffffff-no-rj",
@@ -130570,17 +130563,17 @@
     "check_status": true,
     "cosmetics": [
       {
-        "brand_id": "brand-00019",
-        "brand": "資生堂",
-        "name_id": "name-00291",
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00002",
         "name": "エッセンス スキングロウ ファンデーション",
         "related_tags": [
           "リキッドファンデーション"
         ],
-        "skin_concern": "",
         "mentions": [
           "いつも使っているファンデ、クッションファンデと混ぜて使う"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00013",
@@ -130640,7 +130633,7 @@
     "video_id": "BThOV-45Ed4",
     "view_count": "99682",
     "duration": "PT13M39S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-OL6eN9dLVDuF6G5GFxd": {
     "channel_icon": "https://yt3.ggpht.com/SkivkowTV0DuyzhNGwwqjI5RViSFPRJUQqXmBfXz_2tBfp_We7-CSZmjVxQH2mAA29L8elUrvQ=s88-c-k-c0x00ffffff-no-rj",
@@ -135312,17 +135305,17 @@
         "time_in_video": "19:50"
       },
       {
-        "brand_id": "brand-00019",
-        "brand": "資生堂",
-        "name_id": "name-00291",
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00002",
         "name": "エッセンス スキングロウ ファンデーション",
         "related_tags": [
           "リキッドファンデーション"
         ],
-        "skin_concern": "",
         "mentions": [
           "潤いの高い美容液ファンデーションの名品、艶が出る"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00029",
@@ -135470,7 +135463,7 @@
     "video_id": "50yj0ZpB0ZA",
     "view_count": "118150",
     "duration": "PT33M31S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-OL6eTdrWFpUcsFFQym_": {
     "channel_icon": "https://yt3.ggpht.com/d-BTwOb_IBOF9Rl2DBlEaB9DwBW8UT9xoS9Ax8PJIVqbI69zU-rTDX86o3BX3KUYJAAfkoUJFg=s88-c-k-c0x00ffffff-no-rj",
@@ -140745,15 +140738,16 @@
         "time_in_video": "21:14"
       },
       {
-        "brand": "DECENCIA(ディセンシア)",
         "brand_id": "brand-00253",
-        "name": "ディセンシア　ディセンシー　ブライトリフト　クリーム",
-        "name_id": "name-00011",
+        "brand": "DECENCIA(ディセンシア)",
+        "name_id": "name-00038",
+        "name": "ディセンシー ブライトリフト クリーム",
         "related_tags": [
           "フェイスクリーム"
         ],
-        "skin_concern": "",
-        "time_in_video": "20:54"
+        "mentions": [],
+        "time_in_video": "20:54",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00137",
@@ -140788,7 +140782,7 @@
     "video_id": "zySvkyMfWrM",
     "view_count": "36536",
     "duration": "PT47M35S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-OLqqOh0NcHKPG6_435R": {
     "channel_icon": "https://yt3.ggpht.com/u6QG4K_XjNn7iP0zECC9qc03_vSXbjpz3kFt3bYJpN6MhOVFbwHF9mfYRfhHPPis1G8J91nDHQ=s88-c-k-c0x00ffffff-no-rj",
@@ -140938,19 +140932,19 @@
         "time_in_video": "18:53"
       },
       {
-        "brand_id": "brand-00503",
-        "brand": "ポーラ",
-        "name_id": "name-00008",
-        "name": "リンクルショットローション",
+        "brand_id": "brand-00343",
+        "brand": "リンクルショット",
+        "name_id": "name-00006",
+        "name": "リンクルショット ローション",
         "related_tags": [
           "化粧水"
         ],
-        "skin_concern": "",
         "mentions": [
           "王道で欠かせない",
           "全顔用も出た"
         ],
-        "time_in_video": "8:22"
+        "time_in_video": "8:22",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00013",
@@ -141055,7 +141049,7 @@
     "video_id": "L_ETd6Wfcnk",
     "view_count": "459319",
     "duration": "PT41M30S",
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-14"
   },
   "-OLqqTAH6KOW3duYjz_m": {
     "channel_icon": "https://yt3.ggpht.com/WzlWUGkO7rYcFbc4mvhUr9JakFQi8-m0cmAUHbdYRc0HyuQiDxECaE675p37XdCF2WgedaI1RcY=s88-c-k-c0x00ffffff-no-rj",
@@ -148091,18 +148085,18 @@
         "time_in_video": "9:46"
       },
       {
-        "brand_id": "brand-00019",
-        "brand": "資生堂",
-        "name_id": "name-00304",
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00019",
         "name": "エッセンシャルイネルジャ ハイドレーティング クリーム",
         "related_tags": [
           "フェイスクリーム"
         ],
-        "skin_concern": "",
         "mentions": [
           "リピート購入"
         ],
-        "time_in_video": "12:15"
+        "time_in_video": "12:15",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00091",
@@ -148761,7 +148755,7 @@
     "video_id": "HT7028M4MBQ",
     "view_count": "155367",
     "duration": "PT52M53S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-ONgvqwIyQ3Jqj0e0yU7": {
     "channel_icon": "https://yt3.ggpht.com/dXQSWPynpt4-lMv-HrbGOqEabz2IZqhTQ3DdbSSAq9ykJACA8l5vIO_tLrCgATySbmNsfuGWQ64=s88-c-k-c0x00ffffff-no-rj",
@@ -149053,17 +149047,17 @@
     "check_status": true,
     "cosmetics": [
       {
-        "brand_id": "brand-01163",
-        "brand": "ポール ＆ ジョー",
-        "name_id": "name-00002",
+        "brand_id": "brand-00112",
+        "brand": "ポール ＆ ジョー ボーテ",
+        "name_id": "name-00001",
         "name": "モイスチュアライジング プライマー",
         "related_tags": [
           "化粧下地"
         ],
-        "skin_concern": "",
         "mentions": [
           "使うこともある、これも好き"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00008",
@@ -149311,7 +149305,7 @@
     "video_id": "VHuLH8Aduvk",
     "view_count": "284872",
     "duration": "PT44M11S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-OOFnjZ8OBFLNEOdRkYw": {
     "channel_icon": "https://yt3.ggpht.com/ytc/AIdro_kaE28YZw73CiuSzTuBQfQkvntdWwXugbqbnzxccvWDIA=s88-c-k-c0x00ffffff-no-rj",
@@ -151616,17 +151610,17 @@
         "time_in_video": "15:25"
       },
       {
-        "brand_id": "brand-01170",
-        "brand": "PERIPERA(韓国)",
-        "name_id": "name-00001",
+        "brand_id": "brand-00426",
+        "brand": "peripera",
+        "name_id": "name-00056",
         "name": "スピーディー スキニー ブロウ マスカラ",
         "related_tags": [
           "眉マスカラ"
         ],
-        "skin_concern": "",
         "mentions": [
           "眉尻を描き足す"
-        ]
+        ],
+        "skin_concern": ""
       }
     ],
     "delete_flg": false,
@@ -151651,7 +151645,7 @@
     "video_id": "KOAsHJBHCIo",
     "view_count": "24306",
     "duration": "PT17M52S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-OOjxIcQexbbJ3ZGRQFK": {
     "channel_icon": "https://yt3.ggpht.com/WHXPCqPdGI59nRYRKvBMKtUy5-qSyf9_CIffC-ZwOsxngLFaJQQ--oEqrubHlln664boI1YBYg=s88-c-k-c0x00ffffff-no-rj",
@@ -156875,16 +156869,16 @@
       {
         "brand_id": "brand-00426",
         "brand": "peripera",
-        "name_id": "name-00001",
-        "name": "ブラッシュド サンシャイン チーク",
+        "name_id": "name-00062",
+        "name": "ピュア ブラッシュド サンシャイン チーク",
         "related_tags": [
           "パウダーチーク"
         ],
-        "skin_concern": "",
         "mentions": [
           "目の下に使用"
         ],
-        "time_in_video": "9:29"
+        "time_in_video": "9:29",
+        "skin_concern": ""
       },
       {
         "brand": "rom&nd",
@@ -157002,7 +156996,7 @@
     "video_id": "pOikj6zSolQ",
     "view_count": "51989",
     "duration": "PT13M16S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-OSkkAwszp72am_SNQgX": {
     "channel_icon": "https://yt3.ggpht.com/e5oI1lkobOvC0QY34cWDmIbVQa2IPciPKGEcT43Hm6fdunnKVcJ6E2qs8QJSLsVd1LKVYeyCe30=s88-c-k-c0x00ffffff-no-rj",
@@ -157191,15 +157185,16 @@
         "time_in_video": "32:24"
       },
       {
-        "brand": "エリクシール",
         "brand_id": "brand-00010",
-        "name": "エリクシール デーケアレボリューション ba",
-        "name_id": "name-00045",
+        "brand": "エリクシール",
+        "name_id": "name-00015",
+        "name": "エリクシール デーケアレボリューション ＋ ba",
         "related_tags": [
           "乳液"
         ],
-        "skin_concern": "",
-        "time_in_video": "6:59"
+        "mentions": [],
+        "time_in_video": "6:59",
+        "skin_concern": ""
       },
       {
         "brand": "キャンメイク",
@@ -157386,7 +157381,7 @@
     "video_id": "P7mynjrNjVg",
     "view_count": "299177",
     "duration": "PT47M35S",
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-14"
   },
   "-OSkkBGmO73I0GBHVTCm": {
     "channel_icon": "https://yt3.ggpht.com/_pPIkdLxZjeffX4amye_CvBORFopnH01e7lhSzSLf6KQl--e_37nw5qil2DyBJB4S19vVcos=s88-c-k-c0x00ffffff-no-rj",
@@ -158519,15 +158514,16 @@
         "time_in_video": "16:18"
       },
       {
-        "brand": "DECENCIA(ディセンシア)",
         "brand_id": "brand-00253",
-        "name": "ディセンシア　ディセンシー　ブライトリフト　クリーム",
-        "name_id": "name-00011",
+        "brand": "DECENCIA(ディセンシア)",
+        "name_id": "name-00038",
+        "name": "ディセンシー ブライトリフト クリーム",
         "related_tags": [
           "フェイスクリーム"
         ],
-        "skin_concern": "",
-        "time_in_video": "27:12"
+        "mentions": [],
+        "time_in_video": "27:12",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00129",
@@ -158611,7 +158607,7 @@
     "video_id": "afAiFIK2pYM",
     "view_count": "141496",
     "duration": "PT38M29S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-OSkkEodz0PFmH2OWluL": {
     "channel_icon": "https://yt3.ggpht.com/u6QG4K_XjNn7iP0zECC9qc03_vSXbjpz3kFt3bYJpN6MhOVFbwHF9mfYRfhHPPis1G8J91nDHQ=s88-c-k-c0x00ffffff-no-rj",
@@ -158946,18 +158942,18 @@
         "time_in_video": "3:42"
       },
       {
-        "brand_id": "brand-00019",
-        "brand": "資生堂",
-        "name_id": "name-00298",
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00001",
         "name": "アルティミューン パワライジング セラム",
         "related_tags": [
           "美容液"
         ],
-        "skin_concern": "",
         "mentions": [
           "メモリーT細胞に着目した美容液、劣化細胞を除去"
         ],
-        "time_in_video": "15:14"
+        "time_in_video": "15:14",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00129",
@@ -159013,7 +159009,7 @@
     "video_id": "4kFvQacCkrI",
     "view_count": "213310",
     "duration": "PT29M59S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-OTlDFljdGdaK8doYoBr": {
     "channel_icon": "https://yt3.ggpht.com/wrQi2UI4AaPDtbG9UyhkKdJWNWLRKylNgQspPNibwKrXx06yyeWb_tNh4VUqCLauijfT05X5OSg=s88-c-k-c0x00ffffff-no-rj",
@@ -160482,17 +160478,17 @@
         "time_in_video": "7:40"
       },
       {
-        "brand_id": "brand-00019",
-        "brand": "資生堂",
-        "name_id": "name-00298",
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00001",
         "name": "アルティミューン パワライジング セラム",
         "related_tags": [
           "美容液"
         ],
-        "skin_concern": "",
         "mentions": [
           "劣化細胞に着目した美容液、使うと調子が良い"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00137",
@@ -160535,7 +160531,7 @@
     "video_id": "vUdjz2V6iKg",
     "view_count": "49207",
     "duration": "PT37M34S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-OTlDK24xKSLEBY3w5-N": {
     "channel_icon": "https://yt3.ggpht.com/f4yfrtKAU_pP8lZbHGgGoOgryKHzoGnH7B6kNVkexamUV22OEJtARn4e4ztv8gY9DyKQMRAq-g=s88-c-k-c0x00ffffff-no-rj",
@@ -164300,20 +164296,6 @@
         "time_in_video": "22:32"
       },
       {
-        "brand_id": "brand-00010",
-        "brand": "エリクシール",
-        "name_id": "name-00040",
-        "name": "エリクシール デーケアレボリューション ブライトニング ba",
-        "related_tags": [
-          "乳液"
-        ],
-        "skin_concern": "",
-        "mentions": [
-          "乳液・UVカット・下地の3役、リピート3回"
-        ],
-        "time_in_video": "3:05"
-      },
-      {
         "brand_id": "brand-00329",
         "brand": "tfit",
         "name_id": "name-00018",
@@ -164335,7 +164317,10 @@
           "乳液"
         ],
         "skin_concern": "",
-        "time_in_video": "3:05"
+        "time_in_video": "3:05",
+        "mentions": [
+          "乳液・UVカット・下地の3役、リピート3回"
+        ]
       },
       {
         "brand": "tfit",
@@ -164373,7 +164358,7 @@
     "video_id": "wVzhudPeO64",
     "view_count": "124827",
     "duration": "PT24M25S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-OVhVHAmNOfe1Mj_vrgw": {
     "channel_icon": "https://yt3.ggpht.com/7BW9geYpLjx7B2MR3g9RxV5sRONohUZ0QLMvtMh2wlAi1V3CdJCytVwwe7CQfLS6F-d2wXsWxF4=s88-c-k-c0x00ffffff-no-rj",
@@ -165603,16 +165588,18 @@
         "time_in_video": "0:34"
       },
       {
-        "brand_id": "brand-00019",
-        "brand": "資生堂",
-        "name_id": "name-00291",
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00002",
         "name": "エッセンス スキングロウ ファンデーション",
-        "related_tags": [],
-        "skin_concern": "",
+        "related_tags": [
+          "リキッドファンデーション"
+        ],
         "mentions": [
           "ワンプッシュで使用",
           "艶のある仕上がりと紹介"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00001",
@@ -165774,7 +165761,7 @@
     "video_id": "-KGx84hhAeo",
     "view_count": "168874",
     "duration": "PT21M24S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-OWBOqlSS5-wZT17NB4P": {
     "channel_icon": "https://yt3.ggpht.com/sL4o-AlEmPkNFfWiKdpEeLgj5UWg5Ubopid862uMwPkViPbnm3PguOsryA1pJQPGEet7CKzgbU0=s88-c-k-c0x00ffffff-no-rj",
@@ -165808,17 +165795,19 @@
         ]
       },
       {
-        "brand_id": "brand-00019",
-        "brand": "資生堂",
-        "name_id": "name-00291",
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00002",
         "name": "エッセンス スキングロウ ファンデーション",
-        "related_tags": [],
-        "skin_concern": "",
+        "related_tags": [
+          "リキッドファンデーション"
+        ],
         "mentions": [
           "230番を使用",
           "スパチュラで塗ると使用量が半分で済むと紹介",
           "薄付きだが透明感が出ると絶賛"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00119",
@@ -166009,7 +165998,7 @@
     "video_id": "az97hzVpbQM",
     "view_count": "172779",
     "duration": "PT18M47S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-OWBOr5zXzHzPN7Jwk2p": {
     "channel_icon": "https://yt3.ggpht.com/u-Odrd0LiU-J4xLM9AIPCLTRIZDgHpcBVa0epMtQNENHwQwaXOraAEr9MZTDHtNp997-suLuFW8=s88-c-k-c0x00ffffff-no-rj",
@@ -167713,16 +167702,16 @@
       {
         "brand_id": "brand-00010",
         "brand": "エリクシール",
-        "name_id": "name-00040",
-        "name": "エリクシール デーケアレボリューション ブライトニング ba",
+        "name_id": "name-00011",
+        "name": "エリクシール デーケアレボリューション ブライトニング ＋ ba",
         "related_tags": [
           "乳液"
         ],
-        "skin_concern": "",
         "mentions": [
           "2本目、3本目のリピート、水々しく伸びて艶が出る、SPF50+ PA++++"
         ],
-        "time_in_video": "2:47"
+        "time_in_video": "2:47",
+        "skin_concern": ""
       },
       {
         "brand": "ディオール",
@@ -167828,7 +167817,7 @@
     "video_id": "HitjFJ9TIZg",
     "view_count": "108013",
     "duration": "PT22M23S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-OWpaXKN2BnqI6E3gFaP": {
     "channel_icon": "https://yt3.ggpht.com/pusv6oF0j-sWq2kLVuvRYc2Gw4vT87xfCJITFNpdX85CHkn2KVUh0oTiVE9InlG_SBWcEgo0Hm0=s88-c-k-c0x00ffffff-no-rj",
@@ -173926,17 +173915,17 @@
     "check_status": true,
     "cosmetics": [
       {
-        "brand_id": "brand-00281",
-        "brand": "ETUDE HOUSE (韓国)",
-        "name_id": "name-00312",
+        "brand_id": "brand-00146",
+        "brand": "エチュード",
+        "name_id": "name-00024",
         "name": "ニンフオーラボリューマー",
         "related_tags": [
           "化粧下地"
         ],
-        "skin_concern": "",
         "mentions": [
           "VDLの下地と混ぜて使う"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00015",
@@ -174123,7 +174112,7 @@
     "video_id": "2UGYrIG_on8",
     "view_count": "209562",
     "duration": "PT21M27S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-OYvUtv57bC_gDNgUt1A": {
     "channel_icon": "https://yt3.ggpht.com/sLKUQ-TvedWgarE6vzT878c-02kaFgCqRG_TJE3Rhve7JnpImfuSDN4FoEfWbknYgTBA5z3UEA=s88-c-k-c0x00ffffff-no-rj",
@@ -186159,18 +186148,18 @@
         ]
       },
       {
-        "brand_id": "brand-01170",
-        "brand": "PERIPERA(韓国)",
-        "name_id": "name-00004",
-        "name": "ピュアブラッシュドサンシャインチーク",
+        "brand_id": "brand-00426",
+        "brand": "peripera",
+        "name_id": "name-00062",
+        "name": "ピュア ブラッシュド サンシャイン チーク",
         "related_tags": [
           "パウダーチーク"
         ],
-        "skin_concern": "",
         "mentions": [
           "チークに"
         ],
-        "time_in_video": "8:28"
+        "time_in_video": "8:28",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00146",
@@ -186388,7 +186377,7 @@
     "video_id": "b56YdE5KFFs",
     "view_count": "131723",
     "duration": "PT20M3S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-OcW1XFBl6oYcWuy6kFH": {
     "channel_icon": "https://yt3.ggpht.com/KtqlO2HZ0U3XDZSgzjIr_st-xKt7by9op9-PfCt4CMDVijR5FVp-1kWE76jqXCI8VVRFwJvCbGk=s88-c-k-c0x00ffffff-no-rj",
@@ -188276,17 +188265,17 @@
         ]
       },
       {
-        "brand_id": "brand-00019",
-        "brand": "資生堂",
-        "name_id": "name-00291",
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00002",
         "name": "エッセンス スキングロウ ファンデーション",
         "related_tags": [
           "リキッドファンデーション"
         ],
-        "skin_concern": "",
         "mentions": [
           "毎日メイクのファンデ。美容成分が多く肌への負担が少ない"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00064",
@@ -188486,7 +188475,7 @@
     "video_id": "-2fE1rVo0j0",
     "view_count": "381464",
     "duration": "PT36M34S",
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-14"
   },
   "-Od9EE0ZZu_oKogbRN9n": {
     "channel_icon": "https://yt3.ggpht.com/y50k-1ZY5qqB94YwAUQhUAZxNABKR5RgD_yuGsmklfl53u6D-1fK-atC6IOhbWrRwv092cbrDg=s88-c-k-c0x00ffffff-no-rj",
@@ -212848,16 +212837,16 @@
       {
         "brand_id": "brand-00034",
         "brand": "ビオレ",
-        "name_id": "name-00036",
-        "name": "ビオレUV アスリズム プロテクトエッセンス",
+        "name_id": "name-00012",
+        "name": "ビオレUV アスリズム スキンプロテクトエッセンス",
         "related_tags": [
           "日焼け止め・UVケア(顔用)"
         ],
-        "skin_concern": "",
         "mentions": [
           "塗りやすく、高温多湿にも強い"
         ],
-        "time_in_video": "19:12"
+        "time_in_video": "19:12",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00008",
@@ -212888,7 +212877,7 @@
         "time_in_video": "4:52"
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "bdcrBBVKuWk": {
     "video_id": "bdcrBBVKuWk",
@@ -229187,19 +229176,19 @@
       {
         "brand_id": "brand-00010",
         "brand": "エリクシール",
-        "name_id": "name-00040",
-        "name": "エリクシール デーケアレボリューション ブライトニング ba",
+        "name_id": "name-00011",
+        "name": "エリクシール デーケアレボリューション ブライトニング ＋ ba",
         "related_tags": [
           "乳液"
         ],
-        "skin_concern": "",
         "mentions": [
           "美白ケアしたい方に、顔全体と首に塗ってうるうるの質感に"
         ],
-        "time_in_video": "3:15"
+        "time_in_video": "3:15",
+        "skin_concern": ""
       }
     ],
-    "updated_at": "2026-10-10"
+    "updated_at": "2026-10-14"
   },
   "B_KILJoexyg": {
     "video_id": "B_KILJoexyg",
@@ -241563,16 +241552,16 @@
       {
         "brand_id": "brand-00010",
         "brand": "エリクシール",
-        "name_id": "name-00045",
-        "name": "エリクシール デーケアレボリューション ba",
+        "name_id": "name-00015",
+        "name": "エリクシール デーケアレボリューション ＋ ba",
         "related_tags": [
           "乳液"
         ],
-        "skin_concern": "",
         "mentions": [
           "透明タイプとして引き続きよく使った"
         ],
-        "time_in_video": "2:41"
+        "time_in_video": "2:41",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00225",
@@ -241589,7 +241578,7 @@
         "time_in_video": "25:23"
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "MghXAZGHqh8": {
     "video_id": "MghXAZGHqh8",
@@ -260875,17 +260864,17 @@
         "time_in_video": "11:14"
       },
       {
-        "brand_id": "brand-01170",
-        "brand": "PERIPERA(韓国)",
-        "name_id": "name-00004",
-        "name": "ピュアブラッシュドサンシャインチーク",
+        "brand_id": "brand-00426",
+        "brand": "peripera",
+        "name_id": "name-00062",
+        "name": "ピュア ブラッシュド サンシャイン チーク",
         "related_tags": [
           "パウダーチーク"
         ],
-        "skin_concern": "",
         "mentions": [
           "チークはブラシ選びが一番重要"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00953",
@@ -260980,7 +260969,7 @@
         ]
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "LRv8KS3DkAY": {
     "video_id": "LRv8KS3DkAY",
@@ -284675,17 +284664,17 @@
         ]
       },
       {
-        "brand_id": "brand-01170",
-        "brand": "PERIPERA(韓国)",
-        "name_id": "name-00004",
-        "name": "ピュアブラッシュドサンシャインチーク",
+        "brand_id": "brand-00426",
+        "brand": "peripera",
+        "name_id": "name-00062",
+        "name": "ピュア ブラッシュド サンシャイン チーク",
         "related_tags": [
           "パウダーチーク"
         ],
-        "skin_concern": "",
         "mentions": [
           "モルモルなカラー。重ねる"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-01218",
@@ -284727,7 +284716,7 @@
         ]
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "kZFZx2baroc": {
     "video_id": "kZFZx2baroc",
@@ -297735,18 +297724,18 @@
         "time_in_video": "2:55"
       },
       {
-        "brand_id": "brand-01163",
-        "brand": "ポール ＆ ジョー",
-        "name_id": "name-00001",
+        "brand_id": "brand-00112",
+        "brand": "ポール ＆ ジョー ボーテ",
+        "name_id": "name-00002",
         "name": "プロテクティング プライマー",
         "related_tags": [
           "日焼け止め・UVケア(顔用)"
         ],
-        "skin_concern": "",
         "mentions": [
           "保湿力がありトーンアップ、透明感が上がる"
         ],
-        "time_in_video": "4:06"
+        "time_in_video": "4:06",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00109",
@@ -298067,7 +298056,7 @@
         "time_in_video": "22:57"
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "eWECsGjaYz8": {
     "video_id": "eWECsGjaYz8",
@@ -317987,16 +317976,16 @@
       {
         "brand_id": "brand-00010",
         "brand": "エリクシール",
-        "name_id": "name-00040",
-        "name": "エリクシール デーケアレボリューション ブライトニング ba",
+        "name_id": "name-00011",
+        "name": "エリクシール デーケアレボリューション ブライトニング ＋ ba",
         "related_tags": [
           "乳液"
         ],
-        "skin_concern": "",
         "mentions": [
           "1本で乳液・日焼け止め・下地、めちゃくちゃリピしている、とろみのあるスキンケアの後はモロモロが出やすい"
         ],
-        "time_in_video": "4:45"
+        "time_in_video": "4:45",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00237",
@@ -318096,7 +318085,7 @@
         "time_in_video": "16:32"
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "KuzZ5Wwvh40": {
     "video_id": "KuzZ5Wwvh40",
@@ -341214,16 +341203,16 @@
       {
         "brand_id": "brand-00034",
         "brand": "ビオレ",
-        "name_id": "name-00036",
-        "name": "ビオレUV アスリズム プロテクトエッセンス",
+        "name_id": "name-00012",
+        "name": "ビオレUV アスリズム スキンプロテクトエッセンス",
         "related_tags": [
           "日焼け止め・UVケア(顔用)"
         ],
-        "skin_concern": "",
         "mentions": [
           "ボディにおすすめ。塗ると全然焼けない"
         ],
-        "time_in_video": "11:47"
+        "time_in_video": "11:47",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00361",
@@ -341308,7 +341297,7 @@
         "time_in_video": "10:38"
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "FOCMP2T8SkA": {
     "video_id": "FOCMP2T8SkA",
@@ -346318,16 +346307,16 @@
       {
         "brand_id": "brand-00010",
         "brand": "エリクシール",
-        "name_id": "name-00040",
-        "name": "エリクシール デーケアレボリューション ブライトニング ba",
+        "name_id": "name-00011",
+        "name": "エリクシール デーケアレボリューション ブライトニング ＋ ba",
         "related_tags": [
           "乳液"
         ],
-        "skin_concern": "",
         "mentions": [
           "呼吸感のUVがいい、リピしたいけど売っていない"
         ],
-        "time_in_video": "5:14"
+        "time_in_video": "5:14",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-01544",
@@ -346344,7 +346333,7 @@
         "time_in_video": "10:54"
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "Xw6JLgen48k": {
     "video_id": "Xw6JLgen48k",
@@ -353765,18 +353754,18 @@
         "time_in_video": "20:59"
       },
       {
-        "brand_id": "brand-01163",
-        "brand": "ポール ＆ ジョー",
-        "name_id": "name-00001",
+        "brand_id": "brand-00112",
+        "brand": "ポール ＆ ジョー ボーテ",
+        "name_id": "name-00002",
         "name": "プロテクティング プライマー",
         "related_tags": [
           "日焼け止め・UVケア(顔用)"
         ],
-        "skin_concern": "",
         "mentions": [
           "リニューアルで崩れにくくなった。乾燥肌の方は手放せない。砂漠さん向け"
         ],
-        "time_in_video": "22:06"
+        "time_in_video": "22:06",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00073",
@@ -353916,7 +353905,7 @@
         "time_in_video": "34:07"
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "ED0r4IEwqR8": {
     "video_id": "ED0r4IEwqR8",
@@ -356779,30 +356768,18 @@
         ]
       },
       {
-        "brand_id": "brand-01170",
-        "brand": "PERIPERA(韓国)",
-        "name_id": "name-00004",
-        "name": "ピュアブラッシュドサンシャインチーク",
+        "brand_id": "brand-00426",
+        "brand": "peripera",
+        "name_id": "name-00062",
+        "name": "ピュア ブラッシュド サンシャイン チーク",
         "related_tags": [
           "パウダーチーク"
         ],
-        "skin_concern": "",
         "mentions": [
-          "コーラル感のあるベージュ、毛穴がすぐなくなる、イエベにおすすめ"
-        ]
-      },
-      {
-        "brand_id": "brand-01170",
-        "brand": "PERIPERA(韓国)",
-        "name_id": "name-00004",
-        "name": "ピュアブラッシュドサンシャインチーク",
-        "related_tags": [
-          "パウダーチーク"
-        ],
-        "skin_concern": "",
-        "mentions": [
+          "コーラル感のあるベージュ、毛穴がすぐなくなる、イエベにおすすめ",
           "薄めのピンクベージュ、ブルベにおすすめ"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00425",
@@ -356870,7 +356847,7 @@
         ]
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "oH6ixUqO2Jg": {
     "video_id": "oH6ixUqO2Jg",
@@ -367220,18 +367197,18 @@
         "time_in_video": "9:02"
       },
       {
-        "brand_id": "brand-01163",
-        "brand": "ポール ＆ ジョー",
-        "name_id": "name-00001",
+        "brand_id": "brand-00112",
+        "brand": "ポール ＆ ジョー ボーテ",
+        "name_id": "name-00002",
         "name": "プロテクティング プライマー",
         "related_tags": [
           "日焼け止め・UVケア(顔用)"
         ],
-        "skin_concern": "",
         "mentions": [
           "去年の夏激推し。化粧崩れしない、汗や崩れに本当に強い下地"
         ],
-        "time_in_video": "9:48"
+        "time_in_video": "9:48",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-01171",
@@ -367302,7 +367279,7 @@
         ]
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "e7qlIxeZR3k": {
     "video_id": "e7qlIxeZR3k",
@@ -374351,17 +374328,17 @@
         ]
       },
       {
-        "brand_id": "brand-01163",
-        "brand": "ポール ＆ ジョー",
-        "name_id": "name-00002",
+        "brand_id": "brand-00112",
+        "brand": "ポール ＆ ジョー ボーテ",
+        "name_id": "name-00001",
         "name": "モイスチュアライジング プライマー",
         "related_tags": [
           "化粧下地"
         ],
-        "skin_concern": "",
         "mentions": [
           "崩れにくく、保湿しながら密着してファンデを崩さない。毛穴もカバーしてくれるのでおすすめ"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-01027",
@@ -374526,7 +374503,7 @@
         "time_in_video": "14:39"
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "2aPtSRuHmHM": {
     "video_id": "2aPtSRuHmHM",
@@ -400273,19 +400250,19 @@
       {
         "brand_id": "brand-00034",
         "brand": "ビオレ",
-        "name_id": "name-00036",
-        "name": "ビオレUV アスリズム プロテクトエッセンス",
+        "name_id": "name-00012",
+        "name": "ビオレUV アスリズム スキンプロテクトエッセンス",
         "related_tags": [
           "日焼け止め・UVケア(顔用)"
         ],
-        "skin_concern": "",
         "mentions": [
           "吸収剤と散乱剤のハイブリッド。ムラ付きでもSPF50+以上の結果、さすがのアスリズム"
         ],
-        "time_in_video": "18:20"
+        "time_in_video": "18:20",
+        "skin_concern": ""
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "12Ne66qmqAE": {
     "video_id": "12Ne66qmqAE",
@@ -417255,17 +417232,17 @@
         "time_in_video": "0:49"
       },
       {
-        "brand_id": "brand-00019",
-        "brand": "資生堂",
-        "name_id": "name-00291",
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00002",
         "name": "エッセンス スキングロウ ファンデーション",
         "related_tags": [
           "リキッドファンデーション"
         ],
-        "skin_concern": "",
         "mentions": [
           "美容液みたいにみずみずしいテクスチャー。くすみや色ムラを飛ばし自然な仕上がりで、軽いからこそ崩れにくい"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00029",
@@ -417309,7 +417286,7 @@
         "time_in_video": "7:00"
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "-uJD8lO6YQg": {
     "video_id": "-uJD8lO6YQg",
@@ -434799,17 +434776,17 @@
         "time_in_video": "0:27"
       },
       {
-        "brand_id": "brand-00019",
-        "brand": "資生堂",
-        "name_id": "name-00291",
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00002",
         "name": "エッセンス スキングロウ ファンデーション",
         "related_tags": [
           "リキッドファンデーション"
         ],
-        "skin_concern": "",
         "mentions": [
           "艶感・水みずしさが強く保湿効果が高い、乾燥肌向け。成分的に若干崩れやすく感じた"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00019",
@@ -434854,7 +434831,7 @@
         "time_in_video": "10:01"
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "51orrI_Vi0o": {
     "video_id": "51orrI_Vi0o",
@@ -449946,15 +449923,15 @@
       {
         "brand_id": "brand-00426",
         "brand": "peripera",
-        "name_id": "name-00001",
-        "name": "ブラッシュド サンシャイン チーク",
+        "name_id": "name-00062",
+        "name": "ピュア ブラッシュド サンシャイン チーク",
         "related_tags": [
           "パウダーチーク"
         ],
-        "skin_concern": "",
         "mentions": [
           "肌に近いカラーで顔が引き締まり大人っぽく。880円"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00037",
@@ -450022,7 +449999,7 @@
         ]
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "fMgfocTETX0": {
     "video_id": "fMgfocTETX0",
@@ -475791,17 +475768,17 @@
         "time_in_video": "7:59"
       },
       {
-        "brand_id": "brand-00019",
-        "brand": "資生堂",
-        "name_id": "name-00291",
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00002",
         "name": "エッセンス スキングロウ ファンデーション",
         "related_tags": [
           "リキッドファンデーション"
         ],
-        "skin_concern": "",
         "mentions": [
           "美容液ファンデで塗っているほどいい。厚塗りが苦手でこれだけでベースにすることも。めっちゃナチュラル"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-01506",
@@ -475818,7 +475795,7 @@
         "time_in_video": "18:38"
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "gTEePyu2yEY": {
     "video_id": "gTEePyu2yEY",
@@ -480667,17 +480644,17 @@
         "time_in_video": "19:53"
       },
       {
-        "brand_id": "brand-01170",
-        "brand": "PERIPERA(韓国)",
-        "name_id": "name-00004",
-        "name": "ピュアブラッシュドサンシャインチーク",
+        "brand_id": "brand-00426",
+        "brand": "peripera",
+        "name_id": "name-00062",
+        "name": "ピュア ブラッシュド サンシャイン チーク",
         "related_tags": [
           "パウダーチーク"
         ],
-        "skin_concern": "",
         "mentions": [
           "桃みたいな色、ツヤツヤで透明感、ファンデがはげない"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-01233",
@@ -480867,7 +480844,7 @@
         "time_in_video": "29:25"
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-14"
   },
   "wTQuxu7zP64": {
     "video_id": "wTQuxu7zP64",
@@ -493204,16 +493181,16 @@
       {
         "brand_id": "brand-00034",
         "brand": "ビオレ",
-        "name_id": "name-00036",
-        "name": "ビオレUV アスリズム プロテクトエッセンス",
+        "name_id": "name-00012",
+        "name": "ビオレUV アスリズム スキンプロテクトエッセンス",
         "related_tags": [
           "日焼け止め・UVケア(顔用)"
         ],
-        "skin_concern": "",
         "mentions": [
           "マジで焼けないと教わってからお守りのように持ち歩く。体にもたっぷり塗る、浮気せず一途に愛用"
         ],
-        "time_in_video": "11:23"
+        "time_in_video": "11:23",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00001",
@@ -493312,7 +493289,7 @@
         ]
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "4vD1Jtsuh54": {
     "video_id": "4vD1Jtsuh54",
@@ -588103,18 +588080,18 @@
         "time_in_video": "7:28"
       },
       {
-        "brand_id": "brand-00019",
-        "brand": "資生堂",
-        "name_id": "name-00298",
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00001",
         "name": "アルティミューン パワライジング セラム",
         "related_tags": [
           "美容液"
         ],
-        "skin_concern": "",
         "mentions": [
           "何本もリピートした美容液"
         ],
-        "time_in_video": "9:21"
+        "time_in_video": "9:21",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00013",
@@ -588243,7 +588220,7 @@
         "time_in_video": "12:19"
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "q0xpXs4r2Pc": {
     "video_id": "q0xpXs4r2Pc",
@@ -604525,17 +604502,17 @@
         "time_in_video": "0:26"
       },
       {
-        "brand_id": "brand-00019",
-        "brand": "資生堂",
-        "name_id": "name-00291",
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00002",
         "name": "エッセンス スキングロウ ファンデーション",
         "related_tags": [
           "リキッドファンデーション"
         ],
-        "skin_concern": "",
         "mentions": [
           "軽くて自然、艶がすごい。ほうれい線が目立ちにくい"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00018",
@@ -604770,7 +604747,7 @@
         ]
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "Vp1WZiTYR-4": {
     "video_id": "Vp1WZiTYR-4",
@@ -638060,17 +638037,17 @@
     "processed": true,
     "cosmetics": [
       {
-        "brand_id": "brand-01163",
-        "brand": "ポール ＆ ジョー",
-        "name_id": "name-00002",
+        "brand_id": "brand-00112",
+        "brand": "ポール ＆ ジョー ボーテ",
+        "name_id": "name-00001",
         "name": "モイスチュアライジング プライマー",
         "related_tags": [
           "化粧下地"
         ],
-        "skin_concern": "",
         "mentions": [
           "本当にずっと使っている、何本目かわからない。クッションファンデとの相性がよく崩れ方が綺麗"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00040",
@@ -638212,7 +638189,7 @@
         ]
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-14"
   },
   "iZfTVU1AEkw": {
     "video_id": "iZfTVU1AEkw",
@@ -639313,18 +639290,18 @@
         "time_in_video": "9:19"
       },
       {
-        "brand_id": "brand-00019",
-        "brand": "資生堂",
-        "name_id": "name-00306",
+        "brand_id": "brand-01171",
+        "brand": "SHISEIDO",
+        "name_id": "name-00023",
         "name": "テクノサテン ジェル リップスティック",
         "related_tags": [
           "口紅"
         ],
-        "skin_concern": "",
         "mentions": [
           "2026年夏の新色として紹介。限定5色"
         ],
-        "time_in_video": "10:24"
+        "time_in_video": "10:24",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00165",
@@ -639654,7 +639631,7 @@
         "time_in_video": "1:20"
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-10-14"
   },
   "9-l5KGMObUs": {
     "video_id": "9-l5KGMObUs",
