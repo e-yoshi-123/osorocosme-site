@@ -69,7 +69,7 @@ const flowParts = parts.filter((p) => timeline.some((t) => t.p.key === p.key));
               </a>
               <div class="rs-item-t">
                 <p class="rs-item-b"><BrandFlag brand_id={x.brand_id} />{x.brand}{x.tag && <span>{x.tag}</span>}</p>
-                <p class="rs-item-n"><a href={withBase(`/cosmetics/${x.slug}`)} class="phrase">{x.name}</a>{x.pr && <PrBadge class="ml-1.5 align-middle" />}</p>
+                <p class="rs-item-n"><a href={withBase(`/cosmetics/${x.slug}`)} class="phrase">{x.name}</a>{x.pr && <PrBadge own={x.own} class="ml-1.5 align-middle" />}</p>
                 <div class="rs-item-act">
                   {x.sec !== undefined ? (
                     <a href={`https://www.youtube.com/watch?v=${v.video_id}&t=${x.sec}s`} target="_blank" rel="noopener" data-seek={x.sec} class="scene-seek rs-seek rs-time">▶ {x.time}</a>

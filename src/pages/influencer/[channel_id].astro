@@ -27,6 +27,10 @@ import {
   jstDate,
   getPrInfo,
   isPrMention,
+  isOwnBrandMention,
+  getInfluencerProfile,
+  getOwnBrandIds,
+  getBrandName,
   cosmeticCategory,
 } from "../../lib/data";
 
@@ -50,6 +54,10 @@ const timeline = videos
 const formatDate = formatJaDate;
 // PR・提供としての紹介（動画全体がPR、またはブランド・商品の指定。197章）。カードと動画のサムネイルに「PR」の印を付ける（213章）
 const prCount = timeline.reduce((n, b) => n + b.items.filter((c) => isPrMention(b.video.key, c.brand_id, c.name_id)).length, 0);
+// 本人が言ったパーソナルカラー・肌質と、本人のブランド（ユーザー判断、307章）
+const selfProfile = influencer ? getInfluencerProfile(influencer.channel_id) : undefined;
+const ownBrands = influencer ? getOwnBrandIds(influencer.channel_id).map((id) => ({ id, name: getBrandName(id) })).filter((b) => b.name) : [];
+const ownCount = timeline.reduce((n, b) => n + b.items.filter((c) => isOwnBrandMention(b.video.key, c.brand_id, c.name_id)).length, 0);
 
 // カテゴリごとの紹介コスメ数（同じコスメが複数動画に出ても動画ごとに数える）
 const tagCounts = new Map<string, number>();
@@ -134,6 +142,21 @@ const jsonLd = influencer
               <div class="py-4 px-3 md:px-5"><dt class="u-11">使用コスメ</dt><dd class="num-display text-[24px] md:text-[26px] leading-none mt-1">{totalItems}<span class="font-sans text-xs text-neutral-500 ml-1">品</span></dd></div>
               <div class="py-4 px-3 md:px-5"><dt class="u-11">登録者</dt><dd class="num-display text-[24px] md:text-[26px] leading-none mt-1">{influencer.subscriber_count ? formatCount(Number(influencer.subscriber_count) >= 10000 ? Math.round(Number(influencer.subscriber_count) / 10000) : Number(influencer.subscriber_count)) : "—"}<span class="font-sans text-xs text-neutral-500 ml-1">{Number(influencer.subscriber_count) >= 10000 ? "万人" : "人"}</span></dd></div>
             </dl>
+            {(selfProfile || ownBrands.length > 0) && (
+              <div class="mt-6 max-w-xl">
+                <dl class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+                  {selfProfile?.personal_color && <div><dt class="inline text-xs text-neutral-500">パーソナルカラー</dt><dd class="inline ml-2 text-ink">{selfProfile.personal_color}</dd></div>}
+                  {selfProfile?.skin && <div><dt class="inline text-xs text-neutral-500">肌質</dt><dd class="inline ml-2 text-ink">{selfProfile.skin}</dd></div>}
+                  {selfProfile?.face_type && <div><dt class="inline text-xs text-neutral-500">顔タイプ</dt><dd class="inline ml-2 text-ink">{selfProfile.face_type}</dd></div>}
+                  {ownBrands.length > 0 && <div><dt class="inline text-xs text-neutral-500">プロデュース</dt><dd class="inline ml-2">{ownBrands.map((b, i) => <>{i > 0 && "・"}<a href={withBase(`/brand/${b.id}`)} class="link-u text-ink">{b.name}</a></>)}</dd></div>}
+                </dl>
+                {selfProfile && (
+                  <p class="mt-2 text-xs leading-relaxed text-neutral-500">
+                    パーソナルカラー・肌質は、本人が{selfProfile.from_description ? "概要欄のプロフィールに書いている" : "動画で話している"}内容です{selfProfile.sources.length > 0 && <>（{selfProfile.sources.map((k, i) => <>{i > 0 && "・"}<a href={withBase(`/video/${k}`)} class="link-u">動画{i + 1}</a></>)}）</>}。
+                  </p>
+                )}
+              </div>
+            )}
             <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
               {/* 投稿者のチャンネルへ送る導線（181章） */}
               <a href={`https://www.youtube.com/channel/${influencer.channel_id}`} target="_blank" rel="noopener" class="group u-13">
@@ -185,7 +208,7 @@ const jsonLd = influencer
 
         {timeline.length > 0 && (
           <section class="panel u-14">
-            <SectionHead num={showTop ? "02" : "01"} en="Cosme history" title="使用コスメ遍歴" lead={`動画ごとに、紹介したコスメを新しい順に並べています。カテゴリで絞り込めます。${prCount > 0 ? "「PR」の印は、PR・提供として紹介されたコスメです（ランキングには数えていません）。" : ""}`} />
+            <SectionHead num={showTop ? "02" : "01"} en="Cosme history" title="使用コスメ遍歴" lead={`動画ごとに、紹介したコスメを新しい順に並べています。カテゴリで絞り込めます。${prCount > ownCount ? "「PR」の印は、PR・提供として紹介されたコスメです（ランキングには数えていません）。" : ""}${ownCount > 0 ? "「本人のブランド」の印は、本人がプロデュースしたブランドのコスメです（ランキングには数えていません）。" : ""}`} />
 
             <div class="filter-sentinel" aria-hidden="true"></div>
             <div class="filter-bar sticky top-[var(--hdr-h,97px)] z-20 bg-panel/90 backdrop-blur-md py-3 mb-10 border-b border-ink/10 text-sm -mx-4 px-4 md:mx-0 md:px-0">
@@ -231,7 +254,7 @@ const jsonLd = influencer
                   <div class="inf-4">
                     {items.map((c) => (
                       <div class="history-item" data-tags={(c.related_tags || []).join(",")}>
-                        <CosmeticCard brand_id={c.brand_id} brand={c.brand} name_id={c.name_id} name={c.name} rakutenImageHtml={c.rakuten_image_link} pr={isPrMention(video.key, c.brand_id, c.name_id)} category={cosmeticCategory(c)} />
+                        <CosmeticCard brand_id={c.brand_id} brand={c.brand} name_id={c.name_id} name={c.name} rakutenImageHtml={c.rakuten_image_link} pr={isPrMention(video.key, c.brand_id, c.name_id)} own={isOwnBrandMention(video.key, c.brand_id, c.name_id)} category={cosmeticCategory(c)} />
                       </div>
                     ))}
                   </div>

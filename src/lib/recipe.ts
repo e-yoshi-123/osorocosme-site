@@ -4,6 +4,7 @@ import {
   getVisibleVideos,
   getPrInfo,
   isPrMention,
+  isOwnBrandMention,
   cosmeticCategory,
   getCosmeticListEntry,
   productOffer,
@@ -72,6 +73,8 @@ export interface RecipeItem {
   rakutenLink?: string;
   yahooLink?: string;
   pr: boolean;
+  /** 本人のブランドの紹介（pr も true。307章） */
+  own: boolean;
 }
 export interface Recipe {
   key: string;
@@ -118,6 +121,7 @@ function toItem(v: VideoEntry, c: NonNullable<VideoEntry["cosmetics"]>[number], 
     img: offer.imageSrc, price: offer.imageSrc ? offer.price : undefined, fromYahoo: offer.source === "yahoo",
     rakutenLink: offer.rakutenLink, yahooLink: entry?.yahoo_text_link || undefined,
     pr: isPrMention(v.key, c.brand_id, c.name_id),
+    own: isOwnBrandMention(v.key, c.brand_id, c.name_id),
   };
 }
 

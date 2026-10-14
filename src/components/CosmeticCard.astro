@@ -15,11 +15,13 @@ interface Props {
   caption?: string;
   /** PR・提供としての紹介なら、画像の左上に「PR」の印を重ねる（213章） */
   pr?: boolean;
+  /** 本人のブランドの紹介（307章） */
+  own?: boolean;
   /** カテゴリ（例: 「化粧下地」）。渡すとブランド名の上に出す（動画ページ。213章） */
   category?: string;
 }
 
-const { brand_id, brand, name_id, name, rakutenImageHtml, showBrand = true, caption, pr = false, category } = Astro.props;
+const { brand_id, brand, name_id, name, rakutenImageHtml, showBrand = true, caption, pr = false, own = false, category } = Astro.props;
 // 楽天の画像が無い商品は、Yahoo!ショッピングの画像があればそれを出す（115章）。
 // 楽天の画像はあっても読み込めない場合に備え、Yahoo!の画像を data-* に持たせる（Layout の共通の処理が差し替える。135章）
 const entry = getCosmeticListEntry(brand_id, name_id);
@@ -48,7 +50,7 @@ const yahooImage = rakuten ? undefined : yahooEntry;
         <span class="noimg">No image</span>
       )
     }
-    {pr && <PrBadge tone="solid" class="absolute top-2 left-2 pointer-events-none" />}
+    {pr && <PrBadge tone="solid" own={own} class="absolute top-2 left-2 pointer-events-none" />}
   </div>
   <a href={withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`)} class="card-6">
     {category && <div class="mb-1.5"><span class="card-3">{category}</span></div>}

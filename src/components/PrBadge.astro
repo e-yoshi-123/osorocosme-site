@@ -2,9 +2,11 @@
 // PR・提供の動画・紹介に付ける印（197章）。tone="solid"はサムネイルの上に重ねる用
 interface Props {
   tone?: "line" | "solid";
+  /** 本人がプロデュースしたブランドの紹介（307章）。印の文字を「本人のブランド」にする */
+  own?: boolean;
   class?: string;
 }
-const { tone = "line", class: cls } = Astro.props;
+const { tone = "line", own = false, class: cls } = Astro.props;
 ---
 
 <span
@@ -13,4 +15,4 @@ const { tone = "line", class: cls } = Astro.props;
     tone === "solid" ? "bg-paper/90 text-ink backdrop-blur" : "border border-ink/30 text-neutral-600",
     cls,
   ]}
-  title="PR・提供（概要欄の記載、またはYouTubeの有料プロモーションの表示による）">PR</span>
+  title={own ? "本人がプロデュースしたブランド（ランキングには数えていません）" : "PR・提供（概要欄の記載、またはYouTubeの有料プロモーションの表示による）"}>{own ? "本人のブランド" : "PR"}</span>

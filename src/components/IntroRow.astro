@@ -59,7 +59,7 @@ const concernQuotes = [...new Set(i.concerns.map((c) => c.quote).filter(Boolean)
     <a href={withBase(`/video/${i.videoKey}`)} class="group intro-8" title={i.videoTitle}>
       {i.thumbnail && <span class="overflow-hidden intro-15"><img src={i.thumbnail} alt={i.videoTitle} class="u-3" loading="lazy" /></span>}
       <span class="min-w-0">
-        <span class="intro-2">{i.pr && <PrBadge class="mr-1.5 align-[1px]" />}{i.videoTitle}</span>
+        <span class="intro-2">{i.pr && <PrBadge own={i.own} class="mr-1.5 align-[1px]" />}{i.videoTitle}</span>
         {i.views > 0 && <span class="intro-9">再生 {views}</span>}
       </span>
     </a>

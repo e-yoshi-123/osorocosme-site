@@ -6,6 +6,8 @@ import brandReadings from "../data/brand-readings.json";
 import categoryOverridesData from "../data/category-overrides.json";
 import brandEquivalentsData from "../data/brand_equivalents.json";
 import prVideosData from "../data/pr_videos.json";
+import ownBrandsData from "../data/own-brands.json";
+import influencerProfileData from "../data/influencer-profile.json";
 import shortsData from "../data/shorts.json";
 import ingredientsData from "../data/ingredients.json";
 import productRedirectsData from "../data/product-redirects.json";
@@ -246,8 +248,35 @@ const PR_VIDEOS = prVideosData as unknown as Record<string, PrInfo>;
 export function getPrInfo(videoKey: string): PrInfo | undefined {
   return videoKey === "_comment" ? undefined : PR_VIDEOS[videoKey];
 }
-/** PR・提供としての紹介か。ランキング・最近話題・特集の数には入れない（紹介の一覧には「PR」を付けて残す。197章） */
+/** 本人がプロデュースしたブランド（backend/scripts/influencer_facts/relations.json から classify.py が書き出す。307章）。
+ * channel_id → brands（ブランド全体）・products（ライン単位のときの brand_id_name_id） */
+const OWN_BRANDS = ownBrandsData as Record<string, { brands: string[]; products: string[] }>;
+/** 本人のブランドを本人の動画で紹介したものか。PRと同じくランキング等の数には入れず、「本人のブランド」の印を付ける（ユーザー判断、307章） */
+export function isOwnBrandMention(videoKey: string, brand_id: string, name_id: string): boolean {
+  const v = videos[videoKey];
+  const o = v ? OWN_BRANDS[v.channel_id] : undefined;
+  return !!o && (o.brands.includes(brand_id) || o.products.includes(`${brand_id}_${name_id}`));
+}
+/** 本人のブランド（プロデュースしたブランドの番号。ライン単位のものは除く。307章） */
+export function getOwnBrandIds(channel_id: string): string[] {
+  return OWN_BRANDS[channel_id]?.brands ?? [];
+}
+/** 本人が動画・概要欄で言ったパーソナルカラー・肌質・顔タイプ（backend/scripts/influencer_facts/export_profile.py。AIの推定ではない。307章）。
+ * sources は発言のある動画のキー、from_description は概要欄のプロフィールに書いてあるもの */
+export interface InfluencerProfile {
+  personal_color?: string;
+  skin?: string;
+  face_type?: string;
+  sources: string[];
+  from_description?: boolean;
+}
+const INFLUENCER_PROFILE = influencerProfileData as Record<string, InfluencerProfile>;
+export function getInfluencerProfile(channel_id: string): InfluencerProfile | undefined {
+  return INFLUENCER_PROFILE[channel_id];
+}
+/** PR・提供としての紹介か（本人のブランドの紹介を含む）。ランキング・最近話題・特集の数には入れない（紹介の一覧には「PR」を付けて残す。197章） */
 export function isPrMention(videoKey: string, brand_id: string, name_id: string): boolean {
+  if (isOwnBrandMention(videoKey, brand_id, name_id)) return true;
   const p = getPrInfo(videoKey);
   if (!p) return false;
   return p.whole || p.brands.includes(brand_id) || p.products.includes(`${brand_id}_${name_id}`);
@@ -1927,6 +1956,8 @@ export interface CosmeticFacts {
   rankTotal?: number;
   /** うちPR・提供としての紹介（ランキングには数えない） */
   prCount: number;
+  /** prCount のうち、本人のブランドの紹介（307章） */
+  ownCount: number;
   introductions: CosmeticIntro[];
 }
 export interface CosmeticIntro {
@@ -1938,6 +1969,8 @@ export interface CosmeticIntro {
   videoTitle: string;
   published_at: string;
   pr: boolean;
+  /** 本人のブランドの紹介（pr も true。307章） */
+  own: boolean;
   /** 動画の再生回数（並び替え用） */
   views: number;
   /** 発信力：インフルエンサー一覧と同じスコア（getInfluencerRanking）と、その順位・5段階（influenceOf） */
@@ -1985,6 +2018,7 @@ export function getCosmeticFacts(brand_id: string, name_id: string): CosmeticFac
       videoTitle: v.title,
       published_at: v.published_at,
       pr: isPrMention(v.key, brand_id, name_id),
+      own: isOwnBrandMention(v.key, brand_id, name_id),
       views: toNumber(v.view_count),
       influenceScore: inf.score,
       influenceRank: inf.rank,
@@ -2002,6 +2036,7 @@ export function getCosmeticFacts(brand_id: string, name_id: string): CosmeticFac
     videoCount: videos.length,
     channelCount: new Set(videos.map((v) => v.channel_id)).size,
     prCount: introductions.filter((i) => i.pr).length,
+    ownCount: introductions.filter((i) => i.own).length,
     introductions,
   };
   const byTag = getCosmeticRankingsByTag();
