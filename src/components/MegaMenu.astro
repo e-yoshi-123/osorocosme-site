@@ -49,8 +49,16 @@ const cols = [
               <a href={withBase(sub.all)} class="u-9">一覧 →</a>
             </p>
             <ul class="mega-links space-y-1">
-              {sub.items.map((it) => <li><a href={withBase(it.path)}>{it.label}</a></li>)}
+              {sub.items.filter((it) => !it.path.endsWith("/check/")).map((it) => <li><a href={withBase(it.path)}>{it.label}</a></li>)}
             </ul>
+            {/* 自己診断（314章）は、ほかの項目と見分けやすいボタンにする（316章） */}
+            {sub.items.filter((it) => it.path.endsWith("/check/")).map((it) => (
+              <a href={withBase(it.path)} class="mega-check">
+                {it.path.startsWith("/personal-color") ? <span class="mega-check-sw" aria-hidden="true" /> : <svg class="mega-check-drop" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5S5.5 9.6 5.5 14a6.5 6.5 0 0 0 13 0C18.5 9.6 12 2.5 12 2.5Z" /></svg>}
+                <span>{it.path.startsWith("/personal-color") ? "自分の色を診断する" : "自分の肌を診断する"}</span>
+                <span aria-hidden="true">→</span>
+              </a>
+            ))}
           </>
         ))}
       </section>

@@ -671,3 +671,9 @@ main .md\:sticky.bg-neutral-50\/95 {
   .mega-7 { @apply border-l border-ink/10 pl-6; }
   .item-mc { @apply rounded-full border text-rose inline-flex items-center gap-2 min-h-10 px-5 border-rose/50 text-sm hover:bg-rose hover:text-white aria-pressed:bg-rose aria-pressed:text-white transition-colors cursor-pointer; }
 }
+
+/* メニュー・トップの「自己診断」のボタン（316章）。ほかのリンクと見分けやすく */
+.mega-check { display: flex; align-items: center; gap: .5rem; margin-top: .75rem; padding: .5rem .8rem; border-radius: 999px; background: #fdeef4; border: 1px solid rgba(230, 0, 118, .18); color: var(--color-rose); font-size: 12px; font-weight: 600; line-height: 1.3; width: fit-content; white-space: nowrap; transition: background .2s, color .2s; }
+.mega-check:hover { background: var(--color-rose); color: #fff; }
+.mega-check-sw { flex-shrink: 0; width: 14px; height: 14px; border-radius: 50%; background: conic-gradient(#F7A08A 0 90deg, #C8763D 90deg 180deg, #1F2A6B 180deg 270deg, #C7B8E0 270deg 360deg); box-shadow: 0 0 0 2px #fff; }
+.mega-check-drop { flex-shrink: 0; width: 14px; height: 14px; fill: currentColor; opacity: .85; }

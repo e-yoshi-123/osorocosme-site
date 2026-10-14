@@ -168,8 +168,16 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
                 <a href={withBase(x.all)} class="u-9">一覧 →</a>
               </p>
               <p class="u-6">
-                {x.items.map((it) => <a href={withBase(it.path)} class="chip-s hover:border-rose hover:text-rose transition-colors">{it.label}</a>)}
+                {x.items.filter((it) => !it.path.endsWith("/check/")).map((it) => <a href={withBase(it.path)} class="chip-s hover:border-rose hover:text-rose transition-colors">{it.label}</a>)}
               </p>
+              {/* 自己診断はボタンにする（316章） */}
+              {x.items.filter((it) => it.path.endsWith("/check/")).map((it) => (
+                <a href={withBase(it.path)} class="mega-check">
+                  {it.path.startsWith("/personal-color") ? <span class="mega-check-sw" aria-hidden="true" /> : <svg class="mega-check-drop" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5S5.5 9.6 5.5 14a6.5 6.5 0 0 0 13 0C18.5 9.6 12 2.5 12 2.5Z" /></svg>}
+                  <span>{it.path.startsWith("/personal-color") ? "自分の色を診断する" : "自分の肌を診断する"}</span>
+                  <span aria-hidden="true">→</span>
+                </a>
+              ))}
             </div>
           ))}
         </div>

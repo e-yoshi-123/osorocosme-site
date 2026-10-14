@@ -78,6 +78,9 @@ import { withBase } from "../lib/data";
       const ul = head.nextElementSibling;
       ul?.querySelectorAll<HTMLAnchorElement>("a").forEach((a) => p.append(link(a, "mmenu-1")));
       body.append(p);
+      // 自己診断のボタン（316章）
+      const chk = ul?.nextElementSibling;
+      if (chk?.classList.contains("mega-check")) body.append(chk.cloneNode(true));
       const all = head.querySelector<HTMLAnchorElement>(".u-9");
       if (all) body.append(link(all, "text-rose mmenu-14"));
       d.append(body);
