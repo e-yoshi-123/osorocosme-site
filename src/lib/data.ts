@@ -267,7 +267,6 @@ export interface InfluencerProfile {
   personal_color?: string;
   skin?: string;
   face_type?: string;
-  body_type?: string;
   sources: string[];
   /** サイトに載っていない動画（YouTubeの動画ID） */
   yt_sources?: string[];
@@ -1802,6 +1801,62 @@ export function getPublishedPersonalColors(): PersonalColorDef[] {
     const c = getPersonalColor(d.slug)!;
     return c.people.length >= PC_MIN_PEOPLE && c.groups.reduce((n, g) => n + g.items.length, 0) >= FEATURE_MIN_ITEMS;
   });
+}
+
+/** パーソナルカラーの色見本（季節ごとの代表的な色。札とタイルの丸に使う。311章）。季節が無ければイエベ・ブルベの2色 */
+export function personalColorSwatch(pc: string | undefined): string[] {
+  const { base, season } = parsePersonalColor(pc);
+  const key = `${base ?? ""}${season ?? ""}`;
+  const table: Record<string, string[]> = {
+    イエベ春: ["#FBD3A6", "#F59A7C", "#F7C948"],
+    イエベ秋: ["#D9A066", "#A0582C", "#7D7A3C"],
+    ブルベ夏: ["#CDBCE6", "#9FBDE6", "#E9A9C4"],
+    ブルベ冬: ["#2F2B78", "#C2185B", "#1F2937"],
+    イエベ: ["#F7C08A", "#C98A4B"],
+    ブルベ: ["#AFC6EA", "#4A4699"],
+  };
+  return table[key] ?? [];
+}
+/** 人のパーソナルカラー・肌質の札（商品ページの紹介の行、人のページ。311章）。ページがあればリンク先も */
+export function profileBadges(channel_id: string): { kind: "pc" | "skin" | "face"; label: string; href?: string; pageName?: string; swatch?: string[] }[] {
+  const p = INFLUENCER_PROFILE[channel_id];
+  if (!p) return [];
+  const out: { kind: "pc" | "skin" | "face"; label: string; href?: string; pageName?: string; swatch?: string[] }[] = [];
+  if (p.personal_color) {
+    const page = personalColorPageOf(p.personal_color);
+    out.push({ kind: "pc", label: p.personal_color, href: page ? `/personal-color/${encodeURIComponent(page.slug)}/` : undefined, pageName: page?.name, swatch: personalColorSwatch(p.personal_color) });
+  }
+  if (p.skin) {
+    const page = skinTypePagesOf(p.skin)[0];
+    out.push({ kind: "skin", label: p.skin, href: page ? `/skin-type/${encodeURIComponent(page.slug)}/` : undefined, pageName: page?.name });
+  }
+  if (p.face_type) out.push({ kind: "face", label: `顔タイプ ${p.face_type}` });
+  return out;
+}
+
+/** 商品を紹介した人のうち、パーソナルカラー・肌質が分かる人の内訳（商品ページの「いつ・誰が紹介したか」の上に出す。311章）。
+ * 公開中のパーソナルカラー・肌質のページ単位で数え、人数の多い順（パーソナルカラーは イエベ→イエベ春… の並び） */
+export function introProfileSummary(channelIds: Iterable<string>): { kind: "pc" | "skin"; name: string; href: string; count: number; swatch?: string[] }[] {
+  const counts = new Map<string, { kind: "pc" | "skin"; name: string; href: string; count: number; swatch?: string[] }>();
+  for (const cid of new Set(channelIds)) {
+    const p = INFLUENCER_PROFILE[cid];
+    if (!p) continue;
+    // 「イエベ」「ブルベ」のページは季節の分かる人も含めた全員なので、季節のページと両方に数える（ページの数え方とそろえる）
+    const { base, season } = parsePersonalColor(p.personal_color);
+    const pcs = getPublishedPersonalColors().filter((d) => d.base === base && (!d.season || d.season === season));
+    const hits: { kind: "pc" | "skin"; name: string; href: string; swatch?: string[] }[] = [];
+    for (const pc of pcs) hits.push({ kind: "pc", name: pc.name, href: `/personal-color/${encodeURIComponent(pc.slug)}/`, swatch: personalColorSwatch(pc.name) });
+    for (const d of skinTypePagesOf(p.skin)) hits.push({ kind: "skin", name: d.name, href: `/skin-type/${encodeURIComponent(d.slug)}/` });
+    for (const h of hits) {
+      const e = counts.get(h.href);
+      if (e) e.count++;
+      else counts.set(h.href, { ...h, count: 1 });
+    }
+  }
+  const pcOrder = PERSONAL_COLORS.map((d) => d.name);
+  return [...counts.values()].sort((a, b) =>
+    a.kind !== b.kind ? (a.kind === "pc" ? -1 : 1) : a.kind === "pc" ? pcOrder.indexOf(a.name) - pcOrder.indexOf(b.name) : b.count - a.count,
+  );
 }
 
 /** 肌質から探す（/skin-type/<名前>/。310章）。本人が言った肌質（influencer-profile.json の skin。AIの推定ではない）の人たちが紹介した

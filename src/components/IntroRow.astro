@@ -1,6 +1,7 @@
 ---
 import { formatDateDot, withBase, type CosmeticIntro } from "../lib/data";
 import PrBadge from "./PrBadge.astro";
+import ProfileChips from "./ProfileChips.astro";
 
 interface Props {
   i: CosmeticIntro;
@@ -41,6 +42,8 @@ const concernQuotes = [...new Set(i.concerns.map((c) => c.quote).filter(Boolean)
         {i.channel_icon && <img referrerpolicy="no-referrer" src={i.channel_icon} alt={i.channel_title} data-name={i.channel_title} width="28" height="28" class="intro-10" loading="lazy" />}
         <span class="truncate">{i.channel_title}</span>
       </a>
+      {/* 本人が言ったパーソナルカラー・肌質（311章）。パーソナルカラー・肌質のページから来た人が、誰が同じかを見分けられるように */}
+      <ProfileChips channel_id={i.channel_id} class="mt-1" />
       {
         i.influence > 0 && (
           <a href={withBase("/influencer-list")} class="intro-3" title={`発信力 ${i.influence}/5（発信力スコア${i.influenceRank}位。登録者数・掲載動画数・紹介コスメ数から算出）`}>

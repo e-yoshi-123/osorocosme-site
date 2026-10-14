@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import BeautyProfile from "../../components/BeautyProfile.astro";
 import ShareButtons from "../../components/ShareButtons.astro";
 import VideoCard from "../../components/VideoCard.astro";
 import CosmeticCard from "../../components/CosmeticCard.astro";
@@ -29,8 +30,6 @@ import {
   isPrMention,
   isOwnBrandMention,
   getInfluencerProfile,
-  personalColorPageOf,
-  skinTypePagesOf,
   getOwnBrandIds,
   getBrandName,
   cosmeticCategory,
@@ -58,10 +57,6 @@ const formatDate = formatJaDate;
 const prCount = timeline.reduce((n, b) => n + b.items.filter((c) => isPrMention(b.video.key, c.brand_id, c.name_id)).length, 0);
 // 本人が言ったパーソナルカラー・肌質と、本人のブランド（ユーザー判断、307章）
 const selfProfile = influencer ? getInfluencerProfile(influencer.channel_id) : undefined;
-// パーソナルカラーのページ（同じ色の人が使っているコスメ。309章）があれば、値からリンクする
-const pcPage = personalColorPageOf(selfProfile?.personal_color);
-// 肌質のページ（310章）
-const skinPages = skinTypePagesOf(selfProfile?.skin);
 const ownBrands = influencer ? getOwnBrandIds(influencer.channel_id).map((id) => ({ id, name: getBrandName(id) })).filter((b) => b.name) : [];
 const ownCount = timeline.reduce((n, b) => n + b.items.filter((c) => isOwnBrandMention(b.video.key, c.brand_id, c.name_id)).length, 0);
 
@@ -148,22 +143,8 @@ const jsonLd = influencer
               <div class="py-4 px-3 md:px-5"><dt class="u-11">使用コスメ</dt><dd class="num-display text-[24px] md:text-[26px] leading-none mt-1">{totalItems}<span class="font-sans text-xs text-neutral-500 ml-1">品</span></dd></div>
               <div class="py-4 px-3 md:px-5"><dt class="u-11">登録者</dt><dd class="num-display text-[24px] md:text-[26px] leading-none mt-1">{influencer.subscriber_count ? formatCount(Number(influencer.subscriber_count) >= 10000 ? Math.round(Number(influencer.subscriber_count) / 10000) : Number(influencer.subscriber_count)) : "—"}<span class="font-sans text-xs text-neutral-500 ml-1">{Number(influencer.subscriber_count) >= 10000 ? "万人" : "人"}</span></dd></div>
             </dl>
-            {(selfProfile || ownBrands.length > 0) && (
-              <div class="mt-6 max-w-xl">
-                <dl class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-                  {selfProfile?.personal_color && <div><dt class="inline text-xs text-neutral-500">パーソナルカラー</dt><dd class="inline ml-2 text-ink">{pcPage ? <a href={withBase(`/personal-color/${encodeURIComponent(pcPage.slug)}/`)} class="link-u">{selfProfile.personal_color}</a> : selfProfile.personal_color}</dd></div>}
-                  {selfProfile?.skin && <div><dt class="inline text-xs text-neutral-500">肌質</dt><dd class="inline ml-2 text-ink">{skinPages.length ? <a href={withBase(`/skin-type/${encodeURIComponent(skinPages[0].slug)}/`)} class="link-u">{selfProfile.skin}</a> : selfProfile.skin}</dd></div>}
-                  {selfProfile?.face_type && <div><dt class="inline text-xs text-neutral-500">顔タイプ</dt><dd class="inline ml-2 text-ink">{selfProfile.face_type}</dd></div>}
-                  {selfProfile?.body_type && <div><dt class="inline text-xs text-neutral-500">骨格</dt><dd class="inline ml-2 text-ink">{selfProfile.body_type.replace(/^骨格/, "")}</dd></div>}
-                  {ownBrands.length > 0 && <div><dt class="inline text-xs text-neutral-500">プロデュース</dt><dd class="inline ml-2">{ownBrands.map((b, i) => <>{i > 0 && "・"}<a href={withBase(`/brand/${b.id}`)} class="link-u text-ink">{b.name}</a></>)}</dd></div>}
-                </dl>
-                {selfProfile && (
-                  <p class="mt-2 text-xs leading-relaxed text-neutral-500">
-                    パーソナルカラー・肌質などは、本人が動画・概要欄・タイトルで言っている内容です{selfProfile.sources.length + (selfProfile.yt_sources?.length ?? 0) > 0 && <>（{[...selfProfile.sources.map((k) => withBase(`/video/${k}`)), ...(selfProfile.yt_sources ?? []).map((id) => `https://www.youtube.com/watch?v=${id}`)].map((href, i) => <>{i > 0 && "・"}<a href={href} class="link-u" {...(href.startsWith("https://") ? { target: "_blank", rel: "noopener" } : {})}>動画{i + 1}</a></>)}）</>}。
-                  </p>
-                )}
-              </div>
-            )}
+            {/* 本人が言ったパーソナルカラー・肌質・顔タイプと、本人のブランド（307・311章） */}
+            <BeautyProfile channel_id={influencer.channel_id} profile={selfProfile} ownBrands={ownBrands} />
             <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
               {/* 投稿者のチャンネルへ送る導線（181章） */}
               <a href={`https://www.youtube.com/channel/${influencer.channel_id}`} target="_blank" rel="noopener" class="group u-13">

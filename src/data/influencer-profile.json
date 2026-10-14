@@ -31,7 +31,6 @@
   "personal_color": "ブルベ冬（セカンドはブルベ夏）",
   "skin": "敏感肌・インナードライ",
   "face_type": "ソフトエレガント",
-  "body_type": "骨格ウェーブ",
   "sources": [],
   "yt_sources": [
    "lcbzXStKTCc",
@@ -42,7 +41,6 @@
  },
  "UC1fYrot9lgMstv7vX0BnjnQ": {
   "personal_color": "イエベ秋（セカンドはブルベ夏）",
-  "body_type": "骨格ストレート",
   "sources": [
    "-O45X3pILb9JV2t8kAlg"
   ],
@@ -59,22 +57,6 @@
    "-RPNwQALZ_4"
   ]
  },
- "UC2Z7UBL5mvNUvehH6ph4MNw": {
-  "body_type": "骨格ストレート",
-  "sources": [],
-  "yt_sources": [
-   "EQ2-n5PNRRg"
-  ],
-  "from_description": true
- },
- "UC2ghxrGPzvBMy-GAg2q7BAQ": {
-  "body_type": "骨格ナチュラル",
-  "sources": [
-   "BIV6zRrh0-A"
-  ],
-  "yt_sources": [],
-  "from_description": true
- },
  "UC39QE9QgSRVxVY8lnaHJbow": {
   "skin": "インナードライ",
   "sources": [
@@ -84,7 +66,6 @@
  },
  "UC3swo6utVXOSYwxazwoKWBQ": {
   "skin": "インナードライ（乾燥寄りの混合肌）",
-  "body_type": "骨格ウェーブ",
   "sources": [
    "bKtd5EBOq4g",
    "LxPbDGpzF2c",
@@ -110,7 +91,6 @@
  },
  "UC51Dkxcc01mSJ6TknHqxSiA": {
   "personal_color": "イエベ春",
-  "body_type": "骨格ウェーブ",
   "sources": [],
   "yt_sources": [
    "PcDyuOLfNbw",
@@ -125,18 +105,9 @@
    "K9cQQ0BZI8M"
   ]
  },
- "UC76xyLMpVQsADcIc1jRz6bg": {
-  "body_type": "骨格ウェーブ",
-  "sources": [],
-  "yt_sources": [
-   "wKJCZw_2LWQ"
-  ],
-  "from_description": true
- },
  "UC8V5m9iVXnx9VPWUVeZOENg": {
   "personal_color": "ブルベ夏",
   "skin": "乾燥肌",
-  "body_type": "骨格ナチュラル",
   "sources": [
    "sLvtteCjx8s",
    "PeOQrCodR1A"
@@ -170,19 +141,10 @@
  "UCCDNEMReoY6WRw6rCQ7gWKQ": {
   "personal_color": "イエベ秋（セカンドはイエベ春）",
   "face_type": "エレガント",
-  "body_type": "骨格ナチュラル",
   "sources": [],
   "yt_sources": [
    "OB5l4zpXe4g",
    "uLSDr56YZGg"
-  ],
-  "from_description": true
- },
- "UCCuizDTLsr-mNm_PEGdChVg": {
-  "body_type": "骨格ウェーブ",
-  "sources": [],
-  "yt_sources": [
-   "ObGoiIpzq0s"
   ],
   "from_description": true
  },
@@ -200,20 +162,11 @@
  "UCEOMQ3D4rF07TdItiXC_quA": {
   "personal_color": "イエベ",
   "skin": "乾燥肌",
-  "body_type": "骨格ストレート",
   "sources": [],
   "yt_sources": [
    "Ffl_3g9OpKc",
    "2Bjl8WtHpx8",
    "HAMy2Wfvuh8"
-  ],
-  "from_description": true
- },
- "UCFCss966EI5ubODfAWj10Pg": {
-  "body_type": "骨格ストレート",
-  "sources": [],
-  "yt_sources": [
-   "lsHKbtXVL98"
   ],
   "from_description": true
  },
@@ -290,7 +243,6 @@
  "UCNIwy_Q7EjUxLlsewfuhjgg": {
   "personal_color": "イエベ",
   "skin": "乾燥肌",
-  "body_type": "骨格ストレート",
   "sources": [
    "hkRso_HsJaA",
    "WihtNUWDhJw",
@@ -301,7 +253,6 @@
  },
  "UCOAKHp8hfnk915MK68FLMqQ": {
   "personal_color": "ブルベ夏（セカンドはイエベ春）",
-  "body_type": "骨格ストレート",
   "sources": [],
   "yt_sources": [
    "hcaBZpz4Jd0"
@@ -310,7 +261,6 @@
  },
  "UCOeAaKC24kf8OzW64_FMfJw": {
   "personal_color": "ブルベ冬",
-  "body_type": "骨格ストレート",
   "sources": [],
   "yt_sources": [
    "1JfeI51w9DA"
@@ -380,7 +330,6 @@
  "UCWsQgHwnTXEzHRlPsQcvaYg": {
   "personal_color": "イエベ春",
   "skin": "乾燥肌",
-  "body_type": "骨格ストレート",
   "sources": [
    "1quTwLsOQqk",
    "4dujGdpjA6Y",
@@ -418,7 +367,6 @@
   "personal_color": "イエベ春",
   "skin": "乾燥肌",
   "face_type": "フレッシュ",
-  "body_type": "骨格ナチュラル",
   "sources": [
    "on26ZcBC9xM",
    "hWAjeUgxmJU",
@@ -452,7 +400,6 @@
  },
  "UCf7068tmqBCLPAe91BB3WwQ": {
   "skin": "乾燥肌",
-  "body_type": "骨格ウェーブ",
   "sources": [
    "LzFk1VyljZs",
    "xfwZOPZQxUg",
@@ -497,7 +444,6 @@
  },
  "UChkXOQo_8mnGZqUYSKJ4LmA": {
   "skin": "乾燥寄りの混合肌",
-  "body_type": "骨格ウェーブ",
   "sources": [
    "u3cyzwZ1Yjw"
   ],
@@ -517,7 +463,6 @@
  "UCiOQbtkpXdKwOouAyq3Jc5w": {
   "personal_color": "イエベ春",
   "skin": "乾燥肌",
-  "body_type": "骨格ストレート",
   "sources": [],
   "yt_sources": [
    "gcwIVaouCb0",
@@ -560,14 +505,6 @@
   ],
   "yt_sources": []
  },
- "UCl_pFIct-__993BVb5oo7hA": {
-  "body_type": "骨格ウェーブ",
-  "sources": [],
-  "yt_sources": [
-   "E7joznZ09RM"
-  ],
-  "from_description": true
- },
  "UCm-m76oSXXj41CUxDwUeF4Q": {
   "personal_color": "イエベ春",
   "sources": [],
@@ -591,7 +528,6 @@
  },
  "UCmsA3A5_HKBwI9OktSttTFg": {
   "skin": "インナードライ",
-  "body_type": "骨格ストレート",
   "sources": [
    "OOpowp9Zw9A"
   ],
@@ -602,7 +538,6 @@
  },
  "UCndOUEEJsZf1gwIjegcd1bw": {
   "skin": "乾燥肌",
-  "body_type": "骨格ストレート",
   "sources": [
    "PP2EjSqbTeA"
   ],
@@ -635,7 +570,6 @@
  "UCpikpcPcoDU_rugUYIIpf_w": {
   "personal_color": "ブルベ夏（セカンドはブルベ冬）",
   "skin": "インナードライ",
-  "body_type": "骨格ストレート",
   "sources": [
    "0adYRsqKhoc"
   ],
@@ -656,7 +590,6 @@
   "personal_color": "イエベ春（セカンドはブルベ夏）",
   "skin": "脂性肌",
   "face_type": "フレッシュ",
-  "body_type": "骨格ウェーブ×ナチュラル",
   "sources": [],
   "yt_sources": [
    "BI-Lwgh648Y",
@@ -695,7 +628,6 @@
  "UCuBPCE24I3FVGbeknW204KQ": {
   "personal_color": "イエベ秋",
   "face_type": "エレガント",
-  "body_type": "骨格ストレート×ウェーブ",
   "sources": [],
   "yt_sources": [
    "89gMhoGlaZM",
@@ -705,7 +637,6 @@
  },
  "UCvHv_L3kmfY6v3-RBuyjytg": {
   "skin": "混合肌",
-  "body_type": "骨格ストレート",
   "sources": [],
   "yt_sources": [
    "N-IRxPnhX2M",
@@ -723,7 +654,6 @@
  },
  "UCwdLW8_DvlaWQz0-2tOYEDg": {
   "skin": "敏感肌・乾燥肌",
-  "body_type": "骨格ウェーブ",
   "sources": [
    "dDHvBN3AaeI"
   ],
@@ -734,7 +664,6 @@
  },
  "UCwdqA0-5105yUCy3gGkiAdQ": {
   "personal_color": "ブルベ",
-  "body_type": "骨格ストレート",
   "sources": [],
   "yt_sources": [
    "ePnSagZ7WPQ",
@@ -754,7 +683,6 @@
  },
  "UCxZKDgDjXzyMtkRO2JfqOzg": {
   "skin": "乾燥肌",
-  "body_type": "骨格ウェーブ",
   "sources": [],
   "yt_sources": [
    "O4jf4UPobQA",
@@ -766,7 +694,6 @@
  "UCyud5ThlDFDrR98ImBFZD0w": {
   "personal_color": "イエベ春",
   "skin": "乾燥肌・敏感肌",
-  "body_type": "骨格ウェーブ×ナチュラル",
   "sources": [],
   "yt_sources": [
    "5SyPeKIm6Oc",

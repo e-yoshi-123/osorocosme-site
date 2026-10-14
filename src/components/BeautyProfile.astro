@@ -1,0 +1,87 @@
+---
+// 人のページの「ビューティープロフィール」（311章）。本人が言ったパーソナルカラー・肌質・顔タイプを、1つずつタイルにして目立たせる。
+// パーソナルカラーは色見本の丸（personalColorSwatch）、肌質はしずくの印。ページがあれば「同じ〇〇の人が使っているコスメ」へつなぐ。
+// プロデュースしたブランド（本人のブランド。307章）もここに出す
+import { profileBadges, withBase, type InfluencerProfile } from "../lib/data";
+
+interface Props {
+  channel_id: string;
+  profile?: InfluencerProfile;
+  ownBrands: { id: string; name: string }[];
+}
+const { channel_id, profile, ownBrands } = Astro.props;
+const badges = profileBadges(channel_id);
+const meta = {
+  pc: { en: "Personal color", ja: "パーソナルカラー", more: (v: string) => `同じ${v}の人のコスメ` },
+  skin: { en: "Skin type", ja: "肌質", more: (v: string) => `同じ${v}の人のスキンケア` },
+  face: { en: "Face type", ja: "顔タイプ", more: () => "" },
+};
+const sources = profile ? [...profile.sources.map((k) => withBase(`/video/${k}`)), ...(profile.yt_sources ?? []).map((id) => `https://www.youtube.com/watch?v=${id}`)] : [];
+const short = (s: string) => s.replace(/（.*?）/g, "");
+---
+
+{
+  (badges.length > 0 || ownBrands.length > 0) && (
+    <section class="mt-7 max-w-2xl" aria-label="ビューティープロフィール">
+      {badges.length > 0 && (
+        <ul class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {badges.map((b) => {
+            const m = meta[b.kind];
+            const value = b.kind === "face" ? b.label.replace(/^顔タイプ\s*/, "") : b.label;
+            const sub = value.match(/（(.*?)）/)?.[1];
+            const body = (
+              <>
+                <span class="flex items-center gap-3">
+                  {b.kind === "pc" && (
+                    <span class="w-11 h-11 shrink-0 relative" aria-hidden="true">
+                      {(b.swatch ?? []).map((c, i, arr) => (
+                        <span class="absolute w-6 h-6 rounded-full ring-2 ring-white shadow-[0_4px_10px_-4px_rgba(0,0,0,0.35)]" style={`background:${c};${arr.length === 3 ? ["left:0;top:2px", "right:0;top:2px", "left:10px;bottom:0"][i] : ["left:2px;top:8px", "right:2px;top:8px"][i]}`} />
+                      ))}
+                    </span>
+                  )}
+                  {b.kind === "skin" && (
+                    <span class="w-11 h-11 shrink-0 rounded-full bg-blush flex items-center justify-center ring-2 ring-white" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" class="w-5 h-5 text-rose"><path d="M12 2.5S5.5 9.6 5.5 14a6.5 6.5 0 0 0 13 0C18.5 9.6 12 2.5 12 2.5Z" fill="currentColor" opacity=".8" /><path d="M9.2 14.6a2.9 2.9 0 0 0 2.6 2.7" stroke="#fff" stroke-width="1.4" fill="none" stroke-linecap="round" /></svg>
+                    </span>
+                  )}
+                  {b.kind === "face" && (
+                    <span class="w-11 h-11 shrink-0 rounded-full bg-paper border border-ink/10 flex items-center justify-center ring-2 ring-white" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" class="w-5 h-5 text-ink/70" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><ellipse cx="12" cy="12" rx="6.5" ry="8" /><path d="M9.6 10.6h.01M14.4 10.6h.01M10 15c1.2.9 2.8.9 4 0" /></svg>
+                    </span>
+                  )}
+                  <span class="min-w-0">
+                    <span class="block text-[10px] tracking-[0.14em] uppercase text-rose">{m.en}</span>
+                    <span class:list={["block font-serif font-semibold leading-tight text-ink", short(value).length > 6 ? "text-[15px] md:text-base" : "text-lg md:text-xl"]}>{short(value)}</span>
+                  </span>
+                </span>
+                {sub && <span class="block mt-2 text-[11px] text-neutral-500">{sub}</span>}
+                {b.href && <span class="block mt-2 text-[11px] text-neutral-600 group-hover:text-rose transition-colors">{m.more(b.pageName ?? short(value))} →</span>}
+              </>
+            );
+            const cls = "group block h-full rounded-2xl border border-ink/10 bg-gradient-to-br from-white to-paper p-4 transition-all";
+            return (
+              <li>
+                {b.href ? (
+                  <a href={withBase(b.href)} class:list={[cls, "hover:border-rose/50 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-14px_rgba(0,0,0,0.35)]"]} title={`${m.ja}：${b.label}`}>{body}</a>
+                ) : (
+                  <div class={cls} title={`${m.ja}：${b.label}`}>{body}</div>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+      {ownBrands.length > 0 && (
+        <p class:list={["flex flex-wrap items-center gap-2 text-sm", badges.length > 0 && "mt-3"]}>
+          <span class="text-[10px] tracking-[0.14em] uppercase text-rose mr-1">Produce</span>
+          {ownBrands.map((b) => <a href={withBase(`/brand/${b.id}`)} class="rounded-full border border-ink/15 bg-white/80 px-3 py-1 text-ink hover:border-rose hover:text-rose transition-colors">{b.name}</a>)}
+        </p>
+      )}
+      {badges.length > 0 && (
+        <p class="mt-3 text-[11px] leading-relaxed text-neutral-500">
+          本人が動画・概要欄・タイトルで言っている内容です{sources.length > 0 && <>（{sources.map((href, i) => <>{i > 0 && "・"}<a href={href} class="link-u" {...(href.startsWith("https://") ? { target: "_blank", rel: "noopener" } : {})}>動画{i + 1}</a></>)}）</>}。
+        </p>
+      )}
+    </section>
+  )
+}
