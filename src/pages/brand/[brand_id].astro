@@ -29,11 +29,15 @@ const brandGroups = Array.from(new Set(sections.map((s) => s.group))).map((group
   return {
     group,
     en: GROUP_EN[group] || "Others",
-    tags: secs.map((s) => ({ tag: s.tag, count: s.items.length })),
-    items: secs.flatMap((s) => s.items.map((c) => ({ c, tag: s.tag }))).sort((a, b) => countOf(b.c) - countOf(a.c)),
+    // 区切りは、ランキングと同じカテゴリの順（getBrandCosmeticsByCategory の順）。中は紹介動画の多い順
+    secs,
+    items: secs.flatMap((s) => s.items),
   };
 });
 const n2 = (n: number) => String(n).padStart(2, "0");
+// 区切りの幅（PCの5列の格子で何列ぶんか）と、中の商品の列数。Tailwindが拾えるよう、クラス名をそのまま書く
+const SPAN: Record<number, string> = { 1: "lg:col-span-1", 2: "lg:col-span-2", 3: "lg:col-span-3", 4: "lg:col-span-4", 5: "lg:col-span-5" };
+const COLS: Record<number, string> = { 1: "lg:grid-cols-1", 2: "lg:grid-cols-2", 3: "lg:grid-cols-3", 4: "lg:grid-cols-4", 5: "lg:grid-cols-5" };
 const stats = getBrandsWithVideos().find((b) => b.brand_id === brand_id);
 const meta = getBrandMeta(brand_id!);
 // プロデュースしたインフルエンサー（本人のブランド。ユーザー依頼、321章）
@@ -135,27 +139,28 @@ const jsonLd = [
               </div>
               <p class="shrink-0 pb-1 text-xs text-neutral-500"><span class="num-display text-sm text-ink">{g.items.length}</span> 品</p>
             </header>
-            {g.tags.length > 1 && (
-              <p class="mb-6 flex flex-wrap gap-1.5">
-                {g.tags.map((t) => (
-                  <a href={categoryUrl(t.tag)} class="rounded-full border border-ink/15 px-3 py-1 text-xs text-neutral-600 hover:border-rose hover:text-rose transition-colors" title={`${t.tag}のランキングを見る`}>
-                    {t.tag}<span class="ml-1 text-neutral-400">{t.count}</span>
-                  </a>
-                ))}
-              </p>
-            )}
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-8">
-              {g.items.map(({ c, tag }) => (
-                <CosmeticCard
-                  brand_id={c.brand_id}
-                  brand={c.brand}
-                  name_id={c.name_id}
-                  name={c.name}
-                  rakutenImageHtml={c.rakuten_image_link}
-                  showBrand={false}
-                  category={g.tags.length > 1 && tag !== "その他" ? tag : undefined}
-                  caption={`${countOf(c)}本の動画で紹介`}
-                />
+            {/* 大分類の中を、ランキングと同じ細かいカテゴリ（化粧下地・コンシーラー…）ごとの区切りに。PCでは品数の少ない区切りを横に並べる（5列の格子で、区切りの幅を品数に合わせる） */}
+            <div class="grid lg:grid-cols-5 gap-4 md:gap-5 lg:grid-flow-dense">
+              {g.secs.map((sec) => (
+                <div class:list={["rounded-2xl border border-ink/10 bg-paper/60 p-4 md:p-5", SPAN[Math.min(5, sec.items.length)]]}>
+                  <h3 class:list={["mb-4 flex gap-3", sec.items.length === 1 ? "items-baseline justify-between lg:flex-col lg:items-start lg:gap-1" : "items-baseline justify-between"]}>
+                    <span class:list={["font-serif font-semibold leading-snug", sec.items.length === 1 ? "text-base lg:text-[15px]" : "text-base md:text-[17px]"]}>{sec.tag}<span class="ml-1.5 text-xs font-normal text-neutral-500">{sec.items.length}品</span></span>
+                    {sec.tag !== "その他" && <a href={categoryUrl(sec.tag)} class="shrink-0 text-[11px] text-neutral-500 hover:text-rose transition-colors">ランキング →</a>}
+                  </h3>
+                  <div class:list={["grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8", COLS[Math.min(5, sec.items.length)]]}>
+                    {sec.items.map((c) => (
+                      <CosmeticCard
+                        brand_id={c.brand_id}
+                        brand={c.brand}
+                        name_id={c.name_id}
+                        name={c.name}
+                        rakutenImageHtml={c.rakuten_image_link}
+                        showBrand={false}
+                        caption={`${countOf(c)}本の動画で紹介`}
+                      />
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           </section>
