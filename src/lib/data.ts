@@ -1722,6 +1722,8 @@ export const PC_GROUPS = ["リップ", "アイメイク", "チーク・陰影", 
 export const PC_MIN_CHANNELS = 2;
 /** ページを出す条件：この人数以上の人と、FEATURE_MIN_ITEMS 品以上（薄いページを出さない。179章） */
 export const PC_MIN_PEOPLE = 5;
+/** パーソナルカラーの季節は、この人数でもページを出す（ユーザーの希望でイエベ秋を出す。318章）。そのときは1人の紹介も載せる */
+export const PC_MIN_PEOPLE_SEASON = 4;
 export const PC_PER_GROUP = 10;
 /** 「イエベ春（セカンドはブルベ夏）」→ { base: "イエベ", season: "春" }（1stだけを見る） */
 export function parsePersonalColor(pc: string | undefined): { base?: "イエベ" | "ブルベ"; season?: string } {
@@ -1794,7 +1796,15 @@ function buildPersonalColor(def: PersonalColorDef) {
     },
     (p) => p.personal_color!,
   );
-  return { def, people, ...collectByPeople(new Set(people.map((p) => p.channel_id)), PC_GROUPS, PC_MIN_CHANNELS, PC_PER_GROUP) };
+  const ids = new Set(people.map((p) => p.channel_id));
+  let minChannels = PC_MIN_CHANNELS;
+  let r = collectByPeople(ids, PC_GROUPS, minChannels, PC_PER_GROUP);
+  // 人が少ない色（イエベ秋の4人など）は、2人以上の紹介だけでは品数が足りない。1人の紹介も載せて、人数の多い順に並べる（318章）
+  if (people.length < PC_MIN_PEOPLE && r.groups.reduce((n, g) => n + g.items.length, 0) < FEATURE_MIN_ITEMS) {
+    minChannels = 1;
+    r = collectByPeople(ids, PC_GROUPS, minChannels, PC_PER_GROUP);
+  }
+  return { def, people, minChannels, ...r };
 }
 export function getPersonalColor(slug: string) {
   const def = PERSONAL_COLORS.find((d) => d.slug === slug);
@@ -1802,11 +1812,11 @@ export function getPersonalColor(slug: string) {
   if (!_pcCache.has(slug)) _pcCache.set(slug, buildPersonalColor(def));
   return _pcCache.get(slug)!;
 }
-/** 公開するパーソナルカラーのページ（PC_MIN_PEOPLE 人以上・FEATURE_MIN_ITEMS 品以上）。ページ・入口・サイトマップはすべてこれを使う */
+/** 公開するパーソナルカラーのページ（PC_MIN_PEOPLE 人以上（季節は PC_MIN_PEOPLE_SEASON 人以上）・FEATURE_MIN_ITEMS 品以上）。ページ・入口・サイトマップはすべてこれを使う */
 export function getPublishedPersonalColors(): PersonalColorDef[] {
   return PERSONAL_COLORS.filter((d) => {
     const c = getPersonalColor(d.slug)!;
-    return c.people.length >= PC_MIN_PEOPLE && c.groups.reduce((n, g) => n + g.items.length, 0) >= FEATURE_MIN_ITEMS;
+    return c.people.length >= (d.season ? PC_MIN_PEOPLE_SEASON : PC_MIN_PEOPLE) && c.groups.reduce((n, g) => n + g.items.length, 0) >= FEATURE_MIN_ITEMS;
   });
 }
 

@@ -9,7 +9,6 @@ import PeopleGrid from "../../components/PeopleGrid.astro";
 import {
   getPublishedPersonalColors,
   getPersonalColor,
-  PC_MIN_CHANNELS,
   PC_PER_GROUP,
   getCosmeticListEntry,
   productOffer,
@@ -111,7 +110,7 @@ const jsonLd = [
   <HowWeCount>
     <ul class="list-disc pl-5 space-y-1">
       <li>対象：パーソナルカラーが{name}だと、本人が動画・概要欄・タイトルで言っているインフルエンサー<b>{c.people.length}人</b>の、紹介動画<b>{c.videoCount}本</b>{c.def.season ? `（セカンドではなく、1stが${name}の人）` : `（${name}の季節が分からない人も含む）`}</li>
-      <li>掲載条件：同じ{name}の<b>{PC_MIN_CHANNELS}人以上</b>が紹介したコスメのみ。PR・提供と、本人がプロデュースしたブランドの紹介は数えていません</li>
+      <li>掲載条件：{c.minChannels > 1 ? <>同じ{name}の<b>{c.minChannels}人以上</b>が紹介したコスメのみ。</> : <>{name}の{c.people.length}人のだれかが紹介したコスメ（紹介した人数の多い順）。</>}PR・提供と、本人がプロデュースしたブランドの紹介は数えていません</li>
       <li>並び順：紹介した{name}の人数 → 紹介動画数 → 合計再生回数。各カテゴリ上位{PC_PER_GROUP}品まで</li>
       <li>パーソナルカラーは本人の診断・自己申告によるもので、色が似合うかどうかを保証するものではありません</li>
     </ul>
