@@ -153,6 +153,16 @@ const jsonLd = video
                 <a href={video.url} target="_blank" rel="noopener" class="absolute bottom-3 left-3 bg-paper text-ink text-sm px-4 py-2 rounded-full">YouTubeで見る</a>
               </noscript>
             </div>
+            {/* PCでは、YouTube・チャンネルへの導線とシェアを動画のすぐ下に置く（旧AI要約を出さなくなって、動画の下が空いていたため。338章）。スマホは右の列（題の下）のまま */}
+            <div class="hidden lg:flex flex-wrap items-center justify-between gap-x-6 gap-y-4 mt-6">
+              <div class="flex flex-wrap gap-3">
+                <a href={`https://www.youtube.com/watch?v=${video.video_id}`} target="_blank" rel="noopener" class="group u-13">
+                  <span class="u-23" aria-hidden="true"></span>YouTubeで見る<span class="u-15" aria-hidden="true">→</span>
+                </a>
+                <a href={`https://www.youtube.com/channel/${video.channel_id}`} target="_blank" rel="noopener" class="vid-3">チャンネルを見る</a>
+              </div>
+              <ShareButtons text={`${video.channel_title}「${video.title}」で紹介されたコスメ`} />
+            </div>
           </div>
           {/* PCでは右の列を2段ぶんにし、説明文を動画のすぐ下（左の列）に置く。以前は右の列のほうが長く、動画の下が空いていた（279章） */}
           <div class="lg:col-span-4 lg:row-span-2 lg:pt-2">
@@ -187,14 +197,14 @@ const jsonLd = video
               <div class="py-4 pr-3"><dt class="u-11">投稿日</dt><dd class="num-display text-[20px] mt-1">{formatDateDot(video.published_at)}</dd></div>
               <div class="py-4 pl-4"><dt class="u-11">再生回数</dt><dd class="num-display text-[20px] mt-1">{formatCount(video.view_count)}</dd></div>
             </dl>
-            {/* 投稿者のチャンネルへ送る導線（181章） */}
-            <div class="u-21">
+            {/* 投稿者のチャンネルへ送る導線（181章）。PCは動画の下に出す */}
+            <div class="u-21 lg:!hidden">
               <a href={`https://www.youtube.com/watch?v=${video.video_id}`} target="_blank" rel="noopener" class="group u-13">
                 <span class="u-23" aria-hidden="true"></span>YouTubeで見る<span class="u-15" aria-hidden="true">→</span>
               </a>
               <a href={`https://www.youtube.com/channel/${video.channel_id}`} target="_blank" rel="noopener" class="vid-3">チャンネルを見る</a>
             </div>
-            <ShareButtons text={`${video.channel_title}「${video.title}」で紹介されたコスメ`} class="mt-6" />
+            <div class="lg:hidden"><ShareButtons text={`${video.channel_title}「${video.title}」で紹介されたコスメ`} class="mt-6" /></div>
           </div>
         </div>
         </div>
