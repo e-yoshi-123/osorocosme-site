@@ -1,6 +1,6 @@
 ---
 import BrandFlag from "./BrandFlag.astro";
-import { cosmeticSlug, withBase, parseRakutenImage, getCosmeticListEntry } from "../lib/data";
+import { cosmeticSlug, withBase, parseRakutenImage, getCosmeticListEntry, usesYahooImage } from "../lib/data";
 import PrBadge from "./PrBadge.astro";
 
 interface Props {
@@ -32,7 +32,8 @@ const { brand_id, brand, name_id, name, rakutenImageHtml, showBrand = true, capt
 const entry = getCosmeticListEntry(brand_id, name_id);
 const yahooEntry = entry?.yahoo_text_link && entry.yahoo_image_url ? entry : undefined;
 // 楽天のHTMLはそのまま差し込まず、リンク先・画像・altだけ取り出して自前のタグで出す（276章）
-const rakuten = parseRakutenImage(rakutenImageHtml);
+// 楽天の画像がどれも店名ロゴ入りの商品は、Yahoo!の画像を出す（334章）
+const rakuten = usesYahooImage(entry) ? undefined : parseRakutenImage(rakutenImageHtml);
 const yahooImage = rakuten ? undefined : yahooEntry;
 const productHref = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
 ---

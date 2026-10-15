@@ -27,6 +27,7 @@ import {
   formatJaDate,
   extractImageSrc,
   parseRakutenImage,
+  usesYahooImage,
   breadcrumbLd,
   productCategoryPath,
   amazonSearchUrl,
@@ -88,7 +89,9 @@ const buyable = !!extractImageSrc(entry?.rakuten_image_link);
 const yahooFallback = !buyable && !!entry?.yahoo_text_link && !!entry?.yahoo_image_url;
 // 楽天の画像はあるが実際には読み込めなかったとき、下のスクリプトがYahoo!の画像に差し替えるための値
 const yahooSwap = buyable && entry?.yahoo_text_link && entry?.yahoo_image_url ? entry : undefined;
-const rakutenImage = parseRakutenImage(entry?.rakuten_image_link, 500);
+// 楽天の画像がどれも店名ロゴ入りの商品は、画像だけYahoo!のものにする（購入ボタン・価格は楽天のまま。334章）
+const yahooImageOnly = usesYahooImage(entry);
+const rakutenImage = yahooImageOnly ? undefined : parseRakutenImage(entry?.rakuten_image_link, 500);
 // ページ下部の「次に見たくなる」3要素：一緒に紹介されているコスメ／同じカテゴリの人気ランキング／同じブランドの人気商品
 const coMentioned = getCoMentionedCosmetics(brand_id, name_id, 6);
 const categoryTop = facts.mainTag ? getCategoryTop(facts.mainTag, 6) : [];
@@ -133,7 +136,7 @@ const titleOverride = (titleOverrides as Record<string, { title?: string; lead?:
 const description = entry
   ? (titleOverride?.lead ?? "") + factSentence + (firstIntro ? `最初の紹介は${formatJaDate(firstIntro.published_at)}、直近は${formatJaDate(lastIntro.published_at)}です。` : "")
   : undefined;
-const imageSrc = extractImageSrc(entry?.rakuten_image_link) || (yahooFallback ? entry?.yahoo_image_url : undefined);
+const imageSrc = (yahooImageOnly ? entry?.yahoo_image_url : extractImageSrc(entry?.rakuten_image_link)) || (yahooFallback ? entry?.yahoo_image_url : undefined);
 // Googleの「商品スニペット」は、Productに offers / review / aggregateRating のいずれかが無いと重大な問題として扱われる（Search Consoleの指摘）。
 // このサイトには、根拠のある口コミ・評価は無い（YouTubeの紹介は口コミではない）ので、偽って付けない。
 // 同様に、offers.availability（在庫）・hasMerchantReturnPolicy（返品）・shippingDetails（配送）も、
@@ -201,7 +204,7 @@ const jsonLd = entry
                     <img src={rakutenImage.src} alt={rakutenImage.alt || `${entry.brand} ${entry.name}`} width="500" height="500" loading="eager" fetchpriority="high" decoding="async" />
                   </a>
                 </div>
-              ) : yahooFallback ? (
+              ) : yahooFallback || yahooImageOnly ? (
                 <a href={entry.yahoo_text_link} target="_blank" rel="nofollow sponsored noopener" class="w-[82%] h-[82%] flex items-center justify-center">
                   <img src={entry.yahoo_image_url} alt={`${entry.brand} ${entry.name}`} width="240" height="240" class="max-w-full max-h-full w-auto h-auto rounded-md object-contain" />
                 </a>

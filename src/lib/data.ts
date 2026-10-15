@@ -13,6 +13,7 @@ import ingredientsData from "../data/ingredients.json";
 import officialFactsData from "../data/official-facts.json";
 import productRedirectsData from "../data/product-redirects.json";
 import matsukiyoBrandsData from "../data/matsukiyo-brands.json";
+import imagePreferYahooData from "../data/image-prefer-yahoo.json";
 
 export interface Cosmetic {
   brand_id: string;
@@ -2585,8 +2586,18 @@ export function parseRakutenImage(html: string | undefined, size?: number): { hr
  * 楽天の画像が無く、Yahoo!ショッピングのリンクと画像があればYahoo!の画像・価格を使う（115章）。
  * 画像の無い商品は購入できないリンクの可能性が高いので、価格は出さない（従来どおり）。
  */
+const imagePreferYahoo = new Set((imagePreferYahooData as { keys: string[] }).keys);
+
+/**
+ * 楽天のどの出品の画像にも店名ロゴ・宣伝の文字が入っていて、Yahoo!の画像には入っていない商品（334章、image-prefer-yahoo.json）。
+ * 画像だけYahoo!のもの（押すとYahoo!へ）にする。楽天の購入ボタン・価格は商品ページでそのまま出す。
+ */
+export function usesYahooImage(entry?: CosmeticListEntry): boolean {
+  return !!entry && !!entry.yahoo_text_link && !!entry.yahoo_image_url && imagePreferYahoo.has(`${entry.brand_id}_${entry.name_id}`);
+}
+
 export function productOffer(entry?: CosmeticListEntry, fallbackHtml?: string) {
-  const rakutenSrc = extractImageSrc(entry?.rakuten_image_link || fallbackHtml);
+  const rakutenSrc = usesYahooImage(entry) ? undefined : extractImageSrc(entry?.rakuten_image_link || fallbackHtml);
   if (rakutenSrc) {
     return { imageSrc: rakutenSrc, source: "rakuten" as const, price: entry?.now_price, priceUpdated: entry?.price_updated, rakutenLink: entry?.rakuten_text_link || undefined };
   }
