@@ -169,8 +169,9 @@ const jsonLd = influencer
     ) : (
       <>
         {/* ===== プロフィール：雑誌の人物紹介のように ===== */}
-        <section class="panel grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 items-center md:items-start">
-          <div class="md:col-span-4 lg:col-span-4 md:pt-6">
+        {/* PCでは写真と文字の列を決まった幅でカードの中央にまとめ、右に空きが出て左に寄って見えないようにする（ユーザー指摘、337章） */}
+        <section class="panel grid grid-cols-1 md:grid-cols-[minmax(0,220px)_minmax(0,1fr)] lg:grid-cols-[300px_minmax(0,640px)] lg:justify-center gap-6 md:gap-10 lg:gap-16 items-center md:items-start">
+          <div class="md:pt-6">
             <div class="relative w-[44%] md:w-full max-w-[300px] mx-auto mt-3 md:mt-0 aspect-square">
               <svg viewBox="0 0 100 100" class="absolute -inset-[9%] w-[118%] h-[118%] overflow-visible" aria-hidden="true">
                 <circle cx="50" cy="50" r="49" fill="none" stroke="var(--color-ink)" stroke-opacity="0.15" stroke-width="0.3" />
@@ -181,11 +182,11 @@ const jsonLd = influencer
               ) : <span class="block w-full h-full rounded-full bg-blush" />}
             </div>
           </div>
-          <div class="md:col-span-8 lg:col-span-8 min-w-0">
+          <div class="min-w-0">
             <p class="eyebrow">Influencer profile</p>
             <h1 class="mt-3 font-serif font-semibold h-page tracking-[-0.02em] text-balance">{influencer.channel_title}</h1>
             {/* 説明文は画面に出さない（すぐ下の数字・よく紹介しているコスメと同じ内容のため）。検索結果の説明（meta description）には残す（320章） */}
-            <dl class="mt-8 grid grid-cols-3 max-w-xl border-y border-ink/15 divide-x divide-ink/15">
+            <dl class="mt-8 grid grid-cols-3 border-y border-ink/15 divide-x divide-ink/15">
               <div class="py-4 pr-3"><dt class="u-11">紹介動画</dt><dd class="num-display text-[24px] md:text-[26px] leading-none mt-1">{videos.length}<span class="font-sans text-xs text-neutral-500 ml-1">本</span></dd></div>
               <div class="py-4 px-3 md:px-5"><dt class="u-11">使用コスメ</dt><dd class="num-display text-[24px] md:text-[26px] leading-none mt-1">{uniqueItems}<span class="font-sans text-xs text-neutral-500 ml-1">品</span></dd></div>
               <div class="py-4 px-3 md:px-5"><dt class="u-11">登録者</dt><dd class="num-display text-[24px] md:text-[26px] leading-none mt-1">{influencer.subscriber_count ? formatCount(Number(influencer.subscriber_count) >= 10000 ? Math.round(Number(influencer.subscriber_count) / 10000) : Number(influencer.subscriber_count)) : "—"}<span class="font-sans text-xs text-neutral-500 ml-1">{Number(influencer.subscriber_count) >= 10000 ? "万人" : "人"}</span></dd></div>
@@ -194,7 +195,7 @@ const jsonLd = influencer
                 1画面目に入るよう数字のすぐ下に置く（336章）。候補は下の使用コスメ遍歴の各カード（商品ページへのリンク・ブランド名・商品名と、ブランドの読み仮名の data-r）から作る（ページに別のデータを持たない）。スクリプトなしでは出さない */}
             {timeline.length > 0 && (
               /* ヘッダーのサイト内検索と見分けがつくよう、薄い色の枠に入れ、見出しにチャンネル名を入れる（ユーザー指摘、337章） */
-              <div id="find" class="mt-6 max-w-xl rounded-2xl bg-blush/50 p-4 md:p-5" data-inf-find hidden>
+              <div id="find" class="mt-6 rounded-2xl bg-blush/50 p-4 md:p-5" data-inf-find hidden>
                 <label for="inf-find" class="block text-[15px] font-semibold leading-snug">{influencer.channel_title}<span class="whitespace-nowrap">さんが使ったコスメを探す</span></label>
                 <p class="mt-1 text-xs text-neutral-600">ブランド名・商品名で、紹介した{uniqueItems}品から絞り込めます。</p>
                 <div class="mt-3 flex items-center gap-2 rounded-full bg-white border border-ink/15 px-4 focus-within:border-rose">
