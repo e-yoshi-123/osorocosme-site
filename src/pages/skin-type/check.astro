@@ -39,7 +39,8 @@ const TYPES: Record<string, { en: string; text: string; tone: string }> = {
   乾燥肌: { en: "Dry", text: "皮脂も水分も少なめで、つっぱりやカサつきを感じやすい肌です。", tone: "#F3D9C8" },
   混合肌: { en: "Combination", text: "Tゾーンは皮脂が出やすく、頬などは乾きやすい、部分によって違う肌です。", tone: "#E6DDF2" },
   インナードライ: { en: "Inner dry", text: "表面は皮脂でテカるのに、内側は乾いている肌です。", tone: "#D8ECEF" },
-  脂性肌: { en: "Oily", text: "皮脂が出やすく、テカりやベタつきを感じやすい肌です。", tone: "#F6EBC4" },
+  // 脂性肌だと話す人は少なく肌質のページが無いので、肌悩みの「テカリ・化粧崩れ・脂性肌」へ案内する（338章）
+  脂性肌: { en: "Oily", text: "皮脂が出やすく、テカりやベタつきを感じやすい肌です。", tone: "#F6EBC4", alt: { path: "/concern/oil/", label: "「脂性肌でも使える」「皮脂を抑える」と紹介されたコスメを見る" } },
   普通肌: { en: "Normal", text: "皮脂と水分のバランスがとれていて、トラブルを感じにくい肌です。", tone: "#E3EFDF" },
   敏感肌: { en: "Sensitive", text: "化粧品や季節の変わり目などで、赤み・ピリピリを感じやすい肌です。", tone: "#F8D9DF" },
 };
@@ -232,7 +233,7 @@ const pageUrl = new URL(withBase("/skin-type/check/"), Astro.site!).href;
   const stage = root.querySelector<HTMLElement>("[data-stage]")!;
   const flow = document.querySelector<HTMLElement>("[data-flow]");
   const NODES = JSON.parse(root.dataset.nodes!) as Record<string, Node>;
-  const TYPES = JSON.parse(root.dataset.types!) as Record<string, { en: string; text: string; tone: string }>;
+  const TYPES = JSON.parse(root.dataset.types!) as Record<string, { en: string; text: string; tone: string; alt?: { path: string; label: string } }>;
   const PAGES = JSON.parse(root.dataset.pages!) as Record<string, Page>;
   const PAGE_URL = root.dataset.pageUrl!;
   const BASE = import.meta.env.BASE_URL.endsWith("/") ? import.meta.env.BASE_URL.slice(0, -1) : import.meta.env.BASE_URL;
@@ -307,7 +308,9 @@ const pageUrl = new URL(withBase("/skin-type/check/"), Astro.site!).href;
           ${pg ? `${pg.people.length ? `<div class="sk-block"><h4>同じ${esc(k)}のインフルエンサー</h4><div class="sk-people">${pg.people.map((p) => `<a href="${p.href}" title="${esc(p.name)}"><img src="${esc(p.icon)}" alt="${esc(p.name)}" width="42" height="42" loading="lazy" referrerpolicy="no-referrer"></a>`).join("")}<span>${pg.total}人</span></div></div>` : ""}
             ${pg.items.length ? `<div class="sk-block"><h4>${esc(k)}の人に人気のスキンケア</h4><div class="sk-items">${pg.items.map((it) => `<a class="sk-item" href="${it.href}"><img src="${esc(it.img)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"><b>${esc(it.cat)}</b><span>${esc(it.brand)} ${esc(it.name)}</span><em>同じ${esc(k)}の${it.users}人が使用</em></a>`).join("")}</div></div>` : ""}
             <a class="sk-link" href="${pg.href}">${esc(k)}のインフルエンサーと愛用スキンケアを見る →</a>`
-          : `<p class="sk-none">${esc(k)}だと話しているインフルエンサーはまだ少なく、ページはありません。<a href="${BASE}/skin-type/" style="text-decoration:underline">ほかの肌質を見る →</a></p>`}
+          : TYPES[k]?.alt
+            ? `<p class="sk-none">${esc(k)}だと話しているインフルエンサーはまだ少ないため、紹介のされ方から集めたページがあります。<a href="${BASE}${TYPES[k].alt!.path}" style="text-decoration:underline">${esc(TYPES[k].alt!.label)} →</a></p>`
+            : `<p class="sk-none">${esc(k)}だと話しているインフルエンサーはまだ少なく、ページはありません。<a href="${BASE}/skin-type/" style="text-decoration:underline">ほかの肌質を見る →</a></p>`}
         </div>
       </div>`;
     };
