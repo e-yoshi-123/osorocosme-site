@@ -195,7 +195,7 @@ const jsonLd = entry
         <div class="panel item-16 max-md:!gap-5 max-md:grid-cols-1">
           {/* 右の列（値段・購入・数字・紹介者）のほうがずっと長いので、PCでは画像を画面に追従させて左の下が空いて見えないようにする（279章）。
               スマホでは画像を小さくし、名前・価格・購入ボタン・紹介者の一言が1画面目に入るようにする（336章） */}
-          <div class="md:col-span-5 relative md:sticky md:top-24 w-[55%] max-w-[200px] mx-auto md:w-auto md:max-w-none md:mx-0">
+          <div class="item-img">
             <div class="product-well overflow-hidden item-23">
               {rakutenImage ? (
                 <div
@@ -226,7 +226,7 @@ const jsonLd = entry
           </div>
 
           <div class="md:col-span-7 md:pt-4 min-w-0">
-            <a href={withBase(`/brand/${canonicalBrandId(entry.brand_id)}`)} class="link-u text-xs font-bold tracking-[0.14em] text-rose"><BrandFlag brand_id={entry.brand_id} />{entry.brand}</a>
+            <a href={withBase(`/brand/${canonicalBrandId(entry.brand_id)}`)} class="link-u item-bl"><BrandFlag brand_id={entry.brand_id} />{entry.brand}</a>
             <h1 class="font-serif phrase item-22">{entry.name}</h1>
             {officialTags.length > 0 && (
               <p class="mt-3 flex flex-wrap items-center gap-2 text-xs">
@@ -250,7 +250,7 @@ const jsonLd = entry
               </div>
             )}
             {leadIntro && (
-              <a href="#who" class="mt-4 flex gap-3 items-start rounded-2xl bg-blush/50 px-3.5 py-3 hover:bg-blush transition-colors">
+              <a href="#who" class="item-q">
                 {leadIntro.channel_icon ? (
                   <img referrerpolicy="no-referrer" src={leadIntro.channel_icon} alt="" width="32" height="32" class="w-8 h-8 shrink-0 rounded-full object-cover" loading="lazy" />
                 ) : (
@@ -272,13 +272,13 @@ const jsonLd = entry
 
             <div class="u-22 max-md:!mt-5 max-md:!pt-5">
               {buyable && entry.now_price !== undefined && (
-                <p data-buy class="item-21"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[24px] leading-none">¥{formatCount(entry.now_price)}</span><span class="u-11"><span class="inline-block">楽天市場の参考価格</span>{entry.price_updated && <span class="inline-block">・{formatJaDate(entry.price_updated)}時点</span>}</span></p>
+                <p data-buy class="item-21"><span class="label-caps lcn">Price</span><span class="num-display text-[24px] leading-none">¥{formatCount(entry.now_price)}</span><span class="u-11"><span class="inline-block">楽天市場の参考価格</span>{entry.price_updated && <span class="inline-block">・{formatJaDate(entry.price_updated)}時点</span>}</span></p>
               )}
               {yahooFallback && entry.yahoo_price !== undefined && (
-                <p class="item-21"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[24px] leading-none">¥{formatCount(entry.yahoo_price)}</span><span class="u-11"><span class="inline-block">Yahoo!ショッピングの参考価格</span>{entry.yahoo_price_updated && <span class="inline-block">・{formatJaDate(entry.yahoo_price_updated)}時点</span>}</span></p>
+                <p class="item-21"><span class="label-caps lcn">Price</span><span class="num-display text-[24px] leading-none">¥{formatCount(entry.yahoo_price)}</span><span class="u-11"><span class="inline-block">Yahoo!ショッピングの参考価格</span>{entry.yahoo_price_updated && <span class="inline-block">・{formatJaDate(entry.yahoo_price_updated)}時点</span>}</span></p>
               )}
               {yahooSwap?.yahoo_price !== undefined && (
-                <p data-yahoo-price hidden class="item-21"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[24px] leading-none">¥{formatCount(yahooSwap.yahoo_price)}</span><span class="u-11"><span class="inline-block">Yahoo!ショッピングの参考価格</span>{yahooSwap.yahoo_price_updated && <span class="inline-block">・{formatJaDate(yahooSwap.yahoo_price_updated)}時点</span>}</span></p>
+                <p data-yahoo-price hidden class="item-21"><span class="label-caps lcn">Price</span><span class="num-display text-[24px] leading-none">¥{formatCount(yahooSwap.yahoo_price)}</span><span class="u-11"><span class="inline-block">Yahoo!ショッピングの参考価格</span>{yahooSwap.yahoo_price_updated && <span class="inline-block">・{formatJaDate(yahooSwap.yahoo_price_updated)}時点</span>}</span></p>
               )}
               {official?.price !== undefined && (
                 <p class="mt-1 text-xs text-neutral-500">定価 <span class="num-display text-sm text-neutral-700">¥{formatCount(official.price)}</span>（税込・{official.url ? <a href={official.url} target="_blank" rel="nofollow noopener" class="link-u">メーカー公式</a> : "メーカー公式"}）</p>
@@ -313,7 +313,7 @@ const jsonLd = entry
               <p class="mt-3 text-xs text-neutral-500">PR：リンク先での購入により、当サイトに報酬が支払われることがあります。</p>
               {official && official.contents.length > 0 && (
                 <div class="mt-5 rounded-2xl border border-ink/10 px-4 py-3 text-sm">
-                  <p class="label-caps text-neutral-500">セット内容</p>
+                  <p class="label-caps lcn">セット内容</p>
                   <ul class="mt-1.5 space-y-1 text-neutral-700 list-disc pl-5 marker:text-neutral-400">
                     {official.contents.map((c) => <li>{c}</li>)}
                   </ul>
@@ -324,7 +324,7 @@ const jsonLd = entry
 
             {/* 紹介の実績：動画数・インフルエンサー数・ランキング。文章版は検索エンジン・読み上げ用に残す（sr-only） */}
             <p class="sr-only">{factSentence}</p>
-            <dl class:list={["mt-8 grid border-y border-ink/15 divide-x divide-ink/15 [&>*]:flex [&>*]:flex-col [&>*]:justify-between", facts.rank ? "grid-cols-3" : "grid-cols-2"]}>
+            <dl class:list={["item-nums", facts.rank ? "grid-cols-3" : "grid-cols-2"]}>
               <div class="py-5 pr-3">
                 <dt class="u-11">紹介動画</dt>
                 <dd class="num-display item-8">{facts.videoCount}<span class="item-10">本</span></dd>
@@ -408,10 +408,10 @@ const jsonLd = entry
           {profileSummary.length > 0 && (
             <div class="mb-4" data-prof-filter>
               <p class="flex flex-wrap items-center gap-2 text-xs" role="group" aria-label="パーソナルカラー・肌質で絞り込む">
-                <span class="label-caps text-neutral-500 mr-1">Who uses</span>
+                <span class="label-caps lcn mr-1">Who uses</span>
                 {profileSummary.map((x) => (
-                  <a href={withBase(x.href)} data-prof-key={x.key} data-prof-name={x.name} data-prof-href={withBase(x.href)} aria-pressed="false" class="prof-chip inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-white/80 px-2.5 py-1 text-neutral-700 hover:border-rose hover:text-rose transition-colors aria-pressed:bg-ink aria-pressed:text-paper aria-pressed:border-ink">
-                    {x.kind === "pc" && x.swatch && <span class="inline-block w-3 h-3 rounded-full ring-1 ring-white/60" style={`background:conic-gradient(${x.swatch.map((c, i) => `${c} ${(i * 360) / x.swatch!.length}deg ${((i + 1) * 360) / x.swatch!.length}deg`).join(", ")})`} aria-hidden="true" />}
+                  <a href={withBase(x.href)} data-prof-key={x.key} data-prof-name={x.name} data-prof-href={withBase(x.href)} aria-pressed="false" class="prof-chip item-pc">
+                    {x.kind === "pc" && x.swatch && <span class="item-sw" style={`background:conic-gradient(${x.swatch.map((c, i) => `${c} ${(i * 360) / x.swatch!.length}deg ${((i + 1) * 360) / x.swatch!.length}deg`).join(", ")})`} aria-hidden="true" />}
                     {x.kind === "skin" && <svg viewBox="0 0 12 12" class="w-3 h-3 text-rose" aria-hidden="true"><path d="M6 1.2C6 1.2 2.6 5 2.6 7.3A3.4 3.4 0 0 0 9.4 7.3C9.4 5 6 1.2 6 1.2Z" fill="currentColor" opacity=".75" /></svg>}
                     {x.name}<span class="opacity-70">{x.count}人</span>
                   </a>
@@ -423,7 +423,7 @@ const jsonLd = entry
           {/* 並び替え（スクリプトで行う。スクリプトなしでは新しい順の先頭20件だけ） */}
           {facts.introductions.length > 1 && (
             <div class="flex flex-wrap items-center gap-2 text-xs mb-2" role="group" aria-label="並び替え">
-              <span class="label-caps text-neutral-500 mr-1">Sort</span>
+              <span class="label-caps lcn mr-1">Sort</span>
               <button type="button" class="intro-sort chip is-active" data-sort="date">新しい順</button>
               <button type="button" class="intro-sort chip" data-sort="views">再生数順</button>
               <button type="button" class="intro-sort chip" data-sort="subs">発信力順</button>
@@ -497,8 +497,8 @@ const jsonLd = entry
             <div class="text-sm leading-relaxed text-neutral-700 space-y-2 [overflow-wrap:anywhere]">
               {ingredientInfo.active.length > 0 ? (
                 <>
-                  <p><span class="label-caps text-neutral-500 mr-2">有効成分</span>{ingredientInfo.active.join("、")}</p>
-                  <p><span class="label-caps text-neutral-500 mr-2">その他の成分</span>{otherItems.join("、")}</p>
+                  <p><span class="label-caps lcn mr-2">有効成分</span>{ingredientInfo.active.join("、")}</p>
+                  <p><span class="label-caps lcn mr-2">その他の成分</span>{otherItems.join("、")}</p>
                 </>
               ) : (
                 <p>{ingredientInfo.items.join("、")}</p>

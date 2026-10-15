@@ -499,6 +499,32 @@ main .md\:sticky.bg-neutral-50\/95 {
   元と同じくユーティリティのレイヤーに置く。
 */
 @layer utilities {
+  /* 339章：公開サイトの容量（1GB）のため、さらに長い組み合わせをまとめた */
+  .pchips { @apply inline-flex flex-wrap gap-1; }
+  .pchip { @apply inline-flex items-center gap-1 max-w-[11rem] rounded-full border border-ink/15 bg-white/80 px-2 py-[2px] text-[11px] leading-tight text-neutral-700; }
+  .pchip-a { @apply hover:border-rose hover:text-rose transition-colors; }
+  .pchip-sw { @apply inline-block w-2.5 h-2.5 rounded-full ring-1 ring-ink/10 shrink-0; }
+  .pchip-ic { @apply w-2.5 h-2.5 shrink-0 text-rose; }
+  .item-pc { @apply inline-flex items-center gap-1.5 rounded-full border border-ink/15 bg-white/80 px-2.5 py-1 text-neutral-700 hover:border-rose hover:text-rose transition-colors aria-pressed:bg-ink aria-pressed:text-paper aria-pressed:border-ink; }
+  .mmenu-c { @apply bg-white block rounded-2xl ring-1 ring-ink/10 px-4 py-3; }
+  .tile-0 { @apply min-w-0 block; }
+  .pnav-1 { @apply sticky z-30 -mx-4 md:-mx-8 px-4 md:px-8 bg-paper/90 backdrop-blur-md border-b border-ink/10; }
+  .item-nums { @apply mt-8 grid border-y border-ink/15 divide-x divide-ink/15 [&>*]:flex [&>*]:flex-col [&>*]:justify-between; }
+  .prb-1 { @apply inline-flex items-center shrink-0 rounded-full px-1.5 py-[3px] text-[10px] leading-none font-semibold tracking-[0.08em]; }
+  .item-img { @apply md:col-span-5 relative md:sticky md:top-24 w-[55%] max-w-[200px] mx-auto md:w-auto md:max-w-none md:mx-0; }
+  .vid-pb { @apply flex items-center justify-center w-[68px] h-[48px] rounded-[14px] bg-[#FF0000] text-white shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6)] transition-transform duration-500 group-hover:scale-110; }
+  .vid-th { @apply w-full h-full object-cover opacity-95 transition-transform duration-700 ease-out-expo group-hover:scale-[1.03]; }
+  .rrow-ri { @apply text-rose mt-0.5 whitespace-nowrap; }
+  .intro-t { @apply text-rose text-xs border border-rose/40 rounded-full px-2 py-0.5 hover:bg-rose hover:text-white transition-colors; }
+  .item-q { @apply mt-4 flex gap-3 items-start rounded-2xl bg-blush/50 px-3.5 py-3 hover:bg-blush transition-colors; }
+  .item-sw { @apply inline-block w-3 h-3 rounded-full ring-1 ring-white/60; }
+  .item-bl { @apply text-xs font-bold tracking-[0.14em] text-rose; }
+  .logo-1 { @apply inline-flex items-center gap-2 leading-none; }
+  .lay-nv { @apply items-center gap-7 ml-6; }
+  .brand-i { @apply w-full aspect-[4/3] sm:aspect-auto sm:w-14 sm:h-14 shrink-0 rounded-xl overflow-hidden flex items-center justify-center; }
+  .brand-n { @apply block text-sm font-semibold leading-snug line-clamp-2 sm:line-clamp-1 group-hover:text-rose transition-colors; }
+  .inf-m { @apply flex flex-wrap items-center gap-x-2 gap-y-1; }
+  .lcn { @apply text-neutral-500; }
   .mmenu-1 { @apply text-xs border border-ink/15 rounded-full px-2.5 py-1; }
   /* トップの「探す」のチップ（.mmenu-1 と同じ形。指の端末では上の @media で高さを足す） */
   .chip-s { @apply text-xs border border-ink/15 rounded-full px-2.5 py-1; }
@@ -631,17 +657,17 @@ main .md\:sticky.bg-neutral-50\/95 {
   .vid-7 { @apply mt-6 grid grid-cols-2 border-y border-ink/15 divide-x divide-ink/15; }
   .u-22 { @apply mt-8 pt-6 border-t border-ink/10; }
   .u-23 { @apply w-2 h-2 rounded-full bg-[#FF0000] group-hover:bg-paper; }
-  .tile-4 { @apply relative aspect-square rounded-2xl flex items-center justify-center; }
-  .vcard-11 { @apply w-9 h-9 rounded-lg shrink-0 flex items-center justify-center; }
-  .card-7 { @apply relative aspect-square w-full rounded-2xl flex items-center justify-center; }
-  .u-24 { @apply text-xs mb-1.5; }
+  .tile-4 { @apply relative aspect-square rounded-2xl flex items-center justify-center overflow-hidden; }
+  .vcard-11 { @apply w-9 h-9 rounded-lg shrink-0 flex items-center justify-center overflow-hidden; }
+  .card-7 { @apply relative aspect-square w-full rounded-2xl flex items-center justify-center overflow-hidden; }
+  .u-24 { @apply text-xs mb-1.5 text-neutral-500; }
   .mmenu-12 { @apply transition-transform group-open:rotate-180; }
   .u-25 { @apply leading-[1.3] font-semibold text-balance; }
-  .mmenu-13 { @apply block text-[10px]; }
-  .intro-15 { @apply w-28 md:w-36 shrink-0 rounded-xl; }
-  .vcard-12 { @apply relative rounded-2xl bg-neutral-200; }
+  .mmenu-13 { @apply block text-[10px] text-rose; }
+  .intro-15 { @apply w-28 md:w-36 shrink-0 rounded-xl overflow-hidden; }
+  .vcard-12 { @apply relative rounded-2xl bg-neutral-200 overflow-hidden; }
   .mmenu-14 { @apply inline-block mt-3 text-xs; }
-  .rrow-16 { @apply block aspect-square rounded-xl flex items-center justify-center; }
+  .rrow-16 { @apply block aspect-square rounded-xl flex items-center justify-center overflow-hidden; }
   .item-22 { @apply mt-4 font-semibold text-[24px] md:text-[26px] lg:text-[30px] leading-[1.3] tracking-[-0.02em] text-balance; }
   .lay-27 { @apply relative bg-ink text-paper mt-16 md:mt-24; }
   .item-23 { @apply aspect-square rounded-[28px] flex items-center justify-center; }

@@ -18,9 +18,9 @@ const { tile, rank, caption, current = false, showBrand = true } = Astro.props;
 
 <a
   href={withBase(`/cosmetics/${cosmeticSlug(tile.brand_id, tile.name_id)}`)}
-  class:list={["min-w-0 block group", { "outline outline-1 outline-rose outline-offset-4 rounded-2xl": current }]}
+  class:list={["group tile-0", { "outline outline-1 outline-rose outline-offset-4 rounded-2xl": current }]}
 >
-  <div class="product-well overflow-hidden tile-4">
+  <div class="product-well tile-4">
     {
       tile.imageSrc ? (
         <img

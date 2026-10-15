@@ -3,7 +3,7 @@
 interface Props { class?: string; mark?: boolean; size?: "sm" | "lg" }
 const { class: cls = "", mark = true, size = "sm" } = Astro.props;
 ---
-<span class:list={["inline-flex items-center gap-2 leading-none", cls]}>
+<span class:list={["logo-1", cls]}>
   {mark && (
     <svg viewBox="0 0 64 40" class:list={[size === "lg" ? "w-12" : "w-8", "shrink-0"]} aria-hidden="true">
       <circle cx="22" cy="20" r="14" fill="none" stroke="currentColor" stroke-width="3.2" />

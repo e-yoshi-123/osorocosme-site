@@ -132,7 +132,7 @@ const maxVideos = Math.max(...groups.map((g) => g.videoCount), 1);
   <section class="panel">
   <h2 class="font-serif h-section font-semibold mb-4 flex items-baseline gap-3"><span class="num-display text-sm text-neutral-500">{produced.length > 0 ? "03" : "02"}</span>五十音順</h2>
   <div class="flex flex-wrap items-center gap-2 mb-8 text-sm">
-    <span class="label-caps text-neutral-500 mr-1">Country</span>
+    <span class="label-caps lcn mr-1">Country</span>
     {
       REGIONS.map((r) => (
         <button class="region-chip chip" data-region={r.key}>

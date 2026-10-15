@@ -38,7 +38,7 @@ const href = withBase(`/influencer/${inf.channel_id}`);
   {
     h.latestVideos.length > 0 ? (
       <div>
-        <p class="label-caps text-neutral-500 mb-2">Latest videos</p>
+        <p class="label-caps lcn mb-2">Latest videos</p>
         {large ? (
           <div class="grid grid-cols-3 gap-2">
             {h.latestVideos.map((v) => (
@@ -70,7 +70,7 @@ const href = withBase(`/influencer/${inf.channel_id}`);
   {
     h.topCosmetics.length > 0 ? (
       <div>
-        <p class="label-caps text-neutral-500 mb-2">Most featured</p>
+        <p class="label-caps lcn mb-2">Most featured</p>
         <div class:list={["grid gap-2", large ? "grid-cols-3" : "grid-cols-4"]}>
           {h.topCosmetics.map((c) => (
             <a href={withBase(`/cosmetics/${cosmeticSlug(c.brand_id, c.name_id)}`)} class="group ifcard-1" title={`${c.brand} ${c.name}`}>

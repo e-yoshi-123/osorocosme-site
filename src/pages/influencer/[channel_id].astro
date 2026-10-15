@@ -253,7 +253,7 @@ const jsonLd = influencer
             <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-8">
               {ownProducts.map((c) => (
                 <li class="min-w-0 group">
-                  <a href={withBase(`/cosmetics/${c.slug}`)} class="product-well overflow-hidden tile-4" tabindex="-1" aria-hidden="true">
+                  <a href={withBase(`/cosmetics/${c.slug}`)} class="product-well tile-4" tabindex="-1" aria-hidden="true">
                     {c.imageSrc ? <img src={c.imageSrc} alt="" class="tile-1" loading="lazy" data-err="noimg" /> : <span class="noimg">No image</span>}
                   </a>
                   <a href={withBase(`/cosmetics/${c.slug}`)} class="block">
@@ -290,14 +290,14 @@ const jsonLd = influencer
             <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-8">
               {topCosmetics.map((c) => (
                 <li class="min-w-0 group">
-                  <a href={withBase(`/cosmetics/${c.slug}`)} class="product-well overflow-hidden tile-4" tabindex="-1" aria-hidden="true">
+                  <a href={withBase(`/cosmetics/${c.slug}`)} class="product-well tile-4" tabindex="-1" aria-hidden="true">
                     <img src={c.imageSrc} alt="" class="tile-1" loading="lazy" data-err="noimg" />
                   </a>
                   <a href={withBase(`/cosmetics/${c.slug}`)} class="block">
                     <p class="tile-3"><BrandFlag brand_id={c.brand_id} />{c.brand}</p>
                     <p class="phrase tile-name mt-1">{c.name}</p>
                   </a>
-                  <p class="u-2 flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <p class="u-2 inf-m">
                     <span>{c.videoCount}本で紹介</span>
                     {c.repeat && <span class="inline-flex items-center rounded-full border border-rose text-rose px-1.5 py-[2px] leading-none font-semibold">リピート</span>}
                   </p>
@@ -345,7 +345,7 @@ const jsonLd = influencer
                           <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-4">
                             {sub.items.map((c) => (
                               <li class="min-w-0 group flex gap-3 items-start">
-                        <a href={withBase(`/cosmetics/${c.slug}`)} class="product-well overflow-hidden tile-4 !w-20 !h-20 shrink-0" tabindex="-1" aria-hidden="true">
+                        <a href={withBase(`/cosmetics/${c.slug}`)} class="product-well tile-4 !w-20 !h-20 shrink-0" tabindex="-1" aria-hidden="true">
                           {c.imageSrc ? <img src={c.imageSrc} alt="" class="tile-1" loading="lazy" data-err="noimg" /> : <span class="noimg">No image</span>}
                         </a>
                         <div class="min-w-0 flex-1">
@@ -353,7 +353,7 @@ const jsonLd = influencer
                           <p class="tile-3"><BrandFlag brand_id={c.brand_id} />{c.brand}</p>
                           <p class="phrase tile-name mt-1">{c.name}</p>
                         </a>
-                        <p class="u-2 flex flex-wrap items-center gap-x-2 gap-y-1">
+                        <p class="u-2 inf-m">
                           <span class="text-neutral-500">{c.tag}</span>
                           <span>{c.videoCount}本で紹介</span>
                           {c.repeat && <span class="inline-flex items-center rounded-full border border-rose text-rose px-1.5 py-[2px] leading-none font-semibold">リピート</span>}
@@ -377,7 +377,7 @@ const jsonLd = influencer
                     <ul class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-4 sm:gap-y-8">
                       {sec.items.map((c) => (
                         <li class="min-w-0 group flex gap-3 items-start sm:block">
-                        <a href={withBase(`/cosmetics/${c.slug}`)} class="product-well overflow-hidden tile-4 !w-20 !h-20 shrink-0 sm:!w-full sm:!h-auto" tabindex="-1" aria-hidden="true">
+                        <a href={withBase(`/cosmetics/${c.slug}`)} class="product-well tile-4 !w-20 !h-20 shrink-0 sm:!w-full sm:!h-auto" tabindex="-1" aria-hidden="true">
                           {c.imageSrc ? <img src={c.imageSrc} alt="" class="tile-1" loading="lazy" data-err="noimg" /> : <span class="noimg">No image</span>}
                         </a>
                         <div class="min-w-0 flex-1">
@@ -385,7 +385,7 @@ const jsonLd = influencer
                           <p class="tile-3"><BrandFlag brand_id={c.brand_id} />{c.brand}</p>
                           <p class="phrase tile-name mt-1">{c.name}</p>
                         </a>
-                        <p class="u-2 flex flex-wrap items-center gap-x-2 gap-y-1">
+                        <p class="u-2 inf-m">
                           <span class="text-neutral-500">{c.tag}</span>
                           <span>{c.videoCount}本で紹介</span>
                           {c.repeat && <span class="inline-flex items-center rounded-full border border-rose text-rose px-1.5 py-[2px] leading-none font-semibold">リピート</span>}

@@ -38,7 +38,7 @@ import { withBase } from "../lib/data";
   <div id="search-empty" class="panel hidden">
     <p class="font-serif text-lg font-semibold">該当するものが見つかりませんでした</p>
     <p class="mt-2 text-sm leading-[1.9] text-neutral-600">ブランド・インフルエンサー・コスメ・動画のどれにも当てはまりませんでした。別の言い方（英字・カタカナ・略さない名前など）でもお試しください。</p>
-    <p class="mt-8 label-caps text-neutral-500">Browse</p>
+    <p class="mt-8 label-caps lcn">Browse</p>
     <ul class="mt-3 flex flex-wrap gap-2 text-sm">
       {[["/ranking/", "カテゴリ別ランキング"], ["/brand-list", "ブランド一覧"], ["/influencer-list", "インフルエンサー一覧"], ["/feature/", "特集"], ["/video-list", "動画一覧"]].map(([href, label]) => (
         <li><a href={withBase(href)} class="tab">{label}</a></li>

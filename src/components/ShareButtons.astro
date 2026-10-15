@@ -21,7 +21,7 @@ const btn = "share-btn rounded-full border";
 ---
 
 <div data-share data-url={url} data-text={text} class:list={["flex flex-wrap items-center gap-1.5", className]}>
-  <span class="label-caps text-neutral-500 mr-1.5">Share</span><span class="sr-only">{label}</span>
+  <span class="label-caps lcn mr-1.5">Share</span><span class="sr-only">{label}</span>
   {links.map((l) => (
     <a href={l.href} target="_blank" rel="noopener" data-share-method={l.method} class:list={[btn, l.cls]}>{l.name}</a>
   ))}

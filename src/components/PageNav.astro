@@ -7,7 +7,7 @@ interface Props { items: Item[]; label?: string; class?: string }
 const { items, label = "このページの目次", class: cls } = Astro.props;
 ---
 {items.length >= 2 && (
-<nav class:list={["page-nav sticky z-30 -mx-4 md:-mx-8 px-4 md:px-8 bg-paper/90 backdrop-blur-md border-b border-ink/10", cls]} aria-label={label} data-page-nav>
+<nav class:list={["page-nav pnav-1", cls]} aria-label={label} data-page-nav>
   <div class="pagenav-2">
     {items.map((it) => (
       <a href={it.href ?? (it.target.startsWith("#") ? it.target : undefined)} data-target={it.target} class="chip pagenav-1">{it.label}</a>

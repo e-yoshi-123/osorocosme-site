@@ -14,20 +14,20 @@ const swatchBg = (c: string[]) => (c.length > 1 ? `conic-gradient(${c.map((x, i)
 
 {
   badges.length > 0 && (
-    <span class:list={["inline-flex flex-wrap gap-1", cls]}>
+    <span class:list={["pchips", cls]}>
       {badges.map((b) => {
         const inner = (
           <>
-            {b.kind === "pc" && b.swatch && b.swatch.length > 0 && <span class="inline-block w-2.5 h-2.5 rounded-full ring-1 ring-ink/10 shrink-0" style={`background:${swatchBg(b.swatch)}`} aria-hidden="true" />}
+            {b.kind === "pc" && b.swatch && b.swatch.length > 0 && <span class="pchip-sw" style={`background:${swatchBg(b.swatch)}`} aria-hidden="true" />}
             {b.kind === "skin" && (
-              <svg viewBox="0 0 12 12" class="w-2.5 h-2.5 shrink-0 text-rose" aria-hidden="true"><path d="M6 1.2C6 1.2 2.6 5 2.6 7.3A3.4 3.4 0 0 0 9.4 7.3C9.4 5 6 1.2 6 1.2Z" fill="currentColor" opacity=".75" /></svg>
+              <svg viewBox="0 0 12 12" class="pchip-ic" aria-hidden="true"><path d="M6 1.2C6 1.2 2.6 5 2.6 7.3A3.4 3.4 0 0 0 9.4 7.3C9.4 5 6 1.2 6 1.2Z" fill="currentColor" opacity=".75" /></svg>
             )}
             <span class="truncate">{b.label.replace(/（.*?）/g, "")}</span>
           </>
         );
-        const c = "inline-flex items-center gap-1 max-w-[11rem] rounded-full border border-ink/15 bg-white/80 px-2 py-[2px] text-[11px] leading-tight text-neutral-700";
+        const c = "pchip";
         return b.href ? (
-          <a href={withBase(b.href)} class:list={[c, "hover:border-rose hover:text-rose transition-colors"]} title={`${b.kind === "pc" ? "パーソナルカラー" : "肌質"}：${b.label}（本人が言ったもの）`}>{inner}</a>
+          <a href={withBase(b.href)} class="pchip pchip-a" title={`${b.kind === "pc" ? "パーソナルカラー" : "肌質"}：${b.label}（本人が言ったもの）`}>{inner}</a>
         ) : (
           <span class={c} title={`${b.kind === "pc" ? "パーソナルカラー" : "肌質"}：${b.label}（本人が言ったもの）`}>{inner}</span>
         );

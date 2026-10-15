@@ -19,13 +19,13 @@ const cols = [
   <div class="mega-3">
     <section class="col-span-5" aria-labelledby="mega-cat">
       <p class="mega-5">
-        <span id="mega-cat" class="label-caps text-neutral-500">カテゴリから探す</span>
+        <span id="mega-cat" class="label-caps lcn">カテゴリから探す</span>
         <a href={withBase("/ranking/")} class="mega-4">すべてのカテゴリ →</a>
       </p>
       <div class="mega-6">
         {m.categories.map((g) => (
           <div>
-            <p class="text-neutral-500 u-24">{g.group}</p>
+            <p class="u-24">{g.group}</p>
             <ul class="space-y-1 mega-links">
               {g.items.map((it) => <li><a href={withBase(it.path)}>{it.label}</a></li>)}
             </ul>
@@ -36,7 +36,7 @@ const cols = [
     {cols.map((c) => (
       <section class:list={[c.span, "mega-7"]}>
         <p class="mega-1">
-          <span class="label-caps text-neutral-500">{c.title}</span>
+          <span class="label-caps lcn">{c.title}</span>
           <a href={withBase(c.all)} class="u-9">一覧 →</a>
         </p>
         <ul class:list={["mega-links", c.twoCols ? "grid grid-cols-2 gap-x-4 gap-y-1" : "space-y-1"]}>
@@ -45,7 +45,7 @@ const cols = [
         {("subs" in c ? c.subs ?? [] : []).map((sub) => (
           <>
             <p class="mega-1 mt-6">
-              <span class="label-caps text-neutral-500">{sub.title}</span>
+              <span class="label-caps lcn">{sub.title}</span>
               <a href={withBase(sub.all)} class="u-9">一覧 →</a>
             </p>
             <ul class="mega-links space-y-1">

@@ -119,7 +119,7 @@ const inExplore = /^\/(concern|ingredient|feature|recipe)(\/|$)/.test(path.repla
     <header class="lay-12">
       <div class="lay-8">
         <a href={withBase("/")} class="lay-19" aria-label="OsoroCosme ホーム"><Logo /></a>
-        <nav class="hidden lg:flex items-center gap-7 ml-6" aria-label="メイン">
+        <nav class="hidden lg:flex lay-nv" aria-label="メイン">
           <button type="button" data-menu-toggle aria-controls="mega-menu" aria-expanded="false" class:list={["group lay-xb", inExplore ? "text-ink" : "lay-n0"]}>
             探す
             <svg viewBox="0 0 24 24" class="lay-11" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
