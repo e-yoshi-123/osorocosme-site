@@ -38,6 +38,7 @@ import {
   getInfluencerCategorySections,
   type InfluencerCategoryPick,
   getBrandReading,
+  cosmeticHref,
 } from "../../lib/data";
 
 export function getStaticPaths() {
@@ -109,7 +110,7 @@ const topCosmetics = getInfluencerHighlights(channel_id!, 0, TOP_LIMIT)
   .map((c) => {
     const entry = getCosmeticListEntry(c.brand_id, c.name_id);
     const offer = productOffer(entry);
-    return { ...c, slug: cosmeticSlug(c.brand_id, c.name_id), price: offer.price, fromYahoo: offer.source === "yahoo", rakutenLink: offer.rakutenLink, yahooLink: entry?.yahoo_text_link || undefined };
+    return { ...c, slug: cosmeticSlug(c.brand_id, c.name_id), href: cosmeticHref(c.brand_id, c.name_id), price: offer.price, fromYahoo: offer.source === "yahoo", rakutenLink: offer.rakutenLink, yahooLink: entry?.yahoo_text_link || undefined };
   });
 const showTop = topCosmetics.length >= 3;
 // 本人がプロデュースしたコスメ（ユーザー依頼、321章）。紹介の多い順に、画像・価格・購入先つきで並べる
@@ -118,14 +119,14 @@ const ownProducts = influencer
   ? getOwnProducts(influencer.channel_id).slice(0, OWN_LIMIT).map((c) => {
       const entry = getCosmeticListEntry(c.brand_id, c.name_id);
       const offer = productOffer(entry);
-      return { ...c, slug: cosmeticSlug(c.brand_id, c.name_id), price: offer.price, fromYahoo: offer.source === "yahoo", rakutenLink: offer.rakutenLink, yahooLink: entry?.yahoo_text_link || undefined };
+      return { ...c, slug: cosmeticSlug(c.brand_id, c.name_id), href: cosmeticHref(c.brand_id, c.name_id), price: offer.price, fromYahoo: offer.source === "yahoo", rakutenLink: offer.rakutenLink, yahooLink: entry?.yahoo_text_link || undefined };
     })
   : [];
 // カテゴリ別の愛用コスメ（「人名＋カテゴリ」の検索への答え。大分類ごとに本数の多い順に6品まで。2品以上ある大分類だけ）
 function withOffer(c: InfluencerCategoryPick) {
   const entry = getCosmeticListEntry(c.brand_id, c.name_id);
   const offer = productOffer(entry);
-  return { ...c, slug: cosmeticSlug(c.brand_id, c.name_id), price: offer.price, fromYahoo: offer.source === "yahoo", rakutenLink: offer.rakutenLink, yahooLink: entry?.yahoo_text_link || undefined };
+  return { ...c, slug: cosmeticSlug(c.brand_id, c.name_id), href: cosmeticHref(c.brand_id, c.name_id), price: offer.price, fromYahoo: offer.source === "yahoo", rakutenLink: offer.rakutenLink, yahooLink: entry?.yahoo_text_link || undefined };
 }
 const categorySections = getInfluencerCategorySections(channel_id!).map((sec) => ({
   ...sec,
@@ -253,10 +254,10 @@ const jsonLd = influencer
             <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-8">
               {ownProducts.map((c) => (
                 <li class="min-w-0 group">
-                  <a href={withBase(`/cosmetics/${c.slug}`)} class="product-well tile-4" tabindex="-1" aria-hidden="true">
+                  <a href={c.href} class="product-well tile-4" tabindex="-1" aria-hidden="true">
                     {c.imageSrc ? <img src={c.imageSrc} alt="" class="tile-1" loading="lazy" data-err="noimg" /> : <span class="noimg">No image</span>}
                   </a>
-                  <a href={withBase(`/cosmetics/${c.slug}`)} class="block">
+                  <a href={c.href} class="block">
                     <p class="tile-3"><BrandFlag brand_id={c.brand_id} />{c.brand}</p>
                     <p class="phrase tile-name mt-1">{c.name}</p>
                   </a>
@@ -290,10 +291,10 @@ const jsonLd = influencer
             <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-8">
               {topCosmetics.map((c) => (
                 <li class="min-w-0 group">
-                  <a href={withBase(`/cosmetics/${c.slug}`)} class="product-well tile-4" tabindex="-1" aria-hidden="true">
+                  <a href={c.href} class="product-well tile-4" tabindex="-1" aria-hidden="true">
                     <img src={c.imageSrc} alt="" class="tile-1" loading="lazy" data-err="noimg" />
                   </a>
-                  <a href={withBase(`/cosmetics/${c.slug}`)} class="block">
+                  <a href={c.href} class="block">
                     <p class="tile-3"><BrandFlag brand_id={c.brand_id} />{c.brand}</p>
                     <p class="phrase tile-name mt-1">{c.name}</p>
                   </a>
@@ -345,11 +346,11 @@ const jsonLd = influencer
                           <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-4">
                             {sub.items.map((c) => (
                               <li class="min-w-0 group flex gap-3 items-start">
-                        <a href={withBase(`/cosmetics/${c.slug}`)} class="product-well tile-4 !w-20 !h-20 shrink-0" tabindex="-1" aria-hidden="true">
+                        <a href={c.href} class="product-well tile-4 !w-20 !h-20 shrink-0" tabindex="-1" aria-hidden="true">
                           {c.imageSrc ? <img src={c.imageSrc} alt="" class="tile-1" loading="lazy" data-err="noimg" /> : <span class="noimg">No image</span>}
                         </a>
                         <div class="min-w-0 flex-1">
-                        <a href={withBase(`/cosmetics/${c.slug}`)} class="block">
+                        <a href={c.href} class="block">
                           <p class="tile-3"><BrandFlag brand_id={c.brand_id} />{c.brand}</p>
                           <p class="phrase tile-name mt-1">{c.name}</p>
                         </a>
@@ -377,11 +378,11 @@ const jsonLd = influencer
                     <ul class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-4 sm:gap-y-8">
                       {sec.items.map((c) => (
                         <li class="min-w-0 group flex gap-3 items-start sm:block">
-                        <a href={withBase(`/cosmetics/${c.slug}`)} class="product-well tile-4 !w-20 !h-20 shrink-0 sm:!w-full sm:!h-auto" tabindex="-1" aria-hidden="true">
+                        <a href={c.href} class="product-well tile-4 !w-20 !h-20 shrink-0 sm:!w-full sm:!h-auto" tabindex="-1" aria-hidden="true">
                           {c.imageSrc ? <img src={c.imageSrc} alt="" class="tile-1" loading="lazy" data-err="noimg" /> : <span class="noimg">No image</span>}
                         </a>
                         <div class="min-w-0 flex-1">
-                        <a href={withBase(`/cosmetics/${c.slug}`)} class="block">
+                        <a href={c.href} class="block">
                           <p class="tile-3"><BrandFlag brand_id={c.brand_id} />{c.brand}</p>
                           <p class="phrase tile-name mt-1">{c.name}</p>
                         </a>

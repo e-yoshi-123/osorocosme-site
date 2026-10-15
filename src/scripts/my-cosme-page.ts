@@ -14,7 +14,9 @@ import { norm, splitTerms } from "../lib/search-norm";
 import { load, add, remove, has, save, merge, sanitize, exportText, onChange, type MyCosmeData, type ListKind } from "./my-cosme-store";
 import { sync, pushIfConnected, disconnect, isConnected } from "./my-cosme-drive";
 
-type CosRow = [string, string, number, string, string, string, number];
+type CosRow = [string, string, number, string, string, string, number, string?];
+// 商品へのリンク先。商品ページの無い商品（紹介1本）は、8つ目の動画のページへ（341章）
+const cosHref = (c: CosRow) => (c[7] ? `${base}/video/${esc(c[7])}/#cosmetics` : `${base}/cosmetics/${esc(c[0])}/`);
 interface RecIndex {
   /** ブランド：[名前, 読み・別名, 国コード（不明は空）] */
   b: [string, string, string][];
@@ -108,7 +110,7 @@ function tile(p: Prepared, n: number, caption: string, d: MyCosmeData): string {
     ? `<img src="${esc(src)}" alt="${esc(`${c[1]} ${c[3]}`)}" loading="lazy" class="w-full h-full object-contain p-[11%]" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'noimg',textContent:'No image'}))" />`
     : `<span class="noimg">No image</span>`;
   return `<div class="min-w-0">
-    <a href="${base}/cosmetics/${esc(c[0])}/" class="block group">
+    <a href="${cosHref(c)}" class="block group">
       <div class="product-well relative aspect-square rounded-2xl flex items-center justify-center overflow-hidden">${pic}</div>
       <p class="mt-3 text-xs tracking-[0.14em] text-neutral-500 truncate">${flag(p, n)}${esc(c[1])}</p>
       <p class="mt-1 phrase text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors">${esc(c[3])}</p>
@@ -147,8 +149,8 @@ function renderList(p: Prepared, d: MyCosmeData) {
       const c = p.idx.c[n];
       const src = img(c[4], 128);
       return `<li class="flex items-center gap-3 py-3 border-b border-ink/10">
-        <a href="${base}/cosmetics/${esc(c[0])}/" class="w-12 h-12 shrink-0 rounded-xl product-well flex items-center justify-center overflow-hidden">${src ? `<img src="${esc(src)}" alt="" loading="lazy" class="w-full h-full object-contain p-1" onerror="this.remove()" />` : ""}</a>
-        <a href="${base}/cosmetics/${esc(c[0])}/" class="flex-1 min-w-0 group">
+        <a href="${cosHref(c)}" class="w-12 h-12 shrink-0 rounded-xl product-well flex items-center justify-center overflow-hidden">${src ? `<img src="${esc(src)}" alt="" loading="lazy" class="w-full h-full object-contain p-1" onerror="this.remove()" />` : ""}</a>
+        <a href="${cosHref(c)}" class="flex-1 min-w-0 group">
           <span class="block text-xs text-neutral-500 truncate">${flag(p, n)}${esc(c[1])}${c[5] ? `・${esc(c[5])}` : ""}</span>
           <span class="block text-sm truncate group-hover:text-rose transition-colors">${esc(c[3])}</span>
         </a>

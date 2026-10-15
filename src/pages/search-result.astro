@@ -52,7 +52,7 @@ import { withBase } from "../lib/data";
 
   type BrandRow = [string, string, string, number, number];
   type InfRow = [string, string, string, number, number];
-  type CosRow = [string, string, number, string, string, string, number];
+  type CosRow = [string, string, number, string, string, string, number, string?];
   type VideoRow = [string, string, number, string, string, string, number[]];
   interface Index { b: BrandRow[]; i: InfRow[]; c: CosRow[]; v: VideoRow[] }
   type Kind = "brand" | "influencer" | "cosmetic" | "video";
@@ -267,11 +267,12 @@ import { withBase } from "../lib/data";
     </a>`;
   }
 
-  function cosmeticHtml([slug, brand, , name, img, , videoCount]: CosRow) {
+  function cosmeticHtml([slug, brand, , name, img, , videoCount, vk]: CosRow) {
     const pic = img
       ? `<img src="${esc(largerRakutenImage(img))}" alt="${esc(brand)} ${esc(name)}" class="w-full h-full object-contain p-[11%] transition-transform duration-[1.2s] ease-out-expo group-hover:scale-[1.06]" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'noimg',textContent:'No image'}))" />`
       : `<span class="noimg">No image</span>`;
-    return `<a href="${base}/cosmetics/${slug}/" class="min-w-0 block group">
+    // 商品ページの無い商品（紹介1本）は、紹介している動画のページへ（341章）
+    return `<a href="${vk ? `${base}/video/${vk}/#cosmetics` : `${base}/cosmetics/${slug}/`}" class="min-w-0 block group">
       <div class="product-well relative aspect-square rounded-2xl flex items-center justify-center overflow-hidden">${pic}</div>
       <p class="mt-3 text-xs tracking-[0.14em] text-neutral-500 truncate">${esc(brand)}</p>
       <p class="phrase mt-1 text-sm leading-snug line-clamp-2 group-hover:text-rose transition-colors">${esc(name)}</p>

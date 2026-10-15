@@ -490,17 +490,39 @@ export function getUsedCosmeticKeys(): { brand_id: string; name_id: string }[] {
   return Array.from(map.values());
 }
 
-// 紹介動画がこの本数に満たない商品ページは noindex にし、サイトマップにも載せない。
-// 「検出 - インデックス未登録」が4千件余りあり、クロールを紹介の多いページ・人・ランキングに集めるため（履歴171章）
+// 紹介動画がこの本数に満たない商品は、商品ページを作らない（171章でnoindexにし、341章でページごと消した。
+// 薄いページを減らし、クロールを紹介の多いページ・人・ランキングに集めるのと、公開サイトの容量（約134MB）を減らすため）
 export const COSMETIC_INDEX_MIN_VIDEOS = 2;
-// ただし、直近この日数の動画で紹介された商品は1本でも索引に入れる。新作・コフレは最初の1本が出てから2本目までの間に検索の需要が来るため
-// （デコルテのコフレの商品ページが28日で表示174・クリック11。301章）。日数を過ぎて2本目が無ければ、次のビルドで自動的にnoindexに戻る
+// ただし、直近この日数の動画で紹介された商品は1本でもページを作る。新作・コフレは最初の1本が出てから2本目までの間に検索の需要が来るため
+// （デコルテのコフレの商品ページが28日で表示174・クリック11。301章）。日数を過ぎて2本目が無ければ、次のビルドでページが消える
 export const COSMETIC_INDEX_RECENT_DAYS = 90;
-/** 商品ページを検索に出す（索引に入れ、sitemapに載せる）か。商品ページとsitemapの両方がこれで判定する */
+/** 商品ページを作る（索引に入れ、sitemapに載せる）か。商品ページ・sitemap・商品へのリンク（cosmeticHref）がこれで判定する */
 export function isCosmeticIndexed(videosUsing: { published_at: string }[]): boolean {
   if (videosUsing.length >= COSMETIC_INDEX_MIN_VIDEOS) return true;
   const cut = Date.now() - COSMETIC_INDEX_RECENT_DAYS * 86_400_000;
   return videosUsing.some((v) => v.published_at && new Date(v.published_at).getTime() >= cut);
+}
+const _pageVideo = new Map<string, string>();
+/** 商品ページの無い商品の、紹介している動画のkey（ページのある商品は空文字）。ブラウザ側の検索・マイコスメが使う */
+export function cosmeticPagelessVideo(brand_id: string, name_id: string): string {
+  const k = `${brand_id}_${name_id}`;
+  let r = _pageVideo.get(k);
+  if (r === undefined) {
+    const using = videoIndexes().byCosmetic.get(k) || [];
+    r = isCosmeticIndexed(using) ? "" : sortByPublishedDesc(using)[0]?.key ?? "";
+    _pageVideo.set(k, r);
+  }
+  return r;
+}
+/** 商品ページがあるか */
+export function hasCosmeticPage(brand_id: string, name_id: string): boolean {
+  return cosmeticPagelessVideo(brand_id, name_id) === "" && (videoIndexes().byCosmetic.get(`${brand_id}_${name_id}`)?.length ?? 0) > 0;
+}
+/** 商品へのリンク先。ページの無い商品（紹介1本）は、紹介している動画のページの商品の一覧へ（341章）。
+ * hash（#color-… など）は商品ページのときだけ付ける */
+export function cosmeticHref(brand_id: string, name_id: string, hash = ""): string {
+  const vk = cosmeticPagelessVideo(brand_id, name_id);
+  return vk ? `${withBase(`/video/${vk}`)}#cosmetics` : withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`) + hash;
 }
 // 商品ページ「いつ・誰が紹介したか」：紹介がINTRO_SPLIT_OVER件を超える商品は、先頭INTRO_IN_PAGE件だけをページに入れ、
 // 残りは /cosmetics/<slug>/intros/ に分けて、押したときに読む（ページのHTMLが700KB台になっていた。279章）
@@ -2038,7 +2060,7 @@ export function selfCheckExtras(kind: "pc" | "skin", slug: string, people = 8) {
     const it = c.items.find((e) => CATEGORY_TAG_TO_GROUP[e.tag] === g && !used.has(`${e.brand_id}_${e.name_id}`) && productOffer(getCosmeticListEntry(e.brand_id, e.name_id)).imageSrc);
     if (!it) continue;
     used.add(`${it.brand_id}_${it.name_id}`);
-    items.push({ href: withBase(`/cosmetics/${cosmeticSlug(it.brand_id, it.name_id)}`), img: productOffer(getCosmeticListEntry(it.brand_id, it.name_id)).imageSrc, brand: it.brand, name: it.name, cat: it.tag, users: it.channelCount });
+    items.push({ href: cosmeticHref(it.brand_id, it.name_id), img: productOffer(getCosmeticListEntry(it.brand_id, it.name_id)).imageSrc, brand: it.brand, name: it.name, cat: it.tag, users: it.channelCount });
   }
   return {
     people: c.people.filter((p) => p.channel_icon).slice(0, people).map((p) => ({ href: withBase(`/influencer/${p.channel_id}`), icon: p.channel_icon!, name: p.channel_title })),

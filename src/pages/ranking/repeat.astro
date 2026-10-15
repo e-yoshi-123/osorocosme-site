@@ -11,11 +11,11 @@ import {
   REPEAT_PER_GROUP,
   getCosmeticListEntry,
   productOffer,
-  cosmeticSlug,
   categoryUrl,
   hasRankingPage,
   withBase,
   breadcrumbLd,
+  cosmeticHref,
 } from "../../lib/data";
 
 // リピートされているコスメ（273章）。集計は data.ts の getRepeatRanking
@@ -67,7 +67,7 @@ const jsonLd = [
         "@type": "ListItem",
         position: i + 1,
         name: `${x.it.brand} ${x.it.name}`,
-        url: new URL(withBase(`/cosmetics/${cosmeticSlug(x.it.brand_id, x.it.name_id)}`), Astro.site!).href,
+        url: new URL(cosmeticHref(x.it.brand_id, x.it.name_id), Astro.site!).href,
       })),
   },
   breadcrumbLd(crumbs, Astro.site!),

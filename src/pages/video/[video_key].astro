@@ -26,6 +26,7 @@ import {
   getCosmeticListEntry,
   productImageSrc,
   cosmeticSlug,
+  hasCosmeticPage,
 } from "../../lib/data";
 
 export function getStaticPaths() {
@@ -177,7 +178,7 @@ const jsonLd = video
                 <ul class="mt-2.5 grid grid-cols-4 gap-2">
                   {quickCosmetics.map((x) => (
                     <li class="min-w-0">
-                      <a href={withBase(`/cosmetics/${x.slug}/`)} class="group block">
+                      <a href={hasCosmeticPage(x.c.brand_id, x.c.name_id) ? withBase(`/cosmetics/${x.slug}/`) : "#cosmetics"} class="group block">
                         <span class="vid-q">
                           <img src={x.img} alt={`${x.c.brand} ${x.c.name}`} class="u-19" loading="eager" />
                         </span>

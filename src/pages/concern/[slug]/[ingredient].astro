@@ -13,9 +13,9 @@ import {
   CONCERN_INGREDIENT_MIN_MENTIONS,
   getCosmeticListEntry,
   productOffer,
-  cosmeticSlug,
   withBase,
   breadcrumbLd,
+  cosmeticHref,
 } from "../../../lib/data";
 
 // 肌悩み×成分（5-2、253章）。組は「同じ発言で一緒に語られた紹介の数」で決め、運営者は選ばない
@@ -80,7 +80,7 @@ const jsonLd = [
         "@type": "ListItem",
         position: i + 1,
         name: `${r.it.brand} ${r.it.name}`,
-        url: new URL(withBase(`/cosmetics/${cosmeticSlug(r.it.brand_id, r.it.name_id)}`), Astro.site!).href,
+        url: new URL(cosmeticHref(r.it.brand_id, r.it.name_id), Astro.site!).href,
       })),
   },
   breadcrumbLd(crumbs, Astro.site!),

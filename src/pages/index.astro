@@ -24,9 +24,9 @@ import {
   getCosmeticListEntry,
   productImageSrc,
   getRecentCounts,
-  cosmeticSlug,
   getBrandTopCosmetics,
   getMenuData,
+  cosmeticHref,
 } from "../lib/data";
 
 const visible = getVisibleVideos();
@@ -83,7 +83,7 @@ const heroItems = trending
   .filter((x) => x.img);
 const heroFaces = getInfluencerRanking().filter((i) => i.channel_icon).slice(0, 6);
 const ringFaces = heroFaces.map((f) => ({ src: f.channel_icon!.replace(/=s\d+-/, "=s176-"), name: f.channel_title, href: withBase(`/influencer/${f.channel_id}`) }));
-const ringItems = heroItems.slice(0, 6).map((x) => ({ src: x.img!, name: `${x.r.brand} ${x.r.name}`, href: withBase(`/cosmetics/${cosmeticSlug(x.r.brand_id, x.r.name_id)}`) }));
+const ringItems = heroItems.slice(0, 6).map((x) => ({ src: x.img!, name: `${x.r.brand} ${x.r.name}`, href: cosmeticHref(x.r.brand_id, x.r.name_id) }));
 const isLatin = (t: string) => !/[ぁ-んァ-ヶ一-龠]/.test(t);
 const now = new Date();
 const issue = `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, "0")}`;
@@ -140,7 +140,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
         <div class="relative mx-auto w-full max-w-[560px] px-[3%]">
           <HeroRings faces={ringFaces} items={ringItems} />
           {heroItems[0] && (
-            <a href={withBase(`/cosmetics/${cosmeticSlug(heroItems[0].r.brand_id, heroItems[0].r.name_id)}`)} class="group reveal mx-auto -mt-4 flex items-center gap-4 max-w-sm bg-paper/90 backdrop-blur rounded-full pl-2 pr-5 py-2 border border-ink/10 shadow-[0_20px_50px_-24px_rgba(29,21,23,0.35)]" style="--d:600ms">
+            <a href={cosmeticHref(heroItems[0].r.brand_id, heroItems[0].r.name_id)} class="group reveal mx-auto -mt-4 flex items-center gap-4 max-w-sm bg-paper/90 backdrop-blur rounded-full pl-2 pr-5 py-2 border border-ink/10 shadow-[0_20px_50px_-24px_rgba(29,21,23,0.35)]" style="--d:600ms">
               <span class="w-12 h-12 rounded-full overflow-hidden bg-white shrink-0 ring-1 ring-ink/5"><img src={heroItems[0].img} alt={`${heroItems[0].r.brand} ${heroItems[0].r.name}`} class="u-19" /></span>
               <span class="min-w-0 flex-1">
                 <span class="block label-caps text-rose">Now trending No.1</span>
@@ -235,7 +235,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
             <a href={categoryUrl(f.tag)} class="link-u text-xs tracking-[0.18em] uppercase text-neutral-600">Top 50</a>
           </div>
           {f.top[0] && (
-            <a href={withBase(`/cosmetics/${cosmeticSlug(f.top[0].tile.brand_id, f.top[0].tile.name_id)}`)} class="group block">
+            <a href={cosmeticHref(f.top[0].tile.brand_id, f.top[0].tile.name_id)} class="group block">
               <div class="product-well relative aspect-[5/4] rounded-2xl overflow-hidden flex items-center justify-center">
                 {f.top[0].tile.imageSrc && <img src={f.top[0].tile.imageSrc} alt={`${f.top[0].tile.brand} ${f.top[0].tile.name}`} class="h-[80%] w-auto max-w-[72%] object-contain transition-transform duration-[1.2s] ease-out-expo group-hover:scale-105" loading="lazy" />}
                 <span class="absolute left-0 top-0 flex items-baseline gap-1 bg-badge rounded-br-2xl pl-4 pr-3.5 pt-2.5 pb-1.5" aria-label="1位">
@@ -252,7 +252,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
           <ol class="mt-6 border-t border-ink/10 [&>li:last-child]:border-b-0">
             {f.top.slice(1).map(({ rank, tile }) => (
               <li class="border-b border-ink/10">
-                <a href={withBase(`/cosmetics/${cosmeticSlug(tile.brand_id, tile.name_id)}`)} class="group flex items-center gap-3 sm:gap-4 py-3">
+                <a href={cosmeticHref(tile.brand_id, tile.name_id)} class="group flex items-center gap-3 sm:gap-4 py-3">
                   <span class="num-display text-[22px] w-5 sm:w-6 text-ink/45 group-hover:text-rose transition-colors">{rank}</span>
                   <span class="product-well w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden shrink-0">
                     {tile.imageSrc && <img src={tile.imageSrc} alt={`${tile.brand} ${tile.name}`} class="u-19" loading="lazy" />}

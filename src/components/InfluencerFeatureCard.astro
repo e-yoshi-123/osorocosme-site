@@ -1,5 +1,5 @@
 ---
-import { cosmeticSlug, formatCount, formatDateDot, getInfluencerHighlights, withBase, type InfluencerRanking } from "../lib/data";
+import { formatCount, formatDateDot, getInfluencerHighlights, withBase, type InfluencerRanking, cosmeticHref } from "../lib/data";
 
 interface Props {
   influencer: InfluencerRanking;
@@ -73,7 +73,7 @@ const href = withBase(`/influencer/${inf.channel_id}`);
         <p class="label-caps lcn mb-2">Most featured</p>
         <div class:list={["grid gap-2", large ? "grid-cols-3" : "grid-cols-4"]}>
           {h.topCosmetics.map((c) => (
-            <a href={withBase(`/cosmetics/${cosmeticSlug(c.brand_id, c.name_id)}`)} class="group ifcard-1" title={`${c.brand} ${c.name}`}>
+            <a href={cosmeticHref(c.brand_id, c.name_id)} class="group ifcard-1" title={`${c.brand} ${c.name}`}>
               <div class="product-well aspect-square rounded-xl flex items-center justify-center overflow-hidden">
                 <img
                   src={c.imageSrc}

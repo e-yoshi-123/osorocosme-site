@@ -1,6 +1,6 @@
 ---
 import BrandFlag from "./BrandFlag.astro";
-import { amazonSearchUrl, cosmeticSlug, formatCount, withBase } from "../lib/data";
+import { amazonSearchUrl, formatCount, withBase, cosmeticHref } from "../lib/data";
 
 interface Props {
   /** 現在の表示順での順位（並び替えのたびにスクリプトが書き換える） */
@@ -41,7 +41,7 @@ const top = rank <= 3;
 // 画像のURLはあっても、実際に読み込めない場合は、下の onerror で価格・購入ボタンを取り除く。
 const buyable = !!imageSrc;
 const amazonLink = amazonSearchUrl(brand, name);
-const href = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
+const href = cosmeticHref(brand_id, name_id);
 ---
 
 {/*

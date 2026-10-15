@@ -9,9 +9,9 @@ import {
   getCosmeticListEntry,
   productImageSrc,
   categoryUrl,
-  cosmeticSlug,
   withBase,
   type CosmeticRanking,
+  cosmeticHref,
 } from "../../lib/data";
 
 const pages = getRankingPages();
@@ -19,7 +19,7 @@ const nav = getRankingNav();
 const allTags = Array.from(pages.keys());
 
 const img = (r: CosmeticRanking) => productImageSrc(getCosmeticListEntry(r.brand_id, r.name_id), r.rakuten_image_link);
-const productHref = (r: CosmeticRanking) => withBase(`/cosmetics/${cosmeticSlug(r.brand_id, r.name_id)}`);
+const productHref = (r: CosmeticRanking) => cosmeticHref(r.brand_id, r.name_id);
 const n2 = (n: number) => String(n).padStart(2, "0");
 
 // 大分類の英字の小見出し

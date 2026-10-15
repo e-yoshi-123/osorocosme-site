@@ -7,7 +7,7 @@ import { norm, splitTerms } from "../lib/search-norm";
 
 type BrandRow = [string, string, string, number];
 type InfRow = [string, string, string, number];
-type CosRow = [string, string, number, string, number, string, string?];
+type CosRow = [string, string, number, string, number, string, string?, string?];
 type ExploreRow = [string, string, string, string, number];
 interface SuggestIndex { b: BrandRow[]; i: InfRow[]; c: CosRow[]; x?: ExploreRow[] }
 interface Prepared {
@@ -95,7 +95,7 @@ function suggest(p: Prepared, terms: string[]): Item[] {
     { s: (ex[0]?.s ?? 0) >= 2 ? 4 : ex[0]?.s ?? 0, items: exItems },
     { s: brands[0]?.s ?? 0, items: brands.map(({ r: b }) => ({ kind: "ブランド", href: `${base}/brand/${b[0]}/`, label: b[1], sub: `動画 ${b[3]}本` })) },
     { s: infs[0]?.s ?? 0, items: infs.map(({ r: i }) => ({ kind: "インフルエンサー", href: `${base}/influencer/${i[0]}/`, label: i[1], sub: `動画 ${i[3]}本`, icon: i[2] })) },
-    { s: cos[0]?.s ?? 0, items: cos.map(({ r: c }) => ({ kind: "コスメ", href: `${base}/cosmetics/${c[0]}/`, label: c[3], sub: c[1], thumb: cosImg(c[6]) })) },
+    { s: cos[0]?.s ?? 0, items: cos.map(({ r: c }) => ({ kind: "コスメ", href: c[7] ? `${base}/video/${c[7]}/#cosmetics` : `${base}/cosmetics/${c[0]}/`, label: c[3], sub: c[1], thumb: cosImg(c[6]) })) },
   ];
   // 名前で強く当たった種類を先に（検索結果のページと同じ）
   return groups.sort((x, y) => y.s - x.s).flatMap((g) => g.items);

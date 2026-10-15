@@ -5,7 +5,7 @@
 import BrandFlag from "./BrandFlag.astro";
 import PrBadge from "./PrBadge.astro";
 import { getVideoCosmeticGroups } from "../lib/recipe";
-import { amazonSearchUrl, formatCount, getVideoColors, withBase, type VideoEntry } from "../lib/data";
+import { amazonSearchUrl, formatCount, getVideoColors, hasCosmeticPage, withBase, type VideoEntry } from "../lib/data";
 
 interface Props {
   video: VideoEntry;
@@ -64,17 +64,24 @@ const flowParts = parts.filter((p) => timeline.some((t) => t.p.key === p.key));
         <ul class="rs-items">
           {p.items.map((x, j) => (
             <li class="rs-item" id={`rs-it-${p.key}-${j}`}>
-              <a href={withBase(`/cosmetics/${x.slug}`)} class="rs-item-img product-well" tabindex="-1" aria-hidden="true">
-                {x.img ? <img src={x.img} alt="" loading="lazy" data-err="noimg" /> : <span class="noimg">No image</span>}
-              </a>
+              {/* 商品ページの無い商品（紹介1本）は、画像・名前・色をリンクにしない（341章） */}
+              {hasCosmeticPage(x.brand_id, x.name_id) ? (
+                <a href={withBase(`/cosmetics/${x.slug}`)} class="rs-item-img product-well" tabindex="-1" aria-hidden="true">
+                  {x.img ? <img src={x.img} alt="" loading="lazy" data-err="noimg" /> : <span class="noimg">No image</span>}
+                </a>
+              ) : (
+                <span class="rs-item-img product-well" aria-hidden="true">
+                  {x.img ? <img src={x.img} alt="" loading="lazy" data-err="noimg" /> : <span class="noimg">No image</span>}
+                </span>
+              )}
               <div class="rs-item-t">
                 <p class="rs-item-b"><BrandFlag brand_id={x.brand_id} />{x.brand}{x.tag && <span>{x.tag}</span>}</p>
-                <p class="rs-item-n"><a href={withBase(`/cosmetics/${x.slug}`)} class="phrase">{x.name}</a>{x.pr && <PrBadge own={x.own} class="ml-1.5 align-middle" />}</p>
+                <p class="rs-item-n">{hasCosmeticPage(x.brand_id, x.name_id) ? <a href={withBase(`/cosmetics/${x.slug}`)} class="phrase">{x.name}</a> : <span class="phrase">{x.name}</span>}{x.pr && <PrBadge own={x.own} class="ml-1.5 align-middle" />}</p>
                 {/* 紹介の中で触れていた色（メーカー公式の色の一覧と照合。押すと商品ページのその色の動画の一覧へ） */}
                 {(() => {
                   const cs = getVideoColors(v.key, x.brand_id, x.name_id);
                   return cs.length > 0 && (
-                    <p class="rs-item-c"><span>使った色</span>{cs.map((c) => <a href={withBase(`/cosmetics/${x.slug}/#color-${c.idx}`)}>{c.label}</a>)}</p>
+                    <p class="rs-item-c"><span>使った色</span>{cs.map((c) => (hasCosmeticPage(x.brand_id, x.name_id) ? <a href={withBase(`/cosmetics/${x.slug}/#color-${c.idx}`)}>{c.label}</a> : <span class="rs-cl">{c.label}</span>))}</p>
                   );
                 })()}
                 <div class="rs-item-act">
@@ -217,7 +224,7 @@ const flowParts = parts.filter((p) => timeline.some((t) => t.p.key === p.key));
   .rs-item-n a:hover { color: var(--color-rose); }
   .rs-item-c { margin-top: 4px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; font-size: 12px; }
   .rs-item-c span { color: var(--color-neutral-500); }
-  .rs-item-c a { padding: 1px 8px; border-radius: 999px; color: var(--c); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 45%, transparent); }
+  .rs-item-c a, .rs-item-c .rs-cl { padding: 1px 8px; border-radius: 999px; color: var(--c); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 45%, transparent); }
   .rs-item-c a:hover { background: var(--c); color: #fff; }
   .rs-item-act { margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
   .rs-time { display: inline-flex; align-items: center; gap: 4px; padding: 3px 12px; border-radius: 999px; font-size: 12px; font-family: var(--font-display); font-weight: 600; color: var(--c); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 45%, transparent); transition: background-color .3s, color .3s; }

@@ -11,13 +11,13 @@ import {
   getParentOfTag,
   getCosmeticListEntry,
   productOffer,
-  cosmeticSlug,
   categoryUrl,
   RANKING_TAG_ALIAS,
   withBase,
   breadcrumbLd,
   getRecentCounts,
   RECENT_DAYS,
+  cosmeticHref,
 } from "../../lib/data";
 
 export function getStaticPaths() {
@@ -96,7 +96,7 @@ const jsonLd = [
       "@type": "ListItem",
       position: x.base,
       name: `${x.r.brand} ${x.r.name}`,
-      url: new URL(withBase(`/cosmetics/${cosmeticSlug(x.r.brand_id, x.r.name_id)}`), Astro.site!).href,
+      url: new URL(cosmeticHref(x.r.brand_id, x.r.name_id), Astro.site!).href,
     })),
   },
   breadcrumbLd(crumbs, Astro.site!),
@@ -277,7 +277,7 @@ const jsonLd = [
               {summary.map(({ rank, r }) => (
                 <li>
                   {rank}位：
-                  <a href={withBase(`/cosmetics/${cosmeticSlug(r.brand_id, r.name_id)}`)} class="link-u text-ink font-medium">{r.brand}「{r.name}」</a>
+                  <a href={cosmeticHref(r.brand_id, r.name_id)} class="link-u text-ink font-medium">{r.brand}「{r.name}」</a>
                   <span class="text-neutral-500">（{r.channelCount}人が{r.videoCount}本の動画で紹介）</span>
                 </li>
               ))}

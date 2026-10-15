@@ -1,6 +1,6 @@
 ---
 import BrandFlag from "./BrandFlag.astro";
-import { cosmeticSlug, withBase, largerRakutenImage, type CosmeticTileData } from "../lib/data";
+import { withBase, largerRakutenImage, type CosmeticTileData, cosmeticHref } from "../lib/data";
 
 interface Props {
   tile: CosmeticTileData;
@@ -17,7 +17,7 @@ const { tile, rank, caption, current = false, showBrand = true } = Astro.props;
 ---
 
 <a
-  href={withBase(`/cosmetics/${cosmeticSlug(tile.brand_id, tile.name_id)}`)}
+  href={cosmeticHref(tile.brand_id, tile.name_id)}
   class:list={["group tile-0", { "outline outline-1 outline-rose outline-offset-4 rounded-2xl": current }]}
 >
   <div class="product-well tile-4">

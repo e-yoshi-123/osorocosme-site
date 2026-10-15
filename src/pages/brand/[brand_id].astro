@@ -4,7 +4,7 @@ import PageHead from "../../components/PageHead.astro";
 import Layout from "../../layouts/Layout.astro";
 import ShareButtons from "../../components/ShareButtons.astro";
 import CosmeticCard from "../../components/CosmeticCard.astro";
-import { GROUP_EN, categoryUrl, getRankingPages, getBrandProducers, getBrandsWithVideos, getAliasRedirects, getBrandName, getCosmeticsForBrand, breadcrumbLd, getBrandMeta, getBrandGroups, getBrandCosmeticsByCategory, getBrandTopCosmetics, getCosmeticVideoCounts, COUNTRY_NAMES, withBase, cosmeticSlug, formatCount } from "../../lib/data";
+import { GROUP_EN, categoryUrl, getRankingPages, getBrandProducers, getBrandsWithVideos, getAliasRedirects, getBrandName, getCosmeticsForBrand, breadcrumbLd, getBrandMeta, getBrandGroups, getBrandCosmeticsByCategory, getBrandTopCosmetics, getCosmeticVideoCounts, COUNTRY_NAMES, withBase, formatCount, cosmeticHref } from "../../lib/data";
 
 export function getStaticPaths() {
   return [
@@ -75,7 +75,7 @@ const jsonLd = [
               "@type": "ListItem",
               position: i + 1,
               name: `${brandName} ${it.name}`,
-              url: new URL(withBase(`/cosmetics/${cosmeticSlug(brand_id!, it.name_id)}`), Astro.site!).href,
+              url: new URL(cosmeticHref(brand_id!, it.name_id), Astro.site!).href,
             })),
         },
       ]

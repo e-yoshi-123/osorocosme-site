@@ -1,6 +1,6 @@
 ---
 import BrandFlag from "./BrandFlag.astro";
-import { cosmeticSlug, withBase, parseRakutenImage, getCosmeticListEntry, usesYahooImage } from "../lib/data";
+import { withBase, parseRakutenImage, getCosmeticListEntry, usesYahooImage, cosmeticHref } from "../lib/data";
 import PrBadge from "./PrBadge.astro";
 
 interface Props {
@@ -35,7 +35,7 @@ const yahooEntry = entry?.yahoo_text_link && entry.yahoo_image_url ? entry : und
 // 楽天の画像がどれも店名ロゴ入りの商品は、Yahoo!の画像を出す（334章）
 const rakuten = usesYahooImage(entry) ? undefined : parseRakutenImage(rakutenImageHtml);
 const yahooImage = rakuten ? undefined : yahooEntry;
-const productHref = withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}`);
+const productHref = cosmeticHref(brand_id, name_id);
 ---
 
 <div class="group card-5">

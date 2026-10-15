@@ -16,12 +16,12 @@ import {
   RAKUTEN_PER_GROUP_IN_BAND,
   getCosmeticListEntry,
   productOffer,
-  cosmeticSlug,
   categoryUrl,
   hasRankingPage,
   formatJaDate,
   withBase,
   breadcrumbLd,
+  cosmeticHref,
 } from "../../lib/data";
 
 export function getStaticPaths() {
@@ -86,7 +86,7 @@ const jsonLd = [
         "@type": "ListItem",
         position: i + 1,
         name: `${r.it.brand} ${r.it.name}`,
-        url: new URL(withBase(`/cosmetics/${cosmeticSlug(r.it.brand_id, r.it.name_id)}`), Astro.site!).href,
+        url: new URL(cosmeticHref(r.it.brand_id, r.it.name_id), Astro.site!).href,
       })),
   },
   breadcrumbLd(crumbs, Astro.site!),

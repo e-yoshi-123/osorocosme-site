@@ -14,7 +14,9 @@ import {
   canonicalBrandId,
   getCosmeticListEntry,
   getVideosUsingCosmetic,
-  isCosmeticIndexed,
+  hasCosmeticPage,
+  cosmeticHref,
+  parseCosmeticSlug,
   getCoMentionedCosmetics,
   getCategoryTop,
   getBrandTopCosmetics,
@@ -49,7 +51,8 @@ import titleOverrides from "../../data/title-overrides.json";
 
 export function getStaticPaths() {
   return [
-    ...getUsedCosmeticKeys().map(({ brand_id, name_id }) => ({
+    // 紹介1本の商品（直近90日の紹介を除く）はページを作らない（341章）
+    ...getUsedCosmeticKeys().filter(({ brand_id, name_id }) => hasCosmeticPage(brand_id, name_id)).map(({ brand_id, name_id }) => ({
       params: { slug: cosmeticSlug(brand_id, name_id) },
       props: { brand_id, name_id, redirectTo: "" },
     })),
@@ -67,13 +70,16 @@ export function getStaticPaths() {
 }
 
 const { brand_id, name_id, redirectTo } = Astro.props;
-if (redirectTo) return Astro.redirect(withBase(`/cosmetics/${redirectTo}`), 301);
+// 転送先の商品にページが無ければ、紹介している動画のページへ（341章）
+if (redirectTo) {
+  const t = parseCosmeticSlug(redirectTo);
+  return Astro.redirect(t ? cosmeticHref(t.brand_id, t.name_id) : withBase(`/cosmetics/${redirectTo}`), 301);
+}
 
 // cosmetics_list.json を正データとする（現行WordPressは動画反復順で最後に処理した値が勝つ
 // 不安定な実装だったため、単一の正規ソースに統一）
 const entry = getCosmeticListEntry(brand_id, name_id);
 const videosUsing = sortByPublishedDesc(getVideosUsingCosmetic(brand_id, name_id));
-const noindex = !isCosmeticIndexed(videosUsing); // 2本以上、または直近90日の動画で紹介（301章）
 
 const facts = getCosmeticFacts(brand_id, name_id);
 const producers = getProducersOf(brand_id, name_id);
@@ -180,7 +186,7 @@ const jsonLd = entry
   : [];
 ---
 
-<Layout title={entry ? (titleOverride?.title ?? `${entry.brand} ${entry.name}の紹介動画・使っている人`) : "商品詳細"} description={description} image={imageSrc} jsonLd={jsonLd} noindex={noindex}>
+<Layout title={entry ? (titleOverride?.title ?? `${entry.brand} ${entry.name}の紹介動画・使っている人`) : "商品詳細"} description={description} image={imageSrc} jsonLd={jsonLd} >
   {
     !entry ? (
       <p class="text-neutral-500">商品情報が見つかりませんでした。</p>
