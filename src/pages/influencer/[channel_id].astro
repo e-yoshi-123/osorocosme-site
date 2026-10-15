@@ -162,7 +162,8 @@ const jsonLd = influencer
   : [];
 ---
 
-<Layout title={influencer ? `${influencer.channel_title}のメイク・愛用コスメ一覧（${uniqueItems}品）` : "インフルエンサー詳細"} description={description} image={influencer?.channel_icon} jsonLd={jsonLd}>
+{/* 紹介コスメが0品の人のページは検索に出さない（ユーザー判断、338章。サイトマップにも載らない） */}
+<Layout title={influencer ? `${influencer.channel_title}のメイク・愛用コスメ一覧（${uniqueItems}品）` : "インフルエンサー詳細"} description={description} image={influencer?.channel_icon} jsonLd={jsonLd} noindex={uniqueItems === 0}>
   {
     !influencer ? (
       <p class="text-neutral-500">インフルエンサーが見つかりませんでした。</p>
