@@ -283,9 +283,10 @@ const jsonLd = entry
               {official?.price !== undefined && (
                 <p class="mt-1 text-xs text-neutral-500">定価 <span class="num-display text-sm text-neutral-700">¥{formatCount(official.price)}</span>（税込・{official.url ? <a href={official.url} target="_blank" rel="nofollow noopener" class="link-u">メーカー公式</a> : "メーカー公式"}）</p>
               )}
-              {/* 参考価格が定価より大きく高いとき（限定品の売り切れ後の出品など）は、そうと分かるように書く（338章） */}
-              {official?.price !== undefined && shownPrice !== undefined && shownPrice >= official.price * 1.3 && (
-                <p class="mt-1.5 text-xs text-rose leading-relaxed">参考価格は定価の約{(shownPrice / official.price).toFixed(1)}倍です。{official.limited ? "限定品のため、" : ""}定価より高い出品しか見つからない場合があります。</p>
+              {/* 限定品で、参考価格が定価より大きく高いとき（売り切れ・予約の出品など）は、そうと分かるように書く（338章）。
+                  限定品でない商品の大きな差は、容量・入り数の違いや出品の取り違えのことが多いので出さない（定期点検の10番で見る） */}
+              {official?.limited && official.price !== undefined && shownPrice !== undefined && shownPrice >= official.price * 1.3 && (
+                <p class="mt-1.5 text-xs text-rose leading-relaxed">参考価格は定価の約{(shownPrice / official.price).toFixed(1)}倍です。限定品のため、定価より高い出品しか見つからないことがあります。</p>
               )}
               {/* 楽天・Yahoo!ショッピング・Amazonのボタン（data-buy の扱いは従来どおり）。Amazonは検索結果へのリンクで、全商品に出す。3つとも同じ白い枠（206章） */}
               <div class="u-21 max-md:!mt-4 max-md:!gap-2">
