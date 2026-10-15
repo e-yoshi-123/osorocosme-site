@@ -1,0 +1,32 @@
+---
+// ランキングのページの「まとめて見る」（細かいカテゴリのとき）と「スコアの見方」。
+// PCでは見出しの下、スマホでは一覧の下に出す（スマホの1画面目に商品が入るように。336章）
+import { categoryUrl } from "../lib/data";
+
+interface Props {
+  parent?: { key: string; children: string[]; list: unknown[] };
+  class?: string;
+}
+const { parent, class: cls } = Astro.props;
+---
+
+<div class={cls}>
+  {
+    parent && (
+      <a href={categoryUrl(parent.key)} class="group mt-8 flex items-center justify-between gap-3 border-y border-ink/15 py-4 text-sm hover:text-rose transition-colors">
+        <span>「{parent.key}」（{parent.children.join("・")}）をまとめて見る</span>
+        <span class="shrink-0 num-display text-lg">{parent.list.length}<span class="font-sans text-xs ml-0.5">品</span> <span class="inline-block transition-transform group-hover:translate-x-1">→</span></span>
+      </a>
+    )
+  }
+  <details class:list={["border-b border-ink/15 text-xs text-neutral-600", !parent && "border-t md:border-t-0"]}>
+    <summary class="py-4 cursor-pointer select-none hover:text-rose flex items-center gap-2"><span class="w-5 h-5 rounded-full border border-ink/25 inline-flex items-center justify-center text-xs">?</span>スコアの見方</summary>
+    <div class="pb-5 pt-1 space-y-1.5 leading-relaxed max-w-2xl">
+      <p>紹介した動画の<b>合計再生回数</b>、<b>紹介動画の本数</b>、<b>紹介したインフルエンサー（チャンネル）の数</b>から算出した人気スコアの順です。</p>
+      <p>再生数が多く、複数の動画・複数のインフルエンサーに紹介されている商品ほど上位になります。同じ人が何本も紹介しているだけの商品より、多くの人に紹介されている商品が上位になりやすいよう、チャンネル数を重めにしています。</p>
+      <p>PR・提供の紹介（概要欄の記載や、YouTubeの有料プロモーションの表示があるもの）は、提供元のブランドの商品（提供元が書かれていない動画と店舗の提供は、その動画のすべての商品）を数えていません。商品ページの紹介の一覧には「PR」の印を付けて残しています。インフルエンサー本人がプロデュースしたブランドを本人の動画で紹介したものも数えていません（「本人のブランド」の印）。</p>
+      <p class="text-neutral-500">紹介動画が1〜2本の商品は、動画が1本増えるだけで順位が大きく変わります。順位の差が小さい範囲は、目安としてご覧ください。</p>
+      <p class="text-neutral-500">（計算式：log₁₀(合計再生数＋1) ＋ log₁₀(紹介動画数＋1)×2 ＋ log₁₀(紹介チャンネル数＋1)×1.5）</p>
+    </div>
+  </details>
+</div>

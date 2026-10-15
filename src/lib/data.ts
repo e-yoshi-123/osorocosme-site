@@ -1297,18 +1297,20 @@ export interface ConcernDef {
   /** 言及の文（読点・句点で区切った1節）にこれが含まれれば、その悩みの紹介とみなす */
   pattern: RegExp;
   lead: string;
+  /** 先頭に出す大分類（検索の多くがスキンケアを探している悩みは「スキンケア」。無ければベースメイクから。336章） */
+  first?: string;
 }
 export const CONCERNS: ConcernDef[] = [
-  { slug: "pores", en: "Pores", name: "毛穴", pattern: /毛穴/, lead: "毛穴を隠したい・目立たなくしたいときに、インフルエンサーが使っているコスメです。下地・パウダーから洗顔・スキンケアまで、「毛穴」に触れて紹介されたものを集めました。" },
-  { slug: "dryness", en: "Dry", name: "乾燥", pattern: /乾燥|カサカサ|粉吹/, lead: "乾燥肌・乾燥する季節に、インフルエンサーが使っているコスメです。「乾燥しない」「乾燥肌でも使える」と紹介されたものを集めました。" },
+  { slug: "pores", en: "Pores", name: "毛穴", pattern: /毛穴/, lead: "毛穴を隠したい・目立たなくしたいときに、インフルエンサーが使っているコスメです。洗顔・スキンケアから下地・パウダーまで、「毛穴」に触れて紹介されたものを集めました。", first: "スキンケア" },
+  { slug: "dryness", en: "Dry", name: "乾燥", pattern: /乾燥|カサカサ|粉吹/, lead: "乾燥肌・乾燥する季節に、インフルエンサーが使っているコスメです。「乾燥しない」「乾燥肌でも使える」と紹介されたものを集めました。", first: "スキンケア" },
   { slug: "oil", en: "Shine", name: "テカリ・化粧崩れ", pattern: /テカ|皮脂|崩れにく|崩れ防止|化粧崩れ/, lead: "テカリや化粧崩れを防ぎたいときに、インフルエンサーが使っているコスメです。「崩れにくい」「皮脂を抑える」と紹介されたものを集めました。" },
-  { slug: "spots", en: "Spots", name: "シミ・そばかす", pattern: /シミ|そばかす|色素沈着|美白/, lead: "シミ・そばかすをカバーしたり、美白ケアをしたりするときに、インフルエンサーが使っているコスメです。" },
+  { slug: "spots", en: "Spots", name: "シミ・そばかす", pattern: /シミ|そばかす|色素沈着|美白/, lead: "シミ・そばかすをカバーしたり、美白ケアをしたりするときに、インフルエンサーが使っているコスメです。", first: "スキンケア" },
   { slug: "redness", en: "Red", name: "赤み", pattern: /赤み|赤ら/, lead: "頬や小鼻の赤みを抑えたいときに、インフルエンサーが使っているコスメです。コントロールカラー・コンシーラー・鎮静ケアなどを集めました。" },
   { slug: "dullness", en: "Dull", name: "くすみ", pattern: /くすみ|くすん/, lead: "肌のくすみを飛ばしたいときに、インフルエンサーが使っているコスメです。トーンアップ下地・ブライトニングケアなどを集めました。" },
   { slug: "dark-circles", en: "Dark", name: "クマ", pattern: /クマ/, lead: "目の下のクマを隠したいときに、インフルエンサーが使っているコスメです。コンシーラー・カラー下地などを集めました。" },
-  { slug: "wrinkles", en: "Lines", name: "シワ・たるみ", pattern: /シワ|しわ|たるみ|エイジング/, lead: "シワ・たるみなどのエイジングケアで、インフルエンサーが使っているコスメです。" },
-  { slug: "acne", en: "Acne", name: "ニキビ・肌荒れ", pattern: /ニキビ|にきび|肌荒れ|吹き出物/, lead: "ニキビ・肌荒れのときや、ニキビ跡を隠したいときに、インフルエンサーが使っているコスメです。" },
-  { slug: "sensitive", en: "Calm", name: "敏感肌", pattern: /敏感|低刺激/, lead: "敏感肌・肌がゆらぐときに、インフルエンサーが使っているコスメです。「低刺激」「敏感肌でも使える」と紹介されたものを集めました。" },
+  { slug: "wrinkles", en: "Lines", name: "シワ・たるみ", pattern: /シワ|しわ|たるみ|エイジング/, lead: "シワ・たるみなどのエイジングケアで、インフルエンサーが使っているコスメです。", first: "スキンケア" },
+  { slug: "acne", en: "Acne", name: "ニキビ・肌荒れ", pattern: /ニキビ|にきび|肌荒れ|吹き出物/, lead: "ニキビ・肌荒れのときや、ニキビ跡を隠したいときに、インフルエンサーが使っているコスメです。", first: "スキンケア" },
+  { slug: "sensitive", en: "Calm", name: "敏感肌", pattern: /敏感|低刺激/, lead: "敏感肌・肌がゆらぐときに、インフルエンサーが使っているコスメです。「低刺激」「敏感肌でも使える」と紹介されたものを集めました。", first: "スキンケア" },
 ];
 /** 悪い評価の言い方。HARD があれば数えない。SOFT は「〜な方におすすめ」のような良い言い方（POS）が同じ節に無いときだけ数えない */
 const CONCERN_NEG_HARD = /向かな|合わな|注意|悪化|イマイチ|微妙|残念|カサつ[いく]た/;
@@ -1403,6 +1405,7 @@ function buildConcern(def: ConcernDef) {
     group: g.group,
     items: items.filter((e) => CATEGORY_TAG_TO_GROUP[e.tag] === g.group).slice(0, CONCERN_PER_GROUP),
   })).filter((g) => g.items.length > 0);
+  if (def.first) groups.sort((a, b) => Number(b.group === def.first) - Number(a.group === def.first));
   return { def, videoCount: videoKeys.size, channelCount: channels.size, itemCount: items.length, groups, items };
 }
 export function getConcern(slug: string) {

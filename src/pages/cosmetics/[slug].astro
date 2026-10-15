@@ -129,6 +129,8 @@ const factSentence = entry
   ? `${entry.brand}「${entry.name}」は、YouTubeのコスメ紹介動画${facts.videoCount}本・インフルエンサー${facts.channelCount}人に紹介されています` +
     (facts.rank ? `。「${facts.mainTag}」カテゴリの人気ランキングでは${facts.rankTotal}品中${facts.rank}位です。` : "。")
   : "";
+// 名前のすぐ下に出す紹介者の一言：PR・提供でない紹介のうち、発言があって再生数の最も多い動画のもの（336章）
+const leadIntro = facts.introductions.filter((i) => !i.pr && i.quotes.length > 0).sort((a, b) => b.views - a.views)[0];
 const firstIntro = facts.introductions[facts.introductions.length - 1];
 const lastIntro = facts.introductions[0];
 // Search Consoleの検索語に合わせたページごとのtitle（274章）
@@ -183,14 +185,15 @@ const jsonLd = entry
     ) : (
       <>
         {/* ===== 商品の表紙：左に額装した画像、右に名前・価格・購入ボタン ===== */}
-        <nav class="item-15" aria-label="パンくず">
-          <a href={withBase("/")} class="link-u">Home</a><span aria-hidden="true">/</span>
-          {facts.mainTag ? <a href={categoryUrl(facts.mainTag)} class="link-u">{facts.mainTag}</a> : <span>{entry.category}</span>}
-          <span aria-hidden="true">/</span><span class="truncate text-ink">{entry.name}</span>
+        <nav class="item-15 max-md:!mb-5" aria-label="パンくず">
+          <a href={withBase("/")} class="link-u shrink-0">Home</a><span aria-hidden="true">/</span>
+          {facts.mainTag ? <a href={categoryUrl(facts.mainTag)} class="link-u shrink-0 whitespace-nowrap">{facts.mainTag}</a> : <span class="shrink-0 whitespace-nowrap">{entry.category}</span>}
+          <span aria-hidden="true">/</span><span class="truncate min-w-0 text-ink">{entry.name}</span>
         </nav>
-        <div class="panel item-16">
-          {/* 右の列（値段・購入・数字・紹介者）のほうがずっと長いので、PCでは画像を画面に追従させて左の下が空いて見えないようにする（279章） */}
-          <div class="md:col-span-5 relative md:sticky md:top-24">
+        <div class="panel item-16 max-md:!gap-5 max-md:grid-cols-1">
+          {/* 右の列（値段・購入・数字・紹介者）のほうがずっと長いので、PCでは画像を画面に追従させて左の下が空いて見えないようにする（279章）。
+              スマホでは画像を小さくし、名前・価格・購入ボタン・紹介者の一言が1画面目に入るようにする（336章） */}
+          <div class="md:col-span-5 relative md:sticky md:top-24 w-[55%] max-w-[200px] mx-auto md:w-auto md:max-w-none md:mx-0">
             <div class="product-well overflow-hidden item-23">
               {rakutenImage ? (
                 <div
@@ -213,14 +216,14 @@ const jsonLd = entry
               )}
             </div>
             {facts.rank && facts.rank <= 10 && (
-              <a href={categoryUrl(facts.mainTag!)} class="absolute -top-4 right-2 md:-right-5 w-20 h-20 md:w-24 md:h-24 rounded-full bg-ink text-paper flex flex-col items-center justify-center rotate-[8deg] shadow-xl hover:bg-rose transition-colors">
-                <span class="label-caps text-[11px] text-paper/60">Ranking</span>
-                <span class="num-display text-[22px] md:text-[26px] leading-none">No.{facts.rank}</span>
+              <a href={categoryUrl(facts.mainTag!)} class="absolute -top-3 -right-6 md:-top-4 md:-right-5 w-16 h-16 md:w-24 md:h-24 rounded-full bg-ink text-paper flex flex-col items-center justify-center rotate-[8deg] shadow-xl hover:bg-rose transition-colors">
+                <span class="label-caps text-[9px] md:text-[11px] text-paper/60">Ranking</span>
+                <span class="num-display text-[18px] md:text-[26px] leading-none">No.{facts.rank}</span>
               </a>
             )}
           </div>
 
-          <div class="md:col-span-7 md:pt-4">
+          <div class="md:col-span-7 md:pt-4 min-w-0">
             <a href={withBase(`/brand/${canonicalBrandId(entry.brand_id)}`)} class="link-u text-xs font-bold tracking-[0.14em] text-rose"><BrandFlag brand_id={entry.brand_id} />{entry.brand}</a>
             <h1 class="font-serif phrase item-22">{entry.name}</h1>
             {officialTags.length > 0 && (
@@ -244,6 +247,19 @@ const jsonLd = entry
                 ))}
               </div>
             )}
+            {leadIntro && (
+              <a href="#who" class="mt-4 flex gap-3 items-start rounded-2xl bg-blush/50 px-3.5 py-3 hover:bg-blush transition-colors">
+                {leadIntro.channel_icon ? (
+                  <img referrerpolicy="no-referrer" src={leadIntro.channel_icon} alt="" width="32" height="32" class="w-8 h-8 shrink-0 rounded-full object-cover" loading="lazy" />
+                ) : (
+                  <span class="w-8 h-8 shrink-0 rounded-full bg-paper flex items-center justify-center text-xs text-rose font-semibold" aria-hidden="true">{leadIntro.channel_title.slice(0, 1)}</span>
+                )}
+                <span class="min-w-0 text-sm leading-relaxed">
+                  <span class="block text-neutral-800 line-clamp-2">「{leadIntro.quotes[0]}」</span>
+                  <span class="block mt-0.5 text-xs text-neutral-500 truncate">{leadIntro.channel_title}・{formatJaDate(leadIntro.published_at)}の動画{facts.channelCount > 1 && `（ほか${facts.channelCount - 1}人も紹介）`}</span>
+                </span>
+              </a>
+            )}
             {findLinks.length > 0 ? (
               <p class="mt-4 flex flex-wrap gap-1.5">
                 {findLinks.map((l) => <a href={withBase(l.path)} class="item-4">{l.label}</a>)}
@@ -252,7 +268,7 @@ const jsonLd = entry
               entry.category && <p class="mt-4 inline-flex items-center gap-2 text-xs text-neutral-600 border border-ink/15 rounded-full px-3 py-1">{entry.category}</p>
             )}
 
-            <div class="u-22">
+            <div class="u-22 max-md:!mt-5 max-md:!pt-5">
               {buyable && entry.now_price !== undefined && (
                 <p data-buy class="item-21"><span class="label-caps text-neutral-500">Price</span><span class="num-display text-[24px] leading-none">¥{formatCount(entry.now_price)}</span><span class="u-11"><span class="inline-block">楽天市場の参考価格</span>{entry.price_updated && <span class="inline-block">・{formatJaDate(entry.price_updated)}時点</span>}</span></p>
               )}
@@ -266,7 +282,7 @@ const jsonLd = entry
                 <p class="mt-1 text-xs text-neutral-500">定価 <span class="num-display text-sm text-neutral-700">¥{formatCount(official.price)}</span>（税込・{official.url ? <a href={official.url} target="_blank" rel="nofollow noopener" class="link-u">メーカー公式</a> : "メーカー公式"}）</p>
               )}
               {/* 楽天・Yahoo!ショッピング・Amazonのボタン（data-buy の扱いは従来どおり）。Amazonは検索結果へのリンクで、全商品に出す。3つとも同じ白い枠（206章） */}
-              <div class="u-21">
+              <div class="u-21 max-md:!mt-4 max-md:!gap-2">
                 {buyable && entry.rakuten_text_link && (
                   <a data-buy href={entry.rakuten_text_link} target="_blank" rel="nofollow sponsored noopener" class="group item-2">
                     楽天市場で見る<span class="item-3" aria-hidden="true">→</span>

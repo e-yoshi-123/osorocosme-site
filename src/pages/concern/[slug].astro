@@ -4,6 +4,7 @@ import PageHead from "../../components/PageHead.astro";
 import Layout from "../../layouts/Layout.astro";
 import ShareButtons from "../../components/ShareButtons.astro";
 import RankingRow from "../../components/RankingRow.astro";
+import PageNav from "../../components/PageNav.astro";
 import {
   getPublishedConcerns,
   getConcern,
@@ -80,15 +81,24 @@ const jsonLd = [
 ---
 
 <Layout title={title} description={description} image={topImage} jsonLd={jsonLd}>
-  <nav class="text-xs text-neutral-500 mb-8 flex flex-wrap gap-2" aria-label="パンくず">
+  <nav class="text-xs text-neutral-500 mb-5 md:mb-8 flex flex-wrap gap-2" aria-label="パンくず">
     <a href={withBase("/")} class="link-u">Home</a><span aria-hidden="true">/</span>
     <a href={withBase("/concern/")} class="link-u">肌悩みから探す</a><span aria-hidden="true">/</span>
     <span>{c.def.name}</span>
   </nav>
 
   <PageHead en="By skin concern" title={`${c.def.name}が気になる人に`} lead={c.def.lead}>
-    <ShareButtons text={`${c.def.name}が気になる人に。インフルエンサーが使うコスメ`} class="mt-5" />
+    <div class="hidden md:block"><ShareButtons text={`${c.def.name}が気になる人に。インフルエンサーが使うコスメ`} class="mt-5" /></div>
   </PageHead>
+
+  {/* カテゴリへ飛べる目次の帯（スマホでは後ろのカテゴリが画面7枚分ほど下になるため。336章） */}
+  <PageNav
+    class="mb-6 md:mb-8"
+    items={[
+      ...groups.map((g) => ({ label: `${g.group} ${g.rows.length}`, target: `#g-${encodeURIComponent(g.group)}` })),
+      ...(withIngredients.length > 0 ? [{ label: "成分", target: "#ci-band" }] : []),
+    ]}
+  />
 
   <HowWeCount>
     <ul class="list-disc pl-5 space-y-1">
@@ -100,24 +110,8 @@ const jsonLd = [
   </HowWeCount>
 
   {
-    withIngredients.length > 0 && (
-      <section class="mb-12" aria-labelledby="ci-band">
-        <h2 id="ci-band" class="font-serif h-section font-semibold mb-2">よく一緒に語られる成分</h2>
-        <p class="text-xs text-neutral-500 mb-4">動画の1つの発言の中で「{c.def.name}」と一緒に語られた回数の多い成分です。成分の効果を示すものではありません。</p>
-        <div class="flex flex-wrap gap-2">
-          {withIngredients.map((o) => (
-            <a href={withBase(`/concern/${o.concern.slug}/${o.ingredient.slug}/`)} class="rounded-full border border-ink/15 bg-white/70 px-4 py-2 text-sm text-ink hover:border-ink/40">
-              {o.ingredient.name}<span class="ml-2 text-xs text-neutral-500">{o.mentionCount}件</span>
-            </a>
-          ))}
-        </div>
-      </section>
-    )
-  }
-
-  {
     groups.map((g) => (
-      <section class="panel mb-6 md:mb-8">
+      <section id={`g-${encodeURIComponent(g.group)}`} class="panel mb-6 md:mb-8">
         <h2 class="font-serif h-section font-semibold mb-4">{g.group}</h2>
         <div class="@container">
           <ol class="divide-y divide-ink/10">
@@ -159,6 +153,23 @@ const jsonLd = [
   }
 
   <p class="text-xs text-neutral-500 mb-8">価格は楽天市場で確認した時点の参考価格です。最新の価格・在庫は楽天市場でご確認ください。肌に合うかどうかには個人差があります。</p>
+
+  {
+    withIngredients.length > 0 && (
+      <section class="mb-10" aria-labelledby="ci-band">
+        <h2 id="ci-band" class="font-serif h-section font-semibold mb-2">よく一緒に語られる成分</h2>
+        <p class="text-xs text-neutral-500 mb-4">動画の1つの発言の中で「{c.def.name}」と一緒に語られた回数の多い成分です。成分の効果を示すものではありません。</p>
+        <div class="flex flex-wrap gap-2">
+          {withIngredients.map((o) => (
+            <a href={withBase(`/concern/${o.concern.slug}/${o.ingredient.slug}/`)} class="rounded-full border border-ink/15 bg-white/70 px-4 py-2 text-sm text-ink hover:border-ink/40">
+              {o.ingredient.name}<span class="ml-2 text-xs text-neutral-500">{o.mentionCount}件</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
 
   <ShareButtons text={`${c.def.name}が気になる人に。インフルエンサーが使うコスメ`} label="このページをシェア" class="mb-10" />
 
