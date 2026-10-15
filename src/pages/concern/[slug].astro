@@ -95,7 +95,8 @@ const jsonLd = [
   <PageNav
     class="mb-6 md:mb-8"
     items={[
-      ...groups.map((g) => ({ label: `${g.group} ${g.rows.length}`, target: `#g-${encodeURIComponent(g.group)}` })),
+      // id は「g-」＋カテゴリ名のURL用の文字（%E3…）。% は「#…」のセレクタに使えずスクリプトが止まっていたので、属性のセレクタで渡し、リンク先は今までどおり（339章）
+      ...groups.map((g) => ({ label: `${g.group} ${g.rows.length}`, target: `[id="g-${encodeURIComponent(g.group)}"]`, href: `#g-${encodeURIComponent(g.group)}` })),
       ...(withIngredients.length > 0 ? [{ label: "成分", target: "#ci-band" }] : []),
     ]}
   />
