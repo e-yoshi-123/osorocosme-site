@@ -612256,7 +612256,7 @@
     "view_count": "1170156",
     "duration": "PT2M1S",
     "check_status": true,
-    "delete_flg": false,
+    "delete_flg": true,
     "processed": true,
     "cosmetics": [
       {
@@ -612273,7 +612273,8 @@
         ]
       }
     ],
-    "updated_at": "2026-10-08"
+    "hidden_reason": "not_influencer",
+    "updated_at": "2026-10-16"
   },
   "eRpU3Y_ud_4": {
     "video_id": "eRpU3Y_ud_4",
