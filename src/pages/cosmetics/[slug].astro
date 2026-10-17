@@ -47,6 +47,7 @@ import {
   INTRO_SPLIT_OVER,
   introProfileSummary,
   getCosmeticColorOptions,
+  getSlugAliases,
 } from "../../lib/data";
 import titleOverrides from "../../data/title-overrides.json";
 
@@ -375,7 +376,7 @@ const jsonLd = entry
               );
             })()}
             {/* マイコスメ（5-4）：使っているコスメ・気になるコスメとして、この端末のブラウザに登録する（同じ商品は片方にだけ入る。259章）。表示はスクリプトで切り替える（スクリプトなしでは出さない） */}
-            <div data-mycosme hidden class="item-17" data-slug={cosmeticSlug(brand_id, name_id)} data-name={`${entry.brand} ${entry.name}`} data-colors={JSON.stringify(getCosmeticColorOptions(brand_id, name_id))}>
+            <div data-mycosme hidden class="item-17" data-slug={cosmeticSlug(brand_id, name_id)} data-name={`${entry.brand} ${entry.name}`} data-colors={JSON.stringify(getCosmeticColorOptions(brand_id, name_id))} data-aliases={JSON.stringify(getSlugAliases(cosmeticSlug(brand_id, name_id)))}>
               <button type="button" data-mycosme-toggle="items" aria-pressed="false" class="group rounded-full border item-mc">
                 <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path class="group-aria-pressed:hidden" d="M12 5v14M5 12h14" /><path class="hidden group-aria-pressed:block" d="m5 12.5 4.5 4.5L19 7" /></svg>
                 <span data-label>使っている</span>
@@ -565,11 +566,14 @@ const jsonLd = entry
 
 <script>
   // マイコスメの「使っている」「気になる」に入れる・外す（5-4。保存はこの端末のブラウザだけ。同じ商品は片方にだけ入る）
-  import { has, add, remove, onChange, colorsOf, type ListKind } from "../../scripts/my-cosme-store";
+  import { has, add, remove, onChange, colorsOf, renameSlugs, type ListKind } from "../../scripts/my-cosme-store";
   import { mountColorChooser, colorSummary } from "../../scripts/color-chooser";
   const myBox = document.querySelector<HTMLElement>("[data-mycosme]");
   if (myBox) {
     const slug = myBox.dataset.slug!;
+    // この商品に統合した古い番号で登録していれば、この商品の番号に移す（363章）
+    const aliases = JSON.parse(myBox.dataset.aliases || "[]") as string[];
+    if (aliases.length) renameSlugs(Object.fromEntries(aliases.map((a) => [a, slug])));
     const btns = Array.from(myBox.querySelectorAll<HTMLButtonElement>("[data-mycosme-toggle]"));
     const LABEL: Record<ListKind, [string, string]> = { items: ["使っている", "使っている（登録済み）"], wish: ["気になる", "気になる（登録済み）"] };
     // 登録した商品の色（公式の色の一覧と、色から探すの地図に出る色）

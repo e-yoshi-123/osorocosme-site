@@ -11,7 +11,7 @@
  * 成分の近さ（5-3）：登録したコスメの公式の全成分に入っている成分（成分のページがあるもの）を数え、候補の成分がそれをどれだけ覆うか（0〜1）で
  * 点数を最大 ING_WEIGHT 倍まで上げる。よく入っている成分ごとに、その成分が入ったスキンケアの欄も出す。効能は書かず、成分名の事実だけを出す。 */
 import { norm, splitTerms } from "../lib/search-norm";
-import { load, add, remove, has, save, merge, sanitize, exportText, onChange, type MyCosmeData, type ListKind } from "./my-cosme-store";
+import { load, add, remove, has, save, merge, sanitize, exportText, onChange, renameSlugs, type MyCosmeData, type ListKind } from "./my-cosme-store";
 import { sync, pushIfConnected, disconnect, isConnected } from "./my-cosme-drive";
 import { mountColorChooser, colorSummary } from "./color-chooser";
 
@@ -728,6 +728,8 @@ async function main() {
   }
   $("[data-loading]").remove();
   $("[data-ready]").hidden = false;
+  // 統合した商品に古い番号で登録していれば、寄せ先の番号に移す（363章。つないでいればドライブにも書く）
+  if (renameSlugs(p.idx.r)) afterLocalChange();
   const renderAll = (d: MyCosmeData) => {
     renderList(p, d);
     renderConcernChips(p, d);

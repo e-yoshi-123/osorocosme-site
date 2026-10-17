@@ -200,7 +200,7 @@ const crumbs = [
 </style>
 
 <script>
-  import { load as loadMyCosme, onChange as onMyCosmeChange } from "../../scripts/my-cosme-store";
+  import { load as loadMyCosme, onChange as onMyCosmeChange, renameSlugs } from "../../scripts/my-cosme-store";
   import { colorBaseLabel } from "../../lib/color-label";
   type Data = { p: [string, string, number, string, string, number, string][]; c: [number, string, string, number, string][]; r?: Record<string, string> };
   type Lab = [number, number, number];
@@ -672,6 +672,7 @@ const crumbs = [
   fetch(root.dataset.src!).then((r) => r.json()).then((d: Data) => {
     data = d;
     labs = d.c.map((c) => lab(c[2]));
+    if (d.r) renameSlugs(d.r);  // 統合した商品に古い番号で登録していれば、寄せ先の番号に移す（363章）
     readMine();  // 転送の表を読んでから、マイコスメを読み直す
     if (!restoreState()) render();
   }).catch(() => { statusEl.textContent = "色の一覧を読み込めませんでした。ページを読み込み直してください。"; });

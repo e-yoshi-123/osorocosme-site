@@ -141,6 +141,35 @@ export function setColors(slug: string, kind: ListKind, labels: string[]): boole
   return save(d);
 }
 
+/** 統合した商品（古い slug → 寄せ先の slug）に古い番号で登録していれば、寄せ先の番号に移す（選んだ色も移す。363章）。
+ * 古い番号には消した記録を付ける（ドライブとの同期で、ほかの端末から古い番号が戻らないように）。両方にあれば新しく登録したほうを残す。
+ * 移したら保存して true（何も無ければ保存しない） */
+export function renameSlugs(map: Record<string, string>): boolean {
+  const d = load();
+  let changed = false;
+  const now = Date.now();
+  for (const kind of ["items", "wish"] as const) {
+    for (const [from, it] of Object.entries(d[kind])) {
+      const to = map[from];
+      if (!to || to === from) continue;
+      const cur = d[kind][to];
+      if (!cur || it.t > cur.t) d[kind][to] = { ...it, ...(cur?.c?.length && (cur.ct || 0) > (it.ct || 0) ? { c: cur.c, ct: cur.ct } : {}) };
+      delete d[REMOVED_OF[kind]][to];
+      delete d[kind][from];
+      d[REMOVED_OF[kind]][from] = now;
+      changed = true;
+    }
+  }
+  // 「使っている」と「気になる」の両方に入ったら、新しく入れたほうを残す（同じ商品は片方にだけ）
+  for (const s of Object.keys(d.wish)) {
+    if (!d.items[s]) continue;
+    const drop = d.items[s].t >= d.wish[s].t ? "wish" : "items";
+    delete d[drop][s];
+    d[REMOVED_OF[drop]][s] = now;
+  }
+  return changed ? save(d) : false;
+}
+
 export function remove(slug: string, kind: Kind = "items"): boolean {
   const d = load();
   if (!d[kind][slug]) return true;

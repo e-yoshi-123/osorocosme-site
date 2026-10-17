@@ -2884,3 +2884,16 @@ export function getAllCosmeticColorOptions(): Record<string, [string, string][]>
   _colorOptions = out;
   return out;
 }
+
+let _aliasesTo: Map<string, string[]> | undefined;
+/** この商品（slug）に転送される古い slug（統合・ブランドの別名）。商品ページで、マイコスメの古い番号を移すのに使う（363章） */
+export function getSlugAliases(slug: string): string[] {
+  if (!_aliasesTo) {
+    _aliasesTo = new Map();
+    for (const x of [...getAliasRedirects().products, ...getProductRedirects()]) {
+      if (!_aliasesTo.has(x.to)) _aliasesTo.set(x.to, []);
+      _aliasesTo.get(x.to)!.push(x.from);
+    }
+  }
+  return _aliasesTo.get(slug) || [];
+}
