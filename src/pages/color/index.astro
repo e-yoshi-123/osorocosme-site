@@ -593,9 +593,45 @@ const crumbs = [
   if (fromHash()) selectTab(fromHash()!); else { target = (presets[modeKey()]?.[4]?.[1] || target).toLowerCase(); input.value = target; drawPresets(); }
   window.addEventListener("hashchange", () => { const t = fromHash(); if (t) selectTab(t); });
 
+  // ---- 状態の保存：商品ページへ行って戻ったときに元どおりにする（この端末のブラウザのタブの中だけ。363章、ユーザー「戻った時全てリセットされちゃっている」）----
+  const STATE_KEY = "osorocosme.color.state";
+  function saveState() {
+    if (!data) return;
+    const base = baseI !== null ? { slug: data.p[data.c[baseI][0]][6], label: data.c[baseI][1] } : null;
+    const st = { mode: modeKey(), filter: [...filter], target, base, sort, view, lv: [lvL, lvC, lvH], y: window.scrollY };
+    try { sessionStorage.setItem(STATE_KEY, JSON.stringify(st)); } catch { /* 保存できない設定なら諦める */ }
+  }
+  function restoreState(): boolean {
+    let st: any = null;
+    try { st = JSON.parse(sessionStorage.getItem(STATE_KEY) || "null"); } catch { st = null; }
+    if (!st || !data) return false;
+    const h = location.hash.slice(1);
+    if (h && tabs.some((t) => t.dataset.key === h) && st.mode !== h) return false;  // 別の種類へのリンクで来たときは、そちらを優先
+    const tab = tabs.find((t) => t.dataset.key === st.mode);
+    if (tab) selectTab(tab, false);
+    if (Array.isArray(st.filter) && st.filter.length) {
+      filter.clear(); st.filter.forEach((k: number) => filter.add(k));
+      filters.forEach((x) => { const on = filter.has(Number(x.dataset.filter)); x.classList.toggle("is-active", on); x.setAttribute("aria-pressed", String(on)); });
+    }
+    if (typeof st.sort === "string") { sort = st.sort; sorts.forEach((x) => x.classList.toggle("is-active", x.dataset.sort === sort)); }
+    if (st.view === "L" || st.view === "C") { view = st.view; views.forEach((x) => x.classList.toggle("is-active", x.dataset.view === view)); }
+    if (Array.isArray(st.lv) && st.lv.length === 3) { wlEl.value = String(st.lv[0]); wcEl.value = String(st.lv[1]); whEl.value = String(st.lv[2]); }
+    let bi: number | null = null;
+    if (st.base) bi = data.c.findIndex((c) => data!.p[c[0]][6] === st.base.slug && c[1] === st.base.label);
+    target = typeof st.target === "string" ? st.target : target; input.value = target;
+    baseI = bi !== null && bi >= 0 ? bi : null;
+    drawPresets(); drawBase(); onWeight();
+    if (typeof st.y === "number") requestAnimationFrame(() => window.scrollTo(0, st.y));
+    return true;
+  }
+  window.addEventListener("pagehide", saveState);
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") saveState(); });
+  listEl.addEventListener("click", (e) => { if ((e.target as HTMLElement).closest("a")) saveState(); });
+  popEl.addEventListener("click", (e) => { if ((e.target as HTMLElement).closest("a")) saveState(); }, true);
+
   fetch(root.dataset.src!).then((r) => r.json()).then((d: Data) => {
     data = d;
     labs = d.c.map((c) => lab(c[2]));
-    render();
+    if (!restoreState()) render();
   }).catch(() => { statusEl.textContent = "色の一覧を読み込めませんでした。ページを読み込み直してください。"; });
 </script>
