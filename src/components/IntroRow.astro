@@ -11,9 +11,11 @@ interface Props {
   concernPages: Set<string>;
   /** スクリプトなしでは隠す行（先頭10件より後） */
   extra?: boolean;
+  /** この動画で使った色（公式の並びの番号と表示名。商品ページの色で絞り込むのに使う。363章） */
+  colors?: { idx: number; label: string }[];
 }
 
-const { i, pos, concernPages, extra = false } = Astro.props;
+const { i, pos, concernPages, extra = false, colors = [] } = Astro.props;
 const views = i.views >= 10_000 ? `${(i.views / 10_000).toFixed(1).replace(/\.0$/, "")}万回` : `${i.views.toLocaleString("ja-JP")}回`;
 // 発言（言及）は、効能を言い切るものを除いた先頭2つ（301章）。肌悩みの節は、その発言に含まれていれば重ねて出さない
 const quotes = i.quotes;
@@ -34,6 +36,7 @@ const concernQuotes = [...new Set(i.concerns.map((c) => c.quote).filter(Boolean)
   data-views={i.views}
   data-score={i.influenceScore}
   data-prof={profilePagesOf(i.channel_id).map((p) => p.key).join(" ")}
+  data-colors={colors.map((c) => c.idx).join(" ")}
   hidden={extra}
 >
   <div class="intro-7">
@@ -67,6 +70,7 @@ const concernQuotes = [...new Set(i.concerns.map((c) => c.quote).filter(Boolean)
         {i.views > 0 && <span class="intro-9">再生 {views}</span>}
       </span>
     </a>
+    {colors.length > 0 && <p class="intro-9 mt-1">使った色：{colors.map((c) => c.label).join("・")}</p>}
     {/* 発言（字幕からの言及の要約）と、肌悩みに触れた紹介ならそのチップ。発言は「商品名 使ってみた」のような検索に当たる本文でもある（301章） */}
     {
       (quotes.length > 0 || i.concerns.length > 0) && (

@@ -3,7 +3,7 @@
 // 紹介の多い商品はページのHTMLが700KB台になっていたので、先頭の行だけを商品ページに入れ、
 // 残りは「残りを表示」・並び替えを押したときに、商品ページのスクリプトがここを読んで差し込む。単独では見せないので検索にも出さない
 import IntroRow from "../../../components/IntroRow.astro";
-import { getUsedCosmeticKeys, cosmeticSlug, getCosmeticFacts, getPublishedConcerns, INTRO_IN_PAGE, INTRO_SPLIT_OVER } from "../../../lib/data";
+import { getUsedCosmeticKeys, cosmeticSlug, getCosmeticFacts, getPublishedConcerns, getVideoColorMap, INTRO_IN_PAGE, INTRO_SPLIT_OVER } from "../../../lib/data";
 
 export function getStaticPaths() {
   return getUsedCosmeticKeys()
@@ -14,8 +14,9 @@ export function getStaticPaths() {
 const { brand_id, name_id } = Astro.props;
 const facts = getCosmeticFacts(brand_id, name_id);
 const concernPages = new Set(getPublishedConcerns().map((c) => c.slug));
+const videoColors = getVideoColorMap(brand_id, name_id);
 ---
 <meta name="robots" content="noindex" />
 <ul>
-  {facts.introductions.slice(INTRO_IN_PAGE).map((i, k) => <IntroRow i={i} pos={INTRO_IN_PAGE + k} concernPages={concernPages} />)}
+  {facts.introductions.slice(INTRO_IN_PAGE).map((i, k) => <IntroRow i={i} pos={INTRO_IN_PAGE + k} concernPages={concernPages} colors={videoColors.get(i.videoKey)} />)}
 </ul>

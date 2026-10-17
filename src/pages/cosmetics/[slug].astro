@@ -39,6 +39,7 @@ import {
   CONCERNS,
   getIngredientInfo,
   getOfficialFacts,
+  getVideoColorMap,
   getIngredientsOfCosmetic,
   ingredientSourceLabel,
   getRepeatUsers,
@@ -115,9 +116,10 @@ const ingredientInfo = getIngredientInfo(brand_id, name_id);
 const official = getOfficialFacts(brand_id, name_id);
 const officialTags = official ? [...(official.release ? [`${official.release}発売`] : []), ...(official.limited ? ["限定品"] : []), ...(official.eom ? ["製造終了"] : [])] : [];
 const colorMentioned = official ? official.colors.filter((c) => c.videoCount > 0).length : 0;
-const COLORS_SHOWN = 24;
-// 色の多い商品は、動画で紹介された色を先に（本数の多い順）並べ、先頭だけを出す
-const colorsShown = official ? (official.colors.length > COLORS_SHOWN ? [...official.colors].sort((x, y) => y.videoCount - x.videoCount) : official.colors) : [];
+const videoColors = getVideoColorMap(brand_id, name_id);
+const LINEUP_SHOWN = 12;
+// 色の多い商品は、動画で使われた色を先に（本数の多い順）並べ、先頭だけを出す（残りも文字ではページにある）
+const colorsShown = official ? (official.colors.length > LINEUP_SHOWN ? [...official.colors].sort((x, y) => y.videoCount - x.videoCount) : official.colors) : [];
 const ingredientPages = ingredientInfo ? getIngredientsOfCosmetic(brand_id, name_id) : [];
 const otherItems = ingredientInfo ? ingredientInfo.items.filter((x) => !ingredientInfo.active.includes(x)) : [];
 const concernPages = new Set(getPublishedConcerns().map((c) => c.slug));
@@ -278,6 +280,31 @@ const jsonLd = entry
               entry.category && <p class="mt-4 inline-flex items-center gap-2 text-xs text-neutral-600 border border-ink/15 rounded-full px-3 py-1">{entry.category}</p>
             )}
 
+            {/* ラインナップ（公式の色の一覧。363章で色の節をやめてここに）。色名は検索にも当たるよう全部を文字で置き、先頭だけ見せる。
+                動画で使われた色は押すと、下の「いつ・誰が紹介したか」をその色の紹介に絞り込む。#color-<番号> は色から探すのリンク先 */}
+            {official && official.colors.length > 0 && (
+              <div class="mt-4 rounded-2xl border border-ink/10 px-4 py-3 text-sm" data-lineup>
+                <p class="flex flex-wrap items-baseline gap-x-2"><span class="label-caps lcn">ラインナップ</span><span class="text-xs text-neutral-500">全{official.colors.length}色（{official.colorsManual ? "販売の情報で確かめた色" : "メーカー公式サイトの掲載"}）{colorMentioned > 0 && "・押すとその色を使った紹介に絞り込みます"}</span></p>
+                <ul class="mt-2 flex flex-wrap gap-1.5">
+                  {colorsShown.map((c, k) => (
+                    <li id={`color-${c.idx}`} class:list={["scroll-mt-28", k >= LINEUP_SHOWN && "hidden"]} data-color-extra={k >= LINEUP_SHOWN ? "" : undefined}>
+                      {c.videoCount > 0 ? (
+                        <a href="#who" data-color-key={String(c.idx)} data-color-name={c.label} aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border border-rose/40 px-2.5 py-0.5 text-xs text-neutral-800 hover:bg-rose/10 aria-pressed:bg-rose aria-pressed:border-rose aria-pressed:text-white [overflow-wrap:anywhere]" title={`動画で使われた色（${c.videoCount}本）`}>
+                          {c.label}<span class="text-rose/80 [a[aria-pressed=true]_&]:text-white/90">{c.videoCount}</span>
+                        </a>
+                      ) : (
+                        <span class="inline-flex rounded-full border border-ink/10 px-2.5 py-0.5 text-xs text-neutral-600 [overflow-wrap:anywhere]">{c.label}</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+                {official.colors.length > LINEUP_SHOWN && (
+                  <button type="button" id="colors-more" class="mt-2 text-xs link-u text-neutral-600">全{official.colors.length}色を見る</button>
+                )}
+                <p class="u-11 mt-2">{colorMentioned > 0 ? "数字は、字幕や紹介の中でその色を使った・触れた動画の本数です。" : ""}限定色や販売を終えた色が含まれることがあります。{official.url && <>出典：<a href={official.url} target="_blank" rel="nofollow noopener" class="link-u">メーカー公式サイト</a></>}</p>
+              </div>
+            )}
+
             <div class="u-22 max-md:!mt-5 max-md:!pt-5">
               {buyable && entry.now_price !== undefined && (
                 <p data-buy class="item-21"><span class="label-caps lcn">Price</span><span class="num-display text-[24px] leading-none">¥{formatCount(entry.now_price)}</span><span class="u-11"><span class="inline-block">楽天市場の参考価格</span>{entry.price_updated && <span class="inline-block">・{formatJaDate(entry.price_updated)}時点</span>}</span></p>
@@ -401,7 +428,6 @@ const jsonLd = entry
           class="mt-6 md:mt-8"
           items={[
             { label: `紹介した人 ${facts.introductions.length}`, target: "#who" },
-            ...(official && official.colors.length > 0 ? [{ label: `色 ${official.colors.length}`, target: "#colors" }] : []),
             ...(ingredientInfo ? [{ label: "全成分", target: "#ingredients" }] : []),
             ...(coMentioned.length > 0 ? [{ label: "一緒に紹介", target: "#paired" }] : []),
             ...(facts.mainTag && categoryTop.length > 0 ? [{ label: "ランキング", target: "#ranking" }] : []),
@@ -433,6 +459,18 @@ const jsonLd = entry
               <p class="mt-2 text-xs text-neutral-500" data-prof-status>押すと、その人たちの紹介だけに絞り込めます（本人がパーソナルカラー・肌質を話している人）。</p>
             </div>
           )}
+          {/* 使った色で絞り込む（字幕・紹介の中で色が分かった紹介だけ。363章）。スクリプトなしでは出さない */}
+          {colorMentioned > 0 && (
+            <div class="mb-4 hidden" data-color-filter>
+              <p class="flex flex-wrap items-center gap-2 text-xs" role="group" aria-label="使った色で絞り込む">
+                <span class="label-caps lcn mr-1">Color</span>
+                {[...official!.colors].filter((c) => c.videoCount > 0).sort((x, y) => y.videoCount - x.videoCount).map((c) => (
+                  <button type="button" data-color-key={String(c.idx)} data-color-name={c.label} aria-pressed="false" class="prof-chip item-pc">{c.label}<span class="opacity-70">{c.videoCount}本</span></button>
+                ))}
+              </p>
+              <p class="mt-2 text-xs text-neutral-500" data-color-status>押すと、その色を使った紹介だけに絞り込めます（字幕や紹介の中で色が分かった動画）。</p>
+            </div>
+          )}
           {/* 並び替え（スクリプトで行う。スクリプトなしでは新しい順の先頭20件だけ） */}
           {facts.introductions.length > 1 && (
             <div class="flex flex-wrap items-center gap-2 text-xs mb-2" role="group" aria-label="並び替え">
@@ -445,7 +483,7 @@ const jsonLd = entry
           {/* 日付・チャンネル・動画タイトルを固定の列にする。件数が多い商品は、先頭20件だけ表示して残りは「残りを表示」で出す */}
           <div class="text-sm">
             <ul id="intro-list" data-initial={INTRO_SHOWN} data-rest={introSplit ? withBase(`/cosmetics/${cosmeticSlug(brand_id, name_id)}/intros/`) : undefined}>
-              {introRows.map((i, k) => <IntroRow i={i} pos={k} concernPages={concernPages} extra={k >= INTRO_SHOWN} />)}
+              {introRows.map((i, k) => <IntroRow i={i} pos={k} concernPages={concernPages} extra={k >= INTRO_SHOWN} colors={videoColors.get(i.videoKey)} />)}
             </ul>
             {facts.introductions.length > INTRO_SHOWN && (
               <button type="button" id="intro-more" class="w-full flex items-center justify-center gap-3 py-5 text-xs tracking-[0.1em] cursor-pointer select-none hover:text-rose">
@@ -454,55 +492,6 @@ const jsonLd = entry
             )}
           </div>
         </section>
-
-        {official && official.colors.length > 0 && (
-          <section id="colors" class="panel u-14">
-            <SectionHead en="Colors" title="色のバリエーション" lead={`${official.colors.length}色（${official.colorsManual ? "販売の情報で確かめた色" : "メーカー公式サイトの掲載"}${official.colors.length > COLORS_SHOWN && colorMentioned > 0 ? "。動画で紹介された色を先に並べています" : ""}）。${colorMentioned > 0 ? "「動画で紹介」は、紹介の中でその色の名前・番号に触れた動画の本数で、押すとその動画が開きます。" : ""}限定色や販売を終えた色が含まれることがあります。`} />
-            <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 grid-flow-dense gap-x-6 items-start text-sm">
-              {colorsShown.map((c, k) => (
-                <li id={`color-${c.idx}`} class:list={["border-b border-ink/10 scroll-mt-28 has-[details[open]]:col-span-full has-[details[open]]:my-3 has-[details[open]]:border-b-0", k >= COLORS_SHOWN && "hidden"]} data-color-extra={k >= COLORS_SHOWN ? "" : undefined}>
-                  {c.videos.length > 0 ? (
-                    /* 動画で紹介された色は、押すとその色を紹介した動画の一覧が開く */
-                    /* 閉じているとき：行に枠線のボタン。開いているとき：薄い色の面と左の線でひとかたまりにし、見出しの行とボタンを塗る */
-                    <details class="group rounded-2xl open:bg-[color-mix(in_srgb,var(--color-rose)_6%,white)] open:shadow-[inset_3px_0_0_var(--color-rose)] open:px-4 md:open:px-5">
-                      <summary class="flex items-center justify-between gap-3 py-2 group-open:py-3 cursor-pointer list-none [&::-webkit-details-marker]:hidden group-open:border-b group-open:border-rose/15">
-                        <span class="text-neutral-800 [overflow-wrap:anywhere] group-open:font-semibold group-open:text-rose">{c.label}</span>
-                        <span class="shrink-0 inline-flex items-center gap-1.5 rounded-full border border-rose/50 px-2.5 py-0.5 text-xs text-rose transition-colors hover:bg-rose/10 group-open:bg-rose group-open:border-rose group-open:text-white">
-                          動画で紹介 {c.videoCount}本
-                          <svg viewBox="0 0 10 6" class="w-2.5 h-1.5 transition-transform group-open:rotate-180" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                        </span>
-                      </summary>
-                      <ul class="pb-5 pt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
-                        {c.videos.map((v) => (
-                          <li>
-                            <a href={withBase(`/video/${v.key}`)} class="group/v flex gap-3 items-start">
-                              {v.thumbnail && <img src={v.thumbnail} alt="" width="96" height="54" class="w-24 aspect-video shrink-0 rounded object-cover" loading="lazy" />}
-                              <span class="min-w-0 text-xs leading-relaxed">
-                                <span class="block text-neutral-800 line-clamp-2 group-hover/v:text-rose">{v.title}</span>
-                                <span class="block text-neutral-500">{v.channel_title}・{formatJaDate(v.published_at)}</span>
-                              </span>
-                            </a>
-                            {v.quote && <p class="mt-1 text-xs text-neutral-600 [overflow-wrap:anywhere]">「{v.quote}」</p>}
-                          </li>
-                        ))}
-                      </ul>
-                    </details>
-                  ) : (
-                    <div class="py-2 text-neutral-800 [overflow-wrap:anywhere]">{c.label}</div>
-                  )}
-                </li>
-              ))}
-            </ul>
-            {official.colors.length > COLORS_SHOWN && (
-              <button type="button" id="colors-more" class="w-full flex items-center justify-center gap-3 py-4 text-xs tracking-[0.1em] cursor-pointer select-none hover:text-rose">
-                <span>残り{official.colors.length - COLORS_SHOWN}色を表示</span><span class="w-7 h-7 rounded-full border border-ink/20 flex items-center justify-center" aria-hidden="true">↓</span>
-              </button>
-            )}
-            {official.url && (
-              <p class="u-11 mt-3">出典：<a href={official.url} target="_blank" rel="nofollow noopener" class="link-u">メーカー公式サイト</a></p>
-            )}
-          </section>
-        )}
 
         {ingredientInfo && (
           <section id="ingredients" class="panel u-14">
@@ -648,18 +637,28 @@ const jsonLd = entry
     };
     // パーソナルカラー・肌質の絞り込み（312章）。絞り込み中は、当てはまる行を全部出す（残りも読んでから）
     let prof = "";
+    // 使った色の絞り込み（363章）。上の「色のバリエーション」の色を押しても同じ
+    let color = "";
+    const cStatus = document.querySelector<HTMLElement>("[data-color-status]");
+    const cStatusDefault = cStatus?.textContent || "";
+    document.querySelector<HTMLElement>("[data-color-filter]")?.classList.remove("hidden");
     const status = document.querySelector<HTMLElement>("[data-prof-status]");
     const statusDefault = status?.textContent || "";
     const render = () => {
       let shown = 0;
       rows.sort(cmp[key]).forEach((li) => {
         introList.appendChild(li);
-        const match = !prof || (li.dataset.prof || "").split(" ").includes(prof);
-        li.hidden = !match || (!prof && !all && shown >= INITIAL);
+        const match = (!prof || (li.dataset.prof || "").split(" ").includes(prof)) && (!color || (li.dataset.colors || "").split(" ").includes(color));
+        li.hidden = !match || (!prof && !color && !all && shown >= INITIAL);
         if (match) shown++;
       });
       document.querySelectorAll<HTMLButtonElement>(".intro-sort").forEach((b) => b.classList.toggle("is-active", b.dataset.sort === key));
-      more?.classList.toggle("hidden", all || !!prof);
+      more?.classList.toggle("hidden", all || !!prof || !!color);
+      document.querySelectorAll<HTMLElement>("[data-color-key]").forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.colorKey === color)));
+      if (cStatus) {
+        const chip = document.querySelector<HTMLElement>(`[data-color-filter] [data-color-key="${color}"]`);
+        cStatus.textContent = color && chip ? `「${chip.dataset.colorName}」を使った紹介 ${shown}件${prof ? "（パーソナルカラー・肌質の絞り込みと重ねています）" : ""}。もう一度押すと元に戻ります。` : cStatusDefault;
+      }
       document.querySelectorAll<HTMLElement>("[data-prof-key]").forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.profKey === prof)));
       if (status) {
         const chip = document.querySelector<HTMLElement>(`[data-prof-key="${prof}"]`);
@@ -678,6 +677,17 @@ const jsonLd = entry
         e.preventDefault();
         prof = prof === c.dataset.profKey ? "" : c.dataset.profKey || "";
         if (prof) await loadRest();
+        render();
+      })
+    );
+    document.querySelectorAll<HTMLElement>("[data-color-key]").forEach((c) =>
+      c.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const fromTop = !!c.closest("[data-lineup]");
+        color = color === c.dataset.colorKey && !fromTop ? "" : c.dataset.colorKey || "";
+        if (fromTop) document.getElementById("who")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        if (color && cStatus) cStatus.textContent = `「${c.dataset.colorName}」を使った紹介を読み込んでいます…`;
+        if (color) await loadRest();
         render();
       })
     );
@@ -726,7 +736,7 @@ const jsonLd = entry
 </script>
 
 <script>
-  // 色の多い商品は先頭だけ出し、残りは「残り◯色を表示」で出す
+  // 色の多い商品は先頭だけ出し、残りは「全◯色を見る」で出す
   (function () {
     var btn = document.getElementById("colors-more");
     if (!btn) return;
@@ -735,14 +745,15 @@ const jsonLd = entry
       btn.remove();
     });
   })();
-  // 動画ページの「使った色」から #color-<番号> で来たら、その色の動画の一覧を開く（隠れている色なら残りも出す）
+  // 動画ページ・色から探すの「使った色」から #color-<番号> で来たら、ラインナップのその色を出し、
+  // 動画で使われた色なら「いつ・誰が紹介したか」をその色に絞り込む（隠れている色なら残りも出す。363章）
   (function () {
     var m = location.hash.match(/^#color-\d+$/);
     var li = m && document.getElementById(location.hash.slice(1));
     if (!li) return;
     if (li.hasAttribute("data-color-extra")) document.getElementById("colors-more")?.click();
-    var d = li.querySelector("details");
-    if (d) d.open = true;
-    li.scrollIntoView({ block: "start" });
+    var chip = li.querySelector("[data-color-key]");
+    if (chip) setTimeout(function () { chip.click(); }, 0);
+    else li.scrollIntoView({ block: "center" });
   })();
 </script>
