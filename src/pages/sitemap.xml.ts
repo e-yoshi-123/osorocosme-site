@@ -61,6 +61,7 @@ export const GET: APIRoute = ({ site }) => {
     { path: "/concern/", lastmod: siteNewest },
     ...getPublishedConcerns().map((c) => ({ path: `/concern/${c.slug}/`, lastmod: siteNewest })),
     { path: "/ingredient/", lastmod: siteNewest },
+    { path: "/color/", lastmod: siteNewest },
     ...getPublishedIngredients().map((d) => ({ path: `/ingredient/${d.slug}/`, lastmod: siteNewest })),
     ...getPublishedConcernIngredients().map((x) => ({ path: `/concern/${x.concern.slug}/${x.ingredient.slug}/`, lastmod: siteNewest })),
     { path: "/brand-list", lastmod: siteNewest },

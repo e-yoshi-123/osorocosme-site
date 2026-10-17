@@ -14,6 +14,7 @@ import officialFactsData from "../data/official-facts.json";
 import productRedirectsData from "../data/product-redirects.json";
 import matsukiyoBrandsData from "../data/matsukiyo-brands.json";
 import imagePreferYahooData from "../data/image-prefer-yahoo.json";
+import cosmeticColorsData from "../data/cosmetic-colors.json";
 
 export interface Cosmetic {
   brand_id: string;
@@ -2805,4 +2806,48 @@ export function getBrandCosmeticsByCategory(brand_id: string): BrandCategorySect
     .map((o) => ({ ...o, items: buckets.get(o.tag)! }));
   if (buckets.has("その他")) sections.push({ group: "その他", tag: "その他", items: buckets.get("その他")! });
   return sections;
+}
+
+/** 色から探す（/color/、362章）。色の値は backend/scripts/product_facts/export_colors.py が書く cosmetic-colors.json（公式の色見本の画像から測った値。花王は真上の写真の中央から）。
+ * 種類は商品のカテゴリで分ける（swatch_colors.py の KINDS と同じ分け方） */
+export const COLOR_KINDS = [
+  { key: "lip", label: "リップ", re: /口紅|リップグロス|リップライナー|リップティント|リップスティック/ },
+  { key: "cheek", label: "チーク", re: /チーク/ },
+  { key: "eye", label: "アイシャドウ", re: /アイシャドウ/ },
+  { key: "concealer", label: "コンシーラー", re: /コンシーラー/ },
+  { key: "foundation", label: "ファンデーション", re: /ファンデ/ },
+  { key: "base", label: "下地・コントロールカラー", re: /化粧下地|コントロールカラー|日焼け止め/ },
+] as const;
+const cosmeticColors = cosmeticColorsData as Record<string, [string, string, number][]>;
+export interface ColorSearchData {
+  /** 品：[ブランド, 商品名, 種類の番号（COLOR_KINDS）, リンク先, 画像, 紹介動画の本数, 商品のslug（マイコスメとの照合）] */
+  p: [string, string, number, string, string, number, string][];
+  /** 色：[品の番号, 色の表示名, #RRGGBB, 1＝真上の写真から測った値, その色の行へのリンク（無ければ空）] */
+  c: [number, string, string, number, string][];
+}
+let _colorSearch: ColorSearchData | undefined;
+export function getColorSearchData(): ColorSearchData {
+  if (_colorSearch) return _colorSearch;
+  const out: ColorSearchData = { p: [], c: [] };
+  for (const { brand_id, name_id } of getUsedCosmeticKeys()) {
+    const key = `${brand_id}_${name_id}`;
+    const rows = cosmeticColors[key];
+    const e = getCosmeticListEntry(brand_id, name_id);
+    if (!rows || !e) continue;
+    const cat = cosmeticCategory({ brand_id, name_id }) || e.category || "";
+    const kind = COLOR_KINDS.findIndex((k) => k.re.test(cat) || k.re.test(e.category || ""));
+    if (kind < 0 || /マスカラ|アイブロウ|アイライナー/.test(cat)) continue;
+    const official = getOfficialFacts(brand_id, name_id)?.colors || [];
+    const pi = out.p.length;
+    out.p.push([e.brand, e.name, kind, cosmeticHref(brand_id, name_id), cosmeticImageSrc(brand_id, name_id), usedVideoCount(key), cosmeticSlug(brand_id, name_id)]);
+    for (const [label, hex, top] of rows) {
+      // 商品ページの公式の色の一覧にある色なら、その色の行（#color-<番号>）へ
+      const base = label.replace(/（[^（）]*）$/, "");
+      const oc = official.find((o) => o.label === base);
+      const href = oc && hasCosmeticPage(brand_id, name_id) ? cosmeticHref(brand_id, name_id, `#color-${oc.idx}`) : "";
+      out.c.push([pi, label, hex, top, href]);
+    }
+  }
+  _colorSearch = out;
+  return out;
 }
