@@ -188,6 +188,10 @@ const crumbs = [
   .cs-list { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); }
   .cs-item { display: flex; gap: 0.9rem; align-items: center; padding: 0.8rem; border: 1px solid rgb(29 21 23 / 0.08); border-radius: 0.9rem; background: #fff; min-width: 0; }
   .cs-sw { position: relative; flex: none; width: 3.4rem; height: 3.4rem; border-radius: 999px; border: 1px solid rgb(29 21 23 / 0.12); }
+  .cs-sw-go { cursor: pointer; transition: box-shadow 0.2s; }
+  .cs-sw-go:hover, .cs-sw-go:focus-visible { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--color-ink); outline: none; }
+  .cs-ping { animation: cs-ping 0.9s ease-out 3; transform-box: fill-box; transform-origin: center; }
+  @keyframes cs-ping { from { transform: scale(0.6); opacity: 1; } to { transform: scale(2.2); opacity: 0; } }
   .cs-img { flex: none; width: 3.4rem; height: 3.4rem; object-fit: contain; border-radius: 0.5rem; background: #faf7f5; }
   .cs-body { min-width: 0; display: grid; gap: 0.15rem; font-size: 13px; line-height: 1.45; }
   .cs-brand { font-size: 11px; color: rgb(29 21 23 / 0.55); }
@@ -464,7 +468,7 @@ const crumbs = [
       const [brand, name, kind, url, img, videos, slug] = data!.p[pi];
       const my = isMineShade(i) ? mine.get(slug) : undefined;  // 印は、マイコスメで選んだ色（選んでいなければその商品の全部の色）にだけ
       const shade = href ? `<a href="${href}">${esc(label)}</a>` : esc(label);
-      return `<li class="cs-item${my === "items" ? " is-mine" : my === "wish" ? " is-wish" : ""}"><span class="cs-sw" style="background:${hex}" title="${hex}"></span>${img ? `<img class="cs-img" src="${esc(img)}" alt="" loading="lazy" width="54" height="54">` : ""}<span class="cs-body"><span class="cs-brand">${mode === "all" ? `<span class="cs-kindtag">${esc(kindLabels[kind])}</span>` : ""}${esc(brand)}${my ? `<span class="cs-mytag${my === "wish" ? " w" : ""}">${my === "wish" ? "気になる" : "マイコスメ"}</span>` : ""}</span><a class="cs-name" href="${url}">${esc(name)}</a><span class="cs-shade">${shade}</span><span class="cs-meta"><span class="cs-near">${out ? "範囲外" : nearWord(d)}（ΔE ${d.toFixed(1)}）</span>${hex}・明るさ ${labs[i][0].toFixed(0)}${top ? "・商品写真から" : ""}・紹介${videos}本</span></span></li>`;
+      return `<li class="cs-item${my === "items" ? " is-mine" : my === "wish" ? " is-wish" : ""}"><button type="button" class="cs-sw cs-sw-go" style="background:${hex}" data-go="${i}" title="地図でこの色の位置を見る" aria-label="地図でこの色の位置を見る"></button>${img ? `<img class="cs-img" src="${esc(img)}" alt="" loading="lazy" width="54" height="54">` : ""}<span class="cs-body"><span class="cs-brand">${mode === "all" ? `<span class="cs-kindtag">${esc(kindLabels[kind])}</span>` : ""}${esc(brand)}${my ? `<span class="cs-mytag${my === "wish" ? " w" : ""}">${my === "wish" ? "気になる" : "マイコスメ"}</span>` : ""}</span><a class="cs-name" href="${url}">${esc(name)}</a><span class="cs-shade">${shade}</span><span class="cs-meta"><span class="cs-near">${out ? "範囲外" : nearWord(d)}（ΔE ${d.toFixed(1)}）</span>${hex}・明るさ ${labs[i][0].toFixed(0)}${top ? "・商品写真から" : ""}・紹介${videos}本</span></span></li>`;
     }).join("");
     drawMap(shownKinds, new Set(near.map((r) => r.i)), t);
   }
@@ -581,6 +585,27 @@ const crumbs = [
     if (el.closest("[data-close]")) { hidePop(); return; }
     const pb = el.closest<HTMLElement>("[data-pick]");
     if (pb) { hidePop(); setTarget(pb.dataset.pick!, pb.dataset.base ? Number(pb.dataset.base) : null); }
+  });
+  // 一覧の色の丸：地図のその色の位置へ移り、点を光らせて固定のポップアップを開く
+  listEl.addEventListener("click", (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLElement>("[data-go]");
+    if (!b || !data) return;
+    e.stopPropagation();  // 下の「地図の外を押したら閉じる」に掛からないように
+    const i = Number(b.dataset.go), p = dots.find((q) => q.i === i);
+    if (!p) return;
+    const sr = mapEl.getBoundingClientRect();
+    wrapEl.scrollLeft = Math.max(0, (p.x / W) * sr.width - wrapEl.clientWidth / 2);  // スマホで地図が横に広いとき
+    wrapEl.scrollIntoView({ behavior: "smooth", block: "center" });
+    mapEl.querySelector(".cs-ping")?.remove();
+    const ring = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    ring.setAttribute("class", "cs-ping");
+    Object.entries({ cx: p.x, cy: p.y, r: 12, fill: "none", stroke: "#1d1517", "stroke-width": 2.5, "pointer-events": "none" }).forEach(([k, v]) => ring.setAttribute(k, String(v)));
+    mapEl.appendChild(ring);
+    setTimeout(() => ring.remove(), 2800);
+    popEl.classList.remove("is-hover");
+    popEl.innerHTML = shadeCard(i, true);
+    placePop(p.x, p.y);
+    pinned = true;
   });
   document.addEventListener("click", (e) => { if (pinned && !wrapEl.contains(e.target as Node)) hidePop(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") hidePop(); });
