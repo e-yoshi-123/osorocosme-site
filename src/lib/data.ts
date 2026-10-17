@@ -2863,9 +2863,12 @@ export function getCosmeticColorOptions(brand_id: string, name_id: string): [str
     const base = colorBaseLabel(label);
     if (!hexOf.has(base)) hexOf.set(base, hex);
   }
-  // 公式の色の一覧が無い商品（韓国のブランド等）は、色の値のある色の名前を候補にする（363章、LUNA コンシールブレンダーパレット）
-  if (official.length < 2) return hexOf.size >= 2 ? [...hexOf.entries()] : [];
-  return official.map((o) => [o.label, hexOf.get(o.label) || ""]);
+  // 色から探すの地図に出る色は、全部選べるようにする（363章、ユーザー「カラーマップに出てくる色は全部選べるように」）：
+  // 公式の色の一覧（2色以上のとき）に、色の値のある色で一覧に無いもの（別の時期の色の並び・公式の一覧が無い韓国のブランド等）を後ろに足す。1色だけの商品も出す
+  const out: [string, string][] = official.length >= 2 ? official.map((o) => [o.label, hexOf.get(o.label) || ""]) : [];
+  const seen = new Set(out.map(([l]) => l));
+  for (const [l, hex] of hexOf) if (!seen.has(l)) out.push([l, hex]);
+  return out;
 }
 let _colorOptions: Record<string, [string, string][]> | undefined;
 /** マイコスメのページが読む、商品（slug）ごとの色の候補（/color/options.json） */

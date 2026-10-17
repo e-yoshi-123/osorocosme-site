@@ -121,7 +121,7 @@ function tile(p: Prepared, n: number, caption: string, d: MyCosmeData): string {
   </div>`;
 }
 
-// ---- 登録した商品の色（363章）：候補は /color/options.json（公式の色が2色以上ある商品だけ）。ページを開いたあとに読む ----
+// ---- 登録した商品の色（363章）：候補は /color/options.json（公式の色の一覧と、色から探すの地図に出る色）。ページを開いたあとに読む ----
 let colorOpts: Record<string, [string, string][]> | null = null;
 let colorOptsLoading: Promise<void> | null = null;
 /** 色を選ぶ欄を開いている商品 */
@@ -134,7 +134,7 @@ function loadColorOpts(): Promise<void> {
 }
 function colorRow(slug: string, kind: ListKind, labels: string[]): string {
   const opts = colorOpts?.[slug];
-  if (!opts || opts.length < 2) return "";
+  if (!opts || !opts.length) return "";
   const what = kind === "wish" ? "気になる色" : "持っている色";
   const open = openColors === slug;
   return `<div class="w-full pl-15 -mt-1 text-xs flex flex-wrap items-center gap-2">

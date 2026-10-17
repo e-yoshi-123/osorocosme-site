@@ -572,7 +572,7 @@ const jsonLd = entry
     const slug = myBox.dataset.slug!;
     const btns = Array.from(myBox.querySelectorAll<HTMLButtonElement>("[data-mycosme-toggle]"));
     const LABEL: Record<ListKind, [string, string]> = { items: ["使っている", "使っている（登録済み）"], wish: ["気になる", "気になる（登録済み）"] };
-    // 登録した商品の色（公式の色が2色以上ある商品だけ）
+    // 登録した商品の色（公式の色の一覧と、色から探すの地図に出る色）
     const colors = JSON.parse(myBox.dataset.colors || "[]") as [string, string][];
     const cBox = myBox.querySelector<HTMLElement>("[data-mycosme-colors]")!;
     const cSum = myBox.querySelector<HTMLElement>("[data-mycosme-colors-sum]")!;
@@ -581,7 +581,7 @@ const jsonLd = entry
     let cKind: ListKind | null = null;
     const paintColors = (open?: boolean) => {
       const kind: ListKind | null = has(slug, "items") ? "items" : has(slug, "wish") ? "wish" : null;
-      cBox.hidden = !kind || colors.length < 2;
+      cBox.hidden = !kind || !colors.length;
       if (cBox.hidden) { cPanel.hidden = true; cKind = null; return; }
       const sel = colorsOf(slug, kind!);
       cSum.innerHTML = sel.length ? `${kind === "wish" ? "気になる色" : "持っている色"}：${colorSummary(sel, colors)}` : `<span class="text-neutral-500">${kind === "wish" ? "気になる色" : "持っている色"}はまだ選んでいません</span>`;
