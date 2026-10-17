@@ -53,13 +53,19 @@ const crumbs = [
     </div>
 
     <div class="cs-pick">
-      <p class="cs-h">色を選ぶ</p>
+      <p class="cs-h">探したい色を選ぶ</p>
       <div class="cs-presets" id="cs-presets"></div>
       <div class="cs-find">
         <input type="search" id="cs-q" placeholder="コスメ名・ブランド・色名で探す（例：リップモンスター、NARS、ローズ）" autocomplete="off" aria-label="コスメ名で、基準にするコスメの色を探す" />
         <ul id="cs-sug" class="cs-sug" hidden></ul>
         <p id="cs-base" class="cs-base" hidden></p>
       </div>
+      <label class="cs-own">
+        <span class="cs-own-h">選択中の色</span>
+        <input type="color" id="cs-input" value="#C25A7C" aria-label="選択中の色（押すと自分で選べます）" />
+        <code id="cs-hex">#C25A7C</code>
+        <span class="cs-own-note">（四角を押すと自分で選べます）</span>
+      </label>
       <div class="cs-weights">
         <span class="cs-h">近さに含める範囲（0＝かなり近い色だけ、9＝制限なし）</span>
         <label><span>濃さ</span><span class="cs-end">近い</span><input type="range" id="cs-wl" min="0" max="9" step="1" value="9" aria-label="濃さの違いをどこまで含めるか" /><span class="cs-end">遠い</span><output id="cs-wl-v">9</output></label>
@@ -67,11 +73,6 @@ const crumbs = [
         <label><span>色み</span><span class="cs-end">近い</span><input type="range" id="cs-wh" min="0" max="9" step="1" value="9" aria-label="色みの違いをどこまで含めるか" /><span class="cs-end">遠い</span><output id="cs-wh-v">9</output></label>
         <button type="button" id="cs-wreset" class="cs-wreset" hidden>制限を外す</button>
       </div>
-      <label class="cs-own">
-        <input type="color" id="cs-input" value="#C25A7C" aria-label="好きな色を選ぶ" />
-        <span>好きな色を自分で選ぶ</span>
-        <code id="cs-hex">#C25A7C</code>
-      </label>
     </div>
 
     <section class="cs-mapbox" aria-labelledby="cs-map-h">
@@ -81,7 +82,7 @@ const crumbs = [
           <button type="button" class="chip is-active" data-view="L">明るさで見る</button>
           <button type="button" class="chip" data-view="C">鮮やかさで見る</button>
         </div>
-        <p class="cs-legend"><span class="cs-lg cs-lg-t"></span>選んだ色 <span class="cs-lg cs-lg-m"></span>マイコスメ（使っている） <span class="cs-lg cs-lg-w"></span>マイコスメ（気になる） <span class="cs-lg cs-lg-n"></span>近い色（一覧に出ている色）</p>
+        <p class="cs-legend"><span class="cs-lg cs-lg-t"></span>選択中の色 <span class="cs-lg cs-lg-m"></span>マイコスメ（使っている） <span class="cs-lg cs-lg-w"></span>マイコスメ（気になる） <span class="cs-lg cs-lg-n"></span>近い色（一覧に出ている色）</p>
       </div>
       <div class="cs-mapwrap" id="cs-mapwrap">
         <svg id="cs-map" class="cs-map" viewBox="0 0 1000 440" role="img" aria-label="色の地図。横は色み、縦は明るさ"></svg>
@@ -137,7 +138,9 @@ const crumbs = [
   .cs-wreset { font-size: 12px; text-decoration: underline; color: rgb(29 21 23 / 0.6); }
   .cs-own { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 13px; cursor: pointer; }
   .cs-own input { width: 2.4rem; height: 2.4rem; padding: 0; border: none; background: none; cursor: pointer; }
-  .cs-own code { font-size: 12px; color: rgb(29 21 23 / 0.6); }
+  .cs-own code { font-size: 13px; font-weight: 600; }
+  .cs-own-h { font-size: 12px; letter-spacing: 0.12em; color: rgb(29 21 23 / 0.6); }
+  .cs-own-note { font-size: 11px; color: rgb(29 21 23 / 0.5); }
   .cs-status { font-size: 13px; color: rgb(29 21 23 / 0.6); }
   .cs-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem; }
   .cs-sort { display: flex; gap: 0.4rem; }
