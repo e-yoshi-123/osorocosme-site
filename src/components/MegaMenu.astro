@@ -12,7 +12,7 @@ const cols = [
   { title: "成分から探す", all: "/ingredient/", items: m.ingredients, span: "col-span-3", twoCols: true },
   // メイクレシピ（283章）は、特集の列の先頭に置く（ページが1つだけなので列は立てない）
   // 色から探す（363章）は、短い特集の列の下に続ける（肌悩みの列の下だと、ノートパソコンの高さで画面の外に隠れた）
-  { title: "特集", all: "/feature/", items: [{ path: "/recipe/", label: "メイクレシピ" }, ...m.features], span: "col-span-2", twoCols: false, subs: [{ title: "色から探す", all: "/color/", items: COLOR_KINDS.slice(0, 3).map((k) => ({ label: k.label, path: `/color/#${k.key}` })) }] },
+  { title: "特集", all: "/feature/", items: [{ path: "/recipe/", label: "メイクレシピ" }, ...m.features], span: "col-span-2", twoCols: false, subs: [{ title: "色から探す", all: "/color/", items: COLOR_KINDS.map((k) => ({ label: k.label, path: `/color/#${k.key}` })) }] },
 ].filter((c) => c.items.length > 0);
 ---
 

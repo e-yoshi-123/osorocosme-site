@@ -444,12 +444,13 @@ const crumbs = [
       if (isMineShade(i)) {
         const cur = myBest.get(c[0]);
         if (!cur || d < cur.d) myBest.set(c[0], { d, i, out: !within(t, labs[i]) });
+        return;  // マイコスメの色は下の候補には入れない（持っている商品の、選んでいない色はふつうの候補として出す）
       }
       if (!within(t, labs[i])) return;
       const cur = best.get(c[0]);
       if (!cur || d < cur.d) best.set(c[0], { d, i });
     });
-    const near: { d: number; i: number; out?: boolean }[] = [...best.values()].filter((r) => !myBest.has(data!.c[r.i][0])).sort((a, b) => a.d - b.d).slice(0, SHOW);
+    const near: { d: number; i: number; out?: boolean }[] = [...best.values()].sort((a, b) => a.d - b.d).slice(0, SHOW);
     near.push(...myBest.values());
     near.sort((a, b) => a.d - b.d);
     const rows = sort === "near" ? near : near.slice().sort((a, b) => (sort === "dark" ? 1 : -1) * (labs[a.i][0] - labs[b.i][0]));
@@ -461,7 +462,7 @@ const crumbs = [
     listEl.innerHTML = rows.map(({ d, i, out }) => {
       const [pi, label, hex, top, href] = data!.c[i];
       const [brand, name, kind, url, img, videos, slug] = data!.p[pi];
-      const my = mine.get(slug);
+      const my = isMineShade(i) ? mine.get(slug) : undefined;  // 印は、マイコスメで選んだ色（選んでいなければその商品の全部の色）にだけ
       const shade = href ? `<a href="${href}">${esc(label)}</a>` : esc(label);
       return `<li class="cs-item${my === "items" ? " is-mine" : my === "wish" ? " is-wish" : ""}"><span class="cs-sw" style="background:${hex}" title="${hex}"></span>${img ? `<img class="cs-img" src="${esc(img)}" alt="" loading="lazy" width="54" height="54">` : ""}<span class="cs-body"><span class="cs-brand">${mode === "all" ? `<span class="cs-kindtag">${esc(kindLabels[kind])}</span>` : ""}${esc(brand)}${my ? `<span class="cs-mytag${my === "wish" ? " w" : ""}">${my === "wish" ? "気になる" : "マイコスメ"}</span>` : ""}</span><a class="cs-name" href="${url}">${esc(name)}</a><span class="cs-shade">${shade}</span><span class="cs-meta"><span class="cs-near">${out ? "範囲外" : nearWord(d)}（ΔE ${d.toFixed(1)}）</span>${hex}・明るさ ${labs[i][0].toFixed(0)}${top ? "・商品写真から" : ""}・紹介${videos}本</span></span></li>`;
     }).join("");
@@ -540,7 +541,7 @@ const crumbs = [
     const d = data!;
     const [pi, label, hex, top, href] = d.c[i];
     const [brand, name, kind, url, img, videos, slug] = d.p[pi];
-    const my = mine.get(slug);
+    const my = isMineShade(i) ? mine.get(slug) : undefined;
     // 固定のポップアップ（full）では、商品画像とコスメ名からも商品ページへ
     const link = (inner: string, cls = "") => (full ? `<a href="${url}"${cls ? ` class="${cls}"` : ""}>${inner}</a>` : cls ? `<span class="${cls}">${inner}</span>` : inner);
     const head = `<div class="cs-pop-top"><span class="cs-sw" style="background:${hex}"></span>${img ? link(`<img class="cs-img" src="${esc(img)}" alt="" width="42" height="42">`) : ""}<span class="cs-body"><span class="cs-brand"><span class="cs-kindtag">${esc(kindLabels[kind])}</span>${esc(brand)}${my ? `<span class="cs-mytag${my === "wish" ? " w" : ""}">${my === "wish" ? "気になる" : "マイコスメ"}</span>` : ""}</span>${link(esc(name), "cs-name")}<span class="cs-shade">${esc(label)}</span></span></div>`;
