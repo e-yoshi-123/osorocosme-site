@@ -132,8 +132,9 @@ function loadColorOpts(): Promise<void> {
     .then((d) => { colorOpts = d; })
     .catch(() => { colorOptsLoading = null; }));
 }
-function colorRow(slug: string, kind: ListKind, labels: string[]): string {
-  const opts = colorOpts?.[slug];
+/** 色の候補。統合した商品に古い番号で登録していても、今の商品（optsSlug）の候補を使う */
+function colorRow(slug: string, kind: ListKind, labels: string[], optsSlug = slug): string {
+  const opts = colorOpts?.[optsSlug];
   if (!opts || !opts.length) return "";
   const what = kind === "wish" ? "気になる色" : "持っている色";
   const open = openColors === slug;
@@ -179,14 +180,16 @@ function renderList(p: Prepared, d: MyCosmeData) {
           <span class="block text-sm truncate group-hover:text-rose transition-colors">${esc(c[3])}</span>
         </a>
         ${moveBtn(slug)}${rmBtn(slug, c[3])}
-        ${colorRow(slug, tab, it.c || [])}
+        ${colorRow(slug, tab, it.c || [], c[0])}
       </li>`;
     })
     .join("");
   // 開いている「色を選ぶ」の欄を組み立てる（選ぶたびに保存し、つないでいればドライブにも書く）
-  if (openColors && colorOpts?.[openColors] && d[tab][openColors]) {
+  if (openColors && d[tab][openColors]) {
+    const n = resolve(p, openColors);
+    const opts = colorOpts?.[n !== undefined ? p.idx.c[n][0] : openColors];
     const box = list.querySelector<HTMLElement>(`[data-colors-box="${CSS.escape(openColors)}"]`);
-    if (box) mountColorChooser(box, openColors, tab, colorOpts[openColors], () => afterLocalChange());
+    if (box && opts) mountColorChooser(box, openColors, tab, opts, () => afterLocalChange());
   }
 }
 

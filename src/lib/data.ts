@@ -2825,11 +2825,13 @@ export interface ColorSearchData {
   p: [string, string, number, string, string, number, string][];
   /** 色：[品の番号, 色の表示名, #RRGGBB, 1＝真上の写真から測った値, その色の行へのリンク（無ければ空）] */
   c: [number, string, string, number, string][];
+  /** 統合した商品の古い slug → 寄せ先の slug（マイコスメに古い番号で登録した商品を読み替える） */
+  r: Record<string, string>;
 }
 let _colorSearch: ColorSearchData | undefined;
 export function getColorSearchData(): ColorSearchData {
   if (_colorSearch) return _colorSearch;
-  const out: ColorSearchData = { p: [], c: [] };
+  const out: ColorSearchData = { p: [], c: [], r: Object.fromEntries(getProductRedirects().map((x) => [x.from, x.to])) };
   for (const { brand_id, name_id } of getUsedCosmeticKeys()) {
     const key = `${brand_id}_${name_id}`;
     const rows = cosmeticColors[key];

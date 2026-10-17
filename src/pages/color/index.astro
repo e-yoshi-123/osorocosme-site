@@ -202,7 +202,7 @@ const crumbs = [
 <script>
   import { load as loadMyCosme, onChange as onMyCosmeChange } from "../../scripts/my-cosme-store";
   import { colorBaseLabel } from "../../lib/color-label";
-  type Data = { p: [string, string, number, string, string, number, string][]; c: [number, string, string, number, string][] };
+  type Data = { p: [string, string, number, string, string, number, string][]; c: [number, string, string, number, string][]; r?: Record<string, string> };
   type Lab = [number, number, number];
   const $ = (id: string) => document.getElementById(id)!;
   const root = $("cs");
@@ -341,9 +341,16 @@ const crumbs = [
   function readMine() {
     const d = loadMyCosme();
     mine = new Map(); mineColors = new Map();
-    for (const k of Object.keys(d.items)) mine.set(k, "items");
-    for (const k of Object.keys(d.wish)) if (!mine.has(k)) mine.set(k, "wish");
-    for (const [k, kind] of mine) { const c = d[kind][k]?.c; if (c?.length) mineColors.set(k, new Set(c)); }
+    // 統合した商品に古い番号で登録していれば、寄せ先の番号に読み替える
+    const to = (k: string) => data?.r?.[k] ?? k;
+    for (const [kind, list] of [["items", d.items], ["wish", d.wish]] as const) {
+      for (const [k, it] of Object.entries(list)) {
+        const s = to(k);
+        if (mine.has(s)) continue;
+        mine.set(s, kind);
+        if (it.c?.length) mineColors.set(s, new Set(it.c));
+      }
+    }
   }
   function drawPresets() {
     presetEl.innerHTML = (presets[modeKey()] || []).map(([name, hex]) =>
@@ -665,6 +672,7 @@ const crumbs = [
   fetch(root.dataset.src!).then((r) => r.json()).then((d: Data) => {
     data = d;
     labs = d.c.map((c) => lab(c[2]));
+    readMine();  // 転送の表を読んでから、マイコスメを読み直す
     if (!restoreState()) render();
   }).catch(() => { statusEl.textContent = "色の一覧を読み込めませんでした。ページを読み込み直してください。"; });
 </script>
