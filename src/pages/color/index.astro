@@ -201,6 +201,7 @@ const crumbs = [
 
 <script>
   import { load as loadMyCosme, onChange as onMyCosmeChange } from "../../scripts/my-cosme-store";
+  import { colorBaseLabel } from "../../lib/color-label";
   type Data = { p: [string, string, number, string, string, number, string][]; c: [number, string, string, number, string][] };
   type Lab = [number, number, number];
   const $ = (id: string) => document.getElementById(id)!;
@@ -223,7 +224,7 @@ const crumbs = [
   let mine = new Map<string, "items" | "wish">();
   // マイコスメで選んだ色（商品 slug → 色の表示名）。選んでいない商品は全部の色をマイコスメの色として出す（363章）
   let mineColors = new Map<string, Set<string>>();
-  const baseLabel = (l: string) => l.replace(/（[^（）]*）$/, "");
+  const baseLabel = colorBaseLabel;
   /** その色が「マイコスメの色」か（使っている・気になるに入っていて、色を選んでいればその色） */
   function isMineShade(i: number): boolean {
     const slug = data!.p[data!.c[i][0]][6];

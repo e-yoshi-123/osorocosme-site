@@ -15,6 +15,7 @@ import productRedirectsData from "../data/product-redirects.json";
 import matsukiyoBrandsData from "../data/matsukiyo-brands.json";
 import imagePreferYahooData from "../data/image-prefer-yahoo.json";
 import cosmeticColorsData from "../data/cosmetic-colors.json";
+import { colorBaseLabel } from "./color-label";
 
 export interface Cosmetic {
   brand_id: string;
@@ -2842,7 +2843,7 @@ export function getColorSearchData(): ColorSearchData {
     out.p.push([e.brand, e.name, kind, cosmeticHref(brand_id, name_id), cosmeticImageSrc(brand_id, name_id), usedVideoCount(key), cosmeticSlug(brand_id, name_id)]);
     for (const [label, hex, top] of rows) {
       // 商品ページの公式の色の一覧にある色なら、その色の行（#color-<番号>）へ
-      const base = label.replace(/（[^（）]*）$/, "");
+      const base = colorBaseLabel(label);
       const oc = official.find((o) => o.label === base);
       const href = oc && hasCosmeticPage(brand_id, name_id) ? cosmeticHref(brand_id, name_id, `#color-${oc.idx}`) : "";
       out.c.push([pi, label, hex, top, href]);
@@ -2853,16 +2854,17 @@ export function getColorSearchData(): ColorSearchData {
 }
 
 /** 商品の公式の色の一覧と、分かれば色の値（マイコスメで「持っている色・気になる色」を選ぶ候補。363章）。
- * 色の名前は商品ページの色の一覧（getOfficialFacts）と同じ。値は cosmetic-colors.json から、同じ名前（帯・パレットは1つ目）の色 */
+ * 色の名前は商品ページの色の一覧（getOfficialFacts）と同じ（公式の色の一覧が無ければ、cosmetic-colors.json の色の名前）。値は cosmetic-colors.json から、同じ名前（帯・パレットは1つ目）の色 */
 export function getCosmeticColorOptions(brand_id: string, name_id: string): [string, string][] {
   const official = getOfficialFacts(brand_id, name_id)?.colors || [];
-  if (official.length < 2) return [];
   const rows = cosmeticColors[`${brand_id}_${name_id}`] || [];
   const hexOf = new Map<string, string>();
   for (const [label, hex] of rows) {
-    const base = label.replace(/（[^（）]*）$/, "");
+    const base = colorBaseLabel(label);
     if (!hexOf.has(base)) hexOf.set(base, hex);
   }
+  // 公式の色の一覧が無い商品（韓国のブランド等）は、色の値のある色の名前を候補にする（363章、LUNA コンシールブレンダーパレット）
+  if (official.length < 2) return hexOf.size >= 2 ? [...hexOf.entries()] : [];
   return official.map((o) => [o.label, hexOf.get(o.label) || ""]);
 }
 let _colorOptions: Record<string, [string, string][]> | undefined;
