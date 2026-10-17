@@ -501,7 +501,9 @@ const crumbs = [
     const [pi, label, hex, top, href] = d.c[i];
     const [brand, name, kind, url, img, videos, slug] = d.p[pi];
     const my = mine.get(slug);
-    const head = `<div class="cs-pop-top"><span class="cs-sw" style="background:${hex}"></span>${img ? `<img class="cs-img" src="${esc(img)}" alt="" width="42" height="42">` : ""}<span class="cs-body"><span class="cs-brand"><span class="cs-kindtag">${esc(kindLabels[kind])}</span>${esc(brand)}${my ? `<span class="cs-mytag">マイコスメ</span>` : ""}</span><span class="cs-name">${esc(name)}</span><span class="cs-shade">${esc(label)}</span></span></div>`;
+    // 固定のポップアップ（full）では、商品画像とコスメ名からも商品ページへ
+    const link = (inner: string, cls = "") => (full ? `<a href="${url}"${cls ? ` class="${cls}"` : ""}>${inner}</a>` : cls ? `<span class="${cls}">${inner}</span>` : inner);
+    const head = `<div class="cs-pop-top"><span class="cs-sw" style="background:${hex}"></span>${img ? link(`<img class="cs-img" src="${esc(img)}" alt="" width="42" height="42">`) : ""}<span class="cs-body"><span class="cs-brand"><span class="cs-kindtag">${esc(kindLabels[kind])}</span>${esc(brand)}${my ? `<span class="cs-mytag">マイコスメ</span>` : ""}</span>${link(esc(name), "cs-name")}<span class="cs-shade">${esc(label)}</span></span></div>`;
     if (!full) return head;
     const dt = dist(lab(target), labs[i]);
     return `<button type="button" class="cs-pop-x" aria-label="閉じる" data-close>×</button>${head}<span class="cs-meta">${hex}・明るさ ${labs[i][0].toFixed(0)}・鮮やかさ ${chromaOf(labs[i]).toFixed(0)}・選んだ色との差 ΔE ${dt.toFixed(1)}${top ? "・商品写真から" : ""}・紹介${videos}本</span><div class="cs-pop-btns"><button type="button" class="cs-go" data-pick="${hex}" data-base="${i}">この色を基準に探す</button><a href="${href || url}">${href ? "この色の紹介を見る" : "商品ページへ"}</a></div>`;
@@ -548,7 +550,8 @@ const crumbs = [
     tabs.forEach((x) => { x.classList.toggle("is-active", x === b); x.setAttribute("aria-selected", String(x === b)); });
     filterEl.hidden = mode !== "all";
     const first = presets[modeKey()]?.[0]?.[1];
-    if (resetColor && first) { target = first.toLowerCase(); input.value = target; baseI = null; drawBase(); }
+    // 検索で選んだ基準のコスメがあれば、その色のまま引き継ぐ（363章、ユーザー「カテゴリを変えたときに検索したコスメが消えちゃう」）
+    if (resetColor && first && baseI === null) { target = first.toLowerCase(); input.value = target; }
     hidePop(); drawPresets(); render();
   }
   tabs.forEach((b) => b.addEventListener("click", () => selectTab(b)));
