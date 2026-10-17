@@ -81,7 +81,7 @@ const crumbs = [
           <button type="button" class="chip is-active" data-view="L">明るさで見る</button>
           <button type="button" class="chip" data-view="C">鮮やかさで見る</button>
         </div>
-        <p class="cs-legend"><span class="cs-lg cs-lg-t"></span>選んだ色 <span class="cs-lg cs-lg-m"></span>マイコスメの商品の色 <span class="cs-lg cs-lg-n"></span>近い色（一覧に出ている色）</p>
+        <p class="cs-legend"><span class="cs-lg cs-lg-t"></span>選んだ色 <span class="cs-lg cs-lg-m"></span>マイコスメ（使っている） <span class="cs-lg cs-lg-w"></span>マイコスメ（気になる） <span class="cs-lg cs-lg-n"></span>近い色（一覧に出ている色）</p>
       </div>
       <div class="cs-mapwrap" id="cs-mapwrap">
         <svg id="cs-map" class="cs-map" viewBox="0 0 1000 440" role="img" aria-label="色の地図。横は色み、縦は明るさ"></svg>
@@ -103,7 +103,7 @@ const crumbs = [
   </div>
 
   <p class="text-xs text-neutral-500 mt-10 leading-relaxed max-w-3xl">
-    色は、各ブランドの公式サイトの色見本の画像から測った目安です（色見本の画像が無い花王のブランドは、真上から撮った商品写真の中央から測り、「商品写真から」と書いています）。画面や光、塗る量・肌の色で見え方は変わります。近さは色の差（ΔE）で、2〜3なら見分けにくく、10を超えると別の色に見える程度です。「近さに含める範囲」のつまみで、濃さ（明るさ）・鮮やかさ・色みのそれぞれの違いをどこまで含めるかを選べます（0はかなり近い色だけ、9は制限なし。3つとも範囲に入る色だけを出し、地図では範囲の外の色を薄くします）。1つの商品からは一番近い色だけを出しています。濃さは色の明るさ（L*）で比べています。マイコスメの商品は、登録した商品の全部の色を地図に出しています（どの色を持っているかまでは分からないため）。マイコスメは、この端末のブラウザに保存したものだけを読み、どこにも送りません。
+    色は、各ブランドの公式サイトの色見本の画像から測った目安です（色見本の画像が無い花王のブランドは、真上から撮った商品写真の中央から測り、「商品写真から」と書いています）。画面や光、塗る量・肌の色で見え方は変わります。近さは色の差（ΔE）で、2〜3なら見分けにくく、10を超えると別の色に見える程度です。「近さに含める範囲」のつまみで、濃さ（明るさ）・鮮やかさ・色みのそれぞれの違いをどこまで含めるかを選べます（0はかなり近い色だけ、9は制限なし。3つとも範囲に入る色だけを出し、地図では範囲の外の色を薄くします）。1つの商品からは一番近い色だけを出しています。濃さは色の明るさ（L*）で比べています。マイコスメの商品は、登録した商品の全部の色を地図に出しています（「使っている」はピンク、「気になる」は青の印）（どの色を持っているかまでは分からないため）。マイコスメは、この端末のブラウザに保存したものだけを読み、どこにも送りません。
   </p>
 </Layout>
 
@@ -147,6 +147,13 @@ const crumbs = [
   .cs-lg { display: inline-block; width: 0.8rem; height: 0.8rem; border-radius: 999px; vertical-align: -0.1rem; margin-right: -0.25rem; }
   .cs-lg-t { border: 2px solid var(--color-ink); }
   .cs-lg-m { background: #fff; border: 2.5px solid var(--color-rose); }
+  /* 「気になる」は青（363章、ユーザー「気になるに登録したコスメもマイコスメと別の色で」） */
+  .cs { --wish: #2f6fdb; }
+  .cs-lg-w { background: #fff; border: 2.5px solid var(--wish); }
+  .cs-map .mn.w { fill: var(--wish); }
+  .cs-mytag.w { border-color: var(--wish); color: var(--wish); }
+  .cs-item.is-wish { border-color: rgb(47 111 219 / 0.45); }
+  .cs-mine b.w { color: var(--wish); }
   .cs-lg-n { background: #d9a0a8; border: 1.5px solid var(--color-ink); }
   .cs-mapwrap { position: relative; overflow-x: auto; }
   .cs-view { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; }
@@ -425,7 +432,7 @@ const crumbs = [
       const [brand, name, kind, url, img, videos, slug] = data!.p[pi];
       const my = mine.get(slug);
       const shade = href ? `<a href="${href}">${esc(label)}</a>` : esc(label);
-      return `<li class="cs-item${my ? " is-mine" : ""}"><span class="cs-sw" style="background:${hex}" title="${hex}"></span>${img ? `<img class="cs-img" src="${esc(img)}" alt="" loading="lazy" width="54" height="54">` : ""}<span class="cs-body"><span class="cs-brand">${mode === "all" ? `<span class="cs-kindtag">${esc(kindLabels[kind])}</span>` : ""}${esc(brand)}${my ? `<span class="cs-mytag">マイコスメ${my === "wish" ? "（気になる）" : ""}</span>` : ""}</span><a class="cs-name" href="${url}">${esc(name)}</a><span class="cs-shade">${shade}</span><span class="cs-meta"><span class="cs-near">${nearWord(d)}（ΔE ${d.toFixed(1)}）</span>${hex}・明るさ ${labs[i][0].toFixed(0)}${top ? "・商品写真から" : ""}・紹介${videos}本</span></span></li>`;
+      return `<li class="cs-item${my === "items" ? " is-mine" : my === "wish" ? " is-wish" : ""}"><span class="cs-sw" style="background:${hex}" title="${hex}"></span>${img ? `<img class="cs-img" src="${esc(img)}" alt="" loading="lazy" width="54" height="54">` : ""}<span class="cs-body"><span class="cs-brand">${mode === "all" ? `<span class="cs-kindtag">${esc(kindLabels[kind])}</span>` : ""}${esc(brand)}${my ? `<span class="cs-mytag${my === "wish" ? " w" : ""}">${my === "wish" ? "気になる" : "マイコスメ"}</span>` : ""}</span><a class="cs-name" href="${url}">${esc(name)}</a><span class="cs-shade">${shade}</span><span class="cs-meta"><span class="cs-near">${nearWord(d)}（ΔE ${d.toFixed(1)}）</span>${hex}・明るさ ${labs[i][0].toFixed(0)}${top ? "・商品写真から" : ""}・紹介${videos}本</span></span></li>`;
     }).join("");
     drawMap(shownKinds, new Set(near.map((r) => r.i)), t);
   }
@@ -454,7 +461,8 @@ const crumbs = [
       dots.push({ x, y, i });
       if (mine.has(slug)) {
         if (!myNo.has(pi)) myNo.set(pi, myNo.size + 1);
-        my.push(`<circle cx="${x}" cy="${y}" r="9" fill="${hex}" stroke="#fff" stroke-width="2"/><circle cx="${x}" cy="${y}" r="10.5" fill="none" stroke="var(--color-rose)" stroke-width="2.5"/><text class="mn" x="${x + 12}" y="${y - 8}">${myNo.get(pi)}</text>`);
+        const w = mine.get(slug) === "wish";
+        my.push(`<circle cx="${x}" cy="${y}" r="9" fill="${hex}" stroke="#fff" stroke-width="2"/><circle cx="${x}" cy="${y}" r="10.5" fill="none" stroke="${w ? "var(--wish)" : "var(--color-rose)"}" stroke-width="2.5"/><text class="mn${w ? " w" : ""}" x="${x + 12}" y="${y - 8}">${myNo.get(pi)}</text>`);
       } else if (shown.has(i)) {
         hi.push(`<circle cx="${x}" cy="${y}" r="6.5" fill="${hex}" stroke="#1d1517" stroke-width="1.8"/>`);
       } else {
@@ -470,7 +478,8 @@ const crumbs = [
     else mineEl.innerHTML = [...myNo.entries()].map(([pi, no]) => {
       const [brand, name, , , , , slug] = d.p[pi];
       const sw = d.c.filter((c) => c[0] === pi).map((c) => `<span class="cs-dot" style="background:${c[2]}" title="${esc(c[1])}"></span>`).join("");
-      return `<span><b>${no}</b>${esc(brand)} ${esc(name)}${mine.get(slug) === "wish" ? "（気になる）" : ""}${sw}</span>`;
+      const w = mine.get(slug) === "wish";
+      return `<span><b${w ? ' class="w"' : ""}>${no}</b>${esc(brand)} ${esc(name)}${w ? "（気になる）" : ""}${sw}</span>`;
     }).join("");
     if (pinned) hidePop();
   }
@@ -503,7 +512,7 @@ const crumbs = [
     const my = mine.get(slug);
     // 固定のポップアップ（full）では、商品画像とコスメ名からも商品ページへ
     const link = (inner: string, cls = "") => (full ? `<a href="${url}"${cls ? ` class="${cls}"` : ""}>${inner}</a>` : cls ? `<span class="${cls}">${inner}</span>` : inner);
-    const head = `<div class="cs-pop-top"><span class="cs-sw" style="background:${hex}"></span>${img ? link(`<img class="cs-img" src="${esc(img)}" alt="" width="42" height="42">`) : ""}<span class="cs-body"><span class="cs-brand"><span class="cs-kindtag">${esc(kindLabels[kind])}</span>${esc(brand)}${my ? `<span class="cs-mytag">マイコスメ</span>` : ""}</span>${link(esc(name), "cs-name")}<span class="cs-shade">${esc(label)}</span></span></div>`;
+    const head = `<div class="cs-pop-top"><span class="cs-sw" style="background:${hex}"></span>${img ? link(`<img class="cs-img" src="${esc(img)}" alt="" width="42" height="42">`) : ""}<span class="cs-body"><span class="cs-brand"><span class="cs-kindtag">${esc(kindLabels[kind])}</span>${esc(brand)}${my ? `<span class="cs-mytag${my === "wish" ? " w" : ""}">${my === "wish" ? "気になる" : "マイコスメ"}</span>` : ""}</span>${link(esc(name), "cs-name")}<span class="cs-shade">${esc(label)}</span></span></div>`;
     if (!full) return head;
     const dt = dist(lab(target), labs[i]);
     return `<button type="button" class="cs-pop-x" aria-label="閉じる" data-close>×</button>${head}<span class="cs-meta">${hex}・明るさ ${labs[i][0].toFixed(0)}・鮮やかさ ${chromaOf(labs[i]).toFixed(0)}・選んだ色との差 ΔE ${dt.toFixed(1)}${top ? "・商品写真から" : ""}・紹介${videos}本</span><div class="cs-pop-btns"><button type="button" class="cs-go" data-pick="${hex}" data-base="${i}">この色を基準に探す</button><a href="${href || url}">${href ? "この色の紹介を見る" : "商品ページへ"}</a></div>`;
