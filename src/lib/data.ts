@@ -1610,10 +1610,10 @@ export function getIngredientsOfCosmetic(brand_id: string, name_id: string): { d
 }
 /** メーカー公式の定価・色・発売日・限定・製造終了（backend/scripts/product_facts/export_site.py が書く。出し方は決定事項 2026-10-14） */
 interface OfficialColorRaw { label: string; code?: string; words?: string[] }
-interface OfficialFactsRaw { price?: number; colors?: OfficialColorRaw[]; release?: string; limited?: boolean; eom?: boolean; url?: string; contents?: string[] }
+interface OfficialFactsRaw { price?: number; colors?: OfficialColorRaw[]; colors_from?: "manual"; release?: string; limited?: boolean; eom?: boolean; url?: string; contents?: string[] }
 export interface OfficialColorVideo { key: string; title: string; channel_title: string; thumbnail: string; published_at: string; quote?: string }
 export interface OfficialColor { label: string; /** 公式の並びでの番号（商品ページの #color-<idx> に使う） */ idx: number; videoCount: number; videos: OfficialColorVideo[] }
-export interface OfficialFacts { price?: number; colors: OfficialColor[]; release?: string; limited: boolean; eom: boolean; url?: string; /** セット内容（コフレ等。記事・公式ページで確かめたもの。338章） */ contents: string[] }
+export interface OfficialFacts { price?: number; colors: OfficialColor[]; /** 色の一覧を販売の情報で手で確かめた品（公式サイトの対応づけが無い品。363章） */ colorsManual: boolean; release?: string; limited: boolean; eom: boolean; url?: string; /** セット内容（コフレ等。記事・公式ページで確かめたもの。338章） */ contents: string[] }
 const officialFacts = officialFactsData as Record<string, OfficialFactsRaw>;
 const escRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 /** 紹介文でその色に触れているかの判定。英字付きの色番（PK-1・BR300）はそのまま、数字だけの色番は「04番」「#04」の形だけ（「30代」等と取り違えない）。
@@ -1667,6 +1667,7 @@ function buildOfficialFacts(brand_id: string, name_id: string): OfficialFacts | 
   return {
     price: raw.price,
     colors: colors.map((c, i) => ({ label: c.label, idx: i, videoCount: found[i].length, videos: found[i] })),
+    colorsManual: raw.colors_from === "manual",
     release: raw.release,
     limited: !!raw.limited,
     eom: !!raw.eom,

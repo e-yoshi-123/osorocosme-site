@@ -457,7 +457,7 @@ const jsonLd = entry
 
         {official && official.colors.length > 0 && (
           <section id="colors" class="panel u-14">
-            <SectionHead en="Colors" title="色のバリエーション" lead={`${official.colors.length}色（メーカー公式サイトの掲載${official.colors.length > COLORS_SHOWN && colorMentioned > 0 ? "。動画で紹介された色を先に並べています" : ""}）。${colorMentioned > 0 ? "「動画で紹介」は、紹介の中でその色の名前・番号に触れた動画の本数で、押すとその動画が開きます。" : ""}限定色や販売を終えた色が含まれることがあります。`} />
+            <SectionHead en="Colors" title="色のバリエーション" lead={`${official.colors.length}色（${official.colorsManual ? "販売の情報で確かめた色" : "メーカー公式サイトの掲載"}${official.colors.length > COLORS_SHOWN && colorMentioned > 0 ? "。動画で紹介された色を先に並べています" : ""}）。${colorMentioned > 0 ? "「動画で紹介」は、紹介の中でその色の名前・番号に触れた動画の本数で、押すとその動画が開きます。" : ""}限定色や販売を終えた色が含まれることがあります。`} />
             <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 grid-flow-dense gap-x-6 items-start text-sm">
               {colorsShown.map((c, k) => (
                 <li id={`color-${c.idx}`} class:list={["border-b border-ink/10 scroll-mt-28 has-[details[open]]:col-span-full has-[details[open]]:my-3 has-[details[open]]:border-b-0", k >= COLORS_SHOWN && "hidden"]} data-color-extra={k >= COLORS_SHOWN ? "" : undefined}>
