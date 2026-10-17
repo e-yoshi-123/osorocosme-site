@@ -46,6 +46,7 @@ import {
   INTRO_IN_PAGE,
   INTRO_SPLIT_OVER,
   introProfileSummary,
+  getCosmeticColorOptions,
 } from "../../lib/data";
 import titleOverrides from "../../data/title-overrides.json";
 
@@ -374,7 +375,7 @@ const jsonLd = entry
               );
             })()}
             {/* マイコスメ（5-4）：使っているコスメ・気になるコスメとして、この端末のブラウザに登録する（同じ商品は片方にだけ入る。259章）。表示はスクリプトで切り替える（スクリプトなしでは出さない） */}
-            <div data-mycosme hidden class="item-17" data-slug={cosmeticSlug(brand_id, name_id)} data-name={`${entry.brand} ${entry.name}`}>
+            <div data-mycosme hidden class="item-17" data-slug={cosmeticSlug(brand_id, name_id)} data-name={`${entry.brand} ${entry.name}`} data-colors={JSON.stringify(getCosmeticColorOptions(brand_id, name_id))}>
               <button type="button" data-mycosme-toggle="items" aria-pressed="false" class="group rounded-full border item-mc">
                 <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path class="group-aria-pressed:hidden" d="M12 5v14M5 12h14" /><path class="hidden group-aria-pressed:block" d="m5 12.5 4.5 4.5L19 7" /></svg>
                 <span data-label>使っている</span>
@@ -384,6 +385,11 @@ const jsonLd = entry
                 <span data-label>気になる</span>
               </button>
               <a href={withBase("/my-cosme/")} class="link-u text-xs text-neutral-600">マイコスメでおすすめを見る →</a>
+              {/* 登録した商品の「持っている色・気になる色」（363章）。登録した直後は開いて出す */}
+              <div data-mycosme-colors hidden class="basis-full">
+                <p class="flex flex-wrap items-center gap-2 text-xs"><span data-mycosme-colors-sum></span><button type="button" data-mycosme-colors-toggle class="link-u text-neutral-600">色を選ぶ</button></p>
+                <div data-mycosme-colors-box hidden></div>
+              </div>
             </div>
             <ShareButtons text={`${entry.brand}「${entry.name}」を紹介しているYouTube動画${facts.videoCount}本・インフルエンサー${facts.channelCount}人`} class="mt-6" />
           </div>
@@ -559,12 +565,31 @@ const jsonLd = entry
 
 <script>
   // マイコスメの「使っている」「気になる」に入れる・外す（5-4。保存はこの端末のブラウザだけ。同じ商品は片方にだけ入る）
-  import { has, add, remove, onChange, type ListKind } from "../../scripts/my-cosme-store";
+  import { has, add, remove, onChange, colorsOf, type ListKind } from "../../scripts/my-cosme-store";
+  import { mountColorChooser, colorSummary } from "../../scripts/color-chooser";
   const myBox = document.querySelector<HTMLElement>("[data-mycosme]");
   if (myBox) {
     const slug = myBox.dataset.slug!;
     const btns = Array.from(myBox.querySelectorAll<HTMLButtonElement>("[data-mycosme-toggle]"));
     const LABEL: Record<ListKind, [string, string]> = { items: ["使っている", "使っている（登録済み）"], wish: ["気になる", "気になる（登録済み）"] };
+    // 登録した商品の色（公式の色が2色以上ある商品だけ）
+    const colors = JSON.parse(myBox.dataset.colors || "[]") as [string, string][];
+    const cBox = myBox.querySelector<HTMLElement>("[data-mycosme-colors]")!;
+    const cSum = myBox.querySelector<HTMLElement>("[data-mycosme-colors-sum]")!;
+    const cToggle = myBox.querySelector<HTMLButtonElement>("[data-mycosme-colors-toggle]")!;
+    const cPanel = myBox.querySelector<HTMLElement>("[data-mycosme-colors-box]")!;
+    let cKind: ListKind | null = null;
+    const paintColors = (open?: boolean) => {
+      const kind: ListKind | null = has(slug, "items") ? "items" : has(slug, "wish") ? "wish" : null;
+      cBox.hidden = !kind || colors.length < 2;
+      if (cBox.hidden) { cPanel.hidden = true; cKind = null; return; }
+      const sel = colorsOf(slug, kind!);
+      cSum.innerHTML = sel.length ? `${kind === "wish" ? "気になる色" : "持っている色"}：${colorSummary(sel, colors)}` : `<span class="text-neutral-500">${kind === "wish" ? "気になる色" : "持っている色"}はまだ選んでいません</span>`;
+      if (open) cPanel.hidden = false;
+      if (!cPanel.hidden && cKind !== kind) { mountColorChooser(cPanel, slug, kind!, colors, () => paintColors()); cKind = kind; }
+      cToggle.textContent = cPanel.hidden ? (sel.length ? "色を選び直す" : "色を選ぶ") : "閉じる";
+    };
+    cToggle.addEventListener("click", () => { cPanel.hidden = !cPanel.hidden; if (cPanel.hidden) cKind = null; paintColors(); });
     const paint = () => {
       for (const b of btns) {
         const kind = b.dataset.mycosmeToggle as ListKind;
@@ -572,6 +597,7 @@ const jsonLd = entry
         b.setAttribute("aria-pressed", String(on));
         b.querySelector("[data-label]")!.textContent = LABEL[kind][on ? 1 : 0];
       }
+      paintColors();
     };
     for (const b of btns) {
       b.addEventListener("click", () => {
@@ -579,7 +605,7 @@ const jsonLd = entry
         const on = has(slug, kind);
         const ok = on ? remove(slug, kind) : add(slug, myBox.dataset.name, kind);
         if (!ok) b.querySelector("[data-label]")!.textContent = "このブラウザでは保存できません";
-        else paint();
+        else { paint(); if (!on) { cKind = null; paintColors(true); } }  // 登録したときは、色を選ぶ欄を開く
         const g = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
         if (typeof g === "function") g("event", "my_cosme", { action: `${kind === "wish" ? "wish_" : ""}${on ? "remove" : "add"}` }); // どの商品かは送らない
       });

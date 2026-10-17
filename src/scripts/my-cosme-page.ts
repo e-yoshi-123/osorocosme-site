@@ -13,6 +13,7 @@
 import { norm, splitTerms } from "../lib/search-norm";
 import { load, add, remove, has, save, merge, sanitize, exportText, onChange, type MyCosmeData, type ListKind } from "./my-cosme-store";
 import { sync, pushIfConnected, disconnect, isConnected } from "./my-cosme-drive";
+import { mountColorChooser, colorSummary } from "./color-chooser";
 
 type CosRow = [string, string, number, string, string, string, number, string?];
 // 商品へのリンク先。商品ページの無い商品（紹介1本）は、8つ目の動画のページへ（341章）
@@ -120,6 +121,29 @@ function tile(p: Prepared, n: number, caption: string, d: MyCosmeData): string {
   </div>`;
 }
 
+// ---- 登録した商品の色（363章）：候補は /color/options.json（公式の色が2色以上ある商品だけ）。ページを開いたあとに読む ----
+let colorOpts: Record<string, [string, string][]> | null = null;
+let colorOptsLoading: Promise<void> | null = null;
+/** 色を選ぶ欄を開いている商品 */
+let openColors: string | null = null;
+function loadColorOpts(): Promise<void> {
+  return (colorOptsLoading ??= fetch(`${base}/color/options.json`)
+    .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+    .then((d) => { colorOpts = d; })
+    .catch(() => { colorOptsLoading = null; }));
+}
+function colorRow(slug: string, kind: ListKind, labels: string[]): string {
+  const opts = colorOpts?.[slug];
+  if (!opts || opts.length < 2) return "";
+  const what = kind === "wish" ? "気になる色" : "持っている色";
+  const open = openColors === slug;
+  return `<div class="w-full pl-15 -mt-1 text-xs flex flex-wrap items-center gap-2">
+      ${labels.length ? `<span class="text-neutral-500">${what}：</span>${colorSummary(labels, opts)}` : `<span class="text-neutral-500">${what}はまだ選んでいません</span>`}
+      <button type="button" data-colors-open="${esc(slug)}" class="link-u text-neutral-600 cursor-pointer">${open ? "閉じる" : labels.length ? "色を選び直す" : "色を選ぶ"}</button>
+    </div>
+    <div class="w-full pl-15" data-colors-box="${esc(slug)}"${open ? "" : " hidden"}></div>`;
+}
+
 // ---- 登録した一覧 ----
 const EMPTY_TEXT = {
   items: "まだ登録されていません。上の欄で探すか、右の人気のコスメから追加してください。",
@@ -148,16 +172,22 @@ function renderList(p: Prepared, d: MyCosmeData) {
       }
       const c = p.idx.c[n];
       const src = img(c[4], 128);
-      return `<li class="flex items-center gap-3 py-3 border-b border-ink/10">
+      return `<li class="flex flex-wrap items-center gap-3 py-3 border-b border-ink/10">
         <a href="${cosHref(c)}" class="w-12 h-12 shrink-0 rounded-xl product-well flex items-center justify-center overflow-hidden">${src ? `<img src="${esc(src)}" alt="" loading="lazy" class="w-full h-full object-contain p-1" onerror="this.remove()" />` : ""}</a>
         <a href="${cosHref(c)}" class="flex-1 min-w-0 group">
           <span class="block text-xs text-neutral-500 truncate">${flag(p, n)}${esc(c[1])}${c[5] ? `・${esc(c[5])}` : ""}</span>
           <span class="block text-sm truncate group-hover:text-rose transition-colors">${esc(c[3])}</span>
         </a>
         ${moveBtn(slug)}${rmBtn(slug, c[3])}
+        ${colorRow(slug, tab, it.c || [])}
       </li>`;
     })
     .join("");
+  // 開いている「色を選ぶ」の欄を組み立てる（選ぶたびに保存し、つないでいればドライブにも書く）
+  if (openColors && colorOpts?.[openColors] && d[tab][openColors]) {
+    const box = list.querySelector<HTMLElement>(`[data-colors-box="${CSS.escape(openColors)}"]`);
+    if (box) mountColorChooser(box, openColors, tab, colorOpts[openColors], () => afterLocalChange());
+  }
 }
 
 // ---- 肌悩み ----
@@ -708,6 +738,8 @@ async function main() {
   renderAll(load());
   renderDrive();
   onChange(renderAll);
+  // 登録した商品の色の候補を読んだら、一覧を描き直す（色の欄が出る）
+  loadColorOpts().then(() => renderList(p, load()));
   // 自己診断の結果から登録して来たとき（?registered=pc|skin。316章）：知らせて、おすすめの欄を見せる
   const reg = new URLSearchParams(location.search).get("registered");
   if (reg === "pc" || reg === "skin") {
@@ -720,6 +752,13 @@ async function main() {
 
   root.addEventListener("click", (e) => {
     const t = e.target as HTMLElement;
+    const colBtn = t.closest<HTMLElement>("[data-colors-open]");
+    if (colBtn) {
+      const slug = colBtn.dataset.colorsOpen!;
+      openColors = openColors === slug ? null : slug;
+      renderList(p, load());
+      return;
+    }
     const nameOf = (slug: string) => {
       const n = p.bySlug.get(slug);
       return n !== undefined ? `${p.idx.c[n][1]} ${p.idx.c[n][3]}` : undefined;

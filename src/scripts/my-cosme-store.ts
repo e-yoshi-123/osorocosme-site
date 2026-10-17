@@ -4,7 +4,8 @@
  * 2か所の一覧を合わせる（読み込み・同期）とき、消した商品が戻らないよう、消した時刻も持つ（removed）。
  * 「気になる」（wish・wishRemoved）は259章で足した。「使っている」とは別の一覧で、同じ商品は片方にだけ入る（入れたほうに移る）。
  * 肌悩み（concerns・concernsRemoved。キーは /concern/<slug>/ の slug）も259章で足した。合わせ方は商品と同じ。
- * パーソナルカラー（pc・pcRemoved。キーは「イエベ春」など。1つだけ選ぶのはページ側で守る）と肌質（skin・skinRemoved。複数可）は313章で足した。 */
+ * パーソナルカラー（pc・pcRemoved。キーは「イエベ春」など。1つだけ選ぶのはページ側で守る）と肌質（skin・skinRemoved。複数可）は313章で足した。
+ * 商品の「持っている色・気になる色」（Item の c＝公式の色の表示名、ct＝色を変えた時刻）は363章で足した。 */
 
 export interface MyCosmeData {
   v: 1;
@@ -27,7 +28,7 @@ export interface MyCosmeData {
   skin: Record<string, Item>;
   skinRemoved: Record<string, number>;
 }
-export type Item = { t: number; n?: string };
+export type Item = { t: number; n?: string; /** 選んだ色（公式の色の表示名。商品ページの色の一覧と同じ） */ c?: string[]; /** 色を選び直した時刻 */ ct?: number };
 /** どちらの一覧か：items＝使っている、wish＝気になる */
 export type ListKind = "items" | "wish";
 /** 保存する一覧の種類（商品の2つと、肌悩み） */
@@ -57,7 +58,13 @@ export function sanitize(raw: unknown): MyCosmeData | null {
     if (items && typeof items === "object") {
       for (const [slug, it] of Object.entries(items)) {
         if (!SLUG.test(slug) || !it || typeof it.t !== "number") continue;
-        out[kind][slug] = typeof it.n === "string" ? { t: it.t, n: it.n.slice(0, 200) } : { t: it.t };
+        const item: Item = typeof it.n === "string" ? { t: it.t, n: it.n.slice(0, 200) } : { t: it.t };
+        if (Array.isArray(it.c)) {
+          const c = it.c.filter((x): x is string => typeof x === "string" && x.length > 0).map((x) => x.slice(0, 80)).slice(0, 60);
+          if (c.length) item.c = c;
+          if (typeof it.ct === "number") item.ct = it.ct;
+        }
+        out[kind][slug] = item;
       }
     }
     const rm = r[REMOVED_OF[kind]];
@@ -106,13 +113,31 @@ export function add(slug: string, name?: string, kind: Kind = "items"): boolean 
   if (d[kind][slug]) return true;
   const now = Date.now();
   const other = OTHER[kind];
+  let colors: Pick<Item, "c" | "ct"> = {};
   if (other && d[other][slug]) {
     name ||= d[other][slug].n;
+    const o = d[other][slug];
+    if (o.c?.length) colors = { c: o.c, ct: o.ct ?? now };  // 「気になる」から「使っている」へ移すときは、選んだ色も移す
     delete d[other][slug];
     d[REMOVED_OF[other]][slug] = now;
   }
-  d[kind][slug] = name ? { t: now, n: name } : { t: now };
+  d[kind][slug] = { t: now, ...(name ? { n: name } : {}), ...colors };
   delete d[REMOVED_OF[kind]][slug];
+  return save(d);
+}
+
+/** 登録した商品の、選んだ色（無ければ空） */
+export function colorsOf(slug: string, kind: ListKind): string[] {
+  return load()[kind][slug]?.c || [];
+}
+/** 登録した商品の色を選び直す（登録していない商品には何もしない） */
+export function setColors(slug: string, kind: ListKind, labels: string[]): boolean {
+  const d = load();
+  const it = d[kind][slug];
+  if (!it) return false;
+  const c = [...new Set(labels)].slice(0, 60);
+  if (c.length) it.c = c; else delete it.c;
+  it.ct = Date.now();
   return save(d);
 }
 
@@ -132,7 +157,14 @@ export function merge(a: MyCosmeData, b: MyCosmeData): MyCosmeData {
     const slugs = new Set([...Object.keys(a[kind]), ...Object.keys(b[kind]), ...Object.keys(a[rmKey]), ...Object.keys(b[rmKey])]);
     for (const s of slugs) {
       const ia = a[kind][s], ib = b[kind][s];
-      const item = !ia ? ib : !ib ? ia : ia.t >= ib.t ? { ...ia, n: ia.n || ib.n } : { ...ib, n: ib.n || ia.n };
+      let item = !ia ? ib : !ib ? ia : ia.t >= ib.t ? { ...ia, n: ia.n || ib.n } : { ...ib, n: ib.n || ia.n };
+      // 選んだ色は、選び直した時刻（ct）の新しいほうを採る
+      if (ia && ib && item) {
+        const src = (ia.ct || 0) >= (ib.ct || 0) ? ia : ib;
+        item = { ...item };
+        if (src.c?.length) item.c = src.c; else delete item.c;
+        if (src.ct) item.ct = src.ct; else delete item.ct;
+      }
       const rm = Math.max(a[rmKey][s] || 0, b[rmKey][s] || 0);
       if (item && item.t > rm) out[kind][s] = item;
       else if (rm) out[rmKey][s] = rm;
@@ -153,7 +185,7 @@ export function merge(a: MyCosmeData, b: MyCosmeData): MyCosmeData {
 export function same(a: MyCosmeData, b: MyCosmeData): boolean {
   const key = (d: MyCosmeData) =>
     JSON.stringify(
-      KINDS.map((k) => [Object.entries(d[k]).map(([s, i]) => [s, i.t]).sort(), Object.entries(d[REMOVED_OF[k]]).sort()]),
+      KINDS.map((k) => [Object.entries(d[k]).map(([s, i]) => [s, i.t, i.ct || 0, (i.c || []).join("\u0001")]).sort(), Object.entries(d[REMOVED_OF[k]]).sort()]),
     );
   return key(a) === key(b);
 }

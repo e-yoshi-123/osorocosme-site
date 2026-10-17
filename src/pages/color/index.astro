@@ -103,7 +103,7 @@ const crumbs = [
   </div>
 
   <p class="text-xs text-neutral-500 mt-10 leading-relaxed max-w-3xl">
-    色は、各ブランドの公式サイトの色見本の画像から測った目安です（色見本の画像が無い花王のブランドは、真上から撮った商品写真の中央から測り、「商品写真から」と書いています）。画面や光、塗る量・肌の色で見え方は変わります。近さは色の差（ΔE）で、2〜3なら見分けにくく、10を超えると別の色に見える程度です。「近さに含める範囲」のつまみで、濃さ（明るさ）・鮮やかさ・色みのそれぞれの違いをどこまで含めるかを選べます（0はかなり近い色だけ、9は制限なし。3つとも範囲に入る色だけを出し、地図では範囲の外の色を薄くします）。1つの商品からは一番近い色だけを出しています。濃さは色の明るさ（L*）で比べています。マイコスメの商品は、登録した商品の全部の色を地図に出しています（「使っている」はピンク、「気になる」は青の印）（どの色を持っているかまでは分からないため）。マイコスメは、この端末のブラウザに保存したものだけを読み、どこにも送りません。
+    色は、各ブランドの公式サイトの色見本の画像から測った目安です（色見本の画像が無い花王のブランドは、真上から撮った商品写真の中央から測り、「商品写真から」と書いています）。画面や光、塗る量・肌の色で見え方は変わります。近さは色の差（ΔE）で、2〜3なら見分けにくく、10を超えると別の色に見える程度です。「近さに含める範囲」のつまみで、濃さ（明るさ）・鮮やかさ・色みのそれぞれの違いをどこまで含めるかを選べます（0はかなり近い色だけ、9は制限なし。3つとも範囲に入る色だけを出し、地図では範囲の外の色を薄くします）。1つの商品からは一番近い色だけを出しています。濃さは色の明るさ（L*）で比べています。マイコスメの商品は、マイコスメで選んだ色を、選んでいなければその商品の全部の色を地図に出します（「使っている」はピンク、「気になる」は青の印）。近さの範囲の外でも、一覧に「範囲外」として出します。マイコスメは、この端末のブラウザに保存したものだけを読み、どこにも送りません。
   </p>
 </Layout>
 
@@ -218,6 +218,16 @@ const crumbs = [
   let data: Data | null = null;
   let labs: Lab[] = [];
   let mine = new Map<string, "items" | "wish">();
+  // マイコスメで選んだ色（商品 slug → 色の表示名）。選んでいない商品は全部の色をマイコスメの色として出す（363章）
+  let mineColors = new Map<string, Set<string>>();
+  const baseLabel = (l: string) => l.replace(/（[^（）]*）$/, "");
+  /** その色が「マイコスメの色」か（使っている・気になるに入っていて、色を選んでいればその色） */
+  function isMineShade(i: number): boolean {
+    const slug = data!.p[data!.c[i][0]][6];
+    if (!mine.has(slug)) return false;
+    const sel = mineColors.get(slug);
+    return !sel || sel.has(baseLabel(data!.c[i][1]));
+  }
   let dots: { x: number; y: number; i: number }[] = [];
   let pinned = false;
   // 基準にしたコスメの色（検索で選んだもの。data.c の番号）。その商品は一覧から外し、地図に印を付ける
@@ -326,9 +336,10 @@ const crumbs = [
 
   function readMine() {
     const d = loadMyCosme();
-    mine = new Map();
+    mine = new Map(); mineColors = new Map();
     for (const k of Object.keys(d.items)) mine.set(k, "items");
     for (const k of Object.keys(d.wish)) if (!mine.has(k)) mine.set(k, "wish");
+    for (const [k, kind] of mine) { const c = d[kind][k]?.c; if (c?.length) mineColors.set(k, new Set(c)); }
   }
   function drawPresets() {
     presetEl.innerHTML = (presets[modeKey()] || []).map(([name, hex]) =>
@@ -411,28 +422,37 @@ const crumbs = [
     if (!data) return;
     const t = lab(target), ks = active();
     const best = new Map<number, { d: number; i: number }>();
+    // マイコスメ（使っている・気になる）の品は、近さの範囲の外でも一覧に入れる（363章、ユーザー「範囲外でも表示するように」）。選んだ色があればその中で一番近い色
+    const myBest = new Map<number, { d: number; i: number; out: boolean }>();
     const shownKinds: number[] = [];
     data.c.forEach((c, i) => {
       if (!ks.has(data!.p[c[0]][2])) return;
       shownKinds.push(i);
       if (baseI !== null && c[0] === data!.c[baseI][0]) return;
-      if (!within(t, labs[i])) return;
       const d = dist(t, labs[i]);
+      if (isMineShade(i)) {
+        const cur = myBest.get(c[0]);
+        if (!cur || d < cur.d) myBest.set(c[0], { d, i, out: !within(t, labs[i]) });
+      }
+      if (!within(t, labs[i])) return;
       const cur = best.get(c[0]);
       if (!cur || d < cur.d) best.set(c[0], { d, i });
     });
-    const near = [...best.values()].sort((a, b) => a.d - b.d).slice(0, SHOW);
+    const near: { d: number; i: number; out?: boolean }[] = [...best.values()].filter((r) => !myBest.has(data!.c[r.i][0])).sort((a, b) => a.d - b.d).slice(0, SHOW);
+    near.push(...myBest.values());
+    near.sort((a, b) => a.d - b.d);
     const rows = sort === "near" ? near : near.slice().sort((a, b) => (sort === "dark" ? 1 : -1) * (labs[a.i][0] - labs[b.i][0]));
     const baseName = baseI !== null ? `${data.p[data.c[baseI][0]][1]}（${data.c[baseI][1]}）` : "";
     const what = baseName ? `基準の ${baseName}` : `選んだ色 ${target.toUpperCase()}`, order = sort === "near" ? "近い順" : sort === "dark" ? "濃い順" : "薄い順";
-    statusEl.textContent = plainW() ? `${best.size}品の中から、${what} に近い${rows.length}品を${order}に`
-      : best.size ? `範囲に入るのは${best.size}品。${what} に近い${rows.length}品を${order}に` : `範囲に入るコスメがありません。つまみを「遠い」のほうへ動かすと広がります`;
-    listEl.innerHTML = rows.map(({ d, i }) => {
+    const myN = myBest.size ? `（マイコスメの${myBest.size}品は範囲の外でも出しています）` : "";
+    statusEl.textContent = (plainW() ? `${best.size}品の中から、${what} に近い順の${rows.length}品を${order}に`
+      : best.size ? `範囲に入るのは${best.size}品。${what} に近い${rows.length}品を${order}に` : `範囲に入るコスメがありません。つまみを「遠い」のほうへ動かすと広がります`) + myN;
+    listEl.innerHTML = rows.map(({ d, i, out }) => {
       const [pi, label, hex, top, href] = data!.c[i];
       const [brand, name, kind, url, img, videos, slug] = data!.p[pi];
       const my = mine.get(slug);
       const shade = href ? `<a href="${href}">${esc(label)}</a>` : esc(label);
-      return `<li class="cs-item${my === "items" ? " is-mine" : my === "wish" ? " is-wish" : ""}"><span class="cs-sw" style="background:${hex}" title="${hex}"></span>${img ? `<img class="cs-img" src="${esc(img)}" alt="" loading="lazy" width="54" height="54">` : ""}<span class="cs-body"><span class="cs-brand">${mode === "all" ? `<span class="cs-kindtag">${esc(kindLabels[kind])}</span>` : ""}${esc(brand)}${my ? `<span class="cs-mytag${my === "wish" ? " w" : ""}">${my === "wish" ? "気になる" : "マイコスメ"}</span>` : ""}</span><a class="cs-name" href="${url}">${esc(name)}</a><span class="cs-shade">${shade}</span><span class="cs-meta"><span class="cs-near">${nearWord(d)}（ΔE ${d.toFixed(1)}）</span>${hex}・明るさ ${labs[i][0].toFixed(0)}${top ? "・商品写真から" : ""}・紹介${videos}本</span></span></li>`;
+      return `<li class="cs-item${my === "items" ? " is-mine" : my === "wish" ? " is-wish" : ""}"><span class="cs-sw" style="background:${hex}" title="${hex}"></span>${img ? `<img class="cs-img" src="${esc(img)}" alt="" loading="lazy" width="54" height="54">` : ""}<span class="cs-body"><span class="cs-brand">${mode === "all" ? `<span class="cs-kindtag">${esc(kindLabels[kind])}</span>` : ""}${esc(brand)}${my ? `<span class="cs-mytag${my === "wish" ? " w" : ""}">${my === "wish" ? "気になる" : "マイコスメ"}</span>` : ""}</span><a class="cs-name" href="${url}">${esc(name)}</a><span class="cs-shade">${shade}</span><span class="cs-meta"><span class="cs-near">${out ? "範囲外" : nearWord(d)}（ΔE ${d.toFixed(1)}）</span>${hex}・明るさ ${labs[i][0].toFixed(0)}${top ? "・商品写真から" : ""}・紹介${videos}本</span></span></li>`;
     }).join("");
     drawMap(shownKinds, new Set(near.map((r) => r.i)), t);
   }
@@ -459,7 +479,7 @@ const crumbs = [
       const slug = d.p[pi][6];
       const [x, y] = pos(labs[i]);
       dots.push({ x, y, i });
-      if (mine.has(slug)) {
+      if (isMineShade(i)) {
         if (!myNo.has(pi)) myNo.set(pi, myNo.size + 1);
         const w = mine.get(slug) === "wish";
         my.push(`<circle cx="${x}" cy="${y}" r="9" fill="${hex}" stroke="#fff" stroke-width="2"/><circle cx="${x}" cy="${y}" r="10.5" fill="none" stroke="${w ? "var(--wish)" : "var(--color-rose)"}" stroke-width="2.5"/><text class="mn${w ? " w" : ""}" x="${x + 12}" y="${y - 8}">${myNo.get(pi)}</text>`);
@@ -477,7 +497,7 @@ const crumbs = [
     else if (!myNo.size) mineEl.innerHTML = `<span class="cs-note">マイコスメに登録した商品のうち、表示中のジャンルで色が分かっている商品はまだありません。</span>`;
     else mineEl.innerHTML = [...myNo.entries()].map(([pi, no]) => {
       const [brand, name, , , , , slug] = d.p[pi];
-      const sw = d.c.filter((c) => c[0] === pi).map((c) => `<span class="cs-dot" style="background:${c[2]}" title="${esc(c[1])}"></span>`).join("");
+      const sw = d.c.map((c, i) => [c, i] as const).filter(([c, i]) => c[0] === pi && isMineShade(i)).map(([c]) => `<span class="cs-dot" style="background:${c[2]}" title="${esc(c[1])}"></span>`).join("");
       const w = mine.get(slug) === "wish";
       return `<span><b${w ? ' class="w"' : ""}>${no}</b>${esc(brand)} ${esc(name)}${w ? "（気になる）" : ""}${sw}</span>`;
     }).join("");
