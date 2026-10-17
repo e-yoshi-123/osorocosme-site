@@ -1609,7 +1609,7 @@ export function getIngredientsOfCosmetic(brand_id: string, name_id: string): { d
   return INGREDIENTS.filter((d) => hit[d.slug] && published.has(d.slug)).map((d) => ({ def: d, labels: hit[d.slug] }));
 }
 /** メーカー公式の定価・色・発売日・限定・製造終了（backend/scripts/product_facts/export_site.py が書く。出し方は決定事項 2026-10-14） */
-interface OfficialColorRaw { label: string; code?: string; words?: string[] }
+interface OfficialColorRaw { label: string; code?: string; words?: string[]; /** 字幕・概要欄を読んで、その色を使ったと判断した動画（363章） */ v?: string[] }
 interface OfficialFactsRaw { price?: number; colors?: OfficialColorRaw[]; colors_from?: "manual"; release?: string; limited?: boolean; eom?: boolean; url?: string; contents?: string[] }
 export interface OfficialColorVideo { key: string; title: string; channel_title: string; thumbnail: string; published_at: string; quote?: string }
 export interface OfficialColor { label: string; /** 公式の並びでの番号（商品ページの #color-<idx> に使う） */ idx: number; videoCount: number; videos: OfficialColorVideo[] }
@@ -1653,13 +1653,14 @@ function buildOfficialFacts(brand_id: string, name_id: string): OfficialFacts | 
       const mentions = (v.cosmetics || []).filter((c) => c.brand_id === brand_id && c.name_id === name_id).flatMap((c) => c.mentions || []);
       const flat = (m: string) => m.normalize("NFKC").replace(/\s+/g, "");
       const text = mentions.map(flat).join(" ");
-      if (!text) continue;
-      let hit = colors.map((_, i) => !!matchers[i]?.(text));
+      let hit = colors.map((_, i) => !!text && !!matchers[i]?.(text));
       hit = hit.map((h, i) => h && !colors.some((o, j) => j !== i && hit[j] && (o.words?.[0] || "").length > (colors[i].words?.[0] || "").length && (o.words?.[0] || "").includes(colors[i].words?.[0] || "\0")));
+      hit = hit.map((h, i) => h || !!colors[i].v?.includes(v.key));  // 字幕・概要欄を読んで判断した色
+      if (!hit.some(Boolean)) continue;
       hit.forEach((h, i) => {
         if (!h) return;
         // その色に触れた発言（無ければ出さない）
-        const quote = mentions.find((m) => matchers[i]!(flat(m)))?.trim();
+        const quote = matchers[i] ? mentions.find((m) => matchers[i]!(flat(m)))?.trim() : undefined;
         found[i].push({ key: v.key, title: v.title, channel_title: v.channel_title, thumbnail: v.thumbnail, published_at: v.published_at, quote });
       });
     }
