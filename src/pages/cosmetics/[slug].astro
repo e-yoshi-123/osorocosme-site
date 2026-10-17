@@ -117,6 +117,8 @@ const official = getOfficialFacts(brand_id, name_id);
 const officialTags = official ? [...(official.release ? [`${official.release}発売`] : []), ...(official.limited ? ["限定品"] : []), ...(official.eom ? ["製造終了"] : [])] : [];
 const colorMentioned = official ? official.colors.filter((c) => c.videoCount > 0).length : 0;
 const videoColors = getVideoColorMap(brand_id, name_id);
+// 色見本（色から探すと同じ値。色の値のある色だけ）
+const colorHex = new Map(getCosmeticColorOptions(brand_id, name_id));
 const LINEUP_SHOWN = 12;
 // 色の多い商品は、動画で使われた色を先に（本数の多い順）並べ、先頭だけを出す（残りも文字ではページにある）
 const colorsShown = official ? (official.colors.length > LINEUP_SHOWN ? [...official.colors].sort((x, y) => y.videoCount - x.videoCount) : official.colors) : [];
@@ -289,11 +291,11 @@ const jsonLd = entry
                   {colorsShown.map((c, k) => (
                     <li id={`color-${c.idx}`} class:list={["scroll-mt-28", k >= LINEUP_SHOWN && "hidden"]} data-color-extra={k >= LINEUP_SHOWN ? "" : undefined}>
                       {c.videoCount > 0 ? (
-                        <a href="#who" data-color-key={String(c.idx)} data-color-name={c.label} aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border border-rose/40 px-2.5 py-0.5 text-xs text-neutral-800 hover:bg-rose/10 aria-pressed:bg-rose aria-pressed:border-rose aria-pressed:text-white [overflow-wrap:anywhere]" title={`動画で使われた色（${c.videoCount}本）`}>
-                          {c.label}<span class="text-rose/80 [a[aria-pressed=true]_&]:text-white/90">{c.videoCount}</span>
+                        <a href="#who" data-color-key={String(c.idx)} data-color-name={c.label} aria-pressed="false" class="group inline-flex items-center gap-1.5 rounded-full border border-rose/40 px-2.5 py-0.5 text-xs text-neutral-800 hover:bg-rose/10 aria-pressed:bg-rose aria-pressed:border-rose aria-pressed:text-white [overflow-wrap:anywhere]" title={`動画で使われた色（${c.videoCount}本）`}>
+                          {colorHex.get(c.label) && <span class="inline-block w-3 h-3 rounded-full border border-ink/15 shrink-0" style={`background:${colorHex.get(c.label)}`} aria-hidden="true" />}{c.label}<span class="text-rose/80 group-aria-pressed:text-white/90">{c.videoCount}</span><span class="hidden group-aria-pressed:inline ml-0.5 -mr-0.5 text-[1.1em] leading-none opacity-80" aria-hidden="true">×</span>
                         </a>
                       ) : (
-                        <span class="inline-flex rounded-full border border-ink/10 px-2.5 py-0.5 text-xs text-neutral-600 [overflow-wrap:anywhere]">{c.label}</span>
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-ink/10 px-2.5 py-0.5 text-xs text-neutral-600 [overflow-wrap:anywhere]">{colorHex.get(c.label) && <span class="inline-block w-3 h-3 rounded-full border border-ink/15 shrink-0" style={`background:${colorHex.get(c.label)}`} aria-hidden="true" />}{c.label}</span>
                       )}
                     </li>
                   ))}
@@ -449,10 +451,10 @@ const jsonLd = entry
               <p class="flex flex-wrap items-center gap-2 text-xs" role="group" aria-label="パーソナルカラー・肌質で絞り込む">
                 <span class="label-caps lcn mr-1">Who uses</span>
                 {profileSummary.map((x) => (
-                  <a href={withBase(x.href)} data-prof-key={x.key} data-prof-name={x.name} data-prof-href={withBase(x.href)} aria-pressed="false" class="prof-chip item-pc">
+                  <a href={withBase(x.href)} data-prof-key={x.key} data-prof-name={x.name} data-prof-href={withBase(x.href)} aria-pressed="false" class="group prof-chip item-pc">
                     {x.kind === "pc" && x.swatch && <span class="item-sw" style={`background:conic-gradient(${x.swatch.map((c, i) => `${c} ${(i * 360) / x.swatch!.length}deg ${((i + 1) * 360) / x.swatch!.length}deg`).join(", ")})`} aria-hidden="true" />}
                     {x.kind === "skin" && <svg viewBox="0 0 12 12" class="w-3 h-3 text-rose" aria-hidden="true"><path d="M6 1.2C6 1.2 2.6 5 2.6 7.3A3.4 3.4 0 0 0 9.4 7.3C9.4 5 6 1.2 6 1.2Z" fill="currentColor" opacity=".75" /></svg>}
-                    {x.name}<span class="opacity-70">{x.count}人</span>
+                    {x.name}<span class="opacity-70">{x.count}人</span><span class="hidden group-aria-pressed:inline ml-0.5 -mr-0.5 text-[1.1em] leading-none opacity-80" aria-hidden="true">×</span>
                   </a>
                 ))}
               </p>
@@ -465,7 +467,7 @@ const jsonLd = entry
               <p class="flex flex-wrap items-center gap-2 text-xs" role="group" aria-label="使った色で絞り込む">
                 <span class="label-caps lcn mr-1">Color</span>
                 {[...official!.colors].filter((c) => c.videoCount > 0).sort((x, y) => y.videoCount - x.videoCount).map((c) => (
-                  <button type="button" data-color-key={String(c.idx)} data-color-name={c.label} aria-pressed="false" class="prof-chip item-pc">{c.label}<span class="opacity-70">{c.videoCount}本</span></button>
+                  <button type="button" data-color-key={String(c.idx)} data-color-name={c.label} aria-pressed="false" class="group prof-chip item-pc">{colorHex.get(c.label) && <span class="inline-block w-3 h-3 rounded-full border border-ink/15 shrink-0" style={`background:${colorHex.get(c.label)}`} aria-hidden="true" />}{c.label}<span class="opacity-70">{c.videoCount}本</span><span class="hidden group-aria-pressed:inline ml-0.5 -mr-0.5 text-[1.1em] leading-none opacity-80" aria-hidden="true">×</span></button>
                 ))}
               </p>
               <p class="mt-2 text-xs text-neutral-500" data-color-status>押すと、その色を使った紹介だけに絞り込めます（字幕や紹介の中で色が分かった動画）。</p>
@@ -657,13 +659,13 @@ const jsonLd = entry
       document.querySelectorAll<HTMLElement>("[data-color-key]").forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.colorKey === color)));
       if (cStatus) {
         const chip = document.querySelector<HTMLElement>(`[data-color-filter] [data-color-key="${color}"]`);
-        cStatus.textContent = color && chip ? `「${chip.dataset.colorName}」を使った紹介 ${shown}件${prof ? "（パーソナルカラー・肌質の絞り込みと重ねています）" : ""}。もう一度押すと元に戻ります。` : cStatusDefault;
+        cStatus.textContent = color && chip ? `「${chip.dataset.colorName}」を使った紹介 ${shown}件${prof ? "（パーソナルカラー・肌質の絞り込みと重ねています）" : ""}。×で解除できます。` : cStatusDefault;
       }
       document.querySelectorAll<HTMLElement>("[data-prof-key]").forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.profKey === prof)));
       if (status) {
         const chip = document.querySelector<HTMLElement>(`[data-prof-key="${prof}"]`);
         if (prof && chip) {
-          status.replaceChildren(`${chip.dataset.profName}の人の紹介 ${shown}件。もう一度押すと元に戻ります。`);
+          status.replaceChildren(`${chip.dataset.profName}の人の紹介 ${shown}件。×で解除できます。`);
           const a = document.createElement("a");
           a.href = chip.dataset.profHref || "#";
           a.className = "link-u text-ink ml-2";

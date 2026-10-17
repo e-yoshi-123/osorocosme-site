@@ -1639,13 +1639,15 @@ export function getOfficialFacts(brand_id: string, name_id: string): OfficialFac
   return _officialCache.get(k);
 }
 /** 商品ページ用：動画ごとに、その動画で使った（触れた）色（公式の並びの番号と表示名）。紹介の行に出し、色で絞り込むのに使う */
-export function getVideoColorMap(brand_id: string, name_id: string): Map<string, { idx: number; label: string }[]> {
-  const m = new Map<string, { idx: number; label: string }[]>();
+export function getVideoColorMap(brand_id: string, name_id: string): Map<string, { idx: number; label: string; hex?: string }[]> {
+  const m = new Map<string, { idx: number; label: string; hex?: string }[]>();
+  const hexOf = new Map(getCosmeticColorOptions(brand_id, name_id));
   for (const c of getOfficialFacts(brand_id, name_id)?.colors || []) {
+    const e = { idx: c.idx, label: c.label, hex: hexOf.get(c.label) || undefined };
     for (const v of c.videos) {
       const a = m.get(v.key);
-      if (a) a.push({ idx: c.idx, label: c.label });
-      else m.set(v.key, [{ idx: c.idx, label: c.label }]);
+      if (a) a.push(e);
+      else m.set(v.key, [e]);
     }
   }
   return m;
