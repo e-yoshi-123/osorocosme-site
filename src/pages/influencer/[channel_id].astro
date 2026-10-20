@@ -191,8 +191,10 @@ const jsonLd = influencer
             <dl class="mt-8 grid grid-cols-3 border-y border-ink/15 divide-x divide-ink/15">
               <div class="py-4 pr-3"><dt class="u-11">紹介動画</dt><dd class="num-display text-[24px] md:text-[26px] leading-none mt-1">{videos.length}<span class="font-sans text-xs text-neutral-500 ml-1">本</span></dd></div>
               <div class="py-4 px-3 md:px-5"><dt class="u-11">使用コスメ</dt><dd class="num-display text-[24px] md:text-[26px] leading-none mt-1">{uniqueItems}<span class="font-sans text-xs text-neutral-500 ml-1">品</span></dd></div>
-              <div class="py-4 px-3 md:px-5"><dt class="u-11">登録者</dt><dd class="num-display text-[24px] md:text-[26px] leading-none mt-1">{influencer.subscriber_count ? formatCount(Number(influencer.subscriber_count) >= 10000 ? Math.round(Number(influencer.subscriber_count) / 10000) : Number(influencer.subscriber_count)) : "—"}<span class="font-sans text-xs text-neutral-500 ml-1">{Number(influencer.subscriber_count) >= 10000 ? "万人" : "人"}</span></dd></div>
+              <div class="py-4 px-3 md:px-5"><dt class="u-11">YouTube登録者</dt><dd class="num-display text-[24px] md:text-[26px] leading-none mt-1">{influencer.subscriber_count ? formatCount(Number(influencer.subscriber_count) >= 10000 ? Math.round(Number(influencer.subscriber_count) / 10000) : Number(influencer.subscriber_count)) : "—"}<span class="font-sans text-xs text-neutral-500 ml-1">{Number(influencer.subscriber_count) >= 10000 ? "万人" : "人"}</span></dd></div>
             </dl>
+            {/* YouTube APIの値（登録者数）と自前の集計を並べるときは、その場で出所の違いを書く（API Developer Policies III.E.4(h)。374章） */}
+            <p class="mt-2 text-xs text-neutral-500">登録者数はYouTubeの値（毎日更新）。紹介動画・使用コスメは、OsoroCosmeが動画の字幕から集計した数です。</p>
             {/* 「人名＋商品名・ブランド名」で検索して来た人が、使っているコスメをすぐ探せるように（「紗栄子 キュレル」など）。
                 1画面目に入るよう数字のすぐ下に置く（336章）。候補は下の使用コスメ遍歴の各カード（商品ページへのリンク・ブランド名・商品名と、ブランドの読み仮名の data-r）から作る（ページに別のデータを持たない）。スクリプトなしでは出さない */}
             {timeline.length > 0 && (

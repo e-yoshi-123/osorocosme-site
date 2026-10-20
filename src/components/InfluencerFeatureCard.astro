@@ -27,7 +27,7 @@ const href = withBase(`/influencer/${inf.channel_id}`);
     <div class="min-w-0 flex-1">
       <a href={href} class:list={["font-semibold leading-snug line-clamp-2 mb-0.5 hover:text-rose transition-colors", large ? "text-lg" : "text-base"]}>{inf.channel_title}</a>
       <p class="text-xs text-neutral-500 flex flex-wrap gap-x-2">
-        <span class="whitespace-nowrap">登録者 {formatCount(inf.subscriber_count)}人</span>
+        <span class="whitespace-nowrap">YouTube登録者 {formatCount(inf.subscriber_count)}人</span>
         <span class="whitespace-nowrap">動画 {inf.videoCount}本</span>
         <span class="whitespace-nowrap">コスメ {inf.cosmeticCount}品</span>
       </p>

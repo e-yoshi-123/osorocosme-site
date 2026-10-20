@@ -318,7 +318,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
 
   {/* ===== 04 INFLUENCERS ===== */}
   <section class="panel u-14">
-    <SectionHead num="04" en="Influencers" title="発信力の高いインフルエンサー" lead="掲載動画数・紹介コスメ数から算出した発信力スコアの順です。" href={withBase("/influencer-list")} />
+    <SectionHead num="04" en="Influencers" title="発信力の高いインフルエンサー" lead="掲載動画数・紹介コスメ数からOsoroCosmeが算出した発信力スコアの順です。" href={withBase("/influencer-list")} />
     <ol class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-10">
       {popularInfluencers.map((inf, i) => (
         <li class="reveal" style={`--d:${(i % 5) * 70}ms`}>

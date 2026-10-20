@@ -24,7 +24,7 @@ const thumb = ytThumb(video.thumbnail);
 <a href={withBase(`/video/${video.key}`)} class="group block">
   <div class="vcard-12">
     <img src={thumb.src} srcset={thumb.srcset} sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" alt={video.title} class="vcard-4" loading="lazy" />
-    <span class="vcard-2">▶ {formatCount(video.view_count)}</span>
+    <span class="vcard-2" title="YouTubeの再生回数">▶ {formatCount(video.view_count)}</span>
     {pr && <PrBadge tone="solid" class="absolute top-2.5 left-2.5" />}
     {(duration || short) && <span class="vcard-3">{short ? `ショート${duration ? ` ${duration}` : ""}` : duration}</span>}
   </div>

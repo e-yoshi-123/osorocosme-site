@@ -50,7 +50,7 @@ const concernQuotes = [...new Set(i.concerns.map((c) => c.quote).filter(Boolean)
       <ProfileChips channel_id={i.channel_id} class="mt-1" />
       {
         i.influence > 0 && (
-          <a href={withBase("/influencer-list")} class="intro-3" title={`発信力 ${i.influence}/5（発信力スコア${i.influenceRank}位。掲載動画数・紹介コスメ数から算出）`}>
+          <a href={withBase("/influencer-list")} class="intro-3" title={`発信力 ${i.influence}/5（発信力スコア${i.influenceRank}位。掲載動画数・紹介コスメ数からOsoroCosmeが算出）`}>
             <span class="intro-11" role="img" aria-label={`発信力 5段階中${i.influence}`}>
               {[1, 2, 3, 4, 5].map((n) => (
                 <span class={n <= i.influence ? "intro-d1" : "intro-d0"} />
@@ -67,7 +67,7 @@ const concernQuotes = [...new Set(i.concerns.map((c) => c.quote).filter(Boolean)
       {i.thumbnail && <span class="intro-15"><img src={i.thumbnail} alt={i.videoTitle} class="u-3" loading="lazy" /></span>}
       <span class="min-w-0">
         <span class="intro-2">{i.pr && <PrBadge own={i.own} class="mr-1.5 align-[1px]" />}{i.videoTitle}</span>
-        {i.views > 0 && <span class="intro-9">再生 {views}</span>}
+        {i.views > 0 && <span class="intro-9">YouTube再生 {views}</span>}
       </span>
     </a>
     {colors.length > 0 && (
