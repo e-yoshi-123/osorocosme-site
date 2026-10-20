@@ -19,9 +19,9 @@ const restLater = rest.length - restInPage.length;
 
 <Layout
   title="インフルエンサー一覧"
-  description="コスメを紹介しているYouTuberの一覧。登録者数・掲載動画数・紹介コスメ数から算出した人気順で、各人の使用コスメ遍歴を確認できます。"
+  description="コスメを紹介しているYouTuberの一覧。掲載動画数・紹介コスメ数から算出した順で、各人の使用コスメ遍歴を確認できます。"
 >
-  <PageHead en="Influencers" title="インフルエンサー一覧" lead="登録者数・掲載動画数・紹介コスメ数から算出した発信力スコアの順です。上位の方は、最新の動画とよく紹介するコスメも見られます。" stats={[{ n: formatCount(influencers.length), label: "インフルエンサー", unit: "人" }]} />
+  <PageHead en="Influencers" title="インフルエンサー一覧" lead="掲載動画数・紹介コスメ数から算出した発信力スコアの順です（登録者数はスコアに含めず、スコアが近い方の並びにだけ使っています）。上位の方は、最新の動画とよく紹介するコスメも見られます。" stats={[{ n: formatCount(influencers.length), label: "インフルエンサー", unit: "人" }]} />
 
   <section class="panel mb-6 md:mb-8">
     <h2 class="font-serif h-section font-semibold mb-6">発信力 <span class="num-display text-rose ml-1">TOP{LARGE}</span></h2>

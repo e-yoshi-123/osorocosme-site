@@ -226,7 +226,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
 
   {/* ===== 01 RANKING ===== */}
   <section class="panel mt-12 md:mt-16">
-    <SectionHead num="01" en="Ranking" title="いま、よく紹介されているコスメ" lead="紹介動画の数・紹介したインフルエンサーの数・再生回数から出した人気順です（PR・提供の紹介は数えていません）。商品数の多い3つのカテゴリを先に。" href={withBase("/ranking/")} cta="All categories" />
+    <SectionHead num="01" en="Ranking" title="いま、よく紹介されているコスメ" lead="紹介動画の数・紹介したインフルエンサーの数から出した人気順です（PR・提供の紹介は数えていません）。商品数の多い3つのカテゴリを先に。" href={withBase("/ranking/")} cta="All categories" />
     {/* スマホでは3つのカテゴリを横にめくる（縦に積むと画面2枚半になるため） */}
     <div class="-mx-4 px-4 md:-mx-10 md:px-10 lg:mx-0 lg:px-0 flex lg:grid lg:grid-cols-3 gap-5 md:gap-8 lg:gap-10 overflow-x-auto lg:overflow-visible snap-x snap-mandatory scroll-px-4 md:scroll-px-10 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" data-swipe>
       {featuredFull.map((f, fi) => (
@@ -318,7 +318,7 @@ const featuredFull = featuredTags.map((t) => ({ tag: t, top: getCategoryTop(t, 5
 
   {/* ===== 04 INFLUENCERS ===== */}
   <section class="panel u-14">
-    <SectionHead num="04" en="Influencers" title="発信力の高いインフルエンサー" lead="登録者数・掲載動画数・紹介コスメ数から算出した発信力スコアの順です。" href={withBase("/influencer-list")} />
+    <SectionHead num="04" en="Influencers" title="発信力の高いインフルエンサー" lead="掲載動画数・紹介コスメ数から算出した発信力スコアの順です。" href={withBase("/influencer-list")} />
     <ol class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-10">
       {popularInfluencers.map((inf, i) => (
         <li class="reveal" style={`--d:${(i % 5) * 70}ms`}>

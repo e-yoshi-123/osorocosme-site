@@ -71,7 +71,7 @@ const shownMax = Math.min(MAX, total);
 
 const top3 = list.slice(0, 3).map((r) => `${r.brand}「${r.name}」`);
 const description =
-  `${tag}の人気コスメランキング。YouTubeのコスメ紹介動画での紹介数・再生数・紹介したインフルエンサー数から算出した、${total}品中の上位${shownMax}位（PR・提供の紹介は除く）。` +
+  `${tag}の人気コスメランキング。YouTubeのコスメ紹介動画での紹介数・紹介したインフルエンサー数から算出した、${total}品中の上位${shownMax}位（PR・提供の紹介は除く）。` +
   (isParent ? `${page.children.slice(0, 4).join("・")}などをまとめたランキングです。` : "") +
   (top3.length ? `1位は${top3[0]}` : "") +
   (top3.length >= 3 ? `、2位・3位は${top3[1]}、${top3[2]}` : "") +

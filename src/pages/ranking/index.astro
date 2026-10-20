@@ -6,6 +6,7 @@ import {
   getRankingPages,
   getRankingNav,
   getCosmeticRankings,
+  rankingCmp,
   getCosmeticListEntry,
   productImageSrc,
   categoryUrl,
@@ -35,7 +36,7 @@ const groups = nav.map((g) => {
 const overall = getCosmeticRankings()
   .filter((r) => r.tags.some((t) => pages.has(t)))
   .slice()
-  .sort((a, b) => b.score - a.score || b.videoCount - a.videoCount);
+  .sort(rankingCmp);
 const top10 = overall.slice(0, 10);
 const rankedProducts = new Set(allTags.flatMap((t) => pages.get(t)!.list.map((r) => `${r.brand_id}_${r.name_id}`))).size;
 // 総合の各商品に添えるカテゴリ名（ランキングのページがある、いちばん細かいカテゴリ）
@@ -44,14 +45,14 @@ const tagOf = (r: CosmeticRanking) => r.tags.find((t) => pages.get(t)?.kind === 
 
 <Layout
   title="コスメ人気ランキング（カテゴリ別）"
-  description="YouTubeのコスメ紹介動画での紹介数・再生数・紹介したインフルエンサー数から算出した、カテゴリ別の人気コスメランキング。化粧下地、ファンデーション、アイシャドウ、リップなど、カテゴリを選んで上位50位まで見られます。"
+  description="YouTubeのコスメ紹介動画での紹介数・紹介したインフルエンサー数から算出した、カテゴリ別の人気コスメランキング。化粧下地、ファンデーション、アイシャドウ、リップなど、カテゴリを選んで上位50位まで見られます。"
 >
   {/* ===== 見出し：小さくまとめ、すぐ下に総合ランキングを出す（ヒーローの大きな絵はトップと似て、ページが変わったと分かりにくかった。286章） ===== */}
   <header class="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-10 mb-6 md:mb-8">
     <div class="min-w-0">
       <p class="eyebrow text-rose">Ranking</p>
       <h1 class="mt-2 font-serif font-semibold h-page tracking-[-0.01em]">コスメ人気ランキング</h1>
-      <p class="mt-3 text-sm leading-[1.9] text-neutral-600 max-w-2xl">YouTubeの紹介動画の合計再生回数・紹介動画数・紹介したインフルエンサー数から出した人気順です。PR・提供の紹介は数えていません。</p>
+      <p class="mt-3 text-sm leading-[1.9] text-neutral-600 max-w-2xl">YouTubeの紹介動画数・紹介したインフルエンサー数から出した人気順です（同点のときは合計再生回数の多い順）。PR・提供の紹介は数えていません。</p>
     </div>
     <dl class="flex shrink-0 divide-x divide-ink/15">
       {[

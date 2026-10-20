@@ -680,10 +680,13 @@ export interface InfluencerRanking extends Influencer {
   score: number;
 }
 
-/** 登録者数・動画数（このサイトに掲載中）・紹介コスメ数の3指標から順位付け用スコアを算出。
- * 桁の違いが大きい（登録者数は万〜百万、動画数は1〜数十、コスメ数は1〜数百）ため
- * 対数スケールに揃えたうえで合算し、視聴者数だけでなく「このサイトでの活躍度」も
- * 反映されるよう動画数・コスメ数をやや厚めに重み付けしている。 */
+/** 動画数（このサイトに掲載中）・紹介コスメ数の2指標から順位付け用スコアを算出。
+ * 桁の違いが大きい（動画数は1〜数百、コスメ数は1〜千）ため対数スケールに揃えて合算する。
+ * 登録者数（YouTube APIの値）はスコアに入れない。APIのデータとほかのデータを合成した独自スコアで
+ * チャンネルを順位付けすることを、YouTubeの開発者ポリシーの手引きが禁止例に挙げているため（373章）。
+ * スコアの差が INFLUENCER_SCORE_TIE 未満の並びだけは、登録者数の多い順にする（APIの値だけで並べるのは可。
+ * 掲載1本の人同士が紹介コスメ数だけで並ぶのを避ける。ユーザー判断） */
+export const INFLUENCER_SCORE_TIE = 0.1;
 let _influencerRanking: InfluencerRanking[] | null = null;
 export function getInfluencerRanking(): InfluencerRanking[] {
   if (!_influencerRanking) _influencerRanking = buildInfluencerRanking();
@@ -702,7 +705,6 @@ function buildInfluencerRanking(): InfluencerRanking[] {
       }
     }
 
-    const subscriberScore = Math.log10(toNumber(inf.subscriber_count) + 1);
     const videoScore = Math.log10(videos.length + 1) * 2;
     const cosmeticScore = Math.log10(cosmeticKeys.size + 1) * 1.5;
 
@@ -710,10 +712,19 @@ function buildInfluencerRanking(): InfluencerRanking[] {
       ...inf,
       videoCount: videos.length,
       cosmeticCount: cosmeticKeys.size,
-      score: subscriberScore + videoScore + cosmeticScore,
+      score: videoScore + cosmeticScore,
     });
   }
-  return result.sort((a, b) => b.score - a.score);
+  result.sort((a, b) => b.score - a.score);
+  // スコアの近い人（先頭からの差が INFLUENCER_SCORE_TIE 未満）をひとまとまりにして、その中を登録者数の多い順に並べ直す
+  const out: InfluencerRanking[] = [];
+  for (let i = 0; i < result.length; ) {
+    let j = i + 1;
+    while (j < result.length && result[i].score - result[j].score < INFLUENCER_SCORE_TIE) j++;
+    out.push(...result.slice(i, j).sort((a, b) => toNumber(b.subscriber_count) - toNumber(a.subscriber_count) || b.score - a.score));
+    i = j;
+  }
+  return out;
 }
 
 export interface InfluencerTopCosmetic {
@@ -869,25 +880,6 @@ export function formatCount(n: string | number | undefined): string {
   return num.toLocaleString("ja-JP");
 }
 
-/** インフルエンサーのスコア(getInfluencerRanking)と同じ考え方で、動画単体の「人気」を
- * 再生回数・この動画で紹介されているコスメ数・投稿からの新しさから合成する。
- * 実データでは動画の投稿日が古いもので約3,200日、新しいものでも約200日前後と
- * 全体的に古めに偏っているため、経過730日(約2年)ごとに1点減点する緩やかな減衰にして、
- * 「多少古くても圧倒的に人気」な動画まで埋もれさせないようにしつつ、
- * 同程度の人気なら新しい方を優先する設計にしている。 */
-export function getVideoScore(v: Video): number {
-  const cosmeticsCount = (v.cosmetics || []).filter((c) => c.brand && c.name).length;
-  const popularityScore = Math.log10(toNumber(v.view_count) + 1) + Math.log10(cosmeticsCount + 1) * 1.5;
-
-  let recencyScore = 0;
-  if (v.published_at) {
-    const daysSincePublished = (Date.now() - new Date(v.published_at).getTime()) / 86_400_000;
-    recencyScore = -Math.max(daysSincePublished, 0) / 730;
-  }
-
-  return popularityScore + recencyScore;
-}
-
 export interface CosmeticRanking {
   brand_id: string;
   brand: string;
@@ -902,9 +894,9 @@ export interface CosmeticRanking {
 }
 
 /** コスメ単位の人気スコア。インフルエンサー(getInfluencerRanking)と同じく、桁の違う指標を
- * 対数スケールに揃えて合算する。紹介動画数(2倍)・紹介したチャンネル数(1.5倍)を厚めに、
- * 紹介動画の合計再生回数を1倍で加える。チャンネル数を入れることで、同一インフルエンサーが
- * 何本も紹介しただけの商品より、複数の人に支持されている商品が上位に来る。 */
+ * 対数スケールに揃えて合算する。紹介動画数(2倍)・紹介したチャンネル数(1.5倍)。チャンネル数を入れることで、
+ * 同一インフルエンサーが何本も紹介しただけの商品より、複数の人に支持されている商品が上位に来る。
+ * 紹介動画の合計再生回数（YouTube APIの値）はスコアに入れず、同点のときの並びにだけ使う（373章。インフルエンサーのスコアと同じ理由） */
 let _rankingsCache: CosmeticRanking[] | null = null;
 /** ランキングで、細かく分かれたカテゴリを主なカテゴリに寄せる（後から増えた細かいカテゴリ。120章）。
  * 商品ページの「カテゴリ」表示は元のまま。ランキング・一覧・特集の分類だけに使う。 */
@@ -964,10 +956,7 @@ export function getCosmeticRankings(): CosmeticRanking[] {
     tags: Array.from(tagSet),
     videoCount: videos.size,
     channelCount: channels.size,
-    score:
-      Math.log10(e.totalViews + 1) +
-      Math.log10(videos.size + 1) * 2 +
-      Math.log10(channels.size + 1) * 1.5,
+    score: Math.log10(videos.size + 1) * 2 + Math.log10(channels.size + 1) * 1.5,
   }));
   return _rankingsCache;
 }
@@ -2271,8 +2260,8 @@ export interface RankingPageEntry {
   list: CosmeticRanking[];
 }
 
-const rankingCmp = (a: CosmeticRanking, b: CosmeticRanking) =>
-  b.score - a.score || b.videoCount - a.videoCount || a.name.localeCompare(b.name, "ja");
+export const rankingCmp = (a: CosmeticRanking, b: CosmeticRanking) =>
+  b.score - a.score || b.videoCount - a.videoCount || b.totalViews - a.totalViews || a.name.localeCompare(b.name, "ja");
 
 let _rankingPages: Map<string, RankingPageEntry> | null = null;
 /** ランキングのページ（細かいカテゴリ＋「まとめ」）を、キー別に返す。「まとめ」は細かいカテゴリが2つ以上あるものだけ。 */
@@ -2349,7 +2338,7 @@ export function getCosmeticRankingsByTag(): Map<string, CosmeticRanking[]> {
   }
   for (const [tag, list] of byTag) {
     if (list.length < MIN_RANKING_ITEMS) byTag.delete(tag); // 品数の少ないカテゴリはページを作らない
-    else list.sort((a, b) => b.score - a.score || b.videoCount - a.videoCount || a.name.localeCompare(b.name, "ja"));
+    else list.sort(rankingCmp);
   }
   _byTagCache = byTag;
   return byTag;
