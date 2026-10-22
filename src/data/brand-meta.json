@@ -195,7 +195,8 @@
     "group": "資生堂"
   },
   "brand-00425": {
-    "country": "KR"
+    "country": "KR",
+    "group": "新世界インターナショナル"
   },
   "brand-00237": {
     "country": "JP",
@@ -320,14 +321,16 @@
     "group": "コーセー"
   },
   "brand-00312": {
-    "country": "KR"
+    "country": "KR",
+    "group": "グーダイグローバル"
   },
   "brand-00144": {
     "country": "FR",
     "group": "LVMH"
   },
   "brand-00131": {
-    "country": "KR"
+    "country": "KR",
+    "group": "ロレアル"
   },
   "brand-00109": {
     "country": "JP",
@@ -2350,7 +2353,8 @@
     "country": "KR"
   },
   "brand-01897": {
-    "country": "KR"
+    "country": "KR",
+    "group": "グーダイグローバル"
   },
   "brand-01619": {
     "country": "KR"
@@ -3616,6 +3620,13 @@
     "country": "KR"
   },
   "brand-00967": {
-    "group": "コーセー"
+    "group": "コーセー",
+    "country": "JP"
+  },
+  "brand-01752": {
+    "country": "KR"
+  },
+  "brand-01895": {
+    "country": "KR"
   }
 }
