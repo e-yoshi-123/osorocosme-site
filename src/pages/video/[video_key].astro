@@ -28,6 +28,7 @@ import {
   cosmeticSlug,
   hasCosmeticPage,
 } from "../../lib/data";
+import { getVideoCosmeticGroups } from "../../lib/recipe";
 
 export function getStaticPaths() {
   return getAllVideoEntries().map((v) => ({ params: { video_key: v.key } }));
@@ -91,6 +92,31 @@ const nums: Record<string, string> = {};
   .filter(([, on]) => on)
   .forEach(([k], i) => (nums[k as string] = String(i + 1).padStart(2, "0")));
 
+// 場面の時刻（「動画の流れ」と同じもの）を構造化データの Clip にする。AI・検索が「どの品を何分で使ったか」を拾えるように（379章）。
+// 同じ秒の品は1つにまとめ、終わりは次の場面の始まり（最後は動画の終わり）
+const clips = (() => {
+  if (!video) return [];
+  const { groups, durationSec } = getVideoCosmeticGroups(video);
+  if (!durationSec) return [];
+  const bySec = new Map<number, string[]>();
+  for (const g of groups)
+    for (const x of g.items) {
+      if (x.sec === undefined || x.sec >= durationSec) continue;
+      const names = bySec.get(x.sec) || [];
+      const n = `${x.brand} ${x.name}`;
+      if (!names.includes(n)) names.push(n);
+      bySec.set(x.sec, names);
+    }
+  const secs = [...bySec.keys()].sort((a, b) => a - b);
+  return secs.map((sec, i) => ({
+    "@type": "Clip",
+    name: bySec.get(sec)!.join("、"),
+    startOffset: sec,
+    endOffset: secs[i + 1] ?? durationSec,
+    url: `https://www.youtube.com/watch?v=${video.video_id}&t=${sec}s`,
+  }));
+})();
+
 const viewCountNum = video?.view_count !== undefined ? Number(video.view_count) : NaN;
 const jsonLd = video
   ? [
@@ -104,6 +130,7 @@ const jsonLd = video
         embedUrl: `https://www.youtube.com/embed/${video.video_id}`,
         contentUrl: video.url,
         ...(video.duration ? { duration: video.duration } : {}),
+        ...(clips.length ? { hasPart: clips } : {}),
         ...(Number.isFinite(viewCountNum)
           ? {
               interactionStatistic: {

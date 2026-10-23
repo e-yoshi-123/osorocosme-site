@@ -15,6 +15,8 @@ import {
   getVideosByChannel,
   getSimilarInfluencers,
   getInfluencerHighlights,
+  getRepeatUsers,
+  REPEAT_MIN_GAP_DAYS,
   getCosmeticListEntry,
   productOffer,
   amazonSearchUrl,
@@ -141,6 +143,34 @@ const secNums = (() => {
   return { own: ownProducts.length > 0 ? next() : "", top: showTop ? next() : "", cat: showCategories ? next() : "", history: next(), videos: next() };
 })();
 const repeatCount = topCosmetics.filter((c) => c.repeat).length;
+// AIに引用されるための一文（379章）。この人がリピートしているコスメ（PR・提供を除く。画像の無い品も含む）を、使った本数の多い順に
+const ownRepeats = (() => {
+  const seen = new Set<string>();
+  const out: { brand: string; name: string; videoCount: number; first: string; last: string }[] = [];
+  for (const v of videos)
+    for (const c of v.cosmetics || []) {
+      if (!c.brand_id || !c.name_id || !c.brand || !c.name) continue;
+      const key = `${c.brand_id}_${c.name_id}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const u = getRepeatUsers(c.brand_id, c.name_id).find((x) => x.channel_id === channel_id);
+      if (u) out.push({ brand: c.brand, name: c.name, videoCount: u.videoCount, first: u.first, last: u.last });
+    }
+  return out.sort((a, b) => b.videoCount - a.videoCount || a.first.localeCompare(b.first));
+})();
+const yearSpan = (a: string, b: string) => {
+  const x = jstDate(a).y, y = jstDate(b).y;
+  return x === y ? `${x}年` : `${x}〜${y}年`;
+};
+const citeSentence = influencer && videos.length > 0
+  ? `${influencer.channel_title}は、OsoroCosmeが収録したYouTubeの動画${videos.length}本（${formatJaDate(videos[videos.length - 1].published_at)}〜${formatJaDate(videos[0].published_at)}）で、コスメ${uniqueItems}品を紹介しています。` +
+    (showTop ? `よく紹介しているのは${topCosmetics.slice(0, 3).map((c) => `${c.brand}「${c.name}」（${c.videoCount}本）`).join("、")}です（PR・提供の紹介は数えていません）。` : "") +
+    (ownRepeats.length > 0
+      ? `リピートしているコスメ（${REPEAT_MIN_GAP_DAYS}日以上あけて2本以上の動画で紹介）は${ownRepeats.length}品で、` +
+        ownRepeats.slice(0, 3).map((c) => `${c.brand}「${c.name}」（${c.videoCount}本・${yearSpan(c.first, c.last)}）`).join("、") +
+        (ownRepeats.length > 3 ? `ほか${ownRepeats.length - 3}品` : "") + "です。"
+      : "")
+  : "";
 const description = influencer
   ? `${influencer.channel_title}のコスメ紹介動画${videos.length}本から、使用コスメ${uniqueItems}品をカテゴリ別・投稿日順にまとめています。` +
     (showTop ? `よく紹介しているのは${topCosmetics.slice(0, 3).map((c) => `${c.brand}「${c.name}」`).join("、")}。` : "") +
@@ -188,6 +218,7 @@ const jsonLd = influencer
             <p class="eyebrow">Influencer profile</p>
             <h1 class="mt-3 font-serif font-semibold h-page tracking-[-0.02em] text-balance">{influencer.channel_title}</h1>
             {/* 説明文は画面に出さない（すぐ下の数字・よく紹介しているコスメと同じ内容のため）。検索結果の説明（meta description）には残す（320章） */}
+            {citeSentence && <p class="sr-only">{citeSentence}</p>}
             <dl class="mt-8 grid grid-cols-3 border-y border-ink/15 divide-x divide-ink/15">
               <div class="py-4 pr-3"><dt class="u-11">紹介動画</dt><dd class="num-display text-[24px] md:text-[26px] leading-none mt-1">{videos.length}<span class="font-sans text-xs text-neutral-500 ml-1">本</span></dd></div>
               <div class="py-4 px-3 md:px-5"><dt class="u-11">使用コスメ</dt><dd class="num-display text-[24px] md:text-[26px] leading-none mt-1">{uniqueItems}<span class="font-sans text-xs text-neutral-500 ml-1">品</span></dd></div>

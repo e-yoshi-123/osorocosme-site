@@ -43,6 +43,7 @@ import {
   getIngredientsOfCosmetic,
   ingredientSourceLabel,
   getRepeatUsers,
+  REPEAT_MIN_GAP_DAYS,
   jstDate,
   INTRO_IN_PAGE,
   INTRO_SPLIT_OVER,
@@ -149,8 +150,22 @@ const shownPrice = buyable && entry?.now_price !== undefined ? entry.now_price :
 const lastIntro = facts.introductions[0];
 // Search Consoleの検索語に合わせたページごとのtitle（274章）
 const titleOverride = (titleOverrides as Record<string, { title?: string; lead?: string }>)[`cosmetics/${cosmeticSlug(brand_id, name_id)}`];
+// AIに引用されるための一文（379章）。画面では数字・印に分かれている事実（PRの本数・リピートの人と期間・場面の時刻）を、そのまま引用できる文にまとめる
+const prLabel = facts.ownCount === 0 ? "PR・提供" : facts.ownCount === facts.prCount ? "本人がプロデュースしたブランドとして" : "PR・提供、または本人がプロデュースしたブランドとして";
+const timedCount = videosUsing.filter((v) => v.cosmetics?.some((c) => c.brand_id === brand_id && c.name_id === name_id && c.time_in_video)).length;
+const citeSentence = entry
+  ? factSentence +
+    (facts.prCount > 0 ? `うち${facts.prCount}本は${prLabel}の紹介のため、ランキングには数えていません。` : "") +
+    (repeatUsers.length > 0
+      ? `${repeatUsers.length}人がリピートしています（同じ人が${REPEAT_MIN_GAP_DAYS}日以上あけて2本以上の動画で紹介。PR・提供を除く。` +
+        repeatUsers.slice(0, 3).map((u) => `${u.channel_title}：${u.videoCount}本・${repeatSpan(u)}`).join("、") +
+        (repeatUsers.length > 3 ? `ほか${repeatUsers.length - 3}人` : "") + "）。"
+      : "") +
+    (timedCount > 0 ? `${timedCount}本の動画で、紹介した場面の時刻が分かります。` : "") +
+    (firstIntro ? `最初の紹介は${formatJaDate(firstIntro.published_at)}、直近は${formatJaDate(lastIntro.published_at)}です。` : "")
+  : "";
 const description = entry
-  ? (titleOverride?.lead ?? "") + factSentence + (firstIntro ? `最初の紹介は${formatJaDate(firstIntro.published_at)}、直近は${formatJaDate(lastIntro.published_at)}です。` : "")
+  ? (titleOverride?.lead ?? "") + factSentence + (repeatUsers.length > 0 ? `${repeatUsers.length}人がリピート。` : "") + (firstIntro ? `最初の紹介は${formatJaDate(firstIntro.published_at)}、直近は${formatJaDate(lastIntro.published_at)}です。` : "")
   : undefined;
 const imageSrc = (yahooImageOnly ? entry?.yahoo_image_url : extractImageSrc(entry?.rakuten_image_link)) || (yahooFallback ? entry?.yahoo_image_url : undefined);
 // Googleの「商品スニペット」は、Productに offers / review / aggregateRating のいずれかが無いと重大な問題として扱われる（Search Consoleの指摘）。
@@ -360,7 +375,7 @@ const jsonLd = entry
             </div>
 
             {/* 紹介の実績：動画数・インフルエンサー数・ランキング。文章版は検索エンジン・読み上げ用に残す（sr-only） */}
-            <p class="sr-only">{factSentence}</p>
+            <p class="sr-only">{citeSentence}</p>
             <dl class:list={["item-nums", facts.rank ? "grid-cols-3" : "grid-cols-2"]}>
               <div class="py-5 pr-3">
                 <dt class="u-11">紹介動画</dt>
