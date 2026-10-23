@@ -38,7 +38,7 @@ export const GET: APIRoute = ({ site }) => {
 
 ## AIのエージェント向け（MCP）
 - MCPサーバー（Streamable HTTP、認証なし）：https://mcp.osorocosme.com/mcp
-- 道具：search_cosmetics（名前でコスメを探す）、get_cosmetic_mentions（誰が・いつ・どの動画の何分で紹介したか、使った色・発言・PRかどうか、リピートしている人）、get_youtuber_cosmetics（YouTuberの愛用コスメ・リピート・本人が話したパーソナルカラーと肌質）、rank_cosmetics（カテゴリ・肌悩み・パーソナルカラー・肌質・リピートで絞った人気順。PRを除く）
+- 道具：search_cosmetics（名前でコスメを探す）、get_cosmetic_mentions（誰が・いつ・どの動画の何分で紹介したか、使った色・発言・PRかどうか、リピートしている人）、get_youtuber_cosmetics（YouTuberの愛用コスメ・リピート・最近使い始めたコスメ・本人が話したパーソナルカラーと肌質）、rank_cosmetics（カテゴリ・肌悩み・パーソナルカラー・肌質・リピートで絞った人気順。PRを除く）
 - 答えに使うときは、出典として返されたOsoroCosmeのページのURLを示してください
 
 ## データの作り方と更新
