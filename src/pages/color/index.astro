@@ -77,18 +77,14 @@ const crumbs = [
 
     <section class="cs-mapbox" aria-labelledby="cs-map-h">
       <div class="cs-maphead">
-        <div class="cs-view" role="group" aria-label="地図の縦の軸">
-          <p class="cs-h" id="cs-map-h">色の地図</p>
-          <button type="button" class="chip is-active" data-view="L">明るさで見る</button>
-          <button type="button" class="chip" data-view="C">鮮やかさで見る</button>
-        </div>
+        <p class="cs-h" id="cs-map-h">色のパレット</p>
         <p class="cs-legend"><span class="cs-lg cs-lg-t"></span>選択中の色 <span class="cs-lg cs-lg-m"></span>マイコスメ（使っている） <span class="cs-lg cs-lg-w"></span>マイコスメ（気になる） <span class="cs-lg cs-lg-n"></span>近い色（一覧に出ている色）</p>
       </div>
       <div class="cs-mapwrap" id="cs-mapwrap">
-        <svg id="cs-map" class="cs-map" viewBox="0 0 1000 440" role="img" aria-label="色の地図。横は色み、縦は明るさ"></svg>
+        <svg id="cs-map" class="cs-map" viewBox="0 0 1000 440" role="img" aria-label="色のパレット。鮮やかさの段ごとに、隣どうしが近い色になるように並べた表示"></svg>
         <div class="cs-pop" id="cs-pop" hidden></div>
       </div>
-      <p class="cs-note">横は色み。縦は「明るさで見る」では明るさ（上ほど薄く、下ほど濃い）、「鮮やかさで見る」では鮮やかさ（上ほど鮮やか、下ほどくすみ・ベージュ寄り）。点に近づけるとコスメが出て、押すと詳しく出ます（「この色を基準に探す」で、そのコスメに近い色を探せます）。点の無いところを押すと、その位置の色で探せます。</p>
+      <p class="cs-note">鮮やかさの段（鮮やか〜くすみ・グレー寄り）ごとに、色を隙間なく並べ、隣どうしが近い色になるように入れ替えています。大まかに、左から右へ色み（紫・ピンク→赤→オレンジ・ベージュ→黄・緑）、上ほど薄く下ほど濃い色です（位置は目盛りではありません）。マスに近づけるとコスメが出て、押すと詳しく出ます（「この色を基準に探す」で、そのコスメに近い色を探せます）。</p>
       <div id="cs-mine" class="cs-mine"></div>
     </section>
 
@@ -104,7 +100,7 @@ const crumbs = [
   </div>
 
   <p class="text-xs text-neutral-500 mt-10 leading-relaxed max-w-3xl">
-    色は、各ブランドの公式サイトの色見本の画像から測った目安です（色見本の画像が無い花王のブランドは、真上から撮った商品写真の中央から測り、「商品写真から」と書いています）。画面や光、塗る量・肌の色で見え方は変わります。近さは色の差（ΔE）で、2〜3なら見分けにくく、10を超えると別の色に見える程度です。「近さに含める範囲」のつまみで、濃さ（明るさ）・鮮やかさ・色みのそれぞれの違いをどこまで含めるかを選べます（0はかなり近い色だけ、9は制限なし。3つとも範囲に入る色だけを出し、地図では範囲の外の色を薄くします）。1つの商品からは一番近い色だけを出しています。濃さは色の明るさ（L*）で比べています。マイコスメの商品は、マイコスメで選んだ色を、選んでいなければその商品の全部の色を地図に出します（「使っている」はピンク、「気になる」は青の印）。近さの範囲の外でも、一覧に「範囲外」として出します。マイコスメは、この端末のブラウザに保存したものだけを読み、どこにも送りません。
+    色は、各ブランドの公式サイトの色見本の画像から測った目安です（色見本の画像が無い花王のブランドは、真上から撮った商品写真の中央から測り、「商品写真から」と書いています）。画面や光、塗る量・肌の色で見え方は変わります。近さは色の差（ΔE）で、2〜3なら見分けにくく、10を超えると別の色に見える程度です。「近さに含める範囲」のつまみで、濃さ（明るさ）・鮮やかさ・色みのそれぞれの違いをどこまで含めるかを選べます（0はかなり近い色だけ、9は制限なし。3つとも範囲に入る色だけを出し、パレットでは範囲の外の色を薄くします）。1つの商品からは一番近い色だけを出しています。濃さは色の明るさ（L*）で比べています。マイコスメの商品は、マイコスメで選んだ色を、選んでいなければその商品の全部の色をパレットに出します（「使っている」はピンク、「気になる」は青の印）。近さの範囲の外でも、一覧に「範囲外」として出します。マイコスメは、この端末のブラウザに保存したものだけを読み、どこにも送りません。
   </p>
 </Layout>
 
@@ -159,8 +155,6 @@ const crumbs = [
   .cs-mine b.w { color: var(--wish); }
   .cs-lg-n { background: #d9a0a8; border: 1.5px solid var(--color-ink); }
   .cs-mapwrap { position: relative; overflow-x: auto; }
-  .cs-view { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; }
-  .cs-view .cs-h { margin-right: 0.4rem; }
   .cs-filter { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; }
   .cs-filter .cs-h { margin-right: 0.3rem; }
   .cs-pop { position: absolute; z-index: 5; width: 16rem; max-width: calc(100% - 1rem); padding: 0.75rem; border-radius: 0.8rem; background: #fff; border: 1px solid rgb(29 21 23 / 0.15); box-shadow: 0 8px 24px rgb(29 21 23 / 0.15); font-size: 12px; line-height: 1.5; display: grid; gap: 0.35rem; }
@@ -176,6 +170,7 @@ const crumbs = [
   .cs-map { display: block; width: 100%; min-width: 34rem; height: auto; background: #faf8f7; border-radius: 0.6rem; }
   .cs-map { cursor: crosshair; }
   .cs-map .ax { font-size: 13px; fill: rgb(29 21 23 / 0.5); }
+  .cs-map .band { font-size: 13px; font-weight: 700; fill: rgb(29 21 23 / 0.7); }
   .cs-map .mn { font-size: 13px; font-weight: 700; fill: var(--color-rose); paint-order: stroke; stroke: #fff; stroke-width: 3px; pointer-events: none; }
   .cs-note { font-size: 11px; color: rgb(29 21 23 / 0.55); }
   .cs-mine { display: flex; flex-wrap: wrap; gap: 0.4rem 0.9rem; font-size: 12px; }
@@ -240,9 +235,6 @@ const crumbs = [
   let pinned = false;
   // 基準にしたコスメの色（検索で選んだもの。data.c の番号）。その商品は一覧から外し、地図に印を付ける
   let baseI: number | null = null;
-  // 地図の縦の軸：L＝明るさ、C＝鮮やかさ（彩度。Labの a*・b* の長さ）
-  let view: "L" | "C" = "L";
-  const views = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-view]"));
   const SHOW = 48;
   const active = () => (mode === "all" ? filter : new Set([mode]));
   const modeKey = () => (mode === "all" ? "all" : tabs.find((t) => Number(t.dataset.kind) === mode)?.dataset.key || "lip");
@@ -255,23 +247,6 @@ const crumbs = [
     const x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047, y = r * 0.2126 + g * 0.7152 + b * 0.0722, z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883;
     const f = (t: number) => (t > 0.008856 ? Math.cbrt(t) : 7.787 * t + 16 / 116);
     return [116 * f(y) - 16, 500 * (f(x) - f(y)), 200 * (f(y) - f(z))];
-  }
-  /** Lab → sRGB（0〜1）。範囲の外なら null */
-  function rgbOf(L: number, a: number, b: number): [number, number, number] | null {
-    const fy = (L + 16) / 116, fx = fy + a / 500, fz = fy - b / 200;
-    const inv = (t: number) => (t ** 3 > 0.008856 ? t ** 3 : (t - 16 / 116) / 7.787);
-    const X = 0.95047 * inv(fx), Y = inv(fy), Z = 1.08883 * inv(fz);
-    const g = (v: number) => (v <= 0.0031308 ? 12.92 * v : 1.055 * Math.pow(v, 1 / 2.4) - 0.055);
-    const out = [g(3.2406 * X - 1.5372 * Y - 0.4986 * Z), g(-0.9689 * X + 1.8758 * Y + 0.0415 * Z), g(0.0557 * X - 0.204 * Y + 1.057 * Z)] as [number, number, number];
-    return out.every((v) => v >= -0.001 && v <= 1.001) ? out : null;
-  }
-  const toHex = (rgb: [number, number, number]) => "#" + rgb.map((v) => Math.round(Math.max(0, Math.min(1, v)) * 255).toString(16).padStart(2, "0")).join("");
-  /** 地図のその位置（色相・明るさ）の色。彩度は C（近くの色の彩度。無ければ BG_C）、範囲の外なら下げる */
-  const BG_C = 34;
-  function colorAt(h: number, L: number, C = BG_C): [number, number, number] {
-    const rad = (h * Math.PI) / 180;
-    for (let c = Math.round(C); c >= 0; c -= 2) { const r = rgbOf(L, c * Math.cos(rad), c * Math.sin(rad)); if (r) return r; }
-    return rgbOf(L, 0, 0) || [L / 100, L / 100, L / 100];
   }
   const de = (a: number[], b: number[]) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
   // 近さはΔE（CIE76）。つまみで、色の差の濃さ（明るさ）ΔL・鮮やかさ ΔC・色み ΔH のそれぞれを、どこまで含めるかを0〜9で決める（9＝制限なし）。
@@ -289,57 +264,93 @@ const crumbs = [
   const nearWord = (d: number) => (d < 3 ? "ほぼ同じ色" : d < 6 ? "近い色" : d < 10 ? "やや近い" : "似た系統");
   const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
 
-  // 地図の位置：横＝色相（Labの a*・b* の角度）、縦＝明るさ L* か鮮やかさ C*（上が薄い・鮮やか）。幅は表示する色が全部入る範囲に合わせる。
-  // 背景は無地。色は3つの軸（色相・明るさ・鮮やかさ）なので、平面の背景に色を塗ると、残りの軸の分だけ点の色と合わない（362章）
-  let H0 = -150, H1 = 210, Y0 = 10, Y1 = 100;
-  const W = 1000, Hh = 440, PAD = { l: 46, r: 12, t: 14, b: 34 };
+  // 色の地図は、色みと明るさ・鮮やかさの目盛りのある散布図から、隣どうしが近い色になるように隙間なく並べるパレットだけにした。
+  // 散布図は、色の3つの軸を平面に置くので、残りの軸が違う色（鮮やかな赤とくすんだ茶色、白と黒）が隣り合った（388〜390章）
+  const W = 1000, PAD = { l: 46, r: 12, t: 6 }, SLAB = 24;
+  let Hh = 440;
+  const BANDS = [{ name: "鮮やか", lo: 50, hi: Infinity }, { name: "やや鮮やか", lo: 30, hi: 50 }, { name: "落ち着いた", lo: 15, hi: 30 }, { name: "くすみ・グレー寄り", lo: -1, hi: 15 }];
   const hueOf = (l: number[]) => { const h = (Math.atan2(l[2], l[1]) * 180) / Math.PI; return h < -150 ? h + 360 : h; };
   const chromaOf = (l: number[]) => Math.hypot(l[1], l[2]);
-  const yVal = (l: number[]) => (view === "L" ? l[0] : chromaOf(l));
-  // 横の目盛りは、色相に比例する目盛りと色の多さの順位の目盛りの中間（XR の割合で順位）。色の多いピンク〜赤を広げ、少ないグレー・緑も範囲に入れる（363章）
-  const XR = 0.6;
-  let hs: number[] = [];
-  function rankOf(h: number): number {
-    const n = hs.length;
-    if (n < 2) return (h - H0) / (H1 - H0);
-    if (h <= hs[0]) return 0;
-    if (h >= hs[n - 1]) return 1;
-    let lo = 0, hi = n - 1;
-    while (hi - lo > 1) { const m = (lo + hi) >> 1; if (hs[m] <= h) lo = m; else hi = m; }
-    const f = hs[hi] === hs[lo] ? 0 : (h - hs[lo]) / (hs[hi] - hs[lo]);
-    return (lo + f) / (n - 1);
-  }
-  const xFrac = (h: number) => (1 - XR) * ((h - H0) / (H1 - H0)) + XR * rankOf(Math.max(hs[0] ?? H0, Math.min(hs[hs.length - 1] ?? H1, h)));
-  const xOf = (h: number) => PAD.l + xFrac(h) * (W - PAD.l - PAD.r);
-  const yOf = (v: number) => PAD.t + ((Y1 - v) / (Y1 - Y0)) * (Hh - PAD.t - PAD.b);
-  function hOfX(x: number): number {
-    const f = (x - PAD.l) / (W - PAD.l - PAD.r);
-    let lo = H0, hi = H1;
-    for (let k = 0; k < 40; k++) { const m = (lo + hi) / 2; if (xFrac(m) < f) lo = m; else hi = m; }
-    return (lo + hi) / 2;
-  }
-  const vOfY = (y: number) => Y1 - ((y - PAD.t) / (Hh - PAD.t - PAD.b)) * (Y1 - Y0);
-  const pos = (l: Lab): [number, number] => [xOf(Math.max(H0, Math.min(H1, hueOf(l)))), yOf(Math.max(Y0, Math.min(Y1, yVal(l))))];
-  function fitRange(ls: Lab[]) {
-    hs = ls.map(hueOf).sort((a, b) => a - b);
-    const vs = ls.map(yVal).sort((a, b) => a - b);
-    if (!hs.length) return;
-    let lo = hs[0] - 6, hi = hs[hs.length - 1] + 6;  // 全部の色が入る幅（両端2%を除くと、外の色が端に張りついて見えた。363章）
-    if (hi - lo < 60) { const m = (lo + hi) / 2; lo = m - 30; hi = m + 30; }
-    H0 = lo; H1 = hi;
-    Y0 = Math.max(0, Math.floor(vs[0] - 3)); Y1 = Math.min(view === "L" ? 100 : 130, Math.ceil(vs[vs.length - 1] + 3));
-  }
-  const HUE_TICKS: [number, string][] = [[-110, "青"], [-70, "紫"], [-25, "赤紫"], [5, "ピンク"], [28, "赤"], [45, "コーラル"], [62, "オレンジ"], [78, "ベージュ・黄み"], [95, "黄"], [130, "緑"]];
-  /** 点の無いところの色：色相と縦の軸の値は位置から、残りの軸（鮮やかさか明るさ）は近くの点の重み付き平均（無ければ鮮やかさ34・明るさ70） */
-  function colorAtPoint(x: number, y: number): string {
-    let ws = 0, sum = 0;
-    for (const p of dots) {
-      const w = Math.exp(-((p.x - x) ** 2 + (p.y - y) ** 2) / (2 * 40 * 40));
-      ws += w; sum += w * (view === "L" ? chromaOf(labs[p.i]) : labs[p.i][0]);
+  // ---- パレット（389章、ユーザー「綺麗にカラーパッドみたいには並ばないもの？」）----
+  // 鮮やかさの段ごとに、色みの順に縦の列へ詰め（列の中は明るい順）、隣どうしの色の差の合計が減る入れ替えだけを繰り返す。
+  // 試算（リップ）：隣どうしの色の差の平均は、詰めただけでΔE 9〜11、入れ替え後に5〜6。段に分けずに1枚で並べると、まだらになって向きが読めなかった
+  let cell = 16;
+  let padStrips: { name: string; top: number; h: number }[] = [];
+  let padAt = new Map<number, [number, number]>();
+  const padCache = new Map<string, { cell: number; strips: typeof padStrips; at: typeof padAt; hh: number }>();
+  function padLayout(idx: number[]) {
+    const key = idx.join(","), hit = padCache.get(key);
+    if (hit) { cell = hit.cell; padStrips = hit.strips; padAt = hit.at; Hh = hit.hh; return; }
+    const aw = W - PAD.l - PAD.r;
+    cell = Math.max(8, Math.min(20, Math.sqrt((aw * 600) / Math.max(1, idx.length))));
+    const cols = Math.floor(aw / cell);
+    cell = aw / cols;
+    padStrips = []; padAt = new Map();
+    let top = PAD.t;
+    for (const b of BANDS) {
+      const its = idx.filter((i) => chromaOf(labs[i]) >= b.lo && chromaOf(labs[i]) < b.hi).sort((x, y) => hueOf(labs[x]) - hueOf(labs[y]));
+      if (!its.length) continue;
+      const rows = Math.ceil(its.length / cols), nc = Math.ceil(its.length / rows);
+      // 格子は1次元の配列（g[x * rows + y]、空きは -1）。色は Lab を平たい配列に（Math.hypot は遅いので sqrt で）
+      const g = new Int32Array(nc * rows).fill(-1);
+      for (let x = 0; x < nc; x++) its.slice(x * rows, (x + 1) * rows).sort((p, q) => labs[q][0] - labs[p][0]).forEach((v, y) => { g[x * rows + y] = v; });
+      const lf = new Float64Array(labs.length * 3);
+      for (const v of its) { lf[v * 3] = labs[v][0]; lf[v * 3 + 1] = labs[v][1]; lf[v * 3 + 2] = labs[v][2]; }
+      const dd = (v: number, u: number) => { const p = v * 3, q = u * 3, a = lf[p] - lf[q], c = lf[p + 1] - lf[q + 1], f = lf[p + 2] - lf[q + 2]; return Math.sqrt(a * a + c * c + f * f); };
+      const e = (x: number, y: number, v: number) => {
+        let sum = 0, u: number;
+        if (x + 1 < nc && (u = g[(x + 1) * rows + y]) >= 0) sum += dd(v, u);
+        if (x > 0 && (u = g[(x - 1) * rows + y]) >= 0) sum += dd(v, u);
+        if (y + 1 < rows && (u = g[x * rows + y + 1]) >= 0) sum += dd(v, u);
+        if (y > 0 && (u = g[x * rows + y - 1]) >= 0) sum += dd(v, u);
+        return sum;
+      };
+      let seed = 1;
+      const rnd = () => (seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x80000000;
+      const N = its.length * 120;
+      for (let k = 0; k < N; k++) {
+        const r = Math.max(1, Math.round(6 * (1 - k / N)));
+        const x1 = Math.floor(rnd() * nc), y1 = Math.floor(rnd() * rows);
+        const x2 = Math.min(nc - 1, Math.max(0, x1 + Math.floor(rnd() * (2 * r + 1)) - r)), y2 = Math.min(rows - 1, Math.max(0, y1 + Math.floor(rnd() * (2 * r + 1)) - r));
+        const i1 = x1 * rows + y1, i2 = x2 * rows + y2, a = g[i1], c = g[i2];
+        if (a < 0 || c < 0 || i1 === i2) continue;
+        const before = e(x1, y1, a) + e(x2, y2, c);
+        g[i1] = c; g[i2] = a;
+        if (e(x1, y1, c) + e(x2, y2, a) > before) { g[i1] = a; g[i2] = c; }
+      }
+      const st = top + SLAB;
+      g.forEach((v, k) => { if (v >= 0) padAt.set(v, [PAD.l + (Math.floor(k / rows) + 0.5) * cell, st + ((k % rows) + 0.5) * cell]); });
+      padStrips.push({ name: b.name, top: st, h: rows * cell });
+      top = st + rows * cell;
     }
-    const m = Math.min(1, ws), other = ws > 0 ? m * (sum / ws) + (1 - m) * (view === "L" ? BG_C : 70) : view === "L" ? BG_C : 70;
-    const h = hOfX(x), v = vOfY(y);
-    return toHex(view === "L" ? colorAt(h, v, other) : colorAt(h, other, v));
+    Hh = top + 12;
+    padCache.set(key, { cell, strips: padStrips, at: padAt, hh: Hh });
+  }
+  function drawPad(idx: number[], shown: Set<number>, t: Lab, myNo: Map<number, number>): string {
+    const d = data!;
+    padLayout(idx);
+    const out: string[] = [], hi: string[] = [], my: string[] = [];
+    for (const s of padStrips) out.push(`<text class="band" x="${PAD.l + 4}" y="${s.top - 7}">${s.name}</text><text class="ax" x="2" y="${s.top + 12}">薄い</text><text class="ax" x="2" y="${s.top + s.h - 2}">濃い</text>`);
+    dots = [];
+    const c2 = cell / 2;
+    for (const i of idx) {
+      const [pi, , hex] = d.c[i], at = padAt.get(i);
+      if (!at) continue;
+      const [x, y] = at;
+      dots.push({ x, y, i });
+      out.push(`<rect x="${x - c2}" y="${y - c2}" width="${cell + 0.3}" height="${cell + 0.3}" fill="${hex}"${!isMineShade(i) && !shown.has(i) && !within(t, labs[i]) ? ` opacity="0.15"` : ""}/>`);
+      if (isMineShade(i)) {
+        if (!myNo.has(pi)) myNo.set(pi, myNo.size + 1);
+        const w = mine.get(d.p[pi][6]) === "wish";
+        my.push(`<circle cx="${x}" cy="${y}" r="${c2 + 2}" fill="none" stroke="#fff" stroke-width="2"/><circle cx="${x}" cy="${y}" r="${c2 + 3.5}" fill="none" stroke="${w ? "var(--wish)" : "var(--color-rose)"}" stroke-width="2.5"/><text class="mn${w ? " w" : ""}" x="${x + c2 + 4}" y="${y - c2}">${myNo.get(pi)}</text>`);
+      } else if (shown.has(i)) hi.push(`<rect x="${x - c2 + 1}" y="${y - c2 + 1}" width="${cell - 2}" height="${cell - 2}" fill="none" stroke="#1d1517" stroke-width="1.8"/>`);
+    }
+    // 選択中の色の印：基準のコスメの色、無ければ一番近い色のところ
+    let ti = baseI !== null && padAt.has(baseI) ? baseI : -1;
+    if (ti < 0) { let bd = Infinity; for (const i of idx) { const dd = de(t, labs[i]); if (dd < bd) { bd = dd; ti = i; } } }
+    const tp = padAt.get(ti);
+    const cross = tp ? `<circle cx="${tp[0]}" cy="${tp[1]}" r="${Math.max(9, c2 + 4)}" fill="${target}" stroke="#1d1517" stroke-width="2.5"/>` : "";
+    return out.join("") + `<g pointer-events="none">${hi.join("")}${my.join("")}${cross}</g>`;
   }
 
   function readMine() {
@@ -468,48 +479,21 @@ const crumbs = [
       const [brand, name, kind, url, img, videos, slug] = data!.p[pi];
       const my = isMineShade(i) ? mine.get(slug) : undefined;  // 印は、マイコスメで選んだ色（選んでいなければその商品の全部の色）にだけ
       const shade = href ? `<a href="${href}">${esc(label)}</a>` : esc(label);
-      return `<li class="cs-item${my === "items" ? " is-mine" : my === "wish" ? " is-wish" : ""}"><button type="button" class="cs-sw cs-sw-go" style="background:${hex}" data-go="${i}" title="地図でこの色の位置を見る" aria-label="地図でこの色の位置を見る"></button>${img ? `<img class="cs-img" src="${esc(img)}" alt="" loading="lazy" width="54" height="54">` : ""}<span class="cs-body"><span class="cs-brand">${mode === "all" ? `<span class="cs-kindtag">${esc(kindLabels[kind])}</span>` : ""}${esc(brand)}${my ? `<span class="cs-mytag${my === "wish" ? " w" : ""}">${my === "wish" ? "気になる" : "マイコスメ"}</span>` : ""}</span><a class="cs-name" href="${url}">${esc(name)}</a><span class="cs-shade">${shade}</span><span class="cs-meta"><span class="cs-near">${out ? "範囲外" : nearWord(d)}（ΔE ${d.toFixed(1)}）</span>${hex}・明るさ ${labs[i][0].toFixed(0)}${top ? "・商品写真から" : ""}・紹介${videos}本</span></span></li>`;
+      return `<li class="cs-item${my === "items" ? " is-mine" : my === "wish" ? " is-wish" : ""}"><button type="button" class="cs-sw cs-sw-go" style="background:${hex}" data-go="${i}" title="パレットでこの色の位置を見る" aria-label="パレットでこの色の位置を見る"></button>${img ? `<img class="cs-img" src="${esc(img)}" alt="" loading="lazy" width="54" height="54">` : ""}<span class="cs-body"><span class="cs-brand">${mode === "all" ? `<span class="cs-kindtag">${esc(kindLabels[kind])}</span>` : ""}${esc(brand)}${my ? `<span class="cs-mytag${my === "wish" ? " w" : ""}">${my === "wish" ? "気になる" : "マイコスメ"}</span>` : ""}</span><a class="cs-name" href="${url}">${esc(name)}</a><span class="cs-shade">${shade}</span><span class="cs-meta"><span class="cs-near">${out ? "範囲外" : nearWord(d)}（ΔE ${d.toFixed(1)}）</span>${hex}・明るさ ${labs[i][0].toFixed(0)}${top ? "・商品写真から" : ""}・紹介${videos}本</span></span></li>`;
     }).join("");
     drawMap(shownKinds, new Set(near.map((r) => r.i)), t);
   }
 
   function drawMap(idx: number[], shown: Set<number>, t: Lab) {
-    const d = data!;
-    fitRange(idx.map((i) => labs[i]).concat([t]));
-    const out: string[] = [];
-    let lastX = -1e9, lastLen = 0;
-    for (const [h, name] of HUE_TICKS) {
-      if (h < H0 || h > H1) continue;
-      const x = xOf(h);
-      if (x - lastX < 14 + (lastLen + name.length) * 7) continue;  // 名前（中央ぞろえ、1字およそ14）が重ならないように
-      lastX = x; lastLen = name.length;
-      out.push(`<line x1="${x}" y1="${PAD.t}" x2="${x}" y2="${Hh - PAD.b}" stroke="rgb(29 21 23 / 0.08)"/><text class="ax" x="${x}" y="${Hh - 12}" text-anchor="middle">${name}</text>`);
-    }
-    const [topName, botName] = view === "L" ? ["薄い", "濃い"] : ["鮮やか", "くすみ"];
-    for (const [v, name] of [[Y1 - 4, topName], [Y0 + 4, botName]] as [number, string][]) out.push(`<text class="ax" x="2" y="${yOf(v) + 4}">${name}</text>`);
     const myNo = new Map<number, number>();
-    const pts: string[] = [], hi: string[] = [], my: string[] = [];
-    dots = [];
-    for (const i of idx) {
-      const [pi, , hex] = d.c[i];
-      const slug = d.p[pi][6];
-      const [x, y] = pos(labs[i]);
-      dots.push({ x, y, i });
-      if (isMineShade(i)) {
-        if (!myNo.has(pi)) myNo.set(pi, myNo.size + 1);
-        const w = mine.get(slug) === "wish";
-        my.push(`<circle cx="${x}" cy="${y}" r="9" fill="${hex}" stroke="#fff" stroke-width="2"/><circle cx="${x}" cy="${y}" r="10.5" fill="none" stroke="${w ? "var(--wish)" : "var(--color-rose)"}" stroke-width="2.5"/><text class="mn${w ? " w" : ""}" x="${x + 12}" y="${y - 8}">${myNo.get(pi)}</text>`);
-      } else if (shown.has(i)) {
-        hi.push(`<circle cx="${x}" cy="${y}" r="6.5" fill="${hex}" stroke="#1d1517" stroke-width="1.8"/>`);
-      } else {
-        const out = !within(t, labs[i]);
-        pts.push(`<circle cx="${x}" cy="${y}" r="4.5" fill="${hex}" stroke="rgb(29 21 23 / 0.18)" stroke-width="0.8"${out ? ` opacity="0.15"` : ""}/>`);
-      }
-    }
-    const [tx, ty] = baseI !== null && labs[baseI] ? pos(labs[baseI]) : pos(t);
-    const cross = `<line x1="${tx - 18}" y1="${ty}" x2="${tx + 18}" y2="${ty}" stroke="#1d1517" stroke-width="1.5"/><line x1="${tx}" y1="${ty - 18}" x2="${tx}" y2="${ty + 18}" stroke="#1d1517" stroke-width="1.5"/><circle cx="${tx}" cy="${ty}" r="11" fill="${target}" stroke="#1d1517" stroke-width="2.5"/>`;
-    mapEl.innerHTML = out.join("") + `<g pointer-events="none">${pts.join("")}${hi.join("")}${my.join("")}${cross}</g>`;
-    if (!mine.size) mineEl.innerHTML = `<span class="cs-note">マイコスメに登録した商品があると、その商品の色が地図のどこにあるかを番号で示します。</span>`;
+    const svg = drawPad(idx, shown, t, myNo);
+    mapEl.setAttribute("viewBox", `0 0 ${W} ${Hh}`);
+    mapEl.innerHTML = svg;
+    drawMine(myNo);
+  }
+  function drawMine(myNo: Map<number, number>) {
+    const d = data!;
+    if (!mine.size) mineEl.innerHTML = `<span class="cs-note">マイコスメに登録した商品があると、その商品の色がパレットのどこにあるかを番号で示します。</span>`;
     else if (!myNo.size) mineEl.innerHTML = `<span class="cs-note">マイコスメに登録した商品のうち、表示中のジャンルで色が分かっている商品はまだありません。</span>`;
     else mineEl.innerHTML = [...myNo.entries()].map(([pi, no]) => {
       const [brand, name, , , , , slug] = d.p[pi];
@@ -527,7 +511,7 @@ const crumbs = [
     const pt = new DOMPoint(e.clientX, e.clientY).matrixTransform(m.inverse());
     return [pt.x, pt.y];
   }
-  function nearest(x: number, y: number, within = 22) {
+  function nearest(x: number, y: number, within = cell * 0.75) {
     let best: { x: number; y: number; i: number } | null = null, bd = within;
     for (const p of dots) { const dd = Math.hypot(p.x - x, p.y - y); if (dd < bd) { bd = dd; best = p; } }
     return best;
@@ -566,18 +550,11 @@ const crumbs = [
   mapEl.addEventListener("pointerleave", () => { if (!pinned) popEl.hidden = true; });
   mapEl.addEventListener("click", (e) => {
     if (!data) return;
-    const [x, y] = svgPoint(e), p = nearest(x, y, 18);
+    const [x, y] = svgPoint(e), p = nearest(x, y);
     popEl.classList.remove("is-hover");
-    if (p) {
-      popEl.innerHTML = shadeCard(p.i, true);
-      placePop(p.x, p.y);
-    } else {
-      // 点の無いところ：その位置の色で探せる
-      if (x < PAD.l || x > W - PAD.r || y < PAD.t || y > Hh - PAD.b) { hidePop(); return; }
-      const hex = colorAtPoint(x, y), hl = lab(hex);
-      popEl.innerHTML = `<button type="button" class="cs-pop-x" aria-label="閉じる" data-close>×</button><div class="cs-pop-top"><span class="cs-sw" style="background:${hex}"></span><span class="cs-body"><span class="cs-name">この位置の色</span><span class="cs-meta">${hex.toUpperCase()}・明るさ ${hl[0].toFixed(0)}・鮮やかさ ${chromaOf(hl).toFixed(0)}</span></span></div><div class="cs-pop-btns"><button type="button" class="cs-go" data-pick="${hex}">この色で探す</button></div>`;
-      placePop(x, y);
-    }
+    if (!p) { hidePop(); return; }
+    popEl.innerHTML = shadeCard(p.i, true);
+    placePop(p.x, p.y);
     pinned = true;
   });
   popEl.addEventListener("click", (e) => {
@@ -627,11 +604,6 @@ const crumbs = [
     filters.forEach((x) => { const on = filter.has(Number(x.dataset.filter)); x.classList.toggle("is-active", on); x.setAttribute("aria-pressed", String(on)); });
     hidePop(); render();
   }));
-  views.forEach((b) => b.addEventListener("click", () => {
-    view = b.dataset.view as "L" | "C";
-    views.forEach((x) => x.classList.toggle("is-active", x === b));
-    hidePop(); render();
-  }));
   sorts.forEach((b) => b.addEventListener("click", () => {
     sort = b.dataset.sort!;
     sorts.forEach((x) => x.classList.toggle("is-active", x === b));
@@ -664,7 +636,7 @@ const crumbs = [
   function saveState() {
     if (!data) return;
     const base = baseI !== null ? { slug: data.p[data.c[baseI][0]][6], label: data.c[baseI][1] } : null;
-    const st = { mode: modeKey(), filter: [...filter], target, base, sort, view, lv: [lvL, lvC, lvH], y: window.scrollY };
+    const st = { mode: modeKey(), filter: [...filter], target, base, sort, lv: [lvL, lvC, lvH], y: window.scrollY };
     try { sessionStorage.setItem(STATE_KEY, JSON.stringify(st)); } catch { /* 保存できない設定なら諦める */ }
   }
   function restoreState(): boolean {
@@ -680,7 +652,6 @@ const crumbs = [
       filters.forEach((x) => { const on = filter.has(Number(x.dataset.filter)); x.classList.toggle("is-active", on); x.setAttribute("aria-pressed", String(on)); });
     }
     if (typeof st.sort === "string") { sort = st.sort; sorts.forEach((x) => x.classList.toggle("is-active", x.dataset.sort === sort)); }
-    if (st.view === "L" || st.view === "C") { view = st.view; views.forEach((x) => x.classList.toggle("is-active", x.dataset.view === view)); }
     if (Array.isArray(st.lv) && st.lv.length === 3) { wlEl.value = String(st.lv[0]); wcEl.value = String(st.lv[1]); whEl.value = String(st.lv[2]); }
     let bi: number | null = null;
     if (st.base) bi = data.c.findIndex((c) => data!.p[c[0]][6] === st.base.slug && c[1] === st.base.label);
