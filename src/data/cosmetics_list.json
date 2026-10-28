@@ -113070,7 +113070,8 @@
     "yahoo_price": 4500,
     "yahoo_price_updated": "2026-10-22",
     "yahoo_item_code": "moso-store_0000615",
-    "yahoo_seller_id": "moso-store"
+    "yahoo_seller_id": "moso-store",
+    "rakuten_link_none": true
   },
   "brand-01064_name-00044": {
     "brand": "Perfect Diary",
@@ -138813,7 +138814,9 @@
     "amazon_link": "",
     "rakuten_image_link": "",
     "rakuten_text_link": "",
-    "count": 1
+    "count": 1,
+    "rakuten_link_none": true,
+    "yahoo_link_none": true
   },
   "brand-01556_name-00015": {
     "brand": "DIDION",
