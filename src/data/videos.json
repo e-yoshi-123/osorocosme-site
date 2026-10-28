@@ -337,15 +337,15 @@
       {
         "brand_id": "brand-01058",
         "brand": "花西子",
-        "name_id": "name-00004",
-        "name": "双花彫刻ハイライト",
+        "name_id": "name-00063",
+        "name": "双蓮彫刻 ハイライト",
         "related_tags": [
           "プレストパウダー"
         ],
-        "skin_concern": "",
         "mentions": [],
         "cosmetics_checked": true,
-        "time_in_video": "10:15"
+        "time_in_video": "10:15",
+        "skin_concern": ""
       },
       {
         "brand": "CLIO",
@@ -431,7 +431,8 @@
     "url": "https://www.youtube.com/watch?v=17K_H70YEsg",
     "video_id": "17K_H70YEsg",
     "view_count": "76762",
-    "duration": "PT20M40S"
+    "duration": "PT20M40S",
+    "updated_at": "2026-10-28"
   },
   "-O45WtpeUO_lGC9GLKMX": {
     "channel_icon": "https://yt3.ggpht.com/WHXPCqPdGI59nRYRKvBMKtUy5-qSyf9_CIffC-ZwOsxngLFaJQQ--oEqrubHlln664boI1YBYg=s88-c-k-c0x00ffffff-no-rj",
@@ -114940,20 +114941,6 @@
         "time_in_video": "23:14"
       },
       {
-        "brand_id": "brand-00050",
-        "brand": "rom&nd",
-        "name_id": "name-00046",
-        "name": "ジューシーラスティングティント（ニューベアシリーズ）",
-        "related_tags": [
-          "リップグロス"
-        ],
-        "skin_concern": "",
-        "mentions": [
-          "リニューアル版。保湿力がアップしてよりクリーミー"
-        ],
-        "time_in_video": "26:37"
-      },
-      {
         "brand_id": "brand-01147",
         "brand": "Glint",
         "name_id": "name-00004",
@@ -114976,7 +114963,10 @@
           "口紅"
         ],
         "skin_concern": "",
-        "time_in_video": "26:37"
+        "time_in_video": "26:37",
+        "mentions": [
+          "リニューアル版。保湿力がアップしてよりクリーミー"
+        ]
       },
       {
         "brand_id": "brand-01594",
@@ -115041,7 +115031,7 @@
     "video_id": "idaKjbNSDPg",
     "view_count": "32495",
     "duration": "PT48M43S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-28"
   },
   "-OJ5q-KvPiCp4sn_1oMt": {
     "channel_icon": "https://yt3.ggpht.com/inHljyjaEudGNXBdRRJsdTNzZd6Vohh1zIKneluckQTT045b0Pk8AggUotRvEhjCsKS0Map8hVw=s88-c-k-c0x00ffffff-no-rj",
@@ -141129,16 +141119,6 @@
         "time_in_video": "18:52"
       },
       {
-        "brand": "the SAEM",
-        "brand_id": "brand-00142",
-        "name": "Cover Perfection Pot Concealer",
-        "name_id": "name-00168",
-        "related_tags": [
-          "コンシーラー"
-        ],
-        "skin_concern": ""
-      },
-      {
         "brand": "エチュード",
         "brand_id": "brand-00146",
         "name": "コントゥアパウダー",
@@ -141183,7 +141163,7 @@
     "video_id": "_WOFtai0-yY",
     "view_count": "890542",
     "duration": "PT35M13S",
-    "updated_at": "2026-10-10"
+    "updated_at": "2026-10-28"
   },
   "-OM4LKpfJ9h8raT0jbOi": {
     "channel_icon": "https://yt3.ggpht.com/WHXPCqPdGI59nRYRKvBMKtUy5-qSyf9_CIffC-ZwOsxngLFaJQQ--oEqrubHlln664boI1YBYg=s88-c-k-c0x00ffffff-no-rj",
@@ -157395,16 +157375,6 @@
         ]
       },
       {
-        "brand": "エルシア",
-        "brand_id": "brand-00324",
-        "name": "明るさ＆血色アップ チークカラー",
-        "name_id": "name-00066",
-        "related_tags": [
-          "パウダーチーク"
-        ],
-        "skin_concern": ""
-      },
-      {
         "brand_id": "brand-00920",
         "brand": "pia",
         "name_id": "name-00008",
@@ -157428,7 +157398,7 @@
     "video_id": "kzTvnSww6DM",
     "view_count": "28986",
     "duration": "PT19M4S",
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-28"
   },
   "-OTlDGmYPNQX7dGxE6D5": {
     "channel_icon": "https://yt3.ggpht.com/YXzwKNRLJo33UIs_tscz94lOe_VozceKrVRbVpMevTDL9Ujy3hlkuw1rR2rNXPmnNk9qdhSIlnY=s88-c-k-c0x00ffffff-no-rj",
@@ -293600,15 +293570,15 @@
       {
         "brand_id": "brand-01048",
         "brand": "2aN",
-        "name_id": "name-00003",
-        "name": "Better Me Eye Palette",
+        "name_id": "name-00002",
+        "name": "ベターミーアイパレット",
         "related_tags": [
           "パウダーアイシャドウ"
         ],
-        "skin_concern": "",
         "mentions": [
           "大好き、くすみが一瞬で飛ぶ、透明感が出る"
-        ]
+        ],
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00235",
@@ -293722,7 +293692,7 @@
         ]
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-28"
   },
   "NwjSxVtfgbY": {
     "video_id": "NwjSxVtfgbY",
@@ -361616,18 +361586,18 @@
       {
         "brand_id": "brand-01556",
         "brand": "DIDION",
-        "name_id": "name-00011",
-        "name": "MELTY LIP GLOSS 03 Brown Sugar",
+        "name_id": "name-00010",
+        "name": "MELTY LIP GLOSS",
         "related_tags": [
           "リップグロス"
         ],
-        "skin_concern": "",
         "mentions": [
           "クリア感のあるブラウン、好きなリップに重ねると大人の雰囲気に"
-        ]
+        ],
+        "skin_concern": ""
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-28"
   },
   "DcnmRLfURoY": {
     "video_id": "DcnmRLfURoY",
@@ -410398,16 +410368,16 @@
       {
         "brand_id": "brand-00009",
         "brand": "メイベリン ニューヨーク",
-        "name_id": "name-00022",
-        "name": "メイベリン リフタープランプ L",
+        "name_id": "name-00219",
+        "name": "メイベリン リフタープランプ",
         "related_tags": [
           "口紅"
         ],
-        "skin_concern": "",
         "mentions": [
           "2025年間ベスコス（リッププランパー）。発色・カバー力があり単体でも使える、じわじわ効くプランピング効果と保湿力"
         ],
-        "time_in_video": "1:47"
+        "time_in_video": "1:47",
+        "skin_concern": ""
       },
       {
         "brand_id": "brand-00010",
@@ -410647,7 +410617,7 @@
         "time_in_video": "33:43"
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-10-28"
   },
   "fo9yk0GkHkw": {
     "video_id": "fo9yk0GkHkw",
