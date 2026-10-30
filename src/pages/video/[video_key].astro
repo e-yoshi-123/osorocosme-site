@@ -11,6 +11,7 @@ import {
   getVideosByChannel,
   getVideosUsingCosmetic,
   isVisible,
+  isThinVideo,
   sortByPublishedDesc,
   categoryUrl,
   formatCount,
@@ -43,8 +44,9 @@ const description = video
   : undefined;
 // YouTubeと同じタイトルでは検索結果で並ぶだけなので、このページの中身（紹介コスメの一覧）を先頭に出す（動画タイトルは長く、後ろに付けると切れるため。271章）
 const pageTitle = video ? (validCosmetics.length ? `【紹介コスメ${validCosmetics.length}品】${video.title}` : video.title) : "動画詳細";
-// 非掲載（check_status未確認・削除済み）の動画はsitemapに載せておらず、内容も未確認なので検索に出さない
-const noindex = !!video && !isVisible(video);
+// 非掲載（check_status未確認・削除済み）の動画はsitemapに載せておらず、内容も未確認なので検索に出さない。
+// 紹介コスメが少なく再生数も少ない薄い動画も検索に出さない（408章）
+const noindex = !!video && (!isVisible(video) || isThinVideo(video));
 
 // PR・提供の動画（197章）。提供を受けた商品はランキング等の数に入れていないので、その旨を添える
 const pr = video ? getPrInfo(video.key) : undefined;

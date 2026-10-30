@@ -14,6 +14,8 @@ import {
   getPublishedConcernIngredients,
   getVideosUsingCosmetic,
   isCosmeticIndexed,
+  isThinVideo,
+  isThinBrand,
   getVideosByChannel,
   cosmeticSlug,
   withBase,
@@ -67,14 +69,14 @@ export const GET: APIRoute = ({ site }) => {
     { path: "/brand-list", lastmod: siteNewest },
     { path: "/influencer-list", lastmod: siteNewest },
     { path: "/video-list", lastmod: siteNewest },
-    ...getBrandsWithVideos().map((b) => ({ path: `/brand/${b.brand_id}`, lastmod: brandNewest.get(b.brand_id) })),
+    ...getBrandsWithVideos().filter((b) => !isThinBrand(b)).map((b) => ({ path: `/brand/${b.brand_id}`, lastmod: brandNewest.get(b.brand_id) })), // 薄いブランドは noindex（408章）
     ...getUsedCosmeticKeys().flatMap((k) => {
       const using = getVideosUsingCosmetic(k.brand_id, k.name_id);
       if (!isCosmeticIndexed(using)) return []; // noindex のページは載せない
       return [{ path: `/cosmetics/${cosmeticSlug(k.brand_id, k.name_id)}`, lastmod: newest(using) }];
     }),
     ...getInfluencerRanking().map((i) => ({ path: `/influencer/${i.channel_id}`, lastmod: newest(getVideosByChannel(i.channel_id)) })),
-    ...videos.map((v) => ({ path: `/video/${v.key}`, lastmod: touched(v) })),
+    ...videos.filter((v) => !isThinVideo(v)).map((v) => ({ path: `/video/${v.key}`, lastmod: touched(v) })), // 薄い動画は noindex（408章）
   ];
   const urls = items
     .map((it) => `  <url><loc>${new URL(withBase(it.path), site).href}</loc>${it.lastmod ? `<lastmod>${it.lastmod}</lastmod>` : ""}</url>`)

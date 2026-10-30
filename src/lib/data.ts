@@ -504,6 +504,28 @@ export function isCosmeticIndexed(videosUsing: { published_at: string }[]): bool
   const cut = Date.now() - COSMETIC_INDEX_RECENT_DAYS * 86_400_000;
   return videosUsing.some((v) => v.published_at && new Date(v.published_at).getTime() >= cut);
 }
+// 薄い動画・ブランドのページは noindex にし、sitemap にも載せない。10/26からサイト全体の検索の表示が落ちたので、
+// 301章で後回しにしていたものを前倒しした（407・408章）。3か月で外した490ページのクリックは計1・表示は約80で、失うものはほぼ無い
+export const THIN_VIDEO_MAX_COSMETICS = 2;
+let _medianViews: number | undefined;
+/** 掲載中の動画の再生数の中央値（薄い動画の判定に使う） */
+function medianViews(): number {
+  if (_medianViews === undefined) {
+    const vs = getVisibleVideos().map((v) => toNumber(v.view_count)).sort((a, b) => a - b);
+    const m = vs.length >> 1;
+    _medianViews = vs.length ? (vs.length % 2 ? vs[m] : (vs[m - 1] + vs[m]) / 2) : 0;
+  }
+  return _medianViews;
+}
+/** 紹介コスメが2品以下で、再生数が中央値未満の動画 */
+export function isThinVideo(v: { cosmetics?: { brand_id?: string; name_id?: string }[]; view_count?: string | number }): boolean {
+  const items = new Set((v.cosmetics || []).filter((c) => c.brand_id && c.name_id).map((c) => `${c.brand_id}_${c.name_id}`));
+  return items.size <= THIN_VIDEO_MAX_COSMETICS && toNumber(v.view_count) < medianViews();
+}
+/** 掲載中の動画での紹介が1品・動画1本だけのブランド */
+export function isThinBrand(b: { videoCount: number; cosmeticCount: number }): boolean {
+  return b.cosmeticCount <= 1 && b.videoCount <= 1;
+}
 const _pageVideo = new Map<string, string>();
 /** 商品ページの無い商品の、紹介している動画のkey（ページのある商品は空文字）。ブラウザ側の検索・マイコスメが使う */
 export function cosmeticPagelessVideo(brand_id: string, name_id: string): string {

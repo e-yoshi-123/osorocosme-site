@@ -4,7 +4,7 @@ import PageHead from "../../components/PageHead.astro";
 import Layout from "../../layouts/Layout.astro";
 import ShareButtons from "../../components/ShareButtons.astro";
 import CosmeticCard from "../../components/CosmeticCard.astro";
-import { GROUP_EN, categoryUrl, getRankingPages, getBrandProducers, getBrandsWithVideos, getAliasRedirects, getBrandName, getCosmeticsForBrand, breadcrumbLd, getBrandMeta, getBrandGroups, getBrandCosmeticsByCategory, getBrandTopCosmetics, getCosmeticVideoCounts, COUNTRY_NAMES, withBase, formatCount, cosmeticHref } from "../../lib/data";
+import { GROUP_EN, categoryUrl, getRankingPages, getBrandProducers, getBrandsWithVideos, isThinBrand, getAliasRedirects, getBrandName, getCosmeticsForBrand, breadcrumbLd, getBrandMeta, getBrandGroups, getBrandCosmeticsByCategory, getBrandTopCosmetics, getCosmeticVideoCounts, COUNTRY_NAMES, withBase, formatCount, cosmeticHref } from "../../lib/data";
 
 export function getStaticPaths() {
   return [
@@ -19,6 +19,9 @@ const { redirectTo } = Astro.props;
 if (redirectTo) return Astro.redirect(withBase(`/brand/${redirectTo}`), 301);
 const brandName = getBrandName(brand_id!) ?? "不明なブランド";
 const cosmetics = getCosmeticsForBrand(brand_id!);
+// 紹介が1品・動画1本だけのブランドは検索に出さない（408章）
+const brandStats = getBrandsWithVideos().find((b) => b.brand_id === brand_id);
+const noindex = !!brandStats && isThinBrand(brandStats);
 // カテゴリの中は、紹介動画の多い順に並べる（以前は動画に出てきた順で、どれが人気か分からなかった。195章）
 const videoCounts = getCosmeticVideoCounts();
 const countOf = (c: { brand_id: string; name_id: string }) => videoCounts.get(`${c.brand_id}_${c.name_id}`) ?? 0;
@@ -84,7 +87,7 @@ const jsonLd = [
 ];
 ---
 
-<Layout title={`${brandName}のおすすめ人気コスメ（YouTuberの紹介数順）`} description={description} image={ogImage} jsonLd={jsonLd}>
+<Layout title={`${brandName}のおすすめ人気コスメ（YouTuberの紹介数順）`} description={description} image={ogImage} jsonLd={jsonLd} noindex={noindex}>
   <PageHead en="Brand" title={brandName} stats={[{ n: formatCount(stats?.videoCount ?? 0), label: "紹介動画", unit: "本" }, { n: formatCount(cosmetics.length), label: "コスメ", unit: "品" }]}>
     {countryName && <p class="mt-4 text-sm text-neutral-600"><BrandFlag brand_id={brand_id!} />{countryName}のブランド</p>}
     {producers.length > 0 && (
