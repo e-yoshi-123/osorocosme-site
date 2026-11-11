@@ -98841,9 +98841,17 @@
     "name_id": "name-00046",
     "category": "カラーリップケア",
     "amazon_link": "",
-    "rakuten_image_link": "",
-    "rakuten_text_link": "",
-    "count": 1
+    "rakuten_image_link": "<a href=\"https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fforemost%2F8809784608752m%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fforemost%2Fi%2F10167451%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0\" target=\"_blank\" rel=\"nofollow sponsored noopener\"><img src=\"https://thumbnail.image.rakuten.co.jp/@0_mall/foremost/cabinet/o/8809784608752.jpg?_ex=240x240\" border=\"0\" style=\"margin:2px\" alt=\"Torriden (トリデン) バランスフル リップエッセンス ＃1 クリアボバ\" title=\"Torriden (トリデン) バランスフル リップエッセンス ＃1 クリアボバ\"></a>",
+    "rakuten_text_link": "https://hb.afl.rakuten.co.jp/hgc/3eda3f00.a5d33be4.3eda3f01.51fe71481/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fforemost%2F8809784608752m%2F&m=http%3A%2F%2Fm.rakuten.co.jp%2Fforemost%2Fi%2F10167451%2F&rafcid=wsc_i_is_6557c299-4ae3-4069-baa0-44e506e497f0",
+    "count": 1,
+    "now_price": 1100,
+    "price_updated": "2026-11-12",
+    "yahoo_text_link": "https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3782874&pid=892714915&vc_url=https%3A%2F%2Fstore.shopping.yahoo.co.jp%2Fplaza-slh%2Fp02lip0477.html",
+    "yahoo_image_url": "https://item-shopping.c.yimg.jp/i/j/plaza-slh_p02lip0477",
+    "yahoo_price": 1100,
+    "yahoo_price_updated": "2026-11-12",
+    "yahoo_item_code": "plaza-slh_p02lip0477",
+    "yahoo_seller_id": "plaza-slh"
   },
   "brand-00130_name-00052": {
     "brand": "Torriden (トリデン)",
@@ -103340,7 +103348,8 @@
     "amazon_link": "",
     "rakuten_image_link": "",
     "rakuten_text_link": "",
-    "count": 1
+    "count": 1,
+    "rakuten_link_none": true
   },
   "brand-01096_name-00034": {
     "brand": "DAISY DOLL by MARY QUANT",
@@ -103351,7 +103360,8 @@
     "amazon_link": "",
     "rakuten_image_link": "",
     "rakuten_text_link": "",
-    "count": 1
+    "count": 1,
+    "rakuten_link_none": true
   },
   "brand-01096_name-00035": {
     "brand": "DAISY DOLL by MARY QUANT",
