@@ -41,6 +41,7 @@ import {
   type InfluencerCategoryPick,
   getBrandReading,
   cosmeticHref,
+  hasCosmeticPage,
 } from "../../lib/data";
 
 export function getStaticPaths() {
@@ -298,11 +299,11 @@ const jsonLd = influencer
                   <p class="u-2">{c.videoCount}本で紹介</p>
                   <p class="tc-act">
                     {c.price !== undefined && <span class="num-display tc-price" title={c.fromYahoo ? "Yahoo!ショッピングの参考価格" : "楽天市場の参考価格"}>¥{formatCount(c.price)}</span>}
-                    <span class="tc-shops">
+                    {!hasCosmeticPage(c.brand_id, c.name_id) && <span class="tc-shops">
                       {c.rakutenLink && <a href={c.rakutenLink} target="_blank" rel="nofollow sponsored noopener" title="楽天市場で見る">楽天</a>}
                       {c.yahooLink && <a href={c.yahooLink} target="_blank" rel="nofollow sponsored noopener" title="Yahoo!ショッピングで見る">Yahoo!</a>}
                       <a href={amazonSearchUrl(c.brand, c.name)} target="_blank" rel="nofollow sponsored noopener" title="Amazonで探す（検索結果）">Amazon</a>
-                    </span>
+                    </span>}
                   </p>
                 </li>
               ))}
@@ -338,11 +339,11 @@ const jsonLd = influencer
                   </p>
                   <p class="tc-act">
                     {c.price !== undefined && <span class="num-display tc-price" title={c.fromYahoo ? "Yahoo!ショッピングの参考価格" : "楽天市場の参考価格"}>¥{formatCount(c.price)}</span>}
-                    <span class="tc-shops">
+                    {!hasCosmeticPage(c.brand_id, c.name_id) && <span class="tc-shops">
                       {c.rakutenLink && <a href={c.rakutenLink} target="_blank" rel="nofollow sponsored noopener" title="楽天市場で見る">楽天</a>}
                       {c.yahooLink && <a href={c.yahooLink} target="_blank" rel="nofollow sponsored noopener" title="Yahoo!ショッピングで見る">Yahoo!</a>}
                       <a href={amazonSearchUrl(c.brand, c.name)} target="_blank" rel="nofollow sponsored noopener" title="Amazonで探す（検索結果）">Amazon</a>
-                    </span>
+                    </span>}
                   </p>
                 </li>
               ))}
@@ -395,11 +396,11 @@ const jsonLd = influencer
                         </p>
                         <p class="tc-act">
                           {c.price !== undefined && <span class="num-display tc-price" title={c.fromYahoo ? "Yahoo!ショッピングの参考価格" : "楽天市場の参考価格"}>¥{formatCount(c.price)}</span>}
-                          <span class="tc-shops">
+                          {!hasCosmeticPage(c.brand_id, c.name_id) && <span class="tc-shops">
                             {c.rakutenLink && <a href={c.rakutenLink} target="_blank" rel="nofollow sponsored noopener" title="楽天市場で見る">楽天</a>}
                             {c.yahooLink && <a href={c.yahooLink} target="_blank" rel="nofollow sponsored noopener" title="Yahoo!ショッピングで見る">Yahoo!</a>}
                             <a href={amazonSearchUrl(c.brand, c.name)} target="_blank" rel="nofollow sponsored noopener" title="Amazonで探す（検索結果）">Amazon</a>
-                          </span>
+                          </span>}
                         </p>
                         </div>
                       </li>
@@ -427,11 +428,11 @@ const jsonLd = influencer
                         </p>
                         <p class="tc-act">
                           {c.price !== undefined && <span class="num-display tc-price" title={c.fromYahoo ? "Yahoo!ショッピングの参考価格" : "楽天市場の参考価格"}>¥{formatCount(c.price)}</span>}
-                          <span class="tc-shops">
+                          {!hasCosmeticPage(c.brand_id, c.name_id) && <span class="tc-shops">
                             {c.rakutenLink && <a href={c.rakutenLink} target="_blank" rel="nofollow sponsored noopener" title="楽天市場で見る">楽天</a>}
                             {c.yahooLink && <a href={c.yahooLink} target="_blank" rel="nofollow sponsored noopener" title="Yahoo!ショッピングで見る">Yahoo!</a>}
                             <a href={amazonSearchUrl(c.brand, c.name)} target="_blank" rel="nofollow sponsored noopener" title="Amazonで探す（検索結果）">Amazon</a>
-                          </span>
+                          </span>}
                         </p>
                         </div>
                       </li>

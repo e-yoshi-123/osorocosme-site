@@ -1,6 +1,6 @@
 ---
 import BrandFlag from "./BrandFlag.astro";
-import { amazonSearchUrl, formatCount, withBase, cosmeticHref } from "../lib/data";
+import { amazonSearchUrl, formatCount, withBase, cosmeticHref, hasCosmeticPage } from "../lib/data";
 
 interface Props {
   /** 現在の表示順での順位（並び替えのたびにスクリプトが書き換える） */
@@ -42,6 +42,8 @@ const top = rank <= 3;
 const buyable = !!imageSrc;
 const amazonLink = amazonSearchUrl(brand, name);
 const href = cosmeticHref(brand_id, name_id);
+// 商品ページのある品は、一覧に購入リンクを出さず商品ページへ集める（購入リンクが主役に見えないように。426章）
+const showShops = !hasCosmeticPage(brand_id, name_id);
 ---
 
 {/*
@@ -95,7 +97,7 @@ const href = cosmeticHref(brand_id, name_id);
          Yahoo!・Amazonのボタンには data-buy を付けないので、楽天の画像が読み込めずに楽天のボタンが消えても残る。
          ボタンは幅を決めた3つの枠に置く。狭い枠では3つ並ぶと幅が足りないため、この段を左端（順位の列）から始め、それでも足りない幅（320px）ではボタンを価格の下に回す。どれかが無い行でも、価格とボタンの位置が他の行と縦に揃う（205章）。
          Amazonは商品を特定しない検索結果へのリンクなので、全商品に出す。3つとも同じ白い枠にして、どこか1社を特別扱いしない（206章） */}
-    <div class="rrow-5">
+    {showShops && <div class="rrow-5">
       {
         buyable && link && (
           <a data-buy href={link} target="_blank" rel="nofollow sponsored noopener" aria-label="楽天市場で見る" title="楽天市場で見る" class="rrow-3">
@@ -113,6 +115,6 @@ const href = cosmeticHref(brand_id, name_id);
       <a href={amazonLink} target="_blank" rel="nofollow sponsored noopener" aria-label="Amazonで探す" title="Amazonで探す（検索結果）" class="rrow-1">
         Amazon
       </a>
-    </div>
+    </div>}
   </div>
 </li>

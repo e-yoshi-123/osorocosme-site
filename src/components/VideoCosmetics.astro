@@ -91,11 +91,12 @@ const flowParts = parts.filter((p) => timeline.some((t) => t.p.key === p.key));
                     <span class="rs-time is-none">場面の時刻なし</span>
                   )}
                   {x.price !== undefined && <span class="rs-price num-display" title={x.fromYahoo ? "Yahoo!ショッピングの参考価格" : "楽天市場の参考価格"}>¥{formatCount(x.price)}</span>}
-                  <span class="rs-shops">
+                  {/* 商品ページのある品は、購入リンクを商品ページに集める（426章） */}
+                  {!hasCosmeticPage(x.brand_id, x.name_id) && <span class="rs-shops">
                     {x.img && x.rakutenLink && <a href={x.rakutenLink} target="_blank" rel="nofollow sponsored noopener" title="楽天市場で見る">楽天</a>}
                     {x.yahooLink && <a href={x.yahooLink} target="_blank" rel="nofollow sponsored noopener" title="Yahoo!ショッピングで見る">Yahoo!</a>}
                     <a href={amazonSearchUrl(x.brand, x.name)} target="_blank" rel="nofollow sponsored noopener" title="Amazonで探す（検索結果）">Amazon</a>
-                  </span>
+                  </span>}
                 </div>
               </div>
             </li>
