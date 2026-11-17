@@ -626108,9 +626108,23 @@
         "mentions": [
           "落ちないのに荒れにくい、粘膜のような生発色。一生使うかもしれない、ストックしたい"
         ]
+      },
+      {
+        "brand_id": "brand-00017",
+        "brand": "ヴィセ",
+        "name_id": "name-00219",
+        "name": "ネンマクフェイク リッププランパー",
+        "related_tags": [
+          "リップグロス"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "塗るだけでボリュームアップ、ヒリヒリしすぎない。ジェンダー問わず使える"
+        ],
+        "time_in_video": "19:21"
       }
     ],
-    "updated_at": "2026-10-12"
+    "updated_at": "2026-11-17"
   },
   "PCdSh_VU-S8": {
     "video_id": "PCdSh_VU-S8",
@@ -627541,9 +627555,23 @@
         "mentions": [
           "11月発売の新作として紹介、塗り比べ（概要欄の使用アイテムに記載）"
         ]
+      },
+      {
+        "brand_id": "brand-00017",
+        "brand": "ヴィセ",
+        "name_id": "name-00219",
+        "name": "ネンマクフェイク リッププランパー",
+        "related_tags": [
+          "リップグロス"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "粘膜カラーのリッププランパーも新登場。11月発売の新作として紹介、塗り比べ（概要欄の使用アイテムに記載）"
+        ],
+        "time_in_video": "12:17"
       }
     ],
-    "updated_at": "2026-10-13"
+    "updated_at": "2026-11-17"
   },
   "Kh9KQThee4o": {
     "video_id": "Kh9KQThee4o",
@@ -632444,12 +632472,27 @@
     "subscriber_count": "10800",
     "view_count": "2813",
     "duration": "PT4M5S",
-    "check_status": false,
+    "check_status": true,
     "delete_flg": false,
     "processed": true,
     "via": "channel",
-    "cosmetics": [],
-    "updated_at": "2026-10-12"
+    "cosmetics": [
+      {
+        "brand_id": "brand-01982",
+        "brand": "mealis",
+        "name_id": "name-00001",
+        "name": "メアリス　クッションファンデーション",
+        "related_tags": [
+          "クッションファンデ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "ピンクっぽいベージュ。思いのほか馴染みが良くベタつかない。パフが小鼻に塗りやすい"
+        ],
+        "time_in_video": "0:07"
+      }
+    ],
+    "updated_at": "2026-11-17"
   },
   "tDn5ZabmCPY": {
     "video_id": "tDn5ZabmCPY",
@@ -664566,9 +664609,22 @@
           "フェイスパウダーに使用"
         ],
         "time_in_video": "6:20"
+      },
+      {
+        "brand_id": "brand-00011",
+        "brand": "ケイト",
+        "name_id": "name-00209",
+        "name": "リップモンスターQ",
+        "related_tags": [
+          "リップスティック"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "ルビーレッド系。唇ではやや青紫っぽい。ティッシュオフ後の色が好き。色残りがすごい"
+        ]
       }
     ],
-    "updated_at": "2026-11-13"
+    "updated_at": "2026-11-17"
   },
   "pk4eiYixAuI": {
     "video_id": "pk4eiYixAuI",
@@ -667703,9 +667759,36 @@
           "夕暮れの体温。めっちゃ使いやすい色"
         ],
         "time_in_video": "5:31"
+      },
+      {
+        "brand_id": "brand-00011",
+        "brand": "ケイト",
+        "name_id": "name-00210",
+        "name": "レアフィットジェルペンシルA",
+        "related_tags": [
+          "ジェルアイライナー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "めちゃめちゃ滑らかに描ける、乾くのも早い"
+        ],
+        "time_in_video": "3:36"
+      },
+      {
+        "brand_id": "brand-00011",
+        "brand": "ケイト",
+        "name_id": "name-00209",
+        "name": "リップモンスターQ",
+        "related_tags": [
+          "リップスティック"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "宝冠グレーズ。普通のリップモンスターより潤い感、色持ちも良い"
+        ]
       }
     ],
-    "updated_at": "2026-10-24"
+    "updated_at": "2026-11-17"
   },
   "P4cIF_-_rd0": {
     "video_id": "P4cIF_-_rd0",
@@ -668427,9 +668510,22 @@
         "mentions": [
           "Classical Red。ティッシュオフ後もしっかり発色が残る"
         ]
+      },
+      {
+        "brand_id": "brand-00011",
+        "brand": "ケイト",
+        "name_id": "name-00209",
+        "name": "リップモンスターQ",
+        "related_tags": [
+          "リップスティック"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "王妃のまどろみ。落ちないリップ比較で検証"
+        ]
       }
     ],
-    "updated_at": "2026-10-24"
+    "updated_at": "2026-11-17"
   },
   "rcSura_ioV8": {
     "video_id": "rcSura_ioV8",
@@ -668558,9 +668654,35 @@
           "夕暮れの体温。カシスのニュアンスのくすみブラウン、最高におしゃれ"
         ],
         "time_in_video": "0:51"
+      },
+      {
+        "brand_id": "brand-00011",
+        "brand": "ケイト",
+        "name_id": "name-00210",
+        "name": "レアフィットジェルペンシルA",
+        "related_tags": [
+          "ジェルアイライナー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "ナチュラルブラウン。するする描けてふわっとパウダリーに仕上がる"
+        ]
+      },
+      {
+        "brand_id": "brand-00011",
+        "brand": "ケイト",
+        "name_id": "name-00209",
+        "name": "リップモンスターQ",
+        "related_tags": [
+          "リップスティック"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "宝冠グレーズ。上品なローズレッド、つけやすい"
+        ]
       }
     ],
-    "updated_at": "2026-10-24"
+    "updated_at": "2026-11-17"
   },
   "xygYZujPnxg": {
     "video_id": "xygYZujPnxg",
@@ -674996,9 +675118,23 @@
         "mentions": [
           "ほんのりだけ影を描く"
         ]
+      },
+      {
+        "brand_id": "brand-00017",
+        "brand": "ヴィセ",
+        "name_id": "name-00220",
+        "name": "ネンマクフェイク プランピング リップライナー",
+        "related_tags": [
+          "リップライナー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "プランプ効果でけっこうヒリヒリする。唇周りのくすみを補正"
+        ],
+        "time_in_video": "22:18"
       }
     ],
-    "updated_at": "2026-10-28"
+    "updated_at": "2026-11-17"
   },
   "qk9XnOBIxkE": {
     "video_id": "qk9XnOBIxkE",
@@ -678946,9 +679082,22 @@
           "既存色と比較、くすみカラーで低彩度、落ち着いた色が良ければこちら"
         ],
         "time_in_video": "0:02"
+      },
+      {
+        "brand_id": "brand-00011",
+        "brand": "ケイト",
+        "name_id": "name-00210",
+        "name": "レアフィットジェルペンシルA",
+        "related_tags": [
+          "ジェルアイライナー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "同日発売の新作。するする描けて密着、紫がかったブラウンブラック"
+        ]
       }
     ],
-    "updated_at": "2026-10-28"
+    "updated_at": "2026-11-17"
   },
   "zjF7je3-VfY": {
     "video_id": "zjF7je3-VfY",
@@ -680891,9 +681040,22 @@
           "透明で前髪のホールドにすごいキープ力"
         ],
         "time_in_video": "32:00"
+      },
+      {
+        "brand_id": "brand-00011",
+        "brand": "ケイト",
+        "name_id": "name-00210",
+        "name": "レアフィットジェルペンシルA",
+        "related_tags": [
+          "ジェルアイライナー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "細芯で滑らか。青みの効いたグレージュがかっこいい"
+        ]
       }
     ],
-    "updated_at": "2026-11-02"
+    "updated_at": "2026-11-17"
   },
   "knddzkVxRdM": {
     "video_id": "knddzkVxRdM",
@@ -684763,9 +684925,22 @@
           "ジェルペンシルはこればかり愛用してきた。ブラウンはレアフィットと比べてキャンメイクのほうが色が濃い"
         ],
         "time_in_video": "4:23"
+      },
+      {
+        "brand_id": "brand-00011",
+        "brand": "ケイト",
+        "name_id": "name-00209",
+        "name": "リップモンスターQ",
+        "related_tags": [
+          "リップスティック"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "女王のリップモンと言われる特別なリップモンスターで赤いパッケージ。普通のリップモンより潤い感がある。02はパッと華やかで王道に使いやすいピンク、03はこっくりした秋っぽい色でどちらも好き"
+        ]
       }
     ],
-    "updated_at": "2026-11-06"
+    "updated_at": "2026-11-17"
   },
   "OvfreWDJXf4": {
     "video_id": "OvfreWDJXf4",
@@ -684879,9 +685054,23 @@
           "向井さん：イチオシの色。絶妙な色で肌の色を選ばず、高い位置に横に入れると可愛い。ほかの色と重ねて上気したような入れ方もいい"
         ],
         "time_in_video": "8:34"
+      },
+      {
+        "brand_id": "brand-00017",
+        "brand": "ヴィセ",
+        "name_id": "name-00219",
+        "name": "ネンマクフェイク リッププランパー",
+        "related_tags": [
+          "リップグロス"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "向井さん：透明グロスで待っていた。どの色とも喧嘩せず、マットなリップの中央に重ねて立体感を出せる。1個持っておくとメイクの幅が広がる"
+        ],
+        "time_in_video": "10:46"
       }
     ],
-    "updated_at": "2026-11-06"
+    "updated_at": "2026-11-17"
   },
   "PfvWN9zFKfM": {
     "video_id": "PfvWN9zFKfM",
@@ -689074,9 +689263,23 @@
           "これがないと生きていけない。新しいもの。目元に絶対欠かさない。使い続けるほど感じる。構造復元オイル配合"
         ],
         "time_in_video": "16:27"
+      },
+      {
+        "brand_id": "brand-00017",
+        "brand": "ヴィセ",
+        "name_id": "name-00219",
+        "name": "ネンマクフェイク リッププランパー",
+        "related_tags": [
+          "リップグロス"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "粘膜系の血色カラーで若干ブラウンが入り深みがあって秋っぽい。プルンとなる感じがやりすぎず、とても使いやすい"
+        ],
+        "time_in_video": "3:13"
       }
     ],
-    "updated_at": "2026-11-06"
+    "updated_at": "2026-11-17"
   },
   "XYAo7S949iI": {
     "video_id": "XYAo7S949iI",
@@ -691847,9 +692050,22 @@
         "mentions": [
           "重炭酸の入浴剤で眠りが深くなる。香りがしっかりして楽しみ"
         ]
+      },
+      {
+        "brand_id": "brand-00011",
+        "brand": "ケイト",
+        "name_id": "name-00209",
+        "name": "リップモンスターQ",
+        "related_tags": [
+          "リップスティック"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "クリーミーで濃厚、唇がぽってり見える。使いやすいベージュピンクでデイリー使いしやすい"
+        ]
       }
     ],
-    "updated_at": "2026-11-11"
+    "updated_at": "2026-11-17"
   },
   "IlRfLFcIOTI": {
     "video_id": "IlRfLFcIOTI",
@@ -692172,9 +692388,37 @@
         "mentions": [
           "概要欄の使用アイテムに記載"
         ]
+      },
+      {
+        "brand_id": "brand-00017",
+        "brand": "ヴィセ",
+        "name_id": "name-00219",
+        "name": "ネンマクフェイク リッププランパー",
+        "related_tags": [
+          "リップグロス"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "ほぼクリア。塗り心地がとてもよく唇そのものがしっとり。スースーの後じんじんする、ちょうどいい刺激"
+        ],
+        "time_in_video": "0:04"
+      },
+      {
+        "brand_id": "brand-00017",
+        "brand": "ヴィセ",
+        "name_id": "name-00221",
+        "name": "レイヤード キラー アイ トリオ",
+        "related_tags": [
+          "パウダーアイシャドウ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "かなり淡め。ザクザクのラメで下まぶた全体に乗せてもギラギラにならずぷっくり感と艶感、ブラウンとの相性が良い"
+        ],
+        "time_in_video": "9:16"
       }
     ],
-    "updated_at": "2026-11-11"
+    "updated_at": "2026-11-17"
   },
   "_DA4iYBxoBM": {
     "video_id": "_DA4iYBxoBM",
@@ -692458,9 +692702,37 @@
         "mentions": [
           "ピンクもあり顔色を損なわないベージュ、くすみを飛ばしてくれる"
         ]
+      },
+      {
+        "brand_id": "brand-00017",
+        "brand": "ヴィセ",
+        "name_id": "name-00219",
+        "name": "ネンマクフェイク リッププランパー",
+        "related_tags": [
+          "リップグロス"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "ほぼ透明だがぷっくり感が出て唇の表面が整う、これだけでも結構可愛い"
+        ],
+        "time_in_video": "0:09"
+      },
+      {
+        "brand_id": "brand-00017",
+        "brand": "ヴィセ",
+        "name_id": "name-00221",
+        "name": "レイヤード キラー アイ トリオ",
+        "related_tags": [
+          "パウダーアイシャドウ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "手持ちのアイシャドウにプラスオン。キラキラ輝いて色気爆発、普段でも行けそう"
+        ],
+        "time_in_video": "5:02"
       }
     ],
-    "updated_at": "2026-11-12"
+    "updated_at": "2026-11-17"
   },
   "rHIejlmRXdk": {
     "video_id": "rHIejlmRXdk",
@@ -696196,9 +696468,51 @@
         "mentions": [
           "11月の追加限定色"
         ]
+      },
+      {
+        "brand_id": "brand-00017",
+        "brand": "ヴィセ",
+        "name_id": "name-00221",
+        "name": "レイヤード キラー アイ トリオ",
+        "related_tags": [
+          "パウダーアイシャドウ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "11月の注目新作、リニューアルでラメぎっしりの明るめカラーに"
+        ],
+        "time_in_video": "12:10"
+      },
+      {
+        "brand_id": "brand-00017",
+        "brand": "ヴィセ",
+        "name_id": "name-00220",
+        "name": "ネンマクフェイク プランピング リップライナー",
+        "related_tags": [
+          "リップライナー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "リップライナー嬉しい、プランプ効果で立体唇。日本ブランドで多分初"
+        ],
+        "time_in_video": "12:44"
+      },
+      {
+        "brand_id": "brand-00017",
+        "brand": "ヴィセ",
+        "name_id": "name-00219",
+        "name": "ネンマクフェイク リッププランパー",
+        "related_tags": [
+          "リップグロス"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "大人気リッププランパーの新作、01〜08まで。ラメなしでボリュームアップ成分配合"
+        ],
+        "time_in_video": "13:21"
       }
     ],
-    "updated_at": "2026-11-13"
+    "updated_at": "2026-11-17"
   },
   "fBVA3wILnMA": {
     "video_id": "fBVA3wILnMA",
@@ -698052,6 +698366,48 @@
         "mentions": [
           "プランパー02と重ねるうさぎセット、個人的な好み"
         ]
+      },
+      {
+        "brand_id": "brand-00017",
+        "brand": "ヴィセ",
+        "name_id": "name-00219",
+        "name": "ネンマクフェイク リッププランパー",
+        "related_tags": [
+          "リップグロス"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "シアなピンク、唇に塗るとうっすらピンクで透明感（提供）"
+        ],
+        "time_in_video": "0:07"
+      },
+      {
+        "brand_id": "brand-00017",
+        "brand": "ヴィセ",
+        "name_id": "name-00220",
+        "name": "ネンマクフェイク プランピング リップライナー",
+        "related_tags": [
+          "リップライナー"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "コーラル系の柔らかく唇になじむカラー。セミマットでプランプ効果あり（提供）"
+        ],
+        "time_in_video": "10:09"
+      },
+      {
+        "brand_id": "brand-00017",
+        "brand": "ヴィセ",
+        "name_id": "name-00221",
+        "name": "レイヤード キラー アイ トリオ",
+        "related_tags": [
+          "パウダーアイシャドウ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "質感の違うパール3色、涙袋・目頭に。キラキラで華やか（提供）"
+        ],
+        "time_in_video": "16:25"
       }
     ],
     "updated_at": "2026-11-17"
@@ -698415,6 +698771,19 @@
           "提供。リップにもチークにも使えるマルチバーム、面白いアイテム、血色感を足せる"
         ],
         "time_in_video": "18:09"
+      },
+      {
+        "brand_id": "brand-00054",
+        "brand": "ボビイ ブラウン",
+        "name_id": "name-00250",
+        "name": "ザ メット ホリデイ アイシャドウ パレット",
+        "related_tags": [
+          "パウダーアイシャドウ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "提供。クールトーンで白み、今日の中では難易度高め"
+        ]
       }
     ],
     "updated_at": "2026-11-17"
@@ -698644,6 +699013,20 @@
           "髪の化粧水、とろツヤ髪の訴求どおりの仕上がり。ドライヤーでしっかり乾かす"
         ],
         "time_in_video": "13:33"
+      },
+      {
+        "brand_id": "brand-01260",
+        "brand": "Gyutto",
+        "name_id": "name-00002",
+        "name": "ギュット コルセット ヘアミルク",
+        "related_tags": [
+          "アウトバストリートメント"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "指通りの違いが分かりやすい、うねりを伸ばす効果が持続。研究が詰め込まれている"
+        ],
+        "time_in_video": "14:17"
       }
     ],
     "updated_at": "2026-11-17"
@@ -698861,6 +699244,33 @@
           "ベスコス受賞。すごく好き、おしゃれな曖昧ベージュで手元美人"
         ],
         "time_in_video": "27:16"
+      },
+      {
+        "brand_id": "brand-00011",
+        "brand": "ケイト",
+        "name_id": "name-00209",
+        "name": "リップモンスターQ",
+        "related_tags": [
+          "リップスティック"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "ベスコス受賞。今日使用、シアーレッドにブラウン、潤いとクリーミー質感で落ちにくい。バッグに入れてノーミラーで塗る"
+        ]
+      },
+      {
+        "brand_id": "brand-01064",
+        "brand": "Perfect Diary",
+        "name_id": "name-00001",
+        "name": "エクスプローラ 12色動物アイシャドウパレット",
+        "related_tags": [
+          "パウダーアイシャドウ"
+        ],
+        "skin_concern": "",
+        "mentions": [
+          "特別枠で受賞。最近クッションとこれだけで顔を作る、眉・ライン・チーク・リップ・ハイライトまで全部できる。粉質が良く大人向け"
+        ],
+        "time_in_video": "29:06"
       }
     ],
     "updated_at": "2026-11-17"
